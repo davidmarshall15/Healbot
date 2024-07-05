@@ -135,10 +135,14 @@ function HealBot_Timers_nextRecalcAll()
 end
 
 function HealBot_Timers_nextRecalcPlayers()
-    if HealBot_Timers_luVars["ResetSkins"] then
+      --HealBot_setCall("HealBot_Timers_nextRecalcPlayers")
+    if HealBot_Timers_luVars["UpdateEnemy"] then
+        HealBot_Timers_luVars["UpdateEnemy"]=false
+        HealBot_setLuVars("UpdateEnemy", true)
+     --   HealBot_SetResetFlag("SOFT")
+    elseif HealBot_Timers_luVars["ResetSkins"] then
         HealBot_Timers_ResetSkins()
     end
-      --HealBot_setCall("HealBot_Timers_nextRecalcPlayers")
     HealBot_nextRecalcParty(6)
 end
 
@@ -180,6 +184,13 @@ function HealBot_Timers_nextRecalcFocus()
         HealBot_Timers_ResetSkins()
     end
     HealBot_nextRecalcParty(4)
+end
+
+function HealBot_Timers_updateEnemyFrames()
+    HealBot_Timers_luVars["UpdateEnemy"]=true
+    HealBot_Action_ResetSkinTextAuxAllButtons()
+    HealBot_Timers_Set("OOC","RefreshPartyNextRecalcPlayers")
+    HealBot_Timers_Set("OOC","RefreshPartyNextRecalcEnemy")
 end
 
 function HealBot_Timers_SkinChangePluginUpdate()
@@ -604,6 +615,7 @@ local hbTimerFuncs={["INIT"]={
                         ["TextExtraCustomCols"]=HealBot_Text_setExtraCustomCols,
                         ["SetBarsTextColour"]=HealBot_Options_SetBarsTextColour,
                         ["TextUpdateNames"]=HealBot_Text_UpdateNames,
+                        ["TextUpdateEnemyNames"]=HealBot_Text_UpdateNames_EnemyOnly,
                         ["TextUpdateHealth"]=HealBot_Text_UpdateHealth,
                         ["TextUpdateState"]=HealBot_Text_UpdateState,
                         ["ClearSeparateInHealsAbsorbs"]=HealBot_Text_ClearSeparateInHealsAbsorbs,
@@ -792,6 +804,7 @@ local hbTimerFuncs={["INIT"]={
                         ["PerfRangeFreq"]=HealBot_Range_PerfFreq,
                         ["UpdateCheckInterval"]=HealBot_UpdateCheckInterval,
                         ["MediaPluginChange"]=HealBot_Media_PluginChange,
+                        ["RefreshEnemyUnits"]=HealBot_Action_ResetUnitsEnemyOnly,
                     },
                     ["OOC"]={
                         ["FullReload"]=HealBot_FullReload,
@@ -834,6 +847,7 @@ local hbTimerFuncs={["INIT"]={
                         ["NewSkinLoaded"]=HealBot_NewSkinLoaded,
                         ["ShowFramesOnSkinChange"]=HealBot_Action_ShowFramesOnSkinChange,
                         ["CheckHideUnusedFrames"]=HealBot_Action_CheckHideUnusedFrames,
+                        ["UpdateEnemyFrames"]=HealBot_Timers_updateEnemyFrames,
                     },
                    }
 

@@ -3,7 +3,7 @@ local framePad = 1
 local bheight = 20
 local bWidth = 120
 local pWidth = 120
-local EnemyTargetBarSize = 40
+local zWidth = 120
 local bOutline = 1
 local btextheight,btextheight2,btextheight3,btextheight4=10,10,10,10
 local btextoutline,btextoutline2,btextoutline3,btextoutline4=1,1,1,1
@@ -18,6 +18,8 @@ local AuxOverlapOffset=0
 local tBarsConcat={}
 local erButton=nil
 local iAnchors={["ICON"]="", ["BUTTON"]="", ["DOUBLE"]="", ["RELATIVE"]="", ["TXTCOUNT"]="", ["TXTEXPIRE"]="", ["INDSELFCAST"]="", ["TXTEXPIREX"]=1, ["TXTCOUNTX"]=1}
+local HealBot_Skins_ColAdjFrames={[1]={},[2]={},[3]={},[4]={},[5]={},[6]={},[7]={},[8]={},[9]={},[10]={}}
+local HealBot_Skins_ColAdj={[1]={},[2]={},[3]={},[4]={},[5]={},[6]={},[7]={},[8]={},[9]={},[10]={}}
 local HealBot_Skins_luVars={}
 HealBot_Skins_luVars["AuxReset"]=false
 HealBot_Skins_luVars["IconGlowSize"]=2
@@ -30,6 +32,18 @@ end
 function HealBot_Skins_retLuVars(vName)
       --HealBot_setCall("HealBot_Skins_retLuVars - "..vName)
     return HealBot_Skins_luVars[vName]
+end
+
+function HealBot_Skins_retColAdj(frame, id, col)
+    if not HealBot_Skins_ColAdj[frame][col] then HealBot_Skins_ColAdj[frame][col]=0 end
+    if HealBot_Skins_ColAdj[frame][col]<HealBot_Skins_ColAdjFrames[frame][id] then HealBot_Skins_ColAdj[frame][col]=HealBot_Skins_ColAdjFrames[frame][id] end
+    return HealBot_Skins_ColAdj[frame][col-1] or 0
+end
+
+function HealBot_Skins_resetColAdj(frame)
+    for x,_ in pairs(HealBot_Skins_ColAdj[frame]) do
+        HealBot_Skins_ColAdj[frame][x]=0;
+    end
 end
 
 local indTextures={ [2]=[[Interface\Addons\HealBot\Images\indicator_gold]],
@@ -66,20 +80,30 @@ function HealBot_Skins_showPowerCounter(maxPower)
     testPowerOn=maxPower
 end
 
-function HealBot_Skins_AdjustSpecialBarWidth(button)
+function HealBot_Skins_AdjustSpecialBarWidth(button, primary)
       --HealBot_setCall("HealBot_Skins_AdjustSpecialBarWidth", button)
-    EnemyTargetBarSize=(Healbot_Config_Skins.Enemy[Healbot_Config_Skins.Current_Skin]["ENEMYTARGETSIZE"]/100)
-    if HealBot_Panel_isSpecialUnit(button.unit)==1 then
-        bWidth=bWidth*(1-EnemyTargetBarSize)
-        bWidth=bWidth-((Healbot_Config_Skins.HealBar[Healbot_Config_Skins.Current_Skin][button.frame]["CMARGIN"])+(bOutline*2))
-        if Healbot_Config_Skins.Enemy[Healbot_Config_Skins.Current_Skin]["DOUBLEWIDTH"] then bWidth=bWidth*2 end
-        HealBot_Text_setEnemySizeWidth("EnemySizeWidth1", bWidth, EnemyTargetBarSize)
-        HealBot_Action_SetBackSpecialWidth(10, 0)
+    if button.frame==10 then
+        if primary then
+            bWidth=bWidth*(1-Healbot_Config_Skins.Enemy[Healbot_Config_Skins.Current_Skin]["ENEMYTARGETSIZE"])
+            bWidth=bWidth-(Healbot_Config_Skins.HealBar[Healbot_Config_Skins.Current_Skin][button.frame]["CMARGIN"]+bOutline)
+            HealBot_Text_setEnemySizeWidth("EnemySizeWidth1", bWidth, Healbot_Config_Skins.Enemy[Healbot_Config_Skins.Current_Skin]["ENEMYTARGETSIZE"])
+            HealBot_Action_SetBackSpecialWidth(button.frame, 0)
+        else
+            bWidth=bWidth*Healbot_Config_Skins.Enemy[Healbot_Config_Skins.Current_Skin]["ENEMYTARGETSIZE"]
+            HealBot_Text_setEnemySizeWidth("EnemySizeWidth2", bWidth, Healbot_Config_Skins.Enemy[Healbot_Config_Skins.Current_Skin]["ENEMYTARGETSIZE"])
+            HealBot_Action_SetBackSpecialWidth(button.frame, bWidth+Healbot_Config_Skins.HealBar[Healbot_Config_Skins.Current_Skin][button.frame]["CMARGIN"])
+        end
     else
-        bWidth=bWidth*EnemyTargetBarSize
-        if Healbot_Config_Skins.Enemy[Healbot_Config_Skins.Current_Skin]["DOUBLEWIDTH"] then bWidth=bWidth*2 end
-        HealBot_Text_setEnemySizeWidth("EnemySizeWidth2", bWidth, EnemyTargetBarSize)
-        HealBot_Action_SetBackSpecialWidth(10, bWidth+Healbot_Config_Skins.HealBar[Healbot_Config_Skins.Current_Skin][button.frame]["CMARGIN"])
+        if primary then
+            bWidth=bWidth*(1-Healbot_Config_Skins.Enemy[Healbot_Config_Skins.Current_Skin]["ENEMYTARGETSIZE"])
+            bWidth=bWidth-(Healbot_Config_Skins.HealBar[Healbot_Config_Skins.Current_Skin][button.frame]["CMARGIN"]+bOutline)
+            HealBot_Text_setEnemySizeWidth("EnemySizeWidth1", bWidth, Healbot_Config_Skins.Enemy[Healbot_Config_Skins.Current_Skin]["ENEMYTARGETSIZE"])
+            HealBot_Action_SetBackSpecialWidth(button.frame, 0)
+        else
+            bWidth=bWidth*Healbot_Config_Skins.Enemy[Healbot_Config_Skins.Current_Skin]["ENEMYTARGETSIZE"]
+            HealBot_Text_setEnemySizeWidth("EnemySizeWidth2", bWidth, Healbot_Config_Skins.Enemy[Healbot_Config_Skins.Current_Skin]["ENEMYTARGETSIZE"])
+            HealBot_Action_SetBackSpecialWidth(button.frame, bWidth+Healbot_Config_Skins.HealBar[Healbot_Config_Skins.Current_Skin][button.frame]["CMARGIN"])
+        end
     end
 end
 
@@ -89,7 +113,11 @@ function HealBot_Skins_ResetSkinWidth(button)
     bWidth = ceil(Healbot_Config_Skins.HealBar[Healbot_Config_Skins.Current_Skin][button.frame]["WIDTH"]*frameScale);
     bOutline = ceil(Healbot_Config_Skins.BarCol[Healbot_Config_Skins.Current_Skin][button.frame]["BOUT"]*frameScale);
     if HealBot_Panel_isSpecialUnit(button.unit)>0 then
-        HealBot_Skins_AdjustSpecialBarWidth(button)
+        if HealBot_Panel_isSpecialUnit(button.unit)==1 then
+            HealBot_Skins_AdjustSpecialBarWidth(button, true)
+        else
+            HealBot_Skins_AdjustSpecialBarWidth(button, false)
+        end
     end
     button.gref["Bar"]:SetWidth(bWidth)
     button.gref["Back"]:SetWidth(bWidth+(bOutline*2))
@@ -335,7 +363,7 @@ function HealBot_Skins_UpdateIconGlowSize(b, id)
         b.gref.iconf[id]:EnableMouse(true)
     else
         b.gref.iconf[id]:EnableMouse(false)
-        if HealBot_Globals.Tooltip_ShowIconInfo then
+        if (HealBot_Globals.Tooltip_ShowBuffIconInfo and id<20) or (HealBot_Globals.Tooltip_ShowDebuffIconInfo and id>50 and id<70) then
             b.gref.iconf[id]:EnableMouseMotion(true)
         else
             b.gref.iconf[id]:EnableMouseMotion(false)
@@ -454,31 +482,52 @@ function HealBot_Skins_ResetSkin(barType,button,numcols)
         auxWidth=ceil(auxWidth*frameScale)
     end
 
+    if button then
+        pWidth=bWidth
+        if button.frame==10 then
+            if HealBot_Panel_isSpecialUnit(button.unit)>0 then
+                if HealBot_Panel_isSpecialUnit(button.unit)==1 then
+                    HealBot_Skins_AdjustSpecialBarWidth(button, true)
+                else
+                    HealBot_Skins_AdjustSpecialBarWidth(button, false)
+                end
+            end
+        else
+            if HealBot_Panel_isSpecialPlayerUnit(button.unit)>1 then
+                bWidth=ceil(bWidth*Healbot_Config_Skins.Enemy[Healbot_Config_Skins.Current_Skin]["PLAYERTARGETSIZE"])
+            end
+            if HealBot_Panel_isSpecialPlayerUnit(button.unit)>2 then 
+                if HealBot_Panel_isSpecialPlayerUnit(button.unit)==3 then
+                    HealBot_Skins_AdjustSpecialBarWidth(button, true)
+                else
+                    HealBot_Skins_AdjustSpecialBarWidth(button, false)
+                end
+            end
+        end
+    end
+    
     if barType=="bar" then
         b=button
         if b.skinreset then
-            pWidth=bWidth
-            if HealBot_Panel_isSpecialUnit(button.unit)>0 then
-                HealBot_Skins_AdjustSpecialBarWidth(button)
-                if HealBot_Panel_isSpecialPlayerUnit(button.unit)>0 then
-                    if Healbot_Config_Skins.Enemy[Healbot_Config_Skins.Current_Skin]["DOUBLEWIDTH"] then
-                        pWidth=(pWidth+auxWidth)*3
-                    else
-                        pWidth=((pWidth+bOutline+auxWidth)*2)+Healbot_Config_Skins.HealBar[Healbot_Config_Skins.Current_Skin][button.frame]["CMARGIN"]
-                    end
-                elseif Healbot_Config_Skins.Enemy[Healbot_Config_Skins.Current_Skin]["DOUBLEWIDTH"] then 
-                    pWidth=pWidth*(2-(pWidth/7800))
-                end
-            elseif HealBot_Panel_isSpecialPlayerUnit(button.unit)>0 then
-                pWidth=((pWidth+bOutline+auxWidth)*2)+Healbot_Config_Skins.HealBar[Healbot_Config_Skins.Current_Skin][button.frame]["CMARGIN"]
+            if button.frame==10 then
+                HealBot_Skins_ColAdjFrames[button.frame][button.id]=0
+            elseif HealBot_Panel_isSpecialPlayerUnit(button.unit)>-1 then
+                zWidth=ceil(Healbot_Config_Skins.HealBar[Healbot_Config_Skins.Current_Skin][button.frame]["WIDTH"]*frameScale);
+                pWidth=ceil(zWidth*Healbot_Config_Skins.Enemy[Healbot_Config_Skins.Current_Skin]["PLAYERTARGETSIZE"])
+                pWidth=pWidth+bOutline+auxWidth+Healbot_Config_Skins.HealBar[Healbot_Config_Skins.Current_Skin][button.frame]["CMARGIN"]
+                pWidth=pWidth+zWidth
+                HealBot_Skins_ColAdjFrames[button.frame][button.id]=pWidth-zWidth
+            else
+                HealBot_Skins_ColAdjFrames[button.frame][button.id]=0
             end
+            
             if HealBot_Action_SetBackBarHeightWidth(button.frame, (bheight+auxHeight+(bOutline*2)), (pWidth+auxWidth+(bOutline*2)), framePad) then
                 HealBot_Skins_luVars["AuxReset"]=true
             end
             if HealBot_Skins_luVars["AuxReset"] then
                 b.auxreset=true
             end
-
+--HealBot_AddDebug("Width  unit="..b.unit.."  pWidth="..pWidth.."  bWidth="..bWidth,"Enemy",true)
             b:SetHeight(bheight); 
             b:SetWidth(bWidth)
             b.gref["Bar"]:SetHeight(bheight);
@@ -2563,10 +2612,14 @@ function HealBot_Skins_Check_Skin(SkinName, fromImport)
     if not Healbot_Config_Skins.Enemy[SkinName]["EXISTSHOWGROUP"] then Healbot_Config_Skins.Enemy[SkinName]["EXISTSHOWGROUP"]=1 end
     if Healbot_Config_Skins.Enemy[SkinName]["EXISTSHOWBOSS"]==nil then Healbot_Config_Skins.Enemy[SkinName]["EXISTSHOWBOSS"]=true end
     if Healbot_Config_Skins.Enemy[SkinName]["ENEMYTARGET"]==nil then Healbot_Config_Skins.Enemy[SkinName]["ENEMYTARGET"]=false end
-    if not Healbot_Config_Skins.Enemy[SkinName]["ENEMYTARGETSIZE"] then Healbot_Config_Skins.Enemy[SkinName]["ENEMYTARGETSIZE"]=40 end
-    if Healbot_Config_Skins.Enemy[SkinName]["DOUBLEWIDTH"]==nil then Healbot_Config_Skins.Enemy[SkinName]["DOUBLEWIDTH"]=false end
+    if Healbot_Config_Skins.Enemy[SkinName]["TARUSEENEMYCOLS"]==nil then Healbot_Config_Skins.Enemy[SkinName]["TARUSEENEMYCOLS"]=true end
+    if Healbot_Config_Skins.Enemy[SkinName]["TOTUSEENEMYCOLS"]==nil then Healbot_Config_Skins.Enemy[SkinName]["TOTUSEENEMYCOLS"]=false end
+    if not Healbot_Config_Skins.Enemy[SkinName]["ENEMYTARGETSIZE"] then Healbot_Config_Skins.Enemy[SkinName]["ENEMYTARGETSIZE"]=0.4 end
+    if not Healbot_Config_Skins.Enemy[SkinName]["PLAYERTARGETSIZE"] then Healbot_Config_Skins.Enemy[SkinName]["PLAYERTARGETSIZE"]=0.5 end
     if Healbot_Config_Skins.Enemy[SkinName]["INCDPS"] then Healbot_Config_Skins.Enemy[SkinName]["INCDPS"]=nil end
     if Healbot_Config_Skins.Enemy[SkinName]["FRAME"] then Healbot_Config_Skins.Enemy[SkinName]["FRAME"]=nil end
+    if Healbot_Config_Skins.Enemy[SkinName]["SELFDEBUFFS"]==nil then Healbot_Config_Skins.Enemy[SkinName]["SELFDEBUFFS"]=true end
+    if Healbot_Config_Skins.Enemy[SkinName]["SELFBUFFS"]==nil then Healbot_Config_Skins.Enemy[SkinName]["SELFBUFFS"]=true end
     if Healbot_Config_Skins.General[SkinName]["LOWMANA"] then Healbot_Config_Skins.General[SkinName]["LOWMANA"]=nil end
     if Healbot_Config_Skins.General[SkinName]["LOWMANACOMBAT"] then Healbot_Config_Skins.General[SkinName]["LOWMANACOMBAT"]=nil end
 

@@ -112,22 +112,22 @@ end
 local function HealBot_Aux_clearAllBar(id)
       --HealBot_setCall("HealBot_Aux_clearAllBar")
     for _,xButton in pairs(HealBot_AuxStatic_Buttons) do
-        if Healbot_Config_Skins.AuxBar[Healbot_Config_Skins.Current_Skin][id][xButton.frame]["USE"]==1 then
+        if xButton.frame>0 and Healbot_Config_Skins.AuxBar[Healbot_Config_Skins.Current_Skin][id][xButton.frame]["USE"]==1 then
             xButton.aux[id]["CLEAR"]=true
         end
     end
     for _,xButton in pairs(HealBot_Aux_Buttons) do
-        if Healbot_Config_Skins.AuxBar[Healbot_Config_Skins.Current_Skin][id][xButton.frame]["USE"]==1 then
+        if xButton.frame>0 and Healbot_Config_Skins.AuxBar[Healbot_Config_Skins.Current_Skin][id][xButton.frame]["USE"]==1 then
             xButton.aux[id]["CLEAR"]=true
         end
     end
     for _,xButton in pairs(HealBot_AuxFluid_Buttons) do
-        if Healbot_Config_Skins.AuxBar[Healbot_Config_Skins.Current_Skin][id][xButton.frame]["USE"]==1 then
+        if xButton.frame>0 and Healbot_Config_Skins.AuxBar[Healbot_Config_Skins.Current_Skin][id][xButton.frame]["USE"]==1 then
             xButton.aux[id]["CLEAR"]=true
         end
     end
     for _,xButton in pairs(HealBot_AuxTimed_Buttons) do
-        if Healbot_Config_Skins.AuxBar[Healbot_Config_Skins.Current_Skin][id][xButton.frame]["USE"]==1 then
+        if xButton.frame>0 and Healbot_Config_Skins.AuxBar[Healbot_Config_Skins.Current_Skin][id][xButton.frame]["USE"]==1 then
             xButton.aux[id]["CLEAR"]=true
         end
     end
@@ -315,7 +315,10 @@ function HealBot_Aux_clearAllMarkedBars()
     for _,xButton in pairs(HealBot_Enemy_Button) do
         HealBot_Aux_clearMarkedBars(xButton)
     end
-    for xUnit,xButton in pairs(HealBot_DuplicateEnemy_Button) do
+    for xUnit,xButton in pairs(HealBot_UnitTarget_Button) do
+        HealBot_Aux_clearMarkedBars(xButton)
+    end
+    for xUnit,xButton in pairs(HealBot_PrivateTarget_Button) do
         HealBot_Aux_clearMarkedBars(xButton)
     end
     HealBot_Aux_luVars["WaitOnFullClear"]=false
@@ -2256,7 +2259,10 @@ function HealBot_Aux_ResetTextButtons()
         for _,xButton in pairs(HealBot_Enemy_Button) do
             HealBot_Aux_ResetTextByTypeById(xButton, x)
         end
-        for xUnit,xButton in pairs(HealBot_DuplicateEnemy_Button) do
+        for xUnit,xButton in pairs(HealBot_UnitTarget_Button) do
+            HealBot_Aux_ResetTextByTypeById(xButton, x)
+        end
+        for xUnit,xButton in pairs(HealBot_PrivateTarget_Button) do
             HealBot_Aux_ResetTextByTypeById(xButton, x)
         end
         for _,xButton in pairs(HealBot_Extra_Button) do

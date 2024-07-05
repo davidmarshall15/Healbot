@@ -145,7 +145,7 @@ local vSetTextLenAux=0
 function HealBot_Text_setEnemyTextLen(bWidth, eBarID, tSize)
       --HealBot_setCall("HealBot_Text_setEnemyTextLen")
     if Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][10]["MAXCHARS"]==0 then
-        HealBot_Text_EnemySizeWidth["HLTH"][eBarID]=100
+        HealBot_Text_EnemySizeWidth["NAME"][eBarID]=100
     elseif eBarID==2 then
         HealBot_Text_EnemySizeWidth["NAME"][eBarID] = ceil(Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][10]["MAXCHARS"]*tSize)+1
     else
@@ -895,7 +895,12 @@ function HealBot_Text_ClearOverHeals()
         xButton.text.overheallen=0
         HealBot_Text_ConcatHealthText(xButton)
     end
-    for _,xButton in pairs(HealBot_DuplicateEnemy_Button) do
+    for _,xButton in pairs(HealBot_UnitTarget_Button) do
+        xButton.text.overheal=vTextChars["Nothing"]
+        xButton.text.overheallen=0
+        HealBot_Text_ConcatHealthText(xButton)
+    end
+    for _,xButton in pairs(HealBot_PrivateTarget_Button) do
         xButton.text.overheal=vTextChars["Nothing"]
         xButton.text.overheallen=0
         HealBot_Text_ConcatHealthText(xButton)
@@ -934,7 +939,12 @@ function HealBot_Text_ClearSeparateInHealsAbsorbs()
         xButton.text.inheallen=0
         HealBot_Text_ConcatHealthText(xButton)
     end
-    for _,xButton in pairs(HealBot_DuplicateEnemy_Button) do
+    for _,xButton in pairs(HealBot_UnitTarget_Button) do
+        xButton.text.inheal=vTextChars["Nothing"]
+        xButton.text.inheallen=0
+        HealBot_Text_ConcatHealthText(xButton)
+    end
+    for _,xButton in pairs(HealBot_PrivateTarget_Button) do
         xButton.text.inheal=vTextChars["Nothing"]
         xButton.text.inheallen=0
         HealBot_Text_ConcatHealthText(xButton)
@@ -1345,13 +1355,13 @@ function HealBot_Text_UpdateText(button)
         button.text.nameupdate=false
         if button.status.current<HealBot_Unit_Status["DC"] then
             button.text.nr, button.text.ng, button.text.nb = HealBot_Text_TextNameColours(button)
+            if button.status.enabled or button.status.summons then
+                button.text.na=HealBot_Action_BarColourAlpha(button, Healbot_Config_Skins.BarTextCol[Healbot_Config_Skins.Current_Skin][button.frame]["NCA"], 1)
+            else
+                button.text.na=HealBot_Action_BarColourAlpha(button, Healbot_Config_Skins.BarTextCol[Healbot_Config_Skins.Current_Skin][button.frame]["NCDA"], 1)
+            end
         else
-            button.text.nr, button.text.ng, button.text.nb= 0.58, 0.58, 0.58
-        end
-        if button.status.enabled or button.status.summons then
-            button.text.na=HealBot_Action_BarColourAlpha(button, Healbot_Config_Skins.BarTextCol[Healbot_Config_Skins.Current_Skin][button.frame]["NCA"], 1)
-        else
-            button.text.na=HealBot_Action_BarColourAlpha(button, Healbot_Config_Skins.BarTextCol[Healbot_Config_Skins.Current_Skin][button.frame]["NCDA"], 1)
+            button.text.nr, button.text.ng, button.text.nb, button.text.na= 0.58, 0.58, 0.58, 0.7
         end
         HealBot_Text_UpdateNameColour(button)
         button.gref.txt["text"]:SetText(button.text.namecomplete);
@@ -1483,35 +1493,44 @@ function HealBot_Text_UpdateNameButton(button)
       --HealBot_setCall("HealBot_Text_UpdateNameButton", button)
     cText=button.text.namecomplete or "."
     button.gref.txt["text"]:SetText(cText.." ")
-    button.gref.txt["text"]:SetText(cText)
+    --button.gref.txt["text"]:SetText(cText)
     button.text.name=button.text.name.." "
     HealBot_Text_setNameText(button)
 end
 
-function HealBot_Text_UpdateNames()
+function HealBot_Text_UpdateNames(enemyOnly)
       --HealBot_setCall("HealBot_Text_UpdateNames")
-    for _,xButton in pairs(HealBot_Unit_Button) do
-        HealBot_Text_UpdateNameButton(xButton)
-    end
-    for _,xButton in pairs(HealBot_Private_Button) do
-        HealBot_Text_UpdateNameButton(xButton)
-    end
-    for _,xButton in pairs(HealBot_Pet_Button) do
-        HealBot_Text_UpdateNameButton(xButton)
-    end
-    for _,xButton in pairs(HealBot_Vehicle_Button) do
-        HealBot_Text_UpdateNameButton(xButton)
+    if not enemyOnly then
+        for _,xButton in pairs(HealBot_Unit_Button) do
+            HealBot_Text_UpdateNameButton(xButton)
+        end
+        for _,xButton in pairs(HealBot_Private_Button) do
+            HealBot_Text_UpdateNameButton(xButton)
+        end
+        for _,xButton in pairs(HealBot_Pet_Button) do
+            HealBot_Text_UpdateNameButton(xButton)
+        end
+        for _,xButton in pairs(HealBot_Vehicle_Button) do
+            HealBot_Text_UpdateNameButton(xButton)
+        end
+        for _,xButton in pairs(HealBot_Extra_Button) do
+            HealBot_Text_UpdateNameButton(xButton)
+        end
     end
     for _,xButton in pairs(HealBot_Enemy_Button) do
         HealBot_Text_UpdateNameButton(xButton)
     end
-    for _,xButton in pairs(HealBot_DuplicateEnemy_Button) do
+    for _,xButton in pairs(HealBot_UnitTarget_Button) do
         HealBot_Text_UpdateNameButton(xButton)
     end
-    for _,xButton in pairs(HealBot_Extra_Button) do
+    for _,xButton in pairs(HealBot_PrivateTarget_Button) do
         HealBot_Text_UpdateNameButton(xButton)
     end
    -- HealBot_Timers_Set("LAST","ResetUnitStatus")
+end
+
+function HealBot_Text_UpdateNames_EnemyOnly()
+    HealBot_Text_UpdateNames(true)
 end
 
 function HealBot_Text_UpdateHealthButton(button)
@@ -1540,7 +1559,10 @@ function HealBot_Text_UpdateHealth()
     for _,xButton in pairs(HealBot_Enemy_Button) do
         HealBot_Text_UpdateHealthButton(xButton)
     end
-    for _,xButton in pairs(HealBot_DuplicateEnemy_Button) do
+    for _,xButton in pairs(HealBot_UnitTarget_Button) do
+        HealBot_Text_UpdateHealthButton(xButton)
+    end
+    for _,xButton in pairs(HealBot_PrivateTarget_Button) do
         HealBot_Text_UpdateHealthButton(xButton)
     end
     for _,xButton in pairs(HealBot_Extra_Button) do
@@ -1579,7 +1601,10 @@ function HealBot_Text_UpdateState()
     for _,xButton in pairs(HealBot_Enemy_Button) do
         HealBot_Text_UpdateStateButton(xButton)
     end
-    for _,xButton in pairs(HealBot_DuplicateEnemy_Button) do
+    for _,xButton in pairs(HealBot_UnitTarget_Button) do
+        HealBot_Text_UpdateStateButton(xButton)
+    end
+    for _,xButton in pairs(HealBot_PrivateTarget_Button) do
         HealBot_Text_UpdateStateButton(xButton)
     end
     for _,xButton in pairs(HealBot_Extra_Button) do
@@ -1611,7 +1636,10 @@ function HealBot_Text_UpdateButtons()
         for _,xButton in pairs(HealBot_Vehicle_Button) do
             HealBot_Text_UpdateButton(xButton)
         end
-        for _,xButton in pairs(HealBot_DuplicateEnemy_Button) do
+        for _,xButton in pairs(HealBot_UnitTarget_Button) do
+            HealBot_Text_UpdateButton(xButton)
+        end
+        for _,xButton in pairs(HealBot_PrivateTarget_Button) do
             HealBot_Text_UpdateButton(xButton)
         end
         for _,xButton in pairs(HealBot_Enemy_Button) do

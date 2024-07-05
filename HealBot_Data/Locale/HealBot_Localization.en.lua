@@ -85,6 +85,7 @@ function HealBot_Lang_enALL()
     HEALBOT_BLEED                           = "Bleed";
     HEALBOT_SPELL_HOLYWORDCHASTISE          = "Holy Word: Chastise"
     HEALBOT_SPELL_HOLYWORDSERENITY          = "Holy Word: Serenity"
+    HEALBOT_SPELL_HOLYWORDSANCTUARY         = "Holy Word: Sanctuary"
 
     HB_TOOLTIP_OFFLINE                      = "Offline";
 
@@ -327,7 +328,8 @@ function HealBot_Lang_enALL()
     HEALBOT_OPTIONS_SHOWTOOLTIP             = "Show tooltips";
     HEALBOT_OPTIONS_SHOWDETTOOLTIP          = "Show detailed spell information";
     HEALBOT_OPTIONS_SHOWCDTOOLTIP           = "Show spell cooldown";
-    HEALBOT_OPTIONS_SHOWICONINFOTIP         = "Show icon info";
+    HEALBOT_OPTIONS_SHOWICONBINFOTIP        = "Show buff icon info";
+    HEALBOT_OPTIONS_SHOWICONDINFOTIP        = "Show debuff icon info";
     HEALBOT_OPTIONS_COOLDOWNTEXT            = "Cooldown Text";
     HEALBOT_OPTIONS_COUNTTEXT               = "Count Text";
     HEALBOT_OPTIONS_IGNOREGCDTOOLTIP        = "Ignore spell global cooldown";
@@ -843,7 +845,7 @@ function HealBot_Lang_enALL()
     HEALBOT_OPTIONS_TAB_HEADERS             = "Headers"
     HEALBOT_OPTIONS_TAB_BARS                = "Bars"
     HEALBOT_OPTIONS_TAB_AURAS               = "Auras"
-    HEALBOT_OPTIONS_TAB_UNITTARGETS         = "Unit Targets"
+    HEALBOT_OPTIONS_TAB_UNITTARGETS         = "Player Targets"
     HEALBOT_OPTIONS_TAB_ENEMYUNITS          = "Enemy Units"
     HEALBOT_OPTIONS_TAB_TARGETOFTARGET      = "Target of Target"
     HEALBOT_OPTIONS_TAB_BUTTONS             = "Buttons"
@@ -1776,8 +1778,10 @@ function HealBot_Lang_enALL()
     HEALBOT_ENEMY_NUMBER_BOSSES             = "Number of Bosses"
     HEALBOT_ENEMY_HIDE_OUTOFCOMBAT          = "Hide bars out of combat"
     HEALBOT_ENEMY_SHOW_TARGET               = "Show enemy target"
-    HEALBOT_ENEMY_DOUBLE_WIDTH              = "Double total bar width"
+    HEALBOT_PLAYER_TARGET_SIZE              = "Player target size"
     HEALBOT_ENEMY_TARGET_SIZE               = "Enemy target size"
+    HEALBOT_ENEMY_TARUSESENEMYCOLS          = "Player target always uses enemy frame col"..HEALBOT_enWORD_COLOUR_SUFFIX.."s"
+    HEALBOT_ENEMY_TOTUSESENEMYCOLS          = "Player target of target always uses enemy frame col"..HEALBOT_enWORD_COLOUR_SUFFIX.."s"
     HEALBOT_OPTIONS_SHOW_ONLY_FRIEND        = "Only show Friendly"
     HEALBOT_OPTIONS_EXCLUDE_RAID            = "Exclude Self, Group and Raid"
     HEALBOT_OPTIONS_PROFILE                 = "Profile for".."\n".."Spells/Buffs/Debuffs"

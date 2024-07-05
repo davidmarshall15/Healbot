@@ -10,7 +10,7 @@ local MyGroup={["GROUP"]=0,["FRAME"]=1}
 local HeaderPos={[1]={},[2]={},[3]={},[4]={},[5]={},[6]={},[7]={},[8]={},[9]={},[10]={}}
 local HealBot_ActiveHeaders={[0]=1}
 local HealBot_AutoCloseFrame={[1]=1,[2]=1,[3]=1,[4]=1,[5]=1,[6]=1,[7]=1,[8]=1,[9]=1,[10]=1}
-local HealBot_TrackUnit={[1]={},[2]={},[3]={},[4]={},[5]={},[6]={},[7]={},[8]={},[9]={},[10]={},[11]={},[12]={}}
+local HealBot_TrackUnit={[1]={},[2]={},[3]={},[4]={},[5]={},[6]={},[7]={},[8]={},[9]={},[10]={},[11]={},[12]={},[13]={}}
 local HealBot_EnemyUnits={}
 local HealBot_UnitTargets={}
 local HealBot_TrackPrivateUnit={}
@@ -73,13 +73,7 @@ local HealBot_randomN=random(11)
 local prevCol=0
 local HealBot_randomClCol = {}
 local HealBot_randomClNames={}
-local HealBot_Action_HealGroup = {
-    "player",
-    "party1",
-    "party2",
-    "party3",
-    "party4",
-};
+local HealBot_Action_HealGroup = {["player"]=1,["party1"]=2,["party2"]=3,["party3"]=4,["party4"]=5};
 local HealBot_colIndex= {}
 local HealBot_Action_HealButtons = {};
 local hbPanelShowhbFocus=nil
@@ -104,7 +98,13 @@ HealBot_Panel_luVars["cpMacro"]="HealBot-CrashProt"
 HealBot_Panel_luVars["cpCrash"]=false
 HealBot_Panel_luVars["resetAuxText"]=false
 
-local tEnemyWithPlayerFrames=false
+local tEnemyWithPlayerFrames=1
+local tEnemyWithTankPlayerFrames=1
+if tEnemyWithPlayerFrames==1 then
+    HealBot_Options_TargetUsesEnemyCols:Hide()
+    HealBot_Options_ToTUsesEnemyCols:Hide()
+    HealBot_Options_PlayerTargetSize:Hide()
+end
 
 local hbRoleOnes={}
 local hbTANK1=1
@@ -158,12 +158,12 @@ end
 
 function HealBot_Panel_isSpecialUnit(unit)
       --HealBot_setCall("HealBot_Panel_isSpecialUnit")
-    return HealBot_EnemyUnits[unit] or 0
+    return HealBot_EnemyUnits[unit] or -1
 end
 
 function HealBot_Panel_isSpecialPlayerUnit(unit)
       --HealBot_setCall("HealBot_Panel_isSpecialPlayerUnit")
-    return HealBot_UnitTargets[unit] or 0
+    return HealBot_UnitTargets[unit] or -1
 end
 
 function HealBot_Panel_TankRole(unit, guid, isPlayer)
@@ -866,7 +866,7 @@ function HealBot_Panel_AnchorSpecialFrame(button, backFrame, relButton, newColum
     end
 end
 
-function HealBot_Panel_AnchorFrame(button, backFrame, relButton, newColumn)
+function HealBot_Panel_AnchorFrame(button, backFrame, relButton, newColumn, aWidth)
       --HealBot_setCall("HealBot_Panel_AnchorFrame")
     if newColumn==2 then
         if Healbot_Config_Skins.Anchors[Healbot_Config_Skins.Current_Skin][button.frame]["BARS"]==1 or
@@ -877,22 +877,22 @@ function HealBot_Panel_AnchorFrame(button, backFrame, relButton, newColumn)
         end
     else
         if Healbot_Config_Skins.Anchors[Healbot_Config_Skins.Current_Skin][button.frame]["BARS"]<3 then
-            backFrame:SetPoint("LEFT",relButton,"RIGHT",backBarsSize[button.frame]["CMARGIN"],0)
+            backFrame:SetPoint("LEFT",relButton,"RIGHT",backBarsSize[button.frame]["CMARGIN"]+aWidth,0)
         else
-            backFrame:SetPoint("RIGHT",relButton,"LEFT",-backBarsSize[button.frame]["CMARGIN"],0)
+            backFrame:SetPoint("RIGHT",relButton,"LEFT",0-(backBarsSize[button.frame]["CMARGIN"]+aWidth),0)
         end
     end
 end
 
-function HealBot_Panel_AnchorButton(button, backFrame, relButton, newColumn, child)
+function HealBot_Panel_AnchorButton(button, backFrame, relButton, newColumn, child, aWidth)
       --HealBot_setCall("HealBot_Panel_AnchorButton", button)
     if not relButton then
         HealBot_Panel_Anchor2ParentFrame(button, backFrame)
     elseif backFrame~=relButton then
-        if HealBot_EnemyUnits[button.unit] then
+        if HealBot_EnemyUnits[button.unit] and HealBot_EnemyUnits[button.unit]>0 then
             HealBot_Panel_AnchorSpecialFrame(button, backFrame, relButton, newColumn, child)
         else
-            HealBot_Panel_AnchorFrame(button, backFrame, relButton, newColumn)
+            HealBot_Panel_AnchorFrame(button, backFrame, relButton, newColumn, aWidth)
         end
     else
         HealBot_Panel_Anchor2ParentFrame(button, backFrame)
@@ -908,17 +908,28 @@ function HealBot_Panel_UpdateHeadersOpacity()
 end
 
 local vSpecialAnchor={}
-local eGUID,eButton
-function HealBot_Panel_PositionExtraButton(button, preCombat, frame, parent)
+local eGUID,eButton,eFrame
+function HealBot_Panel_PositionExtraButton(button, preCombat, frame, parent, pTarget, tot)
     eGUID=UnitGUID(button.unit.."target") or button.unit.."target"
-    if Healbot_Config_Skins.DuplicateBars[Healbot_Config_Skins.Current_Skin] and HealBot_TrackUnit[11][button.unit.."target"] then 
-        eButton=HealBot_Action_SetHealButton(button.unit.."target",eGUID,frame,12,true,3,preCombat)
+    if pTarget then
+        eFrame=frame
+        if not tot and Healbot_Config_Skins.Enemy[Healbot_Config_Skins.Current_Skin]["TARUSEENEMYCOLS"] then eFrame=10 end
+        if tot and Healbot_Config_Skins.Enemy[Healbot_Config_Skins.Current_Skin]["TOTUSEENEMYCOLS"] then eFrame=10 end
     else
-        eButton=HealBot_Action_SetHealButton(button.unit.."target",eGUID,frame,11,false,3,preCombat)
+        eFrame=10
+    end
+    if pTarget then
+        if Healbot_Config_Skins.DuplicateBars[Healbot_Config_Skins.Current_Skin] and HealBot_TrackUnit[12][button.unit.."target"] then 
+            eButton=HealBot_Action_SetHealButton(button.unit.."target",eGUID,frame,13,true,3,preCombat,eFrame)
+        else
+            eButton=HealBot_Action_SetHealButton(button.unit.."target",eGUID,frame,12,false,3,preCombat,eFrame)
+        end
+    else
+        eButton=HealBot_Action_SetHealButton(button.unit.."target",eGUID,frame,11,false,3,preCombat,eFrame)
     end
     if eButton then
         HealBot_TrackUnit[eButton.status.unittype][eButton.unit]=true
-        HealBot_Panel_AnchorButton(eButton, eButton.gref["Back"], button.gref["Back"], 1, true)        
+        HealBot_Panel_AnchorButton(eButton, eButton.gref["Back"], parent, 1, true, 0)
         eButton:ClearAllPoints()
         eButton:SetPoint("CENTER",eButton.gref["Bar"],"CENTER",0,0)
         eButton:Show()
@@ -926,7 +937,7 @@ function HealBot_Panel_PositionExtraButton(button, preCombat, frame, parent)
     return eButton
 end
 
-function HealBot_Panel_PositionButton(button,xHeader,relButton,newColumn,preCombat)
+function HealBot_Panel_PositionButton(button,xHeader,relButton,newColumn,preCombat, col)
       --HealBot_setCall("HealBot_Panel_PositionButton", button)
     if xHeader then
         local vPosParentHF=HealBot_Header_Frames[xHeader]
@@ -954,21 +965,26 @@ function HealBot_Panel_PositionButton(button,xHeader,relButton,newColumn,preComb
         end
         HealBot_Track_Headers[xHeader]=true
         vPosParentHF.back:ClearAllPoints()
-        HealBot_Panel_AnchorButton(button, vPosParentHF.back, relButton, newColumn)
+        HealBot_Panel_AnchorButton(button, vPosParentHF.back, relButton, newColumn, false, 0)
         vPosParentHF.bar.txt:SetText(xHeader);
         vPosParentHF:Show();
         return vPosParentHF.back
     else
-        HealBot_Panel_AnchorButton(button, button.gref["Back"], relButton, newColumn)
+        HealBot_Panel_AnchorButton(button, button.gref["Back"], relButton, newColumn, false, HealBot_Skins_retColAdj(button.frame, button.id, col))
         
-        if HealBot_UnitTargets[button.unit] then
-            xButton=HealBot_Panel_PositionExtraButton(button, preCombat, button.frame, button.gref["Back"])
-            if HealBot_UnitTargets[button.unit]==2 and xButton then
-                HealBot_Panel_PositionExtraButton(xButton, preCombat, xButton.frame, xButton.gref["Back"])
+        if button.frame==10 then
+            if HealBot_EnemyUnits[button.unit] and HealBot_EnemyUnits[button.unit]>0 then
+                HealBot_Panel_PositionExtraButton(button, preCombat, 10, button.gref["Back"])
             end
-        end
-        if button.frame==10 and HealBot_EnemyUnits[button.unit] then
-            HealBot_Panel_PositionExtraButton(button, preCombat, 10, button.gref["Back"])
+        elseif HealBot_UnitTargets[button.unit] and HealBot_UnitTargets[button.unit]>0 then
+            xButton=HealBot_Panel_PositionExtraButton(button, preCombat, button.frame, button.gref["Back"], true, false)
+            if xButton then
+                if HealBot_UnitTargets[xButton.unit]==3 then
+                    HealBot_Panel_PositionExtraButton(xButton, preCombat, xButton.frame, xButton.gref["Back"], true, true)
+                elseif HealBot_UnitTarget_Button[xButton.unit.."target"] or HealBot_PrivateTarget_Button[xButton.unit.."target"] then
+                    HealBot_Panel_PlayersTargetsDelToTFrames(xButton.unit.."target")
+                end
+            end
         end
 
         button:ClearAllPoints()
@@ -1131,8 +1147,10 @@ function HealBot_Panel_PositionBars(preCombat)
             vPosButton=HealBot_Test_Button[xUnit] or "nil"
         elseif xUnitType<5 then
             vPosButton=HealBot_Private_Button[xUnit] or "nil"
+        elseif xUnitType>12 then
+            vPosButton=HealBot_PrivateTarget_Button[xUnit] or "nil"
         elseif xUnitType>11 then
-            vPosButton=HealBot_DuplicateEnemy_Button[xUnit] or "nil"
+            vPosButton=HealBot_UnitTarget_Button[xUnit] or "nil"
         elseif xUnitType>10 then
             vPosButton=HealBot_Enemy_Button[xUnit] or "nil"
         elseif xUnitType==8 then
@@ -1161,16 +1179,16 @@ function HealBot_Panel_PositionBars(preCombat)
                 if HeaderPos[vFrame][barNo[vFrame]] then
                     headerNo[vFrame]=headerNo[vFrame]+1
                     if barNo[vFrame]==1 then
-                        vBar[vFrame]["PREVROW"]=HealBot_Panel_PositionButton(vBar[vFrame]["BUTTON"],HeaderPos[vFrame][barNo[vFrame]],false,sameCol,preCombat)
+                        vBar[vFrame]["PREVROW"]=HealBot_Panel_PositionButton(vBar[vFrame]["BUTTON"],HeaderPos[vFrame][barNo[vFrame]],false,sameCol,preCombat, maxCols[vFrame])
                         vBar[vFrame]["PREVCOL"]=vBar[vFrame]["PREVROW"]
                     elseif headerNo[vFrame]>Healbot_Config_Skins.HealBar[Healbot_Config_Skins.Current_Skin][vFrame]["NUMCOLS"] then
-                        vBar[vFrame]["PREVROW"]=HealBot_Panel_PositionButton(vBar[vFrame]["BUTTON"],HeaderPos[vFrame][barNo[vFrame]],vBar[vFrame]["PREVCOL"],newCol,preCombat)
                         maxCols[vFrame]=maxCols[vFrame]+1
+                        vBar[vFrame]["PREVROW"]=HealBot_Panel_PositionButton(vBar[vFrame]["BUTTON"],HeaderPos[vFrame][barNo[vFrame]],vBar[vFrame]["PREVCOL"],newCol,preCombat, maxCols[vFrame])
                         vBar[vFrame]["PREVCOL"]=vBar[vFrame]["PREVROW"]
                         headerNo[vFrame]=1
                         rowNo[vFrame]=1
                     else
-                        vBar[vFrame]["PREVROW"]=HealBot_Panel_PositionButton(vBar[vFrame]["BUTTON"],HeaderPos[vFrame][barNo[vFrame]],vBar[vFrame]["PREVROW"],sameCol,preCombat)
+                        vBar[vFrame]["PREVROW"]=HealBot_Panel_PositionButton(vBar[vFrame]["BUTTON"],HeaderPos[vFrame][barNo[vFrame]],vBar[vFrame]["PREVROW"],sameCol,preCombat, maxCols[vFrame])
                     end
                 end
                 if rowNo[vFrame]>maxRows[vFrame][1] then
@@ -1179,22 +1197,22 @@ function HealBot_Panel_PositionBars(preCombat)
                 if headerNo[vFrame]>maxHeaders[vFrame] then
                     maxHeaders[vFrame]=headerNo[vFrame]
                 end
-                vBar[vFrame]["PREVROW"]=HealBot_Panel_PositionButton(vBar[vFrame]["BUTTON"],false,vBar[vFrame]["PREVROW"],sameCol,preCombat)
+                vBar[vFrame]["PREVROW"]=HealBot_Panel_PositionButton(vBar[vFrame]["BUTTON"],false,vBar[vFrame]["PREVROW"],sameCol,preCombat, maxCols[vFrame])
             elseif Healbot_Config_Skins.HealBar[Healbot_Config_Skins.Current_Skin][vFrame]["GRPCOLS"] then
                 if HeaderPos[vFrame][barNo[vFrame]] then
                     headerNo[vFrame]=headerNo[vFrame]+1
                 end
                 if barNo[vFrame]==1 then
-                    vBar[vFrame]["PREVROW"]=HealBot_Panel_PositionButton(vBar[vFrame]["BUTTON"],false,false,sameCol,preCombat)
+                    vBar[vFrame]["PREVROW"]=HealBot_Panel_PositionButton(vBar[vFrame]["BUTTON"],false,false,sameCol,preCombat, maxCols[vFrame])
                     vBar[vFrame]["PREVCOL"]=vBar[vFrame]["PREVROW"]
                 elseif headerNo[vFrame]>Healbot_Config_Skins.HealBar[Healbot_Config_Skins.Current_Skin][vFrame]["NUMCOLS"] then
-                    vBar[vFrame]["PREVROW"]=HealBot_Panel_PositionButton(vBar[vFrame]["BUTTON"],false,vBar[vFrame]["PREVCOL"],newCol,preCombat)
+                    maxCols[vFrame]=maxCols[vFrame]+1
+                    vBar[vFrame]["PREVROW"]=HealBot_Panel_PositionButton(vBar[vFrame]["BUTTON"],false,vBar[vFrame]["PREVCOL"],newCol,preCombat, maxCols[vFrame])
                     vBar[vFrame]["PREVCOL"]=vBar[vFrame]["PREVROW"]
                     headerNo[vFrame]=1
-                    maxCols[vFrame]=maxCols[vFrame]+1
                     rowNo[vFrame]=1
                 else
-                    vBar[vFrame]["PREVROW"]=HealBot_Panel_PositionButton(vBar[vFrame]["BUTTON"],false,vBar[vFrame]["PREVROW"],sameCol,preCombat)
+                    vBar[vFrame]["PREVROW"]=HealBot_Panel_PositionButton(vBar[vFrame]["BUTTON"],false,vBar[vFrame]["PREVROW"],sameCol,preCombat, maxCols[vFrame])
                 end
                 if rowNo[vFrame]>maxRows[vFrame][1] then
                     maxRows[vFrame][1]=rowNo[vFrame]
@@ -1202,15 +1220,15 @@ function HealBot_Panel_PositionBars(preCombat)
             else
                 if barNo[vFrame]==1 or rowNo[vFrame]>(maxRows[vFrame][maxCols[vFrame]] or rowNo[vFrame]) then
                     if barNo[vFrame]==1 then
-                        vBar[vFrame]["PREVROW"]=HealBot_Panel_PositionButton(vBar[vFrame]["BUTTON"],false,false,sameCol,preCombat)
+                        vBar[vFrame]["PREVROW"]=HealBot_Panel_PositionButton(vBar[vFrame]["BUTTON"],false,false,sameCol,preCombat, maxCols[vFrame])
                     else
-                        vBar[vFrame]["PREVROW"]=HealBot_Panel_PositionButton(vBar[vFrame]["BUTTON"],false,vBar[vFrame]["PREVCOL"],newCol,preCombat)
                         maxCols[vFrame]=maxCols[vFrame]+1
+                        vBar[vFrame]["PREVROW"]=HealBot_Panel_PositionButton(vBar[vFrame]["BUTTON"],false,vBar[vFrame]["PREVCOL"],newCol,preCombat, maxCols[vFrame])
                     end
                     vBar[vFrame]["PREVCOL"]=vBar[vFrame]["PREVROW"]
                     rowNo[vFrame]=1
                 else
-                    vBar[vFrame]["PREVROW"]=HealBot_Panel_PositionButton(vBar[vFrame]["BUTTON"],false,vBar[vFrame]["PREVROW"],sameCol,preCombat)
+                    vBar[vFrame]["PREVROW"]=HealBot_Panel_PositionButton(vBar[vFrame]["BUTTON"],false,vBar[vFrame]["PREVROW"],sameCol,preCombat, maxCols[vFrame])
                 end
             end
         elseif vPosButton.id and hbAnchoredButtons[vPosButton.id] then
@@ -1727,7 +1745,10 @@ function HealBot_Panel_TestBarsOn()
     for _,xButton in pairs(HealBot_Enemy_Button) do
         HealBot_Action_MarkDeleteButton(xButton)
     end
-    for xUnit,xButton in pairs(HealBot_DuplicateEnemy_Button) do
+    for xUnit,xButton in pairs(HealBot_UnitTarget_Button) do
+        HealBot_Action_MarkDeleteButton(xButton)
+    end
+    for xUnit,xButton in pairs(HealBot_PrivateTarget_Button) do
         HealBot_Action_MarkDeleteButton(xButton)
     end
     for _,xButton in pairs(HealBot_Pet_Button) do
@@ -1966,26 +1987,137 @@ function HealBot_Panel_enemyBar(eUnit, pUnit)
     end
 end
 
-function HealBot_Panel_checkEnemyBar(eUnit, pUnit, preCombat, existsShow, preCombatShow)
+function HealBot_Panel_PlayersTargets(eUnit, pUnit, hidden)
+    if hidden then
+        HealBot_Panel_PlayersTargetsDelFrames(pUnit, false)
+        HealBot_UnitTargets[eUnit]=0
+        HealBot_UnitTargets[pUnit]=0
+        if Healbot_Config_Skins.Enemy[Healbot_Config_Skins.Current_Skin]["ENEMYTARGET"] then
+            HealBot_UnitTargets[eUnit.."target"]=0
+        else
+            HealBot_UnitTargets[eUnit.."target"]=nil
+        end
+    else
+        HealBot_UnitTargets[pUnit]=1
+        if Healbot_Config_Skins.Enemy[Healbot_Config_Skins.Current_Skin]["ENEMYTARGET"] then
+            HealBot_UnitTargets[eUnit]=3
+            HealBot_UnitTargets[eUnit.."target"]=4
+        else
+            HealBot_UnitTargets[eUnit]=2
+            HealBot_UnitTargets[eUnit.."target"]=nil
+        end
+    end
+end
+
+function HealBot_Panel_PlayersTargetsClear(eUnit, pUnit)
+    HealBot_UnitTargets[pUnit]=nil
+    HealBot_UnitTargets[eUnit]=nil
+end
+
+function HealBot_Panel_PlayersTargetsDelToTFrames(unit)
+    if HealBot_UnitTarget_Button[unit] then HealBot_Action_MarkDeleteButton(HealBot_UnitTarget_Button[unit]) end
+    if HealBot_PrivateTarget_Button[unit] then HealBot_Action_MarkDeleteButton(HealBot_PrivateTarget_Button[unit]) end
+    HealBot_UnitTargets[unit]=nil
+end
+
+function HealBot_Panel_PlayersTargetsDelFrames(unit, recalc)
+    if HealBot_UnitTarget_Button[unit] then HealBot_Action_MarkDeleteButton(HealBot_UnitTarget_Button[unit]) end
+    if HealBot_PrivateTarget_Button[unit] then HealBot_Action_MarkDeleteButton(HealBot_PrivateTarget_Button[unit]) end       
+    if HealBot_UnitTarget_Button[unit.."target"] then HealBot_Action_MarkDeleteButton(HealBot_UnitTarget_Button[unit.."target"]) end
+    if HealBot_PrivateTarget_Button[unit.."target"] then HealBot_Action_MarkDeleteButton(HealBot_PrivateTarget_Button[unit.."target"]) end
+    HealBot_Panel_PlayersTargetsDelToTFrames(unit.."targettarget")
+    HealBot_Panel_PlayersTargetsClear(unit, unit.."target")
+    if recalc then
+        HealBot_Timers_setLuVars("ResetSkins", true)
+        HealBot_Timers_Set("OOC","RefreshPartyNextRecalcPlayers")
+        HealBot_AddDebug("PlayersTargetsDelFrames  recalc=TRUE  unit="..unit,"Enemy",true)
+    else
+        HealBot_AddDebug("PlayersTargetsDelFrames  recalc=FALSE  unit="..unit,"Enemy",true)
+    end
+end
+
+function HealBot_Panel_EnemyTargetsWithPlayersUpdate(unit, guid)
+    if not HealBot_Data["UILOCK"] then
+        if unit=="player" and Healbot_Config_Skins.Enemy[Healbot_Config_Skins.Current_Skin]["INCSELF"] and Healbot_Config_Skins.Enemy[Healbot_Config_Skins.Current_Skin]["EXISTSHOWPTAR"]<3 and tEnemyWithPlayerFrames==2 then
+            HealBot_nextRecalcParty(6)
+        elseif HealBot_MainTanks[guid] and Healbot_Config_Skins.Enemy[Healbot_Config_Skins.Current_Skin]["INCTANKS"] and Healbot_Config_Skins.Enemy[Healbot_Config_Skins.Current_Skin]["EXISTSHOWTANK"]<3 and tEnemyWithTankPlayerFrames==2 then
+            HealBot_nextRecalcParty(6)
+        elseif HealBot_Action_HealGroup[unit] and Healbot_Config_Skins.Enemy[Healbot_Config_Skins.Current_Skin]["INCGROUP"] and Healbot_Config_Skins.Enemy[Healbot_Config_Skins.Current_Skin]["EXISTSHOWGROUP"]<3 and tEnemyWithPlayerFrames==2 then
+            HealBot_nextRecalcParty(6)
+        elseif HealBot_MyHealTargets[guid] and Healbot_Config_Skins.Enemy[Healbot_Config_Skins.Current_Skin]["INCMYTAR"] and Healbot_Config_Skins.Enemy[Healbot_Config_Skins.Current_Skin]["EXISTSHOWMYTAR"]<3 and tEnemyWithPlayerFrames==2 then
+            HealBot_nextRecalcParty(6)
+        end
+    end
+end
+
+function HealBot_Panel_checkEnemyBar(eUnit, pUnit, preCombat, existsShow, preCombatShow, useFrame)
       --HealBot_setCall("HealBot_Panel_checkEnemyBar")
     if UnitExists(pUnit) then
         if preCombat then
             if preCombatShow==2 then
                 if UnitExists(eUnit) then
-                    HealBot_Panel_enemyBar(eUnit, pUnit)
+                    if useFrame==1 then
+                        HealBot_Panel_enemyBar(eUnit, pUnit)
+                    else
+                        HealBot_Panel_PlayersTargets(eUnit, pUnit, false)
+                    end
+                elseif useFrame==2 then
+                    HealBot_Panel_PlayersTargets(eUnit, pUnit, true)
                 end
             elseif preCombatShow==1 or not UnitExists("boss1") then
-                HealBot_Panel_enemyBar(eUnit, pUnit)
+                if useFrame==1 then
+                    HealBot_Panel_enemyBar(eUnit, pUnit)
+                else
+                    HealBot_Panel_PlayersTargets(eUnit, pUnit, false)
+                end
+            elseif useFrame==2 then
+                HealBot_Panel_PlayersTargets(eUnit, pUnit, true)
             end
         elseif existsShow>1 then
             if existsShow==2 then
-                if HealBot_ValidLivingEnemy(pUnit, eUnit) then
-                    HealBot_Panel_enemyBar(eUnit, pUnit)
+                if UnitExists(eUnit) then
+                    if useFrame==1 then
+                        HealBot_Panel_enemyBar(eUnit, pUnit)
+                    else
+                        HealBot_Panel_PlayersTargets(eUnit, pUnit, false)
+                    end
+                elseif useFrame==2 then
+                    HealBot_Panel_PlayersTargets(eUnit, pUnit, true)
                 end
-            else
+            elseif useFrame==1 then
                 HealBot_Panel_enemyBar(eUnit, pUnit)
+            else
+                HealBot_Panel_PlayersTargets(eUnit, pUnit, false)
             end
+        elseif useFrame==2 then
+            HealBot_Panel_PlayersTargetsDelFrames(pUnit, false)
         end
+    end
+end
+
+function HealBot_Panel_checkEnemyBarInPlayerFrames(unit, guid, preCombat)
+    if unit=="player" and Healbot_Config_Skins.Enemy[Healbot_Config_Skins.Current_Skin]["INCSELF"] and tEnemyWithPlayerFrames==2 then
+        HealBot_Panel_checkEnemyBar(unit.."target", unit, preCombat, 
+                                    Healbot_Config_Skins.Enemy[Healbot_Config_Skins.Current_Skin]["EXISTSHOWPTAR"],
+                                    Healbot_Config_Skins.Enemy[Healbot_Config_Skins.Current_Skin]["INCOMBATSHOWSELF"],
+                                    2)
+    elseif HealBot_MainTanks[guid] and Healbot_Config_Skins.Enemy[Healbot_Config_Skins.Current_Skin]["INCTANKS"] and tEnemyWithTankPlayerFrames==2 then
+        HealBot_Panel_checkEnemyBar(xUnit.."target", xUnit, preCombat, 
+                                    Healbot_Config_Skins.Enemy[Healbot_Config_Skins.Current_Skin]["EXISTSHOWTANK"],
+                                    Healbot_Config_Skins.Enemy[Healbot_Config_Skins.Current_Skin]["INCOMBATSHOWTANK"],
+                                    2)
+    elseif HealBot_Action_HealGroup[unit] and Healbot_Config_Skins.Enemy[Healbot_Config_Skins.Current_Skin]["INCGROUP"] and tEnemyWithPlayerFrames==2 then
+        HealBot_Panel_checkEnemyBar(unit.."target", unit, preCombat, 
+                                    Healbot_Config_Skins.Enemy[Healbot_Config_Skins.Current_Skin]["EXISTSHOWGROUP"],
+                                    Healbot_Config_Skins.Enemy[Healbot_Config_Skins.Current_Skin]["INCOMBATSHOWGROUP"],
+                                    2)
+    elseif HealBot_MyHealTargets[guid] and Healbot_Config_Skins.Enemy[Healbot_Config_Skins.Current_Skin]["INCMYTAR"] and tEnemyWithPlayerFrames==2 then
+        HealBot_Panel_checkEnemyBar(unit.."target", unit, preCombat, 
+                                    Healbot_Config_Skins.Enemy[Healbot_Config_Skins.Current_Skin]["EXISTSHOWMYTAR"],
+                                    Healbot_Config_Skins.Enemy[Healbot_Config_Skins.Current_Skin]["INCOMBATSHOWLIST"],
+                                    2)
+    elseif HealBot_UnitTargets[unit] then
+        HealBot_Panel_PlayersTargetsDelFrames(unit, true)
     end
 end
 
@@ -2264,27 +2396,74 @@ function HealBot_Panel_addUnits(doMainSort,unitType,hText,k, preCombat)
 end
 
 local vEnemyIndex,vEnemyLocation,vEnemyBossNum,vEnemyBossExist=0,"",0,1
+local vEnemyUnit={}
+function HealBot_Panel_enemyPlayerTargets(preCombat, playerFrame)
+    for x,_ in pairs(vEnemyUnit) do
+        vEnemyUnit[x]=nil;
+    end
+    if Healbot_Config_Skins.Enemy[Healbot_Config_Skins.Current_Skin]["INCSELF"] and tEnemyWithPlayerFrames==playerFrame then
+        vEnemyUnit["player"]=true
+        HealBot_Panel_checkEnemyBar("playertarget", "player", preCombat, 
+                                    Healbot_Config_Skins.Enemy[Healbot_Config_Skins.Current_Skin]["EXISTSHOWPTAR"],
+                                    Healbot_Config_Skins.Enemy[Healbot_Config_Skins.Current_Skin]["INCOMBATSHOWSELF"],
+                                    playerFrame)
+    end
+    if Healbot_Config_Skins.Enemy[Healbot_Config_Skins.Current_Skin]["INCTANKS"] and tEnemyWithTankPlayerFrames==playerFrame then
+        for _,xUnit in pairs(HealBot_MainTanks) do
+            if not vEnemyUnit[xUnit] then
+                vEnemyUnit[xUnit]=true
+                HealBot_Panel_checkEnemyBar(xUnit.."target", xUnit, preCombat, 
+                                            Healbot_Config_Skins.Enemy[Healbot_Config_Skins.Current_Skin]["EXISTSHOWTANK"],
+                                            Healbot_Config_Skins.Enemy[Healbot_Config_Skins.Current_Skin]["INCOMBATSHOWTANK"],
+                                            playerFrame)
+            end
+        end
+    end
+    if Healbot_Config_Skins.Enemy[Healbot_Config_Skins.Current_Skin]["INCGROUP"] and tEnemyWithPlayerFrames==playerFrame then
+        for xUnit,_ in pairs(HealBot_Action_HealGroup) do
+            if not vEnemyUnit[xUnit] then
+                vEnemyUnit[xUnit]=true
+                HealBot_Panel_checkEnemyBar(xUnit.."target", xUnit, preCombat, 
+                                            Healbot_Config_Skins.Enemy[Healbot_Config_Skins.Current_Skin]["EXISTSHOWGROUP"],
+                                            Healbot_Config_Skins.Enemy[Healbot_Config_Skins.Current_Skin]["INCOMBATSHOWGROUP"],
+                                            playerFrame)
+            end
+        end
+    end
+    if Healbot_Config_Skins.Enemy[Healbot_Config_Skins.Current_Skin]["INCMYTAR"] and tEnemyWithPlayerFrames==playerFrame then
+        for xGUID,_ in pairs(HealBot_MyHealTargets) do
+            xUnit=hbPanel_dataGUIDs[xGUID] or hbPanel_dataPetGUIDs[xGUID] or "unknown"
+            if not vEnemyUnit[xUnit] then
+                vEnemyUnit[xUnit]=true
+                HealBot_Panel_checkEnemyBar(xUnit.."target", xUnit, preCombat, 
+                                            Healbot_Config_Skins.Enemy[Healbot_Config_Skins.Current_Skin]["EXISTSHOWMYTAR"],
+                                            Healbot_Config_Skins.Enemy[Healbot_Config_Skins.Current_Skin]["INCOMBATSHOWLIST"],
+                                            playerFrame)
+            end
+        end
+        for xGUID,_ in pairs(HealBot_Globals.HealBot_PermMyTargets) do
+            xUnit=hbPanel_dataGUIDs[xGUID] or hbPanel_dataPetGUIDs[xGUID] or "unknown"
+            if not vEnemyUnit[xUnit] then
+                vEnemyUnit[xUnit]=true
+                HealBot_Panel_checkEnemyBar(xUnit.."target", xUnit, preCombat, 
+                                            Healbot_Config_Skins.Enemy[Healbot_Config_Skins.Current_Skin]["EXISTSHOWMYTAR"],
+                                            Healbot_Config_Skins.Enemy[Healbot_Config_Skins.Current_Skin]["INCOMBATSHOWLIST"],
+                                            playerFrame)
+            end
+        end
+    end
+end
+
 function HealBot_Panel_enemyTargets(preCombat)
         --HealBot_setCall("HealBot_Panel_enemyTargets")
     HeaderPos[hbCurrentFrame][i[hbCurrentFrame]+1] = HEALBOT_OPTIONS_TARGETHEALS
     vEnemyIndex=i[hbCurrentFrame]
-    if Healbot_Config_Skins.Enemy[Healbot_Config_Skins.Current_Skin]["INCSELF"] and not tEnemyWithPlayerFrames then
-        if HEALBOT_GAME_VERSION>9 then
-            HealBot_Panel_checkEnemyBar("anyenemy", "player", preCombat, 
-                                        Healbot_Config_Skins.Enemy[Healbot_Config_Skins.Current_Skin]["EXISTSHOWPTAR"],
-                                        Healbot_Config_Skins.Enemy[Healbot_Config_Skins.Current_Skin]["INCOMBATSHOWSELF"])
-        else
-            HealBot_Panel_checkEnemyBar("playertarget", "player", preCombat, 
-                                        Healbot_Config_Skins.Enemy[Healbot_Config_Skins.Current_Skin]["EXISTSHOWPTAR"],
-                                        Healbot_Config_Skins.Enemy[Healbot_Config_Skins.Current_Skin]["INCOMBATSHOWSELF"])
-        end
-    end
     if HEALBOT_GAME_VERSION>1 and Healbot_Config_Skins.Enemy[Healbot_Config_Skins.Current_Skin]["INCFOCUS"] then
         HealBot_Panel_checkEnemyBar("focus", "player", preCombat, 
                                     Healbot_Config_Skins.Enemy[Healbot_Config_Skins.Current_Skin]["EXISTSHOWFOCUS"],
-                                    Healbot_Config_Skins.Enemy[Healbot_Config_Skins.Current_Skin]["INCOMBATSHOWFOCUS"])
+                                    Healbot_Config_Skins.Enemy[Healbot_Config_Skins.Current_Skin]["INCOMBATSHOWFOCUS"],
+                                    1)
     end
-    
     _,vEnemyLocation = IsInInstance()
     if vEnemyLocation == "arena" then
         if Healbot_Config_Skins.Enemy[Healbot_Config_Skins.Current_Skin]["INCARENA"] then
@@ -2292,7 +2471,8 @@ function HealBot_Panel_enemyTargets(preCombat)
                 xUnit="arena"..j;
                 HealBot_Panel_checkEnemyBar(xUnit, "player", preCombat, 
                                             Healbot_Config_Skins.Enemy[Healbot_Config_Skins.Current_Skin]["EXISTSHOWARENA"],
-                                            Healbot_Config_Skins.Enemy[Healbot_Config_Skins.Current_Skin]["INCOMBATSHOWARENA"])
+                                            Healbot_Config_Skins.Enemy[Healbot_Config_Skins.Current_Skin]["INCOMBATSHOWARENA"],
+                                            1)
             end
         end
         if Healbot_Config_Skins.Enemy[Healbot_Config_Skins.Current_Skin]["INCARENAPETS"] then
@@ -2300,36 +2480,9 @@ function HealBot_Panel_enemyTargets(preCombat)
                 xUnit="arenapet"..j;
                 HealBot_Panel_checkEnemyBar(xUnit, "player", preCombat, 
                                             Healbot_Config_Skins.Enemy[Healbot_Config_Skins.Current_Skin]["EXISTSHOWARENA"],
-                                            Healbot_Config_Skins.Enemy[Healbot_Config_Skins.Current_Skin]["INCOMBATSHOWARENA"])
+                                            Healbot_Config_Skins.Enemy[Healbot_Config_Skins.Current_Skin]["INCOMBATSHOWARENA"],
+                                            1)
             end
-        end
-    end
-    if Healbot_Config_Skins.Enemy[Healbot_Config_Skins.Current_Skin]["INCTANKS"] and not tEnemyWithPlayerFrames then
-        for _,xUnit in pairs(HealBot_MainTanks) do
-            HealBot_Panel_checkEnemyBar(xUnit.."target", xUnit, preCombat, 
-                                        Healbot_Config_Skins.Enemy[Healbot_Config_Skins.Current_Skin]["EXISTSHOWTANK"],
-                                        Healbot_Config_Skins.Enemy[Healbot_Config_Skins.Current_Skin]["INCOMBATSHOWTANK"])
-        end
-    end
-    if Healbot_Config_Skins.Enemy[Healbot_Config_Skins.Current_Skin]["INCGROUP"] and not tEnemyWithPlayerFrames then
-        for n,xUnit in ipairs(HealBot_Action_HealGroup) do
-            HealBot_Panel_checkEnemyBar(xUnit.."target", xUnit, preCombat, 
-                                        Healbot_Config_Skins.Enemy[Healbot_Config_Skins.Current_Skin]["EXISTSHOWGROUP"],
-                                        Healbot_Config_Skins.Enemy[Healbot_Config_Skins.Current_Skin]["INCOMBATSHOWGROUP"])
-        end
-    end
-    if Healbot_Config_Skins.Enemy[Healbot_Config_Skins.Current_Skin]["INCMYTAR"] and not tEnemyWithPlayerFrames then
-        for xGUID,_ in pairs(HealBot_MyHealTargets) do
-            xUnit=hbPanel_dataGUIDs[xGUID] or hbPanel_dataPetGUIDs[xGUID] or "unknown"
-            HealBot_Panel_checkEnemyBar(xUnit.."target", xUnit, preCombat, 
-                                        Healbot_Config_Skins.Enemy[Healbot_Config_Skins.Current_Skin]["EXISTSHOWMYTAR"],
-                                        Healbot_Config_Skins.Enemy[Healbot_Config_Skins.Current_Skin]["INCOMBATSHOWLIST"])
-        end
-        for xGUID,_ in pairs(HealBot_Globals.HealBot_PermMyTargets) do
-            xUnit=hbPanel_dataGUIDs[xGUID] or hbPanel_dataPetGUIDs[xGUID] or "unknown"
-            HealBot_Panel_checkEnemyBar(xUnit.."target", xUnit, preCombat, 
-                                        Healbot_Config_Skins.Enemy[Healbot_Config_Skins.Current_Skin]["EXISTSHOWMYTAR"],
-                                        Healbot_Config_Skins.Enemy[Healbot_Config_Skins.Current_Skin]["INCOMBATSHOWLIST"])
         end
     end
     
@@ -2350,10 +2503,12 @@ function HealBot_Panel_enemyTargets(preCombat)
         if vEnemyBossNum>0 then
             for bi=1,vEnemyBossNum do
                 xUnit="boss"..bi
-                HealBot_Panel_checkEnemyBar(xUnit, "player", preCombat, vEnemyBossExist, vEnemyBossExist)
+                HealBot_Panel_checkEnemyBar(xUnit, "player", preCombat, vEnemyBossExist, vEnemyBossExist, 1)
             end
         end
     end
+
+    HealBot_Panel_enemyPlayerTargets(preCombat, 1)
 
     if i[hbCurrentFrame]>vEnemyIndex then 
         HealBot_Panel_addUnits(false,11,HEALBOT_CUSTOM_CASTBY_ENEMY,vEnemyIndex, preCombat)
@@ -2552,7 +2707,7 @@ function HealBot_Panel_raidHeals(preCombat)
             end
         end
     else
-        for n,xUnit in ipairs(HealBot_Action_HealGroup) do
+        for xUnit,n in pairs(HealBot_Action_HealGroup) do
             if hbPanel_dataUnits[xUnit] then
                 HealBot_Panel_addUnit(xUnit, 5, hbPanel_dataUnits[xUnit], true)
             elseif preCombat then
@@ -2667,14 +2822,14 @@ function HealBot_Panel_myHeals(preCombat)
         vMyTargetsUnit=hbPanel_dataGUIDs[xGUID] or hbPanel_dataPetGUIDs[xGUID] or "unknown"
         if UnitExists(vMyTargetsUnit) then  
             HealBot_Panel_addUnit(vMyTargetsUnit, 4, xGUID, false)
-            HealBot_Panel_PlayersTargetsCheck(xUnit, Healbot_Config_Skins.Enemy[Healbot_Config_Skins.Current_Skin]["INCMYTAR"], tEnemyWithPlayerFrames)
+            HealBot_Panel_checkEnemyBarInPlayerFrames(vMyTargetsUnit, xGUID, preCombat)
         end
     end
     for xGUID,_ in pairs(HealBot_Globals.HealBot_PermMyTargets) do
         vMyTargetsUnit=hbPanel_dataGUIDs[xGUID] or hbPanel_dataPetGUIDs[xGUID] or "unknown"
         if UnitExists(vMyTargetsUnit) then  
             HealBot_Panel_addUnit(vMyTargetsUnit, 4, xGUID, false)
-            HealBot_Panel_PlayersTargetsCheck(xUnit, Healbot_Config_Skins.Enemy[Healbot_Config_Skins.Current_Skin]["INCMYTAR"], tEnemyWithPlayerFrames)
+            HealBot_Panel_checkEnemyBarInPlayerFrames(vMyTargetsUnit, xGUID, preCombat)
         end
     end
     if i[hbCurrentFrame]>vMyTargetsIndex then 
@@ -2682,68 +2837,23 @@ function HealBot_Panel_myHeals(preCombat)
     end
 end
 
-function HealBot_Panel_PlayersTargets(pUnit, eUnit)
-    HealBot_UnitTargets[eUnit]=1
-    if Healbot_Config_Skins.Enemy[Healbot_Config_Skins.Current_Skin]["ENEMYTARGET"] then
-        HealBot_EnemyUnits[eUnit]=1
-        HealBot_EnemyUnits[eUnit.."target"]=2
-        HealBot_UnitTargets[pUnit]=2
-        HealBot_UnitTargets[eUnit.."target"]=1
-    else
-        HealBot_EnemyUnits[eUnit]=nil
-        HealBot_EnemyUnits[eUnit.."target"]=nil
-        HealBot_UnitTargets[pUnit]=1
-        HealBot_UnitTargets[eUnit.."target"]=nil
-    end
-end
-
-function HealBot_Panel_PlayersTargetsClear(pUnit, eUnit)
-    HealBot_UnitTargets[pUnit]=nil
-    HealBot_UnitTargets[eUnit]=nil
-    HealBot_UnitTargets[eUnit.."target"]=nil
-end
-
-function HealBot_Panel_PlayersTargetsDelFrames(unit)
-    if HealBot_UnitTargets[unit] then
-        if HealBot_Enemy_Button[unit] then HealBot_Action_MarkDeleteButton(HealBot_Enemy_Button[unit]) end
-        if HealBot_DuplicateEnemy_Button[unit] then HealBot_Action_MarkDeleteButton(HealBot_DuplicateEnemy_Button[unit]) end
-    end        
-    if HealBot_UnitTargets[unit.."target"] then
-        if HealBot_Enemy_Button[unit.."target"] then HealBot_Action_MarkDeleteButton(HealBot_Enemy_Button[unit.."target"]) end
-        if HealBot_DuplicateEnemy_Button[unit.."target"] then HealBot_Action_MarkDeleteButton(HealBot_DuplicateEnemy_Button[unit.."target"]) end
-    end        
-    if HealBot_UnitTargets[unit.."targettarget"] then
-        if HealBot_Enemy_Button[unit.."targettarget"] then HealBot_Action_MarkDeleteButton(HealBot_Enemy_Button[unit.."targettarget"]) end
-        if HealBot_DuplicateEnemy_Button[unit.."targettarget"] then HealBot_Action_MarkDeleteButton(HealBot_DuplicateEnemy_Button[unit.."targettarget"]) end
-    end
-    HealBot_Panel_PlayersTargetsClear(unit, unit.."target")
-end
-
-function HealBot_Panel_PlayersTargetsCheck(unit, enabled, wPlayerFrame)
-    if enabled and wPlayerFrame then
-        HealBot_Panel_PlayersTargets(unit, unit.."target")
-    else
-        HealBot_Panel_PlayersTargetsClear(unit, unit.."target")
-    end
-end
-
 local vGroupIndex=0
 function HealBot_Panel_groupHeals(preCombat)
         --HealBot_setCall("HealBot_Panel_groupHeals")
     vGroupIndex=i[hbCurrentFrame]
-    for n,xUnit in ipairs(HealBot_Action_HealGroup) do
+    for xUnit,n in pairs(HealBot_Action_HealGroup) do
         if UnitExists(xUnit) and UnitGUID(xUnit) and hbPanel_dataGUIDs[UnitGUID(xUnit)] then
             if nraid>0 then 
                 xUnit=hbPanel_dataGUIDs[UnitGUID(xUnit)] or xUnit
             end
             HealBot_Panel_addUnit(xUnit, 6, hbPanel_dataUnits[xUnit], false)
-            HealBot_Panel_PlayersTargetsCheck(xUnit, Healbot_Config_Skins.Enemy[Healbot_Config_Skins.Current_Skin]["INCGROUP"], tEnemyWithPlayerFrames)
+            HealBot_Panel_checkEnemyBarInPlayerFrames(xUnit, UnitGUID(xUnit), preCombat)
         elseif nraid==0 and preCombat then
             if (IsInGroup() and HealBot_Panel_luVars["cpGroup"]) or
                (HealBot_Panel_luVars["cpCrash"] and HealBot_Panel_luVars["cpCrashType"]=="g" and n<=HealBot_Panel_luVars["cpCrashNum"]) then
                 HealBot_UnitGroups[xUnit]=1
                 HealBot_Panel_addUnit(xUnit, 6, xUnit, false)
-                HealBot_Panel_PlayersTargetsCheck(xUnit, Healbot_Config_Skins.Enemy[Healbot_Config_Skins.Current_Skin]["INCGROUP"], tEnemyWithPlayerFrames)
+                HealBot_Panel_checkEnemyBarInPlayerFrames(xUnit, xUnit, preCombat)
             end
         end
     end
@@ -2774,7 +2884,7 @@ function HealBot_Panel_tankHeals(preCombat)
     vTankIndex=i[hbCurrentFrame]
     for xGUID,xUnit in pairs(HealBot_MainTanks) do
         HealBot_Panel_addUnit(xUnit, 1, xGUID, false)
-        HealBot_Panel_PlayersTargetsCheck(xUnit, Healbot_Config_Skins.Enemy[Healbot_Config_Skins.Current_Skin]["INCTANKS"], tEnemyWithPlayerFrames)
+        HealBot_Panel_checkEnemyBarInPlayerFrames(xUnit, xGUID, preCombat)
     end
     if i[hbCurrentFrame]>vTankIndex then
         HealBot_Panel_addUnits(true, 1, HEALBOT_OPTIONS_TANKHEALS,vTankIndex, preCombat)
@@ -2782,12 +2892,12 @@ function HealBot_Panel_tankHeals(preCombat)
 end
 
 local vSelfIndex,vSelfPetIndex,vSelfUnit,vSelfPetUnit=0,0,"player","pet"
-function HealBot_Panel_selfHeals()
+function HealBot_Panel_selfHeals(preCombat)
         --HealBot_setCall("HealBot_Panel_selfHeals")
     vSelfIndex=i[hbCurrentFrame]
     HealBot_Panel_luVars["SelfPets"]=false
-    HealBot_Panel_addUnit(vSelfUnit, 3, UnitGUID(vSelfUnit), false)
-    HealBot_Panel_PlayersTargetsCheck(vSelfUnit, Healbot_Config_Skins.Enemy[Healbot_Config_Skins.Current_Skin]["INCSELF"], tEnemyWithPlayerFrames)
+    HealBot_Panel_addUnit(vSelfUnit, 3, HealBot_Data["PGUID"], false)
+    HealBot_Panel_checkEnemyBarInPlayerFrames(vSelfUnit, HealBot_Data["PGUID"], preCombat)
     if i[hbCurrentFrame]>vSelfIndex then
         if Healbot_Config_Skins.Healing[Healbot_Config_Skins.Current_Skin]["SELFPET"] and hbPanel_dataPetUnits[vSelfPetUnit] and HealBot_Config.DisabledNow==0 then
             vSelfPetIndex=i[hbCurrentFrame]
@@ -3007,7 +3117,10 @@ function HealBot_Panel_EnemyChanged(preCombat)
     --for _,xButton in pairs(HealBot_Enemy_Button) do
     --    HealBot_Action_MarkDeleteButton(xButton)
     --end
-    --for xUnit,xButton in pairs(HealBot_DuplicateEnemy_Button) do
+    --for xUnit,xButton in pairs(HealBot_UnitTarget_Button) do
+    --    HealBot_Action_MarkDeleteButton(xButton)
+    --end
+    --for xUnit,xButton in pairs(HealBot_PrivateTarget_Button) do
     --    HealBot_Action_MarkDeleteButton(xButton)
     --end
     if Healbot_Config_Skins.HealGroups[Healbot_Config_Skins.Current_Skin][11]["STATE"] then
@@ -3021,7 +3134,14 @@ function HealBot_Panel_EnemyChanged(preCombat)
                 HealBot_Action_MarkDeleteButton(xButton)
             end
         end
-        for xUnit,xButton in pairs(HealBot_DuplicateEnemy_Button) do
+        for xUnit,xButton in pairs(HealBot_UnitTarget_Button) do
+            if HealBot_TrackUnit[xButton.status.unittype][xUnit] then
+                xButton:Show()
+            elseif not HealBot_UnitTargets[xUnit] then
+                HealBot_Action_MarkDeleteButton(xButton)
+            end
+        end
+        for xUnit,xButton in pairs(HealBot_PrivateTarget_Button) do
             if HealBot_TrackUnit[xButton.status.unittype][xUnit] then
                 xButton:Show()
             elseif not HealBot_UnitTargets[xUnit] then
@@ -3035,12 +3155,20 @@ function HealBot_Panel_EnemyChanged(preCombat)
                 HealBot_Action_MarkDeleteButton(xButton)
             end
         end
-        for xUnit,xButton in pairs(HealBot_DuplicateEnemy_Button) do
+        for xUnit,xButton in pairs(HealBot_UnitTarget_Button) do
+            if not HealBot_UnitTargets[xUnit] then
+                HealBot_Action_MarkDeleteButton(xButton)
+            end
+        end
+        for xUnit,xButton in pairs(HealBot_PrivateTarget_Button) do
             if not HealBot_UnitTargets[xUnit] then
                 HealBot_Action_MarkDeleteButton(xButton)
             end
         end
         HealBot_Action_HidePanel(hbCurrentFrame)
+    end
+    if preCombat then
+        HealBot_Panel_enemyPlayerTargets(preCombat, 2)
     end
 end
 
@@ -3076,6 +3204,7 @@ function HealBot_Panel_PlayersChanged(preCombat)
         MyGroup["GROUP"]=0
         for gl=1,10 do
             hbCurrentFrame=Healbot_Config_Skins.HealGroups[Healbot_Config_Skins.Current_Skin][gl]["FRAME"]
+            HealBot_Skins_resetColAdj(hbCurrentFrame)
             if Healbot_Config_Skins.HealGroups[Healbot_Config_Skins.Current_Skin][gl]["STATE"] then
                 vActiveFrames[hbCurrentFrame]=true
                 for x,_ in pairs(order) do
@@ -3121,8 +3250,8 @@ function HealBot_Panel_PlayersChanged(preCombat)
             if HealBot_TrackUnit[xButton.status.unittype][xUnit] and not HealBot_Panel_BlackList[xButton.guid] then
                 HealBot_Panel_UnitShow(xButton)
             else
-                if tEnemyWithPlayerFrames then
-                    HealBot_Panel_PlayersTargetsDelFrames(xUnit)
+                if HealBot_UnitTargets[xUnit] and HealBot_UnitTargets[xUnit]>0 then
+                    HealBot_Panel_PlayersTargetsDelFrames(xUnit, true)
                 end
                 HealBot_Action_MarkDeleteButton(xButton)
             end
@@ -3137,8 +3266,8 @@ function HealBot_Panel_PlayersChanged(preCombat)
                 HealBot_Panel_UnitShow(xButton)
                 HealBot_Panel_luVars["NumPrivate"]=HealBot_Panel_luVars["NumPrivate"]+1
             else
-                if tEnemyWithPlayerFrames then
-                    HealBot_Panel_PlayersTargetsDelFrames(xUnit)
+                if HealBot_UnitTargets[xUnit] and HealBot_UnitTargets[xUnit]>0 then
+                    HealBot_Panel_PlayersTargetsDelFrames(xUnit, true)
                 end
                 HealBot_Action_MarkDeleteButton(xButton)
             end
@@ -3176,9 +3305,6 @@ function HealBot_Panel_PlayersChanged(preCombat)
             if HealBot_TrackUnit[vTargetButton.status.unittype][vTargetButton.unit] and not HealBot_Panel_BlackList[vTargetButton.guid] then
                 HealBot_Panel_TargetShow(vTargetButton)
             else
-                if tEnemyWithPlayerFrames then
-                    HealBot_Panel_PlayersTargetsDelFrames(xUnit)
-                end
                 HealBot_Action_MarkDeleteButton(vTargetButton)
             end
         end
@@ -3497,7 +3623,10 @@ function HealBot_Panel_DoPartyChanged(preCombat, changeType)
             for xUnit,xButton in pairs(HealBot_Enemy_Button) do
                 hbPanel_buttonExtraGUIDs[xButton.guid]=xButton
             end
-            for xUnit,xButton in pairs(HealBot_DuplicateEnemy_Button) do
+            for xUnit,xButton in pairs(HealBot_UnitTarget_Button) do
+                hbPanel_buttonExtraGUIDs[xButton.guid]=xButton
+            end
+            for xUnit,xButton in pairs(HealBot_PrivateTarget_Button) do
                 hbPanel_buttonExtraGUIDs[xButton.guid]=xButton
             end
             for xUnit,xButton in pairs(HealBot_Extra_Button) do

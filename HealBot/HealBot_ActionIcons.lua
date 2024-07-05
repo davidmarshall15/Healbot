@@ -1625,7 +1625,11 @@ function HealBot_ActionIcons_ValidateAbility(frame, id, itemsOnly)
         end
         if hbAbility and HealBot_Spells_KnownByName(hbAbility) then
             actionIcons[frame][id]:SetAttribute("type1", "spell")
-            actionIcons[frame][id]:SetAttribute("spell1", hbAbility)
+            if HEALBOT_GAME_VERSION==4 and aID==HEALBOT_HOLY_WORD_SANCTUARY and HealBot_WoWAPI_SpellName(HEALBOT_HOLY_WORD_CHASTISE) then
+                actionIcons[frame][id]:SetAttribute("spell1", HealBot_WoWAPI_SpellName(HEALBOT_HOLY_WORD_CHASTISE))
+            else
+                actionIcons[frame][id]:SetAttribute("spell1", hbAbility)
+            end
             if HealBot_Spell_IDs[aID] then
                 actionIcons[frame][id].range=HealBot_Spell_IDs[aID].range or 40
             else
@@ -2535,7 +2539,15 @@ function HealBot_ActionIcons_GetSpell(spellCode)
     if not vSpellText then
         if spellCode and HealBot_Text_Len(spellCode)>2 then
             local sType,sID = string.split(":", spellCode)
-            if HEALBOT_GAME_VERSION==4 and spellCode==HEALBOT_SPELL_HOLYWORDSERENITY then sType="S"; sID=HBC_HOLY_WORD_SERENITY end
+            if HEALBOT_GAME_VERSION==4 then
+                if spellCode==HEALBOT_SPELL_HOLYWORDSERENITY then 
+                    sType="S"
+                    sID=HBC_HOLY_WORD_SERENITY
+                elseif spellCode==HEALBOT_SPELL_HOLYWORDSANCTUARY then
+                    sType="S"
+                    sID=HEALBOT_HOLY_WORD_SANCTUARY
+                end
+            end
             if sType and not sID and HealBot_Spells_KnownByName(sType) then
                 _, _, _, _, _, _, sID=HealBot_WoWAPI_SpellInfo(sType)
             end

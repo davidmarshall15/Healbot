@@ -76,7 +76,7 @@ function HealBot_Tooltip_GetHealSpell(button,sName)
                 return nil, 1, 0.2, 0, false, false
             else
                 if not button.player then
-                    if HealBot_WoWAPI_UsableItem(sName) and HealBot_Range_Unit(button.unit, button.status.range) then
+                    if HealBot_WoWAPI_UsableItem(sName) and HealBot_Range_Unit(button.unit, button.guid) then
                         return sName, 0.2, 0.5, 1, true, true
                     else
                         return sName, 0.1, 0.25, 0.7, true, false
@@ -450,6 +450,9 @@ function HealBot_ToolTip_ShowDebug(button)
     HealBot_Tooltip_SetLine("Button Player is "..hbTipDebugText["player"],0.4,1,1,1,"Button isPlayer is "..hbTipDebugText["isPlayer"])
     HealBot_Tooltip_SetLine("Debug track is "..hbTipDebugText["debugtrack"],0.4,1,1,1,"Debug time is "..hbTipDebugText["debugtime"])
     HealBot_Tooltip_SetLine("Range state is "..hbTipDebugText["range40"],0.4,1,1,1,"Current status="..hbTipDebugText["status"],0.4,1,1,1)
+    if button then
+        HealBot_Tooltip_SetLine("unitType is "..button.status.unittype,0.4,1,1,1)
+    end
 end
 
 function HealBot_ToolTip_ToggleDebug()
@@ -1383,7 +1386,7 @@ local hbIconTip={}
 local GetSpellDescription=(C_Spell and C_Spell.GetSpellDescription) or GetSpellDescription
 function HealBot_Tooltip_AuraUpdateIconTooltip(frame, details, name, aType,  r, g, b, id)
       --HealBot_setCall("HealBot_Tooltip_AuraUpdateIconTooltip")
-    if HealBot_Globals.UseIconCommands or HealBot_Globals.Tooltip_ShowIconInfo then
+    if HealBot_Globals.UseIconCommands or (HealBot_Globals.Tooltip_ShowBuffIconInfo and id<20) or (HealBot_Globals.Tooltip_ShowDebuffIconInfo and id>50 and id<70) then
         local spell = Spell:CreateFromSpellID(details.spellId)
         spell:ContinueOnSpellLoad(function()
             local desc = spell:GetSpellDescription()

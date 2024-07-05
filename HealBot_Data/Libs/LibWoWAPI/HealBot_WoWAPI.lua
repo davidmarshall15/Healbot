@@ -2,17 +2,18 @@ local hbInfo
 HealBot_Spell_IDs={};
 HealBot_Spell_Names={};
 
+local function HealBot_WoWAPI_One()
+    return 1
+end
+
+local function HealBot_WoWAPI_True()
+    return true
+end
+
 -- C_Spell
 local GetSpellInfo=GetSpellInfo
 local GetSpellName=GetSpellInfo
 local GetSpellCooldown=GetSpellCooldown
-local function HealBot_WoWAPI_GetSpellCountV101(spellId)
-    return 1
-end
-
-local function HealBot_WoWAPI_IsHelpfulSpellV101()
-    return true
-end
 
 local function HealBot_WoWAPI_GetSpellNameV1(spellId)
     return GetSpellName(spellId)
@@ -39,7 +40,7 @@ local function HealBot_WoWAPI_GetInfoV11(spellId)
 end
 
 local function HealBot_WoWAPI_GetCooldownV1(spellId)
-    if HEALBOT_GAME_VERSION==4 and spellId==HEALBOT_SPELL_HOLYWORDSERENITY and HealBot_Aura_CurrentBuff(HealBot_Data["PGUID"], HEALBOT_CHAKRA_SERENITYNAME) then
+    if HEALBOT_GAME_VERSION==4 and (spellId==HEALBOT_SPELL_HOLYWORDSERENITY or spellId==HEALBOT_SPELL_HOLYWORDSANCTUARY) then
         spellId=HEALBOT_SPELL_HOLYWORDCHASTISE
     end
     return GetSpellCooldown(spellId)
@@ -75,8 +76,8 @@ if C_Spell then
         GetSpellInfo=C_Spell.GetSpellInfo
     end
     if C_Spell.GetSpellCooldown then
-    --    HealBot_WoWAPI_GetSpellCooldown=HealBot_WoWAPI_GetCooldownV11
-    --    GetSpellCooldown=C_Spell.GetSpellCooldown
+        HealBot_WoWAPI_GetSpellCooldown=HealBot_WoWAPI_GetCooldownV11
+        GetSpellCooldown=C_Spell.GetSpellCooldown
     end
     HealBot_WoWAPI_GetSpellLink=C_Spell.GetSpellLink or GetSpellLink
     HealBot_WoWAPI_IsPassiveSpell=C_Spell.IsSpellPassive or IsPassiveSpell
@@ -92,8 +93,8 @@ if C_Spell then
     local vMajor = string.split(".", select(1, GetBuildInfo()))
     local vGameVersion = tonumber(vMajor)
     if vGameVersion>10 then
-        HealBot_WoWAPI_GetSpellCount=HealBot_WoWAPI_GetSpellCountV101
-        HealBot_WoWAPI_IsHelpfulSpell=HealBot_WoWAPI_IsHelpfulSpellV101
+        HealBot_WoWAPI_GetSpellCount=HealBot_WoWAPI_One
+        HealBot_WoWAPI_IsHelpfulSpell=HealBot_WoWAPI_True
         GetSpellName=C_Spell.GetSpellInfo
     end
 end

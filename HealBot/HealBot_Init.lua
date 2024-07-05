@@ -537,6 +537,7 @@ local TWWFixList={
     HEALBOT_POWER_WORD_LIFE,
     HEALBOT_HOLY_WORD_SERENITY,
     HBC_HOLY_WORD_SERENITY,
+    HEALBOT_HOLY_WORD_SANCTUARY,
     HEALBOT_SURGING_MIST,
     HEALBOT_HOLY_WORD_SALVATION,
     HEALBOT_FLASH_OF_LIGHT,
@@ -849,6 +850,7 @@ function HealBot_Init_Spells_Defaults()
     elseif HEALBOT_GAME_VERSION==4 and HealBot_Data["PCLASSTRIM"]=="PRIE" then
         HealBot_Init_Spells_CataPriest(HEALBOT_HOLY_WORD_CHASTISE, HEALBOT_SPELL_HOLYWORDCHASTISE, 135886)
         HealBot_Init_Spells_CataPriest(HBC_HOLY_WORD_SERENITY, HEALBOT_SPELL_HOLYWORDSERENITY, 135937)
+        HealBot_Init_Spells_CataPriest(HEALBOT_HOLY_WORD_SANCTUARY, HEALBOT_SPELL_HOLYWORDSANCTUARY, 237541)
     end
     if HealBot_Spell_Ranges["HEAL30"] and HealBot_Spell_Ranges["HEAL30"]~="Set" then 
         HealBot_Range_InitSpell("HEAL30", HealBot_Spell_Ranges["HEAL30"])

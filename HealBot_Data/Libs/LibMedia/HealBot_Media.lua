@@ -390,7 +390,12 @@ local function HealBot_Media_DoUpdateUsedMedia(mediatype, frame)
                         HealBot_Media_UpdateUsedTextures(xButton)
                     end
                 end 
-                for xUnit,xButton in pairs(HealBot_DuplicateEnemy_Button) do
+                for xUnit,xButton in pairs(HealBot_UnitTarget_Button) do
+                    if xButton.frame==frame then
+                        HealBot_Media_UpdateUsedTextures(xButton)
+                    end
+                end
+                for xUnit,xButton in pairs(HealBot_PrivateTarget_Button) do
                     if xButton.frame==frame then
                         HealBot_Media_UpdateUsedTextures(xButton)
                     end
@@ -448,7 +453,12 @@ local function HealBot_Media_DoUpdateUsedMedia(mediatype, frame)
                         HealBot_Media_UpdateUsedButtonText(xButton)
                     end
                 end 
-                for xUnit,xButton in pairs(HealBot_DuplicateEnemy_Button) do
+                for xUnit,xButton in pairs(HealBot_UnitTarget_Button) do
+                    if xButton.frame==frame then
+                        HealBot_Media_UpdateUsedButtonText(xButton)
+                    end
+                end
+                for xUnit,xButton in pairs(HealBot_PrivateTarget_Button) do
                     if xButton.frame==frame then
                         HealBot_Media_UpdateUsedButtonText(xButton)
                     end
@@ -480,7 +490,12 @@ local function HealBot_Media_DoUpdateUsedMedia(mediatype, frame)
                         HealBot_Media_UpdateUsedAuxText(xButton)
                     end
                 end
-                for xUnit,xButton in pairs(HealBot_DuplicateEnemy_Button) do
+                for xUnit,xButton in pairs(HealBot_UnitTarget_Button) do
+                    if xButton.frame==frame then
+                        HealBot_Media_UpdateUsedAuxText(xButton)
+                    end
+                end
+                for xUnit,xButton in pairs(HealBot_PrivateTarget_Button) do
                     if xButton.frame==frame then
                         HealBot_Media_UpdateUsedAuxText(xButton)
                     end

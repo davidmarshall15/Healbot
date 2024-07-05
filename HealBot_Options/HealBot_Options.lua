@@ -2666,7 +2666,7 @@ function HealBot_Options_EnemyShowAura_OnClick(self,var)
     if Healbot_Config_Skins.Enemy[Healbot_Config_Skins.Current_Skin][var]~=self:GetChecked() then
         Healbot_Config_Skins.Enemy[Healbot_Config_Skins.Current_Skin][var]=self:GetChecked()
         if not Healbot_Config_Skins.Enemy[Healbot_Config_Skins.Current_Skin][var] then
-            if var=="SHOWBUFFS" then
+            if var=="SHOWBUFFS" or var=="SELFBUFFS" then
                 HealBot_Aura_ClearAllBuffs(true)
             else
                 HealBot_Aura_ClearAllDebuffs(true)
@@ -2741,14 +2741,7 @@ function HealBot_Options_ShowEnemyTargets_OnClick(self)
     if Healbot_Config_Skins.Enemy[Healbot_Config_Skins.Current_Skin]["ENEMYTARGET"]~=self:GetChecked() then
         Healbot_Config_Skins.Enemy[Healbot_Config_Skins.Current_Skin]["ENEMYTARGET"]=self:GetChecked()
         HealBot_Options_framesChanged(true)
-    end
-end
-
-function HealBot_Options_DoubleEnemyBarWidth_OnClick(self)
-      --HealBot_setCall("HealBot_Options_DoubleEnemyBarWidth_OnClick")
-    if Healbot_Config_Skins.Enemy[Healbot_Config_Skins.Current_Skin]["DOUBLEWIDTH"]~=self:GetChecked() then
-        Healbot_Config_Skins.Enemy[Healbot_Config_Skins.Current_Skin]["DOUBLEWIDTH"]=self:GetChecked()
-        HealBot_Options_framesChanged(true, true)
+        HealBot_Timers_Set("OOC","UpdateEnemyFrames")
     end
 end
 
@@ -2757,6 +2750,22 @@ function HealBot_Options_EnemyExistsBosses_OnClick(self)
     if Healbot_Config_Skins.Enemy[Healbot_Config_Skins.Current_Skin]["EXISTSHOWBOSS"]~=self:GetChecked() then
         Healbot_Config_Skins.Enemy[Healbot_Config_Skins.Current_Skin]["EXISTSHOWBOSS"]=self:GetChecked()
         HealBot_Options_framesChanged(false)
+    end
+end
+
+function HealBot_Options_TargetUsesEnemyCols_OnClick(self)
+      --HealBot_setCall("HealBot_Options_EnemyExistsBosses_OnClick")
+    if Healbot_Config_Skins.Enemy[Healbot_Config_Skins.Current_Skin]["TARUSEENEMYCOLS"]~=self:GetChecked() then
+        Healbot_Config_Skins.Enemy[Healbot_Config_Skins.Current_Skin]["TARUSEENEMYCOLS"]=self:GetChecked()
+        HealBot_Timers_Set("OOC","UpdateEnemyFrames")
+    end
+end
+
+function HealBot_Options_ToTUsesEnemyCols_OnClick(self)
+      --HealBot_setCall("HealBot_Options_EnemyExistsBosses_OnClick")
+    if Healbot_Config_Skins.Enemy[Healbot_Config_Skins.Current_Skin]["TOTUSEENEMYCOLS"]~=self:GetChecked() then
+        Healbot_Config_Skins.Enemy[Healbot_Config_Skins.Current_Skin]["TOTUSEENEMYCOLS"]=self:GetChecked()
+        HealBot_Timers_Set("OOC","UpdateEnemyFrames")
     end
 end
 
@@ -3182,16 +3191,25 @@ function HealBot_Options_ShowEnemyNumBoss_OnValueChanged(self)
     end
 end
 
+function HealBot_Options_PlayerTargetSize_OnValueChanged(self)
+      --HealBot_setCall("HealBot_Options_EnemyTargetSize_OnValueChanged")
+    if Healbot_Config_Skins.Enemy[Healbot_Config_Skins.Current_Skin]["PLAYERTARGETSIZE"]~=HealBot_Util_Round(HealBot_Options_Pct_OnValueChanged(self),2) then
+        Healbot_Config_Skins.Enemy[Healbot_Config_Skins.Current_Skin]["PLAYERTARGETSIZE"] = HealBot_Util_Round(HealBot_Options_Pct_OnValueChanged(self),2);
+        local g=_G[self:GetName().."Text"]
+        g:SetText(self.text .. ": " .. (Healbot_Config_Skins.Enemy[Healbot_Config_Skins.Current_Skin]["PLAYERTARGETSIZE"]*100).."%");
+        HealBot_Options_framesChanged(true)
+        HealBot_Timers_Set("OOC","UpdateEnemyFrames")
+    end
+end
+
 function HealBot_Options_EnemyTargetSize_OnValueChanged(self)
       --HealBot_setCall("HealBot_Options_EnemyTargetSize_OnValueChanged")
-    local val=floor(self:GetValue()+0.5)
-    if val~=self:GetValue() then
-        self:SetValue(val) 
-    elseif Healbot_Config_Skins.Enemy[Healbot_Config_Skins.Current_Skin]["ENEMYTARGETSIZE"]~=val then
-        Healbot_Config_Skins.Enemy[Healbot_Config_Skins.Current_Skin]["ENEMYTARGETSIZE"] = val;
+    if Healbot_Config_Skins.Enemy[Healbot_Config_Skins.Current_Skin]["ENEMYTARGETSIZE"]~=HealBot_Util_Round(HealBot_Options_Pct_OnValueChanged(self),2) then
+        Healbot_Config_Skins.Enemy[Healbot_Config_Skins.Current_Skin]["ENEMYTARGETSIZE"] = HealBot_Util_Round(HealBot_Options_Pct_OnValueChanged(self),2);
         local g=_G[self:GetName().."Text"]
-        g:SetText(self.text .. ": " .. val.."%");
+        g:SetText(self.text .. ": " .. (Healbot_Config_Skins.Enemy[Healbot_Config_Skins.Current_Skin]["ENEMYTARGETSIZE"]*100).."%");
         HealBot_Options_framesChanged(true)
+        HealBot_Timers_Set("OOC","UpdateEnemyFrames")
     end
 end
 
@@ -4786,6 +4804,7 @@ function HealBot_Options_BarOutlineBackGround_OnValueChanged(self)
         local g=_G[self:GetName().."Text"]
         g:SetText(self.text .. ": " .. val);
         HealBot_Options_framesChanged(true)
+        HealBot_Timers_Set("OOC","UpdateEnemyFrames")
     end
 end
 
@@ -7807,10 +7826,18 @@ function HealBot_Options_ShowTooltipSpellIgnoreGlobalCoolDown_OnClick(self)
     HealBot_Globals.Tooltip_IgnoreGCD = self:GetChecked()
 end
 
-function HealBot_Options_ShowTooltipIconInfo_OnClick(self)
-      --HealBot_setCall("HealBot_Options_ShowTooltipIconInfo_OnClick")
-    if HealBot_Globals.Tooltip_ShowIconInfo~=self:GetChecked() then
-        HealBot_Globals.Tooltip_ShowIconInfo = self:GetChecked()
+function HealBot_Options_ShowTooltipBuffIconInfo_OnClick(self)
+      --HealBot_setCall("HealBot_Options_ShowTooltipBuffIconInfo_OnClick")
+    if HealBot_Globals.Tooltip_ShowBuffIconInfo~=self:GetChecked() then
+        HealBot_Globals.Tooltip_ShowBuffIconInfo = self:GetChecked()
+        HealBot_Options_framesChanged(true, true)
+    end
+end
+
+function HealBot_Options_ShowTooltipDebuffIconInfo_OnClick(self)
+      --HealBot_setCall("HealBot_Options_ShowTooltipDebuffIconInfo_OnClick")
+    if HealBot_Globals.Tooltip_ShowDebuffIconInfo~=self:GetChecked() then
+        HealBot_Globals.Tooltip_ShowDebuffIconInfo = self:GetChecked()
         HealBot_Options_framesChanged(true, true)
     end
 end
@@ -9588,7 +9615,7 @@ function HealBot_Options_EnemyCombat_DropDown(object, id)
                             Healbot_Config_Skins.Enemy[Healbot_Config_Skins.Current_Skin][id] = self:GetID()
                             UIDropDownMenu_SetText(object,HealBot_Options_EnemyCombat_List[Healbot_Config_Skins.Enemy[Healbot_Config_Skins.Current_Skin][id]]) 
                             HealBot_Timers_setLuVars("ResetSkins", true)
-                            HealBot_Timers_Set("OOC","RefreshPartyNextRecalcAll")
+                            HealBot_Timers_Set("OOC","UpdateEnemyFrames")
                         end
                     end
         info.checked = false;
@@ -9637,7 +9664,7 @@ function HealBot_Options_EnemyExists_DropDown(object, id)
                             Healbot_Config_Skins.Enemy[Healbot_Config_Skins.Current_Skin][id] = self:GetID()
                             UIDropDownMenu_SetText(object,HealBot_Options_EnemyOOC_List[Healbot_Config_Skins.Enemy[Healbot_Config_Skins.Current_Skin][id]])
                             HealBot_Timers_setLuVars("ResetSkins", true)
-                            HealBot_Timers_Set("OOC","RefreshPartyNextRecalcAll")
+                            HealBot_Timers_Set("OOC","UpdateEnemyFrames")
                         end
                     end
         info.checked = false;
@@ -16425,7 +16452,7 @@ function HealBot_Options_DoSet_Current_Skin(newSkin, ddRefresh, noCallback, optS
                     --end
                     HealBot_setLuVars("TargetNeedReset", true)
                     HealBot_setLuVars("FocusNeedReset", true)
-                    HealBot_setLuVars("newSkin", true)
+                    HealBot_setLuVars("newSkin", 0)
                     if HealBot_Data["TIPUSE"] then HealBot_Tooltip_CustomAnchor_Hide() end
                     HealBot_Timers_InitExtraOptions()
                     HealBot_AddDebug("Update Skins","Frame",true)
@@ -22636,6 +22663,7 @@ function HealBot_Options_OnLoad(self, caller)
     HealBot_Options_Content_Colour(nil, _G["HealBot_Contents_ButtonT301Txt"])
     HealBot_Options_Content_Colour(nil, _G["HealBot_Contents_ButtonT303Txt"])
     HealBot_Options_Content_Colour(nil, _G["HealBot_Contents_ButtonT304Txt"])
+    HealBot_Options_Content_Colour(nil, _G["HealBot_Contents_ButtonT305Txt"])
     HealBot_Options_Content_Colour(nil, _G["HealBot_Contents_ButtonT307Txt"])
     HealBot_Options_Content_Colour(nil, _G["HealBot_Contents_ButtonT308Txt"])
     HealBot_Options_Content_Colour(nil, _G["HealBot_Contents_ButtonT309Txt"])
@@ -23089,6 +23117,8 @@ function HealBot_Options_Lang(region, msgchat)
         g:SetText(HEALBOT_OPTIONS_CONTENT_SKINS_EFFECTS)
         g=_G["HealBot_Contents_ButtonT304Txt"]
         g:SetText(HEALBOT_OPTIONS_CONTENT_SKINS_COLOUR)
+        g=_G["HealBot_Contents_ButtonT305Txt"]
+        g:SetText(HEALBOT_OPTIONS_CONTENT_SKINS_ENEMY)
         g=_G["HealBot_Contents_ButtonT307Txt"]
         g:SetText(HEALBOT_OPTIONS_CONTENT_SKINS_CHAT)
         g=_G["HealBot_Contents_ButtonT308Txt"]
@@ -23650,8 +23680,8 @@ function HealBot_Options_ShowTab(tab, subtab)
             end
         end
     elseif tab=="SkinsEnemy" then
-        --HealBot_Options_UpdateTab(3, 305, "SkinsEnemy"); HealBot_Options_ShowSkinsPanel("HealBot_Options_EnemySkinsFrame", 1005)
-        HealBot_Options_UpdateTab(3, 310, "SkinsFramesEnemy", true); HealBot_Options_ShowSkinsPanel("HealBot_Options_EnemySkinsFrame", 1005)
+        HealBot_Options_UpdateTab(3, 305, "SkinsFramesEnemy", true); HealBot_Options_ShowSkinsPanel("HealBot_Options_EnemySkinsFrame", 1005)
+        --HealBot_Options_UpdateTab(3, 310, "SkinsFramesEnemy", true); HealBot_Options_ShowSkinsPanel("HealBot_Options_EnemySkinsFrame", 1005)
     elseif tab=="SkinsChat" then
         HealBot_Options_UpdateTab(3, 307, "SkinsChat"); HealBot_Options_ShowSkinsPanel("HealBot_Options_ChatSkinsFrame", 1007)
     elseif tab=="SkinsFramesGeneral" then
@@ -24627,8 +24657,12 @@ function HealBot_Options_SkinsEnemyAuraTab(tab)
     if not HealBot_Options_TabRunOnce[tab] then
         HealBot_Options_EnemyShowBuffs:SetChecked(Healbot_Config_Skins.Enemy[Healbot_Config_Skins.Current_Skin]["SHOWBUFFS"])
         HealBot_Options_SetText(HealBot_Options_EnemyShowBuffs,HEALBOT_OPTIONS_TAB_BUFFS)
+        HealBot_Options_EnemyShowBuffsSelfOnly:SetChecked(Healbot_Config_Skins.Enemy[Healbot_Config_Skins.Current_Skin]["SELFBUFFS"])
+        HealBot_Options_SetText(HealBot_Options_EnemyShowBuffsSelfOnly,HEALBOT_OPTIONS_SELFCASTS)
         HealBot_Options_EnemyShowDebuffs:SetChecked(Healbot_Config_Skins.Enemy[Healbot_Config_Skins.Current_Skin]["SHOWDEBUFFS"])
         HealBot_Options_SetText(HealBot_Options_EnemyShowDebuffs,HEALBOT_OPTIONS_TAB_DEBUFFS)
+        HealBot_Options_EnemyShowDebuffsSelfOnly:SetChecked(Healbot_Config_Skins.Enemy[Healbot_Config_Skins.Current_Skin]["SELFDEBUFFS"])
+        HealBot_Options_SetText(HealBot_Options_EnemyShowDebuffsSelfOnly,HEALBOT_OPTIONS_SELFCASTS)
         HealBot_Options_SetLabel("HealBot_EnemyShowAuraStr",HEALBOT_OPTIONS_SHOWENEMYAURA)
         HealBot_Options_TabRunOnce[tab]=true
     end
@@ -24645,6 +24679,8 @@ function HealBot_Options_SkinsUnitTargetsTab(tab)
         HealBot_Options_SetText(HealBot_Options_ShowEnemyIncGroup,HEALBOT_ENEMY_INCLUDE_GROUP)
         HealBot_Options_ShowEnemyIncMyTargets:SetChecked(Healbot_Config_Skins.Enemy[Healbot_Config_Skins.Current_Skin]["INCMYTAR"])
         HealBot_Options_SetText(HealBot_Options_ShowEnemyIncMyTargets,HEALBOT_ENEMY_INCLUDE_MYTARGETS)
+        HealBot_Options_TargetUsesEnemyCols:SetChecked(Healbot_Config_Skins.Enemy[Healbot_Config_Skins.Current_Skin]["TARUSEENEMYCOLS"])
+        HealBot_Options_SetText(HealBot_Options_TargetUsesEnemyCols,HEALBOT_ENEMY_TARUSESENEMYCOLS)
         HealBot_Options_EnemyCombatSelf.initialize = HealBot_Options_EnemyCombatSelf_DropDown
         UIDropDownMenu_SetText(HealBot_Options_EnemyCombatSelf, HealBot_Options_EnemyCombat_List[Healbot_Config_Skins.Enemy[Healbot_Config_Skins.Current_Skin]["INCOMBATSHOWSELF"]])
         HealBot_Options_EnemyCombatTanks.initialize = HealBot_Options_EnemyCombatTanks_DropDown
@@ -24661,8 +24697,13 @@ function HealBot_Options_SkinsUnitTargetsTab(tab)
         UIDropDownMenu_SetText(HealBot_Options_EnemyExistsGroupTargets, HealBot_Options_EnemyOOC_List[Healbot_Config_Skins.Enemy[Healbot_Config_Skins.Current_Skin]["EXISTSHOWGROUP"]])
         HealBot_Options_EnemyExistsMyTargets.initialize = HealBot_Options_EnemyExistsMyTargets_DropDown
         UIDropDownMenu_SetText(HealBot_Options_EnemyExistsMyTargets, HealBot_Options_EnemyOOC_List[Healbot_Config_Skins.Enemy[Healbot_Config_Skins.Current_Skin]["EXISTSHOWMYTAR"]])
-        HealBot_Options_SetLabel("HealBot_EnemyOOC_FontStr",HEALBOT_OPTIONS_OUTOFCOMBAT)
-        HealBot_Options_SetLabel("HealBot_EnemyCombat_FontStr",HEALBOT_OPTIONS_ENTERINGCOMBAT)
+        HealBot_Options_Pct_OnLoad_MinMax(HealBot_Options_PlayerTargetSize,HEALBOT_PLAYER_TARGET_SIZE,0.1,2,0.01,5)
+        HealBot_Options_PlayerTargetSize:SetValue(Healbot_Config_Skins.Enemy[Healbot_Config_Skins.Current_Skin]["PLAYERTARGETSIZE"])
+        HealBot_Options_SetText(HealBot_Options_PlayerTargetSize,HEALBOT_PLAYER_TARGET_SIZE..": "..(Healbot_Config_Skins.Enemy[Healbot_Config_Skins.Current_Skin]["PLAYERTARGETSIZE"]*100).."%")
+        for x=1,4 do
+            HealBot_Options_SetLabel("HealBot_EnemyOOC_FontStr"..x,HEALBOT_OPTIONS_OUTOFCOMBAT)
+            HealBot_Options_SetLabel("HealBot_EnemyCombat_FontStr"..x,HEALBOT_OPTIONS_ENTERINGCOMBAT)
+        end
         HealBot_Options_TabRunOnce[tab]=true
     end
 end
@@ -24689,8 +24730,10 @@ function HealBot_Options_SkinsEnemyUnitsTab(tab)
         UIDropDownMenu_SetText(HealBot_Options_EnemyCombatFocus, HealBot_Options_EnemyCombat_List[Healbot_Config_Skins.Enemy[Healbot_Config_Skins.Current_Skin]["INCOMBATSHOWFOCUS"]])
         HealBot_Options_EnemyExistsFocus.initialize = HealBot_Options_EnemyExistsFocus_DropDown
         UIDropDownMenu_SetText(HealBot_Options_EnemyExistsFocus, HealBot_Options_EnemyOOC_List[Healbot_Config_Skins.Enemy[Healbot_Config_Skins.Current_Skin]["EXISTSHOWFOCUS"]])
-        HealBot_Options_SetLabel("HealBot_EnemyUnitsOOC_FontStr",HEALBOT_OPTIONS_OUTOFCOMBAT)
-        HealBot_Options_SetLabel("HealBot_EnemyUnitsCombat_FontStr",HEALBOT_OPTIONS_ENTERINGCOMBAT)
+        for x=1,2 do
+            HealBot_Options_SetLabel("HealBot_EnemyUnitsOOC_FontStr"..x,HEALBOT_OPTIONS_OUTOFCOMBAT)
+            HealBot_Options_SetLabel("HealBot_EnemyUnitsCombat_FontStr"..x,HEALBOT_OPTIONS_ENTERINGCOMBAT)
+        end
         HealBot_Options_TabRunOnce[tab]=true
     end
 end
@@ -24700,11 +24743,11 @@ function HealBot_Options_SkinsEnemyTargetOfTargetTab(tab)
     if not HealBot_Options_TabRunOnce[tab] then
         HealBot_Options_ShowEnemyTargets:SetChecked(Healbot_Config_Skins.Enemy[Healbot_Config_Skins.Current_Skin]["ENEMYTARGET"])
         HealBot_Options_SetText(HealBot_Options_ShowEnemyTargets,HEALBOT_ENEMY_SHOW_TARGET)
-        HealBot_Options_DoubleEnemyBarWidth:SetChecked(Healbot_Config_Skins.Enemy[Healbot_Config_Skins.Current_Skin]["DOUBLEWIDTH"])
-        HealBot_Options_SetText(HealBot_Options_DoubleEnemyBarWidth,HEALBOT_ENEMY_DOUBLE_WIDTH)
-        HealBot_Options_val_OnLoad(HealBot_Options_EnemyTargetSize,HEALBOT_ENEMY_TARGET_SIZE,20,80,1,5)
+        HealBot_Options_Pct_OnLoad_MinMax(HealBot_Options_EnemyTargetSize,HEALBOT_ENEMY_TARGET_SIZE,0.2,0.8,0.01,5)
         HealBot_Options_EnemyTargetSize:SetValue(Healbot_Config_Skins.Enemy[Healbot_Config_Skins.Current_Skin]["ENEMYTARGETSIZE"])
-        HealBot_Options_SetText(HealBot_Options_EnemyTargetSize,HEALBOT_ENEMY_TARGET_SIZE..": "..Healbot_Config_Skins.Enemy[Healbot_Config_Skins.Current_Skin]["ENEMYTARGETSIZE"].."%")
+        HealBot_Options_SetText(HealBot_Options_EnemyTargetSize,HEALBOT_ENEMY_TARGET_SIZE..": "..(Healbot_Config_Skins.Enemy[Healbot_Config_Skins.Current_Skin]["ENEMYTARGETSIZE"]*100).."%")
+        HealBot_Options_ToTUsesEnemyCols:SetChecked(Healbot_Config_Skins.Enemy[Healbot_Config_Skins.Current_Skin]["TOTUSEENEMYCOLS"])
+        HealBot_Options_SetText(HealBot_Options_ToTUsesEnemyCols,HEALBOT_ENEMY_TOTUSESENEMYCOLS)
         HealBot_Options_TabRunOnce[tab]=true
     end
 end
@@ -26883,8 +26926,10 @@ function HealBot_Options_TipsSpellsTab(tab)
       --HealBot_setCall("HealBot_Options_TipsSpellsTab")
         HealBot_Options_ShowTooltipSpellCoolDown:SetChecked(HealBot_Globals.Tooltip_ShowCD)
         HealBot_Options_SetText(HealBot_Options_ShowTooltipSpellCoolDown,HEALBOT_OPTIONS_SHOWCDTOOLTIP)
-        HealBot_Options_ShowTooltipIconInfo:SetChecked(HealBot_Globals.Tooltip_ShowIconInfo)
-        HealBot_Options_SetText(HealBot_Options_ShowTooltipIconInfo,HEALBOT_OPTIONS_SHOWICONINFOTIP)
+        HealBot_Options_ShowTooltipBuffIconInfo:SetChecked(HealBot_Globals.Tooltip_ShowBuffIconInfo)
+        HealBot_Options_SetText(HealBot_Options_ShowTooltipBuffIconInfo,HEALBOT_OPTIONS_SHOWICONBINFOTIP)
+        HealBot_Options_ShowTooltipDebuffIconInfo:SetChecked(HealBot_Globals.Tooltip_ShowDebuffIconInfo)
+        HealBot_Options_SetText(HealBot_Options_ShowTooltipDebuffIconInfo,HEALBOT_OPTIONS_SHOWICONDINFOTIP)
         HealBot_Options_ShowTooltipSpellExtra:SetChecked(HealBot_Globals.Tooltip_ShowSpellExtra)
         HealBot_Options_SetText(HealBot_Options_ShowTooltipSpellExtra,HEALBOT_TOOLTIP_SHOWSPELLEXTRA)
         HealBot_Options_ShowTooltipSpellInfo:SetChecked(HealBot_Globals.Tooltip_ShowSpellInfo)
