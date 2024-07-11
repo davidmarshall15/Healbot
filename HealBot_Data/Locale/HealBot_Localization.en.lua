@@ -249,6 +249,8 @@ function HealBot_Lang_enALL()
     HEALBOT_OPTIONS_DEBUFFDISPELL           = "General debuffs";
     HEALBOT_OPTIONS_SHOWDEBUFFWARNING       = "Display warning on debuff";
     HEALBOT_OPTIONS_SOUNDDEBUFFWARNING      = "Play sound on debuff";
+    HEALBOT_OPTIONS_WARNINGDISPELLONLY      = "Only when dispellable";
+    HEALBOT_OPTIONS_WARNINGMISSINGONLY      = "Only when missing";
     HEALBOT_OPTIONS_SHOWBUFFWARNING         = "Display warning on buff";
     HEALBOT_OPTIONS_SOUNDBUFFWARNING        = "Play sound on buff";
     HEALBOT_OPTIONS_SOUND                   = "Sound"
@@ -600,6 +602,7 @@ function HealBot_Lang_enALL()
     HEALBOT_MAINTANK                        = "MainTank";
     HEALBOT_STOP                            = "Stop";
     HEALBOT_CANCELPLUGINALERT               = "Cancel Plugin Alert";
+    HEALBOT_MOUSELOOK                       = "Mouselook"
     HEALBOT_IGNOREAURAALL                   = "Disable - Ignore in all zones";
     HEALBOT_ICONRAISEPRIO1                  = "Priority raise x1";
     HEALBOT_ICONRAISEPRIO3                  = "Priority raise x3";
@@ -1082,6 +1085,8 @@ function HealBot_Lang_enALL()
     HEALBOT_OPTIONS_AUXCONFIG               = "Auxiliary Bar Configuration"
     HEALBOT_OPTIONS_VISSTANDARD             = "Standard Frames"
     HEALBOT_OPTIONS_ENEMYAURAS              = "Enemy Auras"
+    HEALBOT_OPTIONS_ENEMYFRAME              = "Enemy frame"
+    HEALBOT_OPTIONS_PLAYERFRAMES            = "Player frames"
     HEALBOT_OPTIONS_AUXFLASH                = "Variable Opacity"
     HEALBOT_WORD_ASSIGNMENT                 = "Assignment:"
     HEALBOT_WORD_ANCHOR                     = "Anchor:"
@@ -1763,10 +1768,11 @@ function HealBot_Lang_enALL()
     HEALBOT_SHARE_SCREENSHOT                = "ScreenShot taken"
     HEALBOT_SHARE_EXPORTED                  = "Successfully Exported"
     HEALBOT_ENEMY_USE_FRAME                 = "Use frame"
-    HEALBOT_ENEMY_INCLUDE_SELF              = "Include Target"
-    HEALBOT_ENEMY_INCLUDE_FOCUS             = "Include Focus"
-    HEALBOT_ENEMY_INCLUDE_TANKS             = "Include Tank targets"
-    HEALBOT_ENEMY_INCLUDE_GROUP             = "Include Group targets"
+    HEALBOT_ENEMY_INCLUDE_SELF              = "Target"
+    HEALBOT_ENEMY_INCLUDE_FOCUS             = "Focus"
+    HEALBOT_ENEMY_INCLUDE_TANKS             = "Tank targets"
+    HEALBOT_ENEMY_INCLUDE_GROUP             = "Group targets"
+    HEALBOT_ENEMY_INCLUDE_RAID              = "Raid targets"
     HEALBOT_OPTIONS_ENEMY_OPT               = "Enemy Visibility";
     HEALBOT_OPTIONS_SHARE_OPT               = "Share Options";
     HEALBOT_OPTIONS_CONTENT_SKINS_SHARE     = "    " .. "Share"
@@ -1774,7 +1780,7 @@ function HealBot_Lang_enALL()
     HEALBOT_ENEMY_NO_TARGET                 = "No target"
     HEALBOT_OPTIONS_ENEMYBARS               = "Health Bars - Enemy characters";
     HEALBOT_OPTIONS_HARMFUL_SPELLS          = "Harmful Spells"
-    HEALBOT_ENEMY_INCLUDE_MYTARGETS         = "Include Private List targets"
+    HEALBOT_ENEMY_INCLUDE_MYTARGETS         = "Private List targets"
     HEALBOT_ENEMY_NUMBER_BOSSES             = "Number of Bosses"
     HEALBOT_ENEMY_HIDE_OUTOFCOMBAT          = "Hide bars out of combat"
     HEALBOT_ENEMY_SHOW_TARGET               = "Show enemy target"
@@ -1805,7 +1811,7 @@ function HealBot_Lang_enALL()
     HEALBOT_LDB_RIGHT_TOOLTIP               = "|cffffff00 Right Click:|r Reset HealBot";
     HEALBOT_LDB_SHIFTRIGHT_TOOLTIP          = "|cffffff00 Shift-Right Click:|r Toggle HealBot On/Off";
     HEALBOT_WORD_PETBATTLE                  = "Pet Battle"
-    HEALBOT_ENEMY_INCLUDE_ARENA             = "Include Arena opponents"
+    HEALBOT_ENEMY_INCLUDE_ARENA             = "Arena opponents"
     HEALBOT_ENEMY_INCLUDE_ARENAPETS         = "Including Pets"
     HEALBOT_ENEMY_EXISTS_SHOW               = "Show when exists"
     HEALBOT_ENEMY_NOBOSS_SHOW               = "Show when not on boss"
@@ -1821,6 +1827,8 @@ function HealBot_Lang_enALL()
     HEALBOT_OPTIONS_ONLYINGCOMBAT           = "Only show in combat"
     HEALBOT_OPTIONS_ONLYOUTOFCOMBAT         = "Only show out of combat"
     HEALBOT_OPTIONS_ONLYONDEMAND            = "Only show on demand"
+    HEALBOT_OPTIONS_USEENEMYFRAME           = "Enemy frame"
+    HEALBOT_OPTIONS_USEPLAYERSFRAME         = "Players frame"
     HEALBOT_SKIN_RAIDBARCOL                 = "Raid col"..HEALBOT_enWORD_COLOUR_SUFFIX
     HEALBOT_SKIN_TANKBARCOL                 = "Tank col"..HEALBOT_enWORD_COLOUR_SUFFIX
     HEALBOT_SKIN_YOURBARCOL                 = "My col"..HEALBOT_enWORD_COLOUR_SUFFIX

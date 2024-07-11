@@ -142,7 +142,7 @@ local sRange=0
 local function HealBot_Range_IsSpellInRange(button, spellName, limit)
     sRange = HealBot_WoWAPI_SpellInRange(spellName, button.unit)
     --if button.unit~="player" then HealBot_AddDebug("spellName="..(spellName or "nil").."  sRange="..(sRange or "nil"),"Range",true) end
-    if sRange then
+    if sRange and type(sRange)=="number" then
         if sRange==1 and HealBot_Spell_Names[spellName] and HealBot_Spell_IDs[HealBot_Spell_Names[spellName]].range<31 then
             sRange=2
         end

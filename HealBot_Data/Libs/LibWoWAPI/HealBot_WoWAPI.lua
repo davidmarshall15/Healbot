@@ -1,19 +1,19 @@
-local hbInfo
+local hbInfo, _
 HealBot_Spell_IDs={};
 HealBot_Spell_Names={};
-
-local function HealBot_WoWAPI_One()
-    return 1
-end
 
 local function HealBot_WoWAPI_True()
     return true
 end
 
+-- GetSpellIDForSpellIdentifier
 -- C_Spell
 local GetSpellInfo=GetSpellInfo
 local GetSpellName=GetSpellInfo
+local GetSpellId=GetSpellInfo
 local GetSpellCooldown=GetSpellCooldown
+local GetSpellCount=GetSpellCount
+local GetSpellCharges=GetSpellCharges
 
 local function HealBot_WoWAPI_GetSpellNameV1(spellId)
     return GetSpellName(spellId)
@@ -25,6 +25,15 @@ local function HealBot_WoWAPI_GetSpellNameV11(spellId)
         return hbInfo.name
     end
     return nil
+end
+
+local function HealBot_WoWAPI_GetSpellIdV1(spellName)
+    _, _, _, _, _, _, hbInfo = GetSpellId(spellName)
+    return hbInfo
+end
+
+local function HealBot_WoWAPI_GetSpellIdV11(spellName)
+    return GetSpellId(spellName)
 end
 
 local function HealBot_WoWAPI_GetInfoV1(spellId)
@@ -49,20 +58,37 @@ end
 local function HealBot_WoWAPI_GetCooldownV11(spellId)
     hbInfo=GetSpellCooldown(spellId)
     if hbInfo then
-        return hbInfo.start, hbInfo.duration
+        return hbInfo.startTime, hbInfo.duration --, hbInfo.isEnabled, hbInfo.modRate
+    end
+    return nil
+end
+
+local function HealBot_WoWAPI_GetSpellChargesV1(spellId)
+    return GetSpellCharges(spellId)
+end
+
+local function HealBot_WoWAPI_GetSpellCountV1(spellId)
+    return GetSpellCount(spellId)
+end
+
+local function HealBot_WoWAPI_GetSpellChargesV11(spellId)
+    hbInfo=GetSpellCharges(spellId)
+    if hbInfo then
+        return hbInfo.currentCharges --, hbInfo.maxCharges
     end
     return nil
 end
 
 local HealBot_WoWAPI_GetSpellName=HealBot_WoWAPI_GetSpellNameV1
+local HealBot_WoWAPI_GetSpellId=HealBot_WoWAPI_GetSpellIdV1
 local HealBot_WoWAPI_GetSpellInfo=HealBot_WoWAPI_GetInfoV1
 local HealBot_WoWAPI_GetSpellCooldown=HealBot_WoWAPI_GetCooldownV1
+local HealBot_WoWAPI_GetSpellCount=HealBot_WoWAPI_GetSpellCountV1
+local HealBot_WoWAPI_GetSpellCharges=HealBot_WoWAPI_GetSpellChargesV1
 local HealBot_WoWAPI_GetSpellLink=GetSpellLink
 local HealBot_WoWAPI_IsPassiveSpell=IsPassiveSpell
 local HealBot_WoWAPI_PickupSpell=PickupSpell
 local HealBot_WoWAPI_GetSpellTexture=GetSpellTexture
-local HealBot_WoWAPI_GetSpellCharges=GetSpellCharges
-local HealBot_WoWAPI_GetSpellCount=GetSpellCount
 local HealBot_WoWAPI_GetSpellPowerCost=GetSpellPowerCost
 local HealBot_WoWAPI_IsHelpfulSpell=IsHelpfulSpell
 local HealBot_WoWAPI_IsSpellInRange=IsSpellInRange
@@ -70,6 +96,10 @@ if C_Spell then
     if C_Spell.GetSpellName then
         HealBot_WoWAPI_GetSpellName=HealBot_WoWAPI_GetSpellNameV11
         GetSpellName=C_Spell.GetSpellName
+    end
+    if C_Spell.GetSpellIDForSpellIdentifier then
+        HealBot_WoWAPI_GetSpellId=HealBot_WoWAPI_GetSpellIdV11
+        GetSpellId=C_Spell.GetSpellIDForSpellIdentifier
     end
     if C_Spell.GetSpellInfo then
         HealBot_WoWAPI_GetSpellInfo=HealBot_WoWAPI_GetInfoV11
@@ -79,12 +109,20 @@ if C_Spell then
         HealBot_WoWAPI_GetSpellCooldown=HealBot_WoWAPI_GetCooldownV11
         GetSpellCooldown=C_Spell.GetSpellCooldown
     end
+    if C_Spell.GetSpellCharges then
+        HealBot_WoWAPI_GetSpellCount=HealBot_WoWAPI_GetSpellChargesV11
+        HealBot_WoWAPI_GetSpellCharges=HealBot_WoWAPI_GetSpellChargesV11
+        GetSpellCharges=C_Spell.GetSpellCharges
+    end
+    if C_Spell.GetSpellCount then
+        HealBot_WoWAPI_GetSpellCount=HealBot_WoWAPI_GetSpellChargesV11
+        HealBot_WoWAPI_GetSpellCharges=HealBot_WoWAPI_GetSpellChargesV11
+        GetSpellCharges=C_Spell.GetSpellCharges
+    end
     HealBot_WoWAPI_GetSpellLink=C_Spell.GetSpellLink or GetSpellLink
     HealBot_WoWAPI_IsPassiveSpell=C_Spell.IsSpellPassive or IsPassiveSpell
     HealBot_WoWAPI_PickupSpell=C_Spell.PickupSpell or PickupSpell
     HealBot_WoWAPI_GetSpellTexture=C_Spell.GetSpellTexture or GetSpellTexture
-    HealBot_WoWAPI_GetSpellCharges=C_Spell.GetSpellCharges or GetSpellCharges
-    HealBot_WoWAPI_GetSpellCount=C_Spell.GetSpellCount or GetSpellCount
     HealBot_WoWAPI_GetSpellPowerCost=C_Spell.GetSpellPowerCost or GetSpellPowerCost
     HealBot_WoWAPI_IsHelpfulSpell=C_Spell.IsHelpfulSpell or IsHelpfulSpell
     HealBot_WoWAPI_IsSpellInRange=C_Spell.IsSpellInRange or IsSpellInRange
@@ -93,7 +131,6 @@ if C_Spell then
     local vMajor = string.split(".", select(1, GetBuildInfo()))
     local vGameVersion = tonumber(vMajor)
     if vGameVersion>10 then
-        HealBot_WoWAPI_GetSpellCount=HealBot_WoWAPI_One
         HealBot_WoWAPI_IsHelpfulSpell=HealBot_WoWAPI_True
         GetSpellName=C_Spell.GetSpellInfo
     end
@@ -101,6 +138,10 @@ end
 
 function HealBot_WoWAPI_SpellName(spellId)
     return HealBot_WoWAPI_GetSpellName(spellId or "X")
+end
+
+function HealBot_WoWAPI_SpellId(spellName)
+    return HealBot_WoWAPI_GetSpellId(spellName or "X")
 end
 
 function HealBot_WoWAPI_SpellInfo(spellId)
@@ -159,29 +200,30 @@ end
 local function HealBot_WoWAPI_GetSpellTabInfoV11(index)
     hbInfo=GetSpellTabInfo(index)
     if hbInfo then
-        return nil, nil, hbInfo.itemIndexOffset, hbInfo.numSpellBookItems, nil, hbInfo.offSpecID
+        return nil, nil, hbInfo.itemIndexOffset, hbInfo.numSpellBookItems, nil, 0 --hbInfo.isOffSpec
     end
     return nil
 end
 
-local function HealBot_WoWAPI_GetSpellBookItemInfoV1(index, bookType)
-    return GetSpellBookItemInfo(index, bookType)
+local function HealBot_WoWAPI_GetSpellBookItemInfoV1(index)
+    return GetSpellBookItemInfo(index, BOOKTYPE_SPELL)
 end
 
-local function HealBot_WoWAPI_GetSpellBookItemInfoV11(index, bookType)
-    hbInfo=GetSpellBookItemInfo(index, bookType)
-    if hbInfo then
-        return hbInfo.spellType, hbInfo.id
+local SpellBookItemtypes={[1]="SPELL", [3]="FLYOUT"}
+local function HealBot_WoWAPI_GetSpellBookItemInfoV11(index)
+    hbInfo=GetSpellBookItemInfo(index, Enum.SpellBookSpellBank.Player)
+    if hbInfo and hbInfo.itemType then
+        return SpellBookItemtypes[hbInfo.itemType], hbInfo.actionID
     end
     return nil
 end
 
-local function HealBot_WoWAPI_GetSpellBookItemNameV1(index, bookType)
-    return GetSpellBookItemName(index, bookType)
+local function HealBot_WoWAPI_GetSpellBookItemNameV1(index)
+    return GetSpellBookItemName(index, BOOKTYPE_SPELL)
 end
 
-local function HealBot_WoWAPI_GetSpellBookItemNameV11(index, bookType)
-    hbInfo=GetSpellBookItemName(index, bookType)
+local function HealBot_WoWAPI_GetSpellBookItemNameV11(index)
+    hbInfo=GetSpellBookItemName(index, Enum.SpellBookSpellBank.Player)
     if hbInfo then
         return hbInfo.spellName, hbInfo.spellSubName
     end
@@ -198,9 +240,9 @@ if C_SpellBook then
         HealBot_WoWAPI_GetSpellTabInfo=HealBot_WoWAPI_GetSpellTabInfoV11
         GetSpellTabInfo=C_SpellBook.GetSpellBookSkillLineInfo
     end
-    if C_SpellBook.GetSpellBookItemType then
+    if C_SpellBook.GetSpellBookItemInfo then
         HealBot_WoWAPI_GetSpellBookItemInfo=HealBot_WoWAPI_GetSpellBookItemInfoV11
-        GetSpellBookItemInfo=C_SpellBook.GetSpellBookItemType
+        GetSpellBookItemInfo=C_SpellBook.GetSpellBookItemInfo
     end
     if C_SpellBook.GetSpellBookItemName then
         HealBot_WoWAPI_GetSpellBookItemName=HealBot_WoWAPI_GetSpellBookItemNameV11
@@ -216,12 +258,12 @@ function HealBot_WoWAPI_SpellTabInfo(index)
     return HealBot_WoWAPI_GetSpellTabInfo(index)
 end
 
-function HealBot_WoWAPI_SpellBookItemInfo(index, bookType)
-    return HealBot_WoWAPI_GetSpellBookItemInfo(index, bookType)
+function HealBot_WoWAPI_SpellBookItemInfo(index)
+    return HealBot_WoWAPI_GetSpellBookItemInfo(index)
 end
 
-function HealBot_WoWAPI_SpellBookItemName(index, bookType)
-    return HealBot_WoWAPI_GetSpellBookItemName(index, bookType)
+function HealBot_WoWAPI_SpellBookItemName(index)
+    return HealBot_WoWAPI_GetSpellBookItemName(index)
 end
 
 

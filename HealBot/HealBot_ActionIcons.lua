@@ -2504,7 +2504,8 @@ function HealBot_ActionIcons_SetSpell(sText)
         --HealBot_setCall("HealBot_ActionIcons_SetSpell")
     if sText then
         if HealBot_Text_Len(sText)>0 then
-            local _, _, _, _, _, _, spellId = HealBot_WoWAPI_SpellInfo(sText)
+            --local _, _, _, _, _, _, spellId = HealBot_WoWAPI_SpellInfo(sText)
+            local spellId = HealBot_WoWAPI_SpellId(sText)
             if spellId then 
                 sText = "S:"..spellId
             else

@@ -13,6 +13,7 @@ local hbCommands = { [strlower(HEALBOT_DISABLED_TARGET)]=true,
                      [strlower(HEALBOT_STOP)]=true,
                      [strlower(HEALBOT_IGNOREAURAALL)]=true,
                      [strlower(HEALBOT_CANCELPLUGINALERT)]=true,
+                     [strlower(HEALBOT_MOUSELOOK)]=true,
                     }  
 local hbPlayerCommands = {}
 if HEALBOT_GAME_VERSION>3 then

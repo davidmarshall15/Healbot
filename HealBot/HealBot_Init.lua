@@ -275,7 +275,14 @@ function HealBot_Init_FindSpellRangeCast(id, spellName, spellBookId)
     if ( not spell ) then return false; end
     if not spellName then spellName=spell end
     
-    if spellBookId then HealBot_SetToolTip(HealBot_ScanTooltip); HealBot_ScanTooltip:SetSpellBookItem(spellBookId, BOOKTYPE_SPELL) end
+    if spellBookId then 
+        HealBot_SetToolTip(HealBot_ScanTooltip); 
+        if HEALBOT_GAME_VERSION>10 then
+            HealBot_ScanTooltip:SetSpellBookItem(spellBookId, Enum.SpellBookSpellBank.Player)
+        else
+            HealBot_ScanTooltip:SetSpellBookItem(spellBookId, BOOKTYPE_SPELL)
+        end
+    end
     if HealBot_Data["PCLASSTRIM"]=="PRIE" then
         if spellName==HEALBOT_PURIFY then 
             if spellBookId and EnumerateTooltipLines_helper(HEALBOT_DISEASE, HealBot_ScanTooltip:GetRegions()) then
@@ -477,288 +484,6 @@ function HealBot_InitValidateRanks()
     end
 end
 
--- Temporary workaround for TWW spellbook
-local TWWFixList={
-    HEALBOT_MINDBENDER,
-    HEALBOT_SMITE,
-    HEALBOT_HOLY_WORD_CHASTISE,
-    HEALBOT_HOLY_FIRE,
-    HEALBOT_SHADOW_WORD_PAIN,
-    HEALBOT_WRATH,
-    HEALBOT_FAERIE_FIRE,
-    HEALBOT_JAB,
-    HEALBOT_TIGER_PALM,
-    HEALBOT_CHI_BURST,
-    HEALBOT_JUDGMENT,
-    HEALBOT_SHIELD_OF_THE_RIGHTEOUS,
-    HEALBOT_CRUSADER_STRIKE,
-    HEALBOT_CHAIN_LIGHTNING,
-    HEALBOT_ELEMENTAL_BLAST,
-    HEALBOT_FLAME_SHOCK,
-    HBC_FLAME_SHOCK,
-    HEALBOT_FROST_SHOCK,
-    HEALBOT_MAGE_BOMB,
-    HEALBOT_CONCUSSIVE_SHOT,
-    HEALBOT_PLAGUE_STRIKE,
-    HEALBOT_GOUGE,
-    HEALBOT_CORRUPTION,
-    HEALBOT_EXECUTE,
-    HEALBOT_EARTH_SHOCK,
-    HEALBOT_LAVA_BLAST,
-    HEALBOT_LIGHTNING_BOLT,
-    HBC_LIGHTNING_BOLT,
-    HEALBOT_FAERIE_SWARM,
-    HEALBOT_MOONFIRE,
-    HEALBOT_PRIMAL_STRIKE,
-    HEALBOT_MIND_SEAR,
-    HEALBOT_SHADOW_WORD_DEATH,
-    HEALBOT_BLACKOUT_KICK,
-    HEALBOT_TOUCH_OF_DEATH,
-    HEALBOT_CRACKLING_JADE_LIGHTNING,
-    HEALBOT_DENOUNCE,
-    HEALBOT_HAMMER_OF_WRATH,
-    HEALBOT_HOLY_SHOCK,
-    HEALBOT_TAUNT,
-    HEALBOT_FEAR,
-    HEALBOT_THROW,
-    HEALBOT_DEATH_COIL,
-    HEALBOT_ARCANE_SHOT,
-    HEALBOT_AIMED_SHOT,
-    HEALBOT_FIRE_BLAST,
-    HEALBOT_FROSTFIRE_BOLT,
-    HEALBOT_BINDING_HEAL,
-    HEALBOT_HOLY_NOVA,
-    HEALBOT_UNHOLY_HOVA,
-    HEALBOT_CIRCLE_OF_HEALING,
-    HEALBOT_DESPERATE_PRAYER,
-    HEALBOT_CHAIN_HEAL,
-    HEALBOT_SPIRIT_LINK_TOTEM,
-    HEALBOT_FLASH_HEAL,
-    HEALBOT_POWER_WORD_LIFE,
-    HEALBOT_HOLY_WORD_SERENITY,
-    HBC_HOLY_WORD_SERENITY,
-    HEALBOT_HOLY_WORD_SANCTUARY,
-    HEALBOT_SURGING_MIST,
-    HEALBOT_HOLY_WORD_SALVATION,
-    HEALBOT_FLASH_OF_LIGHT,
-    HEALBOT_GREATER_HEAL,
-    HEALBOT_HEALING_TOUCH,
-    HEALBOT_HEAL,
-    HBC_HEAL,
-    HBC_HOLY_NOVA,
-    HEALBOT_HEALING_WAVE,
-    HBC_HEALING_WAVE,
-    HBC_LESSER_HEALING_WAVE,
-    HBC_RU_LESSER_HEALING_WAVE,
-    HEALBOT_HEALING_SURGE,
-    HEALBOT_LIGHT_OF_DAWN,
-    HEALBOT_HOLY_LIGHT,
-    HBC_HOLY_LIGHT,
-    HEALBOT_HOLY_RADIANCE,
-    HEALBOT_HOLY_PRISM,
-    HEALBOT_WORD_OF_GLORY,
-    HEALBOT_DIVINE_LIGHT,
-    HEALBOT_LAY_ON_HANDS,
-    HEALBOT_TYRS_DELIVERANCE,
-    HEALBOT_LIFEBLOOM,
-    HEALBOT_HEALING_STREAM_TOTEM,
-    HEALBOT_HEALING_TIDE_TOTEM,
-    HEALBOT_PENANCE,
-    HEALBOT_PRAYER_OF_HEALING,
-    HEALBOT_PRAYER_OF_MENDING,
-    HEALBOT_RIPTIDE,
-    HEALBOT_PRIMORDIAL_WAVE,
-    HEALBOT_WELLSPRING,
-    HEALBOT_DOWNPOUR,
-    HEALBOT_REGROWTH,
-    HEALBOT_NOURISH,
-    HBC_NOURISH,
-    HEALBOT_RENEW,
-    HEALBOT_DIVINE_HYMN,
-    HEALBOT_HEALING_RAIN,
-    HEALBOT_REJUVENATION,
-    HEALBOT_OVERGROWTH,
-    HEALBOT_WILD_GROWTH,
-    HEALBOT_SWIFTMEND,
-    HEALBOT_TRANQUILITY,
-    HEALBOT_GIFT_OF_THE_NAARU,
-    HEALBOT_MENDPET,
-    HEALBOT_HEALTH_FUNNEL,
-    HEALBOT_SOOTHING_MIST,
-    HEALBOT_ZEN_MEDITATION,
-    HEALBOT_LIFE_COCOON,
-    HEALBOT_ENVELOPING_MIST,
-    HEALBOT_REVIVAL,
-    HEALBOT_RENEWING_MIST,
-    HEALBOT_UPLIFT,
-    HEALBOT_CHI_WAVE,
-    HEALBOT_ZEN_SPHERE,
-    HEALBOT_EXECUTION_SENTENCE,
-    HEALBOT_CASCADE,
-    HEALBOT_DIVINE_STAR,
-    HEALBOT_HALO,                               
-    HEALBOT_CLARITY_OF_PURPOSE,
-    HEALBOT_CENARION_WARD,
-    HEALBOT_BREATH_OF_THE_SERPENT,
-    HEALBOT_CHI_EXPLOSION,
-    HEALBOT_RUSHING_JADE_WIND,              
-    HEALBOT_CHI_TOROEDO,
-    HEALBOT_BEACON_OF_LIGHT,
-    HEALBOT_PLEA,                       
-    HEALBOT_POWER_WORD_RADIANCE,            
-    HEALBOT_SHADOW_COVENANT,                
-    HEALBOT_SHADOW_MEND,
-    HEALBOT_HOLY_WORD_SANCTIFY,              
-    HEALBOT_BESTOW_FAITH,                 
-    HEALBOT_LIGHT_OF_THE_MARTYR, 
-    HEALBOT_BEACON_OF_VIRTUE,     
-    HEALBOT_HAND_OF_THE_PROTECTOR,   
-    HEALBOT_ESSENCE_FONT,
-    HEALBOT_LIGHT_OF_TUURE,   
-    HEALBOT_LIVING_FLAME,
-    HEALBOT_EMERALD_BLOSSOM,
-    HEALBOT_ECHO,
-    HEALBOT_DREAM_FLIGHT,
-    HEALBOT_REVERSION,
-    HEALBOT_REWIND,
-    HEALBOT_DREAM_BREATH,
-    HEALBOT_SPIRITBLOOM,
-    HEALBOT_VERDANT_EMBRACE,
-    HEALBOT_RENEWING_BLAZE,
-    HEALBOT_DREAM_PROJECTION,
-    HEALBOT_EMERALD_COMMUNION,
-    HEALBOT_HEX,
-    HEALBOT_ENTANGLING_ROOTS,
-    HEALBOT_GROWL,
-    HEALBOT_SOOTHE,
-    HEALBOT_MASS_ENTANGLEMENT,
-    HEALBOT_PURGE,
-    HEALBOT_WIND_SHEAR,
-    HEALBOT_CYCLONE,
-    HEALBOT_DOMINATE_MIND,
-    HEALBOT_SHACKLE_UNDEAD,
-    HEALBOT_DISPELL_MAGIC,
-    HEALBOT_PROVOKE,
-    HEALBOT_DISABLE,
-    HEALBOT_EXPEL_HARM,
-    HEALBOT_SPEAR_HAND_STRIKE,
-    HEALBOT_PARALYSIS,
-    HEALBOT_HAMMER_OF_JUSTICE,
-    HEALBOT_REBUKE,
-    HEALBOT_RECKONING,
-    HEALBOT_REPENTANCE,
-    HEALBOT_TURN_EVIL,
-    HEALBOT_STONEFORM,
-    HEALBOT_DARKFLIGHT,
-    HEALBOT_POWER_WORD_SHIELD,
-    HEALBOT_SPIRIT_SHELL,
-    HEALBOT_REVIVE,
-    HEALBOT_INTERCESSION,
-    HEALBOT_GUARDIAN_SPIRIT,
-    HEALBOT_SHINING_FORCE,
-    HEALBOT_PAIN_SUPPRESSION,
-    HEALBOT_INTERVENE,
-    HEALBOT_RESURRECTION,
-    HEALBOT_REDEMPTION,
-    HEALBOT_REBIRTH,
-    HEALBOT_TREE_OF_LIFE,
-    HEALBOT_INNERVATE,
-    HEALBOT_ANCESTRALSPIRIT,
-    HEALBOT_RESUSCITATE,
-    HEALBOT_ABSOLUTION,
-    HEALBOT_ANCESTRAL_VISION,
-    HEALBOT_MASS_RESURRECTION,
-    HEALBOT_MASS_RETURN,
-    HEALBOT_RETURN,
-    HEALBOT_REAWAKEN,
-    HEALBOT_REVITALIZE,
-    HEALBOT_CLEANSE,
-    HEALBOT_REMOVE_CURSE,
-    HEALBOT_CLEANSE_TOXIN,
-    HEALBOT_REMOVE_CORRUPTION,
-    HEALBOT_NATURALIZE,
-    HEALBOT_CAUTERIZING_FLAME,
-    HEALBOT_EXPUNGE,
-    HEALBOT_NATURES_CURE,
-    HEALBOT_PURIFY_DISEASE,
-    HEALBOT_PURIFY,
-    HBC_PURIFY,
-    HBC_SHAMAN_CURE_DISEASE,
-    HBC_DRUID_ABOLISH_POISON,
-    HBC_PRIEST_ABOLISH_DISEASE,
-    HBC_DRUID_CURE_POISON,
-    HBC_SHAMAN_CURE_POISON,
-    HEALBOT_BLOODLUST,
-    HEALBOT_HEROISM,
-    HBC_DISPELL_MAGIC,
-    HEALBOT_CLEANSE_SPIRIT,
-    HEALBOT_PURIFY_SPIRIT,
-    HEALBOT_MASS_DISPEL,
-    HEALBOT_LIFE_TAP,
-    HEALBOT_DIVINE_SHIELD,
-    HEALBOT_DIVINE_PROTECTION,
-    HBC_DIVINE_INTERVENTION,
-    HBC_DIVINE_FAVOR,
-    HEALBOT_ANACESTRAL_SWIFTNESS,
-    HEALBOT_LEAP_OF_FAITH,
-    HEALBOT_UNLEASH_ELEMENTS,
-    HEALBOT_DETOX,
-    HEALBOT_SPEED_OF_LIGHT,
-    HEALBOT_HAND_OF_PURITY,
-    HEALBOT_THUNDER_FOCUS_TEA,
-    HEALBOT_ASTRAL_SHIFT,
-    HEALBOT_GUARDIAN_ANCIENT_KINGS,
-    HEALBOT_UNLEASH_LIFE,
-    HEALBOT_CLOUDBURST_TOTEM,
-    HEALBOT_POWER_INFUSION,
-    HEALBOT_VAMPIRIC_EMBRACE,
-    HEALBOT_CLARITY_OF_WILL,
-    HEALBOT_DETONATE_CHI,
-    HEALBOT_BEACON_OF_FAITH,
-    HEALBOT_BEACON_OF_INSIGHT,
-    HEALBOT_RAPTURE,
-    HEALBOT_APOTHEOSIS,
-    HEALBOT_SYMBOL_OF_HOPE,
-    HEALBOT_BODY_AND_MIND,
-    HEALBOT_BLESSING_OF_SACRIFICE,
-    HEALBOT_HOLY_WARD,
-    HEALBOT_RESCUE,
-    HEALBOT_ZEPHYR,
-    HEALBOT_OBSIDIAN_SCALES,
-    HEALBOT_TIME_DILATION,
-    HEALBOT_TIME_STOP,
-    HEALBOT_STASIS,
-    HEALBOT_FURY_OF_THE_ASPECTS,
-    HEALBOT_VISAGE,
-    HEALBOT_TEMPRAL_ANOMALY,
-    HEALBOT_NULLIFYING_SHROUD,
-}
-
-local TWWSpellList={}
-local TWWNoDups={}
-function HealBot_Init_Spells_TWWFix()
-    local sID, sName
-    for x,_ in pairs(TWWSpellList) do
-        TWWSpellList[x]=nil
-    end
-    for x,_ in pairs(TWWNoDups) do
-        TWWNoDups[x]=nil
-    end
-    for j=1, getn(TWWFixList), 1 do
-        if type(TWWFixList[j])=="number" then
-            sID=TWWFixList[j]
-            sName=HealBot_Spells_KnownByID(sID)
-        else
-            sName=TWWFixList[j]
-            sID=HealBot_Spells_KnownByName(sName)
-        end
-        if sID and sName and not TWWNoDups[sName] then
-            TWWNoDups[sName]=true
-            TWWSpellList[sID]=sName
-        end
-    end
-end
-
 function HealBot_Init_Spells_CataPriest(spellID, spellName, spellTexture)
     local _, _, _, _, _, hbRange = HealBot_WoWAPI_SpellInfo(spellID)
     local cooldown = GetSpellBaseCooldown(spellID)
@@ -776,6 +501,7 @@ function HealBot_Init_Spells_CataPriest(spellID, spellName, spellTexture)
     HealBot_Init_SetSpellRange(spellID, spellName, hbRange)
 end
 
+local iSpellName, iSpellRank
 function HealBot_Init_Spells_Defaults()
       --HealBot_setCall("HealBot_Init_Spells_Defaults")
     for x,_ in pairs(HealBot_Spell_IDs) do
@@ -810,33 +536,30 @@ function HealBot_Init_Spells_Defaults()
     end
 	
     HealBot_Init_SkipSpells()
-    if HEALBOT_GAME_VERSION>10 then
-        HealBot_Init_Spells_TWWFix()
-        for sID,sName in pairs(TWWSpellList) do
-            HealBot_Init_Spells_addSpell(sID, sName)
-        end
-    else
-        for j=1,nTabs do
-            local _, _, offset, numEntries, _, offspecID = HealBot_WoWAPI_SpellTabInfo(j)
-            if not offspecID then offspecID=1 end
-            --HealBot_AddDebug("offset="..offset.."  numEntries"..numEntries.."  offspecID="..offspecID,"Init Spells",true)
-            if offspecID==0 then
-                for s=offset+1,offset+numEntries do
-                    --HealBot_AddDebug("Tabinfo slot="..s,"Init Spells",true)
-                    local sName, cRank = HealBot_WoWAPI_SpellBookItemName(s, BOOKTYPE_SPELL)
-                    local sType, sId = HealBot_WoWAPI_SpellBookItemInfo(s, BOOKTYPE_SPELL)
-                    --local sName, cRank = HealBot_WoWAPI_SpellInfo(sId)
-                    if not cRank then cRank="" end
-                    if sType == "SPELL" and not HealBot_WoWAPI_IsSpellPassive(sId) and HealBot_Spells_KnownByName(sName) and not string.find(sName," Rune Ability") then -- and (string.len(cRank)<1 or string.find(cRank,"Rank")) 
-                        HealBot_Init_Spells_addSpell(sId, sName, s, cRank)
-                    elseif sType == "FLYOUT" then
-                        local _, _, numFlyoutSlots, flyoutKnown = GetFlyoutInfo(sId)
-                        if flyoutKnown then
-                            for f=1,numFlyoutSlots do
-                                local fId, _, fKnown, fName = GetFlyoutSlotInfo(sId, f)
-                                if fKnown and not HealBot_WoWAPI_IsSpellPassive(fId) and HealBot_Spells_KnownByName(fName) then
-                                    HealBot_Init_Spells_addSpell(fId, fName, s, cRank)
-                                end
+
+    for j=1,nTabs do
+        local _, _, offset, numEntries, _, offspecID = HealBot_WoWAPI_SpellTabInfo(j)
+        if offspecID==0 then
+            for s=offset+1,offset+numEntries do
+                --HealBot_AddDebug("Tabinfo slot="..s,"Init Spells",true)
+                --local sName, cRank = HealBot_WoWAPI_SpellBookItemName(s)
+                local sType, sId = HealBot_WoWAPI_SpellBookItemInfo(s)
+                if HEALBOT_GAME_VERSION>10 then
+                    iSpellName=HealBot_WoWAPI_SpellName(sId)
+                    iSpellRank=""
+                else
+                    iSpellName, iSpellRank  = HealBot_WoWAPI_SpellBookItemName(s)
+                    if not iSpellRank then iSpellRank="" end
+                end
+                if sType == "SPELL" and not HealBot_WoWAPI_IsSpellPassive(sId) and HealBot_Spells_KnownByName(iSpellName) and not string.find(iSpellName," Rune Ability") then -- and (string.len(iSpellRank)<1 or string.find(iSpellRank,"Rank")) 
+                    HealBot_Init_Spells_addSpell(sId, iSpellName, s, iSpellRank)
+                elseif sType == "FLYOUT" then
+                    local _, _, numFlyoutSlots, flyoutKnown = GetFlyoutInfo(sId)
+                    if flyoutKnown then
+                        for f=1,numFlyoutSlots do
+                            local fId, _, fKnown, fName = GetFlyoutSlotInfo(sId, f)
+                            if fKnown and not HealBot_WoWAPI_IsSpellPassive(fId) and HealBot_Spells_KnownByName(fName) then
+                                HealBot_Init_Spells_addSpell(fId, fName, s, iSpellRank)
                             end
                         end
                     end
@@ -846,7 +569,7 @@ function HealBot_Init_Spells_Defaults()
     end
     if HEALBOT_GAME_VERSION<3 then 
         HealBot_InitValidateRanks()
-        HealBot_Timers_Set("LAST","ClassicSpellRanks",1)
+        HealBot_Init_ClassicSpellRanks()
     elseif HEALBOT_GAME_VERSION==4 and HealBot_Data["PCLASSTRIM"]=="PRIE" then
         HealBot_Init_Spells_CataPriest(HEALBOT_HOLY_WORD_CHASTISE, HEALBOT_SPELL_HOLYWORDCHASTISE, 135886)
         HealBot_Init_Spells_CataPriest(HBC_HOLY_WORD_SERENITY, HEALBOT_SPELL_HOLYWORDSERENITY, 135937)
@@ -875,7 +598,7 @@ function HealBot_Init_ClassicSpellRanks()
       --HealBot_setCall("HealBot_Init_ClassicSpellRanks")
     for hSpell,_ in pairs(HealBot_KnownHeal_Names) do
         if HealBot_Ranks[hSpell] and HealBot_Ranks[hSpell]>1 then
-            for f=1, HealBot_Ranks[hSpell]-1, 1 do
+            for f=1, HealBot_Ranks[hSpell], 1 do
                 local sNameRank=HealBot_Init_retRank(hSpell, f) --hSpell.."(Rank "..f..")"
                 if sNameRank then
                     local _, _, _, _, _, _, spellId = HealBot_WoWAPI_SpellInfo(sNameRank)

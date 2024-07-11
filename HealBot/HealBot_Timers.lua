@@ -39,7 +39,7 @@ local xButton,pButton,aButton
 HealBot_Timers_luVars["DoneBuffReset"]=false
 HealBot_Timers_luVars["nCalls"]=0
 HealBot_Timers_luVars["nProcs"]=9
-HealBot_Timers_luVars["nProcsOn"]=4
+HealBot_Timers_luVars["nProcsOn"]=8
 HealBot_Timers_luVars["nProcsOff"]=2
 HealBot_Timers_luVars["turboEndTimer"]=0
 HealBot_Timers_luVars["ResetSkins"]=false
@@ -68,13 +68,13 @@ function HealBot_Timers_SetnProcs(cpuProfilerOn)
         HealBot_Timers_luVars["nProcsOn"]=2
         HealBot_Timers_luVars["nProcsOff"]=1
     else
-        HealBot_Timers_luVars["nProcsOn"]=HealBot_Util_PerfVal1(200)
-        if HealBot_Timers_luVars["nProcsOn"]<2 then
-            HealBot_Timers_luVars["nProcsOn"]=2
+        HealBot_Timers_luVars["nProcsOn"]=HealBot_Util_PerfVal1(250)
+        if HealBot_Timers_luVars["nProcsOn"]<3 then
+            HealBot_Timers_luVars["nProcsOn"]=3
         end
         HealBot_Timers_luVars["nProcsOff"]=HealBot_Util_PerfVal1(100)
-        if HealBot_Timers_luVars["nProcsOff"]<1 then
-            HealBot_Timers_luVars["nProcsOff"]=1
+        if HealBot_Timers_luVars["nProcsOff"]<2 then
+            HealBot_Timers_luVars["nProcsOff"]=2
         end
     end
     HealBot_Debug_PerfUpdate("TimersOn", HealBot_Timers_luVars["nProcsOn"])
@@ -121,6 +121,7 @@ function HealBot_Timer_ResetAllButtonsRecalcAll()
 end
 
 function HealBot_Timers_ResetSkins()
+    HealBot_Timers_TurboOn(1)
     HealBot_Timers_luVars["ResetSkins"]=false
     HealBot_Action_setLuVars("resetSkin", true)
     HealBot_Action_ResetSkinAllButtons()
@@ -140,50 +141,63 @@ function HealBot_Timers_nextRecalcPlayers()
         HealBot_Timers_luVars["UpdateEnemy"]=false
         HealBot_setLuVars("UpdateEnemy", true)
      --   HealBot_SetResetFlag("SOFT")
-    elseif HealBot_Timers_luVars["ResetSkins"] then
-        HealBot_Timers_ResetSkins()
     end
-    HealBot_nextRecalcParty(6)
+    if HealBot_Timers_luVars["ResetSkins"] then
+        HealBot_Timers_ResetSkins()
+        HealBot_nextRecalcParty(6,0.05)
+    else
+        HealBot_nextRecalcParty(6)
+    end
 end
 
 function HealBot_Timers_nextRecalcVehicle()
     if HealBot_Timers_luVars["ResetSkins"] then
         HealBot_Timers_ResetSkins()
+        HealBot_nextRecalcParty(1,0.05)
+    else
+        HealBot_nextRecalcParty(1)
     end
       --HealBot_setCall("HealBot_Timers_nextRecalcVehicle")
-    HealBot_nextRecalcParty(1)
 end
 
 function HealBot_Timers_nextRecalcPets()
     if HealBot_Timers_luVars["ResetSkins"] then
         HealBot_Timers_ResetSkins()
+        HealBot_nextRecalcParty(2,0.05)
+    else
+        HealBot_nextRecalcParty(2)
     end
       --HealBot_setCall("HealBot_Timers_nextRecalcPets")
-    HealBot_nextRecalcParty(2)
 end
 
 function HealBot_Timers_nextRecalcEnemy()
       --HealBot_setCall("HealBot_Timers_nextRecalcEnemy")
     if HealBot_Timers_luVars["ResetSkins"] then
         HealBot_Timers_ResetSkins()
+        HealBot_nextRecalcParty(5,0.05)
+    else
+        HealBot_nextRecalcParty(5)
     end
-    HealBot_nextRecalcParty(5)
 end
 
 function HealBot_Timers_nextRecalcTarget()
       --HealBot_setCall("HealBot_Timers_nextRecalcEnemy")
     if HealBot_Timers_luVars["ResetSkins"] then
         HealBot_Timers_ResetSkins()
+        HealBot_nextRecalcParty(3,0.05)
+    else
+        HealBot_nextRecalcParty(3)
     end
-    HealBot_nextRecalcParty(3)
 end
 
 function HealBot_Timers_nextRecalcFocus()
       --HealBot_setCall("HealBot_Timers_nextRecalcEnemy")
     if HealBot_Timers_luVars["ResetSkins"] then
         HealBot_Timers_ResetSkins()
+        HealBot_nextRecalcParty(4,0.05)
+    else
+        HealBot_nextRecalcParty(4)
     end
-    HealBot_nextRecalcParty(4)
 end
 
 function HealBot_Timers_updateEnemyFrames()
@@ -545,7 +559,7 @@ function HealBot_Timers_SetCurrentSkin()
     HealBot_Options_setAuxBars()
     HealBot_UpdateAllAuxBars()
     HealBot_Action_ResetFrameAlias()
-    HealBot_nextRecalcDelay(0,0.025)
+    HealBot_nextRecalcParty(0,0.05)
     HealBot_Timers_Set("AUX","ResetText")
     HealBot_Timers_Set("SKINS","SkinChangePluginUpdate")
 end
@@ -799,7 +813,6 @@ local hbTimerFuncs={["INIT"]={
                         ["OverrideAdaptiveColourUseToggle"]=HealBot_Options_Override_ColoursAdaptiveUse_Toggle,
                         ["BarColourAlphaSetFunc"]=HealBot_Action_BarColourAlphaSetFunc,
                         ["AuxBarsReset"]=HealBot_Aux_barsReset,
-                        ["ClassicSpellRanks"]=HealBot_Init_ClassicSpellRanks,
                         ["GuildUpdate"]=HealBot_Comms_GuildUpdate,
                         ["PerfRangeFreq"]=HealBot_Range_PerfFreq,
                         ["UpdateCheckInterval"]=HealBot_UpdateCheckInterval,
@@ -848,6 +861,8 @@ local hbTimerFuncs={["INIT"]={
                         ["ShowFramesOnSkinChange"]=HealBot_Action_ShowFramesOnSkinChange,
                         ["CheckHideUnusedFrames"]=HealBot_Action_CheckHideUnusedFrames,
                         ["UpdateEnemyFrames"]=HealBot_Timers_updateEnemyFrames,
+                        ["PlayersTargetsResetSkins"]=HealBot_Panel_PlayersTargetsResetSkins,
+                        ["ValidateEnemyPlayerFrames"]=HealBot_Panel_validateEnemyPlayerFrames,
                     },
                    }
 
