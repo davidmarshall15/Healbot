@@ -267,6 +267,7 @@ function HealBot_nextRecalcEndDelay(typeRequired)
     if HealBot_RecalcQueue[typeRequired] then
         HealBot_RecalcQueue[typeRequired]=false
         HealBot_RefreshTypes[typeRequired]=true
+        HealBot_Timer_FramesRefresh()
     end
 end
 
@@ -283,7 +284,6 @@ function HealBot_nextRecalcDelay(typeRequired,delay)
         HealBot_nextRecalcParty(6,delay)
     end
     if not HealBot_RecalcQueue[typeRequired] then
-        HealBot_Timer_FramesRefresh()
         HealBot_RecalcQueue[typeRequired]=true
         C_Timer.After(delay, function() HealBot_nextRecalcEndDelay(typeRequired) end)
     end
@@ -3280,8 +3280,8 @@ function HealBot_UpdateCheckInterval()
         HealBot_Action_setLuVars("deadCheckInterval", 1)
         HealBot_Debug_PerfUpdate("deadInt", 1)
     else
-        HealBot_luVars["RecalcDelay"] = HealBot_Util_PerfVal2(990)
-        HealBot_luVars["EventsDelay"] = HealBot_Util_PerfVal2(970)
+        HealBot_luVars["RecalcDelay"] = HealBot_Util_PerfVal2(940)
+        HealBot_luVars["EventsDelay"] = HealBot_Util_PerfVal2(955)
         HealBot_luVars["aggroCheckInterval"] = HealBot_Util_PerfVal2(700)
         HealBot_luVars["statusCheckInterval"] = HealBot_Util_PerfVal2(400)
         HealBot_luVars["healthCheckInterval"] = HealBot_Util_PerfVal2(100)
@@ -3289,15 +3289,15 @@ function HealBot_UpdateCheckInterval()
         if HealBot_luVars["aggroCheckInterval"]<1 then HealBot_luVars["aggroCheckInterval"] = 1 end
         if HealBot_luVars["statusCheckInterval"]<2 then HealBot_luVars["statusCheckInterval"] = 2 end
         if HealBot_luVars["healthCheckInterval"]<3 then HealBot_luVars["healthCheckInterval"] = 3 end
-        if HealBot_luVars["RecalcDelay"]<0.025 then
-            HealBot_luVars["RecalcDelay"] = 0.025
-        elseif HealBot_luVars["RecalcDelay"]>0.075 then
-            HealBot_luVars["RecalcDelay"] = 0.075
+        if HealBot_luVars["RecalcDelay"]<0.2 then
+            HealBot_luVars["RecalcDelay"] = 0.2
+        elseif HealBot_luVars["RecalcDelay"]>0.5 then
+            HealBot_luVars["RecalcDelay"] = 0.5
         end
-        if HealBot_luVars["EventsDelay"]<0.125 then
-            HealBot_luVars["EventsDelay"] = 0.125
-        elseif HealBot_luVars["EventsDelay"]>0.275 then
-            HealBot_luVars["EventsDelay"] = 0.275
+        if HealBot_luVars["EventsDelay"]<0.15 then
+            HealBot_luVars["EventsDelay"] = 0.15
+        elseif HealBot_luVars["EventsDelay"]>0.3 then
+            HealBot_luVars["EventsDelay"] = 0.3
         end
         HealBot_Action_UpdateCheckInterval()
     end
@@ -4261,7 +4261,7 @@ end
 
 function HealBot_Timer_FramesRefresh()
       --HealBot_setCall("HealBot_Timer_FramesRefresh")
-    if not HealBot_luVars["ProcessRefresh"] and not InCombatLockdown() then
+    if not HealBot_luVars["ProcessRefresh"] and not HealBot_Data["UILOCK"] then
         HealBot_luVars["ProcessRefresh"]=true
         if HealBot_Panel_enemyPlayerTargets(false, 2) then
             HealBot_Timers_ResetSkins()
@@ -5432,19 +5432,18 @@ function HealBot_ProcessRefreshTypes()
             HealBot_RecalcParty(4)
         elseif HealBot_RefreshTypes[6] then
             HealBot_RecalcParty(6)
-            if not HealBot_RefreshTypes[5] then
-                HealBot_Timers_Set("OOC","RefreshPartyNextRecalcEnemy")
-            end
+            --if not HealBot_RefreshTypes[5] then
+            --    HealBot_Timers_Set("OOC","RefreshPartyNextRecalcEnemy")
+            --end
         elseif HealBot_RefreshTypes[5] then
             HealBot_RecalcParty(5)
-        elseif HealBot_luVars["RecalcOnZeroEnemy"] then
-            HealBot_luVars["RecalcOnZeroEnemy"]=false
-            HealBot_luVars["checkEnemyPlayerTargets"]=true
+        elseif HealBot_luVars["resetOnNoTargetFrames"] or HealBot_luVars["checkEnemyPlayerTargets"] then
             HealBot_RecalcOnZeroEnemy()
-        elseif (HealBot_luVars["resetOnNoTargetFrames"] and HealBot_luVars["NumEnemyUnitsInQueue"]==0) or (HealBot_luVars["checkEnemyPlayerTargets"] and HealBot_Panel_enemyPlayerTargets(false, 2)) then
+            if (HealBot_luVars["resetOnNoTargetFrames"] and HealBot_luVars["NumEnemyUnitsInQueue"]==0) or (HealBot_luVars["checkEnemyPlayerTargets"] and HealBot_Panel_enemyPlayerTargets(false, 2)) then
+                HealBot_Panel_PlayersTargetsResetSkins()
+            end
             HealBot_luVars["checkEnemyPlayerTargets"]=false
             HealBot_luVars["resetOnNoTargetFrames"]=false
-            HealBot_Timers_Set("OOC","PlayersTargetsResetSkins",0.02)
         elseif HealBot_luVars["RefreshListsComplete"] then
             if HealBot_luVars["ClearReset"] then
                 HealBot_Timers_Set("SKINS","ClearReset")
@@ -5477,10 +5476,17 @@ function HealBot_ProcessRefreshTypes()
     end
 end
 
+function HealBot_CheckPlayersTargets()
+    HealBot_RecalcOnZeroEnemy()
+    if HealBot_luVars["NumEnemyUnitsInQueue"]==0 or HealBot_Panel_enemyPlayerTargets(false, 2) then
+        HealBot_Panel_PlayersTargetsResetSkins()
+    end
+end
+
 function HealBot_RecalcOnZeroEnemy()
     HealBot_Update_ResetRefreshEnemyLists()
     if HealBot_luVars["NumEnemyUnitsInQueue"]==0 then
-        HealBot_nextRecalcParty(6,0.1)
+        HealBot_nextRecalcParty(6,0.02)
     end
 end
 
@@ -6480,7 +6486,7 @@ function HealBot_OnEvent_UnitTarget(button)
             if button.isplayer then
                 if not HealBot_Data["UILOCK"] then
                     if HealBot_Panel_IsTargetingEnemy(button.unit) then
-                        HealBot_nextRecalcParty(5,0.025)
+                        HealBot_nextRecalcParty(5,0.02)
                     end
                 else
                     button.aggro.nextcheck=1
@@ -6559,10 +6565,8 @@ function HealBot_TargetChanged()
         else
             HealBot_UpdateUnitNotExists(HealBot_Extra_Button["target"])
         end
-        HealBot_nextRecalcParty(3)
-    else
-        HealBot_nextRecalcParty(3,0.01)
     end
+    HealBot_nextRecalcParty(3,0.02)
 end
 
 HealBot_luVars["AuxTargetInUse"]=false
@@ -6584,8 +6588,14 @@ function HealBot_OnEvent_PlayerTargetChanged()
         end
         HealBot_TargetChanged()
     end
-    if Healbot_Config_Skins.HealGroups[Healbot_Config_Skins.Current_Skin][11]["STATE"] and Healbot_Config_Skins.Enemy[Healbot_Config_Skins.Current_Skin]["INCSELF"] then
-        HealBot_nextRecalcParty(5,0.01)
+    if Healbot_Config_Skins.Enemy[Healbot_Config_Skins.Current_Skin]["INCSELF"] and Healbot_Config_Skins.Enemy[Healbot_Config_Skins.Current_Skin]["EXISTSHOWPTAR"]<3 then
+        if Healbot_Config_Skins.Enemy[Healbot_Config_Skins.Current_Skin]["SELFUSEFRAME"]==2 then
+            if HealBot_Panel_EnemyTargetsWithPlayersSelfUpdate() then
+                HealBot_Timers_Set("OOC","PlayersTargetsResetSkins",0.02)
+            end
+        elseif Healbot_Config_Skins.HealGroups[Healbot_Config_Skins.Current_Skin][11]["STATE"] then 
+            HealBot_nextRecalcParty(5,0.02)
+        end
     end
     C_Timer.After(0.05, HealBot_SetTargetBar)
     HealBot_Options_FramesActionIconsSetLists()
@@ -7232,16 +7242,14 @@ function HealBot_FocusChanged()
         else
             HealBot_UpdateUnitNotExists(HealBot_Extra_Button["focus"])
         end
-        HealBot_nextRecalcParty(4)
-    else
-        HealBot_nextRecalcParty(4,0.01)
     end
+    HealBot_nextRecalcParty(4,0.02)
 end
 
 function HealBot_OnEvent_FocusChanged()
       --HealBot_setCall("HealBot_OnEvent_FocusChanged")
     if Healbot_Config_Skins.HealGroups[Healbot_Config_Skins.Current_Skin][11]["STATE"] and Healbot_Config_Skins.Enemy[Healbot_Config_Skins.Current_Skin]["INCFOCUS"] then
-        HealBot_nextRecalcParty(5,0.01)
+        HealBot_nextRecalcParty(5,0.02)
     end
     HealBot_FocusChanged()
     HealBot_Options_FramesActionIconsSetLists()

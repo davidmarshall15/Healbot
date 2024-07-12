@@ -6665,7 +6665,7 @@ end
 
 function HealBot_Action_MarkDeleteEnemyButton(button)
     HealBot_Action_MarkDeleteButton(button)
-    HealBot_Timers_Set("OOC","PlayersTargetsResetSkins",0.1)
+    HealBot_Timers_Set("OOC","PlayersTargetsResetSkins")
     HealBot_Panel_setLuVars("RecalcOnZeroEnemy", true)
 end
 
@@ -7073,18 +7073,18 @@ function HealBot_Action_ShowHideFrameOption(frame)
     if not HealBot_Data["UILOCK"] then
         if frame>5 then
             if frame==6 then
-                HealBot_nextRecalcParty(1,0.05)
+                HealBot_nextRecalcParty(1,0.02)
             elseif frame==7 then
-                HealBot_nextRecalcParty(2,0.05)
+                HealBot_nextRecalcParty(2,0.02)
             elseif frame==8 then
-                HealBot_nextRecalcParty(3,0.05)
+                HealBot_nextRecalcParty(3,0.02)
             elseif frame==9 then 
-                HealBot_nextRecalcParty(4,0.05)
+                HealBot_nextRecalcParty(4,0.02)
             elseif frame==10 then 
-                HealBot_nextRecalcParty(5,0.05)
+                HealBot_nextRecalcParty(5,0.02)
             end
         else
-            HealBot_nextRecalcParty(6,0.05)
+            HealBot_nextRecalcParty(6,0.02)
         end
     end
 end

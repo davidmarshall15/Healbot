@@ -47,6 +47,8 @@ local uaBuffData={}
 local uaDebuffData={}
 local uaBuffSlot, uaDebuffSlot=0,0
 local HealBot_Classic_Absorbs={}
+local HealBot_Classic_AbsorbsV1Track={}
+local classicAbsorbBonusV1={}
 local HealBot_TargetIconsTextures = {[1]=[[Interface\Addons\HealBot\Images\Star.tga]],
                                      [2]=[[Interface\Addons\HealBot\Images\Circle.tga]],
                                      [3]=[[Interface\Addons\HealBot\Images\Diamond.tga]],
@@ -998,10 +1000,10 @@ hbDebuffBleed[418009] = "Serrated Arrows"
 hbDebuffBleed[418160] = "Sawblade-Storm"
 hbDebuffBleed[418624] = "Rending Slash"
 
-if HEALBOT_GAME_VERSION<2 then
-    libCD = HealBot_Libs_CD()
-    if libCD then libCD:Register(HEALBOT_HEALBOT) end
-end
+--if HEALBOT_GAME_VERSION<2 then
+--    libCD = HealBot_Libs_CD()
+--    if libCD then libCD:Register(HEALBOT_HEALBOT) end
+--end
 
 function HealBot_Aura_setLuVars(vName, vValue)
     --HealBot_setCall("HealBot_Aura_setLuVars - "..vName)
@@ -3305,21 +3307,35 @@ function HealBot_Aura_EndCheckClassicAbsorbs(button)
     end
 end
 
+local hbClassicAbsorbTotal=0
 function HealBot_Aura_UpdateUnitBuffsV1(button, selfOnly)
       --HealBot_setCall("HealBot_Aura_UpdateUnitBuffsV1", button)
     uaZ=1
-    HealBot_Aura_StartCheckClassicAbsorbs(button)
+    --HealBot_Aura_StartCheckClassicAbsorbs(button)
+    hbClassicAbsorbTotal=0
     while true do
-        uaName, uaTexture, uaCount, uaDebuffType, uaDuration, uaExpirationTime, uaUnitCaster, _, _, uaSpellId, _, _, _, _, _, _, uaExtra17, uaExtra18, uaExtra19 = libCD:UnitAura(button.unit,uaZ,"HELPFUL")
+        uaName, uaTexture, uaCount, uaDebuffType, uaDuration, uaExpirationTime, uaUnitCaster, _, _, uaSpellId, _, _, _, _, _, _, uaExtra17, uaExtra18, uaExtra19 = UnitAura(button.unit,uaZ,"HELPFUL")
         if uaSpellId then
             HealBot_Aura_UpdateUnitBuffsData(button, selfOnly)
-            HealBot_Aura_CheckClassicAbsorbs(button)
+            if HealBot_Classic_Absorbs[uaName] then
+                hbClassicAbsorbValues=(HealBot_Classic_Absorbs[uaName][uaSpellId] or HealBot_Classic_Absorbs[uaName][0] or 0) + (classicAbsorbBonusV1[button.guid] or classicAbsorbBonusV1["DEFAULT"])
+                hbClassicAbsorbTotal=hbClassicAbsorbTotal+hbClassicAbsorbValues
+                if HealBot_Classic_AbsorbsV1Track[uaName]~=uaExpirationTime then
+                    HealBot_Classic_AbsorbsV1Track[uaName]=uaExpirationTime
+                    button.health.auraabsorbs=0
+                end
+            end
+            --HealBot_Aura_CheckClassicAbsorbs(button)
             uaZ=uaZ+1
         else
             break
         end
     end
-    HealBot_Aura_EndCheckClassicAbsorbs(button)
+    if button.health.auraabsorbs~=hbClassicAbsorbTotal then
+        button.health.auraabsorbs=hbClassicAbsorbTotal
+        HealBot_OnEvent_AbsorbsUpdate(button)
+    end
+    --HealBot_Aura_EndCheckClassicAbsorbs(button)
 end
 
 function HealBot_Aura_UpdateUnitBuffsV2(button, selfOnly)
@@ -3350,7 +3366,7 @@ end
 local HealBot_Aura_UpdateUnitBuffs=HealBot_Aura_UpdateUnitBuffsV2
 if HEALBOT_GAME_VERSION>8 then
     HealBot_Aura_UpdateUnitBuffs=HealBot_Aura_UpdateUnitBuffsV9
-elseif HEALBOT_GAME_VERSION<2 and libCD then
+elseif HEALBOT_GAME_VERSION<2 then
     HealBot_Aura_UpdateUnitBuffs=HealBot_Aura_UpdateUnitBuffsV1
 end
 
@@ -3501,7 +3517,7 @@ function HealBot_Aura_UpdateUnitDebuffsV1(button, selfOnly)
       --HealBot_setCall("HealBot_Aura_UpdateUnitDebuffsV1", button)
     uaZ=1
     while true do
-        uaName, uaTexture, uaCount, uaDebuffType, uaDuration, uaExpirationTime, uaUnitCaster, _, _, uaSpellId = libCD:UnitAura(button.unit,uaZ,"HARMFUL")
+        uaName, uaTexture, uaCount, uaDebuffType, uaDuration, uaExpirationTime, uaUnitCaster, _, _, uaSpellId = UnitAura(button.unit,uaZ,"HARMFUL")
         if uaSpellId then
             uaIsBossDebuff=HealBot_Aura_IsBoss(uaUnitCaster)
             HealBot_Aura_UpdateUnitDebuffsData(button, selfOnly)
@@ -3538,8 +3554,8 @@ end
 local HealBot_Aura_UpdateUnitDebuffs=HealBot_Aura_UpdateUnitDebuffsV2
 if HEALBOT_GAME_VERSION>8 then
     HealBot_Aura_UpdateUnitDebuffs=HealBot_Aura_UpdateUnitDebuffsV9
-elseif HEALBOT_GAME_VERSION<2 and libCD then
-    HealBot_Aura_UpdateUnitDebuffs=HealBot_Aura_UpdateUnitDebuffsV1
+--elseif HEALBOT_GAME_VERSION<2 and libCD then
+--    HealBot_Aura_UpdateUnitDebuffs=HealBot_Aura_UpdateUnitDebuffsV1
 end
 
 function HealBot_Aura_ClearUnitBuffOverDebuff(button, callerIsBuff)
@@ -5066,19 +5082,62 @@ function HealBot_Aura_InitData()
                                    [HealBot_WoWAPI_SpellName(HBC_BLESSING_OF_KINGS)]=65,
                                   }
         end
-
-        if HealBot_Config.ClassicAbsorbsFilter==1 then
-            HealBot_Classic_Absorbs={[(HealBot_WoWAPI_SpellName(76669) or "Illuminated Healing")]=true}
+        
+        if HEALBOT_GAME_VERSION<3 then
+            classicAbsorbBonusV1["DEFAULT"]=ceil(GetSpellBonusHealing()*0.3)
+            classicAbsorbBonusV1[HealBot_Data["PGUID"]]=classicAbsorbBonusV1["DEFAULT"]
+            HealBot_Classic_Absorbs={[GetSpellInfo(HEALBOT_POWER_WORD_SHIELD) or "Power Word: Shield"]={[17]=48,
+                                                        [592]=94,
+                                                        [600]=166,
+                                                       [3747]=244,
+                                                       [6065]=313,
+                                                       [6066]=394,
+                                                      [10898]=499,
+                                                      [10899]=622,
+                                                      [10900]=783,
+                                                      [10901]=942,
+                                                      [25217]=1144,
+                                                      [25218]=1265,
+                                                      [48065]=1951,
+                                                      [48066]=2230,
+                                                          [0]=2230,},
+                                     [(GetSpellInfo(HEALBOT_ICE_BARRIER) or "Ice Barrier")]={[11426]=455,
+                                                                                             [13031]=569,
+                                                                                             [13032]=700,
+                                                                                             [13033]=824,
+                                                                                             [27134]=952,
+                                                                                             [33405]=1075,
+                                                                                             [43038]=2860,
+                                                                                             [43039]=3300,
+                                                                                                 [0]=3300,},
+                                     [(GetSpellInfo(HBC_MANA_SHIELD) or "Mana Shield")]={[1463]=120,
+                                                                                         [8494]=210,
+                                                                                         [8495]=300,
+                                                                                        [10191]=390,
+                                                                                        [10192]=480,
+                                                                                        [10193]=570,
+                                                                                        [27131]=715,
+                                                                                        [43019]=1080,
+                                                                                        [43020]=1330,
+                                                                                            [0]=1330},
+                                }
+            HealBot_Classic_AbsorbsV1Track[GetSpellInfo(HEALBOT_POWER_WORD_SHIELD) or "Power Word: Shield"]=0
+            HealBot_Classic_AbsorbsV1Track[(GetSpellInfo(HEALBOT_ICE_BARRIER) or "Ice Barrier")]=0
+            HealBot_Classic_AbsorbsV1Track[(GetSpellInfo(HBC_MANA_SHIELD) or "Mana Shield")]=0
         else
-            HealBot_Classic_Absorbs={[(HealBot_WoWAPI_SpellName(HEALBOT_POWER_WORD_SHIELD) or "Power Word:Shield")]=true,
-                                     [(HealBot_WoWAPI_SpellName(47509) or "Divine Aegis")]=true,
-                                     [(HealBot_WoWAPI_SpellName(76669) or "Illuminated Healing")]=true,
-                                     [(HealBot_WoWAPI_SpellName(HEALBOT_ICE_BARRIER) or "Ice Barrier")]=true,
-                                     [(HealBot_WoWAPI_SpellName(HBC_MANA_SHIELD) or "Mana Shield")]=true,
-                                     [(HealBot_WoWAPI_SpellName(HEALBOT_SACRED_SHIELD) or "Sacred Shield")]=true,
-                                     [(HealBot_WoWAPI_SpellName(77513) or "Blood Shield")]=true,
-                                     [(HealBot_WoWAPI_SpellName(48707) or "Anti-Magic Shell")]=true,
-                                    }
+            if HealBot_Config.ClassicAbsorbsFilter==1 then
+                HealBot_Classic_Absorbs={[(HealBot_WoWAPI_SpellName(76669) or "Illuminated Healing")]=true}
+            else
+                HealBot_Classic_Absorbs={[(HealBot_WoWAPI_SpellName(HEALBOT_POWER_WORD_SHIELD) or "Power Word: Shield")]=true,
+                                         [(HealBot_WoWAPI_SpellName(47509) or "Divine Aegis")]=true,
+                                         [(HealBot_WoWAPI_SpellName(76669) or "Illuminated Healing")]=true,
+                                         [(HealBot_WoWAPI_SpellName(HEALBOT_ICE_BARRIER) or "Ice Barrier")]=true,
+                                         [(HealBot_WoWAPI_SpellName(HBC_MANA_SHIELD) or "Mana Shield")]=true,
+                                         [(HealBot_WoWAPI_SpellName(HEALBOT_SACRED_SHIELD) or "Sacred Shield")]=true,
+                                         [(HealBot_WoWAPI_SpellName(77513) or "Blood Shield")]=true,
+                                         [(HealBot_WoWAPI_SpellName(48707) or "Anti-Magic Shell")]=true,
+                                        }
+            end
         end
     end
     

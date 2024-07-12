@@ -2093,11 +2093,11 @@ end
 function HealBot_Panel_PlayersTargetsResetSkins()
     if HealBot_Panel_luVars["RecalcOnZeroEnemy"] then
         HealBot_Panel_luVars["RecalcOnZeroEnemy"]=false
-        HealBot_setLuVars("RecalcOnZeroEnemy", true)
+        HealBot_setLuVars("resetOnNoTargetFrames", true)
     end
     HealBot_Timers_ResetSkins()
-    HealBot_nextRecalcParty(6,0.025)
-    HealBot_nextRecalcParty(3,0.025)
+    HealBot_nextRecalcParty(6,0.01)
+    HealBot_nextRecalcParty(3,0.01)
     
   --  HealBot_Timers_setLuVars("ResetSkins", true)
   --  HealBot_Timers_Set("OOC","RefreshPartyNextRecalcPlayers")
@@ -2106,15 +2106,16 @@ function HealBot_Panel_PlayersTargetsResetSkins()
 end
 
 function HealBot_Panel_PlayersTargetsDelFrames(unit, recalc)
-    if HealBot_UnitTarget_Button[unit] then HealBot_Action_MarkDeleteEnemyButton(HealBot_UnitTarget_Button[unit]) end
-    if HealBot_PrivateTarget_Button[unit] then HealBot_Action_MarkDeleteEnemyButton(HealBot_PrivateTarget_Button[unit]) end       
-    if HealBot_UnitTarget_Button[unit.."target"] then HealBot_Action_MarkDeleteEnemyButton(HealBot_UnitTarget_Button[unit.."target"]) end
-    if HealBot_PrivateTarget_Button[unit.."target"] then HealBot_Action_MarkDeleteEnemyButton(HealBot_PrivateTarget_Button[unit.."target"]) end
-    HealBot_Panel_PlayersTargetsDelToTFrames(unit.."targettarget")
-    HealBot_Panel_PlayersTargetsClear(unit, unit.."target")
-    --if recalc then
-    --    HealBot_Timers_Set("OOC","PlayersTargetsResetSkins")
-    --end
+    if not HealBot_Data["UILOCK"] then
+        if HealBot_UnitTarget_Button[unit] then HealBot_Action_MarkDeleteEnemyButton(HealBot_UnitTarget_Button[unit]) end
+        if HealBot_PrivateTarget_Button[unit] then HealBot_Action_MarkDeleteEnemyButton(HealBot_PrivateTarget_Button[unit]) end       
+        if HealBot_UnitTarget_Button[unit.."target"] then HealBot_Action_MarkDeleteEnemyButton(HealBot_UnitTarget_Button[unit.."target"]) end
+        if HealBot_PrivateTarget_Button[unit.."target"] then HealBot_Action_MarkDeleteEnemyButton(HealBot_PrivateTarget_Button[unit.."target"]) end
+        HealBot_Panel_PlayersTargetsDelToTFrames(unit.."targettarget")
+        HealBot_Panel_PlayersTargetsClear(unit, unit.."target")
+    else
+        HealBot_Timers_Set("OOC","CheckPlayersTargets",1)
+    end
 end
 
 function HealBot_Panel_validateEnemyPlayerFramesUnit(unit, guid)
@@ -2143,7 +2144,7 @@ function HealBot_Panel_validateEnemyPlayerFrames()
     for _,xButton in pairs(HealBot_Extra_Button) do
         HealBot_Panel_validateEnemyPlayerFramesUnit(xButton.unit, xButton.guid)
     end
-    HealBot_Timers_Set("OOC","PlayersTargetsResetSkins",0.2)
+    HealBot_Timers_Set("OOC","PlayersTargetsResetSkins",0.1)
 end
 
 function HealBot_Panel_EnemyTargetsWithPlayersSelfUpdate()
@@ -3694,9 +3695,6 @@ function HealBot_Panel_DoPartyChanged(preCombat, changeType)
                 end
             else
                 HealBot_ActionIcons_UpdateActiveFrame(8, false)
-            end
-            if HealBot_Panel_EnemyTargetsWithPlayersSelfUpdate() then
-                HealBot_Timers_Set("OOC","PlayersTargetsResetSkins",0.05)
             end
         elseif changeType==4 then
             if Healbot_Config_Skins.HealGroups[Healbot_Config_Skins.Current_Skin][10]["FRAME"]==9 then

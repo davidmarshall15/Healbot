@@ -144,7 +144,7 @@ function HealBot_Timers_nextRecalcPlayers()
     end
     if HealBot_Timers_luVars["ResetSkins"] then
         HealBot_Timers_ResetSkins()
-        HealBot_nextRecalcParty(6,0.05)
+        HealBot_nextRecalcParty(6,0.02)
     else
         HealBot_nextRecalcParty(6)
     end
@@ -153,7 +153,7 @@ end
 function HealBot_Timers_nextRecalcVehicle()
     if HealBot_Timers_luVars["ResetSkins"] then
         HealBot_Timers_ResetSkins()
-        HealBot_nextRecalcParty(1,0.05)
+        HealBot_nextRecalcParty(1,0.02)
     else
         HealBot_nextRecalcParty(1)
     end
@@ -163,7 +163,7 @@ end
 function HealBot_Timers_nextRecalcPets()
     if HealBot_Timers_luVars["ResetSkins"] then
         HealBot_Timers_ResetSkins()
-        HealBot_nextRecalcParty(2,0.05)
+        HealBot_nextRecalcParty(2,0.02)
     else
         HealBot_nextRecalcParty(2)
     end
@@ -174,7 +174,7 @@ function HealBot_Timers_nextRecalcEnemy()
       --HealBot_setCall("HealBot_Timers_nextRecalcEnemy")
     if HealBot_Timers_luVars["ResetSkins"] then
         HealBot_Timers_ResetSkins()
-        HealBot_nextRecalcParty(5,0.05)
+        HealBot_nextRecalcParty(5,0.02)
     else
         HealBot_nextRecalcParty(5)
     end
@@ -184,7 +184,7 @@ function HealBot_Timers_nextRecalcTarget()
       --HealBot_setCall("HealBot_Timers_nextRecalcEnemy")
     if HealBot_Timers_luVars["ResetSkins"] then
         HealBot_Timers_ResetSkins()
-        HealBot_nextRecalcParty(3,0.05)
+        HealBot_nextRecalcParty(3,0.02)
     else
         HealBot_nextRecalcParty(3)
     end
@@ -194,7 +194,7 @@ function HealBot_Timers_nextRecalcFocus()
       --HealBot_setCall("HealBot_Timers_nextRecalcEnemy")
     if HealBot_Timers_luVars["ResetSkins"] then
         HealBot_Timers_ResetSkins()
-        HealBot_nextRecalcParty(4,0.05)
+        HealBot_nextRecalcParty(4,0.02)
     else
         HealBot_nextRecalcParty(4)
     end
@@ -559,7 +559,7 @@ function HealBot_Timers_SetCurrentSkin()
     HealBot_Options_setAuxBars()
     HealBot_UpdateAllAuxBars()
     HealBot_Action_ResetFrameAlias()
-    HealBot_nextRecalcParty(0,0.05)
+    HealBot_nextRecalcParty(0,0.02)
     HealBot_Timers_Set("AUX","ResetText")
     HealBot_Timers_Set("SKINS","SkinChangePluginUpdate")
 end
@@ -863,6 +863,7 @@ local hbTimerFuncs={["INIT"]={
                         ["UpdateEnemyFrames"]=HealBot_Timers_updateEnemyFrames,
                         ["PlayersTargetsResetSkins"]=HealBot_Panel_PlayersTargetsResetSkins,
                         ["ValidateEnemyPlayerFrames"]=HealBot_Panel_validateEnemyPlayerFrames,
+                        ["CheckPlayersTargets"]=HealBot_CheckPlayersTargets,
                     },
                    }
 
