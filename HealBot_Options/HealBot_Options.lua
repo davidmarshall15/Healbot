@@ -2683,13 +2683,7 @@ function HealBot_Options_ShowEnemyIncSelf_OnClick(self)
       --HealBot_setCall("HealBot_Options_ShowEnemyIncSelf_OnClick")
     if Healbot_Config_Skins.Enemy[Healbot_Config_Skins.Current_Skin]["INCSELF"]~=self:GetChecked() then
         Healbot_Config_Skins.Enemy[Healbot_Config_Skins.Current_Skin]["INCSELF"]=self:GetChecked()
-        if Healbot_Config_Skins.Enemy[Healbot_Config_Skins.Current_Skin]["INCSELF"] then
-            HealBot_Timers_Set("OOC","PlayersTargetsResetSkins",0.1)
-        elseif Healbot_Config_Skins.Enemy[Healbot_Config_Skins.Current_Skin]["SELFUSEFRAME"]==2 then
-            HealBot_Timers_Set("OOC","ValidateEnemyPlayerFrames")
-        else
-            HealBot_Timers_Set("OOC","RefreshPartyNextRecalcEnemy")
-        end
+        HealBot_Timers_Set("OOC","ValidateEnemyPlayerFrames")
     end
 end
 
@@ -2697,13 +2691,7 @@ function HealBot_Options_ShowEnemyIncTanks_OnClick(self)
       --HealBot_setCall("HealBot_Options_ShowEnemyIncTanks_OnClick")
     if Healbot_Config_Skins.Enemy[Healbot_Config_Skins.Current_Skin]["INCTANKS"]~=self:GetChecked() then
         Healbot_Config_Skins.Enemy[Healbot_Config_Skins.Current_Skin]["INCTANKS"]=self:GetChecked()
-        if Healbot_Config_Skins.Enemy[Healbot_Config_Skins.Current_Skin]["INCTANKS"] then
-            HealBot_Timers_Set("OOC","PlayersTargetsResetSkins",0.1)
-        elseif Healbot_Config_Skins.Enemy[Healbot_Config_Skins.Current_Skin]["TANKUSEFRAME"]==2 then
-            HealBot_Timers_Set("OOC","ValidateEnemyPlayerFrames")
-        else
-            HealBot_Timers_Set("OOC","RefreshPartyNextRecalcEnemy")
-        end
+        HealBot_Timers_Set("OOC","ValidateEnemyPlayerFrames")
     end
 end
 
@@ -2711,13 +2699,7 @@ function HealBot_Options_ShowEnemyIncGroup_OnClick(self)
       --HealBot_setCall("HealBot_Options_ShowEnemyIncGroup_OnClick")
     if Healbot_Config_Skins.Enemy[Healbot_Config_Skins.Current_Skin]["INCGROUP"]~=self:GetChecked() then
         Healbot_Config_Skins.Enemy[Healbot_Config_Skins.Current_Skin]["INCGROUP"]=self:GetChecked()
-        if Healbot_Config_Skins.Enemy[Healbot_Config_Skins.Current_Skin]["INCGROUP"] then
-            HealBot_Timers_Set("OOC","PlayersTargetsResetSkins",0.1)
-        elseif Healbot_Config_Skins.Enemy[Healbot_Config_Skins.Current_Skin]["GROUPUSEFRAME"]==2 then
-            HealBot_Timers_Set("OOC","ValidateEnemyPlayerFrames")
-        else
-            HealBot_Timers_Set("OOC","RefreshPartyNextRecalcEnemy")
-        end
+        HealBot_Timers_Set("OOC","ValidateEnemyPlayerFrames")
     end
 end
 
@@ -2725,13 +2707,7 @@ function HealBot_Options_ShowEnemyIncRaid_OnClick(self)
       --HealBot_setCall("HealBot_Options_ShowEnemyIncGroup_OnClick")
     if Healbot_Config_Skins.Enemy[Healbot_Config_Skins.Current_Skin]["INCRAID"]~=self:GetChecked() then
         Healbot_Config_Skins.Enemy[Healbot_Config_Skins.Current_Skin]["INCRAID"]=self:GetChecked()
-        if Healbot_Config_Skins.Enemy[Healbot_Config_Skins.Current_Skin]["INCRAID"] then
-            HealBot_Timers_Set("OOC","PlayersTargetsResetSkins",0.1)
-        elseif Healbot_Config_Skins.Enemy[Healbot_Config_Skins.Current_Skin]["RAIDUSEFRAME"]==2 then
-            HealBot_Timers_Set("OOC","ValidateEnemyPlayerFrames")
-        else
-            HealBot_Timers_Set("OOC","RefreshPartyNextRecalcEnemy")
-        end
+        HealBot_Timers_Set("OOC","ValidateEnemyPlayerFrames")
     end
 end
 
@@ -2764,13 +2740,7 @@ function HealBot_Options_ShowEnemyIncMyTargets_OnClick(self)
       --HealBot_setCall("HealBot_Options_ShowEnemyIncMyTargets_OnClick")
     if Healbot_Config_Skins.Enemy[Healbot_Config_Skins.Current_Skin]["INCMYTAR"]~=self:GetChecked() then
         Healbot_Config_Skins.Enemy[Healbot_Config_Skins.Current_Skin]["INCMYTAR"]=self:GetChecked()
-        if Healbot_Config_Skins.Enemy[Healbot_Config_Skins.Current_Skin]["INCMYTAR"] then
-            HealBot_Timers_Set("OOC","PlayersTargetsResetSkins",0.1)
-        elseif Healbot_Config_Skins.Enemy[Healbot_Config_Skins.Current_Skin]["PRIVATELISTUSEFRAME"]==2 then
-            HealBot_Timers_Set("OOC","ValidateEnemyPlayerFrames")
-        else
-            HealBot_Timers_Set("OOC","RefreshPartyNextRecalcEnemy")
-        end
+        HealBot_Timers_Set("OOC","ValidateEnemyPlayerFrames")
     end
 end
 
@@ -9837,8 +9807,9 @@ function HealBot_Options_UseFrame_DropDown(object, id)
                         if Healbot_Config_Skins.Enemy[Healbot_Config_Skins.Current_Skin][id]~=self:GetID() then
                             Healbot_Config_Skins.Enemy[Healbot_Config_Skins.Current_Skin][id] = self:GetID()
                             UIDropDownMenu_SetText(object,HealBot_Options_Lists["EnemyUseFrame"][Healbot_Config_Skins.Enemy[Healbot_Config_Skins.Current_Skin][id]])
-                            HealBot_Timers_setLuVars("ResetSkins", true)
-                            HealBot_Timers_Set("OOC","UpdateEnemyFrames")
+                            --HealBot_Timers_setLuVars("ResetSkins", true)
+                            --HealBot_Timers_Set("OOC","UpdateEnemyFrames")
+                            HealBot_Timers_Set("OOC","ValidateEnemyPlayerFrames")
                         end
                     end
         info.checked = false;
@@ -16627,7 +16598,7 @@ function HealBot_Options_DoSet_Current_Skin(newSkin, ddRefresh, noCallback, optS
                     --end
                     HealBot_setLuVars("TargetNeedReset", true)
                     HealBot_setLuVars("FocusNeedReset", true)
-                    HealBot_setLuVars("newSkin", 0)
+                    HealBot_setLuVars("newSkin", true)
                     if HealBot_Data["TIPUSE"] then HealBot_Tooltip_CustomAnchor_Hide() end
                     HealBot_Timers_InitExtraOptions()
                     HealBot_AddDebug("Update Skins","Frame",true)

@@ -3394,6 +3394,8 @@ function HealBot_Action_InitFrames()
             grpFrame[x].id=x
             grpFrame[x]:SetMovable(true)
             grpFrame[x]:EnableMouse(true)
+            grpFrame[x]:SetHeight(20)
+            grpFrame[x]:SetWidth(20)
             grpFrame[x]:SetFrameLevel(1)
             grpFrame[x]:SetFrameStrata(HealBot_Globals.FrameStrata)
             grpFrame[x]:SetScript("OnShow", function(self) HealBot_Action_OnShow(self) end)
@@ -6066,6 +6068,7 @@ function HealBot_Action_SetHealButton(unit,guid,frame,unitType,duplicate,role,pr
                         end
                         HealBot_UpdateUnitExists(hButton)
                     end
+                    HealBot_RefreshUnit(hButton)
                 --else
                 --    hButton.status.slowupdate=true
                 --    hButton.status.change=true
@@ -6621,11 +6624,9 @@ end
 
 function HealBot_Action_MarkDeleteButton(button)
       --HealBot_setCall("HealBot_Action_MarkDeleteButton", button)
-    button.status.markdel=true
-    button.status.active=false
+    HealBot_Panel_ButtonHide(button)
     HealBot_Action_UnregisterUnitEvents(button)
-    button:Hide()
-    HealBot_Emerg_Button[button.id]:Hide()
+    button.status.markdel=true
     if HealBot_Enemy_Button[button.unit] and HealBot_Enemy_Button[button.unit].id==button.id then 
         HealBot_Enemy_Button[button.unit]=nil 
     end
@@ -6658,14 +6659,13 @@ function HealBot_Action_MarkDeleteButton(button)
     if HealBot_Fluid_InHealButtons[button.id] then HealBot_Fluid_InHealButtons[button.id]=nil end
     if HealBot_Fluid_AbsorbButtons[button.id] then HealBot_Fluid_AbsorbButtons[button.id]=nil end
     if HealBot_Hazard_Buttons[button.id] then HealBot_Hazard_Buttons[button.id]=nil end
-    button.status.enabled=false
     table.insert(hbMarkedDeleteButtons, button.id)
     HealBot_Timers_Set("LAST","ProcMarkedCacheButtons",0.1)
 end
 
 function HealBot_Action_MarkDeleteEnemyButton(button)
     HealBot_Action_MarkDeleteButton(button)
-    HealBot_Timers_Set("OOC","PlayersTargetsResetSkins")
+    HealBot_Panel_PlayersTargetsQueueResetSkins(0.05)
     HealBot_Panel_setLuVars("RecalcOnZeroEnemy", true)
 end
 

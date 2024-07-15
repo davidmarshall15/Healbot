@@ -978,7 +978,6 @@ function HealBot_SlashCmd(cmd)
             --z=GetSpellBonusHealing()
             --HealBot_AddDebug("BonusHealing="..z)
             local hbSpell=HealBot_WoWAPI_SpellName(139)
-            HealBot_AddDebug("hbSpell="..(hbSpell or "nil"))
 
            -- HealBot_Action_EnableButtonGlowType(aButton, 1,0,0, "PLUGIN", "AW1", 6)
            -- HealBot_Action_setAdaptive()
@@ -988,14 +987,22 @@ function HealBot_SlashCmd(cmd)
          --       HealBot_AddDebug("k="..k.." v="..v,"Sort",true)
          --   end
             if HEALBOT_GAME_VERSION==4 then
-               for x=1, 19 do
-                    local tTab, tIndex=3, x
-                    local name, iconTexture, tier, column, rank, maxRank, isExceptional, available, previewRank, previewAvailable = GetTalentInfo(tTab, tIndex)
-                    HealBot_AddDebug("Talent("..tTab..","..tIndex..") is "..name.." tier="..tier.." column="..column.." rank="..rank,"Talent",true)
-                end
+               --for x=1, 19 do
+               --     local tTab, tIndex=3, x
+               --     local name, iconTexture, tier, column, rank, maxRank, isExceptional, available, previewRank, previewAvailable = GetTalentInfo(tTab, tIndex)
+               --     HealBot_AddDebug("Talent("..tTab..","..tIndex..") is "..name.." tier="..tier.." column="..column.." rank="..rank,"Talent",true)
+               --- end
                --local Continent = HealBot_MountsPets_getContinent()
                --HealBot_AddDebug("Continent is "..Continent,"Zone",true)
 
+                local zz=UnitInPhase("target")
+                if zz then
+                    HealBot_AddDebug("UnitInPhase=true")
+                elseif zz==nil then
+                    HealBot_AddDebug("UnitInPhase=nil")
+                else
+                    HealBot_AddDebug("UnitInPhase=false")
+                end
             end
         else
             if x then HBcmd=HBcmd.." "..x end
@@ -1903,6 +1910,7 @@ function HealBot_UpdateUnitExists(button)
         button.status.change=false
         button.status.slowupdate=true
         button.status.postchange=true
+        button.status.update=true
         if not button.status.duplicate and button.status.unittype<7 then
             button.status.plugin=true
         else
@@ -1910,7 +1918,7 @@ function HealBot_UpdateUnitExists(button)
         end
         HealBot_Text_setNameTag(button)
         HealBot_Text_UpdateNameButton(button)
-        HealBot_UpdateUnit(button)
+        --HealBot_UpdateUnit(button)
     end
 end
 
@@ -2724,7 +2732,6 @@ function HealBot_Load()
             if not HealBot_Config_Spells.Binds[x] then HealBot_Config_Spells.Binds[x]=1 end
         end
         HealBot_Options_LoadProfile()
-        hbPhaseShift=HealBot_WoWAPI_SpellName(HBC_PHASE_SHIFT)
         HealBot_Skins_ResetSkin("init")
         HealBot_Timers_InitSpells()
         HealBot_Action_SetCustomRoleCols()
@@ -5437,40 +5444,39 @@ function HealBot_ProcessRefreshTypes()
             --end
         elseif HealBot_RefreshTypes[5] then
             HealBot_RecalcParty(5)
-        elseif HealBot_luVars["resetOnNoTargetFrames"] or HealBot_luVars["checkEnemyPlayerTargets"] then
-            HealBot_RecalcOnZeroEnemy()
-            if (HealBot_luVars["resetOnNoTargetFrames"] and HealBot_luVars["NumEnemyUnitsInQueue"]==0) or (HealBot_luVars["checkEnemyPlayerTargets"] and HealBot_Panel_enemyPlayerTargets(false, 2)) then
-                HealBot_Panel_PlayersTargetsResetSkins()
-            end
-            HealBot_luVars["checkEnemyPlayerTargets"]=false
-            HealBot_luVars["resetOnNoTargetFrames"]=false
         elseif HealBot_luVars["RefreshListsComplete"] then
-            if HealBot_luVars["ClearReset"] then
-                HealBot_Timers_Set("SKINS","ClearReset")
+            if HealBot_luVars["resetOnNoTargetFrames"] or HealBot_luVars["checkEnemyPlayerTargets"] then
+                HealBot_RecalcOnZeroEnemy()
+                if (HealBot_luVars["resetOnNoTargetFrames"] and HealBot_luVars["NumEnemyUnitsInQueue"]==0) or (HealBot_luVars["checkEnemyPlayerTargets"] and HealBot_Panel_enemyPlayerTargets(false, 2)) then
+                    HealBot_Panel_PlayersTargetsQueueResetSkins(0.1)
+                end
+                HealBot_luVars["checkEnemyPlayerTargets"]=false
+                HealBot_luVars["resetOnNoTargetFrames"]=false
             end
             if HealBot_luVars["UpdateEnemy"] then
                 HealBot_luVars["UpdateEnemy"]=false
-                HealBot_Timers_Set("SKINS","TextUpdateEnemyNames")
-                HealBot_Timers_Set("LAST","RefreshEnemyUnits")
+                HealBot_Timers_Set("SKINS","TextUpdateEnemyNames",0.2)
+                HealBot_Timers_Set("LAST","RefreshEnemyUnits",0.3)
+            end
+            if HealBot_luVars["ClearReset"] then
+                HealBot_Timers_Set("SKINS","ClearReset")
             end
             HealBot_luVars["ProcessRefresh"]=false
             if HealBot_Panel_retLuVars("resetAuxText") then
                 HealBot_Panel_setLuVars("resetAuxText", false)
                 HealBot_Timers_Set("AUX","ResetTextButtons")
             end
-            if HealBot_luVars["newSkin"]<3 then
-                if HealBot_luVars["newSkin"]<1 then
-                    HealBot_Timers_Set("OOC","CheckHideUnusedFrames",0.025)
-                end
-                HealBot_luVars["newSkin"]=HealBot_luVars["newSkin"]+1
-                HealBot_Timers_Set("OOC","ShowFramesOnSkinChange",0.05)
+            if HealBot_luVars["newSkin"] then
+                HealBot_luVars["newSkin"]=false
+                HealBot_Timers_Set("OOC","CheckHideUnusedFrames",0.025)
+                HealBot_Timers_Set("OOC","ShowFramesOnSkinChange",0.5)
             end
             HealBot_Skins_setLuVars("AuxReset", false)
             HealBot_SetTargetBar()
             HealBot_ProcessPluginClearDown()
             return
         end
-        C_Timer.After(0.02, HealBot_ProcessRefreshTypes)
+        C_Timer.After(0.05, HealBot_ProcessRefreshTypes)
     else
         HealBot_Timers_Set("OOC","ProcessRefreshTypes")
     end
@@ -5479,7 +5485,7 @@ end
 function HealBot_CheckPlayersTargets()
     HealBot_RecalcOnZeroEnemy()
     if HealBot_luVars["NumEnemyUnitsInQueue"]==0 or HealBot_Panel_enemyPlayerTargets(false, 2) then
-        HealBot_Panel_PlayersTargetsResetSkins()
+        HealBot_Panel_PlayersTargetsQueueResetSkins(0.05)
     end
 end
 
@@ -6591,7 +6597,7 @@ function HealBot_OnEvent_PlayerTargetChanged()
     if Healbot_Config_Skins.Enemy[Healbot_Config_Skins.Current_Skin]["INCSELF"] and Healbot_Config_Skins.Enemy[Healbot_Config_Skins.Current_Skin]["EXISTSHOWPTAR"]<3 then
         if Healbot_Config_Skins.Enemy[Healbot_Config_Skins.Current_Skin]["SELFUSEFRAME"]==2 then
             if HealBot_Panel_EnemyTargetsWithPlayersSelfUpdate() then
-                HealBot_Timers_Set("OOC","PlayersTargetsResetSkins",0.02)
+                HealBot_Panel_PlayersTargetsQueueResetSkins(0.02)
             end
         elseif Healbot_Config_Skins.HealGroups[Healbot_Config_Skins.Current_Skin][11]["STATE"] then 
             HealBot_nextRecalcParty(5,0.02)
@@ -6734,6 +6740,7 @@ function HealBot_PlayerRegenDisabled()
     if HealBot_RefreshTypes[2] then HealBot_RecalcParty(2); end
     if HealBot_RefreshTypes[3] then HealBot_RecalcParty(3); end
     if HealBot_RefreshTypes[4] then HealBot_RecalcParty(4); end
+    HealBot_Panel_ButtonShowNow()
 
     HealBot_UnitInCombat()
     HealBot_UpdateAllUnitBars(true)
