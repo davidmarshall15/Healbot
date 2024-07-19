@@ -390,7 +390,7 @@ function HealBot_Init_Spells_addSpell(spellId, spellName, spellBookId, cRank)
                         HealBot_Spell_Ranks[spellName][0]=rank
                     end
                 end
-                if HEALBOT_GAME_VERSION<3 then 
+                if HEALBOT_GAME_VERSION<3 then
                     spellName=spellName.."("..cRank..")" 
                 end
             end

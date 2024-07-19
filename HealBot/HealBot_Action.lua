@@ -4449,6 +4449,17 @@ function HealBot_Action_ZeroHiddenButtons()
     end
 end
 
+function HealBot_Action_ResetEnemySkinAllButtons()
+      --HealBot_setCall("HealBot_Action_ResetSkinAllButtons")
+    if not HealBot_Action_luVars["TestBarsOn"] and HealBot_Action_luVars["ButtonHWM"]>0 then
+        for i=1,HealBot_Action_luVars["ButtonHWM"] do
+            if HealBot_Buttons[i] then
+                HealBot_Buttons[i].enemyreset=true
+            end
+        end
+    end
+end
+
 function HealBot_Action_ResetSkinButton(index)
       --HealBot_setCall("HealBot_Action_ResetSkinButton")
     if HealBot_Buttons[index] then
@@ -4678,9 +4689,12 @@ function HealBot_Action_SetSpell(cType, cKey, sText)
                 sText = "C:"..cID 
             else
                 local spellId = HealBot_Spells_KnownByName(sText)
-                if spellId then 
-                    spellId = HealBot_Spells_KnownByName(sText)
-                    sText = "S:"..spellId
+                if spellId then
+                    if HEALBOT_GAME_VERSION==1 then
+                        sText = "S:"..spellId..":"..sText
+                    else
+                        sText = "S:"..spellId
+                    end
                 else
                     local itemID = HealBot_WoWAPI_ItemInfoInstant(sText)
                     if itemID then 
@@ -4816,7 +4830,7 @@ function HealBot_Action_GetSpell(cType, cKey)
             vSpellText=HealBot_Globals.IconKeyCombo[cKey]
         end
         if vSpellText and HealBot_Text_Len(vSpellText)>2 then
-            local sType,sID = string.split(":", vSpellText)
+            local sType,sID,sName = string.split(":", vSpellText)
             if sType and not sID and HealBot_Spells_KnownByName(sType) then
                 sID=HealBot_Spells_KnownByName(sType)
             end
@@ -4849,6 +4863,9 @@ function HealBot_Action_GetSpell(cType, cKey)
                     vSpellText=cSpellText or vSpellText
                     vSpellType="spell"
                     vSpellID=sID
+                    if HEALBOT_GAME_VERSION==1 and string.find(vSpellText," Rune Ability") then
+                        vSpellText=sName
+                    end
                 end
             elseif GetMacroIndexByName(vSpellText)>0 then
                 vSpellType="macro"
@@ -5999,6 +6016,8 @@ function HealBot_Action_SetHealButton(unit,guid,frame,unitType,duplicate,role,pr
                 for x=1,9 do
                     HealBot_Action_InitAuxGlow(x, frame, hButton)
                 end
+            elseif unitType>11 then
+                hButton.skinreset=true
             end
             hButton.framecol=colFrame or frame
             
@@ -6066,13 +6085,11 @@ function HealBot_Action_SetHealButton(unit,guid,frame,unitType,duplicate,role,pr
                         if hButton.guid~=guid then
                             HealBot_UpdateUnitGUIDChange(hButton)
                         end
-                        HealBot_UpdateUnitExists(hButton)
+              --          HealBot_UpdateUnitExists(hButton)
+                        hButton.status.change=true
+                        hButton.status.update=true
+                        hButton.status.slowupdate=true
                     end
-                    HealBot_RefreshUnit(hButton)
-                --else
-                --    hButton.status.slowupdate=true
-                --    hButton.status.change=true
-                --    hButton.status.update=true
                 end
                 if not hButton.status.events then HealBot_Action_RegisterUnitEvents(hButton) end
             end
@@ -6083,7 +6100,7 @@ function HealBot_Action_SetHealButton(unit,guid,frame,unitType,duplicate,role,pr
             elseif unitType<9 then
                 HealBot_Panel_setButtonPetGUID(hButton)
             end
-            if hButton.skinreset or hButton.icon.reset or hButton.indreset or hButton.auxreset or hButton.text.reset then
+            if hButton.skinreset or hButton.enemyreset or hButton.icon.reset or hButton.indreset or hButton.auxreset or hButton.text.reset then
                 HealBot_Skins_ResetSkin("bar",hButton)
             elseif frame==10 then
                 HealBot_Skins_ResetSkinWidth(hButton)
@@ -7073,18 +7090,18 @@ function HealBot_Action_ShowHideFrameOption(frame)
     if not HealBot_Data["UILOCK"] then
         if frame>5 then
             if frame==6 then
-                HealBot_nextRecalcParty(1,0.02)
+                HealBot_nextRecalcParty(1)
             elseif frame==7 then
-                HealBot_nextRecalcParty(2,0.02)
+                HealBot_nextRecalcParty(2)
             elseif frame==8 then
-                HealBot_nextRecalcParty(3,0.02)
+                HealBot_nextRecalcParty(3)
             elseif frame==9 then 
-                HealBot_nextRecalcParty(4,0.02)
+                HealBot_nextRecalcParty(4)
             elseif frame==10 then 
-                HealBot_nextRecalcParty(5,0.02)
+                HealBot_nextRecalcParty(5)
             end
         else
-            HealBot_nextRecalcParty(6,0.02)
+            HealBot_nextRecalcParty(6)
         end
     end
 end

@@ -2757,8 +2757,8 @@ function HealBot_Options_ShowEnemyTargetsPlayerFrames_OnClick(self)
       --HealBot_setCall("HealBot_Options_ShowEnemyTargets_OnClick")
     if Healbot_Config_Skins.Enemy[Healbot_Config_Skins.Current_Skin]["ENEMYTARGETPLAYERFRAMES"]~=self:GetChecked() then
         Healbot_Config_Skins.Enemy[Healbot_Config_Skins.Current_Skin]["ENEMYTARGETPLAYERFRAMES"]=self:GetChecked()
-        HealBot_Options_framesChanged(true)
-        HealBot_Timers_Set("OOC","UpdateEnemyFrames")
+        HealBot_Timers_Set("OOC","DeleteAllPlayerFrames")
+        HealBot_Timers_Set("OOC","ValidateEnemyPlayerFrames")
     end
 end
 
@@ -9807,7 +9807,7 @@ function HealBot_Options_UseFrame_DropDown(object, id)
                         if Healbot_Config_Skins.Enemy[Healbot_Config_Skins.Current_Skin][id]~=self:GetID() then
                             Healbot_Config_Skins.Enemy[Healbot_Config_Skins.Current_Skin][id] = self:GetID()
                             UIDropDownMenu_SetText(object,HealBot_Options_Lists["EnemyUseFrame"][Healbot_Config_Skins.Enemy[Healbot_Config_Skins.Current_Skin][id]])
-                            --HealBot_Timers_setLuVars("ResetSkins", true)
+                            HealBot_Timers_setLuVars("ResetSkins", true)
                             --HealBot_Timers_Set("OOC","UpdateEnemyFrames")
                             HealBot_Timers_Set("OOC","ValidateEnemyPlayerFrames")
                         end
@@ -13354,7 +13354,7 @@ function HealBot_Options_ActionAnchor_DropDown()
                         --local g=_G["f"..HealBot_Options_luVars["FramesSelFrame"].."_HealBot_Action"]
                         HealBot_Action_setPoint(HealBot_Options_luVars["FramesSelFrame"], true)
                         --HealBot_Timers_Set("OOC","RefreshPartyNextRecalcAll")
-                        HealBot_nextRecalcParty(0, 0.02)
+                        HealBot_nextRecalcParty(0, 0.05)
                     end
         info.checked = false;
         if Healbot_Config_Skins.Anchors[Healbot_Config_Skins.Current_Skin][HealBot_Options_luVars["FramesSelFrame"]]["FRAME"]==j then info.checked = true end
@@ -13389,7 +13389,7 @@ function HealBot_Options_ActionBarsAnchor_DropDown()
                         --local g=_G["f"..HealBot_Options_luVars["FramesSelFrame"].."_HealBot_Action"]
                         HealBot_Action_setPoint(HealBot_Options_luVars["FramesSelFrame"], true)
                         --HealBot_Timers_Set("OOC","RefreshPartyNextRecalcAll")
-                        HealBot_nextRecalcParty(0, 0.02)
+                        HealBot_nextRecalcParty(0, 0.05)
                     end
         info.checked = false;
         if Healbot_Config_Skins.Anchors[Healbot_Config_Skins.Current_Skin][HealBot_Options_luVars["FramesSelFrame"]]["BARS"]==j then info.checked = true end
@@ -16599,9 +16599,12 @@ function HealBot_Options_DoSet_Current_Skin(newSkin, ddRefresh, noCallback, optS
                     HealBot_setLuVars("TargetNeedReset", true)
                     HealBot_setLuVars("FocusNeedReset", true)
                     HealBot_setLuVars("newSkin", true)
+                    if HealBot_Panel_enemyPlayerTargets(true, 2) then
+                        HealBot_Panel_PlayersTargetsQueueResetSkins(0.25)
+                    end
                     if HealBot_Data["TIPUSE"] then HealBot_Tooltip_CustomAnchor_Hide() end
                     HealBot_Timers_InitExtraOptions()
-                    HealBot_AddDebug("Update Skins","Frame",true)
+                   -- HealBot_AddDebug("Update Skins","Frame",true)
                     HealBot_Options_luVars["SetNewSkin"]=true
                 end
             end

@@ -19,10 +19,9 @@ local tBarsConcat={}
 local erButton=nil
 local iAnchors={["ICON"]="", ["BUTTON"]="", ["DOUBLE"]="", ["RELATIVE"]="", ["TXTCOUNT"]="", ["TXTEXPIRE"]="", ["INDSELFCAST"]="", ["TXTEXPIREX"]=1, ["TXTCOUNTX"]=1}
 local HealBot_Skins_ColAdjFrames={[1]={},[2]={},[3]={},[4]={},[5]={},[6]={},[7]={},[8]={},[9]={},[10]={}}
-local HealBot_Skins_ColAdj={[1]={},[2]={},[3]={},[4]={},[5]={},[6]={},[7]={},[8]={},[9]={},[10]={}}
 local HealBot_Skins_luVars={}
-HealBot_Skins_luVars["AuxReset"]=false
 HealBot_Skins_luVars["IconGlowSize"]=2
+HealBot_Skins_luVars["ColAdj"]=0
 
 function HealBot_Skins_setLuVars(vName, vValue)
       --HealBot_setCall("HealBot_Skins_setLuVars - "..vName)
@@ -34,15 +33,13 @@ function HealBot_Skins_retLuVars(vName)
     return HealBot_Skins_luVars[vName]
 end
 
-function HealBot_Skins_retColAdj(frame, id, col)
-    if not HealBot_Skins_ColAdj[frame][col] then HealBot_Skins_ColAdj[frame][col]=0 end
-    if HealBot_Skins_ColAdj[frame][col]<HealBot_Skins_ColAdjFrames[frame][id] then HealBot_Skins_ColAdj[frame][col]=HealBot_Skins_ColAdjFrames[frame][id] end
-    return HealBot_Skins_ColAdj[frame][col-1] or 0
-end
-
-function HealBot_Skins_resetColAdj(frame)
-    for x,_ in pairs(HealBot_Skins_ColAdj[frame]) do
-        HealBot_Skins_ColAdj[frame][x]=0;
+function HealBot_Skins_retColWidth(frame, id)
+    if HealBot_Skins_ColAdjFrames[frame][id] then
+        --HealBot_AddDebug("HealBot_Skins_ColAdjFrames="..HealBot_Skins_ColAdjFrames[frame][id].." frame="..frame.."  id="..id,"Enemy",true)
+        return HealBot_Skins_ColAdjFrames[frame][id]
+    else
+        --HealBot_AddDebug("HealBot_Skins_ColAdjFrames nil for id "..id,"Enemy",true)
+        return 0
     end
 end
 
@@ -495,10 +492,8 @@ function HealBot_Skins_ResetSkin(barType,button,numcols)
                     HealBot_Skins_AdjustSpecialBarWidth(button, false)
                 end
             end
-        else
-            if HealBot_Panel_isSpecialPlayerUnit(button.unit)>1 then
-                bWidth=ceil(bWidth*Healbot_Config_Skins.Enemy[Healbot_Config_Skins.Current_Skin]["PLAYERTARGETSIZE"])
-            end
+        elseif HealBot_Panel_isSpecialPlayerUnit(button.unit)>1 then
+            bWidth=ceil(bWidth*Healbot_Config_Skins.Enemy[Healbot_Config_Skins.Current_Skin]["PLAYERTARGETSIZE"])
             if HealBot_Panel_isSpecialPlayerUnit(button.unit)>2 then 
                 if HealBot_Panel_isSpecialPlayerUnit(button.unit)==3 then
                     HealBot_Skins_AdjustSpecialBarWidth(button, true)
@@ -511,24 +506,28 @@ function HealBot_Skins_ResetSkin(barType,button,numcols)
     
     if barType=="bar" then
         b=button        
-        if b.skinreset then
-            if button.frame<10 and HealBot_Panel_isSpecialPlayerUnit(button.unit)>-1 then
+        if b.skinreset or b.enemyreset then
+            if button.frame<10 and HealBot_Panel_isSpecialPlayerUnit(button.unit)>1 then
                 pWidth=ceil(zWidth*Healbot_Config_Skins.Enemy[Healbot_Config_Skins.Current_Skin]["PLAYERTARGETSIZE"])
                 pWidth=pWidth+(bOutline*2)+auxWidth+Healbot_Config_Skins.HealBar[Healbot_Config_Skins.Current_Skin][button.frame]["CMARGIN"]
+                HealBot_Skins_ColAdjFrames[button.frame][button.id]=pWidth
                 pWidth=pWidth+zWidth
-                HealBot_Skins_ColAdjFrames[button.frame][button.id]=pWidth-zWidth
+             --   HealBot_Skins_ColAdjFrames[button.frame][button.id]=pWidth-zWidth
             else
                 HealBot_Skins_ColAdjFrames[button.frame][button.id]=0
             end
             
             if HealBot_Action_SetBackBarHeightWidth(button.frame, (bheight+auxHeight+(bOutline*2)), (pWidth+auxWidth+(bOutline*2)), framePad, (zWidth+auxWidth+(bOutline*2))) then
-                HealBot_Skins_luVars["AuxReset"]=true
-            end
-            if HealBot_Skins_luVars["AuxReset"] then
                 b.auxreset=true
             end
+
+            b.enemyreset=false
 --HealBot_AddDebug("Width  unit="..b.unit.."  pWidth="..pWidth.."  bWidth="..bWidth,"Enemy",true)
+        end
+        if b.skinreset then
+            b.height=bheight
             b:SetHeight(bheight); 
+            b.width=bWidth
             b:SetWidth(bWidth)
             b.gref["Bar"]:SetHeight(bheight);
             b.gref["Bar"]:SetWidth(bWidth)

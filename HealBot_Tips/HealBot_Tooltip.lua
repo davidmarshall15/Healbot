@@ -415,19 +415,39 @@ function HealBot_ToolTip_ShowHoT(button)
 end
 
 local hbTipDebugText={}
+local hbStates={[0]="Disabled",
+                [2]="Check",
+                [3]="Enabled OOR",
+                [4]="Enabled IR",
+                [5]="Buff No Col",
+                [6]="Buff Bar Col",
+                [7]="Debuff No Col",
+                [8]="Debuff Bar Col",
+               [15]="Plugin Bar Col",
+               [18]="Dead",
+               [19]="Res",
+               [50]="DC",
+               [99]="Reserved",
+               }
 function HealBot_ToolTip_ShowDebug(button)
       --HealBot_setCall("HealBot_ToolTip_ShowDebug", button)
     HealBot_Tooltip_SetLine("  ",0,0,0,0)
     HealBot_Tooltip_SetLine("Debug On - Turn off in Tip with /hb debugtip",1,1,1,1)
     hbTipDebugText["player"]="False"
     hbTipDebugText["isPlayer"]="False"
-    hbTipDebugText["debugtrack"]="false"
+    hbTipDebugText["debugtrack"]="False"
     hbTipDebugText["range40"]=-99
-    hbTipDebugText["status"]=-99
-    hbTipDebugText["debugtime"]=""
+    hbTipDebugText["status"]="Unknown"
+    hbTipDebugText["debugtime"]="Unset"
+    hbTipDebugText["duplicate"]="False"
     if button then
-        HealBot_Tooltip_SetLine("Button ID:"..button.id,0.4,1,1,1,"Unit ID:"..button.unit)
-        HealBot_Tooltip_SetLine("Button Name:"..button.bName,0.4,1,1,1,"Frame:"..button.frame)
+        hbTipDebugText["playerTarget"]=HealBot_Panel_isSpecialPlayerUnit(button.unit)
+        if hbTipDebugText["playerTarget"]<0 then hbTipDebugText["playerTarget"]="No" end
+        if button.status.duplicate then hbTipDebugText["duplicate"]="True" end
+        HealBot_Tooltip_SetLine("Button ID: "..button.id,0.4,1,1,1,"Unit ID: "..button.unit)
+        HealBot_Tooltip_SetLine("Player target: "..hbTipDebugText["playerTarget"],0.4,1,1,1,"Duplicate: "..hbTipDebugText["duplicate"])
+        HealBot_Tooltip_SetLine("Button Name: "..button.bName,0.4,1,1,1,"Frame: "..button.frame)
+        HealBot_Tooltip_SetLine("Height: "..button.height,0.4,1,1,1,"Width: "..button.width)
         if UnitExists(button.unit) then
             if UnitIsFriend("player",button.unit) then
                 HealBot_Tooltip_SetLine("UnitExists is True",0.4,1,1,1,"UnitIsFriend is True")
@@ -438,7 +458,7 @@ function HealBot_ToolTip_ShowDebug(button)
             HealBot_Tooltip_SetLine("UnitExists is False",0.4,1,1,1)
         end
         hbTipDebugText["range40"]=button.status.range
-        hbTipDebugText["status"]=button.status.current
+        hbTipDebugText["status"]=hbStates[button.status.current] or ("Unknown ("..button.status.current..")")
         if button.player then hbTipDebugText["player"]="True" end
         if button.isplayer then hbTipDebugText["isPlayer"]="True" end
         if button.debug.track then
@@ -450,9 +470,9 @@ function HealBot_ToolTip_ShowDebug(button)
     end
     HealBot_Tooltip_SetLine("Button Player is "..hbTipDebugText["player"],0.4,1,1,1,"Button isPlayer is "..hbTipDebugText["isPlayer"])
     HealBot_Tooltip_SetLine("Debug track is "..hbTipDebugText["debugtrack"],0.4,1,1,1,"Debug time is "..hbTipDebugText["debugtime"])
-    HealBot_Tooltip_SetLine("Range state is "..hbTipDebugText["range40"],0.4,1,1,1,"Current status="..hbTipDebugText["status"],0.4,1,1,1)
+    HealBot_Tooltip_SetLine("Range state is "..hbTipDebugText["range40"],0.4,1,1,1,"Current status="..hbTipDebugText["status"])
     if button then
-        HealBot_Tooltip_SetLine("unitType is "..button.status.unittype,0.4,1,1,1)
+        HealBot_Tooltip_SetLine("unitType is "..button.status.unittype,0.4,1,1,1,"Column is "..(button.Column or "nil"))
     end
 end
 

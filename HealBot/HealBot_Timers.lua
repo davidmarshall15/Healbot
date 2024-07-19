@@ -121,16 +121,23 @@ function HealBot_Timer_ResetAllButtonsRecalcAll()
 end
 
 function HealBot_Timers_ResetSkins()
-    HealBot_Timers_TurboOn(1)
+    --HealBot_Timers_TurboOn(1)
     HealBot_Timers_luVars["ResetSkins"]=false
     HealBot_Action_setLuVars("resetSkin", true)
     HealBot_Action_ResetSkinAllButtons()
+end
+
+function HealBot_Timers_ResetEnemySkins()
+    HealBot_Timers_luVars["ResetEnemySkins"]=false
+    HealBot_Action_ResetEnemySkinAllButtons()
 end
 
 function HealBot_Timers_nextRecalcAll()
       --HealBot_setCall("HealBot_Timers_nextRecalcAll")
     if HealBot_Timers_luVars["ResetSkins"] then
         HealBot_Timers_ResetSkins()
+    elseif HealBot_Timers_luVars["ResetEnemySkins"] then
+        HealBot_Timers_ResetEnemySkins()
     end
     HealBot_nextRecalcParty(0)
 end
@@ -144,29 +151,25 @@ function HealBot_Timers_nextRecalcPlayers()
     end
     if HealBot_Timers_luVars["ResetSkins"] then
         HealBot_Timers_ResetSkins()
-        HealBot_nextRecalcParty(6,0.02)
-    else
-        HealBot_nextRecalcParty(6)
+    elseif HealBot_Timers_luVars["ResetEnemySkins"] then
+        HealBot_Timers_ResetEnemySkins()
     end
+    HealBot_nextRecalcParty(6)
 end
 
 function HealBot_Timers_nextRecalcVehicle()
     if HealBot_Timers_luVars["ResetSkins"] then
         HealBot_Timers_ResetSkins()
-        HealBot_nextRecalcParty(1,0.02)
-    else
-        HealBot_nextRecalcParty(1)
     end
+    HealBot_nextRecalcParty(1)
       --HealBot_setCall("HealBot_Timers_nextRecalcVehicle")
 end
 
 function HealBot_Timers_nextRecalcPets()
     if HealBot_Timers_luVars["ResetSkins"] then
         HealBot_Timers_ResetSkins()
-        HealBot_nextRecalcParty(2,0.02)
-    else
-        HealBot_nextRecalcParty(2)
     end
+    HealBot_nextRecalcParty(2)
       --HealBot_setCall("HealBot_Timers_nextRecalcPets")
 end
 
@@ -174,30 +177,26 @@ function HealBot_Timers_nextRecalcEnemy()
       --HealBot_setCall("HealBot_Timers_nextRecalcEnemy")
     if HealBot_Timers_luVars["ResetSkins"] then
         HealBot_Timers_ResetSkins()
-        HealBot_nextRecalcParty(5,0.02)
-    else
-        HealBot_nextRecalcParty(5)
     end
+    HealBot_nextRecalcParty(5)
 end
 
 function HealBot_Timers_nextRecalcTarget()
       --HealBot_setCall("HealBot_Timers_nextRecalcEnemy")
     if HealBot_Timers_luVars["ResetSkins"] then
         HealBot_Timers_ResetSkins()
-        HealBot_nextRecalcParty(3,0.02)
-    else
-        HealBot_nextRecalcParty(3)
+    elseif HealBot_Timers_luVars["ResetEnemySkins"] then
+        HealBot_Timers_ResetEnemySkins()
     end
+    HealBot_nextRecalcParty(3)
 end
 
 function HealBot_Timers_nextRecalcFocus()
       --HealBot_setCall("HealBot_Timers_nextRecalcEnemy")
     if HealBot_Timers_luVars["ResetSkins"] then
         HealBot_Timers_ResetSkins()
-        HealBot_nextRecalcParty(4,0.02)
-    else
-        HealBot_nextRecalcParty(4)
     end
+    HealBot_nextRecalcParty(4)
 end
 
 function HealBot_Timers_updateEnemyFrames()
@@ -408,7 +407,8 @@ function HealBot_Timers_LastUpdate()
     HealBot_Timers_Set("LAST","CheckVersions",0.25)
     HealBot_Timers_Set("LAST","LoadComplete",0.3)
     HealBot_Timers_Set("LAST","UpdateCheckInterval",1)
-    HealBot_Timers_Set("AURA","BuffsReset",5)
+    HealBot_Timers_Set("AURA","BuffsReset",0.15)
+    HealBot_Timers_Set("AURA","BuffsReset",0.45)
     C_Timer.After(0.5, HealBot_Timers_nextRecalcAll)
 end
 
@@ -559,7 +559,7 @@ function HealBot_Timers_SetCurrentSkin()
     HealBot_Options_setAuxBars()
     HealBot_UpdateAllAuxBars()
     HealBot_Action_ResetFrameAlias()
-    HealBot_nextRecalcParty(0,0.02)
+    HealBot_nextRecalcParty(0,0.05)
     HealBot_Timers_Set("AUX","ResetText")
     HealBot_Timers_Set("SKINS","SkinChangePluginUpdate")
 end
@@ -864,6 +864,8 @@ local hbTimerFuncs={["INIT"]={
                         ["PlayersTargetsResetSkins"]=HealBot_Panel_PlayersTargetsResetSkins,
                         ["ValidateEnemyPlayerFrames"]=HealBot_Panel_validateEnemyPlayerFrames,
                         ["CheckPlayersTargets"]=HealBot_CheckPlayersTargets,
+                        ["DeleteAllPlayerFrames"]=HealBot_Panel_PlayersTargetsDelAll,
+                        ["FramesRefresh"]=HealBot_Timer_FramesRefresh,
                     },
                    }
 
