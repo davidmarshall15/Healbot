@@ -405,6 +405,14 @@ for j=1,10 do
     vTextCustomCols["InHeal"][j]="|cff"..vHex
 end
 
+function HealBot_Text_DeadInRange()
+    if not HealBot_Data["UILOCK"] and HEALBOT_GAME_VERSION>3 then
+        return 0
+    else
+        return 1
+    end
+end
+
 local dR, dG, dB=0,0,0
 function HealBot_Text_DeadColours(button)
       --HealBot_setCall("HealBot_Text_DeadColours", button)
@@ -413,7 +421,7 @@ function HealBot_Text_DeadColours(button)
             dR=Healbot_Config_Skins.BarTextCol[Healbot_Config_Skins.Current_Skin][button.framecol]["NRCR"]
             dG=Healbot_Config_Skins.BarTextCol[Healbot_Config_Skins.Current_Skin][button.framecol]["NRCG"]
             dB=Healbot_Config_Skins.BarTextCol[Healbot_Config_Skins.Current_Skin][button.framecol]["NRCB"]
-        elseif button.status.range>0 and Healbot_Config_Skins.BarTextCol[Healbot_Config_Skins.Current_Skin][button.framecol]["RIP"] then
+        elseif button.status.range>=HealBot_Text_DeadInRange() and Healbot_Config_Skins.BarTextCol[Healbot_Config_Skins.Current_Skin][button.framecol]["RIP"] then
             dR=Healbot_Config_Skins.BarTextCol[Healbot_Config_Skins.Current_Skin][button.framecol]["NDCR"]
             dG=Healbot_Config_Skins.BarTextCol[Healbot_Config_Skins.Current_Skin][button.framecol]["NDCG"]
             dB=Healbot_Config_Skins.BarTextCol[Healbot_Config_Skins.Current_Skin][button.framecol]["NDCB"]
@@ -1609,6 +1617,12 @@ function HealBot_Text_UpdateButton(button)
     if Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][button.framecol]["STATETXTANCHOR"]~=4 then button.text.tagupdate=true end
     if Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][button.framecol]["HLTHTXTANCHOR"]~=4 then button.text.healthupdate=true end
     HealBot_Text_UpdateText(button)
+end
+
+function HealBot_Text_Update(button)
+    HealBot_Text_setNameTag(button)
+    HealBot_Text_UpdateHealthButton(button)
+    HealBot_Text_UpdateNameButton(button)
 end
 
 function HealBot_Text_UpdateButtons()

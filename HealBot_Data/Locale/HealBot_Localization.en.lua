@@ -331,6 +331,7 @@ function HealBot_Lang_enALL()
     HEALBOT_OPTIONS_SHOWDETTOOLTIP          = "Show detailed spell information";
     HEALBOT_OPTIONS_SHOWCDTOOLTIP           = "Show spell cooldown";
     HEALBOT_OPTIONS_SHOWICONBINFOTIP        = "Show buff icon info";
+    HEALBOT_OPTIONS_COMPACT                 = "Compact";
     HEALBOT_OPTIONS_SHOWICONDINFOTIP        = "Show debuff icon info";
     HEALBOT_OPTIONS_COOLDOWNTEXT            = "Cooldown Text";
     HEALBOT_OPTIONS_COUNTTEXT               = "Count Text";

@@ -705,11 +705,14 @@ function HealBot_globalVars()
     HEALBOT_DEBUFF_MASS_RESURRECTED         = 95223 --HealBot_WoWAPI_SpellName(95223) or "--Recently Mass Resurrected";
     
     HEALBOT_ABSOLUTION                      = 212056 --HealBot_WoWAPI_SpellName(212056) or "--Absolution";
+    HBC_ABSOLUTION                          = 450761
     HEALBOT_ANCESTRAL_VISION                = 212048 --HealBot_WoWAPI_SpellName(212048) or "--Ancestral Vision";
+    HBC_ANCESTRAL_VISION                    = 450762
     HEALBOT_MASS_RESURRECTION               = 212036 --HealBot_WoWAPI_SpellName(212036) or "--Mass Resurrection";
     HBC_MASS_RESURRECTION                   = 83968
     HEALBOT_REAWAKEN                        = 212051 --HealBot_WoWAPI_SpellName(212051) or "--Reawaken";
     HEALBOT_REVITALIZE                      = 212040 --HealBot_WoWAPI_SpellName(212040) or "--Revitalize";
+    HBC_REVITALIZE                          = 48544
     HEALBOT_MASS_RETURN                     = 361178
     
     HEALBOT_REDEMPTION                      = 7328 --HealBot_WoWAPI_SpellName(7328) or "--Redemption";

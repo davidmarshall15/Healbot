@@ -35027,9 +35027,23 @@
                       <OnLeave>HealBot_Options_Show_Help("TOOLTIPIGNORESPELLGCD",false)</OnLeave>
                     </Scripts>
                   </CheckButton>
+                  <CheckButton name="HealBot_Options_ShowTooltipShowHoT" inherits="HealBotUIPanelCheckButton">
+                    <Anchors>
+                      <Anchor point="TOPLEFT">
+                        <Offset>
+                          <AbsDimension x="75" y="-410" />
+                        </Offset>
+                      </Anchor>
+                    </Anchors>
+                    <Scripts>
+                      <OnClick>HealBot_Options_ShowTooltipShowHoT_OnClick(self)</OnClick>
+                      <OnEnter>HealBot_Options_Show_Help("TOOLTIPMONBUFFS",true)</OnEnter>
+                      <OnLeave>HealBot_Options_Show_Help("TOOLTIPMONBUFFS",false)</OnLeave>
+                    </Scripts>
+                  </CheckButton>
                   <CheckButton name="HealBot_Options_ShowTooltipBuffIconInfo" inherits="HealBotUIPanelCheckButton">
                     <Anchors>
-                      <Anchor point="TOPLEFT" relativeTo="HealBot_Options_ShowTooltipSpellIgnoreGlobalCoolDown" relativePoint="BOTTOMLEFT">
+                      <Anchor point="TOPLEFT" relativeTo="HealBot_Options_ShowTooltipShowHoT" relativePoint="BOTTOMLEFT">
                         <Offset>
                           <AbsDimension x="0" y="-35"/>
                         </Offset>
@@ -35039,6 +35053,20 @@
                       <OnClick>HealBot_Options_ShowTooltipBuffIconInfo_OnClick(self)</OnClick>
                       <OnEnter>HealBot_Options_Show_Help("TOOLTIPBUFFICONINFO",true)</OnEnter>
                       <OnLeave>HealBot_Options_Show_Help("TOOLTIPBUFFICONINFO",false)</OnLeave>
+                    </Scripts>
+                  </CheckButton>
+                  <CheckButton name="HealBot_Options_ShowTooltipBuffIconCompact" inherits="SendMailRadioButtonTemplate">
+                    <Anchors>
+                      <Anchor point="TOPLEFT" relativeTo="HealBot_Options_ShowTooltipBuffIconInfo" relativePoint="TOPRIGHT">
+                        <Offset>
+                          <AbsDimension x="10" y="-20"/>
+                        </Offset>
+                      </Anchor>
+                    </Anchors>
+                    <Scripts>
+                      <OnClick>HealBot_Options_ShowTooltipBuffIconCompact_OnClick(self)</OnClick>
+                      <OnEnter>HealBot_Options_Show_Help("TOOLTIPCOMPACTICONINFO",true)</OnEnter>
+                      <OnLeave>HealBot_Options_Show_Help("TOOLTIPCOMPACTICONINFO",false)</OnLeave>
                     </Scripts>
                   </CheckButton>
                   <CheckButton name="HealBot_Options_ShowTooltipDebuffIconInfo" inherits="HealBotUIPanelCheckButton">
@@ -35055,18 +35083,18 @@
                       <OnLeave>HealBot_Options_Show_Help("TOOLTIPDEBUFFICONINFO",false)</OnLeave>
                     </Scripts>
                   </CheckButton>
-                  <CheckButton name="HealBot_Options_ShowTooltipShowHoT" inherits="HealBotUIPanelCheckButton">
+                  <CheckButton name="HealBot_Options_ShowTooltipDebuffIconCompact" inherits="SendMailRadioButtonTemplate">
                     <Anchors>
-                      <Anchor point="TOPLEFT">
+                      <Anchor point="TOPLEFT" relativeTo="HealBot_Options_ShowTooltipDebuffIconInfo" relativePoint="TOPRIGHT">
                         <Offset>
-                          <AbsDimension x="75" y="-540" />
+                          <AbsDimension x="10" y="-20"/>
                         </Offset>
                       </Anchor>
                     </Anchors>
                     <Scripts>
-                      <OnClick>HealBot_Options_ShowTooltipShowHoT_OnClick(self)</OnClick>
-                      <OnEnter>HealBot_Options_Show_Help("TOOLTIPMONBUFFS",true)</OnEnter>
-                      <OnLeave>HealBot_Options_Show_Help("TOOLTIPMONBUFFS",false)</OnLeave>
+                      <OnClick>HealBot_Options_ShowTooltipDebuffIconCompact_OnClick(self)</OnClick>
+                      <OnEnter>HealBot_Options_Show_Help("TOOLTIPCOMPACTICONINFO",true)</OnEnter>
+                      <OnLeave>HealBot_Options_Show_Help("TOOLTIPCOMPACTICONINFO",false)</OnLeave>
                     </Scripts>
                   </CheckButton>
                   <Slider name="HealBot_Options_TipMaxButtons" inherits="HealBot_Options_SliderTemplate">
@@ -35076,7 +35104,7 @@
                     <Anchors>
                       <Anchor point="BOTTOM">
                         <Offset>
-                          <AbsDimension x="0" y="135" />
+                          <AbsDimension x="0" y="265" />
                         </Offset>
                       </Anchor>
                     </Anchors>

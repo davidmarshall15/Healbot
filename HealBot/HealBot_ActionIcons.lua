@@ -366,15 +366,15 @@ function HealBot_ActionIcons_IsIconLocked(frame)
         return true
     else
         modKey=1 -- Not Locked
-        if (Healbot_Config_Skins.ActionIcons[Healbot_Config_Skins.Current_Skin][frame]["LOCK"] or 1)>1 then
+        if (Healbot_Config_Skins.ActionIcons[Healbot_Config_Skins.Current_Skin][frame]["LOCK"] or 1)>2 then
             if IsAltKeyDown() then 
                 if IsControlKeyDown() then
-                    modKey=4
+                    modKey=5
                 else
-                    modKey=3
+                    modKey=4
                 end
             elseif IsControlKeyDown() then
-                modKey=2
+                modKey=3
             end
         end
         if HealBot_Action_retLuVars("TestBarsOn") or (Healbot_Config_Skins.ActionIcons[Healbot_Config_Skins.Current_Skin][frame]["LOCK"] or 1)==modKey then

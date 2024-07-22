@@ -2463,7 +2463,7 @@ function HealBot_Action_UpdateUnitNotDead(button)
     HealBot_Check_UnitBuff(button)
     HealBot_RefreshUnit(button)
     HealBot_Aux_ClearResBar(button)
-    button.text.update=true
+    HealBot_Text_Update(button)
     button.status.slowupdate=true
 end
 

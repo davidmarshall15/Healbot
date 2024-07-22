@@ -635,27 +635,22 @@ function HealBot_Init_SmartCast()
         rName=HealBot_WoWAPI_SpellName(HEALBOT_RESURRECTION)
         if rName and HealBot_Spells_KnownByName(rName) then SmartCast_Res=rName end
     elseif HealBot_Data["PCLASSTRIM"]=="DRUI" then
-        rName=HealBot_WoWAPI_SpellName(HEALBOT_REVITALIZE)
+        rName=HealBot_WoWAPI_SpellName(HEALBOT_REVITALIZE) or HealBot_WoWAPI_SpellName(HBC_REVITALIZE)
         if rName and HealBot_Spells_KnownByName(rName) then SmartCast_MassRes=rName end
         rName=HealBot_WoWAPI_SpellName(HEALBOT_REVIVE) or HealBot_WoWAPI_SpellName(HBC_REVIVE)
-        if rName and HealBot_Spells_KnownByName(rName) then 
-            SmartCast_Res=rName
-        else
-            rName=HealBot_WoWAPI_SpellName(HEALBOT_REBIRTH)
-            if rName and HealBot_Spells_KnownByName(rName) then SmartCast_Res=rName end
-        end
+        if rName and HealBot_Spells_KnownByName(rName) then SmartCast_Res=rName end
     elseif HealBot_Data["PCLASSTRIM"]=="MONK" then
         rName=HealBot_WoWAPI_SpellName(HEALBOT_REAWAKEN)
         if rName and HealBot_Spells_KnownByName(rName) then SmartCast_MassRes=rName end
         rName=HealBot_WoWAPI_SpellName(HEALBOT_RESUSCITATE)
         if rName and HealBot_Spells_KnownByName(rName) then SmartCast_Res=rName end
     elseif HealBot_Data["PCLASSTRIM"]=="PALA" then
-        rName=HealBot_WoWAPI_SpellName(HEALBOT_ABSOLUTION)
+        rName=HealBot_WoWAPI_SpellName(HEALBOT_ABSOLUTION) or HealBot_WoWAPI_SpellName(HBC_ABSOLUTION)
         if rName and HealBot_Spells_KnownByName(rName) then SmartCast_MassRes=rName end
         rName=HealBot_WoWAPI_SpellName(HEALBOT_REDEMPTION)
         if rName and HealBot_Spells_KnownByName(rName) then SmartCast_Res=rName end
     elseif HealBot_Data["PCLASSTRIM"]=="SHAM" then
-        rName=HealBot_WoWAPI_SpellName(HEALBOT_ANCESTRAL_VISION)
+        rName=HealBot_WoWAPI_SpellName(HEALBOT_ANCESTRAL_VISION) or HealBot_WoWAPI_SpellName(HBC_ANCESTRAL_VISION)
         if rName and HealBot_Spells_KnownByName(rName) then SmartCast_MassRes=rName end
         rName=HealBot_WoWAPI_SpellName(HEALBOT_ANCESTRALSPIRIT)
         if rName and HealBot_Spells_KnownByName(rName) then SmartCast_Res=rName end

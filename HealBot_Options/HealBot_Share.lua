@@ -1116,6 +1116,11 @@ function HealBot_Share_SkinLoad(sIn, internal)
     end
     HealBot_Skins_Check_Skin(hbOptGetSkinName, true)
     Healbot_Config_Skins.General[hbOptGetSkinName]["VC"]=nil
+    for x=1,10 do
+        Healbot_Config_Skins.Anchors[hbOptGetSkinName][x]["RealFixed"]=false
+        Healbot_Config_Skins.Anchors[hbOptGetSkinName][x]["RealX"]=nil
+        Healbot_Config_Skins.Anchors[hbOptGetSkinName][x]["RealY"]=nil
+    end
     if not internal then
         HealBot_Options_Set_Current_Skin(hbOptGetSkinName, nil, nil, true)
         HealBot_SetResetFlag("SOFT")
