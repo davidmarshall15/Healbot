@@ -4332,7 +4332,6 @@ function HealBot_Options_FontOffset_OnValueChanged(self)
         local g=_G[self:GetName().."Text"]
         g:SetText(self.text .. ": " .. val);
         HealBot_Options_framesChanged(false, false, false, true)
-        HealBot_Timers_Set("SKINS","SetSkinText")
     end
 end
 
@@ -4346,7 +4345,6 @@ function HealBot_Options_StateFontOffset_OnValueChanged(self)
         local g=_G[self:GetName().."Text"]
         g:SetText(self.text .. ": " .. val);
         HealBot_Options_framesChanged(false, false, false, true)
-        HealBot_Timers_Set("SKINS","SetSkinText")
     end
 end
 
@@ -4359,9 +4357,7 @@ function HealBot_Options_AuxFontOffset_OnValueChanged(self)
         Healbot_Config_Skins.AuxBarText[Healbot_Config_Skins.Current_Skin][HealBot_Options_luVars["AuxTxtBar"]][HealBot_Options_luVars["FramesSelFrame"]]["OFFSET"] = val;
         local g=_G[self:GetName().."Text"]
         g:SetText(self.text .. ": " .. val);
-        HealBot_Timers_Set("AUX","UpdateAllAuxByType")
         HealBot_Options_framesChanged(false, false, false, true)
-        HealBot_Timers_Set("SKINS","SetSkinText")
     end
 end
 
@@ -4374,9 +4370,7 @@ function HealBot_Options_AuxFontHOffset_OnValueChanged(self)
         Healbot_Config_Skins.AuxBarText[Healbot_Config_Skins.Current_Skin][HealBot_Options_luVars["AuxTxtBar"]][HealBot_Options_luVars["FramesSelFrame"]]["HOFFSET"] = val;
         local g=_G[self:GetName().."Text"]
         g:SetText(self.text .. ": " .. val);
-        HealBot_Panel_setLuVars("resetAuxText", true)
         HealBot_Options_framesChanged(false, false, false, true)
-        HealBot_Timers_Set("SKINS","SetSkinText")
     end
 end
 
@@ -4389,9 +4383,7 @@ function HealBot_Options_HealthFontOffset_OnValueChanged(self)
         Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][HealBot_Options_luVars["FramesSelFrame"]]["HOFFSET"] = val;
         local g=_G[self:GetName().."Text"]
         g:SetText(self.text .. ": " .. val);
-        HealBot_Timers_Set("AUX","UpdateAllAuxByType")
         HealBot_Options_framesChanged(false, false, false, true)
-        HealBot_Timers_Set("SKINS","SetSkinText")
     end
 end
 
@@ -4405,7 +4397,6 @@ function HealBot_Options_AggroFontOffset_OnValueChanged(self)
         local g=_G[self:GetName().."Text"]
         g:SetText(self.text .. ": " .. val);
         HealBot_Options_framesChanged(false, false, false, true)
-        HealBot_Timers_Set("SKINS","SetSkinText")
     end
 end
 
@@ -9606,9 +9597,9 @@ local function HealBot_Options_BarHealthTextPosition_DropDown()
                         HealBot_Options_framesChanged(false, false, false, true)
                         HealBot_Timers_Set("SKINS","SetSkinText")
                         if Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][HealBot_Options_luVars["FramesSelFrame"]]["HLTHTXTANCHOR"]==4 or self:GetID()==4 then
-                            HealBot_Timers_Set("SKINS","TextUpdateNames")
+                            HealBot_Timers_Set("SKINS","TextUpdateNames",0.25)
                         end
-                        HealBot_Timers_Set("SKINS","TextUpdateHealth")
+                        HealBot_Timers_Set("SKINS","TextUpdateHealth",0.25)
                         HealBot_Options_HealthAnchor_Options()
                     end
         info.checked = false;
@@ -9626,7 +9617,7 @@ local function HealBot_Options_BarAggroTextPosition_DropDown()
                         Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][HealBot_Options_luVars["FramesSelFrame"]]["AGGROTXTANCHOR"] = self:GetID()
                         UIDropDownMenu_SetText(HealBot_Options_BarAggroTextPosition, HealBot_Options_Lists["BarAggroTextAnchor"][Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][HealBot_Options_luVars["FramesSelFrame"]]["AGGROTXTANCHOR"]])
                         HealBot_Options_framesChanged(false, false, false, true)
-                        HealBot_Timers_Set("SKINS","SetSkinText")
+                        HealBot_Timers_Set("SKINS","TextUpdateAggro",0.25)
                     end
         info.checked = false;
         if Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][HealBot_Options_luVars["FramesSelFrame"]]["AGGROTXTANCHOR"]==j then info.checked = true end
@@ -9644,13 +9635,13 @@ local function HealBot_Options_BarNameTextPosition_DropDown()
                             Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][HealBot_Options_luVars["FramesSelFrame"]]["ALIGN"] = self:GetID()
                             UIDropDownMenu_SetText(HealBot_Options_BarNameTextPosition, HealBot_Options_Lists["BarNameTextAnchor"][Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][HealBot_Options_luVars["FramesSelFrame"]]["ALIGN"]])
                             HealBot_Options_framesChanged(false, false, false, true)
-                            HealBot_Timers_Set("SKINS","SetSkinText")
+                --            HealBot_Timers_Set("SKINS","SetSkinText")
                             if HealBot_Options_luVars["TestBarsOn"] then
                                 HealBot_Timers_Set("SKINS","UpdateTextButtons")
                             else
-                                HealBot_Timers_Set("SKINS","TextUpdateNames")
+                                HealBot_Timers_Set("SKINS","TextUpdateNames",0.25)
                                 if Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][HealBot_Options_luVars["FramesSelFrame"]]["HLTHTXTANCHOR"]>4 then
-                                    HealBot_Timers_Set("SKINS","TextUpdateHealth")
+                                    HealBot_Timers_Set("SKINS","TextUpdateHealth",0.25)
                                 end
                             end
                         end
@@ -9669,10 +9660,9 @@ function HealBot_Options_AuxTextAlign_DropDown()
         info.func = function(self)
                         if Healbot_Config_Skins.AuxBarText[Healbot_Config_Skins.Current_Skin][HealBot_Options_luVars["AuxTxtBar"]][HealBot_Options_luVars["FramesSelFrame"]]["ALIGN"]~=self:GetID() then
                             Healbot_Config_Skins.AuxBarText[Healbot_Config_Skins.Current_Skin][HealBot_Options_luVars["AuxTxtBar"]][HealBot_Options_luVars["FramesSelFrame"]]["ALIGN"] = self:GetID()
-                            UIDropDownMenu_SetText(HealBot_Options_BarNameTextPosition, HealBot_Options_Lists["BarNameTextAnchor"][Healbot_Config_Skins.AuxBarText[Healbot_Config_Skins.Current_Skin][HealBot_Options_luVars["AuxTxtBar"]][HealBot_Options_luVars["FramesSelFrame"]]["ALIGN"]])
-                            HealBot_Panel_setLuVars("resetAuxText", true)
+                            UIDropDownMenu_SetText(HealBot_Options_AuxTextAlign, HealBot_Options_Lists["BarNameTextAnchor"][Healbot_Config_Skins.AuxBarText[Healbot_Config_Skins.Current_Skin][HealBot_Options_luVars["AuxTxtBar"]][HealBot_Options_luVars["FramesSelFrame"]]["ALIGN"]])
                             HealBot_Options_framesChanged(false, false, false, true)
-                            HealBot_Timers_Set("SKINS","SetSkinText")
+                            C_Timer.After(0.25, function() HealBot_Text_UpdateAux(HealBot_Options_luVars["AuxTxtBar"]) end)
                         end
                     end
         info.checked = false;
@@ -9687,11 +9677,13 @@ function HealBot_Options_BarStateTextPosition_DropDown()
     for j=1, getn(HealBot_Options_Lists["BarStateTextAnchor"]), 1 do
         info.text = HealBot_Options_Lists["BarStateTextAnchor"][j];
         info.func = function(self)
-                        Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][HealBot_Options_luVars["FramesSelFrame"]]["STATETXTANCHOR"] = self:GetID()
-                        UIDropDownMenu_SetText(HealBot_Options_BarStateTextPosition, HealBot_Options_Lists["BarStateTextAnchor"][Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][HealBot_Options_luVars["FramesSelFrame"]]["STATETXTANCHOR"]])
-                        HealBot_Options_framesChanged(false, false, false, true)
-                        HealBot_Timers_Set("SKINS","SetSkinText")
-                        HealBot_Options_StateUseNameFontString_Options()
+                        if Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][HealBot_Options_luVars["FramesSelFrame"]]["STATETXTANCHOR"] ~= self:GetID() then
+                            Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][HealBot_Options_luVars["FramesSelFrame"]]["STATETXTANCHOR"] = self:GetID()
+                            UIDropDownMenu_SetText(HealBot_Options_BarStateTextPosition, HealBot_Options_Lists["BarStateTextAnchor"][Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][HealBot_Options_luVars["FramesSelFrame"]]["STATETXTANCHOR"]])
+                            HealBot_Options_framesChanged(false, false, false, true)
+                            HealBot_Timers_Set("SKINS","TextUpdateState",0.25)
+                            HealBot_Options_StateUseNameFontString_Options()
+                        end
                     end
         info.checked = false;
         if Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][HealBot_Options_luVars["FramesSelFrame"]]["STATETXTANCHOR"]==j then info.checked = true end
@@ -22548,56 +22540,74 @@ end
 function HealBot_Options_RoleTankTag_OnTextChanged(self)
       --HealBot_setCall("HealBot_Options_RoleTankTag_OnTextChanged")
     Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][HealBot_Options_luVars["FramesSelFrame"]]["ROLETANK"] = self:GetText()
-    HealBot_Timers_Set("SKINS","TextUpdateNames")
+    HealBot_Timers_Set("SKINS","TextUpdateNames",0.05)
 end
 
 function HealBot_Options_RoleHealerTag_OnTextChanged(self)
       --HealBot_setCall("HealBot_Options_RoleHealerTag_OnTextChanged")
     Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][HealBot_Options_luVars["FramesSelFrame"]]["ROLEHEAL"] = self:GetText()
-    HealBot_Timers_Set("SKINS","TextUpdateNames")
+    HealBot_Timers_Set("SKINS","TextUpdateNames",0.05)
 end
 
 
 function HealBot_Options_RoleDamagerTag_OnTextChanged(self)
       --HealBot_setCall("HealBot_Options_RoleDamagerTag_OnTextChanged")
     Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][HealBot_Options_luVars["FramesSelFrame"]]["ROLEDPS"] = self:GetText()
-    HealBot_Timers_Set("SKINS","TextUpdateNames")
+    HealBot_Timers_Set("SKINS","TextUpdateNames",0.05)
 end
 
 function HealBot_Options_DisconnectedTag_OnTextChanged(self)
       --HealBot_setCall("HealBot_Options_DisconnectedTag_OnTextChanged")
     Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][HealBot_Options_luVars["FramesSelFrame"]]["TAGDC"] = self:GetText()
-    HealBot_Timers_Set("SKINS","TextUpdateState")
+    HealBot_Timers_Set("SKINS","TextSetTagInUse",0.05)
 end
 
 function HealBot_Options_UnitDeadTag_OnTextChanged(self)
       --HealBot_setCall("HealBot_Options_UnitDeadTag_OnTextChanged")
     Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][HealBot_Options_luVars["FramesSelFrame"]]["TAGRIP"] = self:GetText()
-    HealBot_Timers_Set("SKINS","TextUpdateState")
+    HealBot_Timers_Set("SKINS","TextSetTagInUse",0.05)
 end
 
 function HealBot_Options_ResTag_OnTextChanged(self)
       --HealBot_setCall("HealBot_Options_ResTag_OnTextChanged")
     Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][HealBot_Options_luVars["FramesSelFrame"]]["TAGRES"] = self:GetText()
-    HealBot_Timers_Set("SKINS","TextUpdateState")
+    HealBot_Timers_Set("SKINS","TextSetTagInUse",0.05)
 end
 
 function HealBot_Options_SummonsTag_OnTextChanged(self)
       --HealBot_setCall("HealBot_Options_SummonsTag_OnTextChanged")
     Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][HealBot_Options_luVars["FramesSelFrame"]]["TAGSUM"] = self:GetText()
-    HealBot_Timers_Set("SKINS","TextUpdateState")
+    HealBot_Timers_Set("SKINS","TextSetTagInUse",0.05)
+end
+
+function HealBot_Options_GroupTag_OnTextChanged(self)
+      --HealBot_setCall("HealBot_Options_GroupTag_OnTextChanged")
+    Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][HealBot_Options_luVars["FramesSelFrame"]]["TAGGROUP"] = self:GetText()
+    HealBot_Timers_Set("SKINS","TextSetTagInUse",0.05)
+end
+
+function HealBot_Options_DebuffTag_OnTextChanged(self)
+      --HealBot_setCall("HealBot_Options_DebuffTag_OnTextChanged")
+    Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][HealBot_Options_luVars["FramesSelFrame"]]["TAGDEBUFF"] = self:GetText()
+    HealBot_Timers_Set("SKINS","TextSetTagInUse",0.05)
+end
+
+function HealBot_Options_BuffTag_OnTextChanged(self)
+      --HealBot_setCall("HealBot_Options_DebuffTag_OnTextChanged")
+    Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][HealBot_Options_luVars["FramesSelFrame"]]["TAGBUFF"] = self:GetText()
+    HealBot_Timers_Set("SKINS","TextSetTagInUse",0.05)
 end
 
 function HealBot_Options_OutOfRangeTag_OnTextChanged(self)
       --HealBot_setCall("HealBot_Options_OutOfRangeTag_OnTextChanged")
     Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][HealBot_Options_luVars["FramesSelFrame"]]["TAGOOR"] = self:GetText()
-    HealBot_Timers_Set("SKINS","TextUpdateState")
+    HealBot_Timers_Set("SKINS","TextSetTagInUse",0.05)
 end
 
 function HealBot_Options_ReserverTag_OnTextChanged(self)
       --HealBot_setCall("HealBot_Options_ReserverTag_OnTextChanged")
     Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][HealBot_Options_luVars["FramesSelFrame"]]["TAGR"] = self:GetText()
-    HealBot_Timers_Set("SKINS","TextUpdateState")
+    HealBot_Timers_Set("SKINS","TextSetTagInUse",0.05)
 end
 
 function HealBot_Options_EnableSmartCast_OnClick(self)
@@ -25667,11 +25677,17 @@ function HealBot_Options_SkinsFramesTextStateTextTab(tab)
         HealBot_Options_OutOfRangeTag:SetText(Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][HealBot_Options_luVars["FramesSelFrame"]]["TAGOOR"])
         HealBot_Options_ReserverTag:SetText(Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][HealBot_Options_luVars["FramesSelFrame"]]["TAGR"])
         HealBot_Options_ResTag:SetText(Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][HealBot_Options_luVars["FramesSelFrame"]]["TAGRES"])
+        HealBot_Options_GroupTag:SetText(Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][HealBot_Options_luVars["FramesSelFrame"]]["TAGGROUP"])
+        HealBot_Options_DebuffTag:SetText(Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][HealBot_Options_luVars["FramesSelFrame"]]["TAGDEBUFF"])
+        HealBot_Options_BuffTag:SetText(Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][HealBot_Options_luVars["FramesSelFrame"]]["TAGBUFF"])
         HealBot_Options_SetText(HealBot_Options_DisconnectedTag,HEALBOT_DISCONNECTED_LABEL)
         HealBot_Options_SetText(HealBot_Options_UnitDeadTag,HEALBOT_DEAD_LABEL)
         HealBot_Options_SetText(HealBot_Options_OutOfRangeTag,HEALBOT_OUTOFRANGE_LABEL)
         HealBot_Options_SetText(HealBot_Options_ReserverTag,HEALBOT_RESERVED_LABEL)
         HealBot_Options_SetText(HealBot_Options_ResTag,HEALBOT_WORD_RESURRECTION)
+        HealBot_Options_SetText(HealBot_Options_GroupTag,HEALBOT_SORTBY_GROUP)
+        HealBot_Options_SetText(HealBot_Options_DebuffTag,HEALBOT_OPTIONS_STATEDEBUFFS)
+        HealBot_Options_SetText(HealBot_Options_BuffTag,HEALBOT_OPTIONS_BUFFMISSING)
         if HEALBOT_GAME_VERSION>3 then
             HealBot_Options_SetText(HealBot_Options_SummonsTag,HEALBOT_WORD_SUMMONS)
             HealBot_Options_SummonsTag:SetText(Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][HealBot_Options_luVars["FramesSelFrame"]]["TAGSUM"])

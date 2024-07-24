@@ -255,7 +255,8 @@ function HealBot_Range_UpdateUnit(button)
                 end
                 if button.status.isdead then
                     HealBot_Text_UpdateButton(button)
-                else
+                end
+                if HealBot_Text_TagInUse(button.framecol, "OOR") then
                     HealBot_Text_setNameTag(button)
                 end
                 if Healbot_Config_Skins.BarSort[Healbot_Config_Skins.Current_Skin][button.frame]["OORLAST"] then

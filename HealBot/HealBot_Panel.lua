@@ -103,7 +103,6 @@ HealBot_Panel_luVars["cpRaid"]=false
 HealBot_Panel_luVars["FocusGroups"]=1
 HealBot_Panel_luVars["cpMacro"]="HealBot-CrashProt"
 HealBot_Panel_luVars["cpCrash"]=false
-HealBot_Panel_luVars["resetAuxText"]=false
 
 local hbRoleOnes={}
 local hbTANK1=1
@@ -677,7 +676,7 @@ local classTextures={
     ["SHAM"]="Interface\\Addons\\HealBot\\Images\\Shaman-round",
     ["WARL"]="Interface\\Addons\\HealBot\\Images\\Warlock-round",
     ["WARR"]="Interface\\Addons\\HealBot\\Images\\Warrior-round",
-    ["EVOK"]="Interface\\Addons\\HealBot\\Images\\Warrior-round",
+    ["EVOK"]="Interface\\Addons\\HealBot\\Images\\Evoker-round",
     }
 
 function HealBot_Panel_retClassRoleIcon(id)

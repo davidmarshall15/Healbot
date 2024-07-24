@@ -1147,566 +1147,6 @@ function HealBot_OnEvent_UnitManaUpdate(button)
     HealBot_OnEvent_UnitMana(button)
 end
 
-function HealBot_UpdateAllHotBarsButton(button)
-      --HealBot_setCall("HealBot_UpdateAllHotBarsButton", button)
-    if HealBot_Action_retLuVars("HotBarsHealth")==0 then
-        if button.hotbars.health then HealBot_Action_BarHotDisable(button, "HEALTH") end
-    else
-        HealBot_Action_UpdateHealthHotBar(button)
-    end
-    if button.aura.debuff.name then HealBot_Aura_DebuffWarnings(button, button.aura.debuff.name, true, 0) end
-end
-
-function HealBot_UpdateAllHotBars()
-      --HealBot_setCall("HealBot_UpdateAllHotBars")
-    for _,xButton in pairs(HealBot_Unit_Button) do
-        HealBot_UpdateAllHotBarsButton(xButton)
-    end
-    for _,xButton in pairs(HealBot_Private_Button) do
-        HealBot_UpdateAllHotBarsButton(xButton)
-    end
-    for _,xButton in pairs(HealBot_Pet_Button) do
-        HealBot_UpdateAllHotBarsButton(xButton)
-    end
-    for _,xButton in pairs(HealBot_Vehicle_Button) do
-        HealBot_UpdateAllHotBarsButton(xButton)
-    end
-    for _,xButton in pairs(HealBot_Extra_Button) do
-        HealBot_UpdateAllHotBarsButton(xButton)
-    end
-end
-
-function HealBot_UpdateAllAuxPowerBars()
-      --HealBot_setCall("HealBot_UpdateAllAuxPowerBars")
-    for _,xButton in pairs(HealBot_Unit_Button) do
-        HealBot_OnEvent_UnitManaUpdate(xButton)
-    end
-    for _,xButton in pairs(HealBot_Private_Button) do
-        HealBot_OnEvent_UnitManaUpdate(xButton)
-    end
-    for _,xButton in pairs(HealBot_Pet_Button) do
-        HealBot_OnEvent_UnitManaUpdate(xButton)
-    end
-    for _,xButton in pairs(HealBot_Vehicle_Button) do
-        HealBot_OnEvent_UnitManaUpdate(xButton)
-    end
-    for _,xButton in pairs(HealBot_Extra_Button) do
-        HealBot_OnEvent_UnitManaUpdate(xButton)
-    end
-    for _,xButton in pairs(HealBot_Enemy_Button) do
-        HealBot_OnEvent_UnitManaUpdate(xButton)
-    end
-    for xUnit,xButton in pairs(HealBot_UnitTarget_Button) do
-        HealBot_OnEvent_UnitManaUpdate(xButton)
-    end
-    for xUnit,xButton in pairs(HealBot_PrivateTarget_Button) do
-        HealBot_OnEvent_UnitManaUpdate(xButton)
-    end
-end
-
-function HealBot_CheckAllAuxOverLays()
-      --HealBot_setCall("HealBot_CheckAllAuxOverLays")
-    for _,xButton in pairs(HealBot_Unit_Button) do
-        HealBot_Aux_CheckOverLays(xButton)
-    end
-    for _,xButton in pairs(HealBot_Private_Button) do
-        HealBot_Aux_CheckOverLays(xButton)
-    end
-    for _,xButton in pairs(HealBot_Pet_Button) do
-        HealBot_Aux_CheckOverLays(xButton)
-    end
-    for _,xButton in pairs(HealBot_Vehicle_Button) do
-        HealBot_Aux_CheckOverLays(xButton)
-    end
-    for _,xButton in pairs(HealBot_Extra_Button) do
-        HealBot_Aux_CheckOverLays(xButton)
-    end
-    for _,xButton in pairs(HealBot_Enemy_Button) do
-        HealBot_Aux_CheckOverLays(xButton)
-    end
-    for xUnit,xButton in pairs(HealBot_UnitTarget_Button) do
-        HealBot_Aux_CheckOverLays(xButton)
-    end
-    for xUnit,xButton in pairs(HealBot_PrivateTarget_Button) do
-        HealBot_Aux_CheckOverLays(xButton)
-    end
-end
-
-function HealBot_ResetAllAuxText()
-      --HealBot_setCall("HealBot_ResetAllAuxText")
-    for _,xButton in pairs(HealBot_Unit_Button) do
-        HealBot_Aux_ResetNameBar(xButton)
-        HealBot_Aux_ResetHealthBar(xButton)
-    end
-    for _,xButton in pairs(HealBot_Private_Button) do
-        HealBot_Aux_ResetNameBar(xButton)
-        HealBot_Aux_ResetHealthBar(xButton)
-    end
-    for _,xButton in pairs(HealBot_Pet_Button) do
-        HealBot_Aux_ResetNameBar(xButton)
-        HealBot_Aux_ResetHealthBar(xButton)
-    end
-    for _,xButton in pairs(HealBot_Vehicle_Button) do
-        HealBot_Aux_ResetNameBar(xButton)
-        HealBot_Aux_ResetHealthBar(xButton)
-    end
-    for _,xButton in pairs(HealBot_Extra_Button) do
-        HealBot_Aux_ResetNameBar(xButton)
-        HealBot_Aux_ResetHealthBar(xButton)
-    end
-    for _,xButton in pairs(HealBot_Enemy_Button) do
-        HealBot_Aux_ResetNameBar(xButton)
-        HealBot_Aux_ResetHealthBar(xButton)
-    end
-    for xUnit,xButton in pairs(HealBot_UnitTarget_Button) do
-        HealBot_Aux_ResetNameBar(xButton)
-        HealBot_Aux_ResetHealthBar(xButton)
-    end
-    for xUnit,xButton in pairs(HealBot_PrivateTarget_Button) do
-        HealBot_Aux_ResetNameBar(xButton)
-        HealBot_Aux_ResetHealthBar(xButton)
-    end
-end
-
-function HealBot_UpdateAllBackground()
-      --HealBot_setCall("HealBot_UpdateAllBackground")
-    for _,xButton in pairs(HealBot_Unit_Button) do
-        HealBot_Action_UpdateBackground(xButton)
-    end
-    for _,xButton in pairs(HealBot_Private_Button) do
-        HealBot_Action_UpdateBackground(xButton)
-    end
-    for _,xButton in pairs(HealBot_Pet_Button) do
-        HealBot_Action_UpdateBackground(xButton)
-    end
-    for _,xButton in pairs(HealBot_Vehicle_Button) do
-        HealBot_Action_UpdateBackground(xButton)
-    end
-    for _,xButton in pairs(HealBot_Extra_Button) do
-        HealBot_Action_UpdateBackground(xButton)
-    end
-    for _,xButton in pairs(HealBot_Enemy_Button) do
-        HealBot_Action_UpdateBackground(xButton)
-    end
-    for xUnit,xButton in pairs(HealBot_UnitTarget_Button) do
-        HealBot_Action_UpdateBackground(xButton)
-    end
-    for xUnit,xButton in pairs(HealBot_PrivateTarget_Button) do
-        HealBot_Action_UpdateBackground(xButton)
-    end
-end
-
-function HealBot_UpdateAllAuxBars()
-      --HealBot_setCall("HealBot_UpdateAllAuxBars")
-    for _,xButton in pairs(HealBot_Unit_Button) do
-        HealBot_Aux_UpdBar(xButton)
-    end
-    for _,xButton in pairs(HealBot_Private_Button) do
-        HealBot_Aux_UpdBar(xButton)
-    end
-    for _,xButton in pairs(HealBot_Pet_Button) do
-        HealBot_Aux_UpdBar(xButton)
-    end
-    for _,xButton in pairs(HealBot_Vehicle_Button) do
-        HealBot_Aux_UpdBar(xButton)
-    end
-    for _,xButton in pairs(HealBot_Extra_Button) do
-        HealBot_Aux_UpdBar(xButton)
-    end
-    for _,xButton in pairs(HealBot_Enemy_Button) do
-        HealBot_Aux_UpdBar(xButton)
-    end
-    for xUnit,xButton in pairs(HealBot_UnitTarget_Button) do
-        HealBot_Aux_UpdBar(xButton)
-    end
-    for xUnit,xButton in pairs(HealBot_PrivateTarget_Button) do
-        HealBot_Aux_UpdBar(xButton)
-    end
-end
-
-function HealBot_updAuxBuffBars(button)
-      --HealBot_setCall("HealBot_updAuxBuffBars", button)
-    if button.aura.buff.name then
-        HealBot_Aura_BuffWarnings(button, button.aura.buff.name, true)
-    else
-        HealBot_Aura_AuxClearAuraBuffBars(button)
-    end
-end
-
-function HealBot_updAllAuxBuffBars()
-      --HealBot_setCall("HealBot_updAllAuxBuffBars")
-    for _,xButton in pairs(HealBot_Unit_Button) do
-        HealBot_updAuxBuffBars(xButton)
-    end
-    for _,xButton in pairs(HealBot_Private_Button) do
-        HealBot_updAuxBuffBars(xButton)
-    end
-    for _,xButton in pairs(HealBot_Pet_Button) do
-        HealBot_updAuxBuffBars(xButton)
-    end
-    for _,xButton in pairs(HealBot_Vehicle_Button) do
-        HealBot_updAuxBuffBars(xButton)
-    end
-    for _,xButton in pairs(HealBot_Extra_Button) do
-        HealBot_updAuxBuffBars(xButton)
-    end
-    for _,xButton in pairs(HealBot_Enemy_Button) do
-        HealBot_updAuxBuffBars(xButton)
-    end
-    for xUnit,xButton in pairs(HealBot_UnitTarget_Button) do
-        HealBot_updAuxBuffBars(xButton)
-    end
-    for xUnit,xButton in pairs(HealBot_PrivateTarget_Button) do
-        HealBot_updAuxBuffBars(xButton)
-    end
-end
-
-function HealBot_updAllAuxOverHealsBars()
-      --HealBot_setCall("HealBot_updAllAuxOverHealsBars")
-    for _,xButton in pairs(HealBot_Unit_Button) do
-        HealBot_Aux_UpdateOverHealBar(xButton)
-    end
-    for _,xButton in pairs(HealBot_Private_Button) do
-        HealBot_Aux_UpdateOverHealBar(xButton)
-    end
-    for _,xButton in pairs(HealBot_Pet_Button) do
-        HealBot_Aux_UpdateOverHealBar(xButton)
-    end
-    for _,xButton in pairs(HealBot_Vehicle_Button) do
-        HealBot_Aux_UpdateOverHealBar(xButton)
-    end
-    for _,xButton in pairs(HealBot_Extra_Button) do
-        HealBot_Aux_UpdateOverHealBar(xButton)
-    end
-end
-
-function HealBot_updAllAuxInHealsBars()
-      --HealBot_setCall("HealBot_updAllAuxInHealsBars")
-    for _,xButton in pairs(HealBot_Unit_Button) do
-        HealBot_Aux_UpdateHealInBar(xButton)
-    end
-    for _,xButton in pairs(HealBot_Private_Button) do
-        HealBot_Aux_UpdateHealInBar(xButton)
-    end
-    for _,xButton in pairs(HealBot_Pet_Button) do
-        HealBot_Aux_UpdateHealInBar(xButton)
-    end
-    for _,xButton in pairs(HealBot_Vehicle_Button) do
-        HealBot_Aux_UpdateHealInBar(xButton)
-    end
-    for _,xButton in pairs(HealBot_Extra_Button) do
-        HealBot_Aux_UpdateHealInBar(xButton)
-    end
-end
-
-function HealBot_updAllAuxAbsorbBars()
-      --HealBot_setCall("HealBot_updAllAuxAbsorbBars")
-    for _,xButton in pairs(HealBot_Unit_Button) do
-        HealBot_Aux_UpdateAbsorbBar(xButton)
-    end
-    for _,xButton in pairs(HealBot_Private_Button) do
-        HealBot_Aux_UpdateAbsorbBar(xButton)
-    end
-    for _,xButton in pairs(HealBot_Pet_Button) do
-        HealBot_Aux_UpdateAbsorbBar(xButton)
-    end
-    for _,xButton in pairs(HealBot_Vehicle_Button) do
-        HealBot_Aux_UpdateAbsorbBar(xButton)
-    end
-    for _,xButton in pairs(HealBot_Extra_Button) do
-        HealBot_Aux_UpdateAbsorbBar(xButton)
-    end
-end
-
-function HealBot_updAllAuxTotalHealAbsorbBars()
-      --HealBot_setCall("HealBot_updAllAuxTotalHealAbsorbBars")
-    for _,xButton in pairs(HealBot_Unit_Button) do
-        HealBot_Aux_UpdateTotalHealAbsorbsBar(xButton)
-    end
-    for _,xButton in pairs(HealBot_Private_Button) do
-        HealBot_Aux_UpdateTotalHealAbsorbsBar(xButton)
-    end
-    for _,xButton in pairs(HealBot_Pet_Button) do
-        HealBot_Aux_UpdateTotalHealAbsorbsBar(xButton)
-    end
-    for _,xButton in pairs(HealBot_Vehicle_Button) do
-        HealBot_Aux_UpdateTotalHealAbsorbsBar(xButton)
-    end
-    for _,xButton in pairs(HealBot_Extra_Button) do
-        HealBot_Aux_UpdateTotalHealAbsorbsBar(xButton)
-    end
-end
-
-function HealBot_updAllThreat()
-      --HealBot_setCall("HealBot_updAllThreat")
-    for _,xButton in pairs(HealBot_Unit_Button) do
-        xButton.aggro.nextcheck=1
-    end
-    for _,xButton in pairs(HealBot_Private_Button) do
-        xButton.aggro.nextcheck=1
-    end
-    for _,xButton in pairs(HealBot_Pet_Button) do
-        xButton.aggro.nextcheck=1
-    end
-    for _,xButton in pairs(HealBot_Vehicle_Button) do
-        xButton.aggro.nextcheck=1
-    end
-    for _,xButton in pairs(HealBot_Extra_Button) do
-        xButton.aggro.nextcheck=1
-    end
-end
-
-function HealBot_updAllAuxThreatBars()
-      --HealBot_setCall("HealBot_updAllAuxThreatBars")
-    for _,xButton in pairs(HealBot_Unit_Button) do
-        HealBot_Aux_UpdateThreatBar(xButton)
-    end
-    for _,xButton in pairs(HealBot_Private_Button) do
-        HealBot_Aux_UpdateThreatBar(xButton)
-    end
-    for _,xButton in pairs(HealBot_Pet_Button) do
-        HealBot_Aux_UpdateThreatBar(xButton)
-    end
-    for _,xButton in pairs(HealBot_Vehicle_Button) do
-        HealBot_Aux_UpdateThreatBar(xButton)
-    end
-    for _,xButton in pairs(HealBot_Extra_Button) do
-        HealBot_Aux_UpdateThreatBar(xButton)
-    end
-end
-
-function HealBot_updAllStateIconAFK()
-      --HealBot_setCall("HealBot_updAllStateIconAFK")
-    for _,xButton in pairs(HealBot_Unit_Button) do
-       HealBot_OnEvent_UnitFlagsChanged(xButton)
-    end
-    for _,xButton in pairs(HealBot_Private_Button) do
-       HealBot_OnEvent_UnitFlagsChanged(xButton)
-    end
-end
-
-function HealBot_clearClassGuidData()
-      --HealBot_setCall("HealBot_clearClassGuidData")
-    for _,xButton in pairs(HealBot_Unit_Button) do
-        HealBot_Action_setGuidData(xButton, "CLASSKNOWN", false)
-    end
-    for _,xButton in pairs(HealBot_Private_Button) do
-        HealBot_Action_setGuidData(xButton, "CLASSKNOWN", false)
-    end
-    for _,xButton in pairs(HealBot_Pet_Button) do
-        HealBot_Action_setGuidData(xButton, "CLASSKNOWN", false)
-    end
-    for _,xButton in pairs(HealBot_Vehicle_Button) do
-        HealBot_Action_setGuidData(xButton, "CLASSKNOWN", false)
-    end
-    for _,xButton in pairs(HealBot_Extra_Button) do
-        HealBot_Action_setGuidData(xButton, "CLASSKNOWN", false)
-    end
-    HealBot_Action_ResetAllButtons(true)
-    HealBot_Timers_Set("OOC","RefreshPartyNextRecalcAll")
-end
-
-function HealBot_updAllStateIconNotInCombat()
-      --HealBot_setCall("HealBot_updAllStateIconNotInCombat")
-    for _,xButton in pairs(HealBot_Unit_Button) do
-       HealBot_UnitAffectingCombat(xButton)
-    end
-    for _,xButton in pairs(HealBot_Private_Button) do
-       HealBot_UnitAffectingCombat(xButton)
-    end
-    for _,xButton in pairs(HealBot_Pet_Button) do
-       HealBot_UnitAffectingCombat(xButton)
-    end
-    for _,xButton in pairs(HealBot_Vehicle_Button) do
-       HealBot_UnitAffectingCombat(xButton)
-    end
-    for _,xButton in pairs(HealBot_Extra_Button) do
-       HealBot_UnitAffectingCombat(xButton)
-    end
-end
-
-function HealBot_updAllStateIconHostile()
-      --HealBot_setCall("HealBot_updAllStateIconHostile")
-    for _,xButton in pairs(HealBot_Unit_Button) do
-       HealBot_OnEvent_ClassificationChanged(xButton)
-    end
-    for _,xButton in pairs(HealBot_Private_Button) do
-       HealBot_OnEvent_ClassificationChanged(xButton)
-    end
-    for _,xButton in pairs(HealBot_Pet_Button) do
-       HealBot_OnEvent_ClassificationChanged(xButton)
-    end
-    for _,xButton in pairs(HealBot_Vehicle_Button) do
-       HealBot_OnEvent_ClassificationChanged(xButton)
-    end
-    for _,xButton in pairs(HealBot_Extra_Button) do
-       HealBot_OnEvent_ClassificationChanged(xButton)
-    end
-    for _,xButton in pairs(HealBot_Extra_Button) do
-       HealBot_OnEvent_ClassificationChanged(xButton)
-    end
-    for _,xButton in pairs(HealBot_Enemy_Button) do
-        HealBot_OnEvent_ClassificationChanged(xButton)
-    end
-    for xUnit,xButton in pairs(HealBot_UnitTarget_Button) do
-        HealBot_OnEvent_ClassificationChanged(xButton)
-    end
-    for xUnit,xButton in pairs(HealBot_PrivateTarget_Button) do
-        HealBot_OnEvent_ClassificationChanged(xButton)
-    end
-end
-
-function HealBot_updAuxDebuffBars(button)
-      --HealBot_setCall("HealBot_updAuxDebuffBars", button)
-    if button.aura.debuff.name then
-        HealBot_Aura_DebuffWarnings(button, button.aura.debuff.name, true, 0)
-    else
-        HealBot_Aura_AuxClearAuraDebuffBars(button)
-    end
-end
-
-function HealBot_updAllAuxDebuffBars()
-      --HealBot_setCall("HealBot_updAllAuxDebuffBars")
-    for _,xButton in pairs(HealBot_Unit_Button) do
-        HealBot_updAuxDebuffBars(xButton)
-    end
-    for _,xButton in pairs(HealBot_Private_Button) do
-        HealBot_updAuxDebuffBars(xButton)
-    end
-    for _,xButton in pairs(HealBot_Pet_Button) do
-        HealBot_updAuxDebuffBars(xButton)
-    end
-    for _,xButton in pairs(HealBot_Vehicle_Button) do
-        HealBot_updAuxDebuffBars(xButton)
-    end
-    for _,xButton in pairs(HealBot_Extra_Button) do
-        HealBot_updAuxDebuffBars(xButton)
-    end
-    for _,xButton in pairs(HealBot_Enemy_Button) do
-        HealBot_updAuxDebuffBars(xButton)
-    end
-    for xUnit,xButton in pairs(HealBot_UnitTarget_Button) do
-        HealBot_updAuxDebuffBars(xButton)
-    end
-    for xUnit,xButton in pairs(HealBot_PrivateTarget_Button) do
-        HealBot_updAuxDebuffBars(xButton)
-    end
-end
-
-function HealBot_updAllAuxRangeBars()
-      --HealBot_setCall("HealBot_updAllAuxRangeBars")
-    for _,xButton in pairs(HealBot_Unit_Button) do
-        HealBot_Update_OORBar(xButton)
-    end
-    for _,xButton in pairs(HealBot_Private_Button) do
-        HealBot_Update_OORBar(xButton)
-    end
-    for _,xButton in pairs(HealBot_Pet_Button) do
-        HealBot_Update_OORBar(xButton)
-    end
-    for _,xButton in pairs(HealBot_Vehicle_Button) do
-        HealBot_Update_OORBar(xButton)
-    end
-    for _,xButton in pairs(HealBot_Extra_Button) do
-        HealBot_Update_OORBar(xButton)
-    end
-    for _,xButton in pairs(HealBot_Enemy_Button) do
-        HealBot_Update_OORBar(xButton)
-    end
-    for xUnit,xButton in pairs(HealBot_UnitTarget_Button) do
-        HealBot_Update_OORBar(xButton)
-    end
-    for xUnit,xButton in pairs(HealBot_PrivateTarget_Button) do
-        HealBot_Update_OORBar(xButton)
-    end
-end
-
-function HealBot_updAllAuxInRangeBars()
-      --HealBot_setCall("HealBot_updAllAuxInRangeBars")
-    for _,xButton in pairs(HealBot_Unit_Button) do
-        HealBot_Update_InRangeBar(xButton)
-    end
-    for _,xButton in pairs(HealBot_Private_Button) do
-        HealBot_Update_InRangeBar(xButton)
-    end
-    for _,xButton in pairs(HealBot_Pet_Button) do
-        HealBot_Update_InRangeBar(xButton)
-    end
-    for _,xButton in pairs(HealBot_Vehicle_Button) do
-        HealBot_Update_InRangeBar(xButton)
-    end
-    for _,xButton in pairs(HealBot_Extra_Button) do
-        HealBot_Update_InRangeBar(xButton)
-    end
-    for _,xButton in pairs(HealBot_Enemy_Button) do
-        HealBot_Update_InRangeBar(xButton)
-    end
-    for xUnit,xButton in pairs(HealBot_UnitTarget_Button) do
-        HealBot_Update_InRangeBar(xButton)
-    end
-    for xUnit,xButton in pairs(HealBot_PrivateTarget_Button) do
-        HealBot_Update_InRangeBar(xButton)
-    end
-end
-
-function HealBot_UpdateAllUnitBars(playersOnly)
-      --HealBot_setCall("HealBot_UpdateAllUnitBars")
-    for _,xButton in pairs(HealBot_Unit_Button) do
-        xButton.status.slowupdate=true
-        xButton.status.update=true
-    end
-    for _,xButton in pairs(HealBot_Private_Button) do
-        xButton.status.slowupdate=true
-        xButton.status.update=true
-    end
-    if not playersOnly then
-        for _,xButton in pairs(HealBot_Pet_Button) do
-            xButton.status.slowupdate=true
-            xButton.status.update=true
-        end
-        for _,xButton in pairs(HealBot_Vehicle_Button) do
-            xButton.status.slowupdate=true
-            xButton.status.update=true
-        end
-        for _,xButton in pairs(HealBot_Extra_Button) do
-            xButton.status.slowupdate=true
-            xButton.status.update=true
-        end
-        for _,xButton in pairs(HealBot_Enemy_Button) do
-            xButton.status.slowupdate=true
-            xButton.status.update=true
-        end
-        for xUnit,xButton in pairs(HealBot_UnitTarget_Button) do
-            xButton.status.slowupdate=true
-            xButton.status.update=true
-        end
-        for xUnit,xButton in pairs(HealBot_PrivateTarget_Button) do
-            xButton.status.slowupdate=true
-            xButton.status.update=true
-        end
-    end
-end
-
-function HealBot_CheckAllPartyGUIDs()
-      --HealBot_setCall("HealBot_CheckAllPartyGUIDs")
-    for _,xButton in pairs(HealBot_Unit_Button) do
-        HealBot_CheckUpdateUnitGUIDChange(xButton)
-    end
-    for _,xButton in pairs(HealBot_Private_Button) do
-        HealBot_CheckUpdateUnitGUIDChange(xButton)
-    end
-end
-
-function HealBot_CheckAllPetGUIDs()
-      --HealBot_setCall("HealBot_CheckAllPetGUIDs")
-    for _,xButton in pairs(HealBot_Pet_Button) do
-        HealBot_CheckUpdateUnitGUIDChange(xButton)
-    end
-    for _,xButton in pairs(HealBot_Vehicle_Button) do
-        HealBot_CheckUpdateUnitGUIDChange(xButton)
-    end
-end
-
 function HealBot_GetUnitGuild(button)
       --HealBot_setCall("HealBot_GetUnitGuild", button)
     if button.isplayer and GetGuildInfo(button.unit) then
@@ -1889,14 +1329,14 @@ function HealBot_UnitClass(button)
                 guName=HealBot_customTempUserName[button.guid] or UnitName(button.unit) or false
                 if guName and guName~=HEALBOT_WORDS_UNKNOWN then
                     button.name=guName
-                    HealBot_Action_setGuidData(button, "CLASSKNOWN", true)
-                    HealBot_Action_setGuidData(button, "PLAYER", button.player)
-                    HealBot_Action_setGuidData(button, "ISPLAYER", button.isplayer)
-                    HealBot_Action_setGuidData(button, "CLASSTRIM", button.text.classtrim)
-                    HealBot_Action_setGuidData(button, "CLASSR", button.text.r)
-                    HealBot_Action_setGuidData(button, "CLASSG", button.text.g)
-                    HealBot_Action_setGuidData(button, "CLASSB", button.text.b)
-                    HealBot_Action_setGuidData(button, "NAME", guName)
+                    HealBot_Action_SetGuidData(button, "CLASSKNOWN", true)
+                    HealBot_Action_SetGuidData(button, "PLAYER", button.player)
+                    HealBot_Action_SetGuidData(button, "ISPLAYER", button.isplayer)
+                    HealBot_Action_SetGuidData(button, "CLASSTRIM", button.text.classtrim)
+                    HealBot_Action_SetGuidData(button, "CLASSR", button.text.r)
+                    HealBot_Action_SetGuidData(button, "CLASSG", button.text.g)
+                    HealBot_Action_SetGuidData(button, "CLASSB", button.text.b)
+                    HealBot_Action_SetGuidData(button, "NAME", guName)
                 end
             end
         elseif button.isplayer then
@@ -5085,6 +4525,9 @@ function HealBot_PartyUpdate_CheckSolo()
                 C_Timer.After(0.1, function() HealBot_Plugin_AuraWatch_ValidateSolo(HealBot_luVars["IsSolo"]) end)
             end
         end
+        if PrevRaid~=HealBot_luVars["IsRaid"] then
+            HealBot_Timers_Set("SKINS","TextUpdateState")
+        end
     end
 end
 
@@ -5123,7 +4566,7 @@ function HealBot_AfterCombatCleanup()
         HealBot_Timers_Set("LAST","TargetFocusUpdate")
         HealBot_UnlockEnemyFrame()
         HealBot_Timers_Set("LAST","IconNotInCombat")
-        HealBot_UpdateAllUnitBars(true)
+        HealBot_Update_AllUnitBars(true)
         if HealBot_luVars["pluginThreat"] then HealBot_Plugin_Threat_TogglePanel() end
     elseif not HealBot_luVars["UpdateEnemyFrame"] then
         HealBot_UnlockEnemyFrame()
@@ -5201,7 +4644,7 @@ function HealBot_SetUnitConnected(button, offlineStart)
       --HealBot_setCall("HealBot_SetUnitConnected", button)
     if offlineStart or button.status.current==HealBot_Unit_Status["DC"] then
         if offlineStart then
-            HealBot_Action_setGuidData(button, "OFFLINE", false)
+            HealBot_Action_SetGuidData(button, "OFFLINE", false)
         end
         HealBot_SetUnitDisconnectChange(button, HealBot_Unit_Status["CHECK"])
     end
@@ -5216,7 +4659,7 @@ function HealBot_SetUnitDisconnect(button)
                 HealBot_SetUnitConnected(button, offlineStart)
             elseif not offlineStart or button.status.current~=HealBot_Unit_Status["DC"] then
                 if not offlineStart then
-                    HealBot_Action_setGuidData(button, "OFFLINE", HealBot_TimeNow)
+                    HealBot_Action_SetGuidData(button, "OFFLINE", HealBot_TimeNow)
                 end
                 HealBot_SetUnitDisconnectChange(button, HealBot_Unit_Status["DC"])
             end
@@ -5490,10 +4933,6 @@ function HealBot_ProcessRefreshTypes()
                 HealBot_Timers_Set("SKINS","ClearReset")
             end
             HealBot_luVars["ProcessRefresh"]=false
-            if HealBot_Panel_retLuVars("resetAuxText") then
-                HealBot_Panel_setLuVars("resetAuxText", false)
-                HealBot_Timers_Set("AUX","ResetTextButtons")
-            end
             if HealBot_luVars["newSkin"] then
                 HealBot_luVars["newSkin"]=false
                 HealBot_Timers_Set("OOC","CheckHideUnusedFrames",0.025)
@@ -6514,7 +5953,7 @@ function HealBot_SpecChange(button)
         HealBot_Timers_Set("PLAYER","TalentsChanged",1)
         HealBot_OnEvent_SpellsChanged(1)
     else
-        if HealBot_Panel_RaidUnitButtonCheck(button.guid) then HealBot_Action_setGuidData(button, "TMPSPEC", " ") end
+        if HealBot_Panel_RaidUnitButtonCheck(button.guid) then HealBot_Action_SetGuidData(button, "TMPSPEC", " ") end
         HealBot_SpecUpdate(button, HealBot_TimeNow)
     end
 end
@@ -6820,7 +6259,7 @@ function HealBot_PlayerRegenDisabled()
     HealBot_Panel_ButtonShowNow()
 
     HealBot_UnitInCombat()
-    HealBot_UpdateAllUnitBars(true)
+    HealBot_Update_AllUnitBars(true)
     if HealBot_luVars["CheckFramesOnCombat"] then
         for f=1,10 do
             if prdCheckActiveFrames[f] and Healbot_Config_Skins.Frame[Healbot_Config_Skins.Current_Skin][f]["AUTOCLOSE"]>1 then
@@ -7112,12 +6551,12 @@ function HealBot_SetUnitName(name, guid)
     xButton,pButton = HealBot_Panel_RaidPetUnitButton(guid)
     if xButton then
         xButton.name=name
-        HealBot_Action_setGuidData(xButton, "NAME", name)
+        HealBot_Action_SetGuidData(xButton, "NAME", name)
         HealBot_Text_setNameText(xButton)
     end
     if pButton then
         pButton.name=name
-        HealBot_Action_setGuidData(pButton, "NAME", name)
+        HealBot_Action_SetGuidData(pButton, "NAME", name)
         HealBot_Text_setNameText(pButton)
     end
 end
@@ -7128,12 +6567,12 @@ function HealBot_DelUnitName(guid)
     xButton,pButton = HealBot_Panel_RaidPetUnitButton(guid)
     if xButton and UnitExists(xButton.unit) then
         xButton.name=UnitName(xButton.unit)
-        HealBot_Action_setGuidData(xButton, "NAME", xButton.name)
+        HealBot_Action_SetGuidData(xButton, "NAME", xButton.name)
         HealBot_Text_setNameText(xButton)
     end
     if pButton and UnitExists(pButton.unit) then
         pButton.name=UnitName(pButton.unit)
-        HealBot_Action_setGuidData(pButton, "NAME", pButton.name)
+        HealBot_Action_SetGuidData(pButton, "NAME", pButton.name)
         HealBot_Text_setNameText(pButton)
     end
 end
@@ -7156,7 +6595,7 @@ function HealBot_OnEvent_PartyMembersChanged()
       --HealBot_setCall("HealBot_OnEvent_PartyMembersChanged")
     HealBot_Timers_Set("OOC","RefreshPartyNextRecalcPlayers")
     if HealBot_Data["UILOCK"] then
-        HealBot_CheckAllPartyGUIDs()
+        HealBot_Update_CheckAllPartyGUIDs()
     end
 end
 
@@ -7166,7 +6605,7 @@ function HealBot_OnEvent_PetsChanged()
         HealBot_Timers_Set("OOC","RefreshPartyNextRecalcPets")
     end
     if HealBot_Data["UILOCK"] then
-        HealBot_CheckAllPetGUIDs()
+        HealBot_Update_CheckAllPetGUIDs()
     end
 end
 
@@ -8058,7 +7497,7 @@ function HealBot_EventRegenDisabled()
         HealBot_PartyUpdate_CheckSkin(true)
         HealBot_Options_SetSkins()
         HealBot_Options_setAuxBars()
-        HealBot_UpdateAllAuxBars()
+        HealBot_Update_AllAuxBars()
         HealBot_Action_ResetFrameAlias()
         HealBot_RefreshTypes[0]=true
     end
@@ -8066,7 +7505,7 @@ function HealBot_EventRegenDisabled()
     HealBot_UpdateLocalUILock(true)
     if HealBot_luVars["VarsLoaded"] and not HealBot_luVars["Loaded"] then
         HealBot_Timers_PowerIndicator()
-        HealBot_updAllThreat()
+        HealBot_Update_AllThreat()
         HealBot_Timers_Set("OOC","FullReload",1)
     end
 end

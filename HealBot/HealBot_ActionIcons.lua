@@ -832,6 +832,9 @@ end
 function HealBot_ActionIcons_UpdateHighlightIcon(frame, id)
     if actionIcons[frame][id].highlight then
         actionIcons[frame][id]:SetAlpha(Healbot_Config_Skins.ActionIcons[Healbot_Config_Skins.Current_Skin][frame]["HIGHLIGHT"])
+        if actionIcons[frame][id].count>0 then
+            HealBot_ActionIcons_setCountFont(frame, id)
+        end
     end
 end
 
@@ -847,6 +850,9 @@ end
 function HealBot_ActionIcons_UpdateFadeIcon(frame, id)
     if not actionIcons[frame][id].highlight then
         actionIcons[frame][id]:SetAlpha(Healbot_Config_Skins.ActionIcons[Healbot_Config_Skins.Current_Skin][frame]["FADE"])
+        if actionIcons[frame][id].count>0 then
+            HealBot_ActionIcons_setCountFont(frame, id)
+        end
     end
 end
 

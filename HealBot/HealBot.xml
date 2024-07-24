@@ -12,6 +12,7 @@
   <Script file="HealBot_Aggro.lua" />
   <Script file="HealBot_Text.lua" />
   <Script file="HealBot_Mounts.lua" />
+  <Script file="HealBot_Update.lua" />
   <Script file="HealBot.lua" />
   
   <!-- Comment Syntax -->

@@ -21944,7 +21944,7 @@
                                 <Anchors>
                                   <Anchor point="TOPLEFT">
                                     <Offset>
-                                      <AbsDimension x="80" y="-90" />
+                                      <AbsDimension x="80" y="-80" />
                                     </Offset>
                                   </Anchor>
                                 </Anchors>
@@ -21995,7 +21995,7 @@
                                 <Anchors>
                                   <Anchor point="TOPLEFT" relativeTo="HealBot_Options_DisconnectedTag" relativePoint="BOTTOMLEFT">
                                     <Offset>
-                                      <AbsDimension x="0" y="-28" />
+                                      <AbsDimension x="0" y="-24" />
                                     </Offset>
                                   </Anchor>
                                 </Anchors>
@@ -22012,7 +22012,7 @@
                                 <Anchors>
                                   <Anchor point="TOPLEFT" relativeTo="HealBot_Options_UnitDeadTag" relativePoint="BOTTOMLEFT">
                                     <Offset>
-                                      <AbsDimension x="0" y="-28" />
+                                      <AbsDimension x="0" y="-24" />
                                     </Offset>
                                   </Anchor>
                                 </Anchors>
@@ -22029,7 +22029,7 @@
                                 <Anchors>
                                   <Anchor point="TOPLEFT" relativeTo="HealBot_Options_OutOfRangeTag" relativePoint="BOTTOMLEFT">
                                     <Offset>
-                                      <AbsDimension x="0" y="-28" />
+                                      <AbsDimension x="0" y="-24" />
                                     </Offset>
                                   </Anchor>
                                 </Anchors>
@@ -22039,11 +22039,62 @@
                                   <OnLeave>HealBot_Options_Show_Help("HEALBARSTXTTAGSUM",false)</OnLeave>
                                 </Scripts>
                               </EditBox>
+                              <EditBox name="HealBot_Options_GroupTag" inherits="HealBot_Options_EditBoxTemplate">
+                                <Size>
+                                  <AbsDimension x="120" y="20"/>
+                                </Size>
+                                <Anchors>
+                                  <Anchor point="TOPLEFT" relativeTo="HealBot_Options_ReserverTag" relativePoint="BOTTOMLEFT">
+                                    <Offset>
+                                      <AbsDimension x="0" y="-24" />
+                                    </Offset>
+                                  </Anchor>
+                                </Anchors>
+                                <Scripts>
+                                  <OnTextChanged>HealBot_Options_GroupTag_OnTextChanged(self)</OnTextChanged>
+                                  <OnEnter>HealBot_Options_Show_Help("HEALBARSTXTGROUP",true)</OnEnter>
+                                  <OnLeave>HealBot_Options_Show_Help("HEALBARSTXTGROUP",false)</OnLeave>
+                                </Scripts>
+                              </EditBox>
+                              <EditBox name="HealBot_Options_DebuffTag" inherits="HealBot_Options_EditBoxTemplate">
+                                <Size>
+                                  <AbsDimension x="120" y="20"/>
+                                </Size>
+                                <Anchors>
+                                  <Anchor point="TOPLEFT" relativeTo="HealBot_Options_ResTag" relativePoint="BOTTOMLEFT">
+                                    <Offset>
+                                      <AbsDimension x="0" y="-24" />
+                                    </Offset>
+                                  </Anchor>
+                                </Anchors>
+                                <Scripts>
+                                  <OnTextChanged>HealBot_Options_DebuffTag_OnTextChanged(self)</OnTextChanged>
+                                  <OnEnter>HealBot_Options_Show_Help("HEALBARSTXTDEBUFF",true)</OnEnter>
+                                  <OnLeave>HealBot_Options_Show_Help("HEALBARSTXTDEBUFF",false)</OnLeave>
+                                </Scripts>
+                              </EditBox>
+                              <EditBox name="HealBot_Options_BuffTag" inherits="HealBot_Options_EditBoxTemplate">
+                                <Size>
+                                  <AbsDimension x="120" y="20"/>
+                                </Size>
+                                <Anchors>
+                                  <Anchor point="TOPLEFT" relativeTo="HealBot_Options_SummonsTag" relativePoint="BOTTOMLEFT">
+                                    <Offset>
+                                      <AbsDimension x="0" y="-24" />
+                                    </Offset>
+                                  </Anchor>
+                                </Anchors>
+                                <Scripts>
+                                  <OnTextChanged>HealBot_Options_BuffTag_OnTextChanged(self)</OnTextChanged>
+                                  <OnEnter>HealBot_Options_Show_Help("HEALBARSTXTBUFF",true)</OnEnter>
+                                  <OnLeave>HealBot_Options_Show_Help("HEALBARSTXTBUFF",false)</OnLeave>
+                                </Scripts>
+                              </EditBox>
                               <Frame name="HealBot_Options_BarStateTextPosition" inherits="UIDropDownMenuTemplate">
                                 <Anchors>
                                   <Anchor point="TOP" relativeTo="HealBot_Options_ResTag" relativePoint="BOTTOM">
                                     <Offset>
-                                      <AbsDimension x="20" y="-40" />
+                                      <AbsDimension x="20" y="-70" />
                                     </Offset>
                                   </Anchor>
                                 </Anchors>
@@ -34523,7 +34574,7 @@
                     <Anchors>
                       <Anchor point="TOPLEFT">
                         <Offset>
-                          <AbsDimension x="75" y="-75" />
+                          <AbsDimension x="75" y="-55" />
                         </Offset>
                       </Anchor>
                     </Anchors>
@@ -34554,7 +34605,7 @@
                     <Anchors>
                       <Anchor point="TOPRIGHT">
                         <Offset>
-                          <AbsDimension x="-50" y="-85" />
+                          <AbsDimension x="-50" y="-70" />
                         </Offset>
                       </Anchor>
                     </Anchors>
@@ -34571,7 +34622,7 @@
                     <Anchors>
                       <Anchor point="TOPLEFT" relativeTo="HealBot_Options_TooltipCustomAnchor" relativePoint="TOPLEFT">
                         <Offset>
-                          <AbsDimension x="0" y="-58" />
+                          <AbsDimension x="0" y="-85" />
                         </Offset>
                       </Anchor>
                     </Anchors>
@@ -34599,7 +34650,7 @@
                     <Anchors>
                       <Anchor point="TOPLEFT" relativeTo="HealBot_Options_ShowTooltip" relativePoint="TOPLEFT">
                         <Offset>
-                          <AbsDimension x="0" y="-75" />
+                          <AbsDimension x="0" y="-100" />
                         </Offset>
                       </Anchor>
                     </Anchors>
@@ -34747,7 +34798,7 @@
                     <Anchors>
                       <Anchor point="TOPLEFT">
                         <Offset>
-                          <AbsDimension x="75" y="-75" />
+                          <AbsDimension x="75" y="-55" />
                         </Offset>
                       </Anchor>
                     </Anchors>
@@ -34761,7 +34812,7 @@
                     <Anchors>
                       <Anchor point="TOP">
                         <Offset>
-                          <AbsDimension x="-50" y="-125"/>
+                          <AbsDimension x="-50" y="-95"/>
                         </Offset>
                       </Anchor>
                     </Anchors>
@@ -34775,7 +34826,7 @@
                     <Anchors>
                       <Anchor point="TOPLEFT" relativeTo="HealBot_Options_ShowTooltipTitle" relativePoint="BOTTOMLEFT">
                         <Offset>
-                          <AbsDimension x="0" y="-20"/>
+                          <AbsDimension x="0" y="-24"/>
                         </Offset>
                       </Anchor>
                     </Anchors>
@@ -34789,7 +34840,7 @@
                     <Anchors>
                       <Anchor point="TOPLEFT" relativeTo="HealBot_Options_ShowTooltipGuild" relativePoint="TOPRIGHT">
                         <Offset>
-                          <AbsDimension x="10" y="-20"/>
+                          <AbsDimension x="10" y="-25"/>
                         </Offset>
                       </Anchor>
                     </Anchors>
@@ -34817,7 +34868,7 @@
                     <Anchors>
                       <Anchor point="TOPLEFT" relativeTo="HealBot_Options_ShowTooltipGuild" relativePoint="BOTTOMLEFT">
                         <Offset>
-                          <AbsDimension x="0" y="-20"/>
+                          <AbsDimension x="0" y="-24"/>
                         </Offset>
                       </Anchor>
                     </Anchors>
@@ -34831,7 +34882,7 @@
                     <Anchors>
                       <Anchor point="TOPLEFT" relativeTo="HealBot_Options_ShowTooltipMyBuffs" relativePoint="BOTTOMLEFT">
                         <Offset>
-                          <AbsDimension x="0" y="-20"/>
+                          <AbsDimension x="0" y="-24"/>
                         </Offset>
                       </Anchor>
                     </Anchors>
@@ -34845,7 +34896,7 @@
                     <Anchors>
                       <Anchor point="TOPLEFT" relativeTo="HealBot_Options_ShowTooltipRequiredBuffs" relativePoint="BOTTOMLEFT">
                         <Offset>
-                          <AbsDimension x="0" y="-20"/>
+                          <AbsDimension x="0" y="-24"/>
                         </Offset>
                       </Anchor>
                     </Anchors>
@@ -34859,7 +34910,7 @@
                     <Anchors>
                       <Anchor point="TOPLEFT" relativeTo="HealBot_Options_ShowTooltipLevel" relativePoint="BOTTOMLEFT">
                         <Offset>
-                          <AbsDimension x="0" y="-20"/>
+                          <AbsDimension x="0" y="-24"/>
                         </Offset>
                       </Anchor>
                     </Anchors>
@@ -34873,7 +34924,7 @@
                     <Anchors>
                       <Anchor point="TOPLEFT" relativeTo="HealBot_Options_ShowTooltipSpec" relativePoint="BOTTOMLEFT">
                         <Offset>
-                          <AbsDimension x="0" y="-20"/>
+                          <AbsDimension x="0" y="-24"/>
                         </Offset>
                       </Anchor>
                     </Anchors>
@@ -34887,7 +34938,7 @@
                     <Anchors>
                       <Anchor point="TOPLEFT" relativeTo="HealBot_Options_ShowTooltipHealthLine" relativePoint="BOTTOMLEFT">
                         <Offset>
-                          <AbsDimension x="0" y="-20"/>
+                          <AbsDimension x="0" y="-24"/>
                         </Offset>
                       </Anchor>
                     </Anchors>
@@ -34901,7 +34952,7 @@
                     <Anchors>
                       <Anchor point="TOPLEFT" relativeTo="HealBot_Options_ShowTooltipManaLine" relativePoint="BOTTOMLEFT">
                         <Offset>
-                          <AbsDimension x="0" y="-20"/>
+                          <AbsDimension x="0" y="-24"/>
                         </Offset>
                       </Anchor>
                     </Anchors>
@@ -34915,7 +34966,7 @@
                     <Anchors>
                       <Anchor point="TOPLEFT" relativeTo="HealBot_Options_ShowTooltipRanks" relativePoint="BOTTOMLEFT">
                         <Offset>
-                          <AbsDimension x="0" y="-20"/>
+                          <AbsDimension x="0" y="-24"/>
                         </Offset>
                       </Anchor>
                     </Anchors>
@@ -34929,7 +34980,7 @@
                     <Anchors>
                       <Anchor point="TOPLEFT" relativeTo="HealBot_Options_ShowTooltipRoles" relativePoint="TOPRIGHT">
                         <Offset>
-                          <AbsDimension x="10" y="-20"/>
+                          <AbsDimension x="10" y="-25"/>
                         </Offset>
                       </Anchor>
                     </Anchors>
@@ -34975,7 +35026,7 @@
                     <Anchors>
                       <Anchor point="TOPLEFT">
                         <Offset>
-                          <AbsDimension x="75" y="-75" />
+                          <AbsDimension x="75" y="-55" />
                         </Offset>
                       </Anchor>
                     </Anchors>
@@ -34989,7 +35040,7 @@
                     <Anchors>
                       <Anchor point="TOP">
                         <Offset>
-                          <AbsDimension x="-70" y="-140"/>
+                          <AbsDimension x="-70" y="-110"/>
                         </Offset>
                       </Anchor>
                     </Anchors>
@@ -35003,7 +35054,7 @@
                     <Anchors>
                       <Anchor point="TOPLEFT" relativeTo="HealBot_Options_ShowTooltipSpellExtra" relativePoint="BOTTOMLEFT">
                         <Offset>
-                          <AbsDimension x="0" y="-35"/>
+                          <AbsDimension x="0" y="-45"/>
                         </Offset>
                       </Anchor>
                     </Anchors>
@@ -35017,7 +35068,7 @@
                     <Anchors>
                       <Anchor point="TOPLEFT" relativeTo="HealBot_Options_ShowTooltipSpellCoolDown" relativePoint="BOTTOMLEFT">
                         <Offset>
-                          <AbsDimension x="0" y="-35"/>
+                          <AbsDimension x="0" y="-45"/>
                         </Offset>
                       </Anchor>
                     </Anchors>
@@ -35059,7 +35110,7 @@
                     <Anchors>
                       <Anchor point="TOPLEFT" relativeTo="HealBot_Options_ShowTooltipBuffIconInfo" relativePoint="TOPRIGHT">
                         <Offset>
-                          <AbsDimension x="10" y="-20"/>
+                          <AbsDimension x="10" y="-25"/>
                         </Offset>
                       </Anchor>
                     </Anchors>
@@ -35087,7 +35138,7 @@
                     <Anchors>
                       <Anchor point="TOPLEFT" relativeTo="HealBot_Options_ShowTooltipDebuffIconInfo" relativePoint="TOPRIGHT">
                         <Offset>
-                          <AbsDimension x="10" y="-20"/>
+                          <AbsDimension x="10" y="-25"/>
                         </Offset>
                       </Anchor>
                     </Anchors>

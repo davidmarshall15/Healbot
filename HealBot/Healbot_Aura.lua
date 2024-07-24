@@ -1770,7 +1770,7 @@ function HealBot_Aura_UpdateState(button)
                 else
                     HealBot_UnitExtraIcons[button.id][93]["texture"]="Interface\\RAIDFRAME\\ReadyCheck-Ready"
                 end
-                if HealBot_Panel_RaidUnitButtonCheck(button.guid) then HealBot_Action_setGuidData(button, "READYCHECK", button.icon.extra.readycheck) end
+                if HealBot_Panel_RaidUnitButtonCheck(button.guid) then HealBot_Action_SetGuidData(button, "READYCHECK", button.icon.extra.readycheck) end
             end
             HealBot_UnitExtraIcons[button.id][93].current=true
             HealBot_Aura_AddExtraIcon(button, 93)
@@ -1789,7 +1789,7 @@ function HealBot_Aura_UpdateState(button)
 end
 
 function HealBot_Aura_UpdateAllState()
-      --HealBot_setCall("HealBot_updAllStateIconNotInCombat")
+      --HealBot_setCall("HealBot_Aura_UpdateAllState")
     for _,xButton in pairs(HealBot_Unit_Button) do
        HealBot_Aura_UpdateState(xButton)
     end
@@ -2101,7 +2101,12 @@ local weaponEnchantState={[1]={["Active"]=false,["Expire"]=0},[2]={["Active"]=fa
 function HealBot_Aura_SetGeneralBuff(button, bName)
       --HealBot_setCall("HealBot_Aura_SetGeneralBuff", button)
     curBuffName=bName
-    button.aura.buff.missingbuff=bName
+    if button.aura.buff.missingbuff~=bName then
+        button.aura.buff.missingbuff=bName
+        if HealBot_Text_TagInUse(button.framecol, "BUFF") then
+            HealBot_Text_setNameTag(button)
+        end
+    end
     button.aura.buff.colbar=(HealBot_Globals.HealBot_Custom_Buffs_ShowBarCol["DEFAULT"] or 4)-1
     if HealBot_Aura_ID[bName] and HealBot_AuraBuffCache[uaBuffData[button.id][uaBuffSlot].spellId] then
         if not button.aura.buff.temp.active or button.aura.buff.temp.priority>HealBot_AuraBuffCache[uaBuffData[button.id][uaBuffSlot].spellId]["priority"] then
@@ -2652,6 +2657,9 @@ function HealBot_Aura_DebuffWarnings(button, debuffName, force, debuffIconIndex)
         --HealBot_setCall("HealBot_Aura_DebuffWarnings", button)
     if button.aura.debuff.name~=debuffName or force then
         button.aura.debuff.name=debuffName
+        if HealBot_Text_TagInUse(button.framecol, "DEBUFF") then
+            HealBot_Text_setNameTag(button)
+        end
         HealBot_Emerg_Button[button.id].debuffupdate=true
         button.aura.debuff.r,button.aura.debuff.g,button.aura.debuff.b=HealBot_Options_RetDebuffRGB(button)
         button.aura.debuff.curespell = HealBot_Options_retDebuffCureSpell(button.aura.debuff.type)
@@ -3601,6 +3609,9 @@ function HealBot_Aura_CheckUnitBuffs(button, selfOnly)
     else
         HealBot_Aura_ClearBuff(button)
     end
+    if button.text.tagbuff and not button.aura.buff.missingbuff then
+        HealBot_Text_setNameTag(button)
+    end
 end
 
 function HealBot_Aura_resetSpellCD()
@@ -3855,6 +3866,7 @@ function HealBot_Aura_ClearDebuff(button)
     if button.aura.debuff.name then
         button.aura.debuff.type = false;
         button.aura.debuff.name = false;
+        button.aura.debuff.dispellable = false
         button.aura.debuff.colbar = 0
         button.aura.debuff.curespell = false
         button.aura.debuff.id = 0
@@ -3868,6 +3880,9 @@ function HealBot_Aura_ClearDebuff(button)
         end
         if button.hazard.debuff then
             HealBot_Action_DisableBorderHazardType(button, "DEBUFF")
+        end
+        if button.text.tagdebuff then
+            HealBot_Text_setNameTag(button)
         end
         HealBot_RefreshUnit(button)
     end

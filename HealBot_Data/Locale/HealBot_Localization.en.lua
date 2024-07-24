@@ -181,6 +181,8 @@ function HealBot_Lang_enALL()
     HEALBOT_OPTIONS_NEWDEBUFFTEXT           = "New Debuff"
     HEALBOT_OPTIONS_NEWHOTBUFFTEXT          = "New Buff"
     HEALBOT_WORD_TAG                        = "Tag"
+    HEALBOT_WORD_MISSING                    = "Missing"
+    HEALBOT_WORD_DISPEL                     = "Dispel"
     HEALBOT_OPTIONS_DELSKIN                 = "Delete"
     HEALBOT_OPTIONS_NEWSKINTEXT             = "New skin"
     HEALBOT_OPTIONS_SAVESKIN                = "Save"
@@ -251,6 +253,7 @@ function HealBot_Lang_enALL()
     HEALBOT_OPTIONS_SOUNDDEBUFFWARNING      = "Play sound on debuff";
     HEALBOT_OPTIONS_WARNINGDISPELLONLY      = "Only when dispellable";
     HEALBOT_OPTIONS_WARNINGMISSINGONLY      = "Only when missing";
+    HEALBOT_OPTIONS_STATEDEBUFFS            = "Dispellable debuffs"
     HEALBOT_OPTIONS_SHOWBUFFWARNING         = "Display warning on buff";
     HEALBOT_OPTIONS_SOUNDBUFFWARNING        = "Play sound on buff";
     HEALBOT_OPTIONS_SOUND                   = "Sound"
@@ -620,7 +623,7 @@ function HealBot_Lang_enALL()
     HEALBOT_ICONNEXTSET                     = "Icon set next";
     HEALBOT_ICONPREVSET                     = "Icon set prev";
     
-    HEALBOT_OPTIONS_SHOWMINIMAPBUTTON       = "Show minimap button";
+    HEALBOT_OPTIONS_SHOWMINIMAPBUTTON       = "Show minimap icon";
     HEALBOT_OPTIONS_ULTRA                   = "Ultra"
     HEALBOT_OPTIONS_CHILL                   = "Chill"
     HEALBOT_OPTIONS_BARBUTTONSHOWRAIDICON   = "Show Raid Target";

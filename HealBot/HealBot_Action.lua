@@ -2392,7 +2392,9 @@ function HealBot_Action_UpdateUnitDeadButtons(button, state)
       --HealBot_setCall("HealBot_Action_UpdateUnitDeadButtons", button)
     if state==1 then
         HealBot_Action_setState(button, HealBot_Unit_Status["RES"])
-        HealBot_Text_setNameTag(button)
+        if HealBot_Text_TagInUse(button.framecol, "RES") then
+            HealBot_Text_setNameTag(button)
+        end
         button.status.hasres=1
         if HealBot_Action_luVars["pluginTimeToLive"] and button.status.plugin then HealBot_Plugin_TimeToLive_UnitUpdate(button) end
         HealBot_Aux_UpdateResBar(button, HEALBOT_WORD_RESURRECTION, ripHasResStart[button.guid]*1000, (ripHasResEnd[button.guid]+1.5)*1000, false)
@@ -2408,7 +2410,9 @@ function HealBot_Action_UpdateUnitDeadButtons(button, state)
             ripHadResStart[button.guid]=false
             HealBot_Action_setState(button, HealBot_Unit_Status["DEAD"])
             button.status.resstart=0
-            HealBot_Text_setNameTag(button)
+            if HealBot_Text_TagInUse(button.framecol, "DEAD") then
+                HealBot_Text_setNameTag(button)
+            end
             button.status.hasres=false
             if HealBot_Action_luVars["pluginTimeToLive"] and button.status.plugin then HealBot_Plugin_TimeToLive_UnitUpdate(button) end
             HealBot_Aux_UpdateResBar(button, HEALBOT_DEAD_LABEL)
@@ -2535,7 +2539,9 @@ function HealBot_Action_UpdateTheDeadButton(button)
                 button.text.nameupdate=true
                 HealBot_UpdateUnitClear(button, true)
                 HealBot_OnEvent_UnitHealth(button)
-                HealBot_Text_setNameTag(button)
+                if HealBot_Text_TagInUse(button.framecol, "DEAD") then
+                    HealBot_Text_setNameTag(button)
+                end
                 HealBot_Text_UpdateText(button)
                 HealBot_Action_setEnabled(button, true, button.status.alpha)
                 if Healbot_Config_Skins.Icons[Healbot_Config_Skins.Current_Skin][button.frame]["SHOWCLASS"] then
@@ -2611,6 +2617,16 @@ function HealBot_Action_UpdateHealthHotBar(button)
             HealBot_Action_BarHotDisable(button, "HEALTH")
         end
     end
+end
+
+function HealBot_Action_UpdateHotBar(button)
+      --HealBot_setCall("HealBot_Action_UpdateHotBar", button)
+    if HealBot_Action_luVars["HotBarsHealth"]==0 then
+        if button.hotbars.health then HealBot_Action_BarHotDisable(button, "HEALTH") end
+    else
+        HealBot_Action_UpdateHealthHotBar(button)
+    end
+    if button.aura.debuff.name then HealBot_Aura_DebuffWarnings(button, button.aura.debuff.name, true, 0) end
 end
 
 function HealBot_Action_BarColourHealth(button)
@@ -2702,6 +2718,9 @@ function HealBot_Action_UpdateHealthButton(button, hlthevent)
         HealBot_Action_UpdateHealthHotBar(button)
         HealBot_Text_setHealthText(button)
         HealBot_Text_UpdateText(button)
+        --if button.aux[button.frame].sticky then
+        --    button.aux[button.frame]:SetWidth(50)
+        --end
     end
     HealBot_Action_EmergBarCheck(button)
 
@@ -5900,21 +5919,21 @@ function HealBot_Action_getGuidData(guid, attrib)
     end
 end
 
-function HealBot_Action_setGuidData(button, attrib, value, callback)
-      --HealBot_setCall("HealBot_Action_setGuidData", button)
+function HealBot_Action_SetGuidData(button, attrib, value, callback)
+      --HealBot_setCall("HealBot_Action_SetGuidData", button)
     if hbGuidData[button.guid] then 
         hbGuidData[button.guid][attrib]=value
     else
         HealBot_Action_initGuidData(button)
-        if not callback then HealBot_Action_setGuidData(button, attrib, value, true) end
+        if not callback then HealBot_Action_SetGuidData(button, attrib, value, true) end
     end
 end
 
 function HealBot_Action_setGuidSpec(button, spec)
       --HealBot_setCall("HealBot_Action_setGuidSpec", button)
     button.spec = " "..spec.." "
-    HealBot_Action_setGuidData(button, "SPEC", button.spec)
-    HealBot_Action_setGuidData(button, "TMPSPEC", button.spec)
+    HealBot_Action_SetGuidData(button, "SPEC", button.spec)
+    HealBot_Action_SetGuidData(button, "TMPSPEC", button.spec)
     HealBot_Timers_Set("OOC","RefreshPartyNextRecalcPlayers",1.25)
 end
 
@@ -6028,7 +6047,12 @@ function HealBot_Action_SetHealButton(unit,guid,frame,unitType,duplicate,role,pr
             
             hButton.status.role=role
             hButton.status.duplicate=duplicate
-            hButton.group=HealBot_Panel_RetUnitGroups(unit)
+            if hButton.group~=HealBot_Panel_RetUnitGroups(unit) then
+                hButton.group=HealBot_Panel_RetUnitGroups(unit)
+                if HealBot_Text_TagInUse(hButton.framecol, "GROUP") then
+                    HealBot_Text_setNameTag(hButton)
+                end
+            end
             hButton.rank=HealBot_Panel_RetUnitRank(guid)
             hButton.roletxt=HealBot_Panel_UnitRoleDefault(guid)
             if hButton.player then
