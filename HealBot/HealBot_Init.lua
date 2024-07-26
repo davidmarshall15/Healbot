@@ -6,6 +6,17 @@ local HealBot_KnownHeal_Names={}
 local HealBot_Spell_Ranks={}
 local HealBot_Buff_Ranks={}
 local _
+local HealBot_Init_luVars={}
+
+function HealBot_Init_setLuVars(vName, vValue)
+      --HealBot_setCall("HealBot_Init_setLuVars - "..vName)
+    HealBot_Init_luVars[vName]=vValue
+end
+
+function HealBot_Init_retLuVars(vName)
+      --HealBot_setCall("HealBot_Init_retLuVars - "..vName)
+    return HealBot_Init_luVars[vName]
+end
 
 function HealBot_Init_retSmartCast_Res()
       --HealBot_setCall("HealBot_Init_retSmartCast_Res")
@@ -685,4 +696,194 @@ function HealBot_Init_retSpec(class,tab)
         return HealBot_Spec[class][tab]
     end
     return nil
+end
+
+function HealBot_Init_NewChar()
+      --HealBot_setCall("HealBot_InitNewChar")
+    if not HealBot_Config_Spells.EnemyKeyCombo then
+        HealBot_Config_Spells.EnemyKeyCombo={}
+    end
+    if HealBot_Config_Spells.EnabledKeyCombo["New"] then
+        HealBot_Spells_Reset(HealBot_Data["PCLASSTRIM"])
+        HealBot_Spells_ResetCures(HealBot_Data["PCLASSTRIM"])
+        HealBot_Spells_ResetBuffs(HealBot_Data["PCLASSTRIM"])
+        HealBot_Config_Buffs.HealBotBuffColR = {[1]=1,[2]=1,[3]=1,[4]=1,[5]=1,[6]=1,[7]=1,[8]=1,[9]=1,[10]=1,[11]=1,[12]=1,[13]=1,[14]=1}
+        HealBot_Config_Buffs.HealBotBuffColG = {[1]=1,[2]=1,[3]=1,[4]=1,[5]=1,[6]=1,[7]=1,[8]=1,[9]=1,[10]=1,[11]=1,[12]=1,[13]=1,[14]=1}
+        HealBot_Config_Buffs.HealBotBuffColB = {[1]=1,[2]=1,[3]=1,[4]=1,[5]=1,[6]=1,[7]=1,[8]=1,[9]=1,[10]=1,[11]=1,[12]=1,[13]=1,[14]=1}
+    end
+    if HealBot_Config.CurrentSpec==9 then
+        HealBot_Config.CurrentSpec=1
+        HealBot_Update_SpellCombos()
+        HealBot_Update_BuffsForSpec()
+    end
+end
+
+function HealBot_Init_Plugins()
+      --HealBot_setCall("HealBot_Init_Plugins")
+    local loaded, reason = HealBot_WoWAPI_LoadAddOn("HealBot_Plugin_Media")
+    HealBot_Init_luVars["pluginMediaReason"]=reason or ""
+    HealBot_Init_luVars["pluginMediaLoaded"]=loaded
+    if loaded and HealBot_Globals.PluginMedia then
+        HealBot_Plugin_Media_Init()
+        HealBot_Media_PluginState(true)
+        HealBot_Timers_setLuVars("pluginMedia", true)
+    else
+        HealBot_Media_PluginState(false)
+        HealBot_Timers_setLuVars("pluginMedia", false)
+    end
+
+    loaded, reason = HealBot_WoWAPI_LoadAddOn("HealBot_Plugin_Threat")
+    HealBot_Init_luVars["pluginThreatReason"]=reason or ""
+    HealBot_Init_luVars["pluginThreatLoaded"]=loaded
+    if loaded and HealBot_Globals.PluginThreat then
+        HealBot_Plugin_Threat_Init()
+        HealBot_Aggro_setLuVars("pluginThreat", true)
+        HealBot_setLuVars("pluginThreat", true)
+        HealBot_Action_setLuVars("pluginThreat", true)
+        HealBot_Timers_setLuVars("pluginThreat", true)
+    else
+        HealBot_Aggro_setLuVars("pluginThreat", false)
+        HealBot_setLuVars("pluginThreat", false)
+        HealBot_Action_setLuVars("pluginThreat", false)
+        HealBot_Timers_setLuVars("pluginThreat", false)
+    end
+
+    loaded, reason = HealBot_WoWAPI_LoadAddOn("HealBot_Plugin_TimeToDie")
+    HealBot_Init_luVars["pluginTimeToDieReason"]=reason or ""
+    HealBot_Init_luVars["pluginTimeToDieLoaded"]=loaded
+    if loaded and HealBot_Globals.PluginTimeToDie then
+        HealBot_Plugin_TimeToDie_Init()
+        HealBot_setLuVars("pluginTimeToDie", true)
+        HealBot_Action_setLuVars("pluginTimeToDie", true)
+        HealBot_Timers_setLuVars("pluginTimeToDie", true)
+    else
+        HealBot_setLuVars("pluginTimeToDie", false)
+        HealBot_Action_setLuVars("pluginTimeToDie", false)
+        HealBot_Timers_setLuVars("pluginTimeToDie", false)
+    end
+
+    loaded, reason = HealBot_WoWAPI_LoadAddOn("HealBot_Plugin_TimeToLive")
+    HealBot_Init_luVars["pluginTimeToLiveReason"]=reason or ""
+    HealBot_Init_luVars["pluginTimeToLiveLoaded"]=loaded
+    if loaded and HealBot_Globals.PluginTimeToLive then
+        HealBot_Plugin_TimeToLive_Init()
+        HealBot_setLuVars("pluginTimeToLive", true)
+        HealBot_Action_setLuVars("pluginTimeToLive", true)
+        HealBot_Timers_setLuVars("pluginTimeToLive", true)
+    else
+        HealBot_setLuVars("pluginTimeToLive", false)
+        HealBot_Action_setLuVars("pluginTimeToLive", false)
+        HealBot_Timers_setLuVars("pluginTimeToLive", false)
+    end
+
+    loaded, reason = HealBot_WoWAPI_LoadAddOn("HealBot_Plugin_ExtraButtons")
+    HealBot_Init_luVars["pluginExtraButtonsReason"]=reason or ""
+    HealBot_Init_luVars["pluginExtraButtonsLoaded"]=loaded
+    if loaded and HealBot_Globals.PluginExtraButtons then
+        HealBot_Action_setLuVars("pluginExtraButtons", true)
+        HealBot_Timers_Set("OOC","RegisterForClicks")
+    else
+        HealBot_Action_setLuVars("pluginExtraButtons", false)
+    end
+
+    loaded, reason = HealBot_WoWAPI_LoadAddOn("HealBot_Plugin_CombatProt")
+    HealBot_Init_luVars["pluginCombatProtReason"]=reason or ""
+    HealBot_Init_luVars["pluginCombatProtLoaded"]=loaded
+    if loaded and HealBot_Globals.PluginCombatProt then
+        HealBot_Plugin_CombatProt_Init()
+        HealBot_Timers_setLuVars("pluginCombatProt", true)
+    else
+        HealBot_Globals.UseCrashProt=false
+        HealBot_Timers_setLuVars("pluginCombatProt", false)
+    end
+
+    loaded, reason = HealBot_WoWAPI_LoadAddOn("HealBot_Plugin_Performance")
+    HealBot_Init_luVars["pluginPerformanceReason"]=reason or ""
+    HealBot_Init_luVars["pluginPerformanceLoaded"]=loaded
+    if loaded and HealBot_Globals.PluginPerformance then
+        HealBot_Plugin_Performance_Init()
+        HealBot_Timers_setLuVars("pluginPerformance", true)
+    else
+        HealBot_Timers_setLuVars("pluginPerformance", false)
+    end
+
+    loaded, reason = HealBot_WoWAPI_LoadAddOn("HealBot_Plugin_Tweaks")
+    HealBot_Init_luVars["pluginTweaksReason"]=reason or ""
+    HealBot_Init_luVars["pluginTweaksLoaded"]=loaded
+    if loaded and HealBot_Globals.PluginTweaks then
+        HealBot_Plugin_Tweaks_Init()
+        HealBot_Timers_setLuVars("pluginTweaks", true)
+    else
+        HealBot_Timers_setLuVars("pluginTweaks", false)
+    end
+
+    loaded, reason = HealBot_WoWAPI_LoadAddOn("HealBot_Plugin_Requests")
+    HealBot_Init_luVars["pluginRequestsReason"]=reason or ""
+    HealBot_Init_luVars["pluginRequestsLoaded"]=loaded
+    if loaded and HealBot_Globals.PluginRequests then
+        HealBot_Plugin_Requests_Init()
+        HealBot_Action_setLuVars("pluginRequests", true)
+    else
+        HealBot_Action_setLuVars("pluginRequests", false)
+    end
+
+    loaded, reason = HealBot_WoWAPI_LoadAddOn("HealBot_Plugin_AuraWatch")
+    HealBot_Init_luVars["pluginAuraWatchReason"]=reason or ""
+    HealBot_Init_luVars["pluginAuraWatchLoaded"]=loaded
+    if loaded and HealBot_Globals.PluginAuraWatch then
+        HealBot_Plugin_AuraWatch_Init()
+        HealBot_Range_setLuVars("pluginAuraWatch", true)
+        HealBot_setLuVars("pluginAuraWatch", true)
+        HealBot_Action_setLuVars("pluginAuraWatch", true)
+        HealBot_Events_setLuVars("pluginAuraWatch", true)
+    else
+        HealBot_Range_setLuVars("pluginAuraWatch", false)
+        HealBot_setLuVars("pluginAuraWatch", false)
+        HealBot_Action_setLuVars("pluginAuraWatch", false)
+        HealBot_Events_setLuVars("pluginAuraWatch", false)
+    end
+
+    loaded, reason = HealBot_WoWAPI_LoadAddOn("HealBot_Plugin_HealthWatch")
+    HealBot_Init_luVars["pluginHealthWatchReason"]=reason or ""
+    HealBot_Init_luVars["pluginHealthWatchLoaded"]=loaded
+    if loaded and HealBot_Globals.PluginHealthWatch then
+        HealBot_Plugin_HealthWatch_Init()
+        HealBot_Action_setLuVars("pluginHealthWatch", true)
+        HealBot_setLuVars("pluginHealthWatch", true)
+        HealBot_Timers_setLuVars("pluginHealthWatch", true)
+    else
+        HealBot_Action_setLuVars("pluginHealthWatch", false)
+        HealBot_setLuVars("pluginHealthWatch", false)
+        HealBot_Timers_setLuVars("pluginHealthWatch", false)
+    end
+
+    loaded, reason = HealBot_WoWAPI_LoadAddOn("HealBot_Plugin_ManaWatch")
+    HealBot_Init_luVars["pluginManaWatchReason"]=reason or ""
+    HealBot_Init_luVars["pluginManaWatchLoaded"]=loaded
+    if loaded and HealBot_Globals.PluginManaWatch then
+        HealBot_Plugin_ManaWatch_Init()
+        HealBot_Action_setLuVars("pluginManaWatch", true)
+        HealBot_setLuVars("pluginManaWatch", true)
+        HealBot_Timers_setLuVars("pluginManaWatch", true)
+    else
+        HealBot_Action_setLuVars("pluginManaWatch", false)
+        HealBot_setLuVars("pluginManaWatch", false)
+        HealBot_Timers_setLuVars("pluginManaWatch", false)
+    end
+
+    loaded, reason = HealBot_WoWAPI_LoadAddOn("HealBot_Plugin_MyCooldowns")
+    HealBot_Init_luVars["pluginMyCooldownsReason"]=reason or ""
+    HealBot_Init_luVars["pluginMyCooldownsLoaded"]=loaded
+    if loaded and HealBot_Globals.PluginMyCooldowns then
+        HealBot_Plugin_MyCooldowns_Init()
+        HealBot_setLuVars("pluginMyCooldowns", true)
+        HealBot_Timers_setLuVars("pluginMyCooldowns", true)
+        HealBot_Events_setLuVars("pluginMyCooldowns", true)
+    else
+        HealBot_setLuVars("pluginMyCooldowns", false)
+        HealBot_Timers_setLuVars("pluginMyCooldowns", false)
+        HealBot_Events_setLuVars("pluginMyCooldowns", false)
+    end
+
+    HealBot_Timers_Set("LAST","RegAggro")
 end

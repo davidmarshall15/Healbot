@@ -13,6 +13,7 @@
   <Script file="HealBot_Text.lua" />
   <Script file="HealBot_Mounts.lua" />
   <Script file="HealBot_Update.lua" />
+  <Script file="HealBot_Events.lua" />
   <Script file="HealBot.lua" />
   
   <!-- Comment Syntax -->

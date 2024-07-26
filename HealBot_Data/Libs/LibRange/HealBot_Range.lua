@@ -100,14 +100,6 @@ function HealBot_Range_ButtonSpell(button, checkSoon, rangespell)
     end
 end
 
-function HealBot_Range_OnEventUpdate(button)
-      --HealBot_setCall("HealBot_Range_OnEventUpdate", button)
-    if button.status.rangenextcheck>HealBot_TimeNow+0.05 then
-        button.status.rangenextcheck = HealBot_TimeNow+0.05
-    end
-    --HealBot_Range_UpdateUnit(button)
-end
-
 local hbInPhase, hbPhaseShift=true,""
 function HealBot_Range_UnitInPhase(unit, guid)
       --HealBot_setCall("HealBot_Range_UnitInPhase", button)
@@ -241,8 +233,8 @@ function HealBot_Range_UpdateUnit(button)
                 HealBot_Update_AuxRange(button)
                 HealBot_RefreshUnit(button)
                 if button.status.range<0 or oldRange<0 then 
-                    HealBot_OnEvent_HealsInUpdate(button)
-                    HealBot_OnEvent_AbsorbsUpdate(button)
+                    HealBot_Events_HealsInUpdate(button)
+                    HealBot_Events_AbsorbsUpdate(button)
                 end
                 HealBot_Action_AdaptiveOORUpdate(button)
                 HealBot_Update_InRangeBar(button)

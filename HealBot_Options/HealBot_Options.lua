@@ -384,7 +384,7 @@ function HealBot_Options_DebuffSpellAuraCD(spellName)
                 HealBot_Aura_setDebuffTypeCD(dType, hbDebuffSpellEnd)
             end)
             HealBot_Timers_Set("AURA","UpdateActiveDebuffs")
-            C_Timer.After(hbDebuffSpellDuration-0.05, HealBot_CheckAllDebuffs)
+            C_Timer.After(hbDebuffSpellDuration-0.05, HealBot_Update_AllDebuffsReindexActives)
         end
     end
 end
@@ -2663,9 +2663,9 @@ function HealBot_Options_EnemyShowAura_OnClick(self,var)
         Healbot_Config_Skins.Enemy[Healbot_Config_Skins.Current_Skin][var]=self:GetChecked()
         if not Healbot_Config_Skins.Enemy[Healbot_Config_Skins.Current_Skin][var] then
             if var=="SHOWBUFFS" or var=="SELFBUFFS" or var=="SHOWBUFFSPLAYERFRAMES" or var=="SELFBUFFSPLAYERFRAMES" then
-                HealBot_Aura_ClearAllBuffs(true)
+                HealBot_Update_ClearAllBuffs(true)
             else
-                HealBot_Aura_ClearAllDebuffs(true)
+                HealBot_Update_ClearAllDebuffs(true)
             end
         end
     end
@@ -6805,7 +6805,7 @@ function HealBot_Options_AggroTxtPct_OnClick(self)
         if HealBot_Options_luVars["TestBarsOn"] then
             HealBot_Timers_Set("SKINS","UpdateTextButtons")
         else
-            HealBot_Timers_Set("SKINS","UpdateAggroText")
+            HealBot_Timers_Set("SKINS","TextUpdateAggro")
         end
     end
 end
@@ -7062,7 +7062,7 @@ function HealBot_Options_CDCCol_DropDown()
                             if sName then HealBot_Globals.HealBot_Custom_Debuffs_ShowBarCol[sName]=self:GetID() end
                             HealBot_setLuVars("UpdateAllAura", 5)
                             HealBot_Aura_setLuVars("updateAll", true)
-                            HealBot_Aura_ClearAllDebuffs()
+                            HealBot_Update_ClearAllDebuffs()
                             HealBot_Timers_Set("AURA","CheckDebuffs")
                             HealBot_Timers_Set("AURA","UpdateAllIcons")
                         end
@@ -7141,7 +7141,7 @@ function HealBot_Options_CDCUpdateAll()
       --HealBot_setCall("HealBot_Options_CDCUpdateAll")
     HealBot_setLuVars("UpdateAllAura", 5)
     HealBot_Aura_setLuVars("updateAll", true)
-    HealBot_Aura_ClearAllDebuffs()
+    HealBot_Update_ClearAllDebuffs()
     HealBot_Timers_Set("AURA","CheckDebuffs")
     HealBot_Timers_Set("AURA","UpdateAllIcons")
 end
@@ -8411,7 +8411,7 @@ function HealBot_IconClassAlwaysEnabled_OnClick(self)
     if Healbot_Config_Skins.Icons[Healbot_Config_Skins.Current_Skin][HealBot_Options_luVars["FramesSelFrame"]]["CLASSEN"]~=self:GetChecked() then
         Healbot_Config_Skins.Icons[Healbot_Config_Skins.Current_Skin][HealBot_Options_luVars["FramesSelFrame"]]["CLASSEN"] = self:GetChecked()
         HealBot_Options_framesChanged(false)
-        HealBot_Aura_Update_UnitAllExtraIcons(nil, 91)
+        HealBot_Update_AllExtraIcons(nil, 91)
     end
 end
 
@@ -8459,7 +8459,7 @@ function HealBot_IconTargetAlwaysEnabled_OnClick(self)
     if Healbot_Config_Skins.Icons[Healbot_Config_Skins.Current_Skin][HealBot_Options_luVars["FramesSelFrame"]]["TARGETEN"]~=self:GetChecked() then
         Healbot_Config_Skins.Icons[Healbot_Config_Skins.Current_Skin][HealBot_Options_luVars["FramesSelFrame"]]["TARGETEN"] = self:GetChecked()
         HealBot_Options_framesChanged(false)
-        HealBot_Aura_Update_UnitAllExtraIcons(nil, 92)
+        HealBot_Update_AllExtraIcons(nil, 92)
     end
 end
 
@@ -8507,7 +8507,7 @@ function HealBot_IconRCAlwaysEnabled_OnClick(self)
     if Healbot_Config_Skins.Icons[Healbot_Config_Skins.Current_Skin][HealBot_Options_luVars["FramesSelFrame"]]["RCEN"]~=self:GetChecked() then
         Healbot_Config_Skins.Icons[Healbot_Config_Skins.Current_Skin][HealBot_Options_luVars["FramesSelFrame"]]["RCEN"] = self:GetChecked()
         HealBot_Options_framesChanged(false)
-        HealBot_Aura_Update_UnitAllExtraIcons(nil, 93)
+        HealBot_Update_AllExtraIcons(nil, 93)
     end
 end
 
@@ -8554,7 +8554,7 @@ function HealBot_IconOORArrowAlwaysEnabled_OnClick(self)
       --HealBot_setCall("HealBot_IconOORArrowAlwaysEnabled_OnClick")
     if Healbot_Config_Skins.Icons[Healbot_Config_Skins.Current_Skin][HealBot_Options_luVars["FramesSelFrame"]]["OOREN"]~=self:GetChecked() then
         Healbot_Config_Skins.Icons[Healbot_Config_Skins.Current_Skin][HealBot_Options_luVars["FramesSelFrame"]]["OOREN"] = self:GetChecked()
-        HealBot_Aura_Update_UnitAllExtraIcons(nil, 94)
+        HealBot_Update_AllExtraIcons(nil, 94)
     end
 end
 
@@ -9299,7 +9299,7 @@ function HealBot_Options_IconExtraPosition_DropDown(object, id, eId)
                                 Healbot_Config_Skins.Icons[Healbot_Config_Skins.Current_Skin][HealBot_Options_luVars["FramesSelFrame"]]["OORANCHOR"]=1
                                 UIDropDownMenu_SetText(HealBot_Options_IconOORArrowAnchor,HEALBOT_OPTIONS_ICONEXTRAANCHOR01) 
                             end
-                            HealBot_Aura_RemoveExtraIcons(eId)
+                            HealBot_Update_RemoveExtraIcons(eId)
                             HealBot_Options_framesChanged(true, true)
                         end
                     end
@@ -9662,7 +9662,7 @@ function HealBot_Options_AuxTextAlign_DropDown()
                             Healbot_Config_Skins.AuxBarText[Healbot_Config_Skins.Current_Skin][HealBot_Options_luVars["AuxTxtBar"]][HealBot_Options_luVars["FramesSelFrame"]]["ALIGN"] = self:GetID()
                             UIDropDownMenu_SetText(HealBot_Options_AuxTextAlign, HealBot_Options_Lists["BarNameTextAnchor"][Healbot_Config_Skins.AuxBarText[Healbot_Config_Skins.Current_Skin][HealBot_Options_luVars["AuxTxtBar"]][HealBot_Options_luVars["FramesSelFrame"]]["ALIGN"]])
                             HealBot_Options_framesChanged(false, false, false, true)
-                            C_Timer.After(0.25, function() HealBot_Text_UpdateAux(HealBot_Options_luVars["AuxTxtBar"]) end)
+                            C_Timer.After(0.25, function() HealBot_Update_TextAux(HealBot_Options_luVars["AuxTxtBar"]) end)
                         end
                     end
         info.checked = false;
@@ -12151,15 +12151,15 @@ function HealBot_Options_SetChat()
     if HealBot_Globals.OverrideChat["USE"]==1 then
         HealBot_setLuVars("EOCOOM", Healbot_Config_Skins.Chat[Healbot_Config_Skins.Current_Skin]["EOCOOM"])
         HealBot_setLuVars("EOCOOMV", Healbot_Config_Skins.Chat[Healbot_Config_Skins.Current_Skin]["EOCOOMV"])
-        HealBot_setLuVars("ChatMSG", Healbot_Config_Skins.Chat[Healbot_Config_Skins.Current_Skin]["MSG"])
-        HealBot_setLuVars("ChatRESONLY", Healbot_Config_Skins.Chat[Healbot_Config_Skins.Current_Skin]["RESONLY"])
-        HealBot_setLuVars("ChatNOTIFY", Healbot_Config_Skins.Chat[Healbot_Config_Skins.Current_Skin]["NOTIFY"])
+        HealBot_Events_setLuVars("ChatMSG", Healbot_Config_Skins.Chat[Healbot_Config_Skins.Current_Skin]["MSG"])
+        HealBot_Events_setLuVars("ChatRESONLY", Healbot_Config_Skins.Chat[Healbot_Config_Skins.Current_Skin]["RESONLY"])
+        HealBot_Events_setLuVars("ChatNOTIFY", Healbot_Config_Skins.Chat[Healbot_Config_Skins.Current_Skin]["NOTIFY"])
     else
         HealBot_setLuVars("EOCOOM", HealBot_Globals.OverrideChat["EOCOOM"])
         HealBot_setLuVars("EOCOOMV", HealBot_Globals.OverrideChat["EOCOOMV"])
-        HealBot_setLuVars("ChatMSG", HealBot_Globals.OverrideChat["MSG"])
-        HealBot_setLuVars("ChatRESONLY", HealBot_Globals.OverrideChat["RESONLY"])
-        HealBot_setLuVars("ChatNOTIFY", HealBot_Globals.OverrideChat["NOTIFY"])
+        HealBot_Events_setLuVars("ChatMSG", HealBot_Globals.OverrideChat["MSG"])
+        HealBot_Events_setLuVars("ChatRESONLY", HealBot_Globals.OverrideChat["RESONLY"])
+        HealBot_Events_setLuVars("ChatNOTIFY", HealBot_Globals.OverrideChat["NOTIFY"])
     end
 end
 
@@ -14088,10 +14088,10 @@ function HealBot_Options_CopyOptionsCopy()
     if tab5 and HealBot_Options_luVars["TestBarsOn"] then HealBot_Panel_resetTestCols(true) end
     if tab9 and HealBot_Options_luVars["CurrentSkinsBarsPanel"]=="HealBot_Options_SkinsFramesBarsAux" then HealBot_Timers_Set("AUX","ResetBars") end
     if tab16 then
-        HealBot_Aura_RemoveExtraIcons(91)
-        HealBot_Aura_RemoveExtraIcons(92)
-        HealBot_Aura_RemoveExtraIcons(93)
-        HealBot_Aura_RemoveExtraIcons(94)
+        HealBot_Update_RemoveExtraIcons(91)
+        HealBot_Update_RemoveExtraIcons(92)
+        HealBot_Update_RemoveExtraIcons(93)
+        HealBot_Update_RemoveExtraIcons(94)
         HealBot_Timers_Set("SKINS","SetSkinBars")
         HealBot_Timers_Set("SKINS","SetSkinText")
         HealBot_Timers_Set("AURA","RaidTargetUpdateAll",0.2)
@@ -16578,7 +16578,7 @@ function HealBot_Options_DoSet_Current_Skin(newSkin, ddRefresh, noCallback, optS
                     HealBot_Action_setLuVars("resetIndicator", true)
                     HealBot_Action_setLuVars("resetText", true)
                     --HealBot_Action_setLuVars("resetAux", true)
-                    HealBot_Action_ResetrCalls()
+                    HealBot_Update_ResetrCalls()
                     HealBot_Timers_ToggleBlizzardFrames()
                     HealBot_Timers_Set("SKINS","EmergHealthCol")
                     HealBot_Timers_Set("SKINS","SetAdaptive")
@@ -16820,10 +16820,10 @@ local function HealBot_Options_Plugins_ShowFrame()
     HealBot_Options_PluginManaWatchFrame:Hide()
     HealBot_Options_PluginMyCooldownsFrame:Hide()
     HealBot_Options_PluginMediaFrame:Hide()
-    if not HealBot_retLuVars(pluginId[HealBot_Options_luVars["curPlugin"]].."Loaded") then
+    if not HealBot_Init_retLuVars(pluginId[HealBot_Options_luVars["curPlugin"]].."Loaded") then
         HealBot_Options_PluginNATxt:Show()
         HealBot_Options_PluginNAReasonTxt:Show()
-        HealBot_Options_PluginNAReasonTxt:SetText(HealBot_retLuVars(pluginId[HealBot_Options_luVars["curPlugin"]].."Reason"))
+        HealBot_Options_PluginNAReasonTxt:SetText(HealBot_Init_retLuVars(pluginId[HealBot_Options_luVars["curPlugin"]].."Reason"))
     else
         HealBot_Options_PluginNATxt:Hide()
         HealBot_Options_PluginNAReasonTxt:Hide()
@@ -18544,7 +18544,7 @@ function HealBot_Options_DebuffIconColUpdate(spellId, col)
     if sName then HealBot_Globals.HealBot_Custom_Debuffs_ShowBarCol[sName]=col end
     HealBot_setLuVars("UpdateAllAura", 5)
     HealBot_Aura_setLuVars("updateAll", true)
-    HealBot_Aura_ClearAllDebuffs()
+    HealBot_Update_ClearAllDebuffs()
     HealBot_Timers_Set("AURA","CheckDebuffs")
     HealBot_Options_ResetUpdate()
 end
@@ -23759,7 +23759,7 @@ function healbotOverride_ColoursAdaptiveUp_OnClick(self, id)
     HealBot_Globals.OverrideAdaptiveOrder[id]=HealBot_Globals.OverrideAdaptiveOrder[id-1]
     HealBot_Globals.OverrideAdaptiveOrder[id-1]=tmpId
     HealBot_Options_SetAdpatvieColoursOrder(true)
-    HealBot_Action_AdaptiveUp(id)
+    HealBot_Update_AdaptiveUp(id)
 end
 
 function healbotOverride_ColoursAdaptiveDown_OnClick(self, id)
@@ -23768,7 +23768,7 @@ function healbotOverride_ColoursAdaptiveDown_OnClick(self, id)
     HealBot_Globals.OverrideAdaptiveOrder[id]=HealBot_Globals.OverrideAdaptiveOrder[id+1]
     HealBot_Globals.OverrideAdaptiveOrder[id+1]=tmpId
     HealBot_Options_SetAdpatvieColoursOrder(true)
-    HealBot_Action_AdaptiveDown(id)
+    HealBot_Update_AdaptiveDown(id)
 end
 
 function HealBot_Options_ColoursAdaptiveUp_OnClick(self, id)
@@ -23777,7 +23777,7 @@ function HealBot_Options_ColoursAdaptiveUp_OnClick(self, id)
     Healbot_Config_Skins.AdaptiveOrder[Healbot_Config_Skins.Current_Skin][id]=Healbot_Config_Skins.AdaptiveOrder[Healbot_Config_Skins.Current_Skin][id-1]
     Healbot_Config_Skins.AdaptiveOrder[Healbot_Config_Skins.Current_Skin][id-1]=tmpId
     HealBot_Options_SetAdpatvieColoursOrder(false)
-    HealBot_Action_AdaptiveUp(id)
+    HealBot_Update_AdaptiveUp(id)
 end
 
 function HealBot_Options_ColoursAdaptiveDown_OnClick(self, id)
@@ -23786,7 +23786,7 @@ function HealBot_Options_ColoursAdaptiveDown_OnClick(self, id)
     Healbot_Config_Skins.AdaptiveOrder[Healbot_Config_Skins.Current_Skin][id]=Healbot_Config_Skins.AdaptiveOrder[Healbot_Config_Skins.Current_Skin][id+1]
     Healbot_Config_Skins.AdaptiveOrder[Healbot_Config_Skins.Current_Skin][id+1]=tmpId
     HealBot_Options_SetAdpatvieColoursOrder(false)
-    HealBot_Action_AdaptiveDown(id)
+    HealBot_Update_AdaptiveDown(id)
 end
 
 function HealBot_Options_SetActionIconCondition(cond)
@@ -27898,10 +27898,10 @@ function HealBot_Options_SetSkins(force)
             HealBot_Action_setLuVars("resetIndicator", true)
             HealBot_Action_setLuVars("resetText", true)
             --HealBot_Action_setLuVars("resetAux", true)
-            HealBot_Aura_RemoveExtraIcons(91)
-            HealBot_Aura_RemoveExtraIcons(92)
-            HealBot_Aura_RemoveExtraIcons(93)
-            HealBot_Aura_RemoveExtraIcons(94)
+            HealBot_Update_RemoveExtraIcons(91)
+            HealBot_Update_RemoveExtraIcons(92)
+            HealBot_Update_RemoveExtraIcons(93)
+            HealBot_Update_RemoveExtraIcons(94)
             HealBot_Timers_Set("AURA","RaidTargetUpdateAll")
             HealBot_Timers_Set("AUX","ResetBars")
             HealBot_Timers_Set("SKINS","SkinsFormat")

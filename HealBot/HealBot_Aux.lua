@@ -283,7 +283,7 @@ function HealBot_Aux_clearAllBars(button)
     for x=1,9 do
         HealBot_Aux_clearBar(button, x)
     end
-    --if button.frame>0 and UnitExists(button.unit) then HealBot_OnEvent_UnitManaUpdate(button) end
+    --if button.frame>0 and UnitExists(button.unit) then HealBot_Events_UnitManaUpdate(button) end
 end
 
 function HealBot_Aux_clearMarkedBars(button)
@@ -293,35 +293,6 @@ function HealBot_Aux_clearMarkedBars(button)
             HealBot_Aux_clearBar(button, x)
         end
     end
-end
-
-function HealBot_Aux_clearAllMarkedBars()
-      --HealBot_setCall("HealBot_Aux_clearAllMarkedBars")
-    for _,xButton in pairs(HealBot_Unit_Button) do
-        HealBot_Aux_clearMarkedBars(xButton)
-    end
-    for _,xButton in pairs(HealBot_Private_Button) do
-        HealBot_Aux_clearMarkedBars(xButton)
-    end
-    for _,xButton in pairs(HealBot_Pet_Button) do
-        HealBot_Aux_clearMarkedBars(xButton)
-    end
-    for _,xButton in pairs(HealBot_Vehicle_Button) do
-        HealBot_Aux_clearMarkedBars(xButton)
-    end
-    for _,xButton in pairs(HealBot_Extra_Button) do
-        HealBot_Aux_clearMarkedBars(xButton)
-    end
-    for _,xButton in pairs(HealBot_Enemy_Button) do
-        HealBot_Aux_clearMarkedBars(xButton)
-    end
-    for xUnit,xButton in pairs(HealBot_UnitTarget_Button) do
-        HealBot_Aux_clearMarkedBars(xButton)
-    end
-    for xUnit,xButton in pairs(HealBot_PrivateTarget_Button) do
-        HealBot_Aux_clearMarkedBars(xButton)
-    end
-    HealBot_Aux_luVars["WaitOnFullClear"]=false
 end
 
 function HealBot_Aux_barsReset()
@@ -1276,6 +1247,7 @@ function HealBot_Aux_clearCastBarAssigned(frame,id)
             HealBot_Aux_clearAllBar(id)
             hbAuxCastBarAssigned[frame][id]=nil
             HealBot_setAuxAssigns("CastBar", frame, false)
+            HealBot_Events_setAuxAssigns("CastBar", frame, false)
         end
     else
         for f=1,10 do
@@ -1284,6 +1256,7 @@ function HealBot_Aux_clearCastBarAssigned(frame,id)
             end
             hbAuxCastBarAssigned[f]={};
             HealBot_setAuxAssigns("CastBar", f, false)
+            HealBot_Events_setAuxAssigns("CastBar", f, false)
         end
     end
 end
@@ -1292,6 +1265,7 @@ function HealBot_Aux_setCastBarAssigned(frame, id)
       --HealBot_setCall("HealBot_Aux_setCastBarAssigned")
     hbAuxCastBarAssigned[frame][id]=true
     HealBot_setAuxAssigns("CastBar", frame, true)
+    HealBot_Events_setAuxAssigns("CastBar", frame, true)
 end
 
 function HealBot_Aux_UpdateCastBar(button, text, startTime, endTime, CastIsChan)
@@ -2198,7 +2172,7 @@ function HealBot_Aux_UpdateAllAuxByType(frame, id)
     end
 end
 
-local function HealBot_Aux_ResetTextByTypeById(button, id)
+function HealBot_Aux_ResetTextByTypeById(button, id)
       --HealBot_setCall("HealBot_Aux_ResetTextByTypeById", button)
     if Healbot_Config_Skins.AuxBar[Healbot_Config_Skins.Current_Skin][id][button.frame]["TEXT"] then
         if hbAuxNameAssigned[button.frame][id] then
@@ -2237,36 +2211,6 @@ local function HealBot_Aux_ResetTextByTypeById(button, id)
                 HealBot_Aux_setBar(button, id, ohValue, true, HealBot_Text_shortHealTxt(button.health.overheal+1, button.frame))
                 HealBot_Aux_UpdateOverHealBarById(button, id)
             end
-        end
-    end
-end
-
-function HealBot_Aux_ResetTextButtons()
-      --HealBot_setCall("HealBot_Aux_ResetTextButtons")
-    for x=1,9 do
-        for _,xButton in pairs(HealBot_Unit_Button) do
-            HealBot_Aux_ResetTextByTypeById(xButton, x)
-        end
-        for _,xButton in pairs(HealBot_Private_Button) do
-            HealBot_Aux_ResetTextByTypeById(xButton, x)
-        end
-        for _,xButton in pairs(HealBot_Pet_Button) do
-            HealBot_Aux_ResetTextByTypeById(xButton, x)
-        end
-        for _,xButton in pairs(HealBot_Vehicle_Button) do
-            HealBot_Aux_ResetTextByTypeById(xButton, x)
-        end
-        for _,xButton in pairs(HealBot_Enemy_Button) do
-            HealBot_Aux_ResetTextByTypeById(xButton, x)
-        end
-        for xUnit,xButton in pairs(HealBot_UnitTarget_Button) do
-            HealBot_Aux_ResetTextByTypeById(xButton, x)
-        end
-        for xUnit,xButton in pairs(HealBot_PrivateTarget_Button) do
-            HealBot_Aux_ResetTextByTypeById(xButton, x)
-        end
-        for _,xButton in pairs(HealBot_Extra_Button) do
-            HealBot_Aux_ResetTextByTypeById(xButton, x)
         end
     end
 end

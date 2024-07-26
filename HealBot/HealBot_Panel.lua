@@ -1166,6 +1166,7 @@ function HealBot_Panel_ToggleTestBars()
         HealBot_Text_setLuVars("TestBarsOn", false)
         HealBot_Aux_setLuVars("TestBarsOn", false)
         HealBot_Aura_setLuVars("TestBarsOn", false)
+        HealBot_Update_setLuVars("TestBarsOn", false)
         HealBot_TestBarsState(false)
         HealBot_Options_setLuVars("TestBarsOn", false)
         HealBot_Skins_isTestBars(false)
@@ -1177,6 +1178,7 @@ function HealBot_Panel_ToggleTestBars()
         HealBot_Text_setLuVars("TestBarsOn", true)
         HealBot_Aux_setLuVars("TestBarsOn", true)
         HealBot_Aura_setLuVars("TestBarsOn", true)
+        HealBot_Update_setLuVars("TestBarsOn", true)
         HealBot_TestBarsState(true)
         HealBot_Options_setLuVars("TestBarsOn", true)
         HealBot_Skins_isTestBars(true)
@@ -1840,27 +1842,7 @@ function HealBot_Panel_TestBarsOn()
             HealBot_Panel_DeleteHeader(xButton.id, xHeader)
         end
     end
-    for _,xButton in pairs(HealBot_Unit_Button) do
-        HealBot_Action_MarkDeleteButton(xButton)
-    end
-    for _,xButton in pairs(HealBot_Private_Button) do
-        HealBot_Action_MarkDeleteButton(xButton)
-    end
-    for _,xButton in pairs(HealBot_Enemy_Button) do
-        HealBot_Action_MarkDeleteButton(xButton)
-    end
-    for xUnit,xButton in pairs(HealBot_UnitTarget_Button) do
-        HealBot_Action_MarkDeleteButton(xButton)
-    end
-    for xUnit,xButton in pairs(HealBot_PrivateTarget_Button) do
-        HealBot_Action_MarkDeleteButton(xButton)
-    end
-    for _,xButton in pairs(HealBot_Pet_Button) do
-        HealBot_Action_MarkDeleteButton(xButton)
-    end
-    for _,xButton in pairs(HealBot_Extra_Button) do
-        HealBot_Action_MarkDeleteButton(xButton)
-    end
+    HealBot_Update_ResetInitButtons()
     for x,_ in pairs(HealBot_Action_HealButtons) do
         HealBot_Action_HealButtons[x]=nil;
     end 

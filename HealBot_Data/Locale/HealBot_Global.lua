@@ -6,7 +6,7 @@ local vMajor         = string.split(".", select(1, GetBuildInfo()))
 HEALBOT_GAME_VERSION = tonumber(vMajor)
 
 function HealBot_Global_Version()
-    return "10.2.7.19.1"
+    return "11.0.0.0"
 end
 function HealBot_Global_InitVersion()
     return "10.2.7.17"  -- Keep just behind the global version
@@ -234,6 +234,7 @@ function HealBot_globalVars()
     HEALBOT_CHI_BURST                       = 130651 --HealBot_WoWAPI_SpellName(130651) or "--Chi Burst"
     HEALBOT_ENVELOPING_MIST                 = 124682 --HealBot_WoWAPI_SpellName(124682) or "--Enveloping Mist"
     HEALBOT_RENEWING_MIST                   = 119611 --HealBot_WoWAPI_SpellName(115151) or "--Renewing Mist"
+    HEALBOT_RENEWING_MIST_NAME              = HealBot_WoWAPI_SpellName(HEALBOT_RENEWING_MIST) or "--Renewing Mist"
     HEALBOT_REVIVAL                         = 115310 --HealBot_WoWAPI_SpellName(115310) or "--Revival"
     HEALBOT_SOOTHING_MIST                   = 198533 --HealBot_WoWAPI_SpellName(115175) or "--Soothing Mist" 
     HEALBOT_SURGING_MIST                    = 116694 --HealBot_WoWAPI_SpellName(116694) or "--Surging Mist" 
