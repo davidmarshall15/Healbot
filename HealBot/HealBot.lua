@@ -265,6 +265,10 @@ function HealBot_nextRecalcEndDelay(typeRequired)
     end
 end
 
+function HealBot_AllRefreshTypes()
+    HealBot_RefreshTypes[0]=true
+end
+
 local hbSpecialInGeneralFrame={[2]=8, [1]=7, [3]=9, [4]=10}
 function HealBot_nextRecalcDelay(typeRequired,delay)
       --HealBot_setCall("HealBot_nextRecalcDelay"..typeRequired)
@@ -2229,9 +2233,9 @@ function HealBot_UpdateCheckInterval()
     HealBot_Debug_PerfUpdate("RefreshDelay", HealBot_luVars["refreshDelay"])
 end
 
-function HealBot_PerfPlugin_adj()
+function HealBot_PerfPlugin_adj(adj)
       --HealBot_setCall("HealBot_PerfPlugin_adj")
-    HealBot_luVars["cpuAdj"]=HealBot_Options_retLuVars("perfCPUAdj")
+    HealBot_luVars["cpuAdj"]=adj
     HealBot_Update_CPUUsage()
 end
 

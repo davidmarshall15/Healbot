@@ -619,6 +619,7 @@ function HealBot_globalVars()
     HBC_WATER_SHIELD                        = 24398
     HEALBOT_EARTHLIVING_WEAPON              = 382021
     HEALBOT_SHAMANISTIC_RAGE                = 30823 --HealBot_WoWAPI_SpellName(30823) or "--Shamanistic Rage";
+    HEALBOT_SKYFURY                         = 462854
     HEALBOT_SPIRITWALKERS_GRACE             = 79206 --HealBot_WoWAPI_SpellName(79206) or "--Spiritwalker's Grace";
     HEALBOT_SPIRIT_LINK_TOTEM               = 98008 --HealBot_WoWAPI_SpellName(98008) or "--Spirit Link Totem";
     HEALBOT_STORM_ELEMENTAL_TOTEM           = 152256 --HealBot_WoWAPI_SpellName(152256) or "--Storm Elemenal Totem";

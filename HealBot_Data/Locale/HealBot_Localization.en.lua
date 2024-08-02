@@ -532,6 +532,7 @@ function HealBot_Lang_enALL()
     HEALBOT_OPTIONS_HLTHTXTANCHORLEFT       = "Left of Name Text"
     HEALBOT_OPTIONS_HLTHTXTANCHORBELOW      = "Below Name Text"
     HEALBOT_OPTIONS_HLTHTXTANCHORABOVE      = "Above Name Text"
+    HEALBOT_OPTIONS_STATETXTREPLACENAME     = "Replace name when active"
     HEALBOT_OPTIONS_STATECOLNOTAVAIL        = "State col"..HEALBOT_enWORD_COLOUR_SUFFIX.." options are inherited from the Name text\nwhen "..HEALBOT_OPTIONS_STATETEXTANCHOR.." is set to "..HEALBOT_OPTIONS_HLTHTXTANCHORLEFT;
 
     HEALBOT_OPTIONS_AUXBARANCHOR            = "Anchor"

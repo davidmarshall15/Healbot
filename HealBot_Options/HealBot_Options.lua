@@ -272,7 +272,6 @@ HealBot_Options_luVars["BuffIconSet"]=1
 HealBot_Options_luVars["DebuffIconSet"]=1
 HealBot_Options_luVars["ActionIconsID"]=1
 HealBot_Options_luVars["ActionIconsCopyFrom"]=1
-HealBot_Options_luVars["perfCPUAdj"]=0
 HealBot_Options_luVars["ActionIconsCondNo"]=1
 HealBot_Options_luVars["CDebuffcustomSpellID"]=1
 
@@ -902,6 +901,7 @@ function HealBot_Options_setLists()
         HEALBOT_OPTIONS_HLTHTXTANCHORINDR,
         HEALBOT_OPTIONS_HLTHTXTANCHORLEFT,
         HEALBOT_OPTIONS_HLTHTXTANCHORABOVE,
+        HEALBOT_OPTIONS_STATETXTREPLACENAME,
     }
     
     HealBot_Options_Lists["BarAggroTextAnchor"] = {
@@ -2006,6 +2006,7 @@ function HealBot_Options_InitBuffSpellsClassList(tClass)
             HEALBOT_WATER_WALKING,
             HEALBOT_WATER_BREATHING,
             HEALBOT_SPIRIT_OF_THE_ALPHA,
+            HEALBOT_SKYFURY,
         }
         local sName=HealBot_Spells_KnownByID(HEALBOT_FLAMETONGUE_SPELL)
         if sName then 
@@ -5785,22 +5786,22 @@ function HealBot_ReturnMinsSecs(s)
     return mins,secs
 end
 
-HealBot_Options_luVars["FluidFreqAdj"]=0.02
+HealBot_Options_luVars["FluidFreqAdj"]=0.0225
 HealBot_Options_luVars["FlashFreqAdj"]=0.05
-HealBot_Options_luVars["StateFreqAdj"]=0.05
-
-function HealBot_Options_PerfPlugin_adj(fluidAdj, flashAdj, stateAdj, cpuAdj)
+function HealBot_Options_PerfPlugin_adj(fluidAdj, flashAdj, cpuAdj)
       --HealBot_setCall("HealBot_Options_PerfPlugin_adj")
-    local fluidVals={[7]=0.01,  [6]=0.014, [5]=0.017, [4]=0.02,  [3]=0.024, [2]=0.027, [1]=0.03}
-    local flashVals={[7]=0.04,  [6]=0.044, [5]=0.437, [4]=0.05,  [3]=0.055, [2]=0.06,  [1]=0.07}
-    local stateVals={[7]=0.04,  [6]=0.044, [5]=0.047, [4]=0.05,  [3]=0.055, [2]=0.06,  [1]=0.07}
-    local timedVals={[7]=0.014, [6]=0.017, [5]=0.022, [4]=0.025, [3]=0.03,  [2]=0.35,  [1]=0.05}
+    
+    --local fluidVals={[7]=0.01,  [6]=0.014, [5]=0.017, [4]=0.02,  [3]=0.024, [2]=0.027, [1]=0.03}
+    --local flashVals={[7]=0.04,  [6]=0.044, [5]=0.047, [4]=0.05,  [3]=0.055, [2]=0.06,  [1]=0.07}
+    --local timedVals={[7]=0.014, [6]=0.017, [5]=0.022, [4]=0.025, [3]=0.03,  [2]=0.035, [1]=0.05}
+    local fluidVals={[15]=0.005,  [14]=0.0075, [13]=0.01,   [12]=0.0125, [11]=0.015,  [10]=0.0175, [9]=0.02,   [8]=0.0225, [7]=0.025, [6]=0.0275, [5]=0.03,   [4]=0.0325, [3]=0.035,  [2]=0.0375, [1]=0.04}
+    local flashVals={[15]=0.03,   [14]=0.0335, [13]=0.037,  [12]=0.04,   [11]=0.0425, [10]=0.045,  [9]=0.0475, [8]=0.05,   [7]=0.055, [6]=0.06,   [5]=0.065,  [4]=0.07,   [3]=0.08,   [2]=0.09,   [1]=0.1}
+    local timedVals={[15]=0.0125, [14]=0.015,  [13]=0.0175, [12]=0.02,   [11]=0.0225, [10]=0.025,  [9]=0.0275, [8]=0.03,   [7]=0.0325, [6]=0.035, [5]=0.0375, [4]=0.04,   [3]=0.0425, [2]=0.045,  [1]=0.05}
     HealBot_Options_luVars["FluidFreqAdj"]=fluidVals[fluidAdj]
     HealBot_Options_luVars["FlashFreqAdj"]=flashVals[flashAdj]
-    HealBot_Options_luVars["StateFreqAdj"]=stateVals[stateAdj]
+    
     local hbCPU=cpuAdj-15
-    HealBot_Options_luVars["perfCPUAdj"]=hbCPU
-    HealBot_PerfPlugin_adj()
+    HealBot_PerfPlugin_adj(hbCPU)
     HealBot_Timers_Set("LAST","BarFreqVars")
     HealBot_Aux_AdjUpdateTimedFreq(timedVals[fluidAdj])
 end
@@ -5810,8 +5811,6 @@ HealBot_Options_luVars["hotBarDebuff"]=0
 HealBot_Options_luVars["hotBarDimming"]=4
 function HealBot_Options_BarFreq_setVars()
       --HealBot_setCall("HealBot_Options_BarFreq_setVars")
-    local stateFreqUpd=0
-    local stateFreq=0.02
     local flashFreqUpd=0
     local flashFreq=0.02
     local smoothAdj=9
@@ -5822,7 +5821,6 @@ function HealBot_Options_BarFreq_setVars()
     local hazardFreq=0.3
     local hazardMinAlpha=0.25
     if HealBot_Globals.OverrideEffects["USE"]==1 then
-        stateFreqUpd=0.07+(Healbot_Config_Skins.General[Healbot_Config_Skins.Current_Skin]["FLUIDFREQ"]/100)
         flashFreqUpd=0.05+(Healbot_Config_Skins.General[Healbot_Config_Skins.Current_Skin]["OFREQ"]*0.4)
         fluidFreq=HealBot_Util_Round(HealBot_Options_luVars["FluidFreqAdj"]-(Healbot_Config_Skins.General[Healbot_Config_Skins.Current_Skin]["FLUIDFREQ"]/1500),4)
         smoothAdj=9-ceil(Healbot_Config_Skins.General[Healbot_Config_Skins.Current_Skin]["FLUIDFREQ"]/2)
@@ -5832,7 +5830,6 @@ function HealBot_Options_BarFreq_setVars()
         hazardFreq=Healbot_Config_Skins.General[Healbot_Config_Skins.Current_Skin]["HAZARDFREQ"] or 0.3
         hazardMinAlpha=Healbot_Config_Skins.General[Healbot_Config_Skins.Current_Skin]["HAZARDMINALPHA"] or 0.25
     else
-        stateFreqUpd=0.07+(HealBot_Globals.OverrideEffects["FLUIDFREQ"]/100)
         flashFreqUpd=0.05+(HealBot_Globals.OverrideEffects["OFREQ"]*0.4)
         fluidFreq=HealBot_Util_Round(HealBot_Options_luVars["FluidFreqAdj"]-(HealBot_Globals.OverrideEffects["FLUIDFREQ"]/1500),4)
         smoothAdj=9-ceil(HealBot_Globals.OverrideEffects["FLUIDFREQ"]/2)
@@ -5843,10 +5840,8 @@ function HealBot_Options_BarFreq_setVars()
         hazardMinAlpha=HealBot_Globals.OverrideEffects["HAZARDMINALPHA"] or 0.25
     end
     flashFreq=HealBot_Util_Round(HealBot_Options_luVars["FlashFreqAdj"]-(flashFreqUpd/8),4)
-    stateFreq=HealBot_Util_Round(HealBot_Options_luVars["StateFreqAdj"]-(stateFreqUpd/8),4)
     hazardFreq=hazardFreq-0.05
     if fluidFreq<0.01 then fluidFreq=0.01 end
-    if stateFreq<0.01 then stateFreq=0.01 end
     if flashFreq<0.01 then flashFreq=0.01 end
     if hazardFreq<0.1 then hazardFreq=0.1 end
     if smoothAdj<2 then smoothAdj=2 end
@@ -5857,11 +5852,7 @@ function HealBot_Options_BarFreq_setVars()
     HealBot_Aux_setLuVars("AuxFluidBarOpacityUpdate", HealBot_Util_Round(flashFreqUpd,2))
     HealBot_Aux_setLuVars("AuxFluidBarOpacityFreq", flashFreq)
     
-    HealBot_Action_setLuVars("FluidBarAlphaUpdate", HealBot_Util_Round(stateFreqUpd,2))
-    HealBot_Action_setLuVars("FluidBarAlphaFreq", stateFreq)
     HealBot_Action_setLuVars("FluidBarSmoothAdj", smoothAdj)
-    HealBot_Aux_setLuVars("AuxFluidBarAlphaUpdate", HealBot_Util_Round(stateFreqUpd,2))
-    HealBot_Aux_setLuVars("AuxFluidBarAlphaFreq", stateFreq)
     HealBot_Aux_setLuVars("FluidBarSmoothAdj", smoothAdj)
     HealBot_Action_setLuVars("HotBarsHealth", hotBarHlth)
     HealBot_Aura_setLuVars("HotBarDebuff", hotBarDebuff)
@@ -5878,9 +5869,8 @@ function HealBot_Options_BarFreq_setVars()
         HealBot_Timers_Set("AURA","UpdateAllHotBars")
         HealBot_Timers_Set("LAST","ResetUnitStatus")
     end
-    HealBot_AddDebug("stateFreq="..stateFreq.."  stateFreqUpd="..HealBot_Util_Round(stateFreqUpd,2), "Effects", true)
-    HealBot_AddDebug("flashFreq="..HealBot_Util_Round(flashFreq,4).."  flashFreqUpd="..flashFreqUpd, "Effects", true)
-    HealBot_AddDebug("hotBarHlth="..hotBarHlth.."  hotBarDebuff="..hotBarDebuff, "Effects", true)
+    HealBot_Debug_PerfUpdate("FluidFreq", fluidFreq)
+    HealBot_Debug_PerfUpdate("FlashFreq", flashFreq)
 end
 
 function HealBot_Options_OverrideHealthDropPct_OnValueChanged(self)
@@ -6411,7 +6401,8 @@ end
 
 function HealBot_Options_StateUseNameFontString_Options()
       --HealBot_setCall("HealBot_Options_StateUseNameFontString_Options")
-    if Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][HealBot_Options_luVars["FramesSelFrame"]]["STATETXTANCHOR"]==4 then
+    if Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][HealBot_Options_luVars["FramesSelFrame"]]["STATETXTANCHOR"]==4 or
+       Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][HealBot_Options_luVars["FramesSelFrame"]]["STATETXTANCHOR"]==6 then
         HealBot_Options_ObjectsEnableDisable("HealBot_Options_StateFontName",false)
         HealBot_Options_ObjectsEnableDisable("HealBot_Options_StateFontHeight",false)
         HealBot_Options_ObjectsEnableDisable("HealBot_Options_StateTextOutLine",false)
@@ -8661,7 +8652,8 @@ function HealBot_Options_ShowHealthOnBar_OnClick(self)
             HealBot_Timers_Set("SKINS","UpdateTextButtons")
         else
             HealBot_Timers_Set("SKINS","TextUpdateHealth")
-            if Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][HealBot_Options_luVars["FramesSelFrame"]]["STATETXTANCHOR"]==4 then
+            if Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][HealBot_Options_luVars["FramesSelFrame"]]["STATETXTANCHOR"]==4 or
+               Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][HealBot_Options_luVars["FramesSelFrame"]]["STATETXTANCHOR"]==6 then
                 HealBot_Timers_Set("SKINS","TextUpdateNames")
             end
         end
@@ -8676,7 +8668,8 @@ function HealBot_Options_HealthIncludePercent_OnClick(self)
             HealBot_Timers_Set("SKINS","UpdateTextButtons")
         else
             HealBot_Timers_Set("SKINS","TextUpdateHealth")
-            if Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][HealBot_Options_luVars["FramesSelFrame"]]["STATETXTANCHOR"]==4 then
+            if Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][HealBot_Options_luVars["FramesSelFrame"]]["STATETXTANCHOR"]==4 or 
+               Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][HealBot_Options_luVars["FramesSelFrame"]]["STATETXTANCHOR"]==6 then
                 HealBot_Timers_Set("SKINS","TextUpdateNames")
             end
         end

@@ -920,7 +920,7 @@ function HealBot_Events_RegenDisabled()
         HealBot_Options_setAuxBars()
         HealBot_Update_AllAuxBars()
         HealBot_Action_ResetFrameAlias()
-        HealBot_RefreshTypes[0]=true
+        HealBot_AllRefreshTypes()
     end
     HealBot_PlayerRegenDisabled();
     HealBot_UpdateLocalUILock(true)
