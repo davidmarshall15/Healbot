@@ -1,4 +1,4 @@
-local LibDeflate = HealBot_Libs_LibC()
+local LibDeflate=HealBot_Libs_LibC()
 local hbLinkFrame=nil
 local hbLinkFrameObjects={}
 local hbLinkFrameText={}
@@ -51,9 +51,9 @@ end
 
 function HealBot_Share_Compress(s)
       --HealBot_setCall("HealBot_Share_Compress")
-    local compressed = LibDeflate:CompressDeflate(s, {level = 9})
+    local compressed=LibDeflate:CompressDeflate(s, {level=9})
     if compressed then
-        local encoded = LibDeflate:EncodeForPrint(compressed)
+        local encoded=LibDeflate:EncodeForPrint(compressed)
         return encoded or s
     else
         return s
@@ -62,9 +62,9 @@ end
 
 function HealBot_Share_Decompress(s)
       --HealBot_setCall("HealBot_Share_Decompress")
-    local decoded = LibDeflate:DecodeForPrint(s)
+    local decoded=LibDeflate:DecodeForPrint(s)
     if decoded then
-        local decompressed = LibDeflate:DecompressDeflate(decoded)
+        local decompressed=LibDeflate:DecompressDeflate(decoded)
         return decompressed or s
     else
         return s
@@ -79,27 +79,27 @@ end
 local function HealBot_Share_ClearExportComplete(sType)
       --HealBot_setCall("HealBot_Share_ClearExportComplete")
     local g
-    if sType==HEALBOT_OPTIONS_SKIN then
+    if sType == HEALBOT_OPTIONS_SKIN then
         g=_G["HealBot_Options_ShareSkinStatusf"]
         g:SetText("")
         g=_G["HealBot_InOut_ShareSkins_Text"]
         g:SetText(HEALBOT_OPTIONS_SKINS_DISCORD)
-    elseif sType==HEALBOT_OPTIONS_TAB_CUSTOM_DEBUFFS then
+    elseif sType == HEALBOT_OPTIONS_TAB_CUSTOM_DEBUFFS then
         g=_G["HealBot_Options_ShareCDbuffStatusf"]
         g:SetText("")
         g=_G["HealBot_InOut_ShareCDbuffs_Text"]
         g:SetText(HEALBOT_OPTIONS_CDEBUFFS_DISCORD)
-    elseif sType==HEALBOT_OPTIONS_TAB_CUSTOM_BUFFS then
+    elseif sType == HEALBOT_OPTIONS_TAB_CUSTOM_BUFFS then
         g=_G["HealBot_Options_ShareBuffsStatusf"]
         g:SetText("")
         g=_G["HealBot_InOut_ShareBuffs_Text"]
         g:SetText(HEALBOT_OPTIONS_CBUFFS_DISCORD)
-    elseif sType==HEALBOT_OPTIONS_TAB_SPELLS then
+    elseif sType == HEALBOT_OPTIONS_TAB_SPELLS then
         g=_G["HealBot_Options_ShareSpellsStatusf"]
         g:SetText("")
         g=_G["HealBot_InOut_ShareSpells_Text"]
         g:SetText(HEALBOT_OPTIONS_SPELLS_DISCORD)
-    elseif sType==HEALBOT_OPTIONS_CONTENT_INOUT_PRESETCOL then
+    elseif sType == HEALBOT_OPTIONS_CONTENT_INOUT_PRESETCOL then
         g=_G["HealBot_Options_SharePresetColsStatusf"]
         g:SetText("")
         g=_G["HealBot_InOut_SharePresetCols_Text"]
@@ -116,27 +116,27 @@ local function HealBot_Share_ExportComplete(sType, sExtra)
     else
         sText=" |cff77c8ff"..sType.." "..HEALBOT_SHARE_EXPORTED
     end
-    if sType==HEALBOT_OPTIONS_SKIN then
+    if sType == HEALBOT_OPTIONS_SKIN then
         g=_G["HealBot_Options_ShareSkinStatusf"]
         g:SetText(sText)
         g=_G["HealBot_InOut_ShareSkins_Text"]
         g:SetText("")
-    elseif sType==HEALBOT_OPTIONS_TAB_CUSTOM_DEBUFFS then
+    elseif sType == HEALBOT_OPTIONS_TAB_CUSTOM_DEBUFFS then
         g=_G["HealBot_Options_ShareCDbuffStatusf"]
         g:SetText(sText)
         g=_G["HealBot_InOut_ShareCDbuffs_Text"]
         g:SetText("")
-    elseif sType==HEALBOT_OPTIONS_TAB_CUSTOM_BUFFS then
+    elseif sType == HEALBOT_OPTIONS_TAB_CUSTOM_BUFFS then
         g=_G["HealBot_Options_ShareBuffsStatusf"]
         g:SetText(sText)
         g=_G["HealBot_InOut_ShareBuffs_Text"]
         g:SetText("")
-    elseif sType==HEALBOT_OPTIONS_TAB_SPELLS then
+    elseif sType == HEALBOT_OPTIONS_TAB_SPELLS then
         g=_G["HealBot_Options_ShareSpellsStatusf"]
         g:SetText(sText)
         g=_G["HealBot_InOut_ShareSpells_Text"]
         g:SetText("")
-    elseif sType==HEALBOT_OPTIONS_CONTENT_INOUT_PRESETCOL then
+    elseif sType == HEALBOT_OPTIONS_CONTENT_INOUT_PRESETCOL then
         g=_G["HealBot_Options_SharePresetColsStatusf"]
         g:SetText(sText)
         g=_G["HealBot_InOut_SharePresetCols_Text"]
@@ -162,12 +162,12 @@ end
 
 local function HealBot_Share_ImportFail(import, reason)
       --HealBot_setCall("HealBot_Share_ImportFail")
-    StaticPopupDialogs["HEALBOT_SHARE_IMPORTFAIL"] = {
-        text = HEALBOT_OPTIONS_IMPORT_FAIL1.." "..import.."\n\n"..HEALBOT_OPTIONS_IMPORT_FAIL2.." "..reason,
-        button1 = CLOSE,
-        timeout = 0,
-        whileDead = 1,
-        hideOnEscape = 1
+    StaticPopupDialogs["HEALBOT_SHARE_IMPORTFAIL"]={
+        text=HEALBOT_OPTIONS_IMPORT_FAIL1.." "..import.."\n\n"..HEALBOT_OPTIONS_IMPORT_FAIL2.." "..reason,
+        button1=CLOSE,
+        timeout=0,
+        whileDead=1,
+        hideOnEscape=1
     };
     StaticPopup_Show("HEALBOT_SHARE_IMPORTFAIL");
 end
@@ -190,12 +190,12 @@ function HealBot_Share_TimeoutRequest()
 end
 
 local function HealBot_Share_ThrottleLinkRequest()
-    StaticPopupDialogs["HEALBOT_SHARE_DENYLINKREQUEST"] = {
-        text = HEALBOT_OPTIONS_LINK_REQUEST_DENIED,
-        button1 = OKAY,
-        timeout = 0,
-        whileDead = 1,
-        hideOnEscape = 1
+    StaticPopupDialogs["HEALBOT_SHARE_DENYLINKREQUEST"]={
+        text=HEALBOT_OPTIONS_LINK_REQUEST_DENIED,
+        button1=OKAY,
+        timeout=0,
+        whileDead=1,
+        hideOnEscape=1
     };
     StaticPopup_Show("HEALBOT_SHARE_DENYLINKREQUEST");
 end
@@ -204,7 +204,7 @@ function HealBot_Share_GetLink(sType, uName, eInfo)
       --HealBot_setCall("HealBot_Share_GetLink")
     if sType>0 then
         if uName then
-            if not eInfo then 
+            if not eInfo then
                 HealBot_Share_luVars["LinkRequest"]="L:R~"..sType
             else
                 HealBot_Share_luVars["LinkRequest"]="L:R~"..sType.."~"..eInfo
@@ -223,7 +223,7 @@ function HealBot_Share_GetLink(sType, uName, eInfo)
     end
 end
 hooksecurefunc("SetItemRef", function(link, text)
-    if link=="garrmission:healbot" then
+    if link == "garrmission:healbot" then
         local _, encoded=strsplit("~", text)
         local s=HealBot_Share_Decompress(encoded)
        -- HealBot_AddDebug("link="..(link or "nil"), "Share", true)
@@ -238,31 +238,31 @@ end)
 
 local function HealBot_Share_DoImportValid()
       --HealBot_setCall("HealBot_Share_DoImportValid")
-    if HealBot_Share_luVars["validImport"]==1 then
+    if HealBot_Share_luVars["validImport"] == 1 then
         HealBot_Share_SkinLoad(Skin_TextData)
-    elseif HealBot_Share_luVars["validImport"]==2 then
+    elseif HealBot_Share_luVars["validImport"] == 2 then
         HealBot_Share_LoadDebuffs(Debuffs_TextData)
-    elseif HealBot_Share_luVars["validImport"]==3 then
+    elseif HealBot_Share_luVars["validImport"] == 3 then
         HealBot_Share_LoadBuffs(Buffs_TextData)
-    elseif HealBot_Share_luVars["validImport"]==4 then
+    elseif HealBot_Share_luVars["validImport"] == 4 then
         HealBot_Share_LoadSpells(Spells_TextData)
-    elseif HealBot_Share_luVars["validImport"]==5 then
+    elseif HealBot_Share_luVars["validImport"] == 5 then
         HealBot_Share_LoadPresetCols(PresetCols_TextData)
     end
 end
 
 local function HealBot_Share_ImportValid(importType)
       --HealBot_setCall("HealBot_Share_ImportValid")
-    StaticPopupDialogs["HEALBOT_SHARE_IMPORTVALID"] = {
-        text = HEALBOT_OPTIONS_IMPORT_VALID1.."\n\n"..importType..HEALBOT_OPTIONS_IMPORT_VALID2,
-        button1 = HEALBOT_WORDS_YES,
-        button2 = HEALBOT_WORDS_NO,
-        OnAccept = function()
+    StaticPopupDialogs["HEALBOT_SHARE_IMPORTVALID"]={
+        text=HEALBOT_OPTIONS_IMPORT_VALID1.."\n\n"..importType..HEALBOT_OPTIONS_IMPORT_VALID2,
+        button1=HEALBOT_WORDS_YES,
+        button2=HEALBOT_WORDS_NO,
+        OnAccept=function()
             HealBot_Share_DoImportValid()
         end,
-        timeout = 0,
-        whileDead = 1,
-        hideOnEscape = 1
+        timeout=0,
+        whileDead=1,
+        hideOnEscape=1
     };
     StaticPopup_Show("HEALBOT_SHARE_IMPORTVALID");
 end
@@ -281,7 +281,7 @@ function HealBot_Share_ValidateData(sType, sIn)
                 id=t
             end
         elseif string.len(t)>1  then
-            if sType==1 then extra=t end
+            if sType == 1 then extra=t end
             break
         end
     end
@@ -336,12 +336,12 @@ function HealBot_Share_LoadPresetCols(sIn)
             ssTab[i]=t
         end
     end
-    
+
     -- Test~0.2,0.2,0.902,1
-    for e=2,#ssTab do 
+    for e=2,#ssTab do
         local x=e-1
         if x>10 then break end
-        local alias,d = string.split("~", ssTab[e])
+        local alias,d=string.split("~", ssTab[e])
         local r,g,b,a=string.split(",", d)
         if not alias or not r or not g or not b or not a then
             HealBot_Options_ImportFail("Preset Colours", "Data corruption")
@@ -370,22 +370,22 @@ function HealBot_Share_ExportSpells(lData)
     local HealBot_Keys_List=HealBot_Action_retComboKeysList()
     for z=1,4 do
         for x=1,20 do
-            HB_button = HealBot_Options_ComboClass_Button(x)
+            HB_button=HealBot_Options_ComboClass_Button(x)
             -- Menu~1,1,7~2,4,false,false,false,false,
             for y=1, getn(HealBot_Keys_List), 1 do
-                HB_combo_prefix = HealBot_Action_GetComboSpec(HealBot_Keys_List[y], HB_button)
-                if z==1 then
-                    sName, sTar, sTrin1, sTrin2, AvoidBC = HealBot_Action_AttribSpellPattern(HB_combo_prefix)
-                    sText = HealBot_Config_Spells.EnabledKeyCombo[HB_combo_prefix]
-                elseif z==2 then
-                    sName, sTar, sTrin1, sTrin2, AvoidBC = HealBot_Action_AttribEnemySpellPattern(HB_combo_prefix)
-                    sText = HealBot_Config_Spells.EnemyKeyCombo[HB_combo_prefix]
-                elseif z==3 then
-                    sName, sTar, sTrin1, sTrin2, AvoidBC = HealBot_Action_AttribEmergSpellPattern(HB_combo_prefix)
-                    sText = HealBot_Config_Spells.EmergKeyCombo[HB_combo_prefix]
+                HB_combo_prefix=HealBot_Action_GetComboSpec(HealBot_Keys_List[y], HB_button)
+                if z == 1 then
+                    sName, sTar, sTrin1, sTrin2, AvoidBC=HealBot_Action_AttribSpellPattern(HB_combo_prefix)
+                    sText=HealBot_Config_Spells.EnabledKeyCombo[HB_combo_prefix]
+                elseif z == 2 then
+                    sName, sTar, sTrin1, sTrin2, AvoidBC=HealBot_Action_AttribEnemySpellPattern(HB_combo_prefix)
+                    sText=HealBot_Config_Spells.EnemyKeyCombo[HB_combo_prefix]
+                elseif z == 3 then
+                    sName, sTar, sTrin1, sTrin2, AvoidBC=HealBot_Action_AttribEmergSpellPattern(HB_combo_prefix)
+                    sText=HealBot_Config_Spells.EmergKeyCombo[HB_combo_prefix]
                 else
-                    sName, sTar, sTrin1, sTrin2, AvoidBC = HealBot_Action_AttribIconSpellPattern(HB_combo_prefix)
-                    sText = HealBot_Globals.IconKeyCombo[HB_combo_prefix]
+                    sName, sTar, sTrin1, sTrin2, AvoidBC=HealBot_Action_AttribIconSpellPattern(HB_combo_prefix)
+                    sText=HealBot_Globals.IconKeyCombo[HB_combo_prefix]
                 end
                 if sName and strlen(sName)>1 then
                     ssStr=ssStr..sName.."~"..z..","..x..","..y.."~"..sText..","
@@ -444,15 +444,15 @@ function HealBot_Share_LoadSpells(sIn)
             ssTab[i]=t
         end
     end
-    if HealBot_Share_luVars["InMethodSpell"]==1 then
-        HealBot_Config_Spells.EnabledKeyCombo = {}
-        HealBot_Config_Spells.EnemyKeyCombo = {}
-        HealBot_Config_Spells.EmergKeyCombo = {}
+    if HealBot_Share_luVars["InMethodSpell"] == 1 then
+        HealBot_Config_Spells.EnabledKeyCombo={}
+        HealBot_Config_Spells.EnemyKeyCombo={}
+        HealBot_Config_Spells.EmergKeyCombo={}
     end
-    
+
     -- Flash Heal~1,1,1~1,2061,false,true,true,false,
-    for e=2,#ssTab do 
-        local _,c,d = string.split("~", ssTab[e])
+    for e=2,#ssTab do
+        local _,c,d=string.split("~", ssTab[e])
         local ActionBarsCombo,Buttons_Button,KeyPress=string.split(",", c)
         local sName,sTar,sTrin1,sTrin2,AvoidBC=string.split(",", d)
         if not ActionBarsCombo or not Buttons_Button or not KeyPress or not sName then
@@ -462,14 +462,14 @@ function HealBot_Share_LoadSpells(sIn)
             Buttons_Button=tonumber(Buttons_Button)
             KeyPress=tonumber(KeyPress)
             local cType="ICON"
-            if ActionBarsCombo==1 then
-                cType = "ENABLED"
-            elseif ActionBarsCombo==2 then
-                cType = "ENEMY"
-            elseif ActionBarsCombo==3 then
-                cType = "EMERG"
+            if ActionBarsCombo == 1 then
+                cType="ENABLED"
+            elseif ActionBarsCombo == 2 then
+                cType="ENEMY"
+            elseif ActionBarsCombo == 3 then
+                cType="EMERG"
             end
-            local button = HealBot_Options_ComboClass_Button(Buttons_Button)
+            local button=HealBot_Options_ComboClass_Button(Buttons_Button)
             local cText=HealBot_Action_GetSpell(cType, HealBot_Action_GetComboSpec(HealBot_Keys_List[KeyPress], button))
             if not cText or (cText and strlen(cText)<2) or HealBot_Share_luVars["InMethodSpell"]<3 then
                 HealBot_Action_SetSpell(cType, HealBot_Action_GetComboSpec(HealBot_Keys_List[KeyPress], button), sName)
@@ -505,7 +505,7 @@ function HealBot_Share_ExportBuffs(lData)
             ssStr=ssStr..xClass.."~"
             if not HealBot_Globals.HealBot_Custom_Buffs_ShowBarCol[bId] then
                 HealBot_Globals.HealBot_Custom_Buffs_ShowBarCol[bId]=1
-            elseif HealBot_Globals.HealBot_Custom_Buffs_ShowBarCol[bId]==true then
+            elseif HealBot_Globals.HealBot_Custom_Buffs_ShowBarCol[bId] == true then
                 HealBot_Globals.HealBot_Custom_Buffs_ShowBarCol[bId]=3
             end
             ssStr=ssStr..bId..","..(HealBot_Globals.HealBot_Custom_Buffs[bId] or 0)..","..x..","..HealBot_Globals.HealBot_Custom_Buffs_ShowBarCol[bId]..","
@@ -516,14 +516,14 @@ function HealBot_Share_ExportBuffs(lData)
             else
                 ssStr=ssStr..",,,"
             end
-            ssStr=ssStr..(HealBot_Globals.CustomBuffIDMethod[bId] or 3).."," 
+            ssStr=ssStr..(HealBot_Globals.CustomBuffIDMethod[bId] or 3)..","
             if HealBot_Globals.CustomBuffTag[bId] then
                 ssStr=ssStr..HealBot_Globals.CustomBuffTag[bId]..","
             else
                 ssStr=ssStr..","
             end
-            ssStr=ssStr..(HealBot_Globals.HealBot_Custom_Buffs_IconSet[bId] or 1).."," 
-            ssStr=ssStr..(HealBot_Globals.HealBot_Custom_Buffs_IconGlow[bId] or 1).."," 
+            ssStr=ssStr..(HealBot_Globals.HealBot_Custom_Buffs_IconSet[bId] or 1)..","
+            ssStr=ssStr..(HealBot_Globals.HealBot_Custom_Buffs_IconGlow[bId] or 1)..","
             if HealBot_Globals.IgnoreCustomBuff[bId] then
                 for instName, _ in pairs(HealBot_Globals.IgnoreCustomBuff[bId]) do
                     ssStr=ssStr..(instName)..","
@@ -561,8 +561,8 @@ function HealBot_Share_LoadBuffs(sIn)
             ssTab[i]=t
         end
     end
-    
-    if HealBot_Share_luVars["InMethodBuff"]==1 then
+
+    if HealBot_Share_luVars["InMethodBuff"] == 1 then
         HealBot_Share_luVars["custombufftextpage"]=1
         HealBot_Globals.WatchHoT={ ["DRUI"]={}, ["HUNT"]={}, ["MAGE"]={}, ["PALA"]={}, ["PRIE"]={}, ["ROGU"]={}, ["SHAM"]={},
                                    ["WARL"]={}, ["WARR"]={}, ["DEAT"]={}, ["DEMO"]={}, ["MONK"]={}, ["EVOK"]={}, ["ALL"]={} }
@@ -574,11 +574,11 @@ function HealBot_Share_LoadBuffs(sIn)
         local r=HealBot_Globals.CustomBuffBarColour[customBuffPriority]["R"]
         local g=HealBot_Globals.CustomBuffBarColour[customBuffPriority]["G"]
         local b=HealBot_Globals.CustomBuffBarColour[customBuffPriority]["B"]
-        HealBot_Globals.CustomBuffBarColour={ [customBuffPriority] = { ["R"] = r, ["G"] = g, ["B"] = b, }, }
+        HealBot_Globals.CustomBuffBarColour={ [customBuffPriority]={ ["R"]=r, ["G"]=g, ["B"]=b, }, }
         HealBot_Globals.IgnoreCustomBuff={}
     end
-    for e=2,#ssTab do 
-        local _,c,d = string.split("~", ssTab[e])
+    for e=2,#ssTab do
+        local _,c,d=string.split("~", ssTab[e])
         local bId,prio,filter,show,r,g,b,idMethod,tag,iconSet,iconGlow,i1,i2,i3,i4=string.split(",", d)
         if not c or not bId or not prio or not filter or not show or not r or not g or not b then
             HealBot_Options_ImportFail("Buffs", "Data corruption - ensure it is exactly as the original file")
@@ -595,14 +595,14 @@ function HealBot_Share_LoadBuffs(sIn)
             if not HealBot_Globals.WatchHoT[c][bId] or HealBot_Share_luVars["InMethodBuff"]<3 then
                 local bName=HealBot_WoWAPI_SpellName(bId) or bId
                 HealBot_Globals.WatchHoT[c][bId]=filter
-                if prio>0 then 
-                    HealBot_Globals.HealBot_Custom_Buffs[bId]=prio 
+                if prio>0 then
+                    HealBot_Globals.HealBot_Custom_Buffs[bId]=prio
                     if bName then HealBot_Globals.HealBot_Custom_Buffs[bName]=prio end
                 end
-                if show=="true" then 
+                if show == "true" then
                     HealBot_Globals.HealBot_Custom_Buffs_ShowBarCol[bId]=3
                     if bName then HealBot_Globals.HealBot_Custom_Buffs_ShowBarCol[bName]=3 end
-                elseif show=="false" then 
+                elseif show == "false" then
                     HealBot_Globals.HealBot_Custom_Buffs_ShowBarCol[bId]=1
                     if bName then HealBot_Globals.HealBot_Custom_Buffs_ShowBarCol[bName]=1 end
                 else
@@ -627,20 +627,20 @@ function HealBot_Share_LoadBuffs(sIn)
                 if iconGlow>1 then
                     HealBot_Globals.HealBot_Custom_Buffs_IconGlow[bId]=iconGlow
                 end
-                if string.len(i1 or "")>0 then 
+                if string.len(i1 or "")>0 then
                     if not HealBot_Globals.IgnoreCustomBuff[bId] then HealBot_Globals.IgnoreCustomBuff[bId]={} end
-                    HealBot_Globals.IgnoreCustomBuff[bId][i1]=true 
+                    HealBot_Globals.IgnoreCustomBuff[bId][i1]=true
                 end
                 if string.len(i2 or "")>0 then
-                    HealBot_Globals.IgnoreCustomBuff[bId][i2]=true 
+                    HealBot_Globals.IgnoreCustomBuff[bId][i2]=true
                 end
                 if string.len(i3 or "")>0 then
-                    HealBot_Globals.IgnoreCustomBuff[bId][i3]=true 
+                    HealBot_Globals.IgnoreCustomBuff[bId][i3]=true
                 end
                 if string.len(i4 or "")>0 then
-                    HealBot_Globals.IgnoreCustomBuff[bId][i4]=true 
+                    HealBot_Globals.IgnoreCustomBuff[bId][i4]=true
                 end
-                if bName and HealBot_Globals.IgnoreCustomBuff[bId] then 
+                if bName and HealBot_Globals.IgnoreCustomBuff[bId] then
                     HealBot_Globals.IgnoreCustomBuff[bName]=HealBot_Options_copyTable(HealBot_Globals.IgnoreCustomBuff[bId])
                 end
             end
@@ -667,9 +667,9 @@ function HealBot_Share_ExportDebuffs(lData)
             ssStr=ssStr..(HealBot_Globals.Custom_Debuff_Categories[dId] or 10).."~"
             if not HealBot_Globals.HealBot_Custom_Debuffs_ShowBarCol[dId] then
                 HealBot_Globals.HealBot_Custom_Debuffs_ShowBarCol[dId]=1
-            elseif HealBot_Globals.HealBot_Custom_Debuffs_ShowBarCol[dId]==true then
+            elseif HealBot_Globals.HealBot_Custom_Debuffs_ShowBarCol[dId] == true then
                 HealBot_Globals.HealBot_Custom_Debuffs_ShowBarCol[dId]=3
-            end                
+            end
             ssStr=ssStr..dId..","..x..","..(HealBot_Globals.FilterCustomDebuff[dId] or "")..","..HealBot_Globals.HealBot_Custom_Debuffs_ShowBarCol[dId]..","
             if HealBot_Globals.CDCBarColour[dId] then
                 ssStr=ssStr..(HealBot_Globals.CDCBarColour[dId]["R"] or 0.8)..","
@@ -724,10 +724,10 @@ function HealBot_Share_LoadDebuffs(sIn)
         end
     end
 
-    if HealBot_Share_luVars["InMethodDebuff"]==1 then
+    if HealBot_Share_luVars["InMethodDebuff"] == 1 then
         HealBot_Share_luVars["customdebufftextpage"]=1
-        HealBot_Globals.Custom_Debuff_Categories={ [HEALBOT_CUSTOM_CAT_CUSTOM_AUTOMATIC]  = 1, }
-        HealBot_Globals.HealBot_Custom_Debuffs={ [HEALBOT_CUSTOM_CAT_CUSTOM_AUTOMATIC]     = 15, }
+        HealBot_Globals.Custom_Debuff_Categories={ [HEALBOT_CUSTOM_CAT_CUSTOM_AUTOMATIC]=1, }
+        HealBot_Globals.HealBot_Custom_Debuffs={ [HEALBOT_CUSTOM_CAT_CUSTOM_AUTOMATIC]=15, }
         HealBot_Globals.FilterCustomDebuff={}
         HealBot_Globals.CustomDebuffIDMethod={}
         HealBot_Globals.HealBot_Custom_Debuffs_IconSet={}
@@ -737,11 +737,11 @@ function HealBot_Share_LoadDebuffs(sIn)
         local r=HealBot_Globals.CDCBarColour[customDebuffPriority]["R"]
         local g=HealBot_Globals.CDCBarColour[customDebuffPriority]["G"]
         local b=HealBot_Globals.CDCBarColour[customDebuffPriority]["B"]
-        HealBot_Globals.CDCBarColour={ [customDebuffPriority] = { ["R"] = r, ["G"] = g, ["B"] = b, }, }
+        HealBot_Globals.CDCBarColour={ [customDebuffPriority]={ ["R"]=r, ["G"]=g, ["B"]=b, }, }
         HealBot_Globals.IgnoreCustomDebuff={}
     end
-    for e=2,#ssTab do 
-        local _,c,d = string.split("~", ssTab[e])
+    for e=2,#ssTab do
+        local _,c,d=string.split("~", ssTab[e])
         local dId,prio,filter,show,r,g,b,idMethod,tag,iconSet,iconGlow,i1,i2,i3,i4=string.split(",", d)
         if not c or not dId or not prio or not filter or not show or not r or not g or not b then
             HealBot_Options_ImportFail("Debuffs", "Data corruption - ensure it is exactly as the original file")
@@ -761,9 +761,9 @@ function HealBot_Share_LoadDebuffs(sIn)
                 HealBot_Globals.Custom_Debuff_Categories[dId]=c
                 HealBot_Globals.HealBot_Custom_Debuffs[dId]=prio
                 if filter then HealBot_Globals.FilterCustomDebuff[dId]=filter end
-                if show=="true" then
+                if show == "true" then
                     HealBot_Globals.HealBot_Custom_Debuffs_ShowBarCol[dId]=3
-                elseif show=="false" then
+                elseif show == "false" then
                     HealBot_Globals.HealBot_Custom_Debuffs_ShowBarCol[dId]=1
                 else
                     HealBot_Globals.HealBot_Custom_Debuffs_ShowBarCol[dId]=tonumber(show) or 1
@@ -786,18 +786,18 @@ function HealBot_Share_LoadDebuffs(sIn)
                     HealBot_Globals.HealBot_Custom_Debuffs_IconGlow[dId]=iconGlow
                 end
                 HealBot_Globals.CDCTag[dId]=tag
-                if string.len(i1 or "")>0 then 
+                if string.len(i1 or "")>0 then
                     if not HealBot_Globals.IgnoreCustomDebuff[dId] then HealBot_Globals.IgnoreCustomDebuff[dId]={} end
-                    HealBot_Globals.IgnoreCustomDebuff[dId][i1]=true 
+                    HealBot_Globals.IgnoreCustomDebuff[dId][i1]=true
                 end
                 if string.len(i2 or "")>0 then
-                    HealBot_Globals.IgnoreCustomDebuff[dId][i2]=true 
+                    HealBot_Globals.IgnoreCustomDebuff[dId][i2]=true
                 end
                 if string.len(i3 or "")>0 then
-                    HealBot_Globals.IgnoreCustomDebuff[dId][i3]=true 
+                    HealBot_Globals.IgnoreCustomDebuff[dId][i3]=true
                 end
                 if string.len(i4 or "")>0 then
-                    HealBot_Globals.IgnoreCustomDebuff[dId][i4]=true 
+                    HealBot_Globals.IgnoreCustomDebuff[dId][i4]=true
                 end
             end
         end
@@ -913,33 +913,33 @@ local AuxLookupRetail={[0]={[1]="None",
                       }
 function HealBot_Share_SkinDecodeAux(dat, frame)
       --HealBot_setCall("HealBot_Share_SkinDecodeAux")
-    if frame<8 then 
+    if frame<8 then
         frame=0
     elseif frame<10 then
         frame=8
     end
     if HEALBOT_GAME_VERSION<9 then
         for j=1, getn(AuxLookupClassic[frame]), 1 do
-            if AuxLookupClassic[frame][j]==dat then
+            if AuxLookupClassic[frame][j] == dat then
                 dat=j
                 break
             end
         end
     else
         for j=1, getn(AuxLookupRetail[frame]), 1 do
-            if AuxLookupRetail[frame][j]==dat then
+            if AuxLookupRetail[frame][j] == dat then
                 dat=j
                 break
             end
         end
     end
-    if type(dat)=="string" then dat=1 end
+    if type(dat) == "string" then dat=1 end
     return dat
 end
 
 function HealBot_Share_SkinEncodeAux(dat, frame)
       --HealBot_setCall("HealBot_Share_SkinEncodeAux")
-    if frame<8 then 
+    if frame<8 then
         frame=0
     elseif frame<10 then
         frame=8
@@ -955,14 +955,14 @@ end
 local ssData=""
 function HealBot_Share_BuildSkinData(cmd, msg, lData)
       --HealBot_setCall("HealBot_Share_BuildSkinData")
-    if cmd=="Init" then
+    if cmd == "Init" then
         HealBot_Share_ExportComplete(HEALBOT_OPTIONS_SKIN, msg)
         if tonumber(msg) then msg=UnitName("player").."-"..msg end
-        if msg==HEALBOT_SKINS_STD then msg=UnitName("player").."-"..HEALBOT_SKINS_STD end
+        if msg == HEALBOT_SKINS_STD then msg=UnitName("player").."-"..HEALBOT_SKINS_STD end
         ssData=validType[1].."\n"..msg
     elseif cmd and msg then
         ssData=ssData.."\n"..cmd.."!"..msg
-        if cmd=="Complete" then
+        if cmd == "Complete" then
             if lData or HealBot_Globals.CompressExport then
                 ssData=HealBot_Share_Compress(ssData)
             end
@@ -982,15 +982,15 @@ local function HealBot_Share_ExportSkinFrames(skinName, varName, varNameAppend)
     local tabStr=""
     local tmpTab={}
     for i=1,10 do
-        if varName=="AuxBar" then
+        if varName == "AuxBar" then
             tmpTab=HealBot_Options_copyTable(Healbot_Config_Skins[varName][skinName][varNameAppend][i])
             tmpTab["USE"]=HealBot_Share_SkinEncodeAux(tmpTab["USE"], i)
             tabStr=HealBot_Options_tab2str(tmpTab)
-        elseif varName=="AuxBarText" then
+        elseif varName == "AuxBarText" then
             tabStr=HealBot_Options_tab2str(Healbot_Config_Skins[varName][skinName][varNameAppend][i])
-        elseif varName=="IconSets" then
+        elseif varName == "IconSets" then
             tabStr=HealBot_Options_tab2str(Healbot_Config_Skins[varName][skinName][i][varNameAppend])
-        elseif varName=="IconSetsText" then
+        elseif varName == "IconSetsText" then
             tabStr=HealBot_Options_tab2str(Healbot_Config_Skins[varName][skinName][i][varNameAppend])
         else
             tabStr=HealBot_Options_tab2str(Healbot_Config_Skins[varName][skinName][i])
@@ -1010,15 +1010,15 @@ local function HealBot_Share_ExportSkinFrames(skinName, varName, varNameAppend)
         end
         if isDup then
             dups=dups..i.."~"
-            if i==10 then
-                if varNameAppend then 
-                    HealBot_Share_BuildSkinData(varName.."^"..varNameAppend.."~d", dups) 
+            if i == 10 then
+                if varNameAppend then
+                    HealBot_Share_BuildSkinData(varName.."^"..varNameAppend.."~d", dups)
                 else
-                    HealBot_Share_BuildSkinData(varName.."~d", dups) 
+                    HealBot_Share_BuildSkinData(varName.."~d", dups)
                 end
             end
         else
-            if string.len(dups)>1 then 
+            if string.len(dups)>1 then
                 if varNameAppend then
                     HealBot_Share_BuildSkinData(varName.."^"..varNameAppend.."~d", dups)
                 else
@@ -1066,7 +1066,7 @@ function HealBot_Share_ExportSkin(skinName, lData)
     for j=1, getn(SkinTabFrameVars), 1 do
         local varName=SkinTabFrameVars[j]
         HealBot_Share_ExportSkinFrames(skinName, varName)
-        if varName=="HealGroups" then
+        if varName == "HealGroups" then
             local tabStr=HealBot_Options_tab2str(Healbot_Config_Skins[varName][skinName][11])
             HealBot_Share_BuildSkinData(varName.."~f~11", tabStr)
         end
@@ -1106,8 +1106,8 @@ function HealBot_Share_SkinLoad(sIn, internal)
     end
     hbOptGetSkinName=ssTab[2]
     if tonumber(hbOptGetSkinName) then hbOptGetSkinName='#'..hbOptGetSkinName end
-    for e=3,#ssTab do 
-        local c,m = string.split("!", ssTab[e])
+    for e=3,#ssTab do
+        local c,m=string.split("!", ssTab[e])
         if c and m then HealBot_Share_BuildSkinRecMsg(hbOptGetSkinName, c, 0, m) end
     end
     if not HealBot_Options_checkSkinName(hbOptGetSkinName) then
@@ -1139,7 +1139,7 @@ end
 
 function HealBot_Options_StringSplit(s, delimiter)
       --HealBot_setCall("HealBot_Options_StringSplit")
-    local result = {};
+    local result={};
     for match in (s..delimiter):gmatch("(.-)"..delimiter) do
         table.insert(result, match);
     end
@@ -1150,11 +1150,11 @@ local tmpRecParts={}
 local lFrame=1
 local function HealBot_Share_DecodeDat(v)
       --HealBot_setCall("HealBot_Share_DecodeDat")
-    if v=="false" then                
-        v=false 
-    elseif v=="true" then
+    if v == "false" then
+        v=false
+    elseif v == "true" then
         v=true
-    elseif tonumber(v) then 
+    elseif tonumber(v) then
         v=tonumber(v)
     end
     return v
@@ -1162,22 +1162,22 @@ end
 
 function HealBot_Share_BuildSkinRecMsg(skinName, cmd, parts, msg)
       --HealBot_setCall("HealBot_Share_BuildSkinRecMsg")
-    local varDat, vType, fNo = string.split("~", cmd)
+    local varDat, vType, fNo=string.split("~", cmd)
     local varName, aID=string.split("^", varDat)
     msg=string.gsub(msg,'\"', '' )
-    if parts==1 then
+    if parts == 1 then
         tmpRecParts[varName]=msg
         return
-    elseif parts==2 then
+    elseif parts == 2 then
         msg=tmpRecParts[varName]..msg
         tmpRecParts[varName]=nil
     end
-    if vType=="f" and Healbot_Config_Skins[varName] then
+    if vType == "f" and Healbot_Config_Skins[varName] then
         if tonumber(fNo) then fNo=tonumber(fNo) end
         if not Healbot_Config_Skins[varName][skinName] then Healbot_Config_Skins[varName][skinName]={} end
-        if varName=="AuxBar" or varName=="AuxBarText" then
-            if tonumber(aID) then 
-                aID=tonumber(aID) 
+        if varName == "AuxBar" or varName == "AuxBarText" then
+            if tonumber(aID) then
+                aID=tonumber(aID)
                 if not Healbot_Config_Skins[varName][skinName][aID] then Healbot_Config_Skins[varName][skinName][aID]={} end
                 for j=1,10 do
                     if not Healbot_Config_Skins[varName][skinName][aID][j] then Healbot_Config_Skins[varName][skinName][aID][j]={} end
@@ -1186,20 +1186,20 @@ function HealBot_Share_BuildSkinRecMsg(skinName, cmd, parts, msg)
         else
             for j=1,10 do
                 if not Healbot_Config_Skins[varName][skinName][j] then Healbot_Config_Skins[varName][skinName][j]={} end
-                if varName=="IconSets" or varName=="IconSetsText" then
-                    if tonumber(aID) then 
-                        aID=tonumber(aID) 
+                if varName == "IconSets" or varName == "IconSetsText" then
+                    if tonumber(aID) then
+                        aID=tonumber(aID)
                         if not Healbot_Config_Skins[varName][skinName][j][aID] then Healbot_Config_Skins[varName][skinName][j][aID]={} end
                     end
                 end
             end
         end
-        if varName=="HealGroups" then
+        if varName == "HealGroups" then
             if not Healbot_Config_Skins[varName][skinName][11] then Healbot_Config_Skins[varName][skinName][11]={} end
         end
-        if varName=="AuxBar" or varName=="AuxBarText" then
-            if tonumber(aID) then 
-                aID=tonumber(aID) 
+        if varName == "AuxBar" or varName == "AuxBarText" then
+            if tonumber(aID) then
+                aID=tonumber(aID)
                 local lMsg=strsub(msg,2,string.len(msg)-1)
                 local d={}
                 d=HealBot_Options_StringSplit(lMsg, ",")
@@ -1207,17 +1207,17 @@ function HealBot_Share_BuildSkinRecMsg(skinName, cmd, parts, msg)
                     local var, dat=string.split("=", d[j])
                     if var and dat then
                         dat=HealBot_Share_DecodeDat(dat)
-                        if varName=="AuxBar" and var=="USE" then
+                        if varName == "AuxBar" and var == "USE" then
                             dat=HealBot_Share_SkinDecodeAux(dat, fNo)
                         end
-                        Healbot_Config_Skins[varName][skinName][aID][fNo][var]=dat 
+                        Healbot_Config_Skins[varName][skinName][aID][fNo][var]=dat
                     end
                     lFrame=fNo
                 end
             end
-        elseif varName=="IconSets" or varName=="IconSetsText" then
-            if tonumber(aID) then 
-                aID=tonumber(aID) 
+        elseif varName == "IconSets" or varName == "IconSetsText" then
+            if tonumber(aID) then
+                aID=tonumber(aID)
                 local lMsg=strsub(msg,2,string.len(msg)-1)
                 local d={}
                 d=HealBot_Options_StringSplit(lMsg, ",")
@@ -1225,7 +1225,7 @@ function HealBot_Share_BuildSkinRecMsg(skinName, cmd, parts, msg)
                     local var, dat=string.split("=", d[j])
                     if var and dat then
                         dat=HealBot_Share_DecodeDat(dat)
-                        Healbot_Config_Skins[varName][skinName][fNo][aID][var]=dat 
+                        Healbot_Config_Skins[varName][skinName][fNo][aID][var]=dat
                     end
                     lFrame=fNo
                 end
@@ -1238,35 +1238,35 @@ function HealBot_Share_BuildSkinRecMsg(skinName, cmd, parts, msg)
                 local var, dat=string.split("=", d[j])
                 if var and dat then
                     dat=HealBot_Share_DecodeDat(dat)
-                    Healbot_Config_Skins[varName][skinName][fNo][var]=dat 
+                    Healbot_Config_Skins[varName][skinName][fNo][var]=dat
                 end
                 lFrame=fNo
             end
         end
-    elseif vType=="d" and Healbot_Config_Skins[varName] then
+    elseif vType == "d" and Healbot_Config_Skins[varName] then
         local dups={}
         dups=HealBot_Options_StringSplit(msg, "~")
         for j=1,getn(dups) do
             local f=nil
             if tonumber(dups[j]) then f=tonumber(dups[j]) end
-            if varName=="AuxBar" or varName=="AuxBarText" then
-                if tonumber(aID) then 
-                    aID=tonumber(aID) 
+            if varName == "AuxBar" or varName == "AuxBarText" then
+                if tonumber(aID) then
+                    aID=tonumber(aID)
                     if f then Healbot_Config_Skins[varName][skinName][aID][f]=HealBot_Options_copyTable(Healbot_Config_Skins[varName][skinName][aID][lFrame]) end
                 end
-            elseif varName=="IconSets" or varName=="IconSetsText" then
-                if tonumber(aID) then 
-                    aID=tonumber(aID) 
+            elseif varName == "IconSets" or varName == "IconSetsText" then
+                if tonumber(aID) then
+                    aID=tonumber(aID)
                     if f then Healbot_Config_Skins[varName][skinName][f][aID]=HealBot_Options_copyTable(Healbot_Config_Skins[varName][skinName][lFrame][aID]) end
                 end
             else
                 if f then Healbot_Config_Skins[varName][skinName][f]=HealBot_Options_copyTable(Healbot_Config_Skins[varName][skinName][lFrame]) end
             end
         end
-    elseif vType=="t" and Healbot_Config_Skins[varName] then
+    elseif vType == "t" and Healbot_Config_Skins[varName] then
         if not Healbot_Config_Skins[varName][skinName] then Healbot_Config_Skins[varName][skinName]={} end
         local lMsg=strsub(msg,2,string.len(msg)-1)
-        local d={}         
+        local d={}
         d=HealBot_Options_StringSplit(lMsg, ",")
         for j=1,getn(d) do
             local var, dat=string.split("=", d[j])
@@ -1278,7 +1278,7 @@ function HealBot_Share_BuildSkinRecMsg(skinName, cmd, parts, msg)
                 Healbot_Config_Skins[varName][skinName][j]=var
             end
         end
-    elseif vType=="a" and Healbot_Config_Skins[varName] then
+    elseif vType == "a" and Healbot_Config_Skins[varName] then
         if not Healbot_Config_Skins[varName][skinName] then Healbot_Config_Skins[varName][skinName]={} end
         local lMsg=strsub(msg,2,string.len(msg)-1)
         local a={}
@@ -1289,7 +1289,7 @@ function HealBot_Share_BuildSkinRecMsg(skinName, cmd, parts, msg)
             local tab=b[2]
             if tab and key then
                 if not Healbot_Config_Skins[varName][skinName][key] then Healbot_Config_Skins[varName][skinName][key]={} end
-                if i==getn(a) then tab=strsub(tab,1,string.len(tab)-1) end
+                if i == getn(a) then tab=strsub(tab,1,string.len(tab)-1) end
                 local d={}
                 d=HealBot_Options_StringSplit(tab, ",")
                 for j=1,getn(d) do
@@ -1303,11 +1303,11 @@ function HealBot_Share_BuildSkinRecMsg(skinName, cmd, parts, msg)
                     end
                 end
             end
-        end     
-    elseif vType=="v" and Healbot_Config_Skins[varName] then
-        if msg=="true" then
+        end
+    elseif vType == "v" and Healbot_Config_Skins[varName] then
+        if msg == "true" then
             Healbot_Config_Skins[varName][skinName]=true
-        elseif msg=="false" then
+        elseif msg == "false" then
             Healbot_Config_Skins[varName][skinName]=false
         else
             if tonumber(msg) then msg=tonumber(msg) end
@@ -1329,9 +1329,9 @@ local dChunk={}
 function HealBot_Share_LinkMsg(msg, sender)
       --HealBot_setCall("HealBot_Share_LinkMsg")
     local mType,data=strsplit("~", msg)
-    if mType=="L" then
+    if mType == "L" then
         HealBot_Share_DisplayLink(data)
-    elseif mType=="R" then
+    elseif mType == "R" then
         local _, sType, eInfo=strsplit("~", msg)
         if sType and sender then
             sType=tonumber(sType)
@@ -1346,38 +1346,38 @@ function HealBot_Share_LinkMsg(msg, sender)
                 HealBot_Comms_SendShareAddonMsg("L:Q~", sender)
             end
         end
-    elseif mType=="D" then
+    elseif mType == "D" then
         local _,id,data=strsplit("~", msg)
         id=tonumber(id)
         dChunk[id]=data
         cChunk=cChunk+1
         HealBot_Share_luVars["LastLinkTimeOut"]=GetTime()
         HealBot_Share_LinkFrame_SetStateText(HEALBOT_OPTIONS_LINK_TRANSINPROGRESS, ceil((cChunk/nChunks)*100).."%")
-    elseif mType=="S" then
+    elseif mType == "S" then
         nChunks=tonumber(data)
         linkDataIn=""
         cChunk=0
         HealBot_Share_luVars["LastLinkTimeOut"]=GetTime()
         HealBot_Share_luVars["TransferComplete"]=false
         HealBot_Share_LinkFrame_SetStateText(HEALBOT_OPTIONS_LINK_TRANSSTARTED)
-    elseif mType=="E" then
+    elseif mType == "E" then
         for x=1,cChunk do
             linkDataIn=linkDataIn..dChunk[x]
         end
-        if string.len(linkDataIn)==tonumber(data) then
-            if HealBot_Share_luVars["RequestType"]==1 then
+        if string.len(linkDataIn) == tonumber(data) then
+            if HealBot_Share_luVars["RequestType"] == 1 then
                 Skin_TextData=linkDataIn
                 HealBot_Share_ValidateData(1, Skin_TextData)
-            elseif HealBot_Share_luVars["RequestType"]==2 then
+            elseif HealBot_Share_luVars["RequestType"] == 2 then
                 Debuffs_TextData=linkDataIn
                 HealBot_Share_ValidateData(2, Debuffs_TextData)
-            elseif HealBot_Share_luVars["RequestType"]==3 then
+            elseif HealBot_Share_luVars["RequestType"] == 3 then
                 Buffs_TextData=linkDataIn
                 HealBot_Share_ValidateData(3, Buffs_TextData)
-            elseif HealBot_Share_luVars["RequestType"]==4 then
+            elseif HealBot_Share_luVars["RequestType"] == 4 then
                 Spells_TextData=linkDataIn
                 HealBot_Share_ValidateData(4, Spells_TextData)
-            elseif HealBot_Share_luVars["RequestType"]==5 then
+            elseif HealBot_Share_luVars["RequestType"] == 5 then
                 PresetCols_TextData=linkDataIn
                 HealBot_Share_ValidateData(5, PresetCols_TextData)
             end
@@ -1389,7 +1389,7 @@ function HealBot_Share_LinkMsg(msg, sender)
         HealBot_Share_luVars["LastLinkTimeOut"]=GetTime()-5
         HealBot_Share_LinkFrame_SetStateText(HEALBOT_OPTIONS_LINK_TRANSCOMPLETE)
     --    HealBot_Options_SharePresetColsExternalEditBox:SetText("Test\nnChunks="..nChunks.."\nstring.len="..data.."\n"..linkDataIn)
-    elseif mType=="Q" then
+    elseif mType == "Q" then
         HealBot_Share_luVars["LastLinkTimeOut"]=GetTime()+15
         HealBot_Share_LinkFrame_SetStateText(HEALBOT_OPTIONS_LINK_WAITQUEUE)
     end
@@ -1429,32 +1429,32 @@ end
 
 function HealBot_Share_LinkData(sType, eInfo)
       --HealBot_setCall("HealBot_Share_LinkData")
-    if sType==1 then
+    if sType == 1 then
         HealBot_Share_ExportSkin(eInfo, true)
-    elseif sType==2 then
+    elseif sType == 2 then
         HealBot_Share_ExportDebuffs(true)
-    elseif sType==3 then
+    elseif sType == 3 then
         HealBot_Share_ExportBuffs(true)
-    elseif sType==4 then
+    elseif sType == 4 then
         HealBot_Share_ExportSpells(true)
-    elseif sType==5 then
+    elseif sType == 5 then
         HealBot_Share_ExportPresetCols(true)
     end
 end
 
 local function HealBot_Share_LinkFrame_OnMouseDown(self, button)
       --HealBot_setCall("HealBot_Share_LinkFrame_OnMouseDown")
-    if button=="LeftButton" and not hbLinkFrame.isMoving then
+    if button == "LeftButton" and not hbLinkFrame.isMoving then
         hbLinkFrame:StartMoving();
-        hbLinkFrame.isMoving = true;
+        hbLinkFrame.isMoving=true;
     end
 end
 
 local function HealBot_Share_LinkFrame_OnMouseUp(self, button)
       --HealBot_setCall("HealBot_Share_LinkFrame_OnMouseUp")
-    if button=="LeftButton" and hbLinkFrame.isMoving then
+    if button == "LeftButton" and hbLinkFrame.isMoving then
 		hbLinkFrame:StopMovingOrSizing();
-		hbLinkFrame.isMoving = false;
+		hbLinkFrame.isMoving=false;
     end
 end
 
@@ -1481,18 +1481,18 @@ function HealBot_Share_LinkFrame_SetRequestText(sType, uName, eInfo)
     end
     hbLinkFrameText["RFROM"]:SetText("|cffffffff"..HEALBOT_WORD_FROM..": |cff55ff55"..uName)
     local inMethod=0
-    if sType==2 then inMethod=HealBot_Options_retLuVars("InMethodDebuff") end
-    if sType==3 then inMethod=HealBot_Options_retLuVars("InMethodBuff") end
-    if sType==4 then inMethod=HealBot_Options_retLuVars("InMethodSpell") end
+    if sType == 2 then inMethod=HealBot_Options_retLuVars("InMethodDebuff") end
+    if sType == 3 then inMethod=HealBot_Options_retLuVars("InMethodBuff") end
+    if sType == 4 then inMethod=HealBot_Options_retLuVars("InMethodSpell") end
     hbLinkFrameText["INMETHOD"]:SetText("|cffffffff"..HEALBOT_OPTIONS_BUTTONIMPORTMETHOD..": |cff55ff55"..inMethodTxt[inMethod])
-    
+
     hbLinkFrameObjects["YesBtn"]:Hide()
     hbLinkFrameObjects["NoBtn"]:Hide()
     hbLinkFrameObjects["CloseBtn"]:Hide()
     if uName~=UnitName("player") then
         HealBot_Share_LinkFrame_SetStateText(HEALBOT_OPTIONS_LINK_REQUESTSENDQ)
         hbLinkFrameObjects["YesBtn"]:Show()
-        hbLinkFrameObjects["NoBtn"]:Show()    
+        hbLinkFrameObjects["NoBtn"]:Show()
         hbLinkFrameObjects["YesBtn"]:Enable()
         hbLinkFrameObjects["NoBtn"]:Enable()
     else
@@ -1523,7 +1523,7 @@ end
 
 function HealBot_Share_LinkFrame_Hide()
       --HealBot_setCall("HealBot_Share_LinkFrame_Hide")
-    if hbLinkFrame then 
+    if hbLinkFrame then
         hbLinkFrame:Hide()
     end
 end
@@ -1533,12 +1533,12 @@ function HealBot_Share_ShowLinkFrame()
     if not hbLinkFrame then
 		hbLinkFrame=CreateFrame("Frame", "HealBot_Link_Frame", UIParent, BackdropTemplateMixin and "BackdropTemplate")
 		hbLinkFrame:SetBackdrop({
-			bgFile = "Interface\\Addons\\HealBot\\Images\\WhiteLine",
-			edgeFile = "Interface\\Addons\\HealBot\\Images\\border",
-			tile = true,
-			tileSize = 8,
-			edgeSize = 8,
-			insets = { left = 3, right = 3, top = 3, bottom = 3, },
+			bgFile="Interface\\Addons\\HealBot\\Images\\WhiteLine",
+			edgeFile="Interface\\Addons\\HealBot\\Images\\border",
+			tile=true,
+			tileSize=8,
+			edgeSize=8,
+			insets={ left=3, right=3, top=3, bottom=3, },
 		})
 		hbLinkFrame:SetMovable(true)
 		hbLinkFrame:EnableMouse(true)
@@ -1546,34 +1546,34 @@ function HealBot_Share_ShowLinkFrame()
 		hbLinkFrame:SetScript("OnMouseUp", function(self, button) HealBot_Share_LinkFrame_OnMouseUp(self, button) end)
 
 		hbLinkFrame:SetWidth(300)
-        hbLinkFrame:SetHeight(150)	
+        hbLinkFrame:SetHeight(150)
         hbLinkFrame:SetBackdropColor(0.2,0.2,0.2,0.8)
         hbLinkFrame:SetBackdropBorderColor(0.4,0.4,0.4,0.9)
         hbLinkFrame:ClearAllPoints()
         hbLinkFrame:SetPoint("BOTTOM","WorldFrame","BOTTOM",0,175);
 
-        hbLinkFrameObjects["CloseBtn"] = CreateFrame("Button", "HealBot_Link_Frame_CloseBtn", hbLinkFrame, "UIPanelButtonTemplate")
+        hbLinkFrameObjects["CloseBtn"]=CreateFrame("Button", "HealBot_Link_Frame_CloseBtn", hbLinkFrame, "UIPanelButtonTemplate")
         hbLinkFrameObjects["CloseBtn"]:SetPoint("BOTTOM", 0, 10)
         hbLinkFrameObjects["CloseBtn"]:SetWidth(120)
         hbLinkFrameObjects["CloseBtn"]:SetHeight(22)
         hbLinkFrameObjects["CloseBtn"]:SetNormalFontObject("GameFontNormal")
         hbLinkFrameObjects["CloseBtn"]:SetText(HEALBOT_OPTIONS_CLOSE)
         hbLinkFrameObjects["CloseBtn"]:SetScript("OnMouseDown", function() HealBot_Share_CancelLinkRequest(); end)
-        hbLinkFrameObjects["YesBtn"] = CreateFrame("Button", "HealBot_Link_Frame_YesBtn", hbLinkFrame, "UIPanelButtonTemplate")
+        hbLinkFrameObjects["YesBtn"]=CreateFrame("Button", "HealBot_Link_Frame_YesBtn", hbLinkFrame, "UIPanelButtonTemplate")
         hbLinkFrameObjects["YesBtn"]:SetPoint("BOTTOM", -60, 10)
         hbLinkFrameObjects["YesBtn"]:SetWidth(110)
         hbLinkFrameObjects["YesBtn"]:SetHeight(22)
         hbLinkFrameObjects["YesBtn"]:SetNormalFontObject("GameFontNormal")
         hbLinkFrameObjects["YesBtn"]:SetText(HEALBOT_WORDS_YES)
         hbLinkFrameObjects["YesBtn"]:SetScript("OnMouseDown", function() HealBot_Share_SendLinkRequest(); end)
-        hbLinkFrameObjects["NoBtn"] = CreateFrame("Button", "HealBot_Link_Frame_NoBtn", hbLinkFrame, "UIPanelButtonTemplate")
+        hbLinkFrameObjects["NoBtn"]=CreateFrame("Button", "HealBot_Link_Frame_NoBtn", hbLinkFrame, "UIPanelButtonTemplate")
         hbLinkFrameObjects["NoBtn"]:SetPoint("BOTTOM", 60, 10)
         hbLinkFrameObjects["NoBtn"]:SetWidth(110)
         hbLinkFrameObjects["NoBtn"]:SetHeight(22)
         hbLinkFrameObjects["NoBtn"]:SetNormalFontObject("GameFontNormal")
         hbLinkFrameObjects["NoBtn"]:SetText(HEALBOT_WORDS_NO)
         hbLinkFrameObjects["NoBtn"]:SetScript("OnMouseDown", function() HealBot_Share_CancelLinkRequest(); end)
-        
+
         HealBot_Share_LinkFrame_CreateText()
     end
     hbLinkFrame:Show()
@@ -1600,9 +1600,9 @@ function HealBot_Share_PostLink()
     s=HealBot_Share_Compress(s)
     if HealBot_Share_luVars["PostChannel"]<3 then
         HealBot_Comms_SendInstantAddonMsg("L:L~"..s)
-    elseif HealBot_Share_luVars["PostChannel"]==3 then
+    elseif HealBot_Share_luVars["PostChannel"] == 3 then
         HealBot_Comms_SendInstantAddonMsg("L:L~"..s, true)
-    elseif HealBot_Share_luVars["PostChannel"]==4 and string.len(HealBot_Share_luVars["PostWhisper"])>1 then
+    elseif HealBot_Share_luVars["PostChannel"] == 4 and string.len(HealBot_Share_luVars["PostWhisper"])>1 then
         HealBot_Comms_SendInstantAddonMsg("L:L~"..s, true, HealBot_Share_luVars["PostWhisper"])
     end
 end
@@ -1610,8 +1610,8 @@ end
 local function HealBot_Share_SetupDropDown(dropdown, width, x, y, text)
       --HealBot_setCall("HealBot_Share_SetupDropDown")
 	dropdown:SetPoint("TOP", x, y)
-	UIDropDownMenu_SetWidth(dropdown, width)	
-	dropdown.Txt = dropdown:CreateFontString()
+	UIDropDownMenu_SetWidth(dropdown, width)
+	dropdown.Txt=dropdown:CreateFontString()
 	dropdown.Txt:SetFontObject(GameFontNormal)
 	dropdown.Txt:SetPoint("TOP", 0 , 12)
     dropdown.Txt:SetText(text)
@@ -1619,42 +1619,42 @@ end
 
 local function HealBot_Share_PostFrameChannel_DropDown()
       --HealBot_setCall("HealBot_Share_PostFrameChannel_DropDown")
-    local info = UIDropDownMenu_CreateInfo()
+    local info=UIDropDownMenu_CreateInfo()
     for j=1, 4, 1 do
-        info.text = linkChannelList[j];
-        info.func = function(self)
+        info.text=linkChannelList[j];
+        info.func=function(self)
                         if HealBot_Share_luVars["PostChannel"]~=self:GetID() then
 							HealBot_Share_luVars["PostChannel"]=self:GetID()
                             UIDropDownMenu_SetText(hbPostLinkFrameObjects["PostFrameChannel"],linkChannelList[HealBot_Share_luVars["PostChannel"]])
-							if HealBot_Share_luVars["PostChannel"]==4 then
+							if HealBot_Share_luVars["PostChannel"] == 4 then
                                 hbPostLinkFrameObjects["PostFrameWhisper"]:Show()
                             else
                                 hbPostLinkFrameObjects["PostFrameWhisper"]:Hide()
                             end
                         end
                     end
-        info.checked = false;
-        if HealBot_Share_luVars["PostChannel"]==j then info.checked = true end
+        info.checked=false;
+        if HealBot_Share_luVars["PostChannel"] == j then info.checked=true end
         UIDropDownMenu_AddButton(info);
     end
 end
 
 local function HealBot_Share_PostFrameWhisper_DropDown()
       --HealBot_setCall("HealBot_Share_PostFrameWhisper_DropDown")
-    local info = UIDropDownMenu_CreateInfo()    
+    local info=UIDropDownMenu_CreateInfo()
     local wList=HealBot_GetInfo()
     local uID=""
     local uName=nil
     for x,_ in pairs(wList) do
-        info.text = x;
-        info.func = function(self)
+        info.text=x;
+        info.func=function(self)
                         if HealBot_Share_luVars["PostWhisper"]~=self:GetText() then
                             HealBot_Share_luVars["PostWhisper"]=self:GetText()
                             UIDropDownMenu_SetText(hbPostLinkFrameObjects["PostFrameWhisper"],HealBot_Share_luVars["PostWhisper"])
                         end
                     end
-        info.checked = false;
-        if HealBot_Share_luVars["PostWhisper"]==x then info.checked = true end
+        info.checked=false;
+        if HealBot_Share_luVars["PostWhisper"] == x then info.checked=true end
         UIDropDownMenu_AddButton(info);
     end
 end
@@ -1671,24 +1671,24 @@ function HealBot_Share_ShowPostFrame(g,h,f,tTxt)
     if not hbPostLinkFrame then
 		hbPostLinkFrame=CreateFrame("Frame", "HealBot_Link_PostFrame", UIParent, BackdropTemplateMixin and "BackdropTemplate")
 		hbPostLinkFrame:SetBackdrop({
-			bgFile = "Interface\\Addons\\HealBot\\Images\\WhiteLine",
-			edgeFile = "Interface\\Addons\\HealBot\\Images\\border",
-			tile = true,
-			tileSize = 8,
-			edgeSize = 8,
-			insets = { left = 3, right = 3, top = 3, bottom = 3, },
+			bgFile="Interface\\Addons\\HealBot\\Images\\WhiteLine",
+			edgeFile="Interface\\Addons\\HealBot\\Images\\border",
+			tile=true,
+			tileSize=8,
+			edgeSize=8,
+			insets={ left=3, right=3, top=3, bottom=3, },
 		})
         hbPostLinkFrame:SetBackdropColor(0,0,0,1)
         hbPostLinkFrame:SetBackdropBorderColor(0,0,0,0)
         hbPostLinkFrame:SetWidth(320)
         hbPostLinkFrame:SetHeight(425)
-        
-		hbPostLinkFrameObjects["PostFrameChannel"] = CreateFrame("Frame", "HealBot_PostFrame_Channel", hbPostLinkFrame, "UIDropDownMenuTemplate")
+
+		hbPostLinkFrameObjects["PostFrameChannel"]=CreateFrame("Frame", "HealBot_PostFrame_Channel", hbPostLinkFrame, "UIDropDownMenuTemplate")
 		HealBot_Share_SetupDropDown(hbPostLinkFrameObjects["PostFrameChannel"], 170, 0, -225, HEALBOT_OPTIONS_LINK_POSTCHANNEL)
-		hbPostLinkFrameObjects["PostFrameWhisper"] = CreateFrame("Frame", "HealBot_PostFrame_Whisper", hbPostLinkFrame, "UIDropDownMenuTemplate")
+		hbPostLinkFrameObjects["PostFrameWhisper"]=CreateFrame("Frame", "HealBot_PostFrame_Whisper", hbPostLinkFrame, "UIDropDownMenuTemplate")
 		HealBot_Share_SetupDropDown(hbPostLinkFrameObjects["PostFrameWhisper"], 170, 0, -285, HEALBOT_OPTIONS_LINK_POSTWHISPER)
         hbPostLinkFrameObjects["PostFrameWhisper"]:Hide()
-        
+
         hbPostLinkFrameText["TITLE"]=hbPostLinkFrame:CreateFontString("HealBot_PostFrameTitleText", "OVERLAY", "GameFontNormal")
         hbPostLinkFrameText["TITLE"]:SetPoint("TOP", hbPostLinkFrame, "TOP", 0, 0)
         hbPostLinkFrameText["TITLE"]:SetText(HEALBOT_OPTIONS_LINK_CREATELR)
@@ -1712,14 +1712,14 @@ function HealBot_Share_ShowPostFrame(g,h,f,tTxt)
         hbPostLinkFrameText["CHAN4"]:SetPoint("TOPLEFT", hbPostLinkFrameText["CHAN3"], "TOPLEFT", 0, -20)
         hbPostLinkFrameText["CHAN4"]:SetText(HEALBOT_OPTIONS_LINK_CHAN4)
         hbPostLinkFrameText["CHAN4"]:SetTextColor(1,1,0.8,1)
-        hbPostLinkFrameObjects["PostBtn"] = CreateFrame("Button", "HealBot_Post_Frame_PostBtn", hbPostLinkFrame, "UIPanelButtonTemplate")
+        hbPostLinkFrameObjects["PostBtn"]=CreateFrame("Button", "HealBot_Post_Frame_PostBtn", hbPostLinkFrame, "UIPanelButtonTemplate")
         hbPostLinkFrameObjects["PostBtn"]:SetPoint("BOTTOM", -80, 20)
         hbPostLinkFrameObjects["PostBtn"]:SetWidth(140)
         hbPostLinkFrameObjects["PostBtn"]:SetHeight(22)
         hbPostLinkFrameObjects["PostBtn"]:SetNormalFontObject("GameFontNormal")
         hbPostLinkFrameObjects["PostBtn"]:SetText(HEALBOT_OPTIONS_BUTTONPOST)
         hbPostLinkFrameObjects["PostBtn"]:SetScript("OnMouseDown", function() HealBot_Share_PostLink(); end)
-        hbPostLinkFrameObjects["CloseBtn"] = CreateFrame("Button", "HealBot_Post_Frame_CloseBtn", hbPostLinkFrame, "UIPanelButtonTemplate")
+        hbPostLinkFrameObjects["CloseBtn"]=CreateFrame("Button", "HealBot_Post_Frame_CloseBtn", hbPostLinkFrame, "UIPanelButtonTemplate")
         hbPostLinkFrameObjects["CloseBtn"]:SetPoint("BOTTOM", 80, 20)
         hbPostLinkFrameObjects["CloseBtn"]:SetWidth(140)
         hbPostLinkFrameObjects["CloseBtn"]:SetHeight(22)
@@ -1728,14 +1728,14 @@ function HealBot_Share_ShowPostFrame(g,h,f,tTxt)
         hbPostLinkFrameObjects["CloseBtn"]:SetScript("OnMouseDown", function() HealBot_Share_ClosePostLink(); end)
     end
     HealBot_Share_luVars["PostWhisper"]=""
-    
+
     UIDropDownMenu_Initialize(hbPostLinkFrameObjects["PostFrameChannel"], HealBot_Share_PostFrameChannel_DropDown)
 	UIDropDownMenu_SetText(hbPostLinkFrameObjects["PostFrameChannel"],linkChannelList[HealBot_Share_luVars["PostChannel"]])
 	HealBot_Share_SetLabel(hbPostLinkFrameObjects["PostFrameChannel"].Txt, HEALBOT_OPTIONS_LINK_POSTCHANNEL)
     UIDropDownMenu_Initialize(hbPostLinkFrameObjects["PostFrameWhisper"], HealBot_Share_PostFrameWhisper_DropDown)
 	UIDropDownMenu_SetText(hbPostLinkFrameObjects["PostFrameWhisper"],HealBot_Share_luVars["PostWhisper"])
 	HealBot_Share_SetLabel(hbPostLinkFrameObjects["PostFrameWhisper"].Txt, HEALBOT_OPTIONS_LINK_POSTWHISPER)
-    
+
     hbPostLinkFrame:SetParent(f)
     hbPostLinkFrame:ClearAllPoints()
     hbPostLinkFrame:SetPoint("BOTTOM",f,"BOTTOM",0,2)

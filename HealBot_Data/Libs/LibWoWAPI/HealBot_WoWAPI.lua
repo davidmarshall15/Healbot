@@ -28,7 +28,7 @@ local function HealBot_WoWAPI_GetSpellNameV11(spellId)
 end
 
 local function HealBot_WoWAPI_GetSpellIdV1(spellName)
-    _, _, _, _, _, _, hbInfo = GetSpellId(spellName)
+    _, _, _, _, _, _, hbInfo=GetSpellId(spellName)
     return hbInfo
 end
 
@@ -49,7 +49,7 @@ local function HealBot_WoWAPI_GetInfoV11(spellId)
 end
 
 local function HealBot_WoWAPI_GetCooldownV1(spellId)
-    if HEALBOT_GAME_VERSION==4 and (spellId==HEALBOT_SPELL_HOLYWORDSERENITY or spellId==HEALBOT_SPELL_HOLYWORDSANCTUARY) then
+    if HEALBOT_GAME_VERSION == 4 and (spellId == HEALBOT_SPELL_HOLYWORDSERENITY or spellId == HEALBOT_SPELL_HOLYWORDSANCTUARY) then
         spellId=HEALBOT_SPELL_HOLYWORDCHASTISE
     end
     return GetSpellCooldown(spellId)
@@ -126,10 +126,10 @@ if C_Spell then
     HealBot_WoWAPI_GetSpellPowerCost=C_Spell.GetSpellPowerCost or GetSpellPowerCost
     HealBot_WoWAPI_IsHelpfulSpell=C_Spell.IsHelpfulSpell or IsHelpfulSpell
     HealBot_WoWAPI_IsSpellInRange=C_Spell.IsSpellInRange or IsSpellInRange
-    
-    
-    local vMajor = string.split(".", select(1, GetBuildInfo()))
-    local vGameVersion = tonumber(vMajor)
+
+
+    local vMajor=string.split(".", select(1, GetBuildInfo()))
+    local vGameVersion=tonumber(vMajor)
     if vGameVersion>10 then
         HealBot_WoWAPI_IsHelpfulSpell=HealBot_WoWAPI_True
         GetSpellName=C_Spell.GetSpellInfo

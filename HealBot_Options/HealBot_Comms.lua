@@ -15,7 +15,7 @@ function HealBot_Comms_SendAddonMsg(msg, aType, pName)
     end
     local unique=true;
     table.foreach(qAddonMsg, function (index,msg)
-        if msg==aMsg then unique=false; end
+        if msg == aMsg then unique=false; end
     end)
     if unique then
         table.insert(qAddonMsg,aMsg)
@@ -24,7 +24,7 @@ end
 
 function HealBot_Comms_Set()
       --HealBot_setCall("HealBot_Comms_Set")
-    local inInst,inType = HealBot_ZoneType()
+    local inInst,inType=HealBot_ZoneType()
     HealBot_Comms_SendTo(inInst,inType)
     HealBot_Comms_GuildUpdate()
 end
@@ -59,7 +59,7 @@ function HealBot_Comms_SendInstantMsg(msg,toPlayer,toSay,toYell)
       --HealBot_setCall("HealBot_Comms_SendInstantMsg")
     if toPlayer then
         SendChatMessage(msg,"WHISPER",nil,toPlayer)
-        HealBot_AddDebug("==SENT--: Whisper to "..toPlayer,"Comms",true)
+        HealBot_AddDebug(" == SENT--: Whisper to "..toPlayer,"Comms",true)
     elseif toSay then
         if hbInInst then
             SendChatMessage(msg,"SAY",nil,nil)
@@ -72,11 +72,11 @@ function HealBot_Comms_SendInstantMsg(msg,toPlayer,toSay,toYell)
         else
             HealBot_AddChat(msg)
         end
-    elseif hbCommsTo==1 then
+    elseif hbCommsTo == 1 then
         SendChatMessage(msg,"INSTANCE_CHAT",nil,nil)
-    elseif hbCommsTo==2 then
+    elseif hbCommsTo == 2 then
         SendChatMessage(msg,"RAID",nil,nil)
-    elseif hbCommsTo==3 then
+    elseif hbCommsTo == 3 then
         SendChatMessage(msg,"PARTY",nil,nil)
     end
 end
@@ -89,11 +89,11 @@ function HealBot_Comms_SendInstantAddonMsg(msg,notGroup,toPlayer)
         elseif hbInGuild then
             C_ChatInfo.SendAddonMessage(HEALBOT_HEALBOT, msg, "GUILD")
         end
-    elseif hbCommsTo==1 then
+    elseif hbCommsTo == 1 then
         C_ChatInfo.SendAddonMessage(HEALBOT_HEALBOT, msg, "INSTANCE_CHAT")
-    elseif hbCommsTo==2 then
+    elseif hbCommsTo == 2 then
         C_ChatInfo.SendAddonMessage(HEALBOT_HEALBOT, msg, "RAID")
-    elseif hbCommsTo==3 then
+    elseif hbCommsTo == 3 then
         C_ChatInfo.SendAddonMessage(HEALBOT_HEALBOT, msg, "PARTY")
     end
 end
@@ -107,14 +107,14 @@ function HealBot_Comms_SendAddonMessage()
         
         local msg, aType, pName=string.split("~", aMsg)
         aType=tonumber(aType)
-        if aType==1 then
+        if aType == 1 then
             HealBot_Comms_SendInstantAddonMsg(msg)
-        elseif aType==2 and pName then
+        elseif aType == 2 and pName then
             local xUnit=HealBot_Panel_RaidUnitName(pName)
-            if xUnit and UnitExists(xUnit) and UnitIsConnected(xUnit) and UnitIsPlayer(xUnit) and UnitName(xUnit)==pName then
+            if xUnit and UnitExists(xUnit) and UnitIsConnected(xUnit) and UnitIsPlayer(xUnit) and UnitName(xUnit) == pName then
                 HealBot_Comms_SendInstantAddonMsg(msg,true,pName)
             end
-        elseif aType==3 then
+        elseif aType == 3 then
             HealBot_Comms_SendInstantAddonMsg(msg,true)
         end
     end
@@ -193,22 +193,22 @@ function HealBot_Comm_round(num, idp)
 end
 
 local HealBot_MsgUpdateAvail=nil
-local hbMajor, hbMinor, hbPatch, hbHealbot = string.split(".", HEALBOT_VERSION)
-local hbVersionChecked = {}
+local hbMajor, hbMinor, hbPatch, hbHealbot=string.split(".", HEALBOT_VERSION)
+local hbVersionChecked={}
 function HealBot_Comms_CheckVer(userName, version)
       --HealBot_setCall("HealBot_Comms_CheckVer")
     if not hbVersionChecked[userName] then
         local tNewVer=nil
         hbVersionChecked[userName]=true
-        local tMajor, tMinor, tPatch, tHealbot = string.split(".", version)
-        if tonumber(tMajor)==HEALBOT_GAME_VERSION then
+        local tMajor, tMinor, tPatch, tHealbot=string.split(".", version)
+        if tonumber(tMajor) == HEALBOT_GAME_VERSION then
             if tonumber(tMajor)>tonumber(hbMajor) then 
                 tNewVer=true
-            elseif tonumber(tMajor)==tonumber(hbMajor) and tonumber(tMinor)>tonumber(hbMinor) then 
+            elseif tonumber(tMajor) == tonumber(hbMajor) and tonumber(tMinor)>tonumber(hbMinor) then 
                 tNewVer=true
-            elseif tonumber(tMajor)==tonumber(hbMajor) and tonumber(tMinor)==tonumber(hbMinor) and tonumber(tPatch)>tonumber(hbPatch) then 
+            elseif tonumber(tMajor) == tonumber(hbMajor) and tonumber(tMinor) == tonumber(hbMinor) and tonumber(tPatch)>tonumber(hbPatch) then 
                 tNewVer=true
-            elseif tonumber(tMajor)==tonumber(hbMajor) and tonumber(tMinor)==tonumber(hbMinor) and tonumber(tPatch)==tonumber(hbPatch) and tonumber(tHealbot)>tonumber(hbHealbot) then 
+            elseif tonumber(tMajor) == tonumber(hbMajor) and tonumber(tMinor) == tonumber(hbMinor) and tonumber(tPatch) == tonumber(hbPatch) and tonumber(tHealbot)>tonumber(hbHealbot) then 
                 tNewVer=true
             end
             if tNewVer then
@@ -220,7 +220,7 @@ function HealBot_Comms_CheckVer(userName, version)
                     HealBot_AddChat(HEALBOT_CHAT_NEWVERSION1)
                     HealBot_Globals.OneTimeMsg["VERSION"]=true
                 end
-                HealBot_MsgUpdateAvail = hbMajor.."."..hbMinor.."."..hbPatch.."."..hbHealbot
+                HealBot_MsgUpdateAvail=hbMajor.."."..hbMinor.."."..hbPatch.."."..hbHealbot
             end
         end
     end

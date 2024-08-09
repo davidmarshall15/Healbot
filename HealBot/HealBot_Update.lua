@@ -1003,12 +1003,12 @@ end
 function HealBot_Update_CheckDC()
       --HealBot_setCall("HealBot_Update_CheckDC")
     for _,xButton in pairs(HealBot_Unit_Button) do
-        if xButton.status.current==HealBot_Unit_Status["DC"] then
+        if xButton.status.current == HealBot_Unit_Status["DC"] then
             HealBot_Events_UnitStatus(xButton)
         end
     end
     for _,xButton in pairs(HealBot_Private_Button) do
-        if xButton.status.current==HealBot_Unit_Status["DC"] then
+        if xButton.status.current == HealBot_Unit_Status["DC"] then
             HealBot_Events_UnitStatus(xButton)
         end
     end
@@ -1368,7 +1368,7 @@ function HealBot_Update_RegisterForClicks(button)
         for _,xButton in pairs(HealBot_Extra_Button) do
             HealBot_Action_ButtonRegisterForClicks(xButton)
         end
-    end   
+    end
 end
 
 function HealBot_Update_ResetrCalls()
@@ -1397,7 +1397,7 @@ function HealBot_Update_ResetrCalls()
     for xUnit,xButton in pairs(HealBot_PrivateTarget_Button) do
         HealBot_Action_ResetrCallsUnit(xButton)
     end
-end 
+end
 
 function HealBot_Update_SetEnabledAttribs()
       --HealBot_setCall("HealBot_Update_SetEnabledAttribs")
@@ -1490,16 +1490,16 @@ function HealBot_Update_ResetInitButtons()
       --HealBot_setCall("HealBot_Update_ResetInitButtons")
     for _,xButton in pairs(HealBot_Unit_Button) do
         HealBot_Action_MarkDeleteButton(xButton)
-    end 
+    end
     for _,xButton in pairs(HealBot_Private_Button) do
         HealBot_Action_MarkDeleteButton(xButton)
-    end 
+    end
     for _,xButton in pairs(HealBot_Extra_Button) do
         HealBot_Action_MarkDeleteButton(xButton)
-    end 
+    end
     for _,xButton in pairs(HealBot_Enemy_Button) do
         HealBot_Action_MarkDeleteButton(xButton)
-    end 
+    end
     for xUnit,xButton in pairs(HealBot_UnitTarget_Button) do
         HealBot_Action_MarkDeleteButton(xButton)
     end
@@ -1508,7 +1508,7 @@ function HealBot_Update_ResetInitButtons()
     end
     for _,xButton in pairs(HealBot_Pet_Button) do
         HealBot_Action_MarkDeleteButton(xButton)
-    end 
+    end
     for _,xButton in pairs(HealBot_Vehicle_Button) do
         HealBot_Action_MarkDeleteButton(xButton)
     end
@@ -1708,7 +1708,7 @@ function HealBot_Update_Skins()
     local foundSkin=false
     for x in pairs (Healbot_Config_Skins.Skins) do
         if not HealBot_Config.SkinDefault[Healbot_Config_Skins.Skins[x]] then
-            HealBot_Config.SkinDefault[Healbot_Config_Skins.Skins[x]] = {[HEALBOT_WORD_SOLO]=false,
+            HealBot_Config.SkinDefault[Healbot_Config_Skins.Skins[x]]={[HEALBOT_WORD_SOLO]=false,
                                                                          [HEALBOT_WORD_PARTY]=false,
                                                                          [HEALBOT_OPTIONS_RAID10]=false,
                                                                          [HEALBOT_OPTIONS_RAID25]=false,
@@ -1719,15 +1719,15 @@ function HealBot_Update_Skins()
                                                                          [HEALBOT_WORD_BG40]=false,
                                                                          [HEALBOT_WORD_PETBATTLE]=false}
         end
-        if Healbot_Config_Skins.Skins[x]==Healbot_Config_Skins.Current_Skin then foundSkin=true end
+        if Healbot_Config_Skins.Skins[x] == Healbot_Config_Skins.Current_Skin then foundSkin=true end
     end
     if not foundSkin then
-        local retryWithSkin = HealBot_getDefaultSkin()
+        local retryWithSkin=HealBot_getDefaultSkin()
         HealBot_Options_Set_Current_Skin(retryWithSkin, nil, true, true)
     end
     if HealBot_Globals.CacheSize then HealBot_Globals.CacheSize=nil end
     if HealBot_Globals.AutoCacheSize then HealBot_Globals.AutoCacheSize=nil end
-    local tMajor, tMinor, tPatch, tHealbot = string.split(".", HealBot_Globals.LastVersionSkinUpdate)
+    local tMajor, tMinor, tPatch, tHealbot=string.split(".", HealBot_Globals.LastVersionSkinUpdate)
     if not HealBot_Update_luVars["ResetGlobalOld"] and tonumber(tMajor)<=oldVersion then
         HealBot_Update_luVars["ResetGlobalOld"]=true
         HealBot_Options_SetDefaults(true)
@@ -1739,15 +1739,15 @@ function HealBot_Update_Skins()
             HealBot_Update_luVars["UpdateMsg"]=true
             HealBot_Globals.OneTimeMsg["VERSION"]=false
         end
-        if tonumber(tMajor)==10 then
-            if tonumber(tMinor)==0 then
-                if tonumber(tPatch)==0 then
+        if tonumber(tMajor) == 10 then
+            if tonumber(tMinor) == 0 then
+                if tonumber(tPatch) == 0 then
                     if tonumber(tHealbot)<4 then
-                        if HealBot_Globals.Tooltip_SetScale==false then
+                        if HealBot_Globals.Tooltip_SetScale == false then
                             HealBot_Globals.Tooltip_Scale=1
                             HealBot_Globals.Tooltip_SetScale=nil
                         end
-                        if HealBot_Globals.Tooltip_SetAlpha==false then
+                        if HealBot_Globals.Tooltip_SetAlpha == false then
                             HealBot_Globals.Tooltip_Alpha=1
                             HealBot_Globals.Tooltip_SetAlpha=nil
                         else
@@ -1755,24 +1755,24 @@ function HealBot_Update_Skins()
                         end
                     end
                 end
-                if tonumber(tPatch)==0 or (tonumber(tPatch)<8 and tonumber(tHealbot)<4) then
+                if tonumber(tPatch) == 0 or (tonumber(tPatch)<8 and tonumber(tHealbot)<4) then
                     for id,_  in pairs(HealBot_Globals.HealBot_Custom_Buffs_IconSet) do
-                        if type(id)=="number" and not HealBot_Globals.HealBot_Custom_Buffs[id] then
+                        if type(id) == "number" and not HealBot_Globals.HealBot_Custom_Buffs[id] then
                             HealBot_Globals.HealBot_Custom_Buffs_IconSet[id]=nil
                         end
                     end
                     for id,_  in pairs(HealBot_Globals.HealBot_Custom_Buffs_IconGlow) do
-                        if type(id)=="number" and not HealBot_Globals.HealBot_Custom_Buffs[id] then
+                        if type(id) == "number" and not HealBot_Globals.HealBot_Custom_Buffs[id] then
                             HealBot_Globals.HealBot_Custom_Buffs_IconGlow[id]=nil
                         end
                     end
                     for id,_  in pairs(HealBot_Globals.HealBot_Custom_Debuffs_IconSet) do
-                        if type(id)=="number" and not HealBot_Globals.HealBot_Custom_Debuffs[id] then
+                        if type(id) == "number" and not HealBot_Globals.HealBot_Custom_Debuffs[id] then
                             HealBot_Globals.HealBot_Custom_Debuffs_IconSet[id]=nil
                         end
                     end
                     for id,_  in pairs(HealBot_Globals.HealBot_Custom_Debuffs_IconGlow) do
-                        if type(id)=="number" and not HealBot_Globals.HealBot_Custom_Debuffs[id] then
+                        if type(id) == "number" and not HealBot_Globals.HealBot_Custom_Debuffs[id] then
                             HealBot_Globals.HealBot_Custom_Debuffs_IconGlow[id]=nil
                         end
                     end
@@ -1842,10 +1842,10 @@ function HealBot_Update_Skins()
                             Healbot_Config_Skins.Emerg[Healbot_Config_Skins.Skins[x]][f]["BARCOL"]=Healbot_Config_Skins.Emerg[Healbot_Config_Skins.Skins[x]][f]["BARCOL"]+1
                         end
                         for z=1,9 do
-                            if Healbot_Config_Skins.AuxBar[Healbot_Config_Skins.Skins[x]][z][f]["COLOUR"]==3 then
+                            if Healbot_Config_Skins.AuxBar[Healbot_Config_Skins.Skins[x]][z][f]["COLOUR"] == 3 then
                                 Healbot_Config_Skins.AuxBar[Healbot_Config_Skins.Skins[x]][z][f]["COLOUR"]=4
                             end
-                            if Healbot_Config_Skins.AuxBarText[Healbot_Config_Skins.Skins[x]][z][f]["COLTYPE"]==3 then
+                            if Healbot_Config_Skins.AuxBarText[Healbot_Config_Skins.Skins[x]][z][f]["COLTYPE"] == 3 then
                                 Healbot_Config_Skins.AuxBarText[Healbot_Config_Skins.Skins[x]][z][f]["COLTYPE"]=4
                             end
                         end
@@ -1861,7 +1861,7 @@ function HealBot_Update_Skins()
                 if tonumber(tPatch)<6 then
                     HealBot_Globals.AbsorbDiv=12
                     HealBot_Globals.InHealDiv=12
-                elseif tonumber(tPatch)==6 and tonumber(tHealbot)<1 then
+                elseif tonumber(tPatch) == 6 and tonumber(tHealbot)<1 then
                     HealBot_Globals.AbsorbDiv=12
                     HealBot_Globals.InHealDiv=12
                 end
@@ -1976,16 +1976,16 @@ function HealBot_Update_Skins()
             HealBot_UpdateSpellsOnVersionChange(HealBot_Config_Spells.EmergAvoidBlueCursor,5)
             HealBot_Share_LoadSpells(HealBot_Options_ShareSpellsExternalEditBox:GetText())
             HealBot_Options_ShareSpellsExternalEditBox:SetText("")
-            StaticPopupDialogs["SpellsUpdatedToV10"] = {
-                text = "HealBot\n\nCharacter spells have been updated\nCheck the spells tab\n\nOpen options now?",
-                    button1 = HEALBOT_WORDS_YES,
-                    button2 = HEALBOT_WORDS_NO,
-                    OnAccept = function()
+            StaticPopupDialogs["SpellsUpdatedToV10"]={
+                text="HealBot\n\nCharacter spells have been updated\nCheck the spells tab\n\nOpen options now?",
+                    button1=HEALBOT_WORDS_YES,
+                    button2=HEALBOT_WORDS_NO,
+                    OnAccept=function()
                         HealBot_Options_ShowHide()
                     end,
-                    timeout = 0,
-                    whileDead = 1,
-                    hideOnEscape = 1
+                    timeout=0,
+                    whileDead=1,
+                    hideOnEscape=1
             };
             StaticPopup_Show("SpellsUpdatedToV10");
         else

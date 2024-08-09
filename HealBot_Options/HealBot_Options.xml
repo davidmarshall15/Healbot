@@ -15,11 +15,11 @@
             </OnScrollRangeChanged>
             <!--  The code to disable the ScrollDownButton is pretty hacked, but it works -->
             <OnVerticalScroll>
-                local scrollbar = _G[self:GetName().."ScrollBar"];
+                local scrollbar=_G[self:GetName().."ScrollBar"];
                 scrollbar:SetValue(offset);
                 local min;
                 local max;
-                min, max = scrollbar:GetMinMaxValues();
+                min, max=scrollbar:GetMinMaxValues();
                 if ( offset == 0 ) then
                     _G[scrollbar:GetName().."ScrollUpButton"]:Disable();
                 else
@@ -25904,6 +25904,15 @@
                             </Anchor>
                           </Anchors>
                         </FontString>
+                        <FontString name="HealBot_Options_SkinsFrameActionIconsGeneralTxt2" text="HEALBOT_OPTIONS_ACTIONICONSGENOPTTEXT2" inherits="GameFontNormal">
+                          <Anchors>
+                            <Anchor point="TOP">
+                              <Offset>
+                                <AbsDimension x="0" y="-35" />
+                              </Offset>
+                            </Anchor>
+                          </Anchors>
+                        </FontString>
                       </Layer>
                     </Layers>
                     <Frames>
@@ -25911,7 +25920,7 @@
                         <Anchors>
                           <Anchor point="TOPLEFT">
                             <Offset>
-                              <AbsDimension x="40" y="-65"/>
+                              <AbsDimension x="40" y="-75"/>
                             </Offset>
                           </Anchor>
                         </Anchors>
@@ -25938,7 +25947,7 @@
                         <Anchors>
                           <Anchor point="TOP">
                             <Offset>
-                              <AbsDimension x="95" y="-65"/>
+                              <AbsDimension x="95" y="-75"/>
                             </Offset>
                           </Anchor>
                         </Anchors>
@@ -25985,7 +25994,7 @@
                         <Anchors>
                           <Anchor point="TOP">
                             <Offset>
-                              <AbsDimension x="0" y="-140"/>
+                              <AbsDimension x="0" y="-145"/>
                             </Offset>
                           </Anchor>
                         </Anchors>

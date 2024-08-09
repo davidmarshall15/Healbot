@@ -27,7 +27,7 @@ local HealBot_Font_Outline={
 
 function HealBot_Media_PluginState(state)
 	if HealBot_Media_luVars["pluginMedia"]~=state then
-        HealBot_Media_luVars["pluginMedia"] = state
+        HealBot_Media_luVars["pluginMedia"]=state
         HealBot_Media_PluginChange()
     elseif not HealBot_Media_luVars["Indexed"] then
         HealBot_Media_UpdateIndexes()    
@@ -50,18 +50,18 @@ local function HealBot_Default_Media()
 end
 
 function HealBot_Media_Register()
-    LSM = HealBot_Libs_LSM()
+    LSM=HealBot_Libs_LSM()
     if not HealBot_Media_luVars["Registered"] then
         HealBot_Default_Media()
         if LSM then
             HealBot_Media_luVars["Registered"]=true
-            for i = 1, #HealBot_Supplied_Textures do
+            for i=1, #HealBot_Supplied_Textures do
                 LSM:Register("statusbar", HealBot_Supplied_Textures[i].name, HealBot_Supplied_Textures[i].file)
             end
-            for i = 1, #HealBot_Supplied_Sounds do
+            for i=1, #HealBot_Supplied_Sounds do
                 LSM:Register("sound", HealBot_Supplied_Sounds[i].name, HealBot_Supplied_Sounds[i].file)
             end
-            for i = 1, #HealBot_Supplied_Fonts do
+            for i=1, #HealBot_Supplied_Fonts do
                 LSM:Register("font", HealBot_Supplied_Fonts[i].name, HealBot_Supplied_Fonts[i].file)
             end
         end
@@ -71,13 +71,13 @@ end
 local function HealBot_Media_SetFonts(id)
       --HealBot_setCall("HealBot_Media_InitFonts")
     if id<=#HealBot_Fonts then
-        local g = _G["UsedToInitFonts"]
+        local g=_G["UsedToInitFonts"]
         g:SetFont(LSM:Fetch('font', HealBot_Fonts[id]), 10, HealBot_Font_Outline[1])
         g:SetText("i"..id)
         C_Timer.After(0.1, function() HealBot_Media_SetFonts(id+1) end)
     elseif HealBot_Media_luVars["InitFontsRerun"]<3 then
-        HealBot_Media_luVars["InitFontsRerun"] = HealBot_Media_luVars["InitFontsRerun"]+1
-        HealBot_Media_luVars["InitFonts"] = false
+        HealBot_Media_luVars["InitFontsRerun"]=HealBot_Media_luVars["InitFontsRerun"]+1
+        HealBot_Media_luVars["InitFonts"]=false
         C_Timer.After(HealBot_Media_luVars["InitFontsRerun"]*3, HealBot_Media_InitFonts)
     else
         HealBot_Media_luVars["InitFonts"]=false
@@ -114,7 +114,7 @@ function HealBot_Media_UpdateTexture(object, texture, caller)
 end
 
 function HealBot_Media_UpdateTextureRef(name, texture, caller)
-    local g = _G[name]
+    local g=_G[name]
     HealBot_Media_UpdateTexture(g, texture, caller)
 end
 
@@ -129,8 +129,8 @@ function HealBot_Media_PlaySound(name, channel)
     if not hbSounds[name] then hbSounds[name]=0 end
     if hbSounds[name]<HealBot_TimeNow then
         if hbSounds["TimeNextPlay"]<HealBot_TimeNow then
-            hbSounds[name] = HealBot_TimeNow+1
-            hbSounds["TimeNextPlay"] = HealBot_TimeNow+0.25
+            hbSounds[name]=HealBot_TimeNow+1
+            hbSounds["TimeNextPlay"]=HealBot_TimeNow+0.25
             PlaySoundFile(LSM:Fetch('sound',name), channel or "SFX")
         elseif hbSounds["TimeCallback"]<HealBot_TimeNow then
             hbSounds["TimeCallback"]=0.02+(hbSounds["TimeNextPlay"]-HealBot_TimeNow)
@@ -142,33 +142,33 @@ end
 function HealBot_Media_UpdateIndexes()
     HealBot_Media_luVars["Indexed"]=true
     for x,_ in pairs(HealBot_TexturesIndex) do
-        HealBot_TexturesIndex[x] = nil
+        HealBot_TexturesIndex[x]=nil
     end 
     for x,_ in pairs(HealBot_FontsIndex) do
-        HealBot_FontsIndex[x] = nil
+        HealBot_FontsIndex[x]=nil
     end 
     for x,_ in pairs(HealBot_SoundsIndex) do
-        HealBot_SoundsIndex[x] = nil
+        HealBot_SoundsIndex[x]=nil
     end 
     
     if HealBot_Media_luVars["pluginMedia"] then
-        HealBot_Textures = HealBot_Plugin_Media_TexturesEnabled()
-        HealBot_Fonts = HealBot_Plugin_Media_FontsEnabled()
-        HealBot_Sounds = HealBot_Plugin_Media_SoundsEnabled()
+        HealBot_Textures=HealBot_Plugin_Media_TexturesEnabled()
+        HealBot_Fonts=HealBot_Plugin_Media_FontsEnabled()
+        HealBot_Sounds=HealBot_Plugin_Media_SoundsEnabled()
     else
-        HealBot_Textures = LSM:List('statusbar')
-        HealBot_Fonts = LSM:List('font')
-        HealBot_Sounds = LSM:List('sound')
+        HealBot_Textures=LSM:List('statusbar')
+        HealBot_Fonts=LSM:List('font')
+        HealBot_Sounds=LSM:List('sound')
     end
     
     for i=1,#HealBot_Textures do
-        HealBot_TexturesIndex[HealBot_Textures[i]] = i
+        HealBot_TexturesIndex[HealBot_Textures[i]]=i
     end
     for i=1,#HealBot_Fonts do
-        HealBot_FontsIndex[HealBot_Fonts[i]] = i
+        HealBot_FontsIndex[HealBot_Fonts[i]]=i
     end
     for i=1,#HealBot_Sounds do
-        HealBot_SoundsIndex[HealBot_Sounds[i]] = i
+        HealBot_SoundsIndex[HealBot_Sounds[i]]=i
     end
 end
 
@@ -343,20 +343,20 @@ local hbUpdateDelayType={}
 local function HealBot_Media_DoUpdateUsedMedia(mediatype, frame)
     if HealBot_retLuVars("ClearReset") then
         if HealBot_Data["UILOCK"] then
-            hbUpdateDelay = 2
+            hbUpdateDelay=2
         else
-            hbUpdateDelay = 0.2
+            hbUpdateDelay=0.2
         end
         C_Timer.After(hbUpdateDelay, function() HealBot_Media_DoUpdateUsedMedia(mediatype, frame) end)
     else
-        hbUpdateDelayType[mediatype..frame] = false
+        hbUpdateDelayType[mediatype..frame]=false
       --HealBot_setCall("HealBot_Media_DoUpdateUsedMedia")
-        if mediatype=="statusbar" then
+        if mediatype == "statusbar" then
             if Healbot_Config_Skins.HeadBar[Healbot_Config_Skins.Current_Skin] then
                 local hFrames=HealBot_Panel_retHealBot_Header_Frames()
                 for _,h in pairs(hFrames) do
                     if h then
-                        local bar = _G[h:GetName().."Bar"]
+                        local bar=_G[h:GetName().."Bar"]
                         if bar then
                             HealBot_Media_UpdateTexture(bar, Healbot_Config_Skins.HeadBar[Healbot_Config_Skins.Current_Skin][frame]["TEXTURE"], "Media_DoUpdateUsedMedia - HeadBar")
                             bar:GetStatusBarTexture():SetHorizTile(false)
@@ -366,57 +366,57 @@ local function HealBot_Media_DoUpdateUsedMedia(mediatype, frame)
             end
             if Healbot_Config_Skins.HealBar[Healbot_Config_Skins.Current_Skin] then
                 for _,xButton in pairs(HealBot_Unit_Button) do
-                    if xButton.frame==frame then
+                    if xButton.frame == frame then
                         HealBot_Media_UpdateUsedTextures(xButton)
                     end
                 end
                 for _,xButton in pairs(HealBot_Private_Button) do
-                    if xButton.frame==frame then
+                    if xButton.frame == frame then
                         HealBot_Media_UpdateUsedTextures(xButton)
                     end
                 end 
                 for _,xButton in pairs(HealBot_Pet_Button) do
-                    if xButton.frame==frame then
+                    if xButton.frame == frame then
                         HealBot_Media_UpdateUsedTextures(xButton)
                     end
                 end 
                 for _,xButton in pairs(HealBot_Vehicle_Button) do
-                    if xButton.frame==frame then
+                    if xButton.frame == frame then
                         HealBot_Media_UpdateUsedTextures(xButton)
                     end
                 end 
                 for _,xButton in pairs(HealBot_Enemy_Button) do
-                    if xButton.frame==frame then
+                    if xButton.frame == frame then
                         HealBot_Media_UpdateUsedTextures(xButton)
                     end
                 end 
                 for xUnit,xButton in pairs(HealBot_UnitTarget_Button) do
-                    if xButton.frame==frame then
+                    if xButton.frame == frame then
                         HealBot_Media_UpdateUsedTextures(xButton)
                     end
                 end
                 for xUnit,xButton in pairs(HealBot_PrivateTarget_Button) do
-                    if xButton.frame==frame then
+                    if xButton.frame == frame then
                         HealBot_Media_UpdateUsedTextures(xButton)
                     end
                 end
                 for _,xButton in pairs(HealBot_Extra_Button) do
-                    if xButton.frame==frame then
+                    if xButton.frame == frame then
                         HealBot_Media_UpdateUsedTextures(xButton)
                     end
                 end
                 for _,xButton in pairs(HealBot_Test_Button) do
-                    if xButton.frame==frame then
+                    if xButton.frame == frame then
                         HealBot_Media_UpdateUsedTextures(xButton)
                     end
                 end
             end
-        elseif mediatype=="font" then
+        elseif mediatype == "font" then
             if Healbot_Config_Skins.HeadText[Healbot_Config_Skins.Current_Skin] then
                 local hFrames=HealBot_Panel_retHealBot_Header_Frames()
                 for _,h in pairs(hFrames) do
                     if h then
-                        local bar = _G[h:GetName().."Bar_text"]
+                        local bar=_G[h:GetName().."Bar_text"]
                         if bar then
                             HealBot_Media_UpdateFont(bar, 
                                                      Healbot_Config_Skins.HeadText[Healbot_Config_Skins.Current_Skin][frame]["FONT"], 
@@ -429,94 +429,94 @@ local function HealBot_Media_DoUpdateUsedMedia(mediatype, frame)
             end
             if Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin] then
                 for _,xButton in pairs(HealBot_Unit_Button) do
-                    if xButton.frame==frame then
+                    if xButton.frame == frame then
                         HealBot_Media_UpdateUsedButtonText(xButton)
                     end
                 end
                 for _,xButton in pairs(HealBot_Private_Button) do
-                    if xButton.frame==frame then
+                    if xButton.frame == frame then
                         HealBot_Media_UpdateUsedButtonText(xButton)
                     end
                 end      
                 for _,xButton in pairs(HealBot_Pet_Button) do
-                    if xButton.frame==frame then
+                    if xButton.frame == frame then
                         HealBot_Media_UpdateUsedButtonText(xButton)
                     end
                 end 
                 for _,xButton in pairs(HealBot_Vehicle_Button) do
-                    if xButton.frame==frame then
+                    if xButton.frame == frame then
                         HealBot_Media_UpdateUsedButtonText(xButton)
                     end
                 end 
                 for _,xButton in pairs(HealBot_Enemy_Button) do
-                    if xButton.frame==frame then
+                    if xButton.frame == frame then
                         HealBot_Media_UpdateUsedButtonText(xButton)
                     end
                 end 
                 for xUnit,xButton in pairs(HealBot_UnitTarget_Button) do
-                    if xButton.frame==frame then
+                    if xButton.frame == frame then
                         HealBot_Media_UpdateUsedButtonText(xButton)
                     end
                 end
                 for xUnit,xButton in pairs(HealBot_PrivateTarget_Button) do
-                    if xButton.frame==frame then
+                    if xButton.frame == frame then
                         HealBot_Media_UpdateUsedButtonText(xButton)
                     end
                 end
                 for _,xButton in pairs(HealBot_Extra_Button) do
-                    if xButton.frame==frame then
+                    if xButton.frame == frame then
                         HealBot_Media_UpdateUsedButtonText(xButton)
                     end
                 end
                 for _,xButton in pairs(HealBot_Test_Button) do
-                    if xButton.frame==frame then
+                    if xButton.frame == frame then
                         HealBot_Media_UpdateUsedButtonText(xButton)
                     end
                 end
             end
             if Healbot_Config_Skins.AuxBarText[Healbot_Config_Skins.Current_Skin] then
                 for _,xButton in pairs(HealBot_Unit_Button) do
-                    if xButton.frame==frame then
+                    if xButton.frame == frame then
                         HealBot_Media_UpdateUsedAuxText(xButton)
                     end
                 end
                 for _,xButton in pairs(HealBot_Private_Button) do
-                     if xButton.frame==frame then
+                     if xButton.frame == frame then
                         HealBot_Media_UpdateUsedAuxText(xButton)
                     end
                 end
                 for _,xButton in pairs(HealBot_Enemy_Button) do
-                    if xButton.frame==frame then
+                    if xButton.frame == frame then
                         HealBot_Media_UpdateUsedAuxText(xButton)
                     end
                 end
                 for xUnit,xButton in pairs(HealBot_UnitTarget_Button) do
-                    if xButton.frame==frame then
+                    if xButton.frame == frame then
                         HealBot_Media_UpdateUsedAuxText(xButton)
                     end
                 end
                 for xUnit,xButton in pairs(HealBot_PrivateTarget_Button) do
-                    if xButton.frame==frame then
+                    if xButton.frame == frame then
                         HealBot_Media_UpdateUsedAuxText(xButton)
                     end
                 end
                 for _,xButton in pairs(HealBot_Pet_Button) do
-                    if xButton.frame==frame then
+                    if xButton.frame == frame then
                         HealBot_Media_UpdateUsedAuxText(xButton)
                     end
                 end
                 for _,xButton in pairs(HealBot_Vehicle_Button) do
-                    if xButton.frame==frame then
+                    if xButton.frame == frame then
                         HealBot_Media_UpdateUsedAuxText(xButton)
                     end
                 end
                 for _,xButton in pairs(HealBot_Extra_Button) do
-                    if xButton.frame==frame then
+                    if xButton.frame == frame then
                         HealBot_Media_UpdateUsedAuxText(xButton)
                     end
                 end
                 for _,xButton in pairs(HealBot_Test_Button) do
-                    if xButton.frame==frame then
+                    if xButton.frame == frame then
                         HealBot_Media_UpdateUsedAuxText(xButton)
                     end
                 end
@@ -528,7 +528,7 @@ end
 function HealBot_Media_UpdateUsedMedia(mediatype, frame)
       --HealBot_setCall("HealBot_Media_UpdateUsedMedia")
     if not hbUpdateDelayType[mediatype..frame] then
-        hbUpdateDelayType[mediatype..frame] = true
+        hbUpdateDelayType[mediatype..frame]=true
         C_Timer.After(0.1, function() HealBot_Media_DoUpdateUsedMedia(mediatype, frame) end)
     end
 end

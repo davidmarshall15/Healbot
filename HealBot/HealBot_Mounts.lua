@@ -1,11 +1,11 @@
-local HealBot_GMount = {}
-local HealBot_PrevGMounts = {}
-local HealBot_FMount = {}
-local HealBot_PrevFMounts = {}
-local HealBot_SMount = {}
-local HealBot_AQMount = {}
-local HealBot_mountData = {}
-local HealBot_MountIndex = {}
+local HealBot_GMount={}
+local HealBot_PrevGMounts={}
+local HealBot_FMount={}
+local HealBot_PrevFMounts={}
+local HealBot_SMount={}
+local HealBot_AQMount={}
+local HealBot_mountData={}
+local HealBot_MountIndex={}
 local HealBot_MountsPets_luVars={}
 HealBot_MountsPets_luVars["dislikeRetry"]=75
 local hbMountTypes={[230]="G",
@@ -41,7 +41,7 @@ function HealBot_MountsPets_Dismount()
       --HealBot_setCall("HealBot_MountsPets_Dismount")
     if IsMounted() then
         Dismount()
-    elseif HEALBOT_GAME_VERSION>2 and CanExitVehicle() then    
+    elseif HEALBOT_GAME_VERSION>2 and CanExitVehicle() then
         VehicleExit()
     end
 end
@@ -51,7 +51,7 @@ function HealBot_MountsPets_FavMount()
     if HealBot_MountsPets_CanMount() then
         if IsMounted() then
             Dismount()
-        elseif HEALBOT_GAME_VERSION>2 and CanExitVehicle() then    
+        elseif HEALBOT_GAME_VERSION>2 and CanExitVehicle() then
             VehicleExit()
         else
             C_MountJournal.SummonByID(0)
@@ -68,11 +68,11 @@ end
 
 function HealBot_MountsPets_Mount(mount)
       --HealBot_setCall("HealBot_MountsPets_Mount")
-    if mount==75207 then
+    if mount == 75207 then
         C_MountJournal.SummonByID(0)
-    elseif HealBot_MountIndex[mount] then 
+    elseif HealBot_MountIndex[mount] then
         if HealBot_MountsPets_CanMount() then
-            C_MountJournal.SummonByID(HealBot_MountIndex[mount]) 
+            C_MountJournal.SummonByID(HealBot_MountIndex[mount])
         end
     else
         HealBot_Timers_Set("LAST","MountsPetsUse")
@@ -86,15 +86,15 @@ function HealBot_MountsPets_ToggelMount(mountType)
     if HealBot_MountsPets_CanMount() then
         if IsMounted() then
             Dismount()
-        elseif HEALBOT_GAME_VERSION>2 and CanExitVehicle() then    
+        elseif HEALBOT_GAME_VERSION>2 and CanExitVehicle() then
             VehicleExit()
         elseif HealBot_mountData["ValidUse"] and IsOutdoors() then
-            local mount = nil
+            local mount=nil
             vToggleMountIndex=0
-            if mountType=="all" and not IsSwimming() and HealBot_mountData["incFlying"] and #HealBot_FMount>0 then
+            if mountType == "all" and not IsSwimming() and HealBot_mountData["incFlying"] and #HealBot_FMount>0 then
                 for x=1,20 do
-                    vToggleMountIndex = math.random(1, #HealBot_FMount);
-                    mount = HealBot_FMount[vToggleMountIndex];
+                    vToggleMountIndex=math.random(1, #HealBot_FMount);
+                    mount=HealBot_FMount[vToggleMountIndex];
                     if not HealBot_Globals.dislikeMount[mount] then
                         break
                     else
@@ -119,18 +119,18 @@ function HealBot_MountsPets_ToggelMount(mountType)
                 if HealBot_mountData["incAbyseal"] then
                     mount=75207
                 elseif #HealBot_SMount>0 then
-                    vToggleMountIndex = math.random(1, #HealBot_SMount);
-                    mount = HealBot_SMount[vToggleMountIndex];
+                    vToggleMountIndex=math.random(1, #HealBot_SMount);
+                    mount=HealBot_SMount[vToggleMountIndex];
                 end
             elseif HealBot_mountData["incAQ"] then
                 if #HealBot_AQMount>0 then
-                    vToggleMountIndex = math.random(1, #HealBot_AQMount);
-                    mount = HealBot_AQMount[vToggleMountIndex];
+                    vToggleMountIndex=math.random(1, #HealBot_AQMount);
+                    mount=HealBot_AQMount[vToggleMountIndex];
                 end
             elseif #HealBot_GMount>0 then
                 for x=1,20 do
-                    vToggleMountIndex = math.random(1, #HealBot_GMount);
-                    mount = HealBot_GMount[vToggleMountIndex];
+                    vToggleMountIndex=math.random(1, #HealBot_GMount);
+                    mount=HealBot_GMount[vToggleMountIndex];
                     if not HealBot_Globals.dislikeMount[mount] then
                         break
                     else
@@ -166,9 +166,9 @@ end
 
 function HealBot_MountsPets_ClassicDalaranCheck()
       --HealBot_setCall("HealBot_MountsPets_ClassicDalaranCheck")
-    local mapPos = C_Map.GetPlayerMapPosition(125, "player")
+    local mapPos=C_Map.GetPlayerMapPosition(125, "player")
     if mapPos then
-        local x, y = mapPos:GetXY()
+        local x, y=mapPos:GetXY()
         if x>0.6 and y<0.5 then
             HealBot_mountData["incFlying"]=true
         else
@@ -180,12 +180,12 @@ function HealBot_MountsPets_ClassicDalaranCheck()
 end
 
 function HealBot_MountsPets_getContinent()
-    local mapID = C_Map.GetBestMapForUnit("player")
+    local mapID=C_Map.GetBestMapForUnit("player")
     if(mapID) then
-        local info = C_Map.GetMapInfo(mapID)
+        local info=C_Map.GetMapInfo(mapID)
         if(info) then
             while(info['mapType'] and info['mapType'] > 2) do
-                info = C_Map.GetMapInfo(info['parentMapID'])
+                info=C_Map.GetMapInfo(info['parentMapID'])
             end
             if(info['mapType'] == 2) then
                 return info['mapID']
@@ -193,7 +193,7 @@ function HealBot_MountsPets_getContinent()
         end
     end
 end
-    
+
 function HealBot_MountsPets_ZoneChange()
       --HealBot_setCall("HealBot_MountsPets_ZoneChange")
     HealBot_mountData["incAQ"]=false
@@ -201,19 +201,19 @@ function HealBot_MountsPets_ZoneChange()
         if HEALBOT_GAME_VERSION>4 then
             HealBot_mountData["incFlying"]=true
         else
-            local Continent = HealBot_MountsPets_getContinent()
-            if Continent==113 and not IsSpellKnown(54197) then
+            local Continent=HealBot_MountsPets_getContinent()
+            if Continent == 113 and not IsSpellKnown(54197) then
                 HealBot_mountData["incFlying"]=false
-            elseif Continent==1945 and not IsSpellKnown(34092) then
+            elseif Continent == 1945 and not IsSpellKnown(34092) then
                 HealBot_mountData["incFlying"]=false
             elseif Continent>1413 and Continent<1415 and not IsSpellKnown(90267) then
                 HealBot_mountData["incFlying"]=false
-            elseif Continent==1415 then
+            elseif Continent == 1415 then
                 HealBot_mountData["incAbyseal"]=true
             else
-                local mapAreaID = C_Map.GetBestMapForUnit("player") or 0
+                local mapAreaID=C_Map.GetBestMapForUnit("player") or 0
                 if mapAreaID>0 then
-                    if mapAreaID==125 then
+                    if mapAreaID == 125 then
                         HealBot_Timers_Set("LAST","MountsPetsDalaran",2)
                     else
                         HealBot_mountData["incFlying"]=true
@@ -228,8 +228,8 @@ function HealBot_MountsPets_ZoneChange()
         end
     else
         HealBot_mountData["incFlying"]=false
-        local _, _, _, _, _, _, _, instanceID = GetInstanceInfo()
-        if instanceID==531 then
+        local _, _, _, _, _, _, _, instanceID=GetInstanceInfo()
+        if instanceID == 531 then
             HealBot_mountData["incAQ"]=true
         end
         --HealBot_AddDebug("Zone Not Flyable","Mounts",true)
@@ -265,38 +265,38 @@ function HealBot_MountsPets_InitMount()
 
     local mount, sID, isUsable, faction, isCollected, mountType
     if C_MountJournal then
-    
+
         HealBot_mountData["playerFaction"]=0 -- Horde
-        local _,raceId = UnitRace("player");
-        if raceId=="Dwarf" or raceId=="Draenei" or raceId=="Gnome" or raceId=="Human" or raceId=="NightElf" or raceId=="Worgen" then
+        local _,raceId=UnitRace("player");
+        if raceId == "Dwarf" or raceId == "Draenei" or raceId == "Gnome" or raceId == "Human" or raceId == "NightElf" or raceId == "Worgen" then
             HealBot_mountData["playerFaction"]=1
-        elseif raceId=="Pandaren" then
-            if UnitFactionGroup("player")=="Alliance" then
+        elseif raceId == "Pandaren" then
+            if UnitFactionGroup("player") == "Alliance" then
                 HealBot_mountData["playerFaction"]=1
             end
         end
-        
+
         for _, z in pairs(C_MountJournal.GetMountIDs()) do
-            mount, sID, _, _, isUsable, _, _, _, faction, _, isCollected = C_MountJournal.GetMountInfoByID(z)
-            _, _, _, _, mountType = C_MountJournal.GetMountInfoExtraByID(z)
+            mount, sID, _, _, isUsable, _, _, _, faction, _, isCollected=C_MountJournal.GetMountInfoByID(z)
+            _, _, _, _, mountType=C_MountJournal.GetMountInfoExtraByID(z)
             if faction and isUsable and isCollected then
-                local englishFaction = UnitFactionGroup("player")
+                local englishFaction=UnitFactionGroup("player")
                 if (faction~=HealBot_mountData["playerFaction"]) then
                     isUsable=nil
                 end
             end
-            
+
             if sID and isUsable and isCollected and not HealBot_Globals.excludeMount[mount] then
-                if hbMountTypes[mountType]=="F" then
+                if hbMountTypes[mountType] == "F" then
                     table.insert(HealBot_FMount, mount);
                     HealBot_MountIndex[mount]=z
-                elseif hbMountTypes[mountType]=="S" then
+                elseif hbMountTypes[mountType] == "S" then
                     table.insert(HealBot_SMount, mount);
                     HealBot_MountIndex[mount]=z
-                elseif hbMountTypes[mountType]=="G" then
+                elseif hbMountTypes[mountType] == "G" then
                     table.insert(HealBot_GMount, mount);
                     HealBot_MountIndex[mount]=z
-                elseif hbMountTypes[mountType]=="AQ" then
+                elseif hbMountTypes[mountType] == "AQ" then
                     table.insert(HealBot_AQMount, mount);
                     HealBot_MountIndex[mount]=z
                 else
@@ -307,22 +307,22 @@ function HealBot_MountsPets_InitMount()
                 HealBot_AddDebug("No id for Name="..(mount or "NoName").."  z="..z,"Mounts",true)
             end
         end
-    end   
-    
-    if #HealBot_GMount==0 and #HealBot_SlowMount>0 then
+    end
+
+    if #HealBot_GMount == 0 and #HealBot_SlowMount>0 then
         for z,_ in pairs(HealBot_SlowMount) do
             HealBot_GMount[z]=HealBot_SlowMount[z]
         end
     end
-    if #HealBot_FMount==0 and #HealBot_SlowFMount>0 then
+    if #HealBot_FMount == 0 and #HealBot_SlowFMount>0 then
         for z,_ in pairs(HealBot_SlowFMount) do
             HealBot_FMount[z]=HealBot_SlowFMount[z]
         end
     end
-    HealBot_mountData["PrevFlying#"]=floor(#HealBot_FMount/3) 
+    HealBot_mountData["PrevFlying#"]=floor(#HealBot_FMount/3)
     HealBot_mountData["PrevGround#"]=floor(#HealBot_GMount/3)
 
-    if #HealBot_GMount==0 and #HealBot_FMount==0 then
+    if #HealBot_GMount == 0 and #HealBot_FMount == 0 then
         HealBot_mountData["ValidUse"]=false
     else
         HealBot_mountData["ValidUse"]=true
@@ -335,18 +335,18 @@ function HealBot_MountsPets_DislikeMount(action)
     if not IsMounted() then
         HealBot_AddChat("ERROR: Not Mounted\nMount first before toggling exclude mount")
     else
-        local z = 0
+        local z=0
         local mount,creatureName,active=nil,nil,nil
         if HEALBOT_GAME_VERSION>3 then
-            z = C_MountJournal.GetNumMounts()
+            z=C_MountJournal.GetNumMounts()
         else
-            z = GetNumCompanions("MOUNT")
+            z=GetNumCompanions("MOUNT")
         end
         for i=1,z do
             if HEALBOT_GAME_VERSION>3 then
-                creatureName, _, _, active = C_MountJournal.GetMountInfoByID(i)
+                creatureName, _, _, active=C_MountJournal.GetMountInfoByID(i)
             else
-                _, creatureName, _, _, active = GetCompanionInfo("MOUNT", i)
+                _, creatureName, _, _, active=GetCompanionInfo("MOUNT", i)
             end
             if active then
                 mount=creatureName
@@ -354,7 +354,7 @@ function HealBot_MountsPets_DislikeMount(action)
             end
         end
         if mount then
-            if action=="Exclude" then
+            if action == "Exclude" then
                 if HealBot_Globals.excludeMount[mount] then
                     HealBot_AddChat(HEALBOT_OPTION_EXCLUDEMOUNT_OFF.." "..mount)
                     HealBot_Globals.excludeMount[mount]=nil

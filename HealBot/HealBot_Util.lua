@@ -13,12 +13,12 @@ end
 local mult=0
 function HealBot_Util_Round(num, idp)
       --HealBot_setCall("HealBot_Util_Round")
-    mult = 10^(idp or 0)
+    mult=10^(idp or 0)
     return floor(num * mult + 0.5) / mult
 end
 
 local function HealBot_Util_PerfMod(mod, mType, mMax)
-    if mType==1 then
+    if mType == 1 then
         if mod>mMax then
             return 1
         elseif mod<1 then
@@ -34,7 +34,7 @@ local function HealBot_Util_PerfMod(mod, mType, mMax)
         return (100-(mod/10))*mMax
     end
 end
-    
+
 function HealBot_Util_PerfVal1(mod)  -- max mod is 1000, returns higher value at higher FPS, returns int
       --HealBot_setCall("HealBot_Util_PerfVal1")
     mod=HealBot_Util_PerfMod(mod, 1, 1000)

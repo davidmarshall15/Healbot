@@ -1,9 +1,9 @@
 function HealBot_Plugin_Options_SetupFrame(frame, hide, tall)
 	frame:SetBackdrop({
-		bgFile = "Interface\\Tooltips\\UI-Tooltip-Background",
-		edgeFile = "Interface\\Tooltips\\UI-Tooltip-Border",
-        tile = true, tileSize = 12, edgeSize = 12,
-        insets = { left = 2, right = 2, top = 2, bottom = 2, },
+		bgFile="Interface\\Tooltips\\UI-Tooltip-Background",
+		edgeFile="Interface\\Tooltips\\UI-Tooltip-Border",
+        tile=true, tileSize=12, edgeSize=12,
+        insets={ left=2, right=2, top=2, bottom=2, },
 	})
 	frame:SetBackdropColor(0,0,0,0);
     if tall then
@@ -16,16 +16,16 @@ function HealBot_Plugin_Options_SetupFrame(frame, hide, tall)
 	if hide then
 		frame:Hide()
 	end
-    frame.Txt = frame:CreateFontString()
+    frame.Txt=frame:CreateFontString()
     frame.Txt:SetFontObject(GameFontNormal)
     frame.Txt:SetPoint("BOTTOMRIGHT", -5 , 5)
 end
 
 function HealBot_Plugin_Options_SetupDropDown(dropdown, width, point, x, y, text, txtPoint, txtX, txtY)
 	dropdown:SetPoint(point, x, y)
-	UIDropDownMenu_SetWidth(dropdown, width)	
+	UIDropDownMenu_SetWidth(dropdown, width)
     if text then
-        dropdown.Txt = dropdown:CreateFontString()
+        dropdown.Txt=dropdown:CreateFontString()
         dropdown.Txt:SetFontObject(GameFontNormal)
         dropdown.Txt:SetPoint(txtPoint, txtX, txtY)
         dropdown.Txt:SetText(text)
@@ -39,7 +39,7 @@ function HealBot_Plugin_Options_SetupSlider(slider, point, width, x, y)
 end
 
 function HealBot_Plugin_Options_SetLabel(object, text)
-	local r,g,b,a = HealBot_Options_OptionsThemeCols()
+	local r,g,b,a=HealBot_Options_OptionsThemeCols()
 	object:SetText(text)
 	object:SetTextColor(r,g,b,a)
 end
@@ -48,7 +48,7 @@ function HealBot_Plugin_Options_SetupStatusBar(bar, width, height, x, y, text, t
 	bar:SetSize(width, height)
 	bar:SetPoint("TOP", x, y)
 	bar:SetStatusBarTexture("Interface\\Addons\\HealBot\\Images\\bar8.tga")
-	bar.Text = bar:CreateFontString()
+	bar.Text=bar:CreateFontString()
 	bar.Text:SetFontObject(GameFontNormal)
     if txtCenter then
         bar.Text:SetPoint("CENTER")
@@ -62,7 +62,7 @@ function HealBot_Plugin_Options_SetupStatusBarButton(bar, width, x, text, y)
 	bar:SetSize(width, 22)
 	bar:SetPoint("TOP", x, y or -85)
 	bar:SetStatusBarTexture("Interface\\Addons\\HealBot\\Images\\tukuibar.tga")
-	bar.Text = bar:CreateFontString()
+	bar.Text=bar:CreateFontString()
 	bar.Text:SetFontObject(GameFontNormal)
     bar.Text:SetPoint("CENTER")
     bar.Text:SetText(text)
@@ -89,7 +89,7 @@ function HealBot_Plugin_Options_Setup_EditBox(editbox, parent, point, x, y, widt
 	editbox:SetTextInsets(2, 2, 2, 2)
 	editbox:SetMaxLetters(30)
 	editbox:SetWidth(width)
-	editbox.Txt = editbox:CreateFontString()
+	editbox.Txt=editbox:CreateFontString()
 	editbox.Txt:SetFontObject(GameFontNormal)
     if txtTop then
         editbox.Txt:SetPoint("TOPLEFT", 0 , 12)
@@ -99,7 +99,7 @@ function HealBot_Plugin_Options_Setup_EditBox(editbox, parent, point, x, y, widt
     editbox.Txt:SetText(headertext)
 	editbox:SetText(text)
     if incHdr then
-        editbox.Hdr = editbox:CreateFontString()
+        editbox.Hdr=editbox:CreateFontString()
         editbox.Hdr:SetFontObject(GameFontNormalSmall)
         editbox.Hdr:SetPoint("TOP", 0, 12)
         editbox.Hdr:SetText(headertext)

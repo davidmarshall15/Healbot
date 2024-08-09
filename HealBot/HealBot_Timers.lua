@@ -32,7 +32,7 @@ local HealBot_Timers_LastRun={
                       ["LAST"]={},
                       ["OOC"]={},
                      }
-                     
+
 local HealBot_Timers_NoCalls={}
 local HealBot_Timers_luVars={}
 local xButton,pButton,aButton
@@ -68,13 +68,13 @@ function HealBot_Timers_SetnProcs(cpuProfilerOn)
         HealBot_Timers_luVars["nProcsOn"]=2
         HealBot_Timers_luVars["nProcsOff"]=1
     else
-        HealBot_Timers_luVars["nProcsOn"]=HealBot_Util_PerfVal1(250)
-        if HealBot_Timers_luVars["nProcsOn"]<3 then
-            HealBot_Timers_luVars["nProcsOn"]=3
+        HealBot_Timers_luVars["nProcsOn"]=HealBot_Util_PerfVal1(150)
+        if HealBot_Timers_luVars["nProcsOn"]<2 then
+            HealBot_Timers_luVars["nProcsOn"]=2
         end
-        HealBot_Timers_luVars["nProcsOff"]=HealBot_Util_PerfVal1(100)
-        if HealBot_Timers_luVars["nProcsOff"]<2 then
-            HealBot_Timers_luVars["nProcsOff"]=2
+        HealBot_Timers_luVars["nProcsOff"]=HealBot_Util_PerfVal1(50)
+        if HealBot_Timers_luVars["nProcsOff"]<1 then
+            HealBot_Timers_luVars["nProcsOff"]=1
         end
     end
     HealBot_Debug_PerfUpdate("TimersOn", HealBot_Timers_luVars["nProcsOn"])
@@ -229,21 +229,21 @@ end
 
 function HealBot_Timers_CheckPlayerAura()
       --HealBot_setCall("HealBot_Timers_CheckPlayerAura")
-    xButton, pButton = HealBot_Panel_RaidUnitButton(HealBot_Data["PGUID"])
+    xButton, pButton=HealBot_Panel_RaidUnitButton(HealBot_Data["PGUID"])
     if xButton then HealBot_Events_CheckUnitAura(xButton) end
     if pButton then HealBot_Events_CheckUnitAura(pButton) end
 end
 
 function HealBot_Timers_CheckTalentInfo()
       --HealBot_setCall("HealBot_Timers_CheckTalentInfo")
-    xButton, pButton = HealBot_Panel_RaidUnitButton(HealBot_Data["PGUID"])
+    xButton, pButton=HealBot_Panel_RaidUnitButton(HealBot_Data["PGUID"])
     if xButton then HealBot_GetTalentInfo(xButton) end
     if pButton then HealBot_GetTalentInfo(pButton) end
 end
 
 function HealBot_Timers_PowerIndicator()
       --HealBot_setCall("HealBot_Timers_PowerIndicator")
-    xButton, pButton = HealBot_Panel_RaidUnitButton(HealBot_Data["PGUID"])
+    xButton, pButton=HealBot_Panel_RaidUnitButton(HealBot_Data["PGUID"])
     if xButton then
         HealBot_Action_setpcClass(xButton)
         xButton.mana.power=-1
@@ -276,8 +276,8 @@ function HealBot_Timers_CheckLowMana()
       --HealBot_setCall("HealBot_Timers_CheckLowMana")
     local checkLowMana=false
     for j=1,10 do
-        if Healbot_Config_Skins.HealBar[Healbot_Config_Skins.Current_Skin][j]["LOWMANA"]>1 and 
-           Healbot_Config_Skins.HealBar[Healbot_Config_Skins.Current_Skin][j]["LOWMANACOMBAT"]==false then
+        if Healbot_Config_Skins.HealBar[Healbot_Config_Skins.Current_Skin][j]["LOWMANA"]>1 and
+           Healbot_Config_Skins.HealBar[Healbot_Config_Skins.Current_Skin][j]["LOWMANACOMBAT"] == false then
             checkLowMana=true
             break
         end
@@ -429,7 +429,7 @@ end
 
 function HealBot_Timers_SetPlayerRestingState()
       --HealBot_setCall("HealBot_Timers_SetPlayerRestingState")
-    xButton, pButton = HealBot_Panel_RaidUnitButton(HealBot_Data["PGUID"])
+    xButton, pButton=HealBot_Panel_RaidUnitButton(HealBot_Data["PGUID"])
     if xButton then HealBot_Aura_UpdateState(xButton) end
     if pButton then HealBot_Aura_UpdateState(pButton) end
 end
@@ -439,7 +439,7 @@ local function HealBot_Timers_MediaLastLoad()
     C_Timer.After(2, HealBot_Media_UpdateIndexes)
     C_Timer.After(3, HealBot_Media_InitFonts)
 end
-    
+
 function HealBot_Timers_InitSpells()
       --HealBot_setCall("HealBot_Timers_InitSpells")
     HealBot_Timers_Set("INIT","InitSpells")
@@ -494,7 +494,7 @@ end
 
 function HealBot_Timer_Plugin_InitBinds()
       --HealBot_setCall("HealBot_Timer_Plugin_InitBinds")
-    if HealBot_Action_retLuVars("pluginExtraButtons") then 
+    if HealBot_Action_retLuVars("pluginExtraButtons") then
         HealBot_Plugin_Options_InitBinds()
     end
 end
@@ -549,7 +549,7 @@ function HealBot_Timers_SetCurrentSkin()
     HealBot_Timers_Set("AUX","ResetText")
     HealBot_Timers_Set("SKINS","SkinChangePluginUpdate")
 end
-                
+
 function HealBot_Timers_InitExtraOptions()
       --HealBot_setCall("HealBot_Timers_InitExtraOptions")
     HealBot_Timers_Set("LAST","OptionsInitExtraTabs",0.1)
@@ -801,6 +801,10 @@ local hbTimerFuncs={["INIT"]={
                         ["AuxBarsReset"]=HealBot_Aux_barsReset,
                         ["GuildUpdate"]=HealBot_Comms_GuildUpdate,
                         ["PerfRangeFreq"]=HealBot_Range_PerfFreq,
+                        ["ActionCheckInterval"]=HealBot_Action_UpdateCheckInterval,
+                        ["AuraCheckInterval"]=HealBot_Aura_UpdateCheckInterval,
+                        ["EventsCheckInterval"]=HealBot_Events_UpdateCheckInterval,
+                        ["DebugCheckInterval"]=HealBot_DebugCheckInterval,
                         ["UpdateCheckInterval"]=HealBot_UpdateCheckInterval,
                         ["MediaPluginChange"]=HealBot_Media_PluginChange,
                         ["RefreshEnemyUnits"]=HealBot_Update_ResetUnitsEnemyOnly,
@@ -878,21 +882,21 @@ end
 
 function HealBot_Timers_PluginsSet(tId)
       --HealBot_setCall("HealBot_Timers_PluginsSet")
-    if tId==1 then
+    if tId == 1 then
         HealBot_Timers_Set("OOC","RefreshPartyNextRecalcPlayers",0.5)
-    elseif tId==2 then
+    elseif tId == 2 then
         HealBot_Timers_Set("AURA","CheckUnits",0.5)
-    elseif tId==3 then
+    elseif tId == 3 then
         HealBot_Timers_Set("INIT","PrepSetAllAttribs",1)
-    elseif tId==4 then
+    elseif tId == 4 then
         HealBot_Timers_Set("LAST","InitBinds",0.1)
-    elseif tId==5 then
+    elseif tId == 5 then
         HealBot_Timers_Set("AURA","ResetBuffCache",0.1)
-    elseif tId==6 then
+    elseif tId == 6 then
         HealBot_Timers_Set("AURA","ResetDebuffCache",0.1)
-    elseif tId==7 then
+    elseif tId == 7 then
         HealBot_Timers_Set("LAST","SetInHealAbsorbMax",0.1)
-    elseif tId==8 then
+    elseif tId == 8 then
         HealBot_Timers_Set("LAST","MediaPluginChange",0.1)
     end
 end

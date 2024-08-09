@@ -1,5 +1,5 @@
-<Ui xmlns="http://www.blizzard.com/wow/ui/" 
-    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+<Ui xmlns="http://www.blizzard.com/wow/ui/"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:schemaLocation="http://www.blizzard.com/wow/ui/ ..\FrameXML\UI.xsd">
 
   <Script file="HealBot_Init.lua" />
@@ -15,10 +15,10 @@
   <Script file="HealBot_Update.lua" />
   <Script file="HealBot_Events.lua" />
   <Script file="HealBot.lua" />
-  
+
   <!-- Comment Syntax -->
 
-    
+
   <StatusBar name="HealBot_StatusBar" virtual="true" hidden="false">
     <Size>
       <AbsDimension y="18"/>
@@ -34,7 +34,7 @@
     </Layers>
     <BarTexture file="Interface\TargetingFrame\UI-StatusBar"/>
   </StatusBar>
-  
+
 
   <Frame name="HealBot" parent="UIParent" inherits="SecureFrameTemplate">
     <Scripts>
@@ -46,7 +46,7 @@
       </OnEvent>
     </Scripts>
   </Frame>
-    
+
   <GameTooltip name="HealBot_ScanTooltip" frameStrata="TOOLTIP" hidden="true" parent="UIParent" inherits="GameTooltipTemplate" />
   <GameTooltip name="HealBot_GameTooltip" frameStrata="TOOLTIP" hidden="true" parent="UIParent" inherits="GameTooltipTemplate" />
 </Ui>
