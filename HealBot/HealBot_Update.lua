@@ -1738,9 +1738,9 @@ function HealBot_Update_Skins()
         HealBot_Options_Set_Current_Skin(retryWithSkin, nil, true, true)
     end
     if not HealBot_Config_Spells.SpellsReset then
-        HealBot_Update_ConvertSpells(HealBot_Config_Spells.EnabledKeyCombo, 20, "ENABLED")
-        HealBot_Update_ConvertSpells(HealBot_Config_Spells.EnemyKeyCombo, 20, "ENEMY")
-        HealBot_Update_ConvertSpells(HealBot_Config_Spells.EmergKeyCombo, 5, "EMERG")
+        if HealBot_Config_Spells.EnabledKeyCombo then HealBot_Update_ConvertSpells(HealBot_Config_Spells.EnabledKeyCombo, 20, "ENABLED") end
+        if HealBot_Config_Spells.EnemyKeyCombo then HealBot_Update_ConvertSpells(HealBot_Config_Spells.EnemyKeyCombo, 20, "ENEMY") end
+        if HealBot_Config_Spells.EmergKeyCombo then HealBot_Update_ConvertSpells(HealBot_Config_Spells.EmergKeyCombo, 5, "EMERG") end
         HealBot_Config_Spells.SpellsReset=true
     end
     if HealBot_Globals.CacheSize then HealBot_Globals.CacheSize=nil end
@@ -1769,10 +1769,12 @@ function HealBot_Update_Skins()
         if HealBot_Class_Spells[""] then HealBot_Class_Spells[""]=nil end
         if HealBot_Class_Buffs[""] then HealBot_Class_Buffs[""]=nil end
         if HealBot_Class_Cures[""] then HealBot_Class_Cures[""]=nil end
+        Healbot_Config_Skins.AuxBarText=nil
 
         for x in pairs (Healbot_Config_Skins.Skins) do
             skinName=Healbot_Config_Skins.Skins[x]
             HealBot_Skins_Check_Skin(skinName)
+            
             if Healbot_Config_Skins.ActionIconsData and Healbot_Config_Skins.ActionIconsData[skinName] and not HealBot_Skins_ActionIconsData[skinName] then
                 for f=1,10 do
                     for i=1,20 do
@@ -1797,6 +1799,7 @@ function HealBot_Update_Skins()
                     HealBot_Skins_ActionIconsData[skinName][f]=nil
                 end
             end
+
         end
         if HealBot_Config_Spells.ActionIconsData then HealBot_Config_Spells.ActionIconsData=nil end
         if HealBot_Config_Spells.ActionIcons then HealBot_Config_Spells.ActionIcons=nil end

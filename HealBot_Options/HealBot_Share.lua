@@ -481,6 +481,9 @@ function HealBot_Share_LoadSpells(sIn)
             end
         end
     end
+    if HealBot_Config_Spells.EnabledKeyCombo then HealBot_Update_ConvertSpells(HealBot_Config_Spells.EnabledKeyCombo, 20, "ENABLED") end
+    if HealBot_Config_Spells.EnemyKeyCombo then HealBot_Update_ConvertSpells(HealBot_Config_Spells.EnemyKeyCombo, 20, "ENEMY") end
+    if HealBot_Config_Spells.EmergKeyCombo then HealBot_Update_ConvertSpells(HealBot_Config_Spells.EmergKeyCombo, 5, "EMERG") end
     HealBot_Options_SaveSpellsProfile("SPELLS")
     HealBot_Timers_InitExtraOptions()
     HealBot_Timers_Set("INIT","SpellsTabText")

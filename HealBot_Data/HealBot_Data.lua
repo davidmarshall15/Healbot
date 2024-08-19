@@ -804,11 +804,17 @@ HealBot_Config_SkinsDefaults={
   ActionIconsData={},
 };
 
+Healbot_Config_AuxDefaults={
+  BarText={},
+  Bar={},
+  Overlay={},
+};
 
 
 HealBot_Config={};
 HealBot_Globals={};
 Healbot_Config_Skins={};
+Healbot_Config_Aux={};
 HealBot_Config_Spells={};
 HealBot_Config_Buffs={};
 HealBot_Config_Cures={};

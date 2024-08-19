@@ -2338,9 +2338,11 @@ function HealBot_SetPlayerData()
             HealBot_Timers_Set("LAST", "SetInHealAbsorbMax")
             HealBot_Timers_Set("PLAYER","SaveProfile",1)
             if not HealBot_Class_Spells.SpellsReset then
-                HealBot_Update_ConvertSpells(HealBot_Class_Spells[HealBot_Data["PCLASSTRIM"]].EnabledKeyCombo, 20, "ENABLED")
-                HealBot_Update_ConvertSpells(HealBot_Class_Spells[HealBot_Data["PCLASSTRIM"]].EnemyKeyCombo, 20, "ENEMY")
-                HealBot_Update_ConvertSpells(HealBot_Class_Spells[HealBot_Data["PCLASSTRIM"]].EmergKeyCombo, 5, "EMERG")
+                if HealBot_Class_Spells[HealBot_Data["PCLASSTRIM"]] then
+                    if HealBot_Class_Spells[HealBot_Data["PCLASSTRIM"]].EnabledKeyCombo then HealBot_Update_ConvertSpells(HealBot_Class_Spells[HealBot_Data["PCLASSTRIM"]].EnabledKeyCombo, 20, "ENABLED") end
+                    if HealBot_Class_Spells[HealBot_Data["PCLASSTRIM"]].EnemyKeyCombo then HealBot_Update_ConvertSpells(HealBot_Class_Spells[HealBot_Data["PCLASSTRIM"]].EnemyKeyCombo, 20, "ENEMY") end
+                    if HealBot_Class_Spells[HealBot_Data["PCLASSTRIM"]].EmergKeyCombo then HealBot_Update_ConvertSpells(HealBot_Class_Spells[HealBot_Data["PCLASSTRIM"]].EmergKeyCombo, 5, "EMERG") end
+                end
                 HealBot_Class_Spells.SpellsReset=true
             end
         else
@@ -2398,6 +2400,11 @@ function HealBot_LoadAddOn()
     table.foreach(HealBot_Config_SkinsDefaults, function (key,val)
         if Healbot_Config_Skins[key] == nil then
             Healbot_Config_Skins[key]=val;
+        end
+    end);
+    table.foreach(Healbot_Config_AuxDefaults, function (key,val)
+        if Healbot_Config_Aux[key] == nil then
+            Healbot_Config_Aux[key]=val;
         end
     end);
     table.foreach(HealBot_Config_SpellsDefaults, function (key,val)

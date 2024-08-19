@@ -222,12 +222,12 @@ function HealBot_Text_setEnemyTextLen(bWidth, eBarID, tSize)
         HealBot_Text_EnemySizeWidth["HLTH"][eBarID]=Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][10]["HMAXCHARS"]
     end
     for x=1,9 do
-        if Healbot_Config_Skins.AuxBarText[Healbot_Config_Skins.Current_Skin][x][10]["MAXCHARS"] == 0 then
+        if HealBot_Aux_GetBarTextVar("MAXCHARS", 10, x) == 0 then
             vSetTextLenAux=100
         elseif eBarID == 2 then
-            vSetTextLenAux=ceil(Healbot_Config_Skins.AuxBarText[Healbot_Config_Skins.Current_Skin][x][10]["MAXCHARS"]*tSize)+1
+            vSetTextLenAux=ceil(HealBot_Aux_GetBarTextVar("MAXCHARS", 10, x)*tSize)+1
         else
-            vSetTextLenAux=Healbot_Config_Skins.AuxBarText[Healbot_Config_Skins.Current_Skin][x][10]["MAXCHARS"]
+            vSetTextLenAux=HealBot_Aux_GetBarTextVar("MAXCHARS", 10, x)
         end
         HealBot_Aux_setTextMaxChars(10, vSetTextLenAux, x)
     end
@@ -246,10 +246,10 @@ function HealBot_Text_setTextLen(curFrame)
         hbBarHealthTextLen[curFrame]=Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][curFrame]["HMAXCHARS"]
     end
     for x=1,9 do
-        if Healbot_Config_Skins.AuxBarText[Healbot_Config_Skins.Current_Skin][x][curFrame]["MAXCHARS"] == 0 then
+        if HealBot_Aux_GetBarTextVar("MAXCHARS", curFrame, x) == 0 then
             vSetTextLenAux=1000
         else
-            vSetTextLenAux=Healbot_Config_Skins.AuxBarText[Healbot_Config_Skins.Current_Skin][x][curFrame]["MAXCHARS"]
+            vSetTextLenAux=HealBot_Aux_GetBarTextVar("MAXCHARS", curFrame, x)
         end
         HealBot_Aux_setTextMaxChars(curFrame, vSetTextLenAux, x)
     end
