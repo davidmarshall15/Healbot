@@ -72,12 +72,12 @@ function HealBot_Range_SetSpells()
     local sName=""
     local HealBot_Keys_List=HealBot_Action_retComboKeysList()
     for y=1, getn(HealBot_Keys_List), 1 do
-        sName=HealBot_Action_GetSpell("ENABLED", HealBot_Action_GetComboSpec(HealBot_Keys_List[y], "Left"))
+        sName=HealBot_Action_GetSpell("ENABLED", HealBot_Action_GetCombo(HealBot_Keys_List[y], "Left"))
         if not sName or not HealBot_Spell_Names[sName] then
             sName=HealBot_RangeSpells["HEAL"]
         end
         HealBot_RangeSpellsKeysFriendly[HealBot_Keys_List[y]]=sName
-        sName=HealBot_Action_GetSpell("ENEMY", HealBot_Action_GetComboSpec(HealBot_Keys_List[y], "Left"))
+        sName=HealBot_Action_GetSpell("ENEMY", HealBot_Action_GetCombo(HealBot_Keys_List[y], "Left"))
         if not sName or not HealBot_Spell_Names[sName] then
             sName=HealBot_RangeSpells["HARM"]
         end

@@ -281,7 +281,7 @@ pFrame:SetMovable(true)
 pFrame:EnableMouse(true)
 pFrame:SetScript("OnMouseDown", function(self, button) HealBot_Debug_pFrameOnMouseDown(self, button) end)
 pFrame:SetScript("OnMouseUp", function(self, button) HealBot_Debug_pFrameOnMouseUp(self, button) end)
-pFrame:SetHeight(420)
+pFrame:SetHeight(440)
 pFrame:SetWidth(220)
 pFrame:SetPoint("TOPLEFT",20,-120)
 pFrame:SetBackdropColor(0.1,0.1,0.1,0.88)
@@ -293,29 +293,30 @@ pFrameTitleText:SetText("HealBot Performance")
 local pIndex={["PerfLevel"]=1,
               ["RecalcDelay"]=2,
               ["EventsDelay"]=3,
-              ["AuraUpdate"]=4,
-              ["TimersOn"]=5,
-              ["TimersOff"]=6,
-              ["RangeEnabled"]=7,
-              ["RangeDisabled"]=8,
-              ["UpdateNumUnits"]=9,
-              ["UpdateNumEnemy"]=10,
-              ["aggroInt"]=11,
-              ["statusInt"]=12,
-              ["healthInt"]=13,
-              ["deadInt"]=14,
-              ["auxOutlines"]=15,
-              ["fps"]=16,
-              ["lag"]=17,
-              ["CDdelay"]=18,
-              ["RefreshDelay"]=19,
-              ["FluidFreq"]=20,
-              ["FlashFreq"]=21,
-              ["AuxFluidFreq"]=22,
+              ["EventsShortDelay"]=4,
+              ["AuraUpdate"]=5,
+              ["TimersOn"]=6,
+              ["TimersOff"]=7,
+              ["RangeEnabled"]=8,
+              ["RangeDisabled"]=9,
+              ["UpdateNumUnits"]=10,
+              ["UpdateNumEnemy"]=11,
+              ["aggroInt"]=12,
+              ["statusInt"]=13,
+              ["healthInt"]=14,
+              ["deadInt"]=15,
+              ["auxOutlines"]=16,
+              ["fps"]=17,
+              ["lag"]=18,
+              ["CDdelay"]=19,
+              ["RefreshDelay"]=20,
+              ["FluidFreq"]=21,
+              ["FlashFreq"]=22,
+              ["AuxFluidFreq"]=23,
              }
 local pFrameText={}
 local pFrameTextVal={}
-for x=1,22 do
+for x=1,23 do
     pFrameText[x]=pFrame:CreateFontString("HealBot_Debug_pFrameFrameText"..x, "ARTWORK", "GameFontNormal")
     pFrameTextVal[x]=pFrame:CreateFontString("HealBot_pFrameDebug_FrameTextVal"..x, "ARTWORK", "GameFontNormal")
     pFrameTextVal[x]:SetTextColor(1,1,1,1)
@@ -329,74 +330,77 @@ pFrameText[2]:SetText("Recalc Delay:")
 pFrameText[3]:SetPoint("TOPLEFT", pFrameText[2], "TOPLEFT", 0, -15)
 pFrameText[3]:SetText("Events Delay:")
 pFrameText[4]:SetPoint("TOPLEFT", pFrameText[3], "TOPLEFT", 0, -15)
-pFrameText[4]:SetText("Aura Update:")
+pFrameText[4]:SetText("Events Short Delay:")
+pFrameText[5]:SetPoint("TOPLEFT", pFrameText[4], "TOPLEFT", 0, -15)
+pFrameText[5]:SetText("Aura Update:")
 
-pFrameText[5]:SetPoint("TOPLEFT", pFrameText[4], "TOPLEFT", 0, -20)
-pFrameText[5]:SetText("Timers Turbo ON:")
-pFrameText[6]:SetPoint("TOPLEFT", pFrameText[5], "TOPLEFT", 0, -15)
-pFrameText[6]:SetText("Timers Turbo OFF:")
+pFrameText[6]:SetPoint("TOPLEFT", pFrameText[5], "TOPLEFT", 0, -20)
+pFrameText[6]:SetText("Timers Turbo ON:")
+pFrameText[7]:SetPoint("TOPLEFT", pFrameText[6], "TOPLEFT", 0, -15)
+pFrameText[7]:SetText("Timers Turbo OFF:")
 
-pFrameText[7]:SetPoint("TOPLEFT", pFrameText[6], "TOPLEFT", 0, -20)
-pFrameText[7]:SetText("Range Check Enabled:")
-pFrameText[8]:SetPoint("TOPLEFT", pFrameText[7], "TOPLEFT", 0, -15)
-pFrameText[8]:SetText("Range Check Disabled:")
+pFrameText[8]:SetPoint("TOPLEFT", pFrameText[7], "TOPLEFT", 0, -20)
+pFrameText[8]:SetText("Range Check Enabled:")
+pFrameText[9]:SetPoint("TOPLEFT", pFrameText[8], "TOPLEFT", 0, -15)
+pFrameText[9]:SetText("Range Check Disabled:")
 
-pFrameText[9]:SetPoint("TOPLEFT", pFrameText[8], "TOPLEFT", 0, -20)
-pFrameText[9]:SetText("Update Units Max:")
-pFrameText[10]:SetPoint("TOPLEFT", pFrameText[9], "TOPLEFT", 0, -15)
-pFrameText[10]:SetText("Update Enemy Max:")
+pFrameText[10]:SetPoint("TOPLEFT", pFrameText[9], "TOPLEFT", 0, -20)
+pFrameText[10]:SetText("Update Units Max:")
+pFrameText[11]:SetPoint("TOPLEFT", pFrameText[10], "TOPLEFT", 0, -15)
+pFrameText[11]:SetText("Update Enemy Max:")
 
-pFrameText[11]:SetPoint("TOPLEFT", pFrameText[10], "TOPLEFT", 0, -20)
-pFrameText[11]:SetText("Threat check interval:")
-pFrameText[12]:SetPoint("TOPLEFT", pFrameText[11], "TOPLEFT", 0, -15)
-pFrameText[12]:SetText("DC check Interval:")
+pFrameText[12]:SetPoint("TOPLEFT", pFrameText[11], "TOPLEFT", 0, -20)
+pFrameText[12]:SetText("Threat check interval:")
 pFrameText[13]:SetPoint("TOPLEFT", pFrameText[12], "TOPLEFT", 0, -15)
-pFrameText[13]:SetText("Health check Interval:")
+pFrameText[13]:SetText("DC check Interval:")
 pFrameText[14]:SetPoint("TOPLEFT", pFrameText[13], "TOPLEFT", 0, -15)
-pFrameText[14]:SetText("Dead check Interval:")
-
-pFrameText[15]:SetPoint("TOPLEFT", pFrameText[14], "TOPLEFT", 0, -20)
-pFrameText[15]:SetText("Num Aux Outlines:")
+pFrameText[14]:SetText("Health check Interval:")
+pFrameText[15]:SetPoint("TOPLEFT", pFrameText[14], "TOPLEFT", 0, -15)
+pFrameText[15]:SetText("Dead check Interval:")
 
 pFrameText[16]:SetPoint("TOPLEFT", pFrameText[15], "TOPLEFT", 0, -20)
-pFrameText[16]:SetText("Frames per Second:")
-pFrameText[17]:SetPoint("TOPLEFT", pFrameText[16], "TOPLEFT", 0, -15)
-pFrameText[17]:SetText("World Latency:")
-pFrameText[18]:SetPoint("TOPLEFT", pFrameText[17], "TOPLEFT", 0, -15)
-pFrameText[18]:SetText("Cooldown Delay:")
+pFrameText[16]:SetText("Num Aux Outlines:")
 
-pFrameText[19]:SetPoint("TOPLEFT", pFrameText[18], "TOPLEFT", 0, -20)
-pFrameText[19]:SetText("Refresh Delay:")
+pFrameText[17]:SetPoint("TOPLEFT", pFrameText[16], "TOPLEFT", 0, -20)
+pFrameText[17]:SetText("Frames per Second:")
+pFrameText[18]:SetPoint("TOPLEFT", pFrameText[17], "TOPLEFT", 0, -15)
+pFrameText[18]:SetText("World Latency:")
+pFrameText[19]:SetPoint("TOPLEFT", pFrameText[18], "TOPLEFT", 0, -15)
+pFrameText[19]:SetText("Cooldown Delay:")
 
 pFrameText[20]:SetPoint("TOPLEFT", pFrameText[19], "TOPLEFT", 0, -20)
-pFrameText[20]:SetText("Fluid Freq:")
-pFrameText[21]:SetPoint("TOPLEFT", pFrameText[20], "TOPLEFT", 0, -15)
-pFrameText[21]:SetText("Flash Freq:")
+pFrameText[20]:SetText("Refresh Delay:")
+
+pFrameText[21]:SetPoint("TOPLEFT", pFrameText[20], "TOPLEFT", 0, -20)
+pFrameText[21]:SetText("Fluid Freq:")
 pFrameText[22]:SetPoint("TOPLEFT", pFrameText[21], "TOPLEFT", 0, -15)
-pFrameText[22]:SetText("Aux Fluid Freq:")
+pFrameText[22]:SetText("Flash Freq:")
+pFrameText[23]:SetPoint("TOPLEFT", pFrameText[22], "TOPLEFT", 0, -15)
+pFrameText[23]:SetText("Aux Fluid Freq:")
 
 pFrameTextVal[1]:SetPoint("TOPRIGHT", pFrame, "TOPRIGHT", -10, -35)
 pFrameTextVal[2]:SetPoint("TOPRIGHT", pFrameTextVal[1], "TOPRIGHT", 0, -20)
 pFrameTextVal[3]:SetPoint("TOPRIGHT", pFrameTextVal[2], "TOPRIGHT", 0, -15)
 pFrameTextVal[4]:SetPoint("TOPRIGHT", pFrameTextVal[3], "TOPRIGHT", 0, -15)
-pFrameTextVal[5]:SetPoint("TOPRIGHT", pFrameTextVal[4], "TOPRIGHT", 0, -20)
-pFrameTextVal[6]:SetPoint("TOPRIGHT", pFrameTextVal[5], "TOPRIGHT", 0, -15)
-pFrameTextVal[7]:SetPoint("TOPRIGHT", pFrameTextVal[6], "TOPRIGHT", 0, -20)
-pFrameTextVal[8]:SetPoint("TOPRIGHT", pFrameTextVal[7], "TOPRIGHT", 0, -15)
-pFrameTextVal[9]:SetPoint("TOPRIGHT", pFrameTextVal[8], "TOPRIGHT", 0, -20)
-pFrameTextVal[10]:SetPoint("TOPRIGHT", pFrameTextVal[9], "TOPRIGHT", 0, -15)
-pFrameTextVal[11]:SetPoint("TOPRIGHT", pFrameTextVal[10], "TOPRIGHT", 0, -20)
-pFrameTextVal[12]:SetPoint("TOPRIGHT", pFrameTextVal[11], "TOPRIGHT", 0, -15)
+pFrameTextVal[5]:SetPoint("TOPRIGHT", pFrameTextVal[4], "TOPRIGHT", 0, -15)
+pFrameTextVal[6]:SetPoint("TOPRIGHT", pFrameTextVal[5], "TOPRIGHT", 0, -20)
+pFrameTextVal[7]:SetPoint("TOPRIGHT", pFrameTextVal[6], "TOPRIGHT", 0, -15)
+pFrameTextVal[8]:SetPoint("TOPRIGHT", pFrameTextVal[7], "TOPRIGHT", 0, -20)
+pFrameTextVal[9]:SetPoint("TOPRIGHT", pFrameTextVal[8], "TOPRIGHT", 0, -15)
+pFrameTextVal[10]:SetPoint("TOPRIGHT", pFrameTextVal[9], "TOPRIGHT", 0, -20)
+pFrameTextVal[11]:SetPoint("TOPRIGHT", pFrameTextVal[10], "TOPRIGHT", 0, -15)
+pFrameTextVal[12]:SetPoint("TOPRIGHT", pFrameTextVal[11], "TOPRIGHT", 0, -20)
 pFrameTextVal[13]:SetPoint("TOPRIGHT", pFrameTextVal[12], "TOPRIGHT", 0, -15)
 pFrameTextVal[14]:SetPoint("TOPRIGHT", pFrameTextVal[13], "TOPRIGHT", 0, -15)
-pFrameTextVal[15]:SetPoint("TOPRIGHT", pFrameTextVal[14], "TOPRIGHT", 0, -20)
+pFrameTextVal[15]:SetPoint("TOPRIGHT", pFrameTextVal[14], "TOPRIGHT", 0, -15)
 pFrameTextVal[16]:SetPoint("TOPRIGHT", pFrameTextVal[15], "TOPRIGHT", 0, -20)
-pFrameTextVal[17]:SetPoint("TOPRIGHT", pFrameTextVal[16], "TOPRIGHT", 0, -15)
+pFrameTextVal[17]:SetPoint("TOPRIGHT", pFrameTextVal[16], "TOPRIGHT", 0, -20)
 pFrameTextVal[18]:SetPoint("TOPRIGHT", pFrameTextVal[17], "TOPRIGHT", 0, -15)
-pFrameTextVal[19]:SetPoint("TOPRIGHT", pFrameTextVal[18], "TOPRIGHT", 0, -20)
+pFrameTextVal[19]:SetPoint("TOPRIGHT", pFrameTextVal[18], "TOPRIGHT", 0, -15)
 pFrameTextVal[20]:SetPoint("TOPRIGHT", pFrameTextVal[19], "TOPRIGHT", 0, -20)
-pFrameTextVal[21]:SetPoint("TOPRIGHT", pFrameTextVal[20], "TOPRIGHT", 0, -15)
+pFrameTextVal[21]:SetPoint("TOPRIGHT", pFrameTextVal[20], "TOPRIGHT", 0, -20)
 pFrameTextVal[22]:SetPoint("TOPRIGHT", pFrameTextVal[21], "TOPRIGHT", 0, -15)
+pFrameTextVal[23]:SetPoint("TOPRIGHT", pFrameTextVal[22], "TOPRIGHT", 0, -15)
 
 local pLeft,pTop=20,120
 function HealBot_Debug_PerfHideShow(show)

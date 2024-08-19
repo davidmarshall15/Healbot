@@ -397,3 +397,20 @@ function HealBot_Spells_ResetBuffs(pClassTrim)
     elseif pClassTrim == "EVOK" then
     end
 end
+
+local hbDefaultBind=1
+function HealBot_SpellBinds_GetData(id)
+    return HealBot_Config_Spells.Binds[id] or hbDefaultBind
+end
+
+function HealBot_SpellBinds_SetData(value, id)
+    if hbDefaultBind == value then
+        HealBot_SpellBinds_NilData(id)
+    else
+        HealBot_Config_Spells.Binds[id]=value
+    end
+end
+
+function HealBot_SpellBinds_NilData(id)
+    HealBot_Config_Spells.Binds[id]=nil
+end

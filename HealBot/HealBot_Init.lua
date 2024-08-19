@@ -515,94 +515,99 @@ end
 local iSpellName, iSpellRank
 function HealBot_Init_Spells_Defaults()
       --HealBot_setCall("HealBot_Init_Spells_Defaults")
-    for x,_ in pairs(HealBot_Spell_IDs) do
-        HealBot_Spell_IDs[x]=nil
-    end
-    for x,_ in pairs(HealBot_Spell_Names) do
-        HealBot_Spell_Names[x]=nil
-    end
-    for x,_ in pairs(HealBot_Buff_Names) do
-        HealBot_Buff_Names[x]=nil
-    end
-    for x,_ in pairs(HealBot_KnownHeal_Names) do
-        HealBot_KnownHeal_Names[x]=nil
-    end
-    for x,_ in pairs(HealBot_Spell_Ranks) do
-        HealBot_Spell_Ranks[x]=nil
-    end
-    for x,_ in pairs(HealBot_Buff_Ranks) do
-        HealBot_Buff_Ranks[x]=nil
-    end
-    for x,_ in pairs(HealBot_Ranks) do
-        HealBot_Ranks[x]=nil
-    end
-    HealBot_Init_Spell_RangesPref()
-    local nTabs=HealBot_WoWAPI_NumSpellTabs()
-
-    local hbBufflist=HealBot_Options_InitBuffSpellsClassList(HealBot_Data["PCLASSTRIM"])
-    for j=1, getn(hbBufflist), 1 do
-        if hbBufflist[j] and HealBot_WoWAPI_SpellName(hbBufflist[j]) then
-            HealBot_Buff_Names[HealBot_WoWAPI_SpellName(hbBufflist[j])]=true
+    if HealBot_Data["PCLASSTRIM"] then
+        for x,_ in pairs(HealBot_Spell_IDs) do
+            HealBot_Spell_IDs[x]=nil
         end
-    end
+        for x,_ in pairs(HealBot_Spell_Names) do
+            HealBot_Spell_Names[x]=nil
+        end
+        for x,_ in pairs(HealBot_Buff_Names) do
+            HealBot_Buff_Names[x]=nil
+        end
+        for x,_ in pairs(HealBot_KnownHeal_Names) do
+            HealBot_KnownHeal_Names[x]=nil
+        end
+        for x,_ in pairs(HealBot_Spell_Ranks) do
+            HealBot_Spell_Ranks[x]=nil
+        end
+        for x,_ in pairs(HealBot_Buff_Ranks) do
+            HealBot_Buff_Ranks[x]=nil
+        end
+        for x,_ in pairs(HealBot_Ranks) do
+            HealBot_Ranks[x]=nil
+        end
+        HealBot_Init_Spell_RangesPref()
+        local nTabs=HealBot_WoWAPI_NumSpellTabs()
 
-    HealBot_Init_SkipSpells()
+        local hbBufflist=HealBot_Options_InitBuffSpellsClassList(HealBot_Data["PCLASSTRIM"])
+        for j=1, getn(hbBufflist), 1 do
+            if hbBufflist[j] and HealBot_WoWAPI_SpellName(hbBufflist[j]) then
+                HealBot_Buff_Names[HealBot_WoWAPI_SpellName(hbBufflist[j])]=true
+            end
+        end
 
-    for j=1,nTabs do
-        local _, _, offset, numEntries, _, offspecID=HealBot_WoWAPI_SpellTabInfo(j)
-        if offspecID == 0 then
-            for s=offset+1,offset+numEntries do
-                --HealBot_AddDebug("Tabinfo slot="..s,"Init Spells",true)
-                --local sName, cRank=HealBot_WoWAPI_SpellBookItemName(s)
-                local sType, sId=HealBot_WoWAPI_SpellBookItemInfo(s)
-                if HEALBOT_GAME_VERSION>10 then
-                    iSpellName=HealBot_WoWAPI_SpellName(sId)
-                    iSpellRank=""
-                else
-                    iSpellName, iSpellRank=HealBot_WoWAPI_SpellBookItemName(s)
-                    if not iSpellRank then iSpellRank="" end
-                end
-                if sType == "SPELL" and not HealBot_WoWAPI_IsSpellPassive(sId) and HealBot_Spells_KnownByName(iSpellName) and not string.find(iSpellName," Rune Ability") then -- and (string.len(iSpellRank)<1 or string.find(iSpellRank,"Rank"))
-                    HealBot_Init_Spells_addSpell(sId, iSpellName, s, iSpellRank)
-                elseif sType == "FLYOUT" then
-                    local _, _, numFlyoutSlots, flyoutKnown=GetFlyoutInfo(sId)
-                    if flyoutKnown then
-                        for f=1,numFlyoutSlots do
-                            local fId, _, fKnown, fName=GetFlyoutSlotInfo(sId, f)
-                            if fKnown and not HealBot_WoWAPI_IsSpellPassive(fId) and HealBot_Spells_KnownByName(fName) then
-                                HealBot_Init_Spells_addSpell(fId, fName, s, iSpellRank)
+        HealBot_Init_SkipSpells()
+
+        for j=1,nTabs do
+            local _, _, offset, numEntries, _, offspecID=HealBot_WoWAPI_SpellTabInfo(j)
+            if offspecID == 0 then
+                for s=offset+1,offset+numEntries do
+                    --HealBot_AddDebug("Tabinfo slot="..s,"Init Spells",true)
+                    --local sName, cRank=HealBot_WoWAPI_SpellBookItemName(s)
+                    local sType, sId=HealBot_WoWAPI_SpellBookItemInfo(s)
+                    if HEALBOT_GAME_VERSION>10 then
+                        iSpellName=HealBot_WoWAPI_SpellName(sId)
+                        iSpellRank=""
+                    else
+                        iSpellName, iSpellRank=HealBot_WoWAPI_SpellBookItemName(s)
+                        if not iSpellRank then iSpellRank="" end
+                    end
+                    if sType == "SPELL" and not HealBot_WoWAPI_IsSpellPassive(sId) and HealBot_Spells_KnownByName(iSpellName) and not string.find(iSpellName," Rune Ability") then -- and (string.len(iSpellRank)<1 or string.find(iSpellRank,"Rank"))
+                        HealBot_Init_Spells_addSpell(sId, iSpellName, s, iSpellRank)
+                    elseif sType == "FLYOUT" then
+                        local _, _, numFlyoutSlots, flyoutKnown=GetFlyoutInfo(sId)
+                        if flyoutKnown then
+                            for f=1,numFlyoutSlots do
+                                local fId, _, fKnown, fName=GetFlyoutSlotInfo(sId, f)
+                                if fKnown and not HealBot_WoWAPI_IsSpellPassive(fId) and HealBot_Spells_KnownByName(fName) then
+                                    HealBot_Init_Spells_addSpell(fId, fName, s, iSpellRank)
+                                end
                             end
                         end
                     end
                 end
             end
         end
+        if HEALBOT_GAME_VERSION<3 then
+            HealBot_InitValidateRanks()
+            HealBot_Init_ClassicSpellRanks()
+        elseif HEALBOT_GAME_VERSION == 4 and HealBot_Data["PCLASSTRIM"] == "PRIE" then
+            HealBot_Init_Spells_CataPriest(HEALBOT_HOLY_WORD_CHASTISE, HEALBOT_SPELL_HOLYWORDCHASTISE, 135886)
+            HealBot_Init_Spells_CataPriest(HBC_HOLY_WORD_SERENITY, HEALBOT_SPELL_HOLYWORDSERENITY, 135937)
+            HealBot_Init_Spells_CataPriest(HEALBOT_HOLY_WORD_SANCTUARY, HEALBOT_SPELL_HOLYWORDSANCTUARY, 237541)
+        end
+        if HealBot_Spell_Ranges["HEAL30"] and HealBot_Spell_Ranges["HEAL30"]~="Set" then
+            HealBot_Range_InitSpell("HEAL30", HealBot_Spell_Ranges["HEAL30"])
+            HealBot_AddDebug("[HEAL30] Init range for "..HealBot_Spell_Ranges["HEAL30"], "Init Range Spell",true)
+        end
+        if HealBot_Spell_Ranges["HARM30"] and HealBot_Spell_Ranges["HARM30"]~="Set" then
+            HealBot_Range_InitSpell("HARM30", HealBot_Spell_Ranges["HARM30"])
+            HealBot_AddDebug("[HARM30] Init range for "..HealBot_Spell_Ranges["HARM30"], "Init Range Spell",true)
+        end
+        if HealBot_Spell_Ranges["HEAL"] and HealBot_Spell_Ranges["HEAL"]~="Set" then
+            HealBot_Range_InitSpell("HEAL", HealBot_Spell_Ranges["HEAL"])
+            HealBot_AddDebug("[HEAL] Init range for "..HealBot_Spell_Ranges["HEAL"], "Init Range Spell",true)
+        end
+        if HealBot_Spell_Ranges["HARM"] and HealBot_Spell_Ranges["HARM"]~="Set" then
+            HealBot_Range_InitSpell("HARM", HealBot_Spell_Ranges["HARM"])
+            HealBot_AddDebug("[HARM] Init range for "..HealBot_Spell_Ranges["HARM"], "Init Range Spell",true)
+        end
+        HealBot_AddDebug("-- ", "Init Range Spell",true)
+    else
+        HealBot_SetPlayerData()
+        HealBot_Timers_Set("INIT","InitSpellsDefaults",0.1)
     end
-    if HEALBOT_GAME_VERSION<3 then
-        HealBot_InitValidateRanks()
-        HealBot_Init_ClassicSpellRanks()
-    elseif HEALBOT_GAME_VERSION == 4 and HealBot_Data["PCLASSTRIM"] == "PRIE" then
-        HealBot_Init_Spells_CataPriest(HEALBOT_HOLY_WORD_CHASTISE, HEALBOT_SPELL_HOLYWORDCHASTISE, 135886)
-        HealBot_Init_Spells_CataPriest(HBC_HOLY_WORD_SERENITY, HEALBOT_SPELL_HOLYWORDSERENITY, 135937)
-        HealBot_Init_Spells_CataPriest(HEALBOT_HOLY_WORD_SANCTUARY, HEALBOT_SPELL_HOLYWORDSANCTUARY, 237541)
-    end
-    if HealBot_Spell_Ranges["HEAL30"] and HealBot_Spell_Ranges["HEAL30"]~="Set" then
-        HealBot_Range_InitSpell("HEAL30", HealBot_Spell_Ranges["HEAL30"])
-        HealBot_AddDebug("[HEAL30] Init range for "..HealBot_Spell_Ranges["HEAL30"], "Init Range Spell",true)
-    end
-    if HealBot_Spell_Ranges["HARM30"] and HealBot_Spell_Ranges["HARM30"]~="Set" then
-        HealBot_Range_InitSpell("HARM30", HealBot_Spell_Ranges["HARM30"])
-        HealBot_AddDebug("[HARM30] Init range for "..HealBot_Spell_Ranges["HARM30"], "Init Range Spell",true)
-    end
-    if HealBot_Spell_Ranges["HEAL"] and HealBot_Spell_Ranges["HEAL"]~="Set" then
-        HealBot_Range_InitSpell("HEAL", HealBot_Spell_Ranges["HEAL"])
-        HealBot_AddDebug("[HEAL] Init range for "..HealBot_Spell_Ranges["HEAL"], "Init Range Spell",true)
-    end
-    if HealBot_Spell_Ranges["HARM"] and HealBot_Spell_Ranges["HARM"]~="Set" then
-        HealBot_Range_InitSpell("HARM", HealBot_Spell_Ranges["HARM"])
-        HealBot_AddDebug("[HARM] Init range for "..HealBot_Spell_Ranges["HARM"], "Init Range Spell",true)
-    end
-    HealBot_AddDebug("-- ", "Init Range Spell",true)
 end
 
 function HealBot_Init_ClassicSpellRanks()
@@ -698,22 +703,30 @@ function HealBot_Init_retSpec(class,tab)
     return nil
 end
 
+function HealBot_Init_Spells()
+    if HealBot_Data["PCLASSTRIM"] then
+        HealBot_Spells_Reset(HealBot_Data["PCLASSTRIM"])
+        HealBot_Spells_ResetCures(HealBot_Data["PCLASSTRIM"])
+        HealBot_Spells_ResetBuffs(HealBot_Data["PCLASSTRIM"])
+    else
+        HealBot_SetPlayerData()
+        HealBot_Timers_Set("LAST","NewCharInitSpells",0.2)
+    end
+end
+
 function HealBot_Init_NewChar()
       --HealBot_setCall("HealBot_InitNewChar")
     if not HealBot_Config_Spells.EnemyKeyCombo then
         HealBot_Config_Spells.EnemyKeyCombo={}
     end
     if HealBot_Config_Spells.EnabledKeyCombo["New"] then
-        HealBot_Spells_Reset(HealBot_Data["PCLASSTRIM"])
-        HealBot_Spells_ResetCures(HealBot_Data["PCLASSTRIM"])
-        HealBot_Spells_ResetBuffs(HealBot_Data["PCLASSTRIM"])
+        HealBot_Init_Spells()
         HealBot_Config_Buffs.HealBotBuffColR={[1]=1,[2]=1,[3]=1,[4]=1,[5]=1,[6]=1,[7]=1,[8]=1,[9]=1,[10]=1,[11]=1,[12]=1,[13]=1,[14]=1}
         HealBot_Config_Buffs.HealBotBuffColG={[1]=1,[2]=1,[3]=1,[4]=1,[5]=1,[6]=1,[7]=1,[8]=1,[9]=1,[10]=1,[11]=1,[12]=1,[13]=1,[14]=1}
         HealBot_Config_Buffs.HealBotBuffColB={[1]=1,[2]=1,[3]=1,[4]=1,[5]=1,[6]=1,[7]=1,[8]=1,[9]=1,[10]=1,[11]=1,[12]=1,[13]=1,[14]=1}
     end
     if HealBot_Config.CurrentSpec == 9 then
         HealBot_Config.CurrentSpec=1
-        HealBot_Update_SpellCombos()
         HealBot_Update_BuffsForSpec()
     end
 end

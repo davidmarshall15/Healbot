@@ -36,7 +36,7 @@ end
 
 function HealBot_Media_PluginChange()
     HealBot_Media_UpdateIndexes()
-    HealBot_Options_ResetUpdate()
+    HealBot_Timers_Set("SKINS","ResetUpdate")
     HealBot_Plugin_Media_Summary()
 end
 
@@ -134,7 +134,7 @@ function HealBot_Media_PlaySound(name, channel)
             PlaySoundFile(LSM:Fetch('sound',name), channel or "SFX")
         elseif hbSounds["TimeCallback"]<HealBot_TimeNow then
             hbSounds["TimeCallback"]=0.02+(hbSounds["TimeNextPlay"]-HealBot_TimeNow)
-            C_Timer.After(hbSounds["TimeCallback"], function() HealBot_Media_PlaySound(id, channel) end)
+            C_Timer.After(hbSounds["TimeCallback"], function() HealBot_Media_PlaySound(name, channel) end)
         end
     end
 end
@@ -247,8 +247,8 @@ function HealBot_Media_UpdateType(mType, frame, auxId)
             HealBot_Options_UpdateMediaFont(HealBot_Options_AggroFontName,Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][frame]["AFONT"])
             HealBot_Options_UpdateMediaFont(HealBot_Options_AuxFontName,Healbot_Config_Skins.AuxBarText[Healbot_Config_Skins.Current_Skin][auxId][frame]["FONT"])
             HealBot_Options_UpdateMediaFont(HealBot_Options_StateFontName,Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][frame]["SFONT"])
-            HealBot_Options_UpdateMediaFont(HealBot_Options_ActionIconsFontName,(Healbot_Config_Skins.ActionIcons[Healbot_Config_Skins.Current_Skin][frame]["FONT"] or HealBot_Default_FontName))
-            HealBot_Options_UpdateMediaFont(HealBot_Options_ActionIconsFontCountName,(Healbot_Config_Skins.ActionIcons[Healbot_Config_Skins.Current_Skin][frame]["FONTCOUNT"] or HealBot_Default_FontName))
+            HealBot_Options_UpdateMediaFont(HealBot_Options_ActionIconsFontName,HealBot_ActionIcons_GetVars("FONT", frame))
+            HealBot_Options_UpdateMediaFont(HealBot_Options_ActionIconsFontCountName,HealBot_ActionIcons_GetVars("FONTCOUNT", frame))
             for z=1,3 do
                 HealBot_Options_UpdateMediaFont(HealBot_BarButtonIconBuffFont,Healbot_Config_Skins.IconSetsText[Healbot_Config_Skins.Current_Skin][frame][z]["BUFFFONT"])
                 HealBot_Options_UpdateMediaFont(HealBot_BarButtonIconFont, Healbot_Config_Skins.IconSetsText[Healbot_Config_Skins.Current_Skin][frame][z]["DBFONT"])

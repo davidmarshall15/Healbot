@@ -647,16 +647,6 @@ function HealBot_Panel_RetPrivateDamagers(unit, perm)
     end
 end
 
-local role_tex_file="Interface\\LFGFrame\\UI-LFG-ICON-PORTRAITROLES.blp"
-local role_t="\124T"..role_tex_file..":%d:%d:"
-local role_tex={
-   DAMAGER=role_t.."0:0:64:64:20:39:22:41\124t",
-   HEALER= role_t.."0:0:64:64:20:39:1:20\124t",
-   TANK=   role_t.."0:0:64:64:0:19:22:41\124t",
-   LEADER= role_t.."0:0:64:64:0:19:1:20\124t",
-   NONE=   ""
-}
-
 local roleTextures={
     ["DAMAGER"]="Interface\\Addons\\HealBot\\Images\\dps.tga",
     ["TANK"]="Interface\\Addons\\HealBot\\Images\\tank.tga",
@@ -1701,15 +1691,15 @@ function HealBot_Panel_TestBarShow(index,button,tRole,r,g,b,tpR,tpG,tpB)
         button.reset=false
         if not hbCustomRoleCols[button.roletxt] then button.roletxt="DAMAGER" end
 
-        if Healbot_Config_Skins.BarCol[Healbot_Config_Skins.Current_Skin][button.frame]["HLTH"] == 2 or
-           Healbot_Config_Skins.BarCol[Healbot_Config_Skins.Current_Skin][button.frame]["HLTH"] == 5 then
+        if HealBot_Skins_GetFrameVar("BarCol", "HLTH", button.frame) == 2 or
+           HealBot_Skins_GetFrameVar("BarCol", "HLTH", button.frame) == 5 then
             HealBot_colIndex["hcr"..index],HealBot_colIndex["hcg"..index],HealBot_colIndex["hcb"..index]=r,g,b
-        elseif Healbot_Config_Skins.BarCol[Healbot_Config_Skins.Current_Skin][button.frame]["HLTH"] == 1 then
+        elseif HealBot_Skins_GetFrameVar("BarCol", "HLTH", button.frame) == 1 then
             HealBot_colIndex["hcr"..index],HealBot_colIndex["hcg"..index],HealBot_colIndex["hcb"..index]=0,1,0
-        elseif Healbot_Config_Skins.BarCol[Healbot_Config_Skins.Current_Skin][button.frame]["HLTH"] == 4 then
-            HealBot_colIndex["hcr"..index]=Healbot_Config_Skins.BarCol[Healbot_Config_Skins.Current_Skin][button.frame]["HR"]
-            HealBot_colIndex["hcg"..index]=Healbot_Config_Skins.BarCol[Healbot_Config_Skins.Current_Skin][button.frame]["HG"]
-            HealBot_colIndex["hcb"..index]=Healbot_Config_Skins.BarCol[Healbot_Config_Skins.Current_Skin][button.frame]["HB"]
+        elseif HealBot_Skins_GetFrameVar("BarCol", "HLTH", button.frame) == 4 then
+            HealBot_colIndex["hcr"..index]=HealBot_Skins_GetFrameVar("BarCol", "HR", button.frame)
+            HealBot_colIndex["hcg"..index]=HealBot_Skins_GetFrameVar("BarCol", "HG", button.frame)
+            HealBot_colIndex["hcb"..index]=HealBot_Skins_GetFrameVar("BarCol", "HB", button.frame)
         else
             HealBot_colIndex["hcr"..index]=hbCustomRoleCols[button.roletxt].r
             HealBot_colIndex["hcg"..index]=hbCustomRoleCols[button.roletxt].g

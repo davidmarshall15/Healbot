@@ -1185,7 +1185,7 @@ function HealBot_Aura_UpdateExtraIcon(button, iconData, index)
        (index == 92 and Healbot_Config_Skins.Icons[Healbot_Config_Skins.Current_Skin][button.frame]["TARGETEN"]) or
        (index == 93 and Healbot_Config_Skins.Icons[Healbot_Config_Skins.Current_Skin][button.frame]["RCEN"]) or
        (index == 94 and Healbot_Config_Skins.Icons[Healbot_Config_Skins.Current_Skin][button.frame]["OOREN"]) then
-        HealBot_Aura_luVars["exIconAlpha"]=HealBot_Action_BarColourAlpha(button, Healbot_Config_Skins.BarCol[Healbot_Config_Skins.Current_Skin][button.framecol]["HA"], 1)
+        HealBot_Aura_luVars["exIconAlpha"]=HealBot_Action_BarColourAlpha(button, HealBot_Skins_GetFrameVar("BarCol", "HA", button.framecol), 1)
     else
         HealBot_Aura_luVars["exIconAlpha"]=button.status.alpha
     end
@@ -1216,7 +1216,7 @@ function HealBot_Aura_DebuffIconAlphaValue(button, iconData, secsLeft)
                     dbRetAlpha=1
                 end
                 if Healbot_Config_Skins.IconSets[Healbot_Config_Skins.Current_Skin][button.frame][iconData.iconSet]["DI15EN"] then
-                    dbMaxAlpha=HealBot_Action_BarColourAlpha(button, Healbot_Config_Skins.BarCol[Healbot_Config_Skins.Current_Skin][button.framecol]["HA"], 1)
+                    dbMaxAlpha=HealBot_Action_BarColourAlpha(button, HealBot_Skins_GetFrameVar("BarCol", "HA", button.framecol), 1)
                     if dbRetAlpha>dbMaxAlpha then
                         dbRetAlpha=dbMaxAlpha
                     end
@@ -1226,13 +1226,13 @@ function HealBot_Aura_DebuffIconAlphaValue(button, iconData, secsLeft)
             else
                 dbNextAuraUpdate=secsLeft-dbMaxDur
                 if Healbot_Config_Skins.IconSets[Healbot_Config_Skins.Current_Skin][button.frame][iconData.iconSet]["DI15EN"] then
-                    dbRetAlpha=HealBot_Action_BarColourAlpha(button, Healbot_Config_Skins.BarCol[Healbot_Config_Skins.Current_Skin][button.framecol]["HA"], 1)
+                    dbRetAlpha=HealBot_Action_BarColourAlpha(button, HealBot_Skins_GetFrameVar("BarCol", "HA", button.framecol), 1)
                 else
                     dbRetAlpha=button.status.alpha
                 end
             end
         elseif Healbot_Config_Skins.IconSets[Healbot_Config_Skins.Current_Skin][button.frame][iconData.iconSet]["DI15EN"] then
-            dbRetAlpha=HealBot_Action_BarColourAlpha(button, Healbot_Config_Skins.BarCol[Healbot_Config_Skins.Current_Skin][button.framecol]["HA"], 1)
+            dbRetAlpha=HealBot_Action_BarColourAlpha(button, HealBot_Skins_GetFrameVar("BarCol", "HA", button.framecol), 1)
         else
             dbRetAlpha=button.status.alpha
         end
@@ -1253,7 +1253,7 @@ function HealBot_Aura_DoUpdateDebuffIcon(button, iconData, index, timer, lastSpe
         if iconData.expirationTime>0 then
             dbiconAlpha, dbAlphaNextUpdate=HealBot_Aura_DebuffIconAlphaValue(button, iconData, dbSecsLeft)
         elseif Healbot_Config_Skins.IconSets[Healbot_Config_Skins.Current_Skin][button.frame][iconData.iconSet]["DI15EN"] then
-            dbiconAlpha=HealBot_Action_BarColourAlpha(button, Healbot_Config_Skins.BarCol[Healbot_Config_Skins.Current_Skin][button.framecol]["HA"], 1)
+            dbiconAlpha=HealBot_Action_BarColourAlpha(button, HealBot_Skins_GetFrameVar("BarCol", "HA", button.framecol), 1)
         else
             dbiconAlpha=button.status.alpha
         end
@@ -1389,7 +1389,7 @@ function HealBot_Aura_BuffIconAlphaValue(button, iconData, secsLeft)
                     bRetAlpha=1
                 end
                 if Healbot_Config_Skins.IconSets[Healbot_Config_Skins.Current_Skin][button.frame][iconData.iconSet]["BUFFI15EN"] then
-                    bMaxAlpha=HealBot_Action_BarColourAlpha(button, Healbot_Config_Skins.BarCol[Healbot_Config_Skins.Current_Skin][button.framecol]["HA"], 1)
+                    bMaxAlpha=HealBot_Action_BarColourAlpha(button, HealBot_Skins_GetFrameVar("BarCol", "HA", button.framecol), 1)
                     if bRetAlpha>bMaxAlpha then
                         bRetAlpha=bMaxAlpha
                     end
@@ -1399,13 +1399,13 @@ function HealBot_Aura_BuffIconAlphaValue(button, iconData, secsLeft)
             else
                 bNextAuraUpdate=secsLeft-bMaxDur
                 if Healbot_Config_Skins.IconSets[Healbot_Config_Skins.Current_Skin][button.frame][iconData.iconSet]["BUFFI15EN"] then
-                    bRetAlpha=HealBot_Action_BarColourAlpha(button, Healbot_Config_Skins.BarCol[Healbot_Config_Skins.Current_Skin][button.framecol]["HA"], 1)
+                    bRetAlpha=HealBot_Action_BarColourAlpha(button, HealBot_Skins_GetFrameVar("BarCol", "HA", button.framecol), 1)
                 else
                     bRetAlpha=button.status.alpha
                 end
             end
         elseif Healbot_Config_Skins.IconSets[Healbot_Config_Skins.Current_Skin][button.frame][iconData.iconSet]["BUFFI15EN"] then
-            bRetAlpha=HealBot_Action_BarColourAlpha(button, Healbot_Config_Skins.BarCol[Healbot_Config_Skins.Current_Skin][button.framecol]["HA"], 1)
+            bRetAlpha=HealBot_Action_BarColourAlpha(button, HealBot_Skins_GetFrameVar("BarCol", "HA", button.framecol), 1)
         else
             bRetAlpha=button.status.alpha
         end
@@ -1426,7 +1426,7 @@ function HealBot_Aura_DoUpdateBuffIcon(button, iconData, index, timer, lastSpell
         if iconData.expirationTime>0 then
             bIconAlpha, bAlphaNextUpdate=HealBot_Aura_BuffIconAlphaValue(button, iconData, bSecsLeft)
         elseif Healbot_Config_Skins.IconSets[Healbot_Config_Skins.Current_Skin][button.frame][iconData.iconSet]["BUFFI15EN"] then
-            bIconAlpha=HealBot_Action_BarColourAlpha(button, Healbot_Config_Skins.BarCol[Healbot_Config_Skins.Current_Skin][button.framecol]["HA"], 1)
+            bIconAlpha=HealBot_Action_BarColourAlpha(button, HealBot_Skins_GetFrameVar("BarCol", "HA", button.framecol), 1)
         else
             bIconAlpha=button.status.alpha
         end
@@ -4661,264 +4661,268 @@ end
 
 function HealBot_Aura_InitData()
       --HealBot_setCall("HealBot_Aura_InitData")
-    local sName=nil
-    if HealBot_Data["PCLASSTRIM"] == HealBot_Class_En[HEALBOT_PRIEST] then
-        sName=HealBot_WoWAPI_SpellName(HBC_DAMPEN_MAGIC)
-        if sName then HealBot_ShortBuffs[sName]=true end
-        sName=HealBot_WoWAPI_SpellName(HBC_SHADOW_PROTECTION)
-        if sName then HealBot_ShortBuffs[sName]=true end
-        sName=HealBot_WoWAPI_SpellName(HEALBOT_FEAR_WARD)
-        if sName then HealBot_ShortBuffs[sName]=true end
-        if HEALBOT_GAME_VERSION<3 then
-            sName=HealBot_WoWAPI_SpellName(HBC_INNER_FIRE)
+    if HealBot_Data["PCLASSTRIM"] then
+        local sName=nil
+        if HealBot_Data["PCLASSTRIM"] == HealBot_Class_En[HEALBOT_PRIEST] then
+            sName=HealBot_WoWAPI_SpellName(HBC_DAMPEN_MAGIC)
             if sName then HealBot_ShortBuffs[sName]=true end
-        end
-    elseif HealBot_Data["PCLASSTRIM"] == HealBot_Class_En[HEALBOT_DRUID] then
-        sName=HealBot_WoWAPI_SpellName(HBC_THORNS)
-        if sName then HealBot_ShortBuffs[sName]=true end
-        if HEALBOT_GAME_VERSION<2 then 
-            sName=HealBot_WoWAPI_SpellName(HBC_OMEN_OF_CLARITY)
+            sName=HealBot_WoWAPI_SpellName(HBC_SHADOW_PROTECTION)
             if sName then HealBot_ShortBuffs[sName]=true end
+            sName=HealBot_WoWAPI_SpellName(HEALBOT_FEAR_WARD)
+            if sName then HealBot_ShortBuffs[sName]=true end
+            if HEALBOT_GAME_VERSION<3 then
+                sName=HealBot_WoWAPI_SpellName(HBC_INNER_FIRE)
+                if sName then HealBot_ShortBuffs[sName]=true end
+            end
+        elseif HealBot_Data["PCLASSTRIM"] == HealBot_Class_En[HEALBOT_DRUID] then
+            sName=HealBot_WoWAPI_SpellName(HBC_THORNS)
+            if sName then HealBot_ShortBuffs[sName]=true end
+            if HEALBOT_GAME_VERSION<2 then 
+                sName=HealBot_WoWAPI_SpellName(HBC_OMEN_OF_CLARITY)
+                if sName then HealBot_ShortBuffs[sName]=true end
+            end
+        elseif HealBot_Data["PCLASSTRIM"] == HealBot_Class_En[HEALBOT_PALADIN] then
+            sName=HealBot_WoWAPI_SpellName(HEALBOT_BEACON_OF_LIGHT)
+            if sName then HealBot_ShortBuffs[sName]=true end
+            sName=HealBot_WoWAPI_SpellName(HEALBOT_SACRED_SHIELD)
+            if sName then HealBot_ShortBuffs[sName]=true end
+            sName=HealBot_WoWAPI_SpellName(HBC_BLESSING_OF_KINGS)
+            if sName then HealBot_ShortBuffs[sName]=true end
+            sName=HealBot_WoWAPI_SpellName(HBC_BLESSING_OF_MIGHT)
+            if sName then HealBot_ShortBuffs[sName]=true end
+            sName=HealBot_WoWAPI_SpellName(HBC_BLESSING_OF_WISDOM)
+            if sName then HealBot_ShortBuffs[sName]=true end
+            sName=HealBot_WoWAPI_SpellName(HBC_BLESSING_OF_LIGHT)
+            if sName then HealBot_ShortBuffs[sName]=true end
+            sName=HealBot_WoWAPI_SpellName(HBC_BLESSING_OF_SANCTUARY)
+            if sName then HealBot_ShortBuffs[sName]=true end
+            sName=HealBot_WoWAPI_SpellName(HBC_SACRED_SHIELD)
+            if sName then HealBot_ShortBuffs[sName]=true end
+        elseif HealBot_Data["PCLASSTRIM"] == HealBot_Class_En[HEALBOT_MONK] then
+            -- Class buffs
+        elseif HealBot_Data["PCLASSTRIM"] == HealBot_Class_En[HEALBOT_WARRIOR] then
+            -- Class buffs
+        elseif HealBot_Data["PCLASSTRIM"] == HealBot_Class_En[HEALBOT_MAGE] then
+            sName=HealBot_WoWAPI_SpellName(HEALBOT_ICE_WARD)
+            if sName then HealBot_ShortBuffs[sName]=true end
+            sName=HealBot_WoWAPI_SpellName(HEALBOT_ICE_BARRIER)
+            if sName then HealBot_ShortBuffs[sName]=true end
+            sName=HealBot_WoWAPI_SpellName(HBC_DAMPEN_MAGIC)
+            if sName then HealBot_ShortBuffs[sName]=true end
+        elseif HealBot_Data["PCLASSTRIM"] == HealBot_Class_En[HEALBOT_WARLOCK] then
+            -- Class buffs
+        elseif HealBot_Data["PCLASSTRIM"] == HealBot_Class_En[HEALBOT_DEATHKNIGHT] then
+            sName=HealBot_WoWAPI_SpellName(HEALBOT_HORN_OF_WINTER)
+            if sName then HealBot_ShortBuffs[sName]=true end
+        elseif HealBot_Data["PCLASSTRIM"] == HealBot_Class_En[HEALBOT_HUNTER] then
+            -- Class buffs
+        elseif HealBot_Data["PCLASSTRIM"] == HealBot_Class_En[HEALBOT_SHAMAN] then
+            sName=HealBot_WoWAPI_SpellName(HEALBOT_FLAMETONGUE_SPELL)
+            if sName then hbWeaponEnchants[sName]=true end
+            sName=HealBot_WoWAPI_SpellName(HEALBOT_WINDFURY_SPELL)
+            if sName then hbWeaponEnchants[sName]=true end
+            sName=HealBot_WoWAPI_SpellName(HBC_ROCKBITER_WEAPON)
+            if sName then hbWeaponEnchants[sName]=true end
+            sName=HealBot_WoWAPI_SpellName(HBC_EARTHLIVING_WEAPON)
+            if sName then hbWeaponEnchants[sName]=true end
+            sName=HealBot_WoWAPI_SpellName(HEALBOT_EARTHLIVING_WEAPON)
+            if sName then hbWeaponEnchants[sName]=true end
+            sName=HealBot_WoWAPI_SpellName(HBC_FLAMETONGUE_WEAPON)
+            if sName then hbWeaponEnchants[sName]=true end
+            sName=HealBot_WoWAPI_SpellName(HBC_WINDFURY_WEAPON)
+            if sName then hbWeaponEnchants[sName]=true end
+        elseif HealBot_Data["PCLASSTRIM"] == HealBot_Class_En[HEALBOT_ROGUE] then
+            -- Class buffs
+        elseif HealBot_Data["PCLASSTRIM"] == HealBot_Class_En[HEALBOT_DEMONHUNTER] then
+            -- Class buffs
         end
-    elseif HealBot_Data["PCLASSTRIM"] == HealBot_Class_En[HEALBOT_PALADIN] then
-        sName=HealBot_WoWAPI_SpellName(HEALBOT_BEACON_OF_LIGHT)
-        if sName then HealBot_ShortBuffs[sName]=true end
-        sName=HealBot_WoWAPI_SpellName(HEALBOT_SACRED_SHIELD)
-        if sName then HealBot_ShortBuffs[sName]=true end
-        sName=HealBot_WoWAPI_SpellName(HBC_BLESSING_OF_KINGS)
-        if sName then HealBot_ShortBuffs[sName]=true end
-        sName=HealBot_WoWAPI_SpellName(HBC_BLESSING_OF_MIGHT)
-        if sName then HealBot_ShortBuffs[sName]=true end
-        sName=HealBot_WoWAPI_SpellName(HBC_BLESSING_OF_WISDOM)
-        if sName then HealBot_ShortBuffs[sName]=true end
-        sName=HealBot_WoWAPI_SpellName(HBC_BLESSING_OF_LIGHT)
-        if sName then HealBot_ShortBuffs[sName]=true end
-        sName=HealBot_WoWAPI_SpellName(HBC_BLESSING_OF_SANCTUARY)
-        if sName then HealBot_ShortBuffs[sName]=true end
-        sName=HealBot_WoWAPI_SpellName(HBC_SACRED_SHIELD)
-        if sName then HealBot_ShortBuffs[sName]=true end
-    elseif HealBot_Data["PCLASSTRIM"] == HealBot_Class_En[HEALBOT_MONK] then
-        -- Class buffs
-    elseif HealBot_Data["PCLASSTRIM"] == HealBot_Class_En[HEALBOT_WARRIOR] then
-        -- Class buffs
-    elseif HealBot_Data["PCLASSTRIM"] == HealBot_Class_En[HEALBOT_MAGE] then
-        sName=HealBot_WoWAPI_SpellName(HEALBOT_ICE_WARD)
-        if sName then HealBot_ShortBuffs[sName]=true end
-        sName=HealBot_WoWAPI_SpellName(HEALBOT_ICE_BARRIER)
-        if sName then HealBot_ShortBuffs[sName]=true end
-        sName=HealBot_WoWAPI_SpellName(HBC_DAMPEN_MAGIC)
-        if sName then HealBot_ShortBuffs[sName]=true end
-    elseif HealBot_Data["PCLASSTRIM"] == HealBot_Class_En[HEALBOT_WARLOCK] then
-        -- Class buffs
-    elseif HealBot_Data["PCLASSTRIM"] == HealBot_Class_En[HEALBOT_DEATHKNIGHT] then
-        sName=HealBot_WoWAPI_SpellName(HEALBOT_HORN_OF_WINTER)
-        if sName then HealBot_ShortBuffs[sName]=true end
-    elseif HealBot_Data["PCLASSTRIM"] == HealBot_Class_En[HEALBOT_HUNTER] then
-        -- Class buffs
-    elseif HealBot_Data["PCLASSTRIM"] == HealBot_Class_En[HEALBOT_SHAMAN] then
-        sName=HealBot_WoWAPI_SpellName(HEALBOT_FLAMETONGUE_SPELL)
-        if sName then hbWeaponEnchants[sName]=true end
-        sName=HealBot_WoWAPI_SpellName(HEALBOT_WINDFURY_SPELL)
-        if sName then hbWeaponEnchants[sName]=true end
-        sName=HealBot_WoWAPI_SpellName(HBC_ROCKBITER_WEAPON)
-        if sName then hbWeaponEnchants[sName]=true end
-        sName=HealBot_WoWAPI_SpellName(HBC_EARTHLIVING_WEAPON)
-        if sName then hbWeaponEnchants[sName]=true end
-        sName=HealBot_WoWAPI_SpellName(HEALBOT_EARTHLIVING_WEAPON)
-        if sName then hbWeaponEnchants[sName]=true end
-        sName=HealBot_WoWAPI_SpellName(HBC_FLAMETONGUE_WEAPON)
-        if sName then hbWeaponEnchants[sName]=true end
-        sName=HealBot_WoWAPI_SpellName(HBC_WINDFURY_WEAPON)
-        if sName then hbWeaponEnchants[sName]=true end
-    elseif HealBot_Data["PCLASSTRIM"] == HealBot_Class_En[HEALBOT_ROGUE] then
-        -- Class buffs
-    elseif HealBot_Data["PCLASSTRIM"] == HealBot_Class_En[HEALBOT_DEMONHUNTER] then
-        -- Class buffs
-    end
 
-    if HEALBOT_GAME_VERSION<5 then
-        
-        local HBC_WISDOM_ID=1 --Mana Regen
-        local HBC_LIGHT_ID=2 --Incoming Heals
-        local HBC_SALVATION_ID=3 --Threat Reduction
-        local HBC_SANCTUARY_ID=4 --Damage Reduction
-        local HBC_STATS_ID=5 --Stats
-        local HBC_MIGHT_ID=6 --Attack Power
-        local HBC_STAMINA_ID=7 --Stamina
-        local HBC_INT_ID=8 --Int
-        local HBC_SPIRIT_ID=9 --Spirit
-        local HBC_SP_ID=10 --Shadow Resistance 
-        local HBC_MOTW_ID=11 --Wild 
-        local HBC_INV_ID=12
-        local HBC_INNER_ID=13
-        if HEALBOT_GAME_VERSION<4 then
-            if HealBot_Data["PCLASSTRIM"] == HealBot_Class_En[HEALBOT_DRUID] then
+        if HEALBOT_GAME_VERSION<5 then
+            
+            local HBC_WISDOM_ID=1 --Mana Regen
+            local HBC_LIGHT_ID=2 --Incoming Heals
+            local HBC_SALVATION_ID=3 --Threat Reduction
+            local HBC_SANCTUARY_ID=4 --Damage Reduction
+            local HBC_STATS_ID=5 --Stats
+            local HBC_MIGHT_ID=6 --Attack Power
+            local HBC_STAMINA_ID=7 --Stamina
+            local HBC_INT_ID=8 --Int
+            local HBC_SPIRIT_ID=9 --Spirit
+            local HBC_SP_ID=10 --Shadow Resistance 
+            local HBC_MOTW_ID=11 --Wild 
+            local HBC_INV_ID=12
+            local HBC_INNER_ID=13
+            if HEALBOT_GAME_VERSION<4 then
+                if HealBot_Data["PCLASSTRIM"] == HealBot_Class_En[HEALBOT_DRUID] then
+                        HealBot_BuffNameTypes={
+                            [(HealBot_WoWAPI_SpellName(HEALBOT_MARK_OF_THE_WILD) or "Mark of the Wild")]=HBC_MOTW_ID,
+                            [(HealBot_WoWAPI_SpellName(HBC_GIFT_OF_THE_WILD) or "Gift of the Wild")]=HBC_MOTW_ID,
+                        }
+                elseif HealBot_Data["PCLASSTRIM"] == HealBot_Class_En[HEALBOT_MAGE] then
                     HealBot_BuffNameTypes={
-                        [(HealBot_WoWAPI_SpellName(HEALBOT_MARK_OF_THE_WILD) or "Mark of the Wild")]=HBC_MOTW_ID,
-                        [(HealBot_WoWAPI_SpellName(HBC_GIFT_OF_THE_WILD) or "Gift of the Wild")]=HBC_MOTW_ID,
+                        [(HealBot_WoWAPI_SpellName(HBC_ARCANE_BRILLIANCE) or "Arcane Brilliance")]=HBC_INT_ID,
+                        [(HealBot_WoWAPI_SpellName(HEALBOT_ARCANE_BRILLIANCE) or "Arcane Brilliance")]=HBC_INT_ID,
+                        [(HealBot_WoWAPI_SpellName(HEALBOT_DALARAN_BRILLIANCE) or "Dalaran Brilliance")]=HBC_INT_ID,
                     }
-            elseif HealBot_Data["PCLASSTRIM"] == HealBot_Class_En[HEALBOT_MAGE] then
+                elseif HealBot_Data["PCLASSTRIM"] == HealBot_Class_En[HEALBOT_PALADIN] then
+                    HealBot_BuffNameTypes={
+                        [(HealBot_WoWAPI_SpellName(HBC_BLESSING_OF_KINGS) or "Blessing of Kings")]=HBC_STATS_ID,
+                        [(HealBot_WoWAPI_SpellName(HBC_BLESSING_OF_LIGHT) or "Blessing of Light")]=HBC_LIGHT_ID,
+                        [(HealBot_WoWAPI_SpellName(HBC_BLESSING_OF_MIGHT) or "Blessing of Might")]=HBC_MIGHT_ID,
+                        [(HealBot_WoWAPI_SpellName(HEALBOT_HAND_OF_SALVATION) or "Hand of Salvation")]=HBC_SALVATION_ID,
+                        [(HealBot_WoWAPI_SpellName(HBC_BLESSING_OF_SANCTUARY) or "Blessing of Sanctuary")]=HBC_SANCTUARY_ID,
+                        [(HealBot_WoWAPI_SpellName(HBC_BLESSING_OF_WISDOM) or "Blessing of Wisdom")]=HBC_WISDOM_ID,
+                        [(HealBot_WoWAPI_SpellName(HBC_GREATER_BLESSING_OF_KINGS) or "Greater Blessing of Kings")]=HBC_STATS_ID,
+                        [(HealBot_WoWAPI_SpellName(HBC_GREATER_BLESSING_OF_LIGHT) or "Greater Blessing of Light")]=HBC_LIGHT_ID,
+                        [(HealBot_WoWAPI_SpellName(HBC_GREATER_BLESSING_OF_MIGHT) or "Greater Blessing of Might")]=HBC_MIGHT_ID,
+                        [(HealBot_WoWAPI_SpellName(HBC_GREATER_BLESSING_OF_SALVATION) or "Greater Blessing of Salvation")]=HBC_SALVATION_ID,
+                        [(HealBot_WoWAPI_SpellName(HBC_GREATER_BLESSING_OF_SANCTUARY) or "Greater Blessing of Sanctuary")]=HBC_SANCTUARY_ID,
+                        [(HealBot_WoWAPI_SpellName(HBC_GREATER_BLESSING_OF_WISDOM) or "Greater Blessing of Wisdom")]=HBC_WISDOM_ID,
+                    }
+                elseif HealBot_Data["PCLASSTRIM"] == HealBot_Class_En[HEALBOT_PRIEST] then
+                    HealBot_BuffNameTypes={
+                        [(HealBot_WoWAPI_SpellName(HBC_POWER_WORD_FORTITUDE) or "Power Word:Fortitude")]=HBC_STAMINA_ID,
+                        [(HealBot_WoWAPI_SpellName(HEALBOT_POWER_WORD_FORTITUDE) or "Power Word:Fortitude")]=HBC_STAMINA_ID,
+                        [(HealBot_WoWAPI_SpellName(HBC_DIVINE_SPIRIT) or "Divine Spirit")]=HBC_SPIRIT_ID,
+                        [(HealBot_WoWAPI_SpellName(HBC_PRAYER_OF_SPIRIT) or "Prayer of Spirit")]=HBC_SPIRIT_ID,
+                        [(HealBot_WoWAPI_SpellName(HBC_SHADOW_PROTECTION) or "Shadow Protection")]=HBC_SP_ID,
+                        [(HealBot_WoWAPI_SpellName(HBC_PRAYER_OF_SHADOW_PROTECTION) or "Prayer of Shadow Protection")]=HBC_SP_ID,
+                    }
+                    if HealBot_Data["PLEVEL"]<80 then
+                        HealBot_BuffNameTypes[(HealBot_WoWAPI_SpellName(HBC_FEL_INTELLIGENCE) or "Fel Intelligence")]=HBC_SPIRIT_ID
+                    end
+                elseif HealBot_Data["PCLASSTRIM"] == HealBot_Class_En[HEALBOT_WARLOCK] then
+                    HealBot_BuffNameTypes={
+                        [(HealBot_WoWAPI_SpellName(HBC_DETECT_LESSER_INVISIBILITY) or "Detect Lesser Invisibility")]=HBC_INV_ID,
+                        [(HealBot_WoWAPI_SpellName(HBC_DETECT_INVISIBILITY) or "Detect Invisibility")]=HBC_INV_ID,
+                        [(HealBot_WoWAPI_SpellName(HBC_DETECT_GREATER_INVISIBILITY) or "Detect Greater Invisibility")]=HBC_INV_ID,
+                    }
+                end
+            elseif HEALBOT_GAME_VERSION<5 then
                 HealBot_BuffNameTypes={
-                    [(HealBot_WoWAPI_SpellName(HBC_ARCANE_BRILLIANCE) or "Arcane Brilliance")]=HBC_INT_ID,
+                    [(HealBot_WoWAPI_SpellName(HEALBOT_MARK_OF_THE_WILD) or "Mark of the Wild")]=HBC_STATS_ID,
+                    [(HealBot_WoWAPI_SpellName(HBC_BLESSING_OF_KINGS) or "Blessing of Kings")]=HBC_STATS_ID,
+                    [(HealBot_WoWAPI_SpellName(HBC_INNER_FIRE) or "Inner Fire")]=HBC_INNER_ID,
+                    [(HealBot_WoWAPI_SpellName(HBC_INNER_WILL) or "Inner Will")]=HBC_INNER_ID,
+                    [(HealBot_WoWAPI_SpellName(HEALBOT_POWER_WORD_FORTITUDE) or "Power Word: Fortitude")]=HBC_STAMINA_ID,
+                    [(HealBot_WoWAPI_SpellName(HEALBOT_COMMANDING_SHOUT) or "Commanding Shout")]=HBC_STAMINA_ID,
                     [(HealBot_WoWAPI_SpellName(HEALBOT_ARCANE_BRILLIANCE) or "Arcane Brilliance")]=HBC_INT_ID,
                     [(HealBot_WoWAPI_SpellName(HEALBOT_DALARAN_BRILLIANCE) or "Dalaran Brilliance")]=HBC_INT_ID,
                 }
-            elseif HealBot_Data["PCLASSTRIM"] == HealBot_Class_En[HEALBOT_PALADIN] then
-                HealBot_BuffNameTypes={
-                    [(HealBot_WoWAPI_SpellName(HBC_BLESSING_OF_KINGS) or "Blessing of Kings")]=HBC_STATS_ID,
-                    [(HealBot_WoWAPI_SpellName(HBC_BLESSING_OF_LIGHT) or "Blessing of Light")]=HBC_LIGHT_ID,
-                    [(HealBot_WoWAPI_SpellName(HBC_BLESSING_OF_MIGHT) or "Blessing of Might")]=HBC_MIGHT_ID,
-                    [(HealBot_WoWAPI_SpellName(HEALBOT_HAND_OF_SALVATION) or "Hand of Salvation")]=HBC_SALVATION_ID,
-                    [(HealBot_WoWAPI_SpellName(HBC_BLESSING_OF_SANCTUARY) or "Blessing of Sanctuary")]=HBC_SANCTUARY_ID,
-                    [(HealBot_WoWAPI_SpellName(HBC_BLESSING_OF_WISDOM) or "Blessing of Wisdom")]=HBC_WISDOM_ID,
-                    [(HealBot_WoWAPI_SpellName(HBC_GREATER_BLESSING_OF_KINGS) or "Greater Blessing of Kings")]=HBC_STATS_ID,
-                    [(HealBot_WoWAPI_SpellName(HBC_GREATER_BLESSING_OF_LIGHT) or "Greater Blessing of Light")]=HBC_LIGHT_ID,
-                    [(HealBot_WoWAPI_SpellName(HBC_GREATER_BLESSING_OF_MIGHT) or "Greater Blessing of Might")]=HBC_MIGHT_ID,
-                    [(HealBot_WoWAPI_SpellName(HBC_GREATER_BLESSING_OF_SALVATION) or "Greater Blessing of Salvation")]=HBC_SALVATION_ID,
-                    [(HealBot_WoWAPI_SpellName(HBC_GREATER_BLESSING_OF_SANCTUARY) or "Greater Blessing of Sanctuary")]=HBC_SANCTUARY_ID,
-                    [(HealBot_WoWAPI_SpellName(HBC_GREATER_BLESSING_OF_WISDOM) or "Greater Blessing of Wisdom")]=HBC_WISDOM_ID,
-                }
-            elseif HealBot_Data["PCLASSTRIM"] == HealBot_Class_En[HEALBOT_PRIEST] then
-                HealBot_BuffNameTypes={
-                    [(HealBot_WoWAPI_SpellName(HBC_POWER_WORD_FORTITUDE) or "Power Word:Fortitude")]=HBC_STAMINA_ID,
-                    [(HealBot_WoWAPI_SpellName(HEALBOT_POWER_WORD_FORTITUDE) or "Power Word:Fortitude")]=HBC_STAMINA_ID,
-                    [(HealBot_WoWAPI_SpellName(HBC_DIVINE_SPIRIT) or "Divine Spirit")]=HBC_SPIRIT_ID,
-                    [(HealBot_WoWAPI_SpellName(HBC_PRAYER_OF_SPIRIT) or "Prayer of Spirit")]=HBC_SPIRIT_ID,
-                    [(HealBot_WoWAPI_SpellName(HBC_SHADOW_PROTECTION) or "Shadow Protection")]=HBC_SP_ID,
-                    [(HealBot_WoWAPI_SpellName(HBC_PRAYER_OF_SHADOW_PROTECTION) or "Prayer of Shadow Protection")]=HBC_SP_ID,
-                }
-                if HealBot_Data["PLEVEL"]<80 then
-                    HealBot_BuffNameTypes[(HealBot_WoWAPI_SpellName(HBC_FEL_INTELLIGENCE) or "Fel Intelligence")]=HBC_SPIRIT_ID
-                end
-            elseif HealBot_Data["PCLASSTRIM"] == HealBot_Class_En[HEALBOT_WARLOCK] then
-                HealBot_BuffNameTypes={
-                    [(HealBot_WoWAPI_SpellName(HBC_DETECT_LESSER_INVISIBILITY) or "Detect Lesser Invisibility")]=HBC_INV_ID,
-                    [(HealBot_WoWAPI_SpellName(HBC_DETECT_INVISIBILITY) or "Detect Invisibility")]=HBC_INV_ID,
-                    [(HealBot_WoWAPI_SpellName(HBC_DETECT_GREATER_INVISIBILITY) or "Detect Greater Invisibility")]=HBC_INV_ID,
-                }
             end
-        elseif HEALBOT_GAME_VERSION<5 then
-            HealBot_BuffNameTypes={
-                [(HealBot_WoWAPI_SpellName(HEALBOT_MARK_OF_THE_WILD) or "Mark of the Wild")]=HBC_STATS_ID,
-                [(HealBot_WoWAPI_SpellName(HBC_BLESSING_OF_KINGS) or "Blessing of Kings")]=HBC_STATS_ID,
-                [(HealBot_WoWAPI_SpellName(HBC_INNER_FIRE) or "Inner Fire")]=HBC_INNER_ID,
-                [(HealBot_WoWAPI_SpellName(HBC_INNER_WILL) or "Inner Will")]=HBC_INNER_ID,
-                [(HealBot_WoWAPI_SpellName(HEALBOT_POWER_WORD_FORTITUDE) or "Power Word: Fortitude")]=HBC_STAMINA_ID,
-                [(HealBot_WoWAPI_SpellName(HEALBOT_COMMANDING_SHOUT) or "Commanding Shout")]=HBC_STAMINA_ID,
-                [(HealBot_WoWAPI_SpellName(HEALBOT_ARCANE_BRILLIANCE) or "Arcane Brilliance")]=HBC_INT_ID,
-                [(HealBot_WoWAPI_SpellName(HEALBOT_DALARAN_BRILLIANCE) or "Dalaran Brilliance")]=HBC_INT_ID,
-            }
-        end
 
-        if HEALBOT_GAME_VERSION<3 then
-            HealBot_BuffMinLevels={[HealBot_WoWAPI_SpellName(HEALBOT_POWER_WORD_FORTITUDE)]=48,
-                                   [HealBot_WoWAPI_SpellName(HBC_DIVINE_SPIRIT)]=20,
-                                   [HealBot_WoWAPI_SpellName(HBC_PRAYER_OF_SPIRIT)]=60,
-                                   [HealBot_WoWAPI_SpellName(HBC_PRAYER_OF_SHADOW_PROTECTION)]=56,
-                                   [HealBot_WoWAPI_SpellName(HBC_SHADOW_PROTECTION)]=30,
-                                   [HealBot_WoWAPI_SpellName(HBC_GIFT_OF_THE_WILD)]=50,
-                                   [HealBot_WoWAPI_SpellName(HBC_THORNS)]=6,
-                                   [HealBot_WoWAPI_SpellName(HBC_ARCANE_BRILLIANCE)]=56,
-                                   [HealBot_WoWAPI_SpellName(HBC_GREATER_BLESSING_OF_LIGHT)]=60,
-                                   [HealBot_WoWAPI_SpellName(HBC_BLESSING_OF_LIGHT)]=40,
-                                   [HealBot_WoWAPI_SpellName(HBC_GREATER_BLESSING_OF_MIGHT)]=52,
-                                   [HealBot_WoWAPI_SpellName(HBC_BLESSING_OF_MIGHT)]=4,
-                                   [HealBot_WoWAPI_SpellName(HBC_GREATER_BLESSING_OF_SALVATION)]=60,
-                                   [HealBot_WoWAPI_SpellName(HBC_BLESSING_OF_SALVATION)]=26,
-                                   [HealBot_WoWAPI_SpellName(HBC_GREATER_BLESSING_OF_WISDOM)]=54,
-                                   [HealBot_WoWAPI_SpellName(HBC_BLESSING_OF_WISDOM)]=14,
-                                   [HealBot_WoWAPI_SpellName(HBC_GREATER_BLESSING_OF_SANCTUARY)]=60,
-                                   [HealBot_WoWAPI_SpellName(HBC_GREATER_BLESSING_OF_KINGS)]=60,
-                                  }
-        elseif HEALBOT_GAME_VERSION<4 then
-            HealBot_BuffMinLevels={[HealBot_WoWAPI_SpellName(HEALBOT_POWER_WORD_FORTITUDE)]=48,
-                                   [HealBot_WoWAPI_SpellName(HBC_DIVINE_SPIRIT)]=20,
-                                   [HealBot_WoWAPI_SpellName(HBC_PRAYER_OF_SPIRIT)]=60,
-                                   [HealBot_WoWAPI_SpellName(HBC_PRAYER_OF_SHADOW_PROTECTION)]=56,
-                                   [HealBot_WoWAPI_SpellName(HBC_SHADOW_PROTECTION)]=30,
-                                   [HealBot_WoWAPI_SpellName(HBC_GIFT_OF_THE_WILD)]=50,
-                                   [HealBot_WoWAPI_SpellName(HBC_THORNS)]=6,
-                                   [HealBot_WoWAPI_SpellName(HBC_ARCANE_BRILLIANCE)]=56,
-                                   [HealBot_WoWAPI_SpellName(HEALBOT_DALARAN_BRILLIANCE)]=56,
-                                   [HealBot_WoWAPI_SpellName(HBC_GREATER_BLESSING_OF_MIGHT)]=52,
-                                   [HealBot_WoWAPI_SpellName(HBC_BLESSING_OF_MIGHT)]=4,
-                                   [HealBot_WoWAPI_SpellName(HBC_BLESSING_OF_SALVATION)]=26,
-                                   [HealBot_WoWAPI_SpellName(HBC_GREATER_BLESSING_OF_WISDOM)]=54,
-                                   [HealBot_WoWAPI_SpellName(HBC_BLESSING_OF_WISDOM)]=14,
-                                   [HealBot_WoWAPI_SpellName(HBC_GREATER_BLESSING_OF_SANCTUARY)]=60,
-                                   [HealBot_WoWAPI_SpellName(HBC_GREATER_BLESSING_OF_KINGS)]=60,
-                                  }
-        else
-            HealBot_BuffMinLevels={[HealBot_WoWAPI_SpellName(HEALBOT_POWER_WORD_FORTITUDE)]=48,
-                                   [HealBot_WoWAPI_SpellName(HEALBOT_SHADOW_PROTECTION)]=56,
-                                   [HealBot_WoWAPI_SpellName(HEALBOT_MARK_OF_THE_WILD)]=85,
-                                   [HealBot_WoWAPI_SpellName(HBC_THORNS)]=6,
-                                   [HealBot_WoWAPI_SpellName(HEALBOT_ARCANE_BRILLIANCE)]=86,
-                                   [HealBot_WoWAPI_SpellName(HEALBOT_DALARAN_BRILLIANCE)]=56,
-                                   [HealBot_WoWAPI_SpellName(HBC_BLESSING_OF_MIGHT)]=56,
-                                   [HealBot_WoWAPI_SpellName(HBC_BLESSING_OF_KINGS)]=65,
-                                  }
-        end
-        
-        if HEALBOT_GAME_VERSION<3 then
-            classicAbsorbBonusV1["DEFAULT"]=ceil(GetSpellBonusHealing()*0.3)
-            classicAbsorbBonusV1[HealBot_Data["PGUID"]]=classicAbsorbBonusV1["DEFAULT"]
-            HealBot_Classic_Absorbs={[GetSpellInfo(HEALBOT_POWER_WORD_SHIELD) or "Power Word: Shield"]={[17]=48,
-                                                        [592]=94,
-                                                        [600]=166,
-                                                       [3747]=244,
-                                                       [6065]=313,
-                                                       [6066]=394,
-                                                      [10898]=499,
-                                                      [10899]=622,
-                                                      [10900]=783,
-                                                      [10901]=942,
-                                                      [25217]=1144,
-                                                      [25218]=1265,
-                                                      [48065]=1951,
-                                                      [48066]=2230,
-                                                          [0]=2230,},
-                                     [(GetSpellInfo(HEALBOT_ICE_BARRIER) or "Ice Barrier")]={[11426]=455,
-                                                                                             [13031]=569,
-                                                                                             [13032]=700,
-                                                                                             [13033]=824,
-                                                                                             [27134]=952,
-                                                                                             [33405]=1075,
-                                                                                             [43038]=2860,
-                                                                                             [43039]=3300,
-                                                                                                 [0]=3300,},
-                                     [(GetSpellInfo(HBC_MANA_SHIELD) or "Mana Shield")]={[1463]=120,
-                                                                                         [8494]=210,
-                                                                                         [8495]=300,
-                                                                                        [10191]=390,
-                                                                                        [10192]=480,
-                                                                                        [10193]=570,
-                                                                                        [27131]=715,
-                                                                                        [43019]=1080,
-                                                                                        [43020]=1330,
-                                                                                            [0]=1330},
-                                }
-            HealBot_Classic_AbsorbsV1Track[GetSpellInfo(HEALBOT_POWER_WORD_SHIELD) or "Power Word: Shield"]=0
-            HealBot_Classic_AbsorbsV1Track[(GetSpellInfo(HEALBOT_ICE_BARRIER) or "Ice Barrier")]=0
-            HealBot_Classic_AbsorbsV1Track[(GetSpellInfo(HBC_MANA_SHIELD) or "Mana Shield")]=0
-        else
-            if HealBot_Config.ClassicAbsorbsFilter == 1 then
-                HealBot_Classic_Absorbs={[(HealBot_WoWAPI_SpellName(76669) or "Illuminated Healing")]=true}
+            if HEALBOT_GAME_VERSION<3 then
+                HealBot_BuffMinLevels={[HealBot_WoWAPI_SpellName(HEALBOT_POWER_WORD_FORTITUDE)]=48,
+                                       [HealBot_WoWAPI_SpellName(HBC_DIVINE_SPIRIT)]=20,
+                                       [HealBot_WoWAPI_SpellName(HBC_PRAYER_OF_SPIRIT)]=60,
+                                       [HealBot_WoWAPI_SpellName(HBC_PRAYER_OF_SHADOW_PROTECTION)]=56,
+                                       [HealBot_WoWAPI_SpellName(HBC_SHADOW_PROTECTION)]=30,
+                                       [HealBot_WoWAPI_SpellName(HBC_GIFT_OF_THE_WILD)]=50,
+                                       [HealBot_WoWAPI_SpellName(HBC_THORNS)]=6,
+                                       [HealBot_WoWAPI_SpellName(HBC_ARCANE_BRILLIANCE)]=56,
+                                       [HealBot_WoWAPI_SpellName(HBC_GREATER_BLESSING_OF_LIGHT)]=60,
+                                       [HealBot_WoWAPI_SpellName(HBC_BLESSING_OF_LIGHT)]=40,
+                                       [HealBot_WoWAPI_SpellName(HBC_GREATER_BLESSING_OF_MIGHT)]=52,
+                                       [HealBot_WoWAPI_SpellName(HBC_BLESSING_OF_MIGHT)]=4,
+                                       [HealBot_WoWAPI_SpellName(HBC_GREATER_BLESSING_OF_SALVATION)]=60,
+                                       [HealBot_WoWAPI_SpellName(HBC_BLESSING_OF_SALVATION)]=26,
+                                       [HealBot_WoWAPI_SpellName(HBC_GREATER_BLESSING_OF_WISDOM)]=54,
+                                       [HealBot_WoWAPI_SpellName(HBC_BLESSING_OF_WISDOM)]=14,
+                                       [HealBot_WoWAPI_SpellName(HBC_GREATER_BLESSING_OF_SANCTUARY)]=60,
+                                       [HealBot_WoWAPI_SpellName(HBC_GREATER_BLESSING_OF_KINGS)]=60,
+                                      }
+            elseif HEALBOT_GAME_VERSION<4 then
+                HealBot_BuffMinLevels={[HealBot_WoWAPI_SpellName(HEALBOT_POWER_WORD_FORTITUDE)]=48,
+                                       [HealBot_WoWAPI_SpellName(HBC_DIVINE_SPIRIT)]=20,
+                                       [HealBot_WoWAPI_SpellName(HBC_PRAYER_OF_SPIRIT)]=60,
+                                       [HealBot_WoWAPI_SpellName(HBC_PRAYER_OF_SHADOW_PROTECTION)]=56,
+                                       [HealBot_WoWAPI_SpellName(HBC_SHADOW_PROTECTION)]=30,
+                                       [HealBot_WoWAPI_SpellName(HBC_GIFT_OF_THE_WILD)]=50,
+                                       [HealBot_WoWAPI_SpellName(HBC_THORNS)]=6,
+                                       [HealBot_WoWAPI_SpellName(HBC_ARCANE_BRILLIANCE)]=56,
+                                       [HealBot_WoWAPI_SpellName(HEALBOT_DALARAN_BRILLIANCE)]=56,
+                                       [HealBot_WoWAPI_SpellName(HBC_GREATER_BLESSING_OF_MIGHT)]=52,
+                                       [HealBot_WoWAPI_SpellName(HBC_BLESSING_OF_MIGHT)]=4,
+                                       [HealBot_WoWAPI_SpellName(HBC_BLESSING_OF_SALVATION)]=26,
+                                       [HealBot_WoWAPI_SpellName(HBC_GREATER_BLESSING_OF_WISDOM)]=54,
+                                       [HealBot_WoWAPI_SpellName(HBC_BLESSING_OF_WISDOM)]=14,
+                                       [HealBot_WoWAPI_SpellName(HBC_GREATER_BLESSING_OF_SANCTUARY)]=60,
+                                       [HealBot_WoWAPI_SpellName(HBC_GREATER_BLESSING_OF_KINGS)]=60,
+                                      }
             else
-                HealBot_Classic_Absorbs={[(HealBot_WoWAPI_SpellName(HEALBOT_POWER_WORD_SHIELD) or "Power Word: Shield")]=true,
-                                         [(HealBot_WoWAPI_SpellName(47509) or "Divine Aegis")]=true,
-                                         [(HealBot_WoWAPI_SpellName(76669) or "Illuminated Healing")]=true,
-                                         [(HealBot_WoWAPI_SpellName(HEALBOT_ICE_BARRIER) or "Ice Barrier")]=true,
-                                         [(HealBot_WoWAPI_SpellName(HBC_MANA_SHIELD) or "Mana Shield")]=true,
-                                         [(HealBot_WoWAPI_SpellName(HEALBOT_SACRED_SHIELD) or "Sacred Shield")]=true,
-                                         [(HealBot_WoWAPI_SpellName(77513) or "Blood Shield")]=true,
-                                         [(HealBot_WoWAPI_SpellName(48707) or "Anti-Magic Shell")]=true,
-                                        }
+                HealBot_BuffMinLevels={[HealBot_WoWAPI_SpellName(HEALBOT_POWER_WORD_FORTITUDE)]=48,
+                                       [HealBot_WoWAPI_SpellName(HEALBOT_SHADOW_PROTECTION)]=56,
+                                       [HealBot_WoWAPI_SpellName(HEALBOT_MARK_OF_THE_WILD)]=85,
+                                       [HealBot_WoWAPI_SpellName(HBC_THORNS)]=6,
+                                       [HealBot_WoWAPI_SpellName(HEALBOT_ARCANE_BRILLIANCE)]=86,
+                                       [HealBot_WoWAPI_SpellName(HEALBOT_DALARAN_BRILLIANCE)]=56,
+                                       [HealBot_WoWAPI_SpellName(HBC_BLESSING_OF_MIGHT)]=56,
+                                       [HealBot_WoWAPI_SpellName(HBC_BLESSING_OF_KINGS)]=65,
+                                      }
+            end
+            
+            if HEALBOT_GAME_VERSION<3 then
+                classicAbsorbBonusV1["DEFAULT"]=ceil(GetSpellBonusHealing()*0.3)
+                classicAbsorbBonusV1[HealBot_Data["PGUID"]]=classicAbsorbBonusV1["DEFAULT"]
+                HealBot_Classic_Absorbs={[HealBot_WoWAPI_SpellInfo(HEALBOT_POWER_WORD_SHIELD) or "Power Word: Shield"]={[17]=48,
+                                                            [592]=94,
+                                                            [600]=166,
+                                                           [3747]=244,
+                                                           [6065]=313,
+                                                           [6066]=394,
+                                                          [10898]=499,
+                                                          [10899]=622,
+                                                          [10900]=783,
+                                                          [10901]=942,
+                                                          [25217]=1144,
+                                                          [25218]=1265,
+                                                          [48065]=1951,
+                                                          [48066]=2230,
+                                                              [0]=2230,},
+                                         [(HealBot_WoWAPI_SpellInfo(HEALBOT_ICE_BARRIER) or "Ice Barrier")]={[11426]=455,
+                                                                                                 [13031]=569,
+                                                                                                 [13032]=700,
+                                                                                                 [13033]=824,
+                                                                                                 [27134]=952,
+                                                                                                 [33405]=1075,
+                                                                                                 [43038]=2860,
+                                                                                                 [43039]=3300,
+                                                                                                     [0]=3300,},
+                                         [(HealBot_WoWAPI_SpellInfo(HBC_MANA_SHIELD) or "Mana Shield")]={[1463]=120,
+                                                                                             [8494]=210,
+                                                                                             [8495]=300,
+                                                                                            [10191]=390,
+                                                                                            [10192]=480,
+                                                                                            [10193]=570,
+                                                                                            [27131]=715,
+                                                                                            [43019]=1080,
+                                                                                            [43020]=1330,
+                                                                                                [0]=1330},
+                                    }
+                HealBot_Classic_AbsorbsV1Track[HealBot_WoWAPI_SpellInfo(HEALBOT_POWER_WORD_SHIELD) or "Power Word: Shield"]=0
+                HealBot_Classic_AbsorbsV1Track[(HealBot_WoWAPI_SpellInfo(HEALBOT_ICE_BARRIER) or "Ice Barrier")]=0
+                HealBot_Classic_AbsorbsV1Track[(HealBot_WoWAPI_SpellInfo(HBC_MANA_SHIELD) or "Mana Shield")]=0
+            else
+                if HealBot_Config.ClassicAbsorbsFilter == 1 then
+                    HealBot_Classic_Absorbs={[(HealBot_WoWAPI_SpellName(76669) or "Illuminated Healing")]=true}
+                else
+                    HealBot_Classic_Absorbs={[(HealBot_WoWAPI_SpellName(HEALBOT_POWER_WORD_SHIELD) or "Power Word: Shield")]=true,
+                                             [(HealBot_WoWAPI_SpellName(47509) or "Divine Aegis")]=true,
+                                             [(HealBot_WoWAPI_SpellName(76669) or "Illuminated Healing")]=true,
+                                             [(HealBot_WoWAPI_SpellName(HEALBOT_ICE_BARRIER) or "Ice Barrier")]=true,
+                                             [(HealBot_WoWAPI_SpellName(HBC_MANA_SHIELD) or "Mana Shield")]=true,
+                                             [(HealBot_WoWAPI_SpellName(HEALBOT_SACRED_SHIELD) or "Sacred Shield")]=true,
+                                             [(HealBot_WoWAPI_SpellName(77513) or "Blood Shield")]=true,
+                                             [(HealBot_WoWAPI_SpellName(48707) or "Anti-Magic Shell")]=true,
+                                            }
+                end
             end
         end
+        HealBot_Timers_Set("LAST","InitItemsData")
+    else
+        HealBot_SetPlayerData()
+        HealBot_Timers_Set("AURA","InitAuraData",1)
     end
-    
-    HealBot_Timers_Set("LAST","InitItemsData")
 end
 
 function HealBot_Aura_ClearGUID(guid)

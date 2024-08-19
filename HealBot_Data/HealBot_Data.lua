@@ -154,8 +154,29 @@ HealBot_ConfigDefaults={
   SkinSpecEnabled={},
   EnableHealthy=true,
   Profile=1,
-  BuffReset="6.0.0",
   };
+
+
+local hbSkinDefault=false
+function HealBot_SkinDefault_GetData(skin, id)
+    if HealBot_Config.SkinDefault[skin] then
+        return HealBot_Config.SkinDefault[skin][id] or hbSkinDefault
+    end
+    return false
+end
+
+function HealBot_SkinDefault_SetData(value, skin, id)
+    if hbSkinDefault == value then
+        HealBot_SkinDefault_NilData(skin, id)
+    else
+        HealBot_Config.SkinDefault[skin][id]=value
+    end
+end
+
+function HealBot_SkinDefault_NilData(skin, id)
+    HealBot_Config.SkinDefault[skin][id]=nil
+end
+
 
 HealBot_Config_SpellsDefaults={
   EnabledKeyCombo={["New"]=true},
@@ -791,9 +812,16 @@ Healbot_Config_Skins={};
 HealBot_Config_Spells={};
 HealBot_Config_Buffs={};
 HealBot_Config_Cures={};
+HealBot_Config_ActionIcons={}      -- Remove this soon, also from ToC's
+HealBot_Config_ActionIconsData={}  -- Remove this soon, also from ToC's
 HealBot_Class_Spells={};
+HealBot_Spells_Loadouts={};
 HealBot_Class_Buffs={};
 HealBot_Class_Cures={};
+HealBot_Skins_ActionIcons={}
+HealBot_Skins_ActionIconsData={}
+HealBot_ActionIcons_Loadouts={}
+HealBot_ActionIconsData_Loadouts={}
 HealBot_customTempUserName={}
 
 HealBot_Data={  ["TIPBUTTON"]=false,

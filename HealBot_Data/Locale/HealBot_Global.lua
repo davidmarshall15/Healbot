@@ -6,10 +6,10 @@ local vMajor        =string.split(".", select(1, GetBuildInfo()))
 HEALBOT_GAME_VERSION=tonumber(vMajor)
 
 function HealBot_Global_Version()
-    return "11.0.0.0"
+    return "11.0.2.0.21"
 end
 function HealBot_Global_InitVersion()
-    return "10.2.7.17"  -- Keep just behind the global version
+    return "11.0.2.0"  -- Keep just behind the global version
 end
 
 function HealBot_globalVars()
@@ -263,7 +263,7 @@ function HealBot_globalVars()
     HEALBOT_HOLY_WORD_SALVATION            =265202 --HealBot_WoWAPI_SpellName(265202) or "--Holy Word: Salvation";
     HEALBOT_HOLY_WORD_SERENITY             =2050 --Lesser Heal in Classic
     HBC_HOLY_WORD_SERENITY                 =88684  --HealBot_WoWAPI_SpellName(88684) or "Holy Word: Serenity";
-    HEALBOT_HOLY_WORD_SANCTUARY            =88685 --GetSpellInfo(88685) or "Holy Word: Sanctuary"; -- PoH 
+    HEALBOT_HOLY_WORD_SANCTUARY            =88685 --HealBot_WoWAPI_SpellInfo(88685) or "Holy Word: Sanctuary"; -- PoH 
 
 
     HEALBOT_PENANCE                        =47540 --HealBot_WoWAPI_SpellName(47540) or "--Penance"

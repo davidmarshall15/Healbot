@@ -243,16 +243,21 @@ end
 
 function HealBot_Timers_PowerIndicator()
       --HealBot_setCall("HealBot_Timers_PowerIndicator")
-    xButton, pButton=HealBot_Panel_RaidUnitButton(HealBot_Data["PGUID"])
-    if xButton then
-        HealBot_Action_setpcClass(xButton)
-        xButton.mana.power=-1
-        HealBot_Events_PowerIndicators(xButton)
-    end
-    if pButton then
-        HealBot_Action_setpcClass(pButton)
-        pButton.mana.power=-1
-        HealBot_Events_PowerIndicators(pButton)
+    if HealBot_Data["PCLASSTRIM"] then
+        xButton, pButton=HealBot_Panel_RaidUnitButton(HealBot_Data["PGUID"])
+        if xButton then
+            HealBot_Action_setpcClass(xButton)
+            xButton.mana.power=-1
+            HealBot_Events_PowerIndicators(xButton)
+        end
+        if pButton then
+            HealBot_Action_setpcClass(pButton)
+            pButton.mana.power=-1
+            HealBot_Events_PowerIndicators(pButton)
+        end
+    else
+        HealBot_SetPlayerData()
+        HealBot_Timers_Set("SKINS","PowerIndicator",1)
     end
 end
 
@@ -361,6 +366,7 @@ function HealBot_Timers_SpellsLoaded()
     HealBot_Timers_Set("SKINS","PowerIndicator")
     HealBot_Timers_Set("INIT","PrepSetAllAttribs")
     HealBot_Timers_Set("AURA","InitAuraData")
+    HealBot_Timers_Set("PLAYER","LoadProfile")
 end
 
 function HealBot_Timers_SpellsResetTabs()
@@ -371,14 +377,24 @@ end
 
 function HealBot_Timers_TalentsLookupImprovedCallback()
       --HealBot_setCall("HealBot_Timers_TalentsLookupImproved")
-    HealBot_Init_TalentLookupImproved(true)
-    HealBot_Options_setDebuffTypes()
+    if HealBot_Data["PCLASSTRIM"] then
+        HealBot_Init_TalentLookupImproved(true)
+        HealBot_Options_setDebuffTypes()
+    else
+        HealBot_SetPlayerData()
+        HealBot_Timers_Set("LAST","TalentsLookupImprovedCallback",1)
+    end
 end
 
 function HealBot_Timers_TalentsLookupImproved()
       --HealBot_setCall("HealBot_Timers_TalentsLookupImproved")
-    HealBot_Init_TalentLookupImproved()
-    HealBot_Options_setDebuffTypes()
+    if HealBot_Data["PCLASSTRIM"] then
+        HealBot_Init_TalentLookupImproved()
+        HealBot_Options_setDebuffTypes()
+    else
+        HealBot_SetPlayerData()
+        HealBot_Timers_Set("LAST","TalentsLookupImproved",1)
+    end
 end
 
 function HealBot_Timers_BuffsReset()
@@ -462,12 +478,13 @@ function HealBot_Timers_LastLoad()
     HealBot_Timers_Set("AURA","BuffTagNames",0.275)
     HealBot_Timers_Set("AURA","DebuffTagNames",0.3)
     HealBot_Timers_Set("SKINS","SetAdaptive",0.325)
-    HealBot_Timers_Set("LAST","SetPlayerData",0.35)
+    HealBot_Timers_Set("INIT","SetPlayerData",0.35)
     HealBot_Timers_Set("AURA","BuffsReset",0.375)
     HealBot_Timers_Set("AUX","ResetTextButtons",0.4)
     HealBot_Timers_Set("SKINS","TextSetTagInUse",0.45)
     HealBot_Timers_Set("INIT","LastUpdate",0.5)
     HealBot_Timers_Set("INIT","HealBotLoaded",1)
+    HealBot_Timers_Set("OOC","RemoveInvalidLoadouts",15)
     HealBot_Timers_MediaLastLoad()
     if not HealBot_Timers_luVars["HelpNotice"] then
         HealBot_Timers_Set("LAST","HealBotLoadedChat")
@@ -585,6 +602,8 @@ local hbTimerFuncs={["INIT"]={
                         ["LastUpdate"]=HealBot_Timers_LastUpdate,
                         ["EnteringWorld"]=HealBot_Timers_EnteringWorld,
                         ["EnteringWorld2"]=HealBot_Timers_EnteringWorld2,
+                        ["SetPlayerData"]=HealBot_SetPlayerData,
+                        ["InitSpellsDefaults"]=HealBot_Init_Spells_Defaults,
                     },
                     ["RESET"]={
                         ["Reload"]=HealBot_Options_ReloadUIAreYouSure,
@@ -646,13 +665,13 @@ local hbTimerFuncs={["INIT"]={
                         ["ActionIconsPlayerNames"]=HealBot_Options_ActionIcons_PlayerNames,
                         ["ActionIconsStateChange"]=HealBot_ActionIcons_CheckStateChange,
                         ["UpdateActiveFrameIdx"]=HealBot_ActionIcons_UpdateActiveFrameIdx,
-                        ["ActionIconsSetGlowSize"]=HealBot_ActionIcons_SetGlowSize,
                         ["ActionIconsSetFontChange"]=HealBot_ActionIcons_setFontChange,
                         ["SelfCountTextUpdate"]=HealBot_ActionIcons_SelfCountTextUpdateAll,
                         ["SkinChangePluginUpdate"]=HealBot_Timers_SkinChangePluginUpdate,
                         ["ClearReset"]=HealBot_Action_ClearReset,
                         ["ResetSkinAllElements"]=HealBot_Action_ResetSkinAllElements,
                         ["ResetSkinAllButtons"]=HealBot_Action_ResetSkinAllButtons,
+                        ["ResetUpdate"]=HealBot_Options_ResetUpdate
                     },
                     ["AUX"]={
                         ["ClearBars"]=HealBot_Options_clearAuxBars,
@@ -778,7 +797,6 @@ local hbTimerFuncs={["INIT"]={
                         ["CheckHideFrames"]=HealBot_Action_HideFrames,
                         ["MountsPetsDalaran"]=HealBot_MountsPets_ClassicDalaranCheck,
                         ["LoadTips"]=HealBot_Options_LoadTips,
-                        ["SetPlayerData"]=HealBot_SetPlayerData,
                         ["SetInHealAbsorbMax"]=HealBot_Aux_setInHealAbsorbMax,
                         ["UpdateButtonGlow"]=HealBot_Timer_UpdateGlow,
                         ["UpdateIconGlow"]=HealBot_Timer_UpdateIconGlow,
@@ -808,6 +826,11 @@ local hbTimerFuncs={["INIT"]={
                         ["UpdateCheckInterval"]=HealBot_UpdateCheckInterval,
                         ["MediaPluginChange"]=HealBot_Media_PluginChange,
                         ["RefreshEnemyUnits"]=HealBot_Update_ResetUnitsEnemyOnly,
+                        ["SetDebuffTypes"]=HealBot_Options_setDebuffTypes,
+                        ["NewCharInitSpells"]=HealBot_Init_Spells,
+                        ["ResetSpells"]=HealBot_Reset_Spells,
+                        ["ResetBuffs"]=HealBot_Reset_Buffs,
+                        ["ResetCures"]=HealBot_Reset_Cures,
                     },
                     ["OOC"]={
                         ["FullReload"]=HealBot_FullReload,
@@ -856,6 +879,7 @@ local hbTimerFuncs={["INIT"]={
                         ["CheckPlayersTargets"]=HealBot_CheckPlayersTargets,
                         ["DeleteAllPlayerFrames"]=HealBot_Panel_PlayersTargetsDelAll,
                         ["FramesRefresh"]=HealBot_Timer_FramesRefresh,
+                        ["RemoveInvalidLoadouts"]=HealBot_Action_RemoveInvalidLoadouts,
                     },
                    }
 
