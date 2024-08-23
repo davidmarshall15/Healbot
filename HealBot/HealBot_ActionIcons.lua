@@ -489,47 +489,51 @@ function HealBot_ActionIcons_StoreConfig(frame, id, tmp)
             hbTmpConfigCache[frame][id]=HealBot_Options_copyTable(HealBot_Skins_ActionIconsData[Healbot_Config_Skins.Current_Skin][frame][id])
             hbCacheMap[1]["Frame"]=frame
             hbCacheMap[1]["ID"]=id
-            --HealBot_ActionIcons_Debug(frame, id, "StoreConfig - TMP")
+            HealBot_ActionIcons_Debug(frame, id, "StoreConfig - TMP")
         else
             hbConfigCache[frame][id]=HealBot_Options_copyTable(HealBot_Skins_ActionIconsData[Healbot_Config_Skins.Current_Skin][frame][id])
             hbCacheMap[0]["Frame"]=frame
             hbCacheMap[0]["ID"]=id
-            --HealBot_ActionIcons_Debug(frame, id, "StoreConfig - LIVE")
+            HealBot_ActionIcons_Debug(frame, id, "StoreConfig - LIVE")
         end
     end
 end
 
 function HealBot_ActionIcons_SwapConfig(frame, id)
         --HealBot_setCall("HealBot_ActionIcons_SwapConfig")
-    --HealBot_ActionIcons_Debug(frame, id, "SwapConfig - TRY")
+    HealBot_ActionIcons_Debug(frame, id, "SwapConfig - TRY")
     if hbTmpConfigCache[frame][id] then
         hbConfigCache[frame][id]=HealBot_Options_copyTable(hbTmpConfigCache[frame][id])
         HealBot_ActionIcons_ClearConfig(frame, id, true)
-        --HealBot_ActionIcons_Debug(frame, id, "SwapConfig - DONE")
+        HealBot_ActionIcons_Debug(frame, id, "SwapConfig - DONE")
     end
 end
 
 function HealBot_ActionIcons_UpdateConfig(frame, id)
         --HealBot_setCall("HealBot_ActionIcons_UpdateConfig")
-    --HealBot_ActionIcons_Debug(frame, id, "UpdateConfig - TRY")
+    HealBot_ActionIcons_Debug(frame, id, "UpdateConfig - TRY")
     if hbCacheMap[0]["Frame"]>0 and hbCacheMap[0]["ID"]>0 and hbConfigCache[hbCacheMap[0]["Frame"]][hbCacheMap[0]["ID"]] then
-        --HealBot_Skins_ActionIconsData[Healbot_Config_Skins.Current_Skin][frame][id]=HealBot_Options_copyTable(hbConfigCache[hbCacheMap[0]["Frame"]][hbCacheMap[0]["ID"]])
+        HealBot_Skins_ActionIconsData[Healbot_Config_Skins.Current_Skin][frame][id]=HealBot_Options_copyTable(hbConfigCache[hbCacheMap[0]["Frame"]][hbCacheMap[0]["ID"]])
         HealBot_ActionIcons_ClearConfig(hbCacheMap[0]["Frame"], hbCacheMap[0]["ID"])
-        HealBot_ActionIcons_Debug(frame, id, "UpdateConfig - NOT ACTIVE")
+        HealBot_ActionIcons_Debug(frame, id, "UpdateConfig - DONE")
     end
 end
 
 function HealBot_ActionIcons_ClearConfig(frame, id, tmp)
         --HealBot_setCall("HealBot_ActionIcons_ClearConfig")
-    --HealBot_ActionIcons_Debug(frame, id, "ClearConfig - TRY")
+    if tmp then
+        HealBot_ActionIcons_Debug(frame, id, "ClearConfig - TMP - TRY")
+    else
+        HealBot_ActionIcons_Debug(frame, id, "ClearConfig - LIVE - TRY")
+    end
     if tmp then
         if hbTmpConfigCache[frame][id] then
             hbTmpConfigCache[frame][id]=nil
-            --HealBot_ActionIcons_Debug(frame, id, "StoreConfig - TMP - DONE")
+            HealBot_ActionIcons_Debug(frame, id, "ClearConfig - TMP - DONE")
         end
     elseif hbConfigCache[frame][id] then
         hbConfigCache[frame][id]=nil
-        --HealBot_ActionIcons_Debug(frame, id, "StoreConfig - LIVE - DONE")
+        HealBot_ActionIcons_Debug(frame, id, "ClearConfig - LIVE - DONE")
     end
 end
 
@@ -564,7 +568,7 @@ function HealBot_ActionIcons_ClearIconFrame(frame, id, info)
     HealBot_ActionIcons_RightOnFrame(frame, id)
     HealBot_ActionIcons_CursorUpdateIcon("nil", frame, id)
     if hbSelfAbility[info] then hbSelfAbility[info][actionIcons[frame][id].uid]=nil end
-        --HealBot_ActionIcons_Debug(frame, id, "ClearIconFrame - info="..(info or ""))
+        HealBot_ActionIcons_Debug(frame, id, "ClearIconFrame - info="..(info or ""))
 end
 
 function HealBot_ActionIcons_OnMouseDown(self, button)

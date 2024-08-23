@@ -125,27 +125,27 @@ function HealBot_Skins_ResetSkinWidth(button)
     button:SetWidth(bWidth)
     auxWidth=0
     for x=1,9 do
-        if Healbot_Config_Skins.AuxBar[Healbot_Config_Skins.Current_Skin][x][button.frame]["USE"]>1 and
-           Healbot_Config_Skins.AuxBarFrame[Healbot_Config_Skins.Current_Skin][button.frame]["OVERLAP"] == 2 and
-           Healbot_Config_Skins.AuxBar[Healbot_Config_Skins.Current_Skin][x][button.frame]["ANCHOR"]>2 and
-           Healbot_Config_Skins.AuxBar[Healbot_Config_Skins.Current_Skin][x][button.frame]["ANCHOR"]<5 then
+        if HealBot_Aux_GetBarVar("USE", button.framecol, x)>1 and
+           HealBot_Aux_GetOverlayVar("OVERLAP", button.frame) == 2 and
+           HealBot_Aux_GetBarVar("ANCHOR", button.framecol, x)>2 and
+           HealBot_Aux_GetBarVar("ANCHOR", button.framecol, x)<5 then
             auxTmp=auxWidth
-            auxWidth=auxWidth+Healbot_Config_Skins.AuxBar[Healbot_Config_Skins.Current_Skin][x][button.frame]["DEPTH"]
-            auxWidth=auxWidth+Healbot_Config_Skins.AuxBar[Healbot_Config_Skins.Current_Skin][x][button.frame]["OFFSET"]
+            auxWidth=auxWidth+HealBot_Aux_GetBarVar("DEPTH", button.framecol, x)
+            auxWidth=auxWidth+HealBot_Aux_GetBarVar("OFFSET", button.framecol, x)
             if auxWidth<auxTmp then auxWidth=auxTmp end
         end
     end
     auxWidth=ceil(auxWidth*frameScale)
     for x=1,9 do
-        if Healbot_Config_Skins.AuxBar[Healbot_Config_Skins.Current_Skin][x][button.frame]["USE"]>1 then
-            if Healbot_Config_Skins.AuxBar[Healbot_Config_Skins.Current_Skin][x][button.frame]["ANCHOR"]<3 or Healbot_Config_Skins.AuxBar[Healbot_Config_Skins.Current_Skin][x][button.frame]["ANCHOR"]>4 then
-                if Healbot_Config_Skins.AuxBarFrame[Healbot_Config_Skins.Current_Skin][button.frame]["OVERLAP"] == 2 then
-                    button.gref.aux[x]:SetWidth(ceil((bWidth+auxWidth)*Healbot_Config_Skins.AuxBar[Healbot_Config_Skins.Current_Skin][x][button.frame]["SIZE"]))
+        if HealBot_Aux_GetBarVar("USE", button.framecol, x)>1 then
+            if HealBot_Aux_GetBarVar("ANCHOR", button.framecol, x)<3 or HealBot_Aux_GetBarVar("ANCHOR", button.framecol, x)>4 then
+                if HealBot_Aux_GetOverlayVar("OVERLAP", button.frame) == 2 then
+                    button.gref.aux[x]:SetWidth(ceil((bWidth+auxWidth)*HealBot_Aux_GetBarVar("SIZE", button.framecol, x)))
                 else
-                    button.gref.aux[x]:SetWidth(ceil(bWidth*Healbot_Config_Skins.AuxBar[Healbot_Config_Skins.Current_Skin][x][button.frame]["SIZE"]))
+                    button.gref.aux[x]:SetWidth(ceil(bWidth*HealBot_Aux_GetBarVar("SIZE", button.framecol, x)))
                 end
             else
-                button.gref.aux[x]:SetWidth(Healbot_Config_Skins.AuxBar[Healbot_Config_Skins.Current_Skin][x][button.frame]["DEPTH"])
+                button.gref.aux[x]:SetWidth(HealBot_Aux_GetBarVar("DEPTH", button.framecol, x))
             end
         end
     end
@@ -451,25 +451,25 @@ function HealBot_Skins_ResetSkin(barType,button,numcols)
         auxOffsetRight=0
 
         for x=1,9 do
-            if Healbot_Config_Skins.AuxBar[Healbot_Config_Skins.Current_Skin][x][button.frame]["USE"]>1 then
-                --if Healbot_Config_Skins.AuxBar[Healbot_Config_Skins.Current_Skin][x][button.frame]["ANCHOR"] == 9 then
+            if HealBot_Aux_GetBarVar("USE", button.framecol, x)>1 then
+                --if HealBot_Aux_GetBarVar("ANCHOR", button.framecol, x) == 9 then
                 --    button.aux[x].sticky=true
                 --else
                 --    button.aux[x].sticky=false
-                    if Healbot_Config_Skins.AuxBar[Healbot_Config_Skins.Current_Skin][x][button.frame]["DEPTH"]+Healbot_Config_Skins.AuxBar[Healbot_Config_Skins.Current_Skin][x][button.frame]["OFFSET"]>0 then
-                        auxTmp=Healbot_Config_Skins.AuxBar[Healbot_Config_Skins.Current_Skin][x][button.frame]["DEPTH"]+Healbot_Config_Skins.AuxBar[Healbot_Config_Skins.Current_Skin][x][button.frame]["OFFSET"]
+                    if HealBot_Aux_GetBarVar("DEPTH", button.framecol, x)+HealBot_Aux_GetBarVar("OFFSET", button.framecol, x)>0 then
+                        auxTmp=HealBot_Aux_GetBarVar("DEPTH", button.framecol, x)+HealBot_Aux_GetBarVar("OFFSET", button.framecol, x)
                     else
                         auxTmp=0
                     end
-                    if Healbot_Config_Skins.AuxBar[Healbot_Config_Skins.Current_Skin][x][button.frame]["ANCHOR"]<3 or Healbot_Config_Skins.AuxBar[Healbot_Config_Skins.Current_Skin][x][button.frame]["ANCHOR"]>4 then
-                        if Healbot_Config_Skins.AuxBar[Healbot_Config_Skins.Current_Skin][x][button.frame]["ANCHOR"] == 1 or
-                           Healbot_Config_Skins.AuxBar[Healbot_Config_Skins.Current_Skin][x][button.frame]["ANCHOR"] == 5 or
-                           Healbot_Config_Skins.AuxBar[Healbot_Config_Skins.Current_Skin][x][button.frame]["ANCHOR"] == 6 then
+                    if HealBot_Aux_GetBarVar("ANCHOR", button.framecol, x)<3 or HealBot_Aux_GetBarVar("ANCHOR", button.framecol, x)>4 then
+                        if HealBot_Aux_GetBarVar("ANCHOR", button.framecol, x) == 1 or
+                           HealBot_Aux_GetBarVar("ANCHOR", button.framecol, x) == 5 or
+                           HealBot_Aux_GetBarVar("ANCHOR", button.framecol, x) == 6 then
                             auxOffsetBelow=auxOffsetBelow+auxTmp
                         end
                         auxHeight=auxHeight+auxTmp
                     else
-                        if Healbot_Config_Skins.AuxBar[Healbot_Config_Skins.Current_Skin][x][button.frame]["ANCHOR"] == 3 then
+                        if HealBot_Aux_GetBarVar("ANCHOR", button.framecol, x) == 3 then
                             auxOffsetLeft=auxOffsetLeft+auxTmp
                         else
                             auxOffsetRight=auxOffsetRight+auxTmp
@@ -639,90 +639,90 @@ function HealBot_Skins_ResetSkin(barType,button,numcols)
             AuxBelow,AuxAbove,AuxLeft,AuxRight=b.gref["Bar"],b.gref["Bar"],b.gref["Bar"],b.gref["Bar"]
             AuxOverlapOffset=0
             for x=1,9 do
-                if Healbot_Config_Skins.AuxBar[Healbot_Config_Skins.Current_Skin][x][button.frame]["USE"]>1 then
+                if HealBot_Aux_GetBarVar("USE", button.framecol, x)>1 then
                     b.gref.aux[x]:ClearAllPoints()
                     if button.aux[x].sticky then
                         b.gref.aux[x]:SetOrientation("VERTICAL")
-                        b.gref.aux[x]:SetHeight(ceil(bheight*Healbot_Config_Skins.AuxBar[Healbot_Config_Skins.Current_Skin][x][button.frame]["SIZE"]))
+                        b.gref.aux[x]:SetHeight(ceil(bheight*HealBot_Aux_GetBarVar("SIZE", button.framecol, x)))
                         if Healbot_Config_Skins.Anchors[Healbot_Config_Skins.Current_Skin][button.frame]["BARS"]<3 then
                             b.gref.aux[x]:SetPoint("RIGHT",b.gref["Back"],"RIGHT",0,0)
                         else
                             b.gref.aux[x]:SetPoint("LEFT",b.gref["Back"],"LEFT",0,0)
                         end
-                    elseif Healbot_Config_Skins.AuxBar[Healbot_Config_Skins.Current_Skin][x][button.frame]["ANCHOR"]<5 then
-                        if Healbot_Config_Skins.AuxBar[Healbot_Config_Skins.Current_Skin][x][button.frame]["ANCHOR"]<3 then
+                    elseif HealBot_Aux_GetBarVar("ANCHOR", button.framecol, x)<5 then
+                        if HealBot_Aux_GetBarVar("ANCHOR", button.framecol, x)<3 then
                             b.gref.aux[x]:SetOrientation("HORIZONTAL")
-                            if Healbot_Config_Skins.AuxBarFrame[Healbot_Config_Skins.Current_Skin][button.frame]["OVERLAP"] == 2 then
-                                b.gref.aux[x]:SetWidth(ceil((bWidth+auxWidth)*Healbot_Config_Skins.AuxBar[Healbot_Config_Skins.Current_Skin][x][button.frame]["SIZE"]))
-                              --  AuxOverlapOffset=ceil(((bWidth+auxWidth)*(1-Healbot_Config_Skins.AuxBar[Healbot_Config_Skins.Current_Skin][x][button.frame]["SIZE"]))/2)
+                            if HealBot_Aux_GetOverlayVar("OVERLAP", button.frame) == 2 then
+                                b.gref.aux[x]:SetWidth(ceil((bWidth+auxWidth)*HealBot_Aux_GetBarVar("SIZE", button.framecol, x)))
+                              --  AuxOverlapOffset=ceil(((bWidth+auxWidth)*(1-HealBot_Aux_GetBarVar("SIZE", button.framecol, x)))/2)
                             else
-                                b.gref.aux[x]:SetWidth(ceil(bWidth*Healbot_Config_Skins.AuxBar[Healbot_Config_Skins.Current_Skin][x][button.frame]["SIZE"]))
+                                b.gref.aux[x]:SetWidth(ceil(bWidth*HealBot_Aux_GetBarVar("SIZE", button.framecol, x)))
                             end
-                            b.gref.aux[x]:SetHeight(ceil(Healbot_Config_Skins.AuxBar[Healbot_Config_Skins.Current_Skin][x][button.frame]["DEPTH"]*frameScale))
-                            if Healbot_Config_Skins.AuxBar[Healbot_Config_Skins.Current_Skin][x][button.frame]["ANCHOR"] == 1 then
-                                b.gref.aux[x]:SetPoint("TOP",AuxBelow,"BOTTOM",0,-(ceil(Healbot_Config_Skins.AuxBar[Healbot_Config_Skins.Current_Skin][x][button.frame]["OFFSET"])*frameScale))
+                            b.gref.aux[x]:SetHeight(ceil(HealBot_Aux_GetBarVar("DEPTH", button.framecol, x)*frameScale))
+                            if HealBot_Aux_GetBarVar("ANCHOR", button.framecol, x) == 1 then
+                                b.gref.aux[x]:SetPoint("TOP",AuxBelow,"BOTTOM",0,-(ceil(HealBot_Aux_GetBarVar("OFFSET", button.framecol, x))*frameScale))
                                 AuxBelow=b.gref.aux[x]
                             else
-                                b.gref.aux[x]:SetPoint("BOTTOM",AuxAbove,"TOP",0,ceil(Healbot_Config_Skins.AuxBar[Healbot_Config_Skins.Current_Skin][x][button.frame]["OFFSET"]*frameScale))
+                                b.gref.aux[x]:SetPoint("BOTTOM",AuxAbove,"TOP",0,ceil(HealBot_Aux_GetBarVar("OFFSET", button.framecol, x)*frameScale))
                                 AuxAbove=b.gref.aux[x]
                             end
-                            --if Healbot_Config_Skins.AuxBarFrame[Healbot_Config_Skins.Current_Skin][button.frame]["OVERLAP"] == 2 then
+                            --if HealBot_Aux_GetOverlayVar("OVERLAP", button.frame) == 2 then
                             --    b.gref.aux[x]:SetPoint("RIGHT",b.gref["Back"],"RIGHT",-(bOutline+AuxOverlapOffset),0)
                             --else
                             --    b.gref.aux[x]:SetPoint("CENTER",b.gref["Bar"],"CENTER",0,0)
                             --end
                         else
                             b.gref.aux[x]:SetOrientation("VERTICAL")
-                            b.gref.aux[x]:SetWidth(ceil(Healbot_Config_Skins.AuxBar[Healbot_Config_Skins.Current_Skin][x][button.frame]["DEPTH"]*frameScale))
-                            if Healbot_Config_Skins.AuxBarFrame[Healbot_Config_Skins.Current_Skin][button.frame]["OVERLAP"] == 1 then
-                                b.gref.aux[x]:SetHeight(ceil((bheight+auxHeight)*Healbot_Config_Skins.AuxBar[Healbot_Config_Skins.Current_Skin][x][button.frame]["SIZE"]))
+                            b.gref.aux[x]:SetWidth(ceil(HealBot_Aux_GetBarVar("DEPTH", button.framecol, x)*frameScale))
+                            if HealBot_Aux_GetOverlayVar("OVERLAP", button.frame) == 1 then
+                                b.gref.aux[x]:SetHeight(ceil((bheight+auxHeight)*HealBot_Aux_GetBarVar("SIZE", button.framecol, x)))
                                 --b.gref.aux[x]:SetPoint("TOP",b.gref["Back"],"TOP",0,-(bOutline))
                             else
-                                b.gref.aux[x]:SetHeight(ceil(bheight*Healbot_Config_Skins.AuxBar[Healbot_Config_Skins.Current_Skin][x][button.frame]["SIZE"]))
+                                b.gref.aux[x]:SetHeight(ceil(bheight*HealBot_Aux_GetBarVar("SIZE", button.framecol, x)))
                             end
-                            if Healbot_Config_Skins.AuxBar[Healbot_Config_Skins.Current_Skin][x][button.frame]["ANCHOR"] == 3 then
-                                b.gref.aux[x]:SetPoint("RIGHT",AuxLeft,"LEFT",-(ceil(Healbot_Config_Skins.AuxBar[Healbot_Config_Skins.Current_Skin][x][button.frame]["OFFSET"]*frameScale)),0)
+                            if HealBot_Aux_GetBarVar("ANCHOR", button.framecol, x) == 3 then
+                                b.gref.aux[x]:SetPoint("RIGHT",AuxLeft,"LEFT",-(ceil(HealBot_Aux_GetBarVar("OFFSET", button.framecol, x)*frameScale)),0)
                                 AuxLeft=b.gref.aux[x]
                             else
-                                b.gref.aux[x]:SetPoint("LEFT",AuxRight,"RIGHT",ceil(Healbot_Config_Skins.AuxBar[Healbot_Config_Skins.Current_Skin][x][button.frame]["OFFSET"]*frameScale),0)
+                                b.gref.aux[x]:SetPoint("LEFT",AuxRight,"RIGHT",ceil(HealBot_Aux_GetBarVar("OFFSET", button.framecol, x)*frameScale),0)
                                 AuxRight=b.gref.aux[x]
                             end
                         end
                     else
                         b.gref.aux[x]:SetOrientation("HORIZONTAL")
-                        if Healbot_Config_Skins.AuxBarFrame[Healbot_Config_Skins.Current_Skin][button.frame]["OVERLAP"] == 2 then
-                            b.gref.aux[x]:SetWidth(ceil((bWidth+auxWidth)*Healbot_Config_Skins.AuxBar[Healbot_Config_Skins.Current_Skin][x][button.frame]["SIZE"]))
+                        if HealBot_Aux_GetOverlayVar("OVERLAP", button.frame) == 2 then
+                            b.gref.aux[x]:SetWidth(ceil((bWidth+auxWidth)*HealBot_Aux_GetBarVar("SIZE", button.framecol, x)))
                         else
-                            b.gref.aux[x]:SetWidth(ceil(bWidth*Healbot_Config_Skins.AuxBar[Healbot_Config_Skins.Current_Skin][x][button.frame]["SIZE"]))
+                            b.gref.aux[x]:SetWidth(ceil(bWidth*HealBot_Aux_GetBarVar("SIZE", button.framecol, x)))
                         end
-                        b.gref.aux[x]:SetHeight(ceil(Healbot_Config_Skins.AuxBar[Healbot_Config_Skins.Current_Skin][x][button.frame]["DEPTH"]*frameScale))
-                        if Healbot_Config_Skins.AuxBar[Healbot_Config_Skins.Current_Skin][x][button.frame]["ANCHOR"] == 5 then
-                            b.gref.aux[x]:SetPoint("TOP",AuxBelow,"BOTTOM",0,-(ceil(Healbot_Config_Skins.AuxBar[Healbot_Config_Skins.Current_Skin][x][button.frame]["OFFSET"])*frameScale))
-                            if Healbot_Config_Skins.AuxBarFrame[Healbot_Config_Skins.Current_Skin][button.frame]["OVERLAP"] == 2 then
+                        b.gref.aux[x]:SetHeight(ceil(HealBot_Aux_GetBarVar("DEPTH", button.framecol, x)*frameScale))
+                        if HealBot_Aux_GetBarVar("ANCHOR", button.framecol, x) == 5 then
+                            b.gref.aux[x]:SetPoint("TOP",AuxBelow,"BOTTOM",0,-(ceil(HealBot_Aux_GetBarVar("OFFSET", button.framecol, x))*frameScale))
+                            if HealBot_Aux_GetOverlayVar("OVERLAP", button.frame) == 2 then
                                 b.gref.aux[x]:SetPoint("LEFT",b.gref["Bar"],"LEFT",-auxOffsetLeft,0)
                             else
                                 b.gref.aux[x]:SetPoint("LEFT",b.gref["Bar"],"LEFT",0,0)
                             end
                             AuxBelow=b.gref.aux[x]
-                        elseif Healbot_Config_Skins.AuxBar[Healbot_Config_Skins.Current_Skin][x][button.frame]["ANCHOR"] == 6 then
-                            b.gref.aux[x]:SetPoint("TOP",AuxBelow,"BOTTOM",0,-(ceil(Healbot_Config_Skins.AuxBar[Healbot_Config_Skins.Current_Skin][x][button.frame]["OFFSET"])*frameScale))
-                            if Healbot_Config_Skins.AuxBarFrame[Healbot_Config_Skins.Current_Skin][button.frame]["OVERLAP"] == 2 then
+                        elseif HealBot_Aux_GetBarVar("ANCHOR", button.framecol, x) == 6 then
+                            b.gref.aux[x]:SetPoint("TOP",AuxBelow,"BOTTOM",0,-(ceil(HealBot_Aux_GetBarVar("OFFSET", button.framecol, x))*frameScale))
+                            if HealBot_Aux_GetOverlayVar("OVERLAP", button.frame) == 2 then
                                 b.gref.aux[x]:SetPoint("RIGHT",b.gref["Bar"],"RIGHT",auxOffsetRight,0)
                             else
                                 b.gref.aux[x]:SetPoint("RIGHT",b.gref["Bar"],"RIGHT",0,0)
                             end
                             AuxBelow=b.gref.aux[x]
-                        elseif Healbot_Config_Skins.AuxBar[Healbot_Config_Skins.Current_Skin][x][button.frame]["ANCHOR"] == 7 then
-                            b.gref.aux[x]:SetPoint("BOTTOM",AuxAbove,"TOP",0,ceil(Healbot_Config_Skins.AuxBar[Healbot_Config_Skins.Current_Skin][x][button.frame]["OFFSET"]*frameScale))
-                            if Healbot_Config_Skins.AuxBarFrame[Healbot_Config_Skins.Current_Skin][button.frame]["OVERLAP"] == 2 then
+                        elseif HealBot_Aux_GetBarVar("ANCHOR", button.framecol, x) == 7 then
+                            b.gref.aux[x]:SetPoint("BOTTOM",AuxAbove,"TOP",0,ceil(HealBot_Aux_GetBarVar("OFFSET", button.framecol, x)*frameScale))
+                            if HealBot_Aux_GetOverlayVar("OVERLAP", button.frame) == 2 then
                                 b.gref.aux[x]:SetPoint("LEFT",b.gref["Bar"],"LEFT",-auxOffsetLeft,0)
                             else
                                 b.gref.aux[x]:SetPoint("LEFT",b.gref["Bar"],"LEFT",0,0)
                             end
                             AuxAbove=b.gref.aux[x]
                         else
-                            b.gref.aux[x]:SetPoint("BOTTOM",AuxAbove,"TOP",0,ceil(Healbot_Config_Skins.AuxBar[Healbot_Config_Skins.Current_Skin][x][button.frame]["OFFSET"]*frameScale))
-                            if Healbot_Config_Skins.AuxBarFrame[Healbot_Config_Skins.Current_Skin][button.frame]["OVERLAP"] == 2 then
+                            b.gref.aux[x]:SetPoint("BOTTOM",AuxAbove,"TOP",0,ceil(HealBot_Aux_GetBarVar("OFFSET", button.framecol, x)*frameScale))
+                            if HealBot_Aux_GetOverlayVar("OVERLAP", button.frame) == 2 then
                                 b.gref.aux[x]:SetPoint("RIGHT",b.gref["Bar"],"RIGHT",auxOffsetRight,0)
                             else
                                 b.gref.aux[x]:SetPoint("RIGHT",b.gref["Bar"],"RIGHT",0,0)
@@ -788,8 +788,8 @@ function HealBot_Skins_ResetSkin(barType,button,numcols)
                                          HealBot_Aux_GetBarTextVar("OUTLINE", b.framecol, x),
                                          "Skins_ResetSkin - AuxBarText")
                 b.gref.auxtxt[x]:ClearAllPoints();
-                b.gref.auxtxt[x]:SetWidth(ceil((zWidth+auxWidth)*Healbot_Config_Skins.AuxBar[Healbot_Config_Skins.Current_Skin][x][b.framecol]["SIZE"]))
-                if Healbot_Config_Skins.AuxBar[Healbot_Config_Skins.Current_Skin][x][b.framecol]["ANCHOR"]<3 or Healbot_Config_Skins.AuxBar[Healbot_Config_Skins.Current_Skin][x][b.framecol]["ANCHOR"]>4 then
+                b.gref.auxtxt[x]:SetWidth(ceil((zWidth+auxWidth)*HealBot_Aux_GetBarVar("SIZE", b.framecol, x)))
+                if HealBot_Aux_GetBarVar("ANCHOR", b.framecol, x)<3 or HealBot_Aux_GetBarVar("ANCHOR", b.framecol, x)>4 then
                     b.gref.auxtxt[x]:SetWordWrap(false)
                 else
                     b.gref.auxtxt[x]:SetWordWrap(true)
@@ -1526,6 +1526,20 @@ local function HealBot_Skins_Check_IconSetsText(SkinName, frame, oVar, nVar, v1,
 end
 
 function HealBot_Skins_Check_Aux(SkinName)
+    if Healbot_Config_Skins.AuxBar and Healbot_Config_Skins.AuxBar[skinName] then
+        if not Healbot_Config_Aux.Bar[skinName] then Healbot_Config_Aux.Bar[skinName]={} end
+        for f=1,10 do
+            for i=1,9 do
+                table.foreach(Healbot_Config_Skins.AuxBar[skinName][i][f], function (key,val)
+                    if key and val then
+                        if key == "SIZE" and val == 0.98 then val=1 end
+                        HealBot_Aux_SetBarSkin(val, skinName, key, f, i)
+                    end
+                end);
+            end
+        end
+        Healbot_Config_Skins.AuxBar[skinName]=nil
+    end
     if Healbot_Config_Skins.AuxBarText and Healbot_Config_Skins.AuxBarText[skinName] then
         if not Healbot_Config_Aux.BarText[skinName] then Healbot_Config_Aux.BarText[skinName]={} end
         for f=1,10 do
@@ -1540,6 +1554,19 @@ function HealBot_Skins_Check_Aux(SkinName)
             end
         end
         Healbot_Config_Skins.AuxBarText[skinName]=nil
+    end
+    if Healbot_Config_Skins.AuxBarFrame and Healbot_Config_Skins.AuxBarFrame[skinName] then
+        if not Healbot_Config_Aux.Overlay[skinName] then Healbot_Config_Aux.Overlay[skinName]={} end
+        for f=1,10 do
+            table.foreach(Healbot_Config_Skins.AuxBarFrame[skinName][f], function (key,val)
+                if key and val then
+                    if key ~= "OFREQ" and key ~= "OMIN" and key ~= "OMAX" then
+                        HealBot_Aux_SetBarTextSkin(val, skinName, key, f, i)
+                    end
+                end
+            end);
+        end
+        Healbot_Config_Skins.AuxBarFrame[skinName]=nil
     end
 end
 
@@ -1615,21 +1642,18 @@ function HealBot_Skins_Check_Skin(SkinName, fromImport)
     if not Healbot_Config_Skins.FocusGroups[SkinName] then Healbot_Config_Skins.FocusGroups[SkinName]={} end
     if not Healbot_Config_Skins.BarVisibility[SkinName] then Healbot_Config_Skins.BarVisibility[SkinName]={} end
     if not Healbot_Config_Skins.BarAggro[SkinName] then Healbot_Config_Skins.BarAggro[SkinName]={} end
-    if not Healbot_Config_Skins.AuxBar[SkinName] then Healbot_Config_Skins.AuxBar[SkinName]={} end
-    if not Healbot_Config_Skins.AuxBarFrame[SkinName] then Healbot_Config_Skins.AuxBarFrame[SkinName]={} end
     if not Healbot_Config_Skins.Indicators[SkinName] then Healbot_Config_Skins.Indicators[SkinName]={} end
     if not Healbot_Config_Skins.Emerg[SkinName] then Healbot_Config_Skins.Emerg[SkinName]={} end
     if not Healbot_Config_Skins.CustomCols[SkinName] then Healbot_Config_Skins.CustomCols[SkinName]={} end
     if not Healbot_Config_Skins.Adaptive[SkinName] then Healbot_Config_Skins.Adaptive[SkinName]={} end
     if not Healbot_Config_Skins.AdaptiveOrder[SkinName] then Healbot_Config_Skins.AdaptiveOrder[SkinName]={} end
     if not Healbot_Config_Skins.AdaptiveCol[SkinName] then Healbot_Config_Skins.AdaptiveCol[SkinName]={} end
+    if not Healbot_Config_Aux.Bar[SkinName] then Healbot_Config_Aux.Bar[SkinName]={} end
     if not Healbot_Config_Aux.BarText[SkinName] then Healbot_Config_Aux.BarText[SkinName]={} end
+    if not Healbot_Config_Aux.Overlay[SkinName] then Healbot_Config_Aux.Overlay[SkinName]={} end
     if not HealBot_Skins_ActionIcons[SkinName] then HealBot_Skins_ActionIcons[SkinName]={} end
     if not HealBot_Skins_ActionIconsData[SkinName] then HealBot_Skins_ActionIconsData[SkinName]={} end
 
-    for g=1,9 do
-        if not Healbot_Config_Skins.AuxBar[SkinName][g] then Healbot_Config_Skins.AuxBar[SkinName][g]={} end
-    end
     for gl=1,10 do
         if not Healbot_Config_Skins.HeadText[SkinName][gl] then Healbot_Config_Skins.HeadText[SkinName][gl]={} end
         if not Healbot_Config_Skins.HeadBar[SkinName][gl] then Healbot_Config_Skins.HeadBar[SkinName][gl]={} end
@@ -1637,7 +1661,6 @@ function HealBot_Skins_Check_Skin(SkinName, fromImport)
         if not Healbot_Config_Skins.FrameAlias[SkinName][gl] then Healbot_Config_Skins.FrameAlias[SkinName][gl]={} end
         if not Healbot_Config_Skins.FrameAliasBar[SkinName][gl] then Healbot_Config_Skins.FrameAliasBar[SkinName][gl]={} end
         if not Healbot_Config_Skins.HealBar[SkinName][gl] then Healbot_Config_Skins.HealBar[SkinName][gl]={} end
-       -- if not Healbot_Config_Skins.BarCol[SkinName][gl] then Healbot_Config_Skins.BarCol[SkinName][gl]={} end
         if not Healbot_Config_Skins.BarIACol[SkinName][gl] then Healbot_Config_Skins.BarIACol[SkinName][gl]={} end
         if not Healbot_Config_Skins.BarText[SkinName][gl] then Healbot_Config_Skins.BarText[SkinName][gl]={} end
         if not Healbot_Config_Skins.BarTextCol[SkinName][gl] then Healbot_Config_Skins.BarTextCol[SkinName][gl]={} end
@@ -1655,10 +1678,6 @@ function HealBot_Skins_Check_Skin(SkinName, fromImport)
         if not Healbot_Config_Skins.BarVisibility[SkinName][gl] then Healbot_Config_Skins.BarVisibility[SkinName][gl]={} end
         if not Healbot_Config_Skins.BarSort[SkinName][gl] then Healbot_Config_Skins.BarSort[SkinName][gl]={} end
         if not Healbot_Config_Skins.BarAggro[SkinName][gl] then Healbot_Config_Skins.BarAggro[SkinName][gl]={} end
-        for g=1,9 do
-            if not Healbot_Config_Skins.AuxBar[SkinName][g][gl] then Healbot_Config_Skins.AuxBar[SkinName][g][gl]={} end
-        end
-        if not Healbot_Config_Skins.AuxBarFrame[SkinName][gl] then Healbot_Config_Skins.AuxBarFrame[SkinName][gl]={} end
         if not Healbot_Config_Skins.Indicators[SkinName][gl] then Healbot_Config_Skins.Indicators[SkinName][gl]={} end
         if not Healbot_Config_Skins.Emerg[SkinName][gl] then Healbot_Config_Skins.Emerg[SkinName][gl]={} end
     end
@@ -2107,61 +2126,51 @@ function HealBot_Skins_Check_Skin(SkinName, fromImport)
         if Healbot_Config_Skins.BarIACol[SkinName][gl]["AIT"] == nil then Healbot_Config_Skins.BarIACol[SkinName][gl]["AIT"]=0.7 end
         if Healbot_Config_Skins.BarIACol[SkinName][gl]["ACT"] == nil then Healbot_Config_Skins.BarIACol[SkinName][gl]["ACT"]=0.4 end
         if Healbot_Config_Skins.BarIACol[SkinName][gl]["AA"] == nil then Healbot_Config_Skins.BarIACol[SkinName][gl]["AA"]=0.78 end
-        if (Healbot_Config_Skins.BarCol[SkinName][gl]["HLTH"] or 99) == 5 then Healbot_Config_Skins.BarCol[SkinName][gl]["HLTH"]=nil end
-        if (Healbot_Config_Skins.BarCol[SkinName][gl]["BACK"] or 99) == 1 then Healbot_Config_Skins.BarCol[SkinName][gl]["BACK"]=nil end
-        if (Healbot_Config_Skins.BarCol[SkinName][gl]["BORDER"] or 99) == 1 then Healbot_Config_Skins.BarCol[SkinName][gl]["BORDER"]=nil end
-        if (Healbot_Config_Skins.BarCol[SkinName][gl]["HR"] or 99) == 0.4 then Healbot_Config_Skins.BarCol[SkinName][gl]["HR"]=nil end
-        if (Healbot_Config_Skins.BarCol[SkinName][gl]["HG"] or 99) == 0.7 then Healbot_Config_Skins.BarCol[SkinName][gl]["HG"]=nil end
-        if (Healbot_Config_Skins.BarCol[SkinName][gl]["HB"] or 99) == 0.7 then Healbot_Config_Skins.BarCol[SkinName][gl]["HB"]=nil end
-        if (Healbot_Config_Skins.BarCol[SkinName][gl]["HA"] or 99) == 1 then Healbot_Config_Skins.BarCol[SkinName][gl]["HA"]=nil end
-        if (Healbot_Config_Skins.BarCol[SkinName][gl]["HIR"] or 99) == 0.4 then Healbot_Config_Skins.BarCol[SkinName][gl]["HIR"]=nil end
-        if (Healbot_Config_Skins.BarCol[SkinName][gl]["HIG"] or 99) == 0.7 then Healbot_Config_Skins.BarCol[SkinName][gl]["HIG"]=nil end
-        if (Healbot_Config_Skins.BarCol[SkinName][gl]["HIB"] or 99) == 0.7 then Healbot_Config_Skins.BarCol[SkinName][gl]["HIB"]=nil end
-        if (Healbot_Config_Skins.BarCol[SkinName][gl]["HCR"] or 99) == 0.4 then Healbot_Config_Skins.BarCol[SkinName][gl]["HCR"]=nil end
-        if (Healbot_Config_Skins.BarCol[SkinName][gl]["HCG"] or 99) == 0.7 then Healbot_Config_Skins.BarCol[SkinName][gl]["HCG"]=nil end
-        if (Healbot_Config_Skins.BarCol[SkinName][gl]["HCB"] or 99) == 0.7 then Healbot_Config_Skins.BarCol[SkinName][gl]["HCB"]=nil end
-        if (Healbot_Config_Skins.BarCol[SkinName][gl]["HCT"] or 99) == 0.4 then Healbot_Config_Skins.BarCol[SkinName][gl]["HCT"]=nil end
-        if (Healbot_Config_Skins.BarCol[SkinName][gl]["HIT"] or 99) == 0.7 then Healbot_Config_Skins.BarCol[SkinName][gl]["HIT"]=nil end
-        if (Healbot_Config_Skins.BarCol[SkinName][gl]["ORA"] or 99) == 0.4 then Healbot_Config_Skins.BarCol[SkinName][gl]["ORA"]=nil end
-        if (Healbot_Config_Skins.BarCol[SkinName][gl]["DISA"] or 99) == 0.1 then Healbot_Config_Skins.BarCol[SkinName][gl]["DISA"]=nil end
-        if (Healbot_Config_Skins.BarCol[SkinName][gl]["BR"] or 99) == 0.4 then Healbot_Config_Skins.BarCol[SkinName][gl]["BR"]=nil end
-        if (Healbot_Config_Skins.BarCol[SkinName][gl]["BG"] or 99) == 0.7 then Healbot_Config_Skins.BarCol[SkinName][gl]["BG"]=nil end
-        if (Healbot_Config_Skins.BarCol[SkinName][gl]["BB"] or 99) == 0.7 then Healbot_Config_Skins.BarCol[SkinName][gl]["BB"]=nil end
-        if (Healbot_Config_Skins.BarCol[SkinName][gl]["BA"] or 99) == 0 then Healbot_Config_Skins.BarCol[SkinName][gl]["BA"]=nil end
-        if (Healbot_Config_Skins.BarCol[SkinName][gl]["BIR"] or 99) == 0.4 then Healbot_Config_Skins.BarCol[SkinName][gl]["BIR"]=nil end
-        if (Healbot_Config_Skins.BarCol[SkinName][gl]["BIG"] or 99) == 0.7 then Healbot_Config_Skins.BarCol[SkinName][gl]["BIG"]=nil end
-        if (Healbot_Config_Skins.BarCol[SkinName][gl]["BIB"] or 99) == 0.7 then Healbot_Config_Skins.BarCol[SkinName][gl]["BIB"]=nil end
-        if (Healbot_Config_Skins.BarCol[SkinName][gl]["BCR"] or 99) == 0.4 then Healbot_Config_Skins.BarCol[SkinName][gl]["BCR"]=nil end
-        if (Healbot_Config_Skins.BarCol[SkinName][gl]["BCG"] or 99) == 0.7 then Healbot_Config_Skins.BarCol[SkinName][gl]["BCG"]=nil end
-        if (Healbot_Config_Skins.BarCol[SkinName][gl]["BCB"] or 99) == 0.7 then Healbot_Config_Skins.BarCol[SkinName][gl]["BCB"]=nil end
-        if (Healbot_Config_Skins.BarCol[SkinName][gl]["BCT"] or 99) == 0.4 then Healbot_Config_Skins.BarCol[SkinName][gl]["BCT"]=nil end
-        if (Healbot_Config_Skins.BarCol[SkinName][gl]["BIT"] or 99) == 0.7 then Healbot_Config_Skins.BarCol[SkinName][gl]["BIT"]=nil end
-        if (Healbot_Config_Skins.BarCol[SkinName][gl]["BOUT"] or 99) == 1 then Healbot_Config_Skins.BarCol[SkinName][gl]["BOUT"]=nil end
-        if (Healbot_Config_Skins.BarCol[SkinName][gl]["BORR"] or 99) == 0.1 then Healbot_Config_Skins.BarCol[SkinName][gl]["BORR"]=nil end
-        if (Healbot_Config_Skins.BarCol[SkinName][gl]["BORG"] or 99) == 0.1 then Healbot_Config_Skins.BarCol[SkinName][gl]["BORG"]=nil end
-        if (Healbot_Config_Skins.BarCol[SkinName][gl]["BORB"] or 99) == 0.3 then Healbot_Config_Skins.BarCol[SkinName][gl]["BORB"]=nil end
-        if (Healbot_Config_Skins.BarCol[SkinName][gl]["BORA"] or 99) == 1 then Healbot_Config_Skins.BarCol[SkinName][gl]["BORA"]=nil end
-        if (Healbot_Config_Skins.BarCol[SkinName][gl]["BORIR"] or 99) == 0.1 then Healbot_Config_Skins.BarCol[SkinName][gl]["BORIR"]=nil end
-        if (Healbot_Config_Skins.BarCol[SkinName][gl]["BORIG"] or 99) == 0.1 then Healbot_Config_Skins.BarCol[SkinName][gl]["BORIG"]=nil end
-        if (Healbot_Config_Skins.BarCol[SkinName][gl]["BORIB"] or 99) == 0.3 then Healbot_Config_Skins.BarCol[SkinName][gl]["BORIB"]=nil end
-        if (Healbot_Config_Skins.BarCol[SkinName][gl]["BORCR"] or 99) == 0.1 then Healbot_Config_Skins.BarCol[SkinName][gl]["BORCR"]=nil end
-        if (Healbot_Config_Skins.BarCol[SkinName][gl]["BORCG"] or 99) == 0.1 then Healbot_Config_Skins.BarCol[SkinName][gl]["BORCG"]=nil end
-        if (Healbot_Config_Skins.BarCol[SkinName][gl]["BORCB"] or 99) == 0.3 then Healbot_Config_Skins.BarCol[SkinName][gl]["BORCB"]=nil end
-        if (Healbot_Config_Skins.BarCol[SkinName][gl]["BORCT"] or 99) == 0.4 then Healbot_Config_Skins.BarCol[SkinName][gl]["BORCT"]=nil end
-        if (Healbot_Config_Skins.BarCol[SkinName][gl]["BORIT"] or 99) == 0.7 then Healbot_Config_Skins.BarCol[SkinName][gl]["BORIT"]=nil end
-        if (Healbot_Config_Skins.BarCol[SkinName][gl]["BORSIZE"] or 99) == 2 then Healbot_Config_Skins.BarCol[SkinName][gl]["BORSIZE"]=nil end
-        for x=1,9 do
-            if Healbot_Config_Skins.AuxBar[SkinName][x][gl]["MANAONLY"] == nil then Healbot_Config_Skins.AuxBar[SkinName][x][gl]["MANAONLY"]=false end
-            if Healbot_Config_Skins.AuxBar[SkinName][x][gl]["HEALERSMANAONLY"] == nil then Healbot_Config_Skins.AuxBar[SkinName][x][gl]["HEALERSMANAONLY"]=false end
+        if Healbot_Config_Skins.BarCol[SkinName][gl] then
+            if (Healbot_Config_Skins.BarCol[SkinName][gl]["HLTH"] or 99) == 5 then Healbot_Config_Skins.BarCol[SkinName][gl]["HLTH"]=nil end
+            if (Healbot_Config_Skins.BarCol[SkinName][gl]["BACK"] or 99) == 1 then Healbot_Config_Skins.BarCol[SkinName][gl]["BACK"]=nil end
+            if (Healbot_Config_Skins.BarCol[SkinName][gl]["BORDER"] or 99) == 1 then Healbot_Config_Skins.BarCol[SkinName][gl]["BORDER"]=nil end
+            if (Healbot_Config_Skins.BarCol[SkinName][gl]["HR"] or 99) == 0.4 then Healbot_Config_Skins.BarCol[SkinName][gl]["HR"]=nil end
+            if (Healbot_Config_Skins.BarCol[SkinName][gl]["HG"] or 99) == 0.7 then Healbot_Config_Skins.BarCol[SkinName][gl]["HG"]=nil end
+            if (Healbot_Config_Skins.BarCol[SkinName][gl]["HB"] or 99) == 0.7 then Healbot_Config_Skins.BarCol[SkinName][gl]["HB"]=nil end
+            if (Healbot_Config_Skins.BarCol[SkinName][gl]["HA"] or 99) == 1 then Healbot_Config_Skins.BarCol[SkinName][gl]["HA"]=nil end
+            if (Healbot_Config_Skins.BarCol[SkinName][gl]["HIR"] or 99) == 0.4 then Healbot_Config_Skins.BarCol[SkinName][gl]["HIR"]=nil end
+            if (Healbot_Config_Skins.BarCol[SkinName][gl]["HIG"] or 99) == 0.7 then Healbot_Config_Skins.BarCol[SkinName][gl]["HIG"]=nil end
+            if (Healbot_Config_Skins.BarCol[SkinName][gl]["HIB"] or 99) == 0.7 then Healbot_Config_Skins.BarCol[SkinName][gl]["HIB"]=nil end
+            if (Healbot_Config_Skins.BarCol[SkinName][gl]["HCR"] or 99) == 0.4 then Healbot_Config_Skins.BarCol[SkinName][gl]["HCR"]=nil end
+            if (Healbot_Config_Skins.BarCol[SkinName][gl]["HCG"] or 99) == 0.7 then Healbot_Config_Skins.BarCol[SkinName][gl]["HCG"]=nil end
+            if (Healbot_Config_Skins.BarCol[SkinName][gl]["HCB"] or 99) == 0.7 then Healbot_Config_Skins.BarCol[SkinName][gl]["HCB"]=nil end
+            if (Healbot_Config_Skins.BarCol[SkinName][gl]["HCT"] or 99) == 0.4 then Healbot_Config_Skins.BarCol[SkinName][gl]["HCT"]=nil end
+            if (Healbot_Config_Skins.BarCol[SkinName][gl]["HIT"] or 99) == 0.7 then Healbot_Config_Skins.BarCol[SkinName][gl]["HIT"]=nil end
+            if (Healbot_Config_Skins.BarCol[SkinName][gl]["ORA"] or 99) == 0.4 then Healbot_Config_Skins.BarCol[SkinName][gl]["ORA"]=nil end
+            if (Healbot_Config_Skins.BarCol[SkinName][gl]["DISA"] or 99) == 0.1 then Healbot_Config_Skins.BarCol[SkinName][gl]["DISA"]=nil end
+            if (Healbot_Config_Skins.BarCol[SkinName][gl]["BR"] or 99) == 0.4 then Healbot_Config_Skins.BarCol[SkinName][gl]["BR"]=nil end
+            if (Healbot_Config_Skins.BarCol[SkinName][gl]["BG"] or 99) == 0.7 then Healbot_Config_Skins.BarCol[SkinName][gl]["BG"]=nil end
+            if (Healbot_Config_Skins.BarCol[SkinName][gl]["BB"] or 99) == 0.7 then Healbot_Config_Skins.BarCol[SkinName][gl]["BB"]=nil end
+            if (Healbot_Config_Skins.BarCol[SkinName][gl]["BA"] or 99) == 0 then Healbot_Config_Skins.BarCol[SkinName][gl]["BA"]=nil end
+            if (Healbot_Config_Skins.BarCol[SkinName][gl]["BIR"] or 99) == 0.4 then Healbot_Config_Skins.BarCol[SkinName][gl]["BIR"]=nil end
+            if (Healbot_Config_Skins.BarCol[SkinName][gl]["BIG"] or 99) == 0.7 then Healbot_Config_Skins.BarCol[SkinName][gl]["BIG"]=nil end
+            if (Healbot_Config_Skins.BarCol[SkinName][gl]["BIB"] or 99) == 0.7 then Healbot_Config_Skins.BarCol[SkinName][gl]["BIB"]=nil end
+            if (Healbot_Config_Skins.BarCol[SkinName][gl]["BCR"] or 99) == 0.4 then Healbot_Config_Skins.BarCol[SkinName][gl]["BCR"]=nil end
+            if (Healbot_Config_Skins.BarCol[SkinName][gl]["BCG"] or 99) == 0.7 then Healbot_Config_Skins.BarCol[SkinName][gl]["BCG"]=nil end
+            if (Healbot_Config_Skins.BarCol[SkinName][gl]["BCB"] or 99) == 0.7 then Healbot_Config_Skins.BarCol[SkinName][gl]["BCB"]=nil end
+            if (Healbot_Config_Skins.BarCol[SkinName][gl]["BCT"] or 99) == 0.4 then Healbot_Config_Skins.BarCol[SkinName][gl]["BCT"]=nil end
+            if (Healbot_Config_Skins.BarCol[SkinName][gl]["BIT"] or 99) == 0.7 then Healbot_Config_Skins.BarCol[SkinName][gl]["BIT"]=nil end
+            if (Healbot_Config_Skins.BarCol[SkinName][gl]["BOUT"] or 99) == 1 then Healbot_Config_Skins.BarCol[SkinName][gl]["BOUT"]=nil end
+            if (Healbot_Config_Skins.BarCol[SkinName][gl]["BORR"] or 99) == 0.1 then Healbot_Config_Skins.BarCol[SkinName][gl]["BORR"]=nil end
+            if (Healbot_Config_Skins.BarCol[SkinName][gl]["BORG"] or 99) == 0.1 then Healbot_Config_Skins.BarCol[SkinName][gl]["BORG"]=nil end
+            if (Healbot_Config_Skins.BarCol[SkinName][gl]["BORB"] or 99) == 0.3 then Healbot_Config_Skins.BarCol[SkinName][gl]["BORB"]=nil end
+            if (Healbot_Config_Skins.BarCol[SkinName][gl]["BORA"] or 99) == 1 then Healbot_Config_Skins.BarCol[SkinName][gl]["BORA"]=nil end
+            if (Healbot_Config_Skins.BarCol[SkinName][gl]["BORIR"] or 99) == 0.1 then Healbot_Config_Skins.BarCol[SkinName][gl]["BORIR"]=nil end
+            if (Healbot_Config_Skins.BarCol[SkinName][gl]["BORIG"] or 99) == 0.1 then Healbot_Config_Skins.BarCol[SkinName][gl]["BORIG"]=nil end
+            if (Healbot_Config_Skins.BarCol[SkinName][gl]["BORIB"] or 99) == 0.3 then Healbot_Config_Skins.BarCol[SkinName][gl]["BORIB"]=nil end
+            if (Healbot_Config_Skins.BarCol[SkinName][gl]["BORCR"] or 99) == 0.1 then Healbot_Config_Skins.BarCol[SkinName][gl]["BORCR"]=nil end
+            if (Healbot_Config_Skins.BarCol[SkinName][gl]["BORCG"] or 99) == 0.1 then Healbot_Config_Skins.BarCol[SkinName][gl]["BORCG"]=nil end
+            if (Healbot_Config_Skins.BarCol[SkinName][gl]["BORCB"] or 99) == 0.3 then Healbot_Config_Skins.BarCol[SkinName][gl]["BORCB"]=nil end
+            if (Healbot_Config_Skins.BarCol[SkinName][gl]["BORCT"] or 99) == 0.4 then Healbot_Config_Skins.BarCol[SkinName][gl]["BORCT"]=nil end
+            if (Healbot_Config_Skins.BarCol[SkinName][gl]["BORIT"] or 99) == 0.7 then Healbot_Config_Skins.BarCol[SkinName][gl]["BORIT"]=nil end
+            if (Healbot_Config_Skins.BarCol[SkinName][gl]["BORSIZE"] or 99) == 2 then Healbot_Config_Skins.BarCol[SkinName][gl]["BORSIZE"]=nil end
         end
-        if Healbot_Config_Skins.AuxBarFrame[SkinName][gl]["OVERLAYRECENTHEALS"] == nil then Healbot_Config_Skins.AuxBarFrame[SkinName][gl]["OVERLAYRECENTHEALS"]=false end
-        if Healbot_Config_Skins.AuxBarFrame[SkinName][gl]["OVERLAYHEALTHDROP"] == nil then Healbot_Config_Skins.AuxBarFrame[SkinName][gl]["OVERLAYHEALTHDROP"]=false end
-        if Healbot_Config_Skins.AuxBarFrame[SkinName][gl]["OVERLAYAGGRO"] == nil then Healbot_Config_Skins.AuxBarFrame[SkinName][gl]["OVERLAYAGGRO"]=false end
-        if Healbot_Config_Skins.AuxBarFrame[SkinName][gl]["OVERLAYDEBUFF"] == nil then Healbot_Config_Skins.AuxBarFrame[SkinName][gl]["OVERLAYDEBUFF"]=false end
-        if Healbot_Config_Skins.AuxBarFrame[SkinName][gl]["OVERLAYHIGHLIGHT"] == nil then Healbot_Config_Skins.AuxBarFrame[SkinName][gl]["OVERLAYHIGHLIGHT"]=false end
-        if Healbot_Config_Skins.AuxBarFrame[SkinName][gl]["OVERLAYTARGET"] == nil then Healbot_Config_Skins.AuxBarFrame[SkinName][gl]["OVERLAYTARGET"]=false end
-        if Healbot_Config_Skins.AuxBarFrame[SkinName][gl]["OVERLAYOOR"] == nil then Healbot_Config_Skins.AuxBarFrame[SkinName][gl]["OVERLAYOOR"]=false end
-        if Healbot_Config_Skins.AuxBarFrame[SkinName][gl]["OVERLAYBUFF"] == nil then Healbot_Config_Skins.AuxBarFrame[SkinName][gl]["OVERLAYBUFF"]=false end
         if Healbot_Config_Skins.HeadText[SkinName][gl]["OUTLINE"] == nil then Healbot_Config_Skins.HeadText[SkinName][gl]["OUTLINE"]=1 end
         if Healbot_Config_Skins.HeadText[SkinName][gl]["FONT"] == nil then Healbot_Config_Skins.HeadText[SkinName][gl]["FONT"]=HealBot_Data_Default_FontName() end
         if Healbot_Config_Skins.HeadText[SkinName][gl]["HEIGHT"] == nil then Healbot_Config_Skins.HeadText[SkinName][gl]["HEIGHT"]=9 end
@@ -2298,52 +2307,7 @@ function HealBot_Skins_Check_Skin(SkinName, fromImport)
                 Healbot_Config_Skins.HealBar[SkinName][gl]["LOWMANACOMBAT"]=true
             end
         end
-        for g=1,9 do
-            if not Healbot_Config_Skins.AuxBar[SkinName][g][gl]["COLOUR"] then Healbot_Config_Skins.AuxBar[SkinName][g][gl]["COLOUR"]=1 end
-            if Healbot_Config_Skins.AuxBar[SkinName][g][gl]["COLOUR"]>4 then Healbot_Config_Skins.AuxBar[SkinName][g][gl]["COLOUR"]=4 end
-            if not Healbot_Config_Skins.AuxBar[SkinName][g][gl]["ANCHOR"] then Healbot_Config_Skins.AuxBar[SkinName][g][gl]["ANCHOR"]=1 end
-            if not Healbot_Config_Skins.AuxBar[SkinName][g][gl]["OFFSET"] then Healbot_Config_Skins.AuxBar[SkinName][g][gl]["OFFSET"]=1 end
-            if not Healbot_Config_Skins.AuxBar[SkinName][g][gl]["DEPTH"] then Healbot_Config_Skins.AuxBar[SkinName][g][gl]["DEPTH"]=5 end
-            if not Healbot_Config_Skins.AuxBar[SkinName][g][gl]["SIZE"] then Healbot_Config_Skins.AuxBar[SkinName][g][gl]["SIZE"]=0.98 end
-            if not Healbot_Config_Skins.AuxBar[SkinName][g][gl]["USE"] then Healbot_Config_Skins.AuxBar[SkinName][g][gl]["USE"]=1 end
-            if not Healbot_Config_Skins.AuxBar[SkinName][g][gl]["R"] then Healbot_Config_Skins.AuxBar[SkinName][g][gl]["R"]=1 end
-            if not Healbot_Config_Skins.AuxBar[SkinName][g][gl]["G"] then Healbot_Config_Skins.AuxBar[SkinName][g][gl]["G"]=1 end
-            if not Healbot_Config_Skins.AuxBar[SkinName][g][gl]["B"] then Healbot_Config_Skins.AuxBar[SkinName][g][gl]["B"]=1 end
-            if not Healbot_Config_Skins.AuxBar[SkinName][g][gl]["A"] then Healbot_Config_Skins.AuxBar[SkinName][g][gl]["A"]=1 end
-            if not Healbot_Config_Skins.AuxBar[SkinName][g][gl]["OTYPE"] then Healbot_Config_Skins.AuxBar[SkinName][g][gl]["OTYPE"]=1 end
-            if Healbot_Config_Skins.AuxBar[SkinName][g][gl]["TEXT"] == nil then Healbot_Config_Skins.AuxBar[SkinName][g][gl]["TEXT"]=false end
-        end
-        if not Healbot_Config_Skins.AuxBarFrame[SkinName][gl]["OVERLAP"] then Healbot_Config_Skins.AuxBarFrame[SkinName][gl]["OVERLAP"]=1 end
-        if Healbot_Config_Skins.AuxBarFrame[SkinName][gl]["OFREQ"] then
-            if not Healbot_Config_Skins.General[SkinName]["OFREQ"] then
-                for g=1,9 do
-                    if Healbot_Config_Skins.AuxBar[SkinName][g][gl]["OTYPE"] == 2 then
-                        Healbot_Config_Skins.General[SkinName]["OFREQ"]=Healbot_Config_Skins.AuxBarFrame[SkinName][gl]["OFREQ"]
-                    end
-                end
-            end
-            Healbot_Config_Skins.AuxBarFrame[SkinName][gl]["OFREQ"]=nil
-        end
-        if Healbot_Config_Skins.AuxBarFrame[SkinName][gl]["OMIN"] then
-            if not Healbot_Config_Skins.General[SkinName]["OMIN"] then
-                for g=1,9 do
-                    if Healbot_Config_Skins.AuxBar[SkinName][g][gl]["OTYPE"] == 2 then
-                        Healbot_Config_Skins.General[SkinName]["OMIN"]=Healbot_Config_Skins.AuxBarFrame[SkinName][gl]["OMIN"]
-                    end
-                end
-            end
-            Healbot_Config_Skins.AuxBarFrame[SkinName][gl]["OMIN"]=nil
-        end
-        if Healbot_Config_Skins.AuxBarFrame[SkinName][gl]["OMAX"] then
-            if not Healbot_Config_Skins.General[SkinName]["OMAX"] then
-                for g=1,9 do
-                    if Healbot_Config_Skins.AuxBar[SkinName][g][gl]["OTYPE"] == 2 then
-                        Healbot_Config_Skins.General[SkinName]["OMAX"]=Healbot_Config_Skins.AuxBarFrame[SkinName][gl]["OMAX"]
-                    end
-                end
-            end
-            Healbot_Config_Skins.AuxBarFrame[SkinName][gl]["OMAX"]=nil
-        end
+
         if Healbot_Config_Skins.Anchors[SkinName][gl]["FRAME"] == nil then Healbot_Config_Skins.Anchors[SkinName][gl]["FRAME"]=1 end
         if Healbot_Config_Skins.Anchors[SkinName][gl]["BARS"] == nil then Healbot_Config_Skins.Anchors[SkinName][gl]["BARS"]=1 end
         if Healbot_Config_Skins.Anchors[SkinName][gl]["GROW"] == nil then Healbot_Config_Skins.Anchors[SkinName][gl]["GROW"]=2 end
@@ -2436,55 +2400,13 @@ function HealBot_Skins_Check_Skin(SkinName, fromImport)
         Healbot_Config_Skins.BarTextCol[SkinName][gl]["CG"]=nil
         Healbot_Config_Skins.BarTextCol[SkinName][gl]["CB"]=nil
         Healbot_Config_Skins.BarText[SkinName][gl]["AGGROCOL"]=nil
-
-        if HealBot_Config_Buffs.CBshownAB then
-            for x=1,9 do
-                Healbot_Config_Skins.AuxBar[SkinName][7][x]["USE"]=9
-                Healbot_Config_Skins.AuxBar[SkinName][7][x]["DEPTH"]=1
-                Healbot_Config_Skins.AuxBar[SkinName][7][x]["ANCHOR"]=2
-            end
-        end
         HealBot_Config_Buffs.CBshownAB=nil
         HealBot_Config_Buffs.HealBot_CBWarnRange_Aggro=nil
-        if HealBot_Config_Buffs.CDCshownAB then
-            for x=1,9 do
-                Healbot_Config_Skins.AuxBar[SkinName][8][x]["USE"]=10
-                Healbot_Config_Skins.AuxBar[SkinName][8][x]["DEPTH"]=1
-                Healbot_Config_Skins.AuxBar[SkinName][8][x]["ANCHOR"]=2
-            end
-        end
         HealBot_Config_Cures.CDCshownAB=nil
         HealBot_Config_Cures.HealBot_CDCWarnRange_Aggro=nil
-
-        if Healbot_Config_Skins.BarHighlight and Healbot_Config_Skins.BarHighlight[SkinName] and Healbot_Config_Skins.BarHighlight[SkinName][gl]["CBAR"] then
-            Healbot_Config_Skins.AuxBar[SkinName][6][gl]["USE"]=8
-            Healbot_Config_Skins.AuxBar[SkinName][6][gl]["DEPTH"]=1
-            Healbot_Config_Skins.AuxBar[SkinName][6][gl]["ANCHOR"]=2
-        end
-        if Healbot_Config_Skins.BarAggro[SkinName][gl]["SHOW"] and Healbot_Config_Skins.HealBar[SkinName][gl]["AGGROSIZE"] and
-                                                                   Healbot_Config_Skins.HealBar[SkinName][gl]["AGGROSIZE"]>0 then
-            Healbot_Config_Skins.AuxBar[SkinName][5][gl]["USE"]=5
-            if Healbot_Config_Skins.HealBar[SkinName][gl]["AGGROSIZE"]>1 then
-                Healbot_Config_Skins.AuxBar[SkinName][5][gl]["DEPTH"]=ceil(Healbot_Config_Skins.HealBar[SkinName][gl]["AGGROSIZE"]/1.5)
-            else
-                Healbot_Config_Skins.AuxBar[SkinName][5][gl]["DEPTH"]=1
-            end
-        end
-        if Healbot_Config_Skins.BarAggro[SkinName][gl]["SHOWBARSPCT"] then
-            Healbot_Config_Skins.AuxBar[SkinName][4][gl]["USE"]=6
-            Healbot_Config_Skins.AuxBar[SkinName][4][gl]["DEPTH"]=2
-        end
         Healbot_Config_Skins.BarAggro[SkinName][gl]["SHOWBARSPCT"]=nil
         Healbot_Config_Skins.BarAggro[SkinName][gl]["SHOWBARS"]=nil
         Healbot_Config_Skins.BarHighlight=nil
-        if Healbot_Config_Skins.HealBar[SkinName][gl]["POWERSIZE"] and Healbot_Config_Skins.HealBar[SkinName][gl]["POWERSIZE"]>0 then
-            Healbot_Config_Skins.AuxBar[SkinName][1][gl]["USE"]=4
-            if Healbot_Config_Skins.HealBar[SkinName][gl]["POWERSIZE"]>1 then
-                Healbot_Config_Skins.AuxBar[SkinName][1][gl]["DEPTH"]=ceil(Healbot_Config_Skins.HealBar[SkinName][gl]["POWERSIZE"]/1.5)
-            else
-                Healbot_Config_Skins.AuxBar[SkinName][1][gl]["DEPTH"]=1
-            end
-        end
         Healbot_Config_Skins.HealBar[SkinName][gl]["POWERSIZE"]=nil
         Healbot_Config_Skins.HealBar[SkinName][gl]["AGGROSIZE"]=nil
         Healbot_Config_Skins.BarAggro[SkinName][gl]["FREQ"]=nil

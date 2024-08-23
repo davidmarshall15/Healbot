@@ -779,9 +779,6 @@ HealBot_Config_SkinsDefaults={
   Anchors={},
   HeadBar={},
   HeadText={},
-  AuxBarFrame={},
-  AuxBar={},
-  AuxBarText={},
   HealBar={},
   BarCol={},
   BarIACol={},
@@ -800,13 +797,11 @@ HealBot_Config_SkinsDefaults={
   Adaptive={},
   AdaptiveOrder={},
   AdaptiveCol={},
-  ActionIcons={},
-  ActionIconsData={},
 };
 
 Healbot_Config_AuxDefaults={
-  BarText={},
   Bar={},
+  BarText={},
   Overlay={},
 };
 

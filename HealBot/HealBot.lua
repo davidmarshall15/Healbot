@@ -2444,8 +2444,6 @@ function HealBot_LoadAddOn()
         g:SetFont(HealBot_Supplied_Fonts[15].file, 12)
     end
     HealBot_Config.LastAutoSkinChangeTime=0
-    HealBot_Timers_Set("LAST","SetAutoClose", 12)
-    HealBot_Timers_Set("LAST","LoadTips", 2)
     HealBot:SetScript("OnUpdate", HealBot_OnUpdate)
 end
 
@@ -2462,6 +2460,8 @@ function HealBot_VariablesLoaded()
         HealBot_Include_Skin(HEALBOT_OPTIONS_RAID40, true)
     end
     HealBot_Update_Skins()
+    HealBot_Timers_Set("LAST","SetAutoClose", 12)
+    HealBot_Timers_Set("LAST","LoadTips", 2)
     HealBot_Options_SetOverrideGlowSize()
     HealBot_Action_SetCustomClassCols(HealBot_Globals.OverrideColours["USECLASS"])
     HealBot_Data["PGUID"]=UnitGUID("player") or "x"

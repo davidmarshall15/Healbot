@@ -3556,7 +3556,7 @@ end
 local hbInitAuxGlow={}
 function HealBot_Action_InitAuxGlow(id, frame, button)
       --HealBot_setCall("HealBot_Action_InitAuxGlow")
-    if Healbot_Config_Skins.AuxBar[Healbot_Config_Skins.Current_Skin][id][frame]["OUTLINE"] and Healbot_Config_Skins.AuxBar[Healbot_Config_Skins.Current_Skin][id][frame]["USE"]>1 then
+    if HealBot_Aux_GetBarVar("OUTLINE", frame, id) and HealBot_Aux_GetBarVar("USE", frame, id)>1 then
         if not hbInitAuxGlow[frame] then hbInitAuxGlow[frame]={} end
         if button then
             if button.frame == frame and not button.aux[id]["OUTLINE"] then
