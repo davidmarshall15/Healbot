@@ -400,17 +400,24 @@ end
 
 local hbDefaultBind=1
 function HealBot_SpellBinds_GetData(id)
-    return HealBot_Config_Spells.Binds[id] or hbDefaultBind
+    if HealBot_Config_Spells.Binds then
+        return HealBot_Config_Spells.Binds[id] or hbDefaultBind
+    end
+    return hbDefaultBind
 end
 
 function HealBot_SpellBinds_SetData(value, id)
     if hbDefaultBind == value then
         HealBot_SpellBinds_NilData(id)
     else
+        if not HealBot_Config_Spells.Binds then HealBot_Config_Spells.Binds={} end
         HealBot_Config_Spells.Binds[id]=value
     end
 end
 
 function HealBot_SpellBinds_NilData(id)
-    HealBot_Config_Spells.Binds[id]=nil
+    if HealBot_Config_Spells.Binds then
+        HealBot_Config_Spells.Binds[id]=nil
+        HealBot_Util_EmptyTable(HealBot_Config_Spells, Binds)
+    end
 end

@@ -1261,9 +1261,9 @@ function HealBot_Aura_DoUpdateDebuffIcon(button, iconData, index, timer, lastSpe
         if dbiconAlpha<button.status.alpha then
             dbiconAlpha=button.status.alpha
         end
-        if dbSecsLeft>-2 and Healbot_Config_Skins.IconSetsText[Healbot_Config_Skins.Current_Skin][button.frame][iconData.iconSet]["DBSDUR"] then
-            if dbSecsLeft<=Healbot_Config_Skins.IconSetsText[Healbot_Config_Skins.Current_Skin][button.frame][iconData.iconSet]["DBDURTHRH"] then
-                if dbSecsLeft<=Healbot_Config_Skins.IconSetsText[Healbot_Config_Skins.Current_Skin][button.frame][iconData.iconSet]["DBDURWARN"] then
+        if dbSecsLeft>-2 and HealBot_Skins_GetIconTextBoolean("DBSDUR", button.frame, iconData.iconSet) then
+            if dbSecsLeft<=HealBot_Skins_GetIconTextVar("DBDURTHRH", button.frame, iconData.iconSet) then
+                if dbSecsLeft<=HealBot_Skins_GetIconTextVar("DBDURWARN", button.frame, iconData.iconSet) then
                     if UnitIsFriend("player",button.unit) then
                         button.gref.txt.expire[index]:SetTextColor(0,1,0,dbiconAlpha)
                     else
@@ -1282,9 +1282,9 @@ function HealBot_Aura_DoUpdateDebuffIcon(button, iconData, index, timer, lastSpe
             else
                 button.gref.txt.expire[index]:SetTextColor(1,1,1,0)
                 button.gref.txt.expire[index]:SetText(" ");
-                dbDurNextUpdate=dbSecsLeft-Healbot_Config_Skins.IconSetsText[Healbot_Config_Skins.Current_Skin][button.frame][iconData.iconSet]["DBDURTHRH"]
-                --if (iconData.expirationTime-HealBot_TimeNow-1)>Healbot_Config_Skins.IconSetsText[Healbot_Config_Skins.Current_Skin][button.frame][iconData.iconSet]["DBDURTHRH"] then
-                --    dbDurNextUpdate=(iconData.expirationTime-HealBot_TimeNow-1)-Healbot_Config_Skins.IconSetsText[Healbot_Config_Skins.Current_Skin][button.frame][iconData.iconSet]["DBDURTHRH"]
+                dbDurNextUpdate=dbSecsLeft-HealBot_Skins_GetIconTextVar("DBDURTHRH", button.frame, iconData.iconSet)
+                --if (iconData.expirationTime-HealBot_TimeNow-1)>HealBot_Skins_GetIconTextVar("DBDURTHRH", button.frame, iconData.iconSet) then
+                --    dbDurNextUpdate=(iconData.expirationTime-HealBot_TimeNow-1)-HealBot_Skins_GetIconTextVar("DBDURTHRH", button.frame, iconData.iconSet)
                 --else
                 --    dbDurNextUpdate=HealBot_Aura_luVars["AuraUpdate"]
                 --end
@@ -1302,7 +1302,7 @@ function HealBot_Aura_DoUpdateDebuffIcon(button, iconData, index, timer, lastSpe
             end
         end
         if not srcTimer then
-            if iconData.count > 1 and Healbot_Config_Skins.IconSetsText[Healbot_Config_Skins.Current_Skin][button.frame][iconData.iconSet]["DBSCNT"] then
+            if iconData.count > 1 and HealBot_Skins_GetIconTextBoolean("DBSCNT", button.frame, iconData.iconSet) then
                 button.gref.txt.count[index]:SetText(iconData.count);
                 button.gref.txt.count[index]:SetTextColor(1,1,1,dbiconAlpha);
             else
@@ -1434,10 +1434,10 @@ function HealBot_Aura_DoUpdateBuffIcon(button, iconData, index, timer, lastSpell
         if bIconAlpha<button.status.alpha then
             bIconAlpha=button.status.alpha
         end
-        if bSecsLeft>-2 and Healbot_Config_Skins.IconSetsText[Healbot_Config_Skins.Current_Skin][button.frame][iconData.iconSet]["BUFFSDUR"] 
-                        and (not Healbot_Config_Skins.IconSetsText[Healbot_Config_Skins.Current_Skin][button.frame][iconData.iconSet]["BUFFSSDUR"] or UnitIsUnit(iconData.unitCaster,"player")) then
-            if bSecsLeft<=Healbot_Config_Skins.IconSetsText[Healbot_Config_Skins.Current_Skin][button.frame][iconData.iconSet]["BUFFDURTHRH"] then
-                if bSecsLeft<=Healbot_Config_Skins.IconSetsText[Healbot_Config_Skins.Current_Skin][button.frame][iconData.iconSet]["BUFFDURWARN"] then
+        if bSecsLeft>-2 and HealBot_Skins_GetIconTextBoolean("BUFFSDUR", button.frame, iconData.iconSet)
+                        and (not HealBot_Skins_GetIconTextBoolean("BUFFSSDUR", button.frame, iconData.iconSet) or UnitIsUnit(iconData.unitCaster,"player")) then
+            if bSecsLeft<=HealBot_Skins_GetIconTextVar("BUFFDURTHRH", button.frame, iconData.iconSet) then
+                if bSecsLeft<=HealBot_Skins_GetIconTextVar("BUFFDURWARN", button.frame, iconData.iconSet) then
                     if UnitIsFriend("player",button.unit) then
                         button.gref.txt.expire[index]:SetTextColor(1,0.5,0,bIconAlpha)
                     else
@@ -1456,9 +1456,9 @@ function HealBot_Aura_DoUpdateBuffIcon(button, iconData, index, timer, lastSpell
             else
                 button.gref.txt.expire[index]:SetTextColor(1,1,1,0)
                 button.gref.txt.expire[index]:SetText(" ");
-                bDurNextUpdate=bSecsLeft-Healbot_Config_Skins.IconSetsText[Healbot_Config_Skins.Current_Skin][button.frame][iconData.iconSet]["BUFFDURTHRH"]
-                --if (iconData.expirationTime-HealBot_TimeNow-1)>Healbot_Config_Skins.IconSetsText[Healbot_Config_Skins.Current_Skin][button.frame][iconData.iconSet]["BUFFDURTHRH"] then
-                --    bDurNextUpdate=(iconData.expirationTime-HealBot_TimeNow-1)-Healbot_Config_Skins.IconSetsText[Healbot_Config_Skins.Current_Skin][button.frame][iconData.iconSet]["BUFFDURTHRH"]
+                bDurNextUpdate=bSecsLeft-HealBot_Skins_GetIconTextVar("BUFFDURTHRH", button.frame, iconData.iconSet)
+                --if (iconData.expirationTime-HealBot_TimeNow-1)>HealBot_Skins_GetIconTextVar("BUFFDURTHRH", button.frame, iconData.iconSet) then
+                --    bDurNextUpdate=(iconData.expirationTime-HealBot_TimeNow-1)-HealBot_Skins_GetIconTextVar("BUFFDURTHRH", button.frame, iconData.iconSet)
                 --else
                 --    bDurNextUpdate=HealBot_Aura_luVars["AuraUpdate"]
                 --end
@@ -1481,8 +1481,8 @@ function HealBot_Aura_DoUpdateBuffIcon(button, iconData, index, timer, lastSpell
             else
                 button.gref.indicator.selfcast[index]:SetAlpha(0)
             end
-            if iconData.count > 1 and Healbot_Config_Skins.IconSetsText[Healbot_Config_Skins.Current_Skin][button.frame][iconData.iconSet]["BUFFSCNT"] 
-                                  and (not Healbot_Config_Skins.IconSetsText[Healbot_Config_Skins.Current_Skin][button.frame][iconData.iconSet]["BUFFSSCNT"] or UnitIsUnit(iconData.unitCaster,"player")) then
+            if iconData.count > 1 and HealBot_Skins_GetIconTextBoolean("BUFFSCNT", button.frame, iconData.iconSet)
+                                  and (not HealBot_Skins_GetIconTextBoolean("BUFFSSCNT", button.frame, iconData.iconSet) or UnitIsUnit(iconData.unitCaster,"player")) then
                 button.gref.txt.count[index]:SetText(iconData.count);
                 button.gref.txt.count[index]:SetTextColor(1,1,1,bIconAlpha);
             else

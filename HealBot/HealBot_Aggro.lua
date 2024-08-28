@@ -38,10 +38,8 @@ end
 
 function HealBot_Aggro_IndicatorUpdate(button)
       --HealBot_setCall("HealBot_Aggro_IndicatorUpdate", button)
-    if Healbot_Config_Skins.BarAggro[Healbot_Config_Skins.Current_Skin][button.frame]["SHOW"] and
-       button.status.current<HealBot_Unit_Status["DEAD"] and button.frame<10 then
-        if Healbot_Config_Skins.BarAggro[Healbot_Config_Skins.Current_Skin][button.frame]["SHOWIND"] and
-           button.aggro.status>=Healbot_Config_Skins.BarAggro[Healbot_Config_Skins.Current_Skin][button.frame]["ALERTIND"] then
+    if HealBot_Skins_GetFrameBoolean("BarAggro", "SHOW", button.frame) and button.status.current<HealBot_Unit_Status["DEAD"] and button.frame<10 then
+        if HealBot_Skins_GetFrameBoolean("BarAggro", "SHOWIND", button.frame) and button.aggro.status>=HealBot_Skins_GetFrameVar("BarAggro", "ALERTIND", button.frame) then
             local indAlpha=HealBot_Action_BarColourAlpha(button, 1, 1)
             if button.aggro.status == 1 then
                 if button.aggro.ind~=1 then
@@ -77,7 +75,7 @@ function HealBot_Aggro_IndicatorUpdate(button)
         elseif button.aggro.ind~=0 then
             HealBot_Aggro_IndicatorClear(button)
         end
-        if Healbot_Config_Skins.BarAggro[Healbot_Config_Skins.Current_Skin][button.frame]["HAZARD"] and button.aggro.status == 3 then
+        if HealBot_Skins_GetFrameBoolean("BarAggro", "HAZARD", button.frame) and button.aggro.status == 3 then
             HealBot_Action_EnableBorderHazardType(button, 1, 0, 0, "AGGRO")
         elseif button.hazard.aggro then
             HealBot_Aggro_HazardClear(button)
@@ -138,8 +136,8 @@ end
 function HealBot_Aggro_UpdateUnit(button,status,threatData)
       --HealBot_setCall("HealBot_Aggro_UpdateUnit", button)
     if button.status.current<HealBot_Unit_Status["DEAD"] and UnitIsFriend("player",button.unit) and UnitAffectingCombat(button.unit) then
-        if status and Healbot_Config_Skins.BarAggro[Healbot_Config_Skins.Current_Skin][button.frame]["SHOW"] then
-            if threatData["status"]>Healbot_Config_Skins.BarAggro[Healbot_Config_Skins.Current_Skin][button.frame]["ALERT"] then
+        if status and HealBot_Skins_GetFrameBoolean("BarAggro", "SHOW", button.frame) then
+            if threatData["status"]>HealBot_Skins_GetFrameVar("BarAggro", "ALERT", button.frame) then
                 HealBot_Aggro_AuxSetAggroBar(button)
             else
                 HealBot_Aggro_AuxClearAggroBar(button)
@@ -158,7 +156,7 @@ function HealBot_Aggro_UpdateUnit(button,status,threatData)
     if button.aggro.status~=threatData["status"] then
         button.aggro.status=threatData["status"]
         HealBot_Action_AdaptiveAggroUpdate(button)
-        if button.aggro.status>Healbot_Config_Skins.BarAggro[Healbot_Config_Skins.Current_Skin][button.frame]["ALERT"] then
+        if button.aggro.status>HealBot_Skins_GetFrameVar("BarAggro", "ALERT", button.frame) then
             HealBot_Aux_UpdateThreatBar(button)
         end
         HealBot_Aggro_IndicatorUpdate(button)
@@ -174,7 +172,7 @@ function HealBot_Aggro_UpdateUnit(button,status,threatData)
         HealBot_Action_AdaptiveThreatUpdate(button)
         button.aggro.threatvalue=threatData["threatvalue"]
         button.aggro.mobname=threatData["threatname"]
-        if Healbot_Config_Skins.BarAggro[Healbot_Config_Skins.Current_Skin][button.frame]["SHOWTEXT"]>1 then
+        if HealBot_Skins_GetFrameVar("BarAggro", "SHOWTEXT", button.frame)>1 then
             HealBot_Text_setNameText(button)
         end
         if not Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][button.frame]["TAGAGGROONLYTIP"] then

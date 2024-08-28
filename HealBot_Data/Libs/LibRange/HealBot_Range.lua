@@ -259,7 +259,7 @@ function HealBot_Range_UpdateUnit(button)
                 if HealBot_Text_TagInUse(button.framecol, "OOR") then
                     HealBot_Text_setNameTag(button)
                 end
-                if Healbot_Config_Skins.BarSort[Healbot_Config_Skins.Current_Skin][button.frame]["OORLAST"] then
+                if HealBot_Skins_GetFrameBoolean("BarSort", "OORLAST", button.frame) then
                     if button.status.unittype<7 then
                         HealBot_Timers_Set("OOC","RefreshPartyNextRecalcPlayers")
                     elseif button.status.unittype<9 then

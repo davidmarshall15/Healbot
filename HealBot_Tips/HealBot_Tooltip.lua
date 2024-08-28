@@ -1056,7 +1056,7 @@ function HealBot_Tooltip_DebugActionIconCondition(icon, index, cond)
                 if cond == 2 then
                     if HealBot_ActionIcons_CurrentBuff(icon.frame, icon.id, index) then
                         HealBot_Tooltip_SetLine("Buff exists",0.4,1,1,1,"TRUE",0.25,1,0.25,1)
-                        if (icon.auraIsSelf[index] or not HealBot_ActionIcons_GetData("AlertBuffSelf", icon.frame, icon.id, index)) and
+                        if (icon.auraIsSelf[index] or not HealBot_ActionIcons_GetBoolean("AlertBuffSelf", icon.frame, icon.id, index)) and
                             icon.auraStacks[index]>=HealBot_ActionIcons_GetData("AlertBuffMinStacks", icon.frame, icon.id, index) and
                             icon.auraStacks[index]<=HealBot_ActionIcons_GetData("AlertBuffMaxStacks", icon.frame, icon.id, index) then
                             HealBot_Tooltip_SetLine("Buff cast conditions met",0.4,1,1,1,"TRUE",0.25,1,0.25,1)
@@ -1069,7 +1069,7 @@ function HealBot_Tooltip_DebugActionIconCondition(icon, index, cond)
                 elseif cond == 4 then
                     if HealBot_ActionIcons_CurrentBuff(icon.frame, icon.id, index) then
                         HealBot_Tooltip_SetLine("Buff exists",0.4,1,1,1,"TRUE",0.25,1,0.25,1)
-                        if (icon.auraIsSelf[index] or not HealBot_ActionIcons_GetData("AlertBuffSelf", icon.frame, icon.id, index)) and
+                        if (icon.auraIsSelf[index] or not HealBot_ActionIcons_GetBoolean("AlertBuffSelf", icon.frame, icon.id, index)) and
                              icon.auraStacks[index]>=HealBot_ActionIcons_GetData("AlertBuffMinStacks", icon.frame, icon.id, index) and
                             icon.auraStacks[index]<=HealBot_ActionIcons_GetData("AlertBuffMaxStacks", icon.frame, icon.id, index) then
                             HealBot_Tooltip_SetLine("Buff cast conditions met",0.4,1,1,1,"TRUE",0.25,1,0.25,1)
@@ -1100,7 +1100,7 @@ function HealBot_Tooltip_DebugActionIconCondition(icon, index, cond)
                 if cond == 6 then
                     if HealBot_ActionIcons_CurrentDebuff(icon.frame, icon.id, index) then
                         HealBot_Tooltip_SetLine("Debuff exists",0.4,1,1,1,"TRUE",0.25,1,0.25,1)
-                        if (icon.auraIsSelf[index] or not HealBot_ActionIcons_GetData("AlertDebuffSelf", icon.frame, icon.id, index)) and
+                        if (icon.auraIsSelf[index] or not HealBot_ActionIcons_GetBoolean("AlertDebuffSelf", icon.frame, icon.id, index)) and
                             icon.auraStacks[index]>=HealBot_ActionIcons_GetData("AlertDebuffMinStacks", icon.frame, icon.id, index) and
                             icon.auraStacks[index]<=HealBot_ActionIcons_GetData("AlertDebuffMaxStacks", icon.frame, icon.id, index) then
                             HealBot_Tooltip_SetLine("Debuff cast conditions met",0.4,1,1,1,"TRUE",0.25,1,0.25,1)
@@ -1113,7 +1113,7 @@ function HealBot_Tooltip_DebugActionIconCondition(icon, index, cond)
                 elseif cond == 8 then
                     if HealBot_ActionIcons_CurrentDebuff(icon.frame, icon.id, index) then
                         HealBot_Tooltip_SetLine("Debuff exists",0.4,1,1,1,"TRUE",0.25,1,0.25,1)
-                        if (icon.auraIsSelf[index] or not HealBot_ActionIcons_GetData("AlertDebuffSelf", icon.frame, icon.id, index)) and
+                        if (icon.auraIsSelf[index] or not HealBot_ActionIcons_GetBoolean("AlertDebuffSelf", icon.frame, icon.id, index)) and
                             icon.auraStacks[index]>=HealBot_ActionIcons_GetData("AlertDebuffMinStacks", icon.frame, icon.id, index) and
                             icon.auraStacks[index]<=HealBot_ActionIcons_GetData("AlertDebuffMaxStacks", icon.frame, icon.id, index) then
                             HealBot_Tooltip_SetLine("Debuff cast conditions met",0.4,1,1,1,"TRUE",0.25,1,0.25,1)

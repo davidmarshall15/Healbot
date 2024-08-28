@@ -376,53 +376,53 @@ end
 function HealBot_Text_sethbAggroNumberFormat()
       --HealBot_setCall("HealBot_Text_sethbAggroNumberFormat")
     for j=1,9 do
-        if Healbot_Config_Skins.BarAggro[Healbot_Config_Skins.Current_Skin][j]["TEXTFORMAT"] == 2 then
+        if HealBot_Skins_GetFrameVar("BarAggro", "TEXTFORMAT", j) == 2 then
             aggroNumFormatSurLa[j]="("
             aggroNumFormatSurRa[j]=")"
-        elseif Healbot_Config_Skins.BarAggro[Healbot_Config_Skins.Current_Skin][j]["TEXTFORMAT"] == 3 then
+        elseif HealBot_Skins_GetFrameVar("BarAggro", "TEXTFORMAT", j) == 3 then
             aggroNumFormatSurLa[j]="["
             aggroNumFormatSurRa[j]="]"
-        elseif Healbot_Config_Skins.BarAggro[Healbot_Config_Skins.Current_Skin][j]["TEXTFORMAT"] == 4 then
+        elseif HealBot_Skins_GetFrameVar("BarAggro", "TEXTFORMAT", j) == 4 then
             aggroNumFormatSurLa[j]="{"
             aggroNumFormatSurRa[j]="}"
-        elseif Healbot_Config_Skins.BarAggro[Healbot_Config_Skins.Current_Skin][j]["TEXTFORMAT"] == 5 then
+        elseif HealBot_Skins_GetFrameVar("BarAggro", "TEXTFORMAT", j) == 5 then
             aggroNumFormatSurLa[j]="<"
             aggroNumFormatSurRa[j]=">"
-        elseif Healbot_Config_Skins.BarAggro[Healbot_Config_Skins.Current_Skin][j]["TEXTFORMAT"] == 6 then
+        elseif HealBot_Skins_GetFrameVar("BarAggro", "TEXTFORMAT", j) == 6 then
             aggroNumFormatSurLa[j]="~"
             aggroNumFormatSurRa[j]=""
-        elseif Healbot_Config_Skins.BarAggro[Healbot_Config_Skins.Current_Skin][j]["TEXTFORMAT"] == 7 then
+        elseif HealBot_Skins_GetFrameVar("BarAggro", "TEXTFORMAT", j) == 7 then
             aggroNumFormatSurLa[j]=":"
             aggroNumFormatSurRa[j]=":"
-        elseif Healbot_Config_Skins.BarAggro[Healbot_Config_Skins.Current_Skin][j]["TEXTFORMAT"] == 8 then
+        elseif HealBot_Skins_GetFrameVar("BarAggro", "TEXTFORMAT", j) == 8 then
             aggroNumFormatSurLa[j]="*"
             aggroNumFormatSurRa[j]="*"
         else
             aggroNumFormatSurLa[j]=""
             aggroNumFormatSurRa[j]=""
         end
-        if Healbot_Config_Skins.BarAggro[Healbot_Config_Skins.Current_Skin][j]["SHOWTEXT"] == 1 then
+        if HealBot_Skins_GetFrameVar("BarAggro", "SHOWTEXT", j) == 1 then
             hbNameFormats["AggroLeft"][j]=vTextChars["Nothing"]
             hbNameFormats["AggroRight"][j]=vTextChars["Nothing"]
-        elseif Healbot_Config_Skins.BarAggro[Healbot_Config_Skins.Current_Skin][j]["SHOWTEXT"] == 2 then
+        elseif HealBot_Skins_GetFrameVar("BarAggro", "SHOWTEXT", j) == 2 then
             hbNameFormats["AggroLeft"][j]=">>"
             hbNameFormats["AggroRight"][j]="<<"
-        elseif Healbot_Config_Skins.BarAggro[Healbot_Config_Skins.Current_Skin][j]["SHOWTEXT"] == 3 then
+        elseif HealBot_Skins_GetFrameVar("BarAggro", "SHOWTEXT", j) == 3 then
             hbNameFormats["AggroLeft"][j]="!!"
             hbNameFormats["AggroRight"][j]="!!"
-        elseif Healbot_Config_Skins.BarAggro[Healbot_Config_Skins.Current_Skin][j]["SHOWTEXT"] == 4 then
+        elseif HealBot_Skins_GetFrameVar("BarAggro", "SHOWTEXT", j) == 4 then
             hbNameFormats["AggroLeft"][j]="++"
             hbNameFormats["AggroRight"][j]="++"
-        elseif Healbot_Config_Skins.BarAggro[Healbot_Config_Skins.Current_Skin][j]["SHOWTEXT"] == 5 then
+        elseif HealBot_Skins_GetFrameVar("BarAggro", "SHOWTEXT", j) == 5 then
             hbNameFormats["AggroLeft"][j]="**"
             hbNameFormats["AggroRight"][j]="**"
-        elseif Healbot_Config_Skins.BarAggro[Healbot_Config_Skins.Current_Skin][j]["SHOWTEXT"] == 6 then
+        elseif HealBot_Skins_GetFrameVar("BarAggro", "SHOWTEXT", j) == 6 then
             hbNameFormats["AggroLeft"][j]="^^"
             hbNameFormats["AggroRight"][j]="^^"
-        elseif Healbot_Config_Skins.BarAggro[Healbot_Config_Skins.Current_Skin][j]["SHOWTEXT"] == 7 then
+        elseif HealBot_Skins_GetFrameVar("BarAggro", "SHOWTEXT", j) == 7 then
             hbNameFormats["AggroLeft"][j]="--"
             hbNameFormats["AggroRight"][j]="--"
-        elseif Healbot_Config_Skins.BarAggro[Healbot_Config_Skins.Current_Skin][j]["SHOWTEXT"] == 8 then
+        elseif HealBot_Skins_GetFrameVar("BarAggro", "SHOWTEXT", j) == 8 then
             hbNameFormats["AggroLeft"][j]="##"
             hbNameFormats["AggroRight"][j]="##"
         else
@@ -1332,8 +1332,8 @@ function HealBot_Text_setNameText(button)
                     vSetNameTextName=vSetNameTextClass;
                 end
             elseif Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][button.framecol]["NAMEONBAR"] then
-                if Healbot_Config_Skins.BarAggro[Healbot_Config_Skins.Current_Skin][button.framecol]["SHOWTEXT"]>1 and 
-                       (button.aggro.status or 0)>Healbot_Config_Skins.BarAggro[Healbot_Config_Skins.Current_Skin][button.framecol]["ALERT"] then
+                if HealBot_Skins_GetFrameVar("BarAggro", "SHOWTEXT", button.framecol)>1 and 
+                       (button.aggro.status or 0)>HealBot_Skins_GetFrameVar("BarAggro", "ALERT", button.framecol) then
                     tConcat[1]=hbNameFormats["AggroLeft"][button.framecol]
                     tConcat[2]=button.text.nameonly
                     tConcat[3]=hbNameFormats["AggroRight"][button.framecol]

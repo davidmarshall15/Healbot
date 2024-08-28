@@ -445,37 +445,37 @@ function HealBot_CheckFrameHorizontal(frame, aType)
     local wPct=HealBot_Util_Round(((Healbot_Config_Skins.HealBar[Healbot_Config_Skins.Current_Skin][frame]["WIDTH"]/GetScreenWidth())*100),2)
     local wAdj=Hcenter-Healbot_Config_Skins.HealBar[Healbot_Config_Skins.Current_Skin][frame]["WIDTH"]
     if aType == "LEFT" then
-        if (Healbot_Config_Skins.Anchors[Healbot_Config_Skins.Current_Skin][frame]["RealX"]+Hcenter)<0 then
-            Healbot_Config_Skins.Anchors[Healbot_Config_Skins.Current_Skin][frame]["RealX"]=0-Hcenter
-        elseif (Healbot_Config_Skins.Anchors[Healbot_Config_Skins.Current_Skin][frame]["RealX"]+wAdj)>GetScreenWidth() then
-            Healbot_Config_Skins.Anchors[Healbot_Config_Skins.Current_Skin][frame]["RealX"]=wAdj
+        if (HealBot_Skins_GetFrameVar("Anchors", "RealX", frame)+Hcenter)<0 then
+            HealBot_Skins_SetFrameVar(0-Hcenter, "Anchors", "RealX", frame)
+        elseif (HealBot_Skins_GetFrameVar("Anchors", "RealX", frame)+wAdj)>GetScreenWidth() then
+            HealBot_Skins_SetFrameVar(wAdj, "Anchors", "RealX", frame)
         end
-        if Healbot_Config_Skins.Anchors[Healbot_Config_Skins.Current_Skin][frame]["X"]<0.01 then
-            Healbot_Config_Skins.Anchors[Healbot_Config_Skins.Current_Skin][frame]["X"]=0.01
-        elseif (Healbot_Config_Skins.Anchors[Healbot_Config_Skins.Current_Skin][frame]["X"]+wPct)>100 then
-            Healbot_Config_Skins.Anchors[Healbot_Config_Skins.Current_Skin][frame]["X"]=100-wPct
+        if HealBot_Skins_GetFrameVar("Anchors", "X", frame)<0.01 then
+            HealBot_Skins_SetFrameVar(0.01, "Anchors", "X", frame)
+        elseif (HealBot_Skins_GetFrameVar("Anchors", "X", frame)+wPct)>100 then
+            HealBot_Skins_SetFrameVar(100-wPct, "Anchors", "X", frame)
         end
     elseif aType == "RIGHT" then
-        if (Healbot_Config_Skins.Anchors[Healbot_Config_Skins.Current_Skin][frame]["RealX"]+wAdj)<0 then
-            Healbot_Config_Skins.Anchors[Healbot_Config_Skins.Current_Skin][frame]["RealX"]=0-wAdj
-        elseif (Healbot_Config_Skins.Anchors[Healbot_Config_Skins.Current_Skin][frame]["RealX"]+Hcenter)>GetScreenWidth() then
-            Healbot_Config_Skins.Anchors[Healbot_Config_Skins.Current_Skin][frame]["RealX"]=Hcenter
+        if (HealBot_Skins_GetFrameVar("Anchors", "RealX", frame)+wAdj)<0 then
+            HealBot_Skins_SetFrameVar(0-wAdj, "Anchors", "RealX", frame)
+        elseif (HealBot_Skins_GetFrameVar("Anchors", "RealX", frame)+Hcenter)>GetScreenWidth() then
+            HealBot_Skins_SetFrameVar(Hcenter, "Anchors", "RealX", frame)
         end
-        if Healbot_Config_Skins.Anchors[Healbot_Config_Skins.Current_Skin][frame]["X"]<wPct then
-            Healbot_Config_Skins.Anchors[Healbot_Config_Skins.Current_Skin][frame]["X"]=wPct
-        elseif Healbot_Config_Skins.Anchors[Healbot_Config_Skins.Current_Skin][frame]["X"]>100 then
-            Healbot_Config_Skins.Anchors[Healbot_Config_Skins.Current_Skin][frame]["X"]=100
+        if HealBot_Skins_GetFrameVar("Anchors", "X", frame)<wPct then
+            HealBot_Skins_SetFrameVar(wPct, "Anchors", "X", frame)
+        elseif HealBot_Skins_GetFrameVar("Anchors", "X", frame)>100 then
+            HealBot_Skins_SetFrameVar(100, "Anchors", "X", frame)
         end
     elseif aType == "CENTER" then
-        if (Healbot_Config_Skins.Anchors[Healbot_Config_Skins.Current_Skin][frame]["RealX"]+Hcenter)<0 then
-            Healbot_Config_Skins.Anchors[Healbot_Config_Skins.Current_Skin][frame]["RealX"]=0-Hcenter
-        elseif (Healbot_Config_Skins.Anchors[Healbot_Config_Skins.Current_Skin][frame]["RealX"]+Hcenter)>GetScreenWidth() then
-            Healbot_Config_Skins.Anchors[Healbot_Config_Skins.Current_Skin][frame]["RealX"]=Hcenter
+        if (HealBot_Skins_GetFrameVar("Anchors", "RealX", frame)+Hcenter)<0 then
+            HealBot_Skins_SetFrameVar(0-Hcenter, "Anchors", "RealX", frame)
+        elseif (HealBot_Skins_GetFrameVar("Anchors", "RealX", frame)+Hcenter)>GetScreenWidth() then
+            HealBot_Skins_SetFrameVar(Hcenter, "Anchors", "RealX", frame)
         end
-        if Healbot_Config_Skins.Anchors[Healbot_Config_Skins.Current_Skin][frame]["X"]<0.01 then
-            Healbot_Config_Skins.Anchors[Healbot_Config_Skins.Current_Skin][frame]["X"]=0.01
-        elseif Healbot_Config_Skins.Anchors[Healbot_Config_Skins.Current_Skin][frame]["X"]>100 then
-            Healbot_Config_Skins.Anchors[Healbot_Config_Skins.Current_Skin][frame]["X"]=100
+        if HealBot_Skins_GetFrameVar("Anchors", "X", frame)<0.01 then
+            HealBot_Skins_SetFrameVar(0.01, "Anchors", "X", frame)
+        elseif HealBot_Skins_GetFrameVar("Anchors", "X", frame)>100 then
+            HealBot_Skins_SetFrameVar(100, "Anchors", "X", frame)
         end
     end
 end
@@ -485,37 +485,37 @@ function HealBot_CheckFrameVertical(frame, aType)
     local hPct=HealBot_Util_Round(((Healbot_Config_Skins.HealBar[Healbot_Config_Skins.Current_Skin][frame]["HEIGHT"]/GetScreenHeight())*100),2)
     local hAdj=Vcenter-Healbot_Config_Skins.HealBar[Healbot_Config_Skins.Current_Skin][frame]["HEIGHT"]
     if aType == "TOP" then
-        if (Healbot_Config_Skins.Anchors[Healbot_Config_Skins.Current_Skin][frame]["RealY"]+hAdj)<0 then
-            Healbot_Config_Skins.Anchors[Healbot_Config_Skins.Current_Skin][frame]["RealY"]=0-hAdj
-        elseif (Healbot_Config_Skins.Anchors[Healbot_Config_Skins.Current_Skin][frame]["RealY"]+Vcenter)>GetScreenHeight() then
-            Healbot_Config_Skins.Anchors[Healbot_Config_Skins.Current_Skin][frame]["RealY"]=Vcenter
+        if (HealBot_Skins_GetFrameVar("Anchors", "RealY", frame)+hAdj)<0 then
+            HealBot_Skins_SetFrameVar(0-hAdj, "Anchors", "RealY", frame)
+        elseif (HealBot_Skins_GetFrameVar("Anchors", "RealY", frame)+Vcenter)>GetScreenHeight() then
+            HealBot_Skins_SetFrameVar(Vcenter, "Anchors", "RealY", frame)
         end
-        if Healbot_Config_Skins.Anchors[Healbot_Config_Skins.Current_Skin][frame]["Y"]<hPct then
-            Healbot_Config_Skins.Anchors[Healbot_Config_Skins.Current_Skin][frame]["Y"]=hPct
-        elseif Healbot_Config_Skins.Anchors[Healbot_Config_Skins.Current_Skin][frame]["Y"]>100 then
-            Healbot_Config_Skins.Anchors[Healbot_Config_Skins.Current_Skin][frame]["Y"]=100
+        if HealBot_Skins_GetFrameVar("Anchors", "Y", frame)<hPct then
+            HealBot_Skins_SetFrameVar(hPct, "Anchors", "Y", frame)
+        elseif HealBot_Skins_GetFrameVar("Anchors", "Y", frame)>100 then
+            HealBot_Skins_SetFrameVar(100, "Anchors", "Y", frame)
         end
     elseif aType == "BOTTOM" then
-        if (Healbot_Config_Skins.Anchors[Healbot_Config_Skins.Current_Skin][frame]["RealY"]+Vcenter)<0 then
-            Healbot_Config_Skins.Anchors[Healbot_Config_Skins.Current_Skin][frame]["RealY"]=0-Vcenter
-        elseif (Healbot_Config_Skins.Anchors[Healbot_Config_Skins.Current_Skin][frame]["RealY"]+Vcenter+Healbot_Config_Skins.HealBar[Healbot_Config_Skins.Current_Skin][frame]["HEIGHT"])>GetScreenHeight() then
-            Healbot_Config_Skins.Anchors[Healbot_Config_Skins.Current_Skin][frame]["RealY"]=hAdj
+        if (HealBot_Skins_GetFrameVar("Anchors", "RealY", frame)+Vcenter)<0 then
+            HealBot_Skins_SetFrameVar(0-Vcenter, "Anchors", "RealY", frame)
+        elseif (HealBot_Skins_GetFrameVar("Anchors", "RealY", frame)+Vcenter+Healbot_Config_Skins.HealBar[Healbot_Config_Skins.Current_Skin][frame]["HEIGHT"])>GetScreenHeight() then
+            HealBot_Skins_SetFrameVar(hAdj, "Anchors", "RealY", frame)
         end
-        if Healbot_Config_Skins.Anchors[Healbot_Config_Skins.Current_Skin][frame]["Y"]<0.01 then
-            Healbot_Config_Skins.Anchors[Healbot_Config_Skins.Current_Skin][frame]["Y"]=0.01
-        elseif (Healbot_Config_Skins.Anchors[Healbot_Config_Skins.Current_Skin][frame]["Y"]+hPct)>100 then
-            Healbot_Config_Skins.Anchors[Healbot_Config_Skins.Current_Skin][frame]["Y"]=100-hPct
+        if HealBot_Skins_GetFrameVar("Anchors", "Y", frame)<0.01 then
+            HealBot_Skins_SetFrameVar(0.01, "Anchors", "Y", frame)
+        elseif (HealBot_Skins_GetFrameVar("Anchors", "Y", frame)+hPct)>100 then
+            HealBot_Skins_SetFrameVar(100-hPct, "Anchors", "Y", frame)
         end
     elseif aType == "CENTER" then
-        if (Healbot_Config_Skins.Anchors[Healbot_Config_Skins.Current_Skin][frame]["RealY"]+Vcenter)<0 then
-            Healbot_Config_Skins.Anchors[Healbot_Config_Skins.Current_Skin][frame]["RealY"]=0-Vcenter
-        elseif (Healbot_Config_Skins.Anchors[Healbot_Config_Skins.Current_Skin][frame]["RealY"]+Vcenter)>GetScreenHeight() then
-            Healbot_Config_Skins.Anchors[Healbot_Config_Skins.Current_Skin][frame]["RealY"]=Vcenter
+        if (HealBot_Skins_GetFrameVar("Anchors", "RealY", frame)+Vcenter)<0 then
+            HealBot_Skins_SetFrameVar(0-Vcenter, "Anchors", "RealY", frame)
+        elseif (HealBot_Skins_GetFrameVar("Anchors", "RealY", frame)+Vcenter)>GetScreenHeight() then
+            HealBot_Skins_SetFrameVar(Vcenter, "Anchors", "RealY", frame)
         end
-        if Healbot_Config_Skins.Anchors[Healbot_Config_Skins.Current_Skin][frame]["Y"]<0.01 then
-            Healbot_Config_Skins.Anchors[Healbot_Config_Skins.Current_Skin][frame]["Y"]=0.01
-        elseif Healbot_Config_Skins.Anchors[Healbot_Config_Skins.Current_Skin][frame]["Y"]>100 then
-            Healbot_Config_Skins.Anchors[Healbot_Config_Skins.Current_Skin][frame]["Y"]=100
+        if HealBot_Skins_GetFrameVar("Anchors", "Y", frame)<0.01 then
+            HealBot_Skins_SetFrameVar(0.01, "Anchors", "Y", frame)
+        elseif HealBot_Skins_GetFrameVar("Anchors", "Y", frame)>100 then
+            HealBot_Skins_SetFrameVar(100, "Anchors", "Y", frame)
         end
     end
 end
@@ -523,28 +523,28 @@ end
 function HealBot_CheckFrame(frame)
       --HealBot_setCall("HealBot_CheckFrame")
     if HealBot_Config.DisabledNow == 1 then return end
-    if Healbot_Config_Skins.Anchors[Healbot_Config_Skins.Current_Skin][frame]["FRAME"] == 1 then
+    if HealBot_Skins_GetFrameVar("Anchors", "FRAME", frame) == 1 then
         HealBot_CheckFrameHorizontal(frame, "LEFT")
         HealBot_CheckFrameVertical(frame, "TOP")
-    elseif Healbot_Config_Skins.Anchors[Healbot_Config_Skins.Current_Skin][frame]["FRAME"] == 2 then
+    elseif HealBot_Skins_GetFrameVar("Anchors", "FRAME", frame) == 2 then
         HealBot_CheckFrameHorizontal(frame, "LEFT")
         HealBot_CheckFrameVertical(frame, "BOTTOM")
-    elseif Healbot_Config_Skins.Anchors[Healbot_Config_Skins.Current_Skin][frame]["FRAME"] == 3 then
+    elseif HealBot_Skins_GetFrameVar("Anchors", "FRAME", frame) == 3 then
         HealBot_CheckFrameHorizontal(frame, "RIGHT")
         HealBot_CheckFrameVertical(frame, "TOP")
-    elseif Healbot_Config_Skins.Anchors[Healbot_Config_Skins.Current_Skin][frame]["FRAME"] == 4 then
+    elseif HealBot_Skins_GetFrameVar("Anchors", "FRAME", frame) == 4 then
         HealBot_CheckFrameHorizontal(frame, "RIGHT")
         HealBot_CheckFrameVertical(frame, "BOTTOM")
-    elseif Healbot_Config_Skins.Anchors[Healbot_Config_Skins.Current_Skin][frame]["FRAME"] == 5 then
+    elseif HealBot_Skins_GetFrameVar("Anchors", "FRAME", frame) == 5 then
         HealBot_CheckFrameHorizontal(frame, "CENTER")
         HealBot_CheckFrameVertical(frame, "TOP")
-    elseif Healbot_Config_Skins.Anchors[Healbot_Config_Skins.Current_Skin][frame]["FRAME"] == 6 then
+    elseif HealBot_Skins_GetFrameVar("Anchors", "FRAME", frame) == 6 then
         HealBot_CheckFrameHorizontal(frame, "LEFT")
         HealBot_CheckFrameVertical(frame, "CENTER")
-    elseif Healbot_Config_Skins.Anchors[Healbot_Config_Skins.Current_Skin][frame]["FRAME"] == 7 then
+    elseif HealBot_Skins_GetFrameVar("Anchors", "FRAME", frame) == 7 then
         HealBot_CheckFrameHorizontal(frame, "RIGHT")
         HealBot_CheckFrameVertical(frame, "CENTER")
-    elseif Healbot_Config_Skins.Anchors[Healbot_Config_Skins.Current_Skin][frame]["FRAME"] == 8 then
+    elseif HealBot_Skins_GetFrameVar("Anchors", "FRAME", frame) == 8 then
         HealBot_CheckFrameHorizontal(frame, "CENTER")
         HealBot_CheckFrameVertical(frame, "BOTTOM")
     end
@@ -4569,8 +4569,8 @@ function HealBot_PlayerTargetChanged()
         end
         HealBot_TargetChanged()
     end
-    if Healbot_Config_Skins.Enemy[Healbot_Config_Skins.Current_Skin]["INCSELF"] and Healbot_Config_Skins.Enemy[Healbot_Config_Skins.Current_Skin]["EXISTSHOWPTAR"]<3 then
-        if Healbot_Config_Skins.Enemy[Healbot_Config_Skins.Current_Skin]["SELFUSEFRAME"] == 2 then
+    if HealBot_Skins_GetBoolean("Enemy", "INCSELF") and HealBot_Skins_GetVar("Enemy", "EXISTSHOWPTAR")<3 then
+        if HealBot_Skins_GetVar("Enemy", "SELFUSEFRAME") == 2 then
             if HealBot_Panel_EnemyTargetsWithPlayersSelfUpdate() then
                 HealBot_Panel_PlayersTargetsQueueResetSkins(0.05)
             end

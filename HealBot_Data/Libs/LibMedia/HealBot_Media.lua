@@ -236,9 +236,9 @@ function HealBot_Media_UpdateType(mType, frame, auxId)
       --HealBot_setCall("HealBot_Options_UpdateMedia")
     if HealBot_Options:IsVisible() then
         if mType == "Textures" then
-            HealBot_Options_UpdateMediaTexture(HealBot_Options_SkinFrameAliasTextureS,Healbot_Config_Skins.FrameAliasBar[Healbot_Config_Skins.Current_Skin][frame]["TEXTURE"])
+            HealBot_Options_UpdateMediaTexture(HealBot_Options_SkinFrameAliasTextureS,HealBot_Skins_GetFrameVar("FrameAliasBar", "TEXTURE", frame))
             HealBot_Options_UpdateMediaTexture(HealBot_Options_BarTextureS,Healbot_Config_Skins.HealBar[Healbot_Config_Skins.Current_Skin][frame]["TEXTURE"])
-            HealBot_Options_UpdateMediaTexture(HealBot_Options_HeadTextureS,Healbot_Config_Skins.HeadBar[Healbot_Config_Skins.Current_Skin][frame]["TEXTURE"])
+            HealBot_Options_UpdateMediaTexture(HealBot_Options_HeadTextureS,HealBot_Skins_GetFrameVar("HeadBar", "TEXTURE", frame))
             HealBot_Options_UpdateMediaTexture(HealBot_EmergBarTexture, Healbot_Config_Skins.Emerg[Healbot_Config_Skins.Current_Skin][frame]["TEXTURE"])
         elseif mType == "Fonts" then
             HealBot_Options_UpdateMediaFont(HealBot_Options_HeadFontNameS,Healbot_Config_Skins.HeadText[Healbot_Config_Skins.Current_Skin][frame]["FONT"])
@@ -250,8 +250,8 @@ function HealBot_Media_UpdateType(mType, frame, auxId)
             HealBot_Options_UpdateMediaFont(HealBot_Options_ActionIconsFontName,HealBot_ActionIcons_GetVars("FONT", frame))
             HealBot_Options_UpdateMediaFont(HealBot_Options_ActionIconsFontCountName,HealBot_ActionIcons_GetVars("FONTCOUNT", frame))
             for z=1,3 do
-                HealBot_Options_UpdateMediaFont(HealBot_BarButtonIconBuffFont,Healbot_Config_Skins.IconSetsText[Healbot_Config_Skins.Current_Skin][frame][z]["BUFFFONT"])
-                HealBot_Options_UpdateMediaFont(HealBot_BarButtonIconFont, Healbot_Config_Skins.IconSetsText[Healbot_Config_Skins.Current_Skin][frame][z]["DBFONT"])
+                HealBot_Options_UpdateMediaFont(HealBot_BarButtonIconBuffFont,HealBot_Skins_GetIconTextVar("BUFFFONT", frame, z))
+                HealBot_Options_UpdateMediaFont(HealBot_BarButtonIconFont, HealBot_Skins_GetIconTextVar("DBFONT", frame, z))
             end
             HealBot_Options_UpdateMediaFont(HealBot_Options_FontName, Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][frame]["FONT"])
         else
@@ -358,7 +358,7 @@ local function HealBot_Media_DoUpdateUsedMedia(mediatype, frame)
                     if h then
                         local bar=_G[h:GetName().."Bar"]
                         if bar then
-                            HealBot_Media_UpdateTexture(bar, Healbot_Config_Skins.HeadBar[Healbot_Config_Skins.Current_Skin][frame]["TEXTURE"], "Media_DoUpdateUsedMedia - HeadBar")
+                            HealBot_Media_UpdateTexture(bar, HealBot_Skins_GetFrameVar("HeadBar", "TEXTURE", frame), "Media_DoUpdateUsedMedia - HeadBar")
                             bar:GetStatusBarTexture():SetHorizTile(false)
                         end
                     end

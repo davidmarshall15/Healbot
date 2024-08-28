@@ -1723,6 +1723,22 @@ function HealBot_Update_ConvertSpells(combo, maxButtons, cType)
     end);
 end
 
+function HealBot_Update_ConvertClassToPlayer()
+    if HealBot_Data["PCLASSTRIM"] and HealBot_Data["PGUID"] then
+        for x,_ in pairs(HealBot_Spells_Loadouts) do
+            local c,l=string.split(":",x)
+            l=tonumber(l)
+            if c == HealBot_Data["PCLASSTRIM"] or c == HealBot_Data["PGUID"] then
+                HealBot_Spell_Loadouts[l]=HealBot_Options_copyTable(HealBot_Spells_Loadouts[x])
+                HealBot_Spells_Loadouts[x]=nil
+            end
+        end
+    else
+        HealBot_SetPlayerData()
+        C_Timer.After(0.1, HealBot_Update_ConvertClassToPlayer)
+    end
+end
+
 local skinName=""
 function HealBot_Update_Skins()
       --HealBot_setCall("HealBot_Update_Skins")
@@ -1751,7 +1767,14 @@ function HealBot_Update_Skins()
         HealBot_Options_SetDefaults(true)
     elseif HealBot_Globals.LastVersionSkinUpdate~=HealBot_Global_Version() then
         for x=1,20 do  -- This can be remove when 9.2.x check is replace with defaults due to old version
-            if HealBot_Config_Spells.Binds[x] and HealBot_Config_Spells.Binds[x] == 1 then HealBot_Config_Spells.Binds[x]=nil end
+            if HealBot_Config_Spells.Binds and HealBot_Config_Spells.Binds[x] and HealBot_Config_Spells.Binds[x] == 1 then HealBot_Config_Spells.Binds[x]=nil end
+        end
+        for x,_ in pairs(HealBot_Class_Spells) do
+            if x ~= "SpellsReset" then
+                for n=1,20 do
+                    if HealBot_Class_Spells[x].Binds and HealBot_Class_Spells[x].Binds[n] and HealBot_Class_Spells[x].Binds[n] == 1 then HealBot_Class_Spells[x].Binds[n]=nil end
+                end
+            end
         end
         for x in pairs (Healbot_Config_Skins.Skins) do
             skinName=Healbot_Config_Skins.Skins[x]
@@ -1813,7 +1836,6 @@ function HealBot_Update_Skins()
         if Healbot_Config_Skins.ActionIcons then Healbot_Config_Skins.ActionIcons=nil end
         if HealBot_Config_ActionIconsData then HealBot_Config_ActionIconsData=nil end
         if HealBot_Config_ActionIcons then HealBot_Config_ActionIcons=nil end
-        
         if not HealBot_Update_luVars["UpdateMsg"] then
             HealBot_Update_luVars["UpdateMsg"]=true
             HealBot_Globals.OneTimeMsg["VERSION"]=false
@@ -1838,11 +1860,6 @@ function HealBot_Update_Skins()
                 end);
             end
         end
-        for x,_ in pairs(Healbot_Config_Skins.BarSort) do
-            if not Healbot_Config_Skins["HeadBar"][x] then
-                Healbot_Config_Skins.BarSort[x]=nil
-            end
-        end
         
         if not HealBot_Globals.HealBot_Custom_Debuffs_ShowBarCol["DEFAULT"] then
             HealBot_Globals.HealBot_Custom_Debuffs_ShowBarCol["DEFAULT"]=4
@@ -1862,12 +1879,8 @@ function HealBot_Update_Skins()
         if HealBot_Globals.AllowPlayerRoles then
             HealBot_Globals.AllowPlayerRoles=nil
         end
-        for x in pairs (Healbot_Config_Skins.Skins) do
-            if Healbot_Config_Skins.Enemy[Healbot_Config_Skins.Skins[x]]["ENEMYTARGETSIZE"]>10 then
-                Healbot_Config_Skins.Enemy[Healbot_Config_Skins.Skins[x]]["ENEMYTARGETSIZE"]=Healbot_Config_Skins.Enemy[Healbot_Config_Skins.Current_Skin]["ENEMYTARGETSIZE"]/100
-            end
-        end
         if not HealBot_Globals.Custom_Debuff_Categories[HEALBOT_CUSTOM_CAT_CUSTOM_AUTOMATIC] then HealBot_Globals.Custom_Debuff_Categories[HEALBOT_CUSTOM_CAT_CUSTOM_AUTOMATIC]=1 end
+        HealBot_Config.KnownLoadouts=nil
         HealBot_Update_BuffsForSpec("Debuff")
         if not HealBot_Globals.OverrideColours["TANK"] then HealBot_Skins_SetRoleCol(nil, "TANK", true) end         -- This is old when 10.0 is old.
         if not HealBot_Globals.OverrideColours["HEALER"] then HealBot_Skins_SetRoleCol(nil, "HEALER", true) end
@@ -1909,10 +1922,24 @@ function HealBot_Update_Skins()
         if not HealBot_Globals.OverrideColours["USECLASS"] then HealBot_Globals.OverrideColours["USECLASS"]=1 end
         if not HealBot_Globals.OverrideColours["GLOW"] then HealBot_Globals.OverrideColours["GLOW"]=3 end
         if not HealBot_Globals.OverrideColours["ICONGLOW"] then HealBot_Globals.OverrideColours["ICONGLOW"]=2 end
+        if HealBot_Class_Cures.ShowGroups then HealBot_Class_Cures.ShowGroups=nil end
+        if HealBot_Class_Buffs.ShowGroups then HealBot_Class_Buffs.ShowGroups=nil end
         HealBot_Globals.OverrideAdaptiveCols=nil
         HealBot_Globals.LastVersionSkinUpdate=HealBot_Global_Version()
     else
         HealBot_Skins_Check(Healbot_Config_Skins.Current_Skin)
+    end
+    if HealBot_Config_Cures.ShowGroups then HealBot_Config_Cures.ShowGroups=nil end
+    if HealBot_Config_Buffs.ShowGroups then HealBot_Config_Buffs.ShowGroups=nil end
+    if HealBot_Spells_Loadouts then
+        for x,_ in pairs(HealBot_Spells_Loadouts) do
+            if HealBot_Spells_Loadouts[x].ActionIcons then HealBot_Spells_Loadouts[x].ActionIcons=nil end
+            if HealBot_Spells_Loadouts[x].ActionIconsData then HealBot_Spells_Loadouts[x].ActionIconsData=nil end
+            for n=1,20 do
+                if HealBot_Spells_Loadouts[x].Binds and HealBot_Spells_Loadouts[x].Binds[n] and HealBot_Spells_Loadouts[x].Binds[n] == 1 then HealBot_Spells_Loadouts[x].Binds[n]=nil end
+            end
+        end
+        HealBot_Update_ConvertClassToPlayer()
     end
     if HealBot_Config.LastVersionUpdate then HealBot_Config.LastVersionUpdate=nil end
 

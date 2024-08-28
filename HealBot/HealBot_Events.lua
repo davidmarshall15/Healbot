@@ -40,14 +40,14 @@ function HealBot_Events_setAuxAssigns(vName, frame, vValue)
 end
 
 function HealBot_Events_UpdateCheckInterval()
-    HealBot_Events_luVars["EventsDelay"]=HealBot_Util_PerfVal2(958)
+    HealBot_Events_luVars["EventsDelay"]=HealBot_Util_PerfVal2(970)
     if HealBot_Events_luVars["EventsDelay"]<0.05 then
         HealBot_Events_luVars["EventsDelay"]=0.05
-    elseif HealBot_Events_luVars["EventsDelay"]>0.3 then
-        HealBot_Events_luVars["EventsDelay"]=0.3
+    elseif HealBot_Events_luVars["EventsDelay"]>0.25 then
+        HealBot_Events_luVars["EventsDelay"]=0.25
     end
     HealBot_Events_luVars["EventsShortDelay"]=HealBot_Util_Round((HealBot_Events_luVars["EventsDelay"]/8),2)
-    if HealBot_Events_luVars["EventsShortDelay"]<0.02 then HealBot_Events_luVars["EventsShortDelay"]=0.02 end
+    if HealBot_Events_luVars["EventsShortDelay"]<0.01 then HealBot_Events_luVars["EventsShortDelay"]=0.01 end
     HealBot_Debug_PerfUpdate("EventsDelay", HealBot_Events_luVars["EventsDelay"])
     HealBot_Debug_PerfUpdate("EventsShortDelay", HealBot_Events_luVars["EventsShortDelay"])
 end
@@ -461,11 +461,11 @@ end
 
 function HealBot_Events_EnemyDebuff(button)
     if button.frame == 10 then
-        if Healbot_Config_Skins.Enemy[Healbot_Config_Skins.Current_Skin]["SHOWDEBUFFS"] then
-            HealBot_Aura_CheckUnitAuras(button, true, Healbot_Config_Skins.Enemy[Healbot_Config_Skins.Current_Skin]["SELFDEBUFFS"])
+        if HealBot_Skins_GetBoolean("Enemy", "SHOWDEBUFFS") then
+            HealBot_Aura_CheckUnitAuras(button, true, HealBot_Skins_GetBoolean("Enemy", "SELFDEBUFFS"))
         end
-    elseif Healbot_Config_Skins.Enemy[Healbot_Config_Skins.Current_Skin]["SHOWDEBUFFSPLAYERFRAMES"] then
-        HealBot_Aura_CheckUnitAuras(button, true, Healbot_Config_Skins.Enemy[Healbot_Config_Skins.Current_Skin]["SELFDEBUFFSPLAYERFRAMES"])
+    elseif HealBot_Skins_GetBoolean("Enemy", "SHOWDEBUFFSPLAYERFRAMES") then
+        HealBot_Aura_CheckUnitAuras(button, true, HealBot_Skins_GetBoolean("Enemy", "SELFDEBUFFSPLAYERFRAMES"))
     end
 end
 
@@ -492,11 +492,11 @@ end
 
 function HealBot_Events_EnemyBuff(button)
     if button.frame == 10 then
-        if Healbot_Config_Skins.Enemy[Healbot_Config_Skins.Current_Skin]["SHOWBUFFS"] then
-            HealBot_Aura_CheckUnitAuras(button, false, Healbot_Config_Skins.Enemy[Healbot_Config_Skins.Current_Skin]["SELFBUFFS"])
+        if HealBot_Skins_GetBoolean("Enemy", "SHOWBUFFS") then
+            HealBot_Aura_CheckUnitAuras(button, false, HealBot_Skins_GetBoolean("Enemy", "SELFBUFFS"))
         end
-    elseif Healbot_Config_Skins.Enemy[Healbot_Config_Skins.Current_Skin]["SHOWBUFFSPLAYERFRAMES"] then
-        HealBot_Aura_CheckUnitAuras(button, false, Healbot_Config_Skins.Enemy[Healbot_Config_Skins.Current_Skin]["SELFBUFFSPLAYERFRAMES"])
+    elseif HealBot_Skins_GetBoolean("Enemy", "SHOWBUFFSPLAYERFRAMES") then
+        HealBot_Aura_CheckUnitAuras(button, false, HealBot_Skins_GetBoolean("Enemy", "SELFBUFFSPLAYERFRAMES"))
     end
 end
 
@@ -750,7 +750,7 @@ end
 
 function HealBot_Events_FocusChanged()
       --HealBot_setCall("HealBot_Events_FocusChanged")
-    if Healbot_Config_Skins.HealGroups[Healbot_Config_Skins.Current_Skin][11]["STATE"] and Healbot_Config_Skins.Enemy[Healbot_Config_Skins.Current_Skin]["INCFOCUS"] then
+    if Healbot_Config_Skins.HealGroups[Healbot_Config_Skins.Current_Skin][11]["STATE"] and HealBot_Skins_GetBoolean("Enemy", "INCFOCUS") then
         HealBot_nextRecalcParty(5,0.05)
     end
     HealBot_FocusChanged()

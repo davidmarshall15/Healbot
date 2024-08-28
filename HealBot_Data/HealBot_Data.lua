@@ -154,6 +154,7 @@ HealBot_ConfigDefaults={
   SkinSpecEnabled={},
   EnableHealthy=true,
   Profile=1,
+  SpecProfAtSave=0,
   };
 
 
@@ -816,7 +817,8 @@ HealBot_Config_Cures={};
 HealBot_Config_ActionIcons={}      -- Remove this soon, also from ToC's
 HealBot_Config_ActionIconsData={}  -- Remove this soon, also from ToC's
 HealBot_Class_Spells={};
-HealBot_Spells_Loadouts={};
+HealBot_Spells_Loadouts={};        -- Remove this soon, also from ToC's
+HealBot_Spell_Loadouts={};
 HealBot_Class_Buffs={};
 HealBot_Class_Cures={};
 HealBot_Skins_ActionIcons={}
