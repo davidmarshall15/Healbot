@@ -495,18 +495,18 @@ function HealBot_ToolTip_SetTooltipPos(frame)
     hbtPosFrm=_G["f"..frame.."_HealBot_Action"]
     hbtPosTop=hbtPosFrm:GetTop();
     hbtPosX, hbtPosY=GetCursorPosition();
-    if Healbot_Config_Skins.Frame[Healbot_Config_Skins.Current_Skin][frame]["TIPLOC"]>1 then
-        if Healbot_Config_Skins.Frame[Healbot_Config_Skins.Current_Skin][frame]["TIPLOC"] == 2 then
+    if HealBot_Skins_GetFrameVar("Frame", "TIPLOC", frame)>1 then
+        if HealBot_Skins_GetFrameVar("Frame", "TIPLOC", frame) == 2 then
             hbtPosY=hbtPosY/UIParent:GetScale();
             hbTip:SetOwner(hbtPosFrm, "ANCHOR_LEFT", 0, 0-(hbtPosTop-(hbtPosY-50)))
-        elseif Healbot_Config_Skins.Frame[Healbot_Config_Skins.Current_Skin][frame]["TIPLOC"] == 3 then
+        elseif HealBot_Skins_GetFrameVar("Frame", "TIPLOC", frame) == 3 then
             hbtPosY=hbtPosY/UIParent:GetScale();
             hbTip:SetOwner(hbtPosFrm, "ANCHOR_RIGHT", 0, 0-(hbtPosTop-(hbtPosY-50)))
-        elseif Healbot_Config_Skins.Frame[Healbot_Config_Skins.Current_Skin][frame]["TIPLOC"] == 4 then
+        elseif HealBot_Skins_GetFrameVar("Frame", "TIPLOC", frame) == 4 then
            hbTip:SetOwner(hbtPosFrm, "ANCHOR_TOP")
-        elseif Healbot_Config_Skins.Frame[Healbot_Config_Skins.Current_Skin][frame]["TIPLOC"] == 5 then
+        elseif HealBot_Skins_GetFrameVar("Frame", "TIPLOC", frame) == 5 then
            hbTip:SetOwner(hbtPosFrm, "ANCHOR_BOTTOM")
-        elseif Healbot_Config_Skins.Frame[Healbot_Config_Skins.Current_Skin][frame]["TIPLOC"] == 6 then
+        elseif HealBot_Skins_GetFrameVar("Frame", "TIPLOC", frame) == 6 then
             hbtPosX=hbtPosX/UIParent:GetScale();
             hbtPosY=hbtPosY/UIParent:GetScale();
             hbTip:SetOwner(hbtPosFrm, "ANCHOR_NONE")

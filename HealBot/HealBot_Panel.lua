@@ -142,7 +142,7 @@ end
 
 function HealBot_Panel_setAutoClose(frame)
       --HealBot_setCall("HealBot_Panel_setAutoClose")
-    HealBot_AutoCloseFrame[frame]=Healbot_Config_Skins.Frame[Healbot_Config_Skins.Current_Skin][frame]["AUTOCLOSE"]
+    HealBot_AutoCloseFrame[frame]=HealBot_Skins_GetFrameVar("Frame", "AUTOCLOSE", frame)
 end
 
 function HealBot_Panel_setCP(cpType, useCP)
@@ -1038,7 +1038,7 @@ function HealBot_Action_SetBackBarHeightWidth(frame, height, width, pad, headerW
       --HealBot_setCall("HealBot_Action_SetBackBarHeightWidth")
     if backBarsSize[frame]["FRAME"]~=frame then
         backBarsSize[frame]["FRAME"]=frame
-        local vSetAddHWScale=Healbot_Config_Skins.Frame[Healbot_Config_Skins.Current_Skin][frame]["SCALE"]
+        local vSetAddHWScale=HealBot_Skins_GetFrameVar("Frame", "SCALE", frame)
         backBarsSize[frame]["RMARGIN"]=ceil(Healbot_Config_Skins.HealBar[Healbot_Config_Skins.Current_Skin][frame]["RMARGIN"] * vSetAddHWScale)
         backBarsSize[frame]["CMARGIN"]=ceil(Healbot_Config_Skins.HealBar[Healbot_Config_Skins.Current_Skin][frame]["CMARGIN"] * vSetAddHWScale)
     end
@@ -1102,7 +1102,7 @@ function HealBot_Action_SetHeightWidth(numRows,numCols,numHeaders,frame)
         vSetHWextraHeight=vSetHWextraHeight+20
     end
     if hbFocusOn == frame then
-        vSetHWextraHeight=vSetHWextraHeight+10+ceil(Healbot_Config_Skins.HealBar[Healbot_Config_Skins.Current_Skin][frame]["HEIGHT"]*Healbot_Config_Skins.Frame[Healbot_Config_Skins.Current_Skin][frame]["SCALE"])
+        vSetHWextraHeight=vSetHWextraHeight+10+ceil(Healbot_Config_Skins.HealBar[Healbot_Config_Skins.Current_Skin][frame]["HEIGHT"]*HealBot_Skins_GetFrameVar("Frame", "SCALE", frame))
     end
     if numHeaders>0 then
         if HealBot_Skins_GetFrameVar("Anchors", "GROW", frame) == 1 then
@@ -1112,8 +1112,8 @@ function HealBot_Action_SetHeightWidth(numRows,numCols,numHeaders,frame)
         end
     end
     --HealBot_AddDebug("backBarsSize WIDTH for frame"..frame.." is "..backBarsSize[frame]["WIDTH"],"Enemy",true)
-    vSetHWextraHeight=vSetHWextraHeight+(Healbot_Config_Skins.Frame[Healbot_Config_Skins.Current_Skin][frame]["PADDING"]*2)
-    vSetHWextraWidth=vSetHWextraWidth+(Healbot_Config_Skins.Frame[Healbot_Config_Skins.Current_Skin][frame]["PADDING"]*2)
+    vSetHWextraHeight=vSetHWextraHeight+(HealBot_Skins_GetFrameVar("Frame", "PADDING", frame)*2)
+    vSetHWextraWidth=vSetHWextraWidth+(HealBot_Skins_GetFrameVar("Frame", "PADDING", frame)*2)
     if HealBot_Skins_GetFrameVar("Anchors", "GROW", frame) == 1 then
         vSetHWFrame:SetHeight(vSetHWextraHeight+(backBarsSize[frame]["HEIGHT"]*numCols)+(backBarsSize[frame]["RMARGIN"]*(numCols-1)))
         vSetHWFrame:SetWidth(vSetHWextraWidth+(backBarsSize[frame]["WIDTH"]*numRows)+(backBarsSize[frame]["CMARGIN"]*((numHeaders+numRows-1))))
@@ -1706,15 +1706,15 @@ function HealBot_Panel_TestBarShow(index,button,tRole,r,g,b,tpR,tpG,tpB)
             HealBot_colIndex["hcb"..index]=hbCustomRoleCols[button.roletxt].b
         end
 
-        if Healbot_Config_Skins.BarTextCol[Healbot_Config_Skins.Current_Skin][button.frame]["NAME"] == 2 or
-           Healbot_Config_Skins.BarTextCol[Healbot_Config_Skins.Current_Skin][button.frame]["NAME"] == 5 then
+        if HealBot_Skins_GetFrameVar("BarTextCol", "NAME", button.frame) == 2 or
+           HealBot_Skins_GetFrameVar("BarTextCol", "NAME", button.frame) == 5 then
             HealBot_colIndex["hctr"..index],HealBot_colIndex["hctg"..index],HealBot_colIndex["hctb"..index]=r,g,b
-        elseif Healbot_Config_Skins.BarTextCol[Healbot_Config_Skins.Current_Skin][button.frame]["NAME"] == 1 then
+        elseif HealBot_Skins_GetFrameVar("BarTextCol", "NAME", button.frame) == 1 then
             HealBot_colIndex["hctr"..index],HealBot_colIndex["hctg"..index],HealBot_colIndex["hctb"..index]=0,1,0
-        elseif Healbot_Config_Skins.BarTextCol[Healbot_Config_Skins.Current_Skin][button.frame]["NAME"] == 4 then
-            HealBot_colIndex["hctr"..index]=Healbot_Config_Skins.BarTextCol[Healbot_Config_Skins.Current_Skin][button.frame]["NCR"]
-            HealBot_colIndex["hctg"..index]=Healbot_Config_Skins.BarTextCol[Healbot_Config_Skins.Current_Skin][button.frame]["NCG"]
-            HealBot_colIndex["hctb"..index]=Healbot_Config_Skins.BarTextCol[Healbot_Config_Skins.Current_Skin][button.frame]["NCB"]
+        elseif HealBot_Skins_GetFrameVar("BarTextCol", "NAME", button.frame) == 4 then
+            HealBot_colIndex["hctr"..index]=HealBot_Skins_GetFrameVar("BarTextCol", "NCR", button.frame)
+            HealBot_colIndex["hctg"..index]=HealBot_Skins_GetFrameVar("BarTextCol", "NCG", button.frame)
+            HealBot_colIndex["hctb"..index]=HealBot_Skins_GetFrameVar("BarTextCol", "NCB", button.frame)
         else
             HealBot_colIndex["hctr"..index]=hbCustomRoleCols[button.roletxt].r
             HealBot_colIndex["hctg"..index]=hbCustomRoleCols[button.roletxt].g
@@ -1722,45 +1722,45 @@ function HealBot_Panel_TestBarShow(index,button,tRole,r,g,b,tpR,tpG,tpB)
         end
         button.text.r,button.text.g,button.text.b=r,g,b
 
-        if Healbot_Config_Skins.BarTextCol[Healbot_Config_Skins.Current_Skin][button.frame]["HLTH"] == 2 or
-           Healbot_Config_Skins.BarTextCol[Healbot_Config_Skins.Current_Skin][button.frame]["HLTH"] == 5 then
+        if HealBot_Skins_GetFrameVar("BarTextCol", "HLTH", button.frame) == 2 or
+           HealBot_Skins_GetFrameVar("BarTextCol", "HLTH", button.frame) == 5 then
             HealBot_colIndex["hctr2"..index],HealBot_colIndex["hctg2"..index],HealBot_colIndex["hctb2"..index]=r,g,b
-        elseif Healbot_Config_Skins.BarTextCol[Healbot_Config_Skins.Current_Skin][button.frame]["HLTH"] == 1 then
+        elseif HealBot_Skins_GetFrameVar("BarTextCol", "HLTH", button.frame) == 1 then
             HealBot_colIndex["hctr2"..index],HealBot_colIndex["hctg2"..index],HealBot_colIndex["hctb2"..index]=0,1,0
-        elseif Healbot_Config_Skins.BarTextCol[Healbot_Config_Skins.Current_Skin][button.frame]["HLTH"] == 4 then
-            HealBot_colIndex["hctr2"..index]=Healbot_Config_Skins.BarTextCol[Healbot_Config_Skins.Current_Skin][button.frame]["HCR"]
-            HealBot_colIndex["hctg2"..index]=Healbot_Config_Skins.BarTextCol[Healbot_Config_Skins.Current_Skin][button.frame]["HCG"]
-            HealBot_colIndex["hctb2"..index]=Healbot_Config_Skins.BarTextCol[Healbot_Config_Skins.Current_Skin][button.frame]["HCB"]
+        elseif HealBot_Skins_GetFrameVar("BarTextCol", "HLTH", button.frame) == 4 then
+            HealBot_colIndex["hctr2"..index]=HealBot_Skins_GetFrameVar("BarTextCol", "HCR", button.frame)
+            HealBot_colIndex["hctg2"..index]=HealBot_Skins_GetFrameVar("BarTextCol", "HCG", button.frame)
+            HealBot_colIndex["hctb2"..index]=HealBot_Skins_GetFrameVar("BarTextCol", "HCB", button.frame)
         else
             HealBot_colIndex["hctr2"..index]=hbCustomRoleCols[button.roletxt].r
             HealBot_colIndex["hctg2"..index]=hbCustomRoleCols[button.roletxt].g
             HealBot_colIndex["hctb2"..index]=hbCustomRoleCols[button.roletxt].b
         end
 
-        if Healbot_Config_Skins.BarTextCol[Healbot_Config_Skins.Current_Skin][button.frame]["STATE"] == 2 or
-           Healbot_Config_Skins.BarTextCol[Healbot_Config_Skins.Current_Skin][button.frame]["STATE"] == 5 then
+        if HealBot_Skins_GetFrameVar("BarTextCol", "STATE", button.frame) == 2 or
+           HealBot_Skins_GetFrameVar("BarTextCol", "STATE", button.frame) == 5 then
             HealBot_colIndex["hctr3"..index],HealBot_colIndex["hctg3"..index],HealBot_colIndex["hctb3"..index]=r,g,b
-        elseif Healbot_Config_Skins.BarTextCol[Healbot_Config_Skins.Current_Skin][button.frame]["STATE"] == 1 then
+        elseif HealBot_Skins_GetFrameVar("BarTextCol", "STATE", button.frame) == 1 then
             HealBot_colIndex["hctr3"..index],HealBot_colIndex["hctg3"..index],HealBot_colIndex["hctb3"..index]=0,1,0
-        elseif Healbot_Config_Skins.BarTextCol[Healbot_Config_Skins.Current_Skin][button.frame]["STATE"] == 4 then
-            HealBot_colIndex["hctr3"..index]=Healbot_Config_Skins.BarTextCol[Healbot_Config_Skins.Current_Skin][button.frame]["SCR"]
-            HealBot_colIndex["hctg3"..index]=Healbot_Config_Skins.BarTextCol[Healbot_Config_Skins.Current_Skin][button.frame]["SCG"]
-            HealBot_colIndex["hctb3"..index]=Healbot_Config_Skins.BarTextCol[Healbot_Config_Skins.Current_Skin][button.frame]["SCB"]
+        elseif HealBot_Skins_GetFrameVar("BarTextCol", "STATE", button.frame) == 4 then
+            HealBot_colIndex["hctr3"..index]=HealBot_Skins_GetFrameVar("BarTextCol", "SCR", button.frame)
+            HealBot_colIndex["hctg3"..index]=HealBot_Skins_GetFrameVar("BarTextCol", "SCG", button.frame)
+            HealBot_colIndex["hctb3"..index]=HealBot_Skins_GetFrameVar("BarTextCol", "SCB", button.frame)
         else
             HealBot_colIndex["hctr3"..index]=hbCustomRoleCols[button.roletxt].r
             HealBot_colIndex["hctg3"..index]=hbCustomRoleCols[button.roletxt].g
             HealBot_colIndex["hctb3"..index]=hbCustomRoleCols[button.roletxt].b
         end
 
-        if Healbot_Config_Skins.BarTextCol[Healbot_Config_Skins.Current_Skin][button.frame]["AGGRO"] == 2 or
-           Healbot_Config_Skins.BarTextCol[Healbot_Config_Skins.Current_Skin][button.frame]["AGGRO"] == 5 then
+        if HealBot_Skins_GetFrameVar("BarTextCol", "AGGRO", button.frame) == 2 or
+           HealBot_Skins_GetFrameVar("BarTextCol", "AGGRO", button.frame) == 5 then
             HealBot_colIndex["hctr4"..index],HealBot_colIndex["hctg4"..index],HealBot_colIndex["hctb4"..index]=r,g,b
-        elseif Healbot_Config_Skins.BarTextCol[Healbot_Config_Skins.Current_Skin][button.frame]["AGGRO"] == 1 then
+        elseif HealBot_Skins_GetFrameVar("BarTextCol", "AGGRO", button.frame) == 1 then
             HealBot_colIndex["hctr4"..index],HealBot_colIndex["hctg4"..index],HealBot_colIndex["hctb4"..index]=0,1,0
-        elseif Healbot_Config_Skins.BarTextCol[Healbot_Config_Skins.Current_Skin][button.frame]["AGGRO"] == 4 then
-            HealBot_colIndex["hctr4"..index]=Healbot_Config_Skins.BarTextCol[Healbot_Config_Skins.Current_Skin][button.frame]["ACR"]
-            HealBot_colIndex["hctg4"..index]=Healbot_Config_Skins.BarTextCol[Healbot_Config_Skins.Current_Skin][button.frame]["ACG"]
-            HealBot_colIndex["hctb4"..index]=Healbot_Config_Skins.BarTextCol[Healbot_Config_Skins.Current_Skin][button.frame]["ACB"]
+        elseif HealBot_Skins_GetFrameVar("BarTextCol", "AGGRO", button.frame) == 4 then
+            HealBot_colIndex["hctr4"..index]=HealBot_Skins_GetFrameVar("BarTextCol", "ACR", button.frame)
+            HealBot_colIndex["hctg4"..index]=HealBot_Skins_GetFrameVar("BarTextCol", "ACG", button.frame)
+            HealBot_colIndex["hctb4"..index]=HealBot_Skins_GetFrameVar("BarTextCol", "ACB", button.frame)
         else
             HealBot_colIndex["hctr4"..index]=hbCustomRoleCols[button.roletxt].r
             HealBot_colIndex["hctg4"..index]=hbCustomRoleCols[button.roletxt].g
@@ -2460,7 +2460,7 @@ function HealBot_Panel_SetFocusGroups()
         HealBot_Panel_luVars["FocusGroups"]=HealBot_Globals.OverrideEffects["FOCUSGROUPS"]
         HealBot_Panel_luVars["FGroups"]=HealBot_Globals.OverrideFocusGroups
     else
-        HealBot_Panel_luVars["FocusGroups"]=Healbot_Config_Skins.General[Healbot_Config_Skins.Current_Skin]["FOCUSGROUPS"]
+        HealBot_Panel_luVars["FocusGroups"]=HealBot_Skins_GetVar("General", "FOCUSGROUPS")
         HealBot_Panel_luVars["FGroups"]=Healbot_Config_Skins.FocusGroups[Healbot_Config_Skins.Current_Skin]
     end
 end

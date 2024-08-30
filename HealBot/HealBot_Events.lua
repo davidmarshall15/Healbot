@@ -632,9 +632,9 @@ function HealBot_Events_UnitThreat(button)
     if UnitAffectingCombat(button.unit) then
         if button.status.current<HealBot_Unit_Status["DC"] then
             if not HealBot_Data["UILOCK"] and HealBot_retLuVars("UpdateEnemyFrame") and HealBot_Data["PALIVE"] then
-                if Healbot_Config_Skins.General[Healbot_Config_Skins.Current_Skin]["UNITINCOMBAT"]>1 and button.status.range>0 and
+                if HealBot_Skins_GetVar("General", "UNITINCOMBAT")>1 and button.status.range>0 and
                    HealBot_ValidLivingEnemy(button.unit, button.unit.."target") and UnitIsUnit(button.unit, button.unit.."targettarget") then
-                    if Healbot_Config_Skins.General[Healbot_Config_Skins.Current_Skin]["UNITINCOMBAT"] == 3 then
+                    if HealBot_Skins_GetVar("General", "UNITINCOMBAT") == 3 then
                         HealBot_PlayerRegenDisabled()
                     else
                         HealBot_UnitInCombat()

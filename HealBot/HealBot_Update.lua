@@ -1038,16 +1038,22 @@ function HealBot_Update_AllHealth()
     end
 end
 
-function HealBot_Update_ClearLowMana()
+function HealBot_Update_ClearLowMana(frame)
       --HealBot_setCall("HealBot_Update_ClearLowMana")
     for _,xButton in pairs(HealBot_Unit_Button) do
-        HealBot_DoClearLowMana(xButton)
+        if xButton.frame == frame then
+            HealBot_DoClearLowMana(xButton)
+        end
     end
     for _,xButton in pairs(HealBot_Private_Button) do
-        HealBot_DoClearLowMana(xButton)
+        if xButton.frame == frame then
+            HealBot_DoClearLowMana(xButton)
+        end
     end
     for _,xButton in pairs(HealBot_Extra_Button) do
-        HealBot_DoClearLowMana(xButton)
+        if xButton.frame == frame then
+            HealBot_DoClearLowMana(xButton)
+        end
     end
 end
 

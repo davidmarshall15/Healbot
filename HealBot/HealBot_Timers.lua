@@ -366,7 +366,6 @@ function HealBot_Timers_SpellsLoaded()
     HealBot_Timers_Set("SKINS","PowerIndicator")
     HealBot_Timers_Set("INIT","PrepSetAllAttribs")
     HealBot_Timers_Set("AURA","InitAuraData")
-    HealBot_Timers_Set("PLAYER","LoadProfile")
 end
 
 function HealBot_Timers_SpellsResetTabs()

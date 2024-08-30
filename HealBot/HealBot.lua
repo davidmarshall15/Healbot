@@ -420,7 +420,7 @@ function HealBot_StartMoving(HBframe, frame)
     if not HBframe.isMoving then
         HBframe:StartMoving();
         HBframe.isMoving=true;
-        if frame and Healbot_Config_Skins.General[Healbot_Config_Skins.Current_Skin]["STICKYFRAME"] and frame>1 then HealBot_luVars["MovingFrame"]=frame end
+        if frame and HealBot_Skins_GetBoolean("General", "STICKYFRAME") and frame>1 then HealBot_luVars["MovingFrame"]=frame end
     end
 end
 
@@ -1084,7 +1084,7 @@ function HealBot_UnitMana(button)
         hbManaCurrent=UnitPower(button.unit) or 0
         hbManaMax=UnitPowerMax(button.unit) or 0
         if button.mana.current~=hbManaCurrent or button.mana.max~=hbManaMax or button.mana.change then
-            if not HealBot_Data["UILOCK"] and HEALBOT_GAME_VERSION<5 and button.isplayer and not button.player and (hbManaMax>(button.mana.max*1.1) or hbManaMax<(button.mana.max*0.9)) then
+            if not HealBot_Data["UILOCK"] and HEALBOT_GAME_VERSION<5 and button.isplayer and not button.player and (hbManaMax>(button.mana.max*1.25) or hbManaMax<(button.mana.max*0.75)) then
                 HealBot_Events_SpecChange(button)
             end
             button.mana.current=hbManaCurrent
@@ -1708,6 +1708,7 @@ function HealBot_Load()
         HealBot_Timers_Set("INIT","SeparateInHealsAbsorbs")
         HealBot_Timers_Set("INIT","InitPlugins")
         HealBot_Timers_Set("INIT","RegEvents")
+        HealBot_Timers_Set("PLAYER","LoadProfile")
         HealBot_Timers_Set("SKINS","RaidTargetUpdate")
         HealBot_Timers_Set("SKINS","TextExtraCustomCols")
         HealBot_Timers_Set("SKINS","PowerIndicator")
@@ -2925,9 +2926,12 @@ function HealBot_UnitHealth(button, force)
                 if HealBot_luVars["regAggro"] and health<button.health.current then
                     HealBot_Events_UnitThreat(button)
                 end
-                if healthMax>(button.health.max*1.1) or healthMax<(button.health.max*0.9) then
-                    if button.player then HealBot_Timers_Set("LAST", "SetInHealAbsorbMax") end
-                    if HEALBOT_GAME_VERSION<5 then HealBot_Events_SpecChange(button) end
+                if healthMax>(button.health.max*1.25) or healthMax<(button.health.max*0.75) then
+                    if button.player then 
+                        HealBot_Timers_Set("LAST", "SetInHealAbsorbMax")
+                    elseif HEALBOT_GAME_VERSION<5 then 
+                        HealBot_Events_SpecChange(button) 
+                    end
                 end
             end
             if button.frame<10 and health<button.health.current and HealBot_luVars["HealthDropPct"]<=(button.health.hpct-floor((health/healthMax)*1000))
@@ -4610,7 +4614,7 @@ function HealBot_CheckFramesOnCombatFrame(frame)
                  and Healbot_Config_Skins.Healing[Healbot_Config_Skins.Current_Skin]["FOCUSINCOMBAT"] == 1) then
         check=false
     end
-    if check and prdCheckActiveFrames[frame] and Healbot_Config_Skins.Frame[Healbot_Config_Skins.Current_Skin][frame]["AUTOCLOSE"]>1 then
+    if check and prdCheckActiveFrames[frame] and HealBot_Skins_GetFrameVar("Frame", "AUTOCLOSE", frame)>1 then
         HealBot_luVars["CheckFramesOnCombat"]=true
     end
 end
@@ -4711,10 +4715,13 @@ function HealBot_PlayerRegenDisabled()
     HealBot_Update_AllUnitBars(true)
     if HealBot_luVars["CheckFramesOnCombat"] then
         for f=1,10 do
-            if prdCheckActiveFrames[f] and Healbot_Config_Skins.Frame[Healbot_Config_Skins.Current_Skin][f]["AUTOCLOSE"]>1 then
+            if prdCheckActiveFrames[f] and HealBot_Skins_GetFrameVar("Frame", "AUTOCLOSE", f)>1 then
                 if not HealBot_Action_FrameIsVisible(f) then
                     HealBot_Action_ShowPanel(f)
                 end
+            end
+            if HealBot_Action_FrameIsVisible(f) and not Healbot_Config_Skins.HealBar[Healbot_Config_Skins.Current_Skin][f]["LOWMANACOMBAT"] then
+                HealBot_Update_ClearLowMana(f)
             end
         end
     end
@@ -4726,7 +4733,7 @@ function HealBot_PlayerRegenDisabled()
     if not HealBot_luVars["hlPlayerBarsIC"] and HealBot_luVars["HighlightTarget"] then
         HealBot_PlayerTargetChanged()
     end
-    if not Healbot_Config_Skins.General[Healbot_Config_Skins.Current_Skin]["LOWMANACOMBAT"] then HealBot_Update_ClearLowMana() end
+    
     HealBot_Timers_Set("LAST","ResetUnitStatus")
     if HealBot_luVars["rcEnd"] then
         HealBot_luVars["rcEnd"]=false
