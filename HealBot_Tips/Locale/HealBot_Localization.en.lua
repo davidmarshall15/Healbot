@@ -23,6 +23,7 @@ function HealBot_Lang_Options_enALL()
     local hbSpellsTips7="\n--\n".._G["GREEN_FONT_COLOR_CODE"].."NOTE: Debuff types can also be set on the Debuffs General tab."
     local hbSpellsTips8="\n--\n".._G["ORANGE_FONT_COLOR_CODE"].."NOTE: In case of a conflict between these settings, the following applies.\n--\n".._G["ORANGE_FONT_COLOR_CODE"].."The settings used will be the first found in the following order:.\n".._G["ORANGE_FONT_COLOR_CODE"].."1. Target\n".._G["ORANGE_FONT_COLOR_CODE"].."2. Private List targets\n".._G["ORANGE_FONT_COLOR_CODE"].."3. Tank targets\n".._G["ORANGE_FONT_COLOR_CODE"].."4. Group targets\n".._G["ORANGE_FONT_COLOR_CODE"].."4. Raid targets.\n--\n".._G["ORANGE_FONT_COLOR_CODE"].."An example of a conflict that may arise, is when a tank is part of\n".._G["ORANGE_FONT_COLOR_CODE"].."your group and both the Tank targets and Group targets are turned on.\n".._G["ORANGE_FONT_COLOR_CODE"].."In this case, Tank target settings will be used."
     local hbSpellsTips9="\n--\n".._G["YELLOW_FONT_COLOR_CODE"].."NOTE: Using Players frame is Experimental, feedback welcome."
+    local hbSpellsTips10="\n--\n".._G["YELLOW_FONT_COLOR_CODE"].."NOTE: This option only works with spells."
     HEALBOT_OPTIONS_HELP_TITLES={
                         -- Reset Colours
                                  ["RESETCOLS"]="Reset Col"..HEALBOT_enWORD_COLOUR_SUFFIX,
@@ -801,6 +802,11 @@ function HealBot_Lang_Options_enALL()
                                  ["INOUTIMPORTPRESETCOLS"]=HEALBOT_OPTIONS_BUTTONIMPORT,
                         -- Plugin Tab
                                  ["SELECTPLUGIN"]=HEALBOT_OPTIONS_PLUGINS,
+                        -- Buttons
+                                 ["GLOBALDEFAULT"]=HEALBOT_OPTIONS_DEFAULTS,
+                                 ["UNUSEDDEFAULT"]=HEALBOT_OPTIONS_UNUSEDDEFAULTS,
+                                 ["LOCALDEFAULT"]=HEALBOT_OPTIONS_LOCALDEFAULTS,
+                                 ["RESET"]=HEALBOT_OPTIONS_SOFTRESET,
                               }
     HEALBOT_OPTIONS_HELP_TEXT={
                         -- Reset Colours
@@ -843,10 +849,10 @@ function HealBot_Lang_Options_enALL()
                                ["SPELLSUSEICONCMDS"]="Turn On/Off the use of Icon Commands set on this tab.\n--\n".._G["GREEN_FONT_COLOR_CODE"].."On: Click on buff/debuff icons to run commands with icon tooltips.\n".._G["GREEN_FONT_COLOR_CODE"].."Off: Click through icons to cast spells on the health/emergancy bar with normal tooltips.",
                                ["SPELLSBUTTON"]="Modifier key held when casting.\n--\n".."|cff77c8ff".."TIP: Set spells with the same range on the same modifier keys combination.",
                                ["SPELLSBUTTONCAST"]="Timing of the spell cast\n".._G["GREEN_FONT_COLOR_CODE"].."Cast when the button is Pressed or Released.",
-                               ["SPELLSAVOIDBLUE"]="Cast an invalid spell and ended up with\na blue cursor? this option is your friend.",
-                               ["SPELLSAUTOTARGET"]="Set the healers target to the character\nreceiving the current spell cast.",
+                               ["SPELLSAVOIDBLUE"]="Cast an invalid spell and ended up with\na blue cursor? this option is your friend."..hbSpellsTips10,
+                               ["SPELLSAUTOTARGET"]="Set the healers target to the character\nreceiving the current spell cast."..hbSpellsTips10,
                                ["SPELLSTARGETLASTTARGET"]="Target the last target after the cast has started.\n--\n".._G["YELLOW_FONT_COLOR_CODE"].."NOTE: Only applies to clicks using Auto Target.",
-                               ["SPELLSAUTOTRINKET"]="Attempt to use trinkets automatically when casting spells..\n--\n".._G["YELLOW_FONT_COLOR_CODE"].."NOTE: Errors can be automatically suppressed when using Auto Trinkets.\n".._G["YELLOW_FONT_COLOR_CODE"].."Check the bottom of the HealBot tab for current settings.\n".._G["ORANGE_FONT_COLOR_CODE"].."-------------\n".._G["ORANGE_FONT_COLOR_CODE"].."WARNING\n".._G["ORANGE_FONT_COLOR_CODE"].."-------------\n".._G["ORANGE_FONT_COLOR_CODE"].."Some trinkets break the cast using this method\n".._G["ORANGE_FONT_COLOR_CODE"].."ensure the trinket works with the spell selected.",
+                               ["SPELLSAUTOTRINKET"]="Attempt to use trinkets automatically when casting spells.\n--\n".._G["YELLOW_FONT_COLOR_CODE"].."NOTE: Errors can be automatically suppressed when using Auto Trinkets.\n".._G["YELLOW_FONT_COLOR_CODE"].."Check the bottom of the HealBot tab for current settings.\n".._G["ORANGE_FONT_COLOR_CODE"].."-------------\n".._G["ORANGE_FONT_COLOR_CODE"].."WARNING\n".._G["ORANGE_FONT_COLOR_CODE"].."-------------\n".._G["ORANGE_FONT_COLOR_CODE"].."Some trinkets break the cast using this method\n".._G["ORANGE_FONT_COLOR_CODE"].."ensure the trinket works with the spell selected."..hbSpellsTips10,
                                ["SPELLSBUTTONCLICK"]="Spell to cast on the Left Button."..hbSpellsTips1.."\n--\n".._G["GREEN_FONT_COLOR_CODE"].."NOTE: For each modifier key combination, range checking is done on the Left click.\n".._G["GREEN_FONT_COLOR_CODE"].."NOTE: On the Left click, range checking is only done when a spell is set.\n".."|cff77c8ff".."TIP: Do not set a macro, item or command on the Left click.\n".."|cff77c8ff".."TIP: Set spells with the same range on the same modifier keys combination."..hbSpellsTips3,
                                ["SPELLSBUTTONSHIFTCLICK"]="Spell to cast on the Middle Button."..hbSpellsTips1..hbSpellsTips2..hbSpellsTips3,
                                ["SPELLSBUTTONCTRLCLICK"]="Spell to cast on the Right Button."..hbSpellsTips1..hbSpellsTips2..hbSpellsTips3,
@@ -1583,7 +1589,12 @@ function HealBot_Lang_Options_enALL()
                                ["INOUTIMPORTPRESETCOLS"]="Import loads in the data from the large text box.",
                         -- Plugin Tab
                                ["SELECTPLUGIN"]="Select plugin.\n--\nInformation on plugins can be found at "..HEALBOT_ABOUT_URL.."\n--\n".._G["GREEN_FONT_COLOR_CODE"].."- HealBot Threat: ".._G["FONT_COLOR_CODE_CLOSE"].."See threat for all players on multiple mobs.\n".._G["GREEN_FONT_COLOR_CODE"].."- HealBot TimeToDie: ".._G["FONT_COLOR_CODE_CLOSE"].."Player damage tracker showing how soon players will die.\n".._G["GREEN_FONT_COLOR_CODE"].."- HealBot TimeToLive: ".._G["FONT_COLOR_CODE_CLOSE"].."Resurrection monitor tracking incoming and pending resurrections.\n".._G["GREEN_FONT_COLOR_CODE"].."- HealBot ExtraButtons: ".._G["FONT_COLOR_CODE_CLOSE"].."Set spells for use with an MMO mouse on buttons 6 - 20\n".._G["GREEN_FONT_COLOR_CODE"].."- HealBot CombatProt: ".._G["FONT_COLOR_CODE_CLOSE"].."Reserve bars for missing players, protects against missing bars in combat.\n".._G["GREEN_FONT_COLOR_CODE"].."- HealBot Performance: ".._G["FONT_COLOR_CODE_CLOSE"].."Tweak internal timers and effects.\n".._G["GREEN_FONT_COLOR_CODE"].."- HealBot MyCooldowns: ".._G["FONT_COLOR_CODE_CLOSE"].."Track cooldowns for your spells and abilities.\n".._G["GREEN_FONT_COLOR_CODE"].."- HealBot Tweaks: ".._G["FONT_COLOR_CODE_CLOSE"].."Tweak internal settings.\n".._G["GREEN_FONT_COLOR_CODE"].."- HealBot Requests: ".._G["FONT_COLOR_CODE_CLOSE"].."Players can whisper you to request a buff or ability.\n".._G["GREEN_FONT_COLOR_CODE"].."- HealBot AuraWatch: ".._G["FONT_COLOR_CODE_CLOSE"].."Monitor your cooldowns and optionally other player conditions to run alerts.\n".._G["GREEN_FONT_COLOR_CODE"].."- HealBot HealthWatch: ".._G["FONT_COLOR_CODE_CLOSE"].."Monitor players and alert on low health.\n".._G["GREEN_FONT_COLOR_CODE"].."- HealBot ManaWatch: ".._G["FONT_COLOR_CODE_CLOSE"].."Monitor players and alert on low mana.\n".._G["GREEN_FONT_COLOR_CODE"].."- HealBot Media: ".._G["FONT_COLOR_CODE_CLOSE"].."Exclude unwanted textures, fonts and sounds from HealBot options.",
-                              }
+                        -- Buttons
+                               ["GLOBALDEFAULT"]="Reset all settings for all characters to default values",
+                               ["UNUSEDDEFAULT"]="Reset all settings for unused frames in the current skin to default values\n--\n".._G["GREEN_FONT_COLOR_CODE"].."To save memory, this is highly recommended.",
+                               ["LOCALDEFAULT"]="Reset spells, general buffs and general debuffs on your current character to default values",
+                               ["RESET"]="Reset HealBot frames.\n--\n".._G["GREEN_FONT_COLOR_CODE"].."This does not affect your settings.",
+                              }                               
 
 end
 

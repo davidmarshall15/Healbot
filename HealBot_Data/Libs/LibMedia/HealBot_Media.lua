@@ -237,23 +237,23 @@ function HealBot_Media_UpdateType(mType, frame, auxId)
     if HealBot_Options:IsVisible() then
         if mType == "Textures" then
             HealBot_Options_UpdateMediaTexture(HealBot_Options_SkinFrameAliasTextureS,HealBot_Skins_GetFrameVar("FrameAliasBar", "TEXTURE", frame))
-            HealBot_Options_UpdateMediaTexture(HealBot_Options_BarTextureS,Healbot_Config_Skins.HealBar[Healbot_Config_Skins.Current_Skin][frame]["TEXTURE"])
+            HealBot_Options_UpdateMediaTexture(HealBot_Options_BarTextureS,HealBot_Skins_GetFrameVar("HealBar", "TEXTURE", frame))
             HealBot_Options_UpdateMediaTexture(HealBot_Options_HeadTextureS,HealBot_Skins_GetFrameVar("HeadBar", "TEXTURE", frame))
-            HealBot_Options_UpdateMediaTexture(HealBot_EmergBarTexture, Healbot_Config_Skins.Emerg[Healbot_Config_Skins.Current_Skin][frame]["TEXTURE"])
+            HealBot_Options_UpdateMediaTexture(HealBot_EmergBarTexture, HealBot_Skins_GetFrameVar("Emerg", "TEXTURE", frame))
         elseif mType == "Fonts" then
-            HealBot_Options_UpdateMediaFont(HealBot_Options_HeadFontNameS,Healbot_Config_Skins.HeadText[Healbot_Config_Skins.Current_Skin][frame]["FONT"])
-            HealBot_Options_UpdateMediaFont(HealBot_Options_AliasFontName,Healbot_Config_Skins.FrameAlias[Healbot_Config_Skins.Current_Skin][frame]["FONT"])
-            HealBot_Options_UpdateMediaFont(HealBot_Options_HealthFontName,Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][frame]["HFONT"])
-            HealBot_Options_UpdateMediaFont(HealBot_Options_AggroFontName,Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][frame]["AFONT"])
-            HealBot_Options_UpdateMediaFont(HealBot_Options_AuxFontName,HealBot_Data_AuxGetBarTextVar("FONT", frame, auxId))
-            HealBot_Options_UpdateMediaFont(HealBot_Options_StateFontName,Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][frame]["SFONT"])
+            HealBot_Options_UpdateMediaFont(HealBot_Options_HeadFontNameS,HealBot_Skins_GetFrameVar("HeadText", "FONT", frame))
+            HealBot_Options_UpdateMediaFont(HealBot_Options_AliasFontName,HealBot_Skins_GetFrameVar("FrameAlias", "FONT", frame))
+            HealBot_Options_UpdateMediaFont(HealBot_Options_HealthFontName,HealBot_Skins_GetFrameVar("BarText", "HFONT", frame))
+            HealBot_Options_UpdateMediaFont(HealBot_Options_AggroFontName,HealBot_Skins_GetFrameVar("BarText", "AFONT", frame))
+            HealBot_Options_UpdateMediaFont(HealBot_Options_AuxFontName,HealBot_Aux_GetBarTextVar("FONT", frame, auxId))
+            HealBot_Options_UpdateMediaFont(HealBot_Options_StateFontName,HealBot_Skins_GetFrameVar("BarText", "SFONT", frame))
             HealBot_Options_UpdateMediaFont(HealBot_Options_ActionIconsFontName,HealBot_ActionIcons_GetVars("FONT", frame))
             HealBot_Options_UpdateMediaFont(HealBot_Options_ActionIconsFontCountName,HealBot_ActionIcons_GetVars("FONTCOUNT", frame))
             for z=1,3 do
                 HealBot_Options_UpdateMediaFont(HealBot_BarButtonIconBuffFont,HealBot_Skins_GetIconTextVar("BUFFFONT", frame, z))
                 HealBot_Options_UpdateMediaFont(HealBot_BarButtonIconFont, HealBot_Skins_GetIconTextVar("DBFONT", frame, z))
             end
-            HealBot_Options_UpdateMediaFont(HealBot_Options_FontName, Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][frame]["FONT"])
+            HealBot_Options_UpdateMediaFont(HealBot_Options_FontName, HealBot_Skins_GetFrameVar("BarText", "FONT", frame))
         else
             HealBot_Options_val_OnLoad(HealBot_Options_WarningSound,HEALBOT_OPTIONS_SOUND,1,#HealBot_Sounds,1,2)
             HealBot_Options_SetText(HealBot_Options_WarningSound,HEALBOT_OPTIONS_SOUND)
@@ -267,61 +267,56 @@ end
 
 local function HealBot_Media_UpdateUsedTextures(button)
       --HealBot_setCall("HealBot_Media_UpdateUsedTextures", button)
-    HealBot_Media_UpdateTexture(button.gref["Bar"], Healbot_Config_Skins.HealBar[Healbot_Config_Skins.Current_Skin][button.frame]["TEXTURE"], "Media_UpdateUsedTextures - HealBar")
-    HealBot_Media_UpdateTexture(button.gref["InHeal"], Healbot_Config_Skins.HealBar[Healbot_Config_Skins.Current_Skin][button.frame]["TEXTURE"], "Media_UpdateUsedTextures - HealBar")
+    HealBot_Media_UpdateTexture(button.gref["Bar"], HealBot_Skins_GetFrameVar("HealBar", "TEXTURE", button.frame), "Media_UpdateUsedTextures - HealBar")
+    HealBot_Media_UpdateTexture(button.gref["InHeal"], HealBot_Skins_GetFrameVar("HealBar", "TEXTURE", button.frame), "Media_UpdateUsedTextures - HealBar")
     for x=1,9 do
-        HealBot_Media_UpdateTexture(button.gref.aux[x], Healbot_Config_Skins.HealBar[Healbot_Config_Skins.Current_Skin][button.frame]["TEXTURE"], "Media_UpdateUsedTextures - HealBar")
+        HealBot_Media_UpdateTexture(button.gref.aux[x], HealBot_Skins_GetFrameVar("HealBar", "TEXTURE", button.frame), "Media_UpdateUsedTextures - HealBar")
     end
-    HealBot_Media_UpdateTexture(button.gref["Absorb"], Healbot_Config_Skins.HealBar[Healbot_Config_Skins.Current_Skin][button.frame]["TEXTURE"], "Media_UpdateUsedTextures - HealBar")
+    HealBot_Media_UpdateTexture(button.gref["Absorb"], HealBot_Skins_GetFrameVar("HealBar", "TEXTURE", button.frame), "Media_UpdateUsedTextures - HealBar")
     button.gref["Bar"]:GetStatusBarTexture():SetHorizTile(false)
     button.gref["InHeal"]:GetStatusBarTexture():SetHorizTile(false)
     for x=1,9 do
         button.gref.aux[x]:GetStatusBarTexture():SetHorizTile(false)
     end
     button.gref["Absorb"]:GetStatusBarTexture():SetHorizTile(false)
-    HealBot_Media_UpdateTexture(HealBot_Emerg_Button[button.id].bar, Healbot_Config_Skins.Emerg[Healbot_Config_Skins.Current_Skin][button.frame]["TEXTURE"], "Media_UpdateUsedTextures - Emerg")
+    HealBot_Media_UpdateTexture(HealBot_Emerg_Button[button.id].bar, HealBot_Skins_GetFrameVar("Emerg", "TEXTURE", button.frame), "Media_UpdateUsedTextures - Emerg")
     HealBot_Emerg_Button[button.id].bar:GetStatusBarTexture():SetHorizTile(false)
 end
 
 local function HealBot_Media_UpdateUsedButtonText(button)
       --HealBot_setCall("HealBot_Media_UpdateUsedButtonText", button)
     HealBot_Media_UpdateFont(button.gref.txt["text"], 
-                             Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][button.frame]["FONT"], 
-                             ceil(Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][button.frame]["HEIGHT"]*
-                                  HealBot_Skins_GetFrameVar("Frame", "SCALE", button.frame)), 
-                             Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][button.frame]["OUTLINE"],
+                             HealBot_Skins_GetFrameVar("BarText", "FONT", button.frame), 
+                             ceil(HealBot_Skins_GetFrameVar("BarText", "HEIGHT", button.frame)*HealBot_Skins_GetFrameVar("Frame", "SCALE", button.frame)), 
+                             HealBot_Skins_GetFrameVar("BarText", "OUTLINE", button.frame),
                              "Media_UpdateUsedButtonText - BarText")
     HealBot_Media_UpdateFont(button.gref.txt["text2"], 
-                             Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][button.frame]["HFONT"], 
-                             ceil(Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][button.frame]["HHEIGHT"]*
-                                  HealBot_Skins_GetFrameVar("Frame", "SCALE", button.frame)), 
-                             Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][button.frame]["HOUTLINE"],
+                             HealBot_Skins_GetFrameVar("BarText", "HFONT", button.frame), 
+                             ceil(HealBot_Skins_GetFrameVar("BarText", "HHEIGHT", button.frame)*HealBot_Skins_GetFrameVar("Frame", "SCALE", button.frame)), 
+                             HealBot_Skins_GetFrameVar("BarText", "HOUTLINE", button.frame),
                              "Media_UpdateUsedButtonText - BarText")
     HealBot_Media_UpdateFont(button.gref.txt["text3"], 
-                             Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][button.frame]["SFONT"], 
-                             ceil(Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][button.frame]["SHEIGHT"]*
-                                  HealBot_Skins_GetFrameVar("Frame", "SCALE", button.frame)), 
-                             Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][button.frame]["SOUTLINE"],
+                             HealBot_Skins_GetFrameVar("BarText", "SFONT", button.frame), 
+                             ceil(HealBot_Skins_GetFrameVar("BarText", "SHEIGHT", button.frame)*HealBot_Skins_GetFrameVar("Frame", "SCALE", button.frame)), 
+                             HealBot_Skins_GetFrameVar("BarText", "SOUTLINE", button.frame),
                              "Media_UpdateUsedButtonText - BarText")
     HealBot_Media_UpdateFont(button.gref.txt["text4"], 
-                             Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][button.frame]["AFONT"], 
-                             ceil(Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][button.frame]["AHEIGHT"]*
-                                  HealBot_Skins_GetFrameVar("Frame", "SCALE", button.frame)), 
-                             Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][button.frame]["AOUTLINE"],
+                             HealBot_Skins_GetFrameVar("BarText", "AFONT", button.frame), 
+                             ceil(HealBot_Skins_GetFrameVar("BarText", "AHEIGHT", button.frame)*HealBot_Skins_GetFrameVar("Frame", "SCALE", button.frame)), 
+                             HealBot_Skins_GetFrameVar("BarText", "AOUTLINE", button.frame),
                              "Media_UpdateUsedButtonText - BarText")
-    if ceil(Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][button.frame]["HHEIGHT"]*HealBot_Skins_GetFrameVar("Frame", "SCALE", button.frame))-HealBot_Globals.VehicleFontSizeReduction<2 then
+    if ceil(HealBot_Skins_GetFrameVar("BarText", "HHEIGHT", button.frame)*HealBot_Skins_GetFrameVar("Frame", "SCALE", button.frame))-HealBot_Globals.VehicleFontSizeReduction<2 then
         HealBot_Media_UpdateFont(button.gref.txt["text5"],
-                                 Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][button.frame]["HFONT"],
+                                 HealBot_Skins_GetFrameVar("Frame", "HFONT", button.frame),
                                  2,
-                                 Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][button.frame]["HOUTLINE"],
+                                 HealBot_Skins_GetFrameVar("Frame", "HOUTLINE", button.frame),
                                  "Media_UpdateUsedButtonText - BarText")
 
     else
         HealBot_Media_UpdateFont(button.gref.txt["text5"], 
-                                 Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][button.frame]["HFONT"], 
-                                 ceil(Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][button.frame]["HHEIGHT"]*
-                                      HealBot_Skins_GetFrameVar("Frame", "SCALE", button.frame))-HealBot_Globals.VehicleFontSizeReduction,
-                                 Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][button.frame]["HOUTLINE"],
+                                 HealBot_Skins_GetFrameVar("Frame", "HFONT", button.frame), 
+                                 ceil(HealBot_Skins_GetFrameVar("BarText", "HHEIGHT", button.frame)*HealBot_Skins_GetFrameVar("Frame", "SCALE", button.frame))-HealBot_Globals.VehicleFontSizeReduction,
+                                 HealBot_Skins_GetFrameVar("BarText", "HOUTLINE", button.frame),
                                  "Media_UpdateUsedButtonText - BarText")
     end
 end
@@ -330,10 +325,10 @@ local function HealBot_Media_UpdateUsedAuxText(button)
       --HealBot_setCall("HealBot_Media_UpdateUsedAuxText")
     for x=1,9 do
         HealBot_Media_UpdateFont(button.gref.auxtxt[x],
-                                 HealBot_Data_AuxGetBarTextVar("FONT", button.frame, x),
-                                 ceil(HealBot_Data_AuxGetBarTextVar("HEIGHT", button.frame, x)*
+                                 HealBot_Aux_GetBarTextVar("FONT", button.frame, x),
+                                 ceil(HealBot_Aux_GetBarTextVar("HEIGHT", button.frame, x)*
                                       HealBot_Skins_GetFrameVar("Frame", "SCALE", button.frame)),
-                                 HealBot_Data_AuxGetBarTextVar("OUTLINE", button.frame, x),
+                                 HealBot_Aux_GetBarTextVar("OUTLINE", button.frame, x),
                                  "Media_UpdateUsedButtonText - AuxBarText")
     end
 end
@@ -352,173 +347,164 @@ local function HealBot_Media_DoUpdateUsedMedia(mediatype, frame)
         hbUpdateDelayType[mediatype..frame]=false
       --HealBot_setCall("HealBot_Media_DoUpdateUsedMedia")
         if mediatype == "statusbar" then
-            if Healbot_Config_Skins.HeadBar[Healbot_Config_Skins.Current_Skin] then
-                local hFrames=HealBot_Panel_retHealBot_Header_Frames()
-                for _,h in pairs(hFrames) do
-                    if h then
-                        local bar=_G[h:GetName().."Bar"]
-                        if bar then
-                            HealBot_Media_UpdateTexture(bar, HealBot_Skins_GetFrameVar("HeadBar", "TEXTURE", frame), "Media_DoUpdateUsedMedia - HeadBar")
-                            bar:GetStatusBarTexture():SetHorizTile(false)
-                        end
+            local hFrames=HealBot_Panel_retHealBot_Header_Frames()
+            for _,h in pairs(hFrames) do
+                if h then
+                    local bar=_G[h:GetName().."Bar"]
+                    if bar then
+                        HealBot_Media_UpdateTexture(bar, HealBot_Skins_GetFrameVar("HeadBar", "TEXTURE", frame), "Media_DoUpdateUsedMedia - HeadBar")
+                        bar:GetStatusBarTexture():SetHorizTile(false)
                     end
                 end
             end
-            if Healbot_Config_Skins.HealBar[Healbot_Config_Skins.Current_Skin] then
-                for _,xButton in pairs(HealBot_Unit_Button) do
-                    if xButton.frame == frame then
-                        HealBot_Media_UpdateUsedTextures(xButton)
-                    end
+            for _,xButton in pairs(HealBot_Unit_Button) do
+                if xButton.frame == frame then
+                    HealBot_Media_UpdateUsedTextures(xButton)
                 end
-                for _,xButton in pairs(HealBot_Private_Button) do
-                    if xButton.frame == frame then
-                        HealBot_Media_UpdateUsedTextures(xButton)
-                    end
-                end 
-                for _,xButton in pairs(HealBot_Pet_Button) do
-                    if xButton.frame == frame then
-                        HealBot_Media_UpdateUsedTextures(xButton)
-                    end
-                end 
-                for _,xButton in pairs(HealBot_Vehicle_Button) do
-                    if xButton.frame == frame then
-                        HealBot_Media_UpdateUsedTextures(xButton)
-                    end
-                end 
-                for _,xButton in pairs(HealBot_Enemy_Button) do
-                    if xButton.frame == frame then
-                        HealBot_Media_UpdateUsedTextures(xButton)
-                    end
-                end 
-                for xUnit,xButton in pairs(HealBot_UnitTarget_Button) do
-                    if xButton.frame == frame then
-                        HealBot_Media_UpdateUsedTextures(xButton)
-                    end
+            end
+            for _,xButton in pairs(HealBot_Private_Button) do
+                if xButton.frame == frame then
+                    HealBot_Media_UpdateUsedTextures(xButton)
                 end
-                for xUnit,xButton in pairs(HealBot_PrivateTarget_Button) do
-                    if xButton.frame == frame then
-                        HealBot_Media_UpdateUsedTextures(xButton)
-                    end
+            end 
+            for _,xButton in pairs(HealBot_Pet_Button) do
+                if xButton.frame == frame then
+                    HealBot_Media_UpdateUsedTextures(xButton)
                 end
-                for _,xButton in pairs(HealBot_Extra_Button) do
-                    if xButton.frame == frame then
-                        HealBot_Media_UpdateUsedTextures(xButton)
-                    end
+            end 
+            for _,xButton in pairs(HealBot_Vehicle_Button) do
+                if xButton.frame == frame then
+                    HealBot_Media_UpdateUsedTextures(xButton)
                 end
-                for _,xButton in pairs(HealBot_Test_Button) do
-                    if xButton.frame == frame then
-                        HealBot_Media_UpdateUsedTextures(xButton)
-                    end
+            end 
+            for _,xButton in pairs(HealBot_Enemy_Button) do
+                if xButton.frame == frame then
+                    HealBot_Media_UpdateUsedTextures(xButton)
+                end
+            end 
+            for xUnit,xButton in pairs(HealBot_UnitTarget_Button) do
+                if xButton.frame == frame then
+                    HealBot_Media_UpdateUsedTextures(xButton)
+                end
+            end
+            for xUnit,xButton in pairs(HealBot_PrivateTarget_Button) do
+                if xButton.frame == frame then
+                    HealBot_Media_UpdateUsedTextures(xButton)
+                end
+            end
+            for _,xButton in pairs(HealBot_Extra_Button) do
+                if xButton.frame == frame then
+                    HealBot_Media_UpdateUsedTextures(xButton)
+                end
+            end
+            for _,xButton in pairs(HealBot_Test_Button) do
+                if xButton.frame == frame then
+                    HealBot_Media_UpdateUsedTextures(xButton)
                 end
             end
         elseif mediatype == "font" then
-            if Healbot_Config_Skins.HeadText[Healbot_Config_Skins.Current_Skin] then
-                local hFrames=HealBot_Panel_retHealBot_Header_Frames()
-                for _,h in pairs(hFrames) do
-                    if h then
-                        local bar=_G[h:GetName().."Bar_text"]
-                        if bar then
-                            HealBot_Media_UpdateFont(bar, 
-                                                     Healbot_Config_Skins.HeadText[Healbot_Config_Skins.Current_Skin][frame]["FONT"], 
-                                                     Healbot_Config_Skins.HeadText[Healbot_Config_Skins.Current_Skin][frame]["HEIGHT"],
-                                                     Healbot_Config_Skins.HeadText[Healbot_Config_Skins.Current_Skin][frame]["OUTLINE"],
-                                                     "Media_DoUpdateUsedMedia - HeadText")
-                        end
+            local hFrames=HealBot_Panel_retHealBot_Header_Frames()
+            for _,h in pairs(hFrames) do
+                if h then
+                    local bar=_G[h:GetName().."Bar_text"]
+                    if bar then
+                        HealBot_Media_UpdateFont(bar, 
+                                                 HealBot_Skins_GetFrameVar("HeadText", "FONT", frame),
+                                                 HealBot_Skins_GetFrameVar("HeadText", "HEIGHT", frame),
+                                                 HealBot_Skins_GetFrameVar("HeadText", "OUTLINE", frame),
+                                                 "Media_DoUpdateUsedMedia - HeadText")
                     end
                 end
             end
-            if Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin] then
-                for _,xButton in pairs(HealBot_Unit_Button) do
-                    if xButton.frame == frame then
-                        HealBot_Media_UpdateUsedButtonText(xButton)
-                    end
-                end
-                for _,xButton in pairs(HealBot_Private_Button) do
-                    if xButton.frame == frame then
-                        HealBot_Media_UpdateUsedButtonText(xButton)
-                    end
-                end      
-                for _,xButton in pairs(HealBot_Pet_Button) do
-                    if xButton.frame == frame then
-                        HealBot_Media_UpdateUsedButtonText(xButton)
-                    end
-                end 
-                for _,xButton in pairs(HealBot_Vehicle_Button) do
-                    if xButton.frame == frame then
-                        HealBot_Media_UpdateUsedButtonText(xButton)
-                    end
-                end 
-                for _,xButton in pairs(HealBot_Enemy_Button) do
-                    if xButton.frame == frame then
-                        HealBot_Media_UpdateUsedButtonText(xButton)
-                    end
-                end 
-                for xUnit,xButton in pairs(HealBot_UnitTarget_Button) do
-                    if xButton.frame == frame then
-                        HealBot_Media_UpdateUsedButtonText(xButton)
-                    end
-                end
-                for xUnit,xButton in pairs(HealBot_PrivateTarget_Button) do
-                    if xButton.frame == frame then
-                        HealBot_Media_UpdateUsedButtonText(xButton)
-                    end
-                end
-                for _,xButton in pairs(HealBot_Extra_Button) do
-                    if xButton.frame == frame then
-                        HealBot_Media_UpdateUsedButtonText(xButton)
-                    end
-                end
-                for _,xButton in pairs(HealBot_Test_Button) do
-                    if xButton.frame == frame then
-                        HealBot_Media_UpdateUsedButtonText(xButton)
-                    end
+            for _,xButton in pairs(HealBot_Unit_Button) do
+                if xButton.frame == frame then
+                    HealBot_Media_UpdateUsedButtonText(xButton)
                 end
             end
-            if Healbot_Config_Aux.BarText[Healbot_Config_Skins.Current_Skin] then
-                for _,xButton in pairs(HealBot_Unit_Button) do
-                    if xButton.frame == frame then
-                        HealBot_Media_UpdateUsedAuxText(xButton)
-                    end
+            for _,xButton in pairs(HealBot_Private_Button) do
+                if xButton.frame == frame then
+                    HealBot_Media_UpdateUsedButtonText(xButton)
                 end
-                for _,xButton in pairs(HealBot_Private_Button) do
-                     if xButton.frame == frame then
-                        HealBot_Media_UpdateUsedAuxText(xButton)
-                    end
+            end      
+            for _,xButton in pairs(HealBot_Pet_Button) do
+                if xButton.frame == frame then
+                    HealBot_Media_UpdateUsedButtonText(xButton)
                 end
-                for _,xButton in pairs(HealBot_Enemy_Button) do
-                    if xButton.frame == frame then
-                        HealBot_Media_UpdateUsedAuxText(xButton)
-                    end
+            end 
+            for _,xButton in pairs(HealBot_Vehicle_Button) do
+                if xButton.frame == frame then
+                    HealBot_Media_UpdateUsedButtonText(xButton)
                 end
-                for xUnit,xButton in pairs(HealBot_UnitTarget_Button) do
-                    if xButton.frame == frame then
-                        HealBot_Media_UpdateUsedAuxText(xButton)
-                    end
+            end 
+            for _,xButton in pairs(HealBot_Enemy_Button) do
+                if xButton.frame == frame then
+                    HealBot_Media_UpdateUsedButtonText(xButton)
                 end
-                for xUnit,xButton in pairs(HealBot_PrivateTarget_Button) do
-                    if xButton.frame == frame then
-                        HealBot_Media_UpdateUsedAuxText(xButton)
-                    end
+            end 
+            for xUnit,xButton in pairs(HealBot_UnitTarget_Button) do
+                if xButton.frame == frame then
+                    HealBot_Media_UpdateUsedButtonText(xButton)
                 end
-                for _,xButton in pairs(HealBot_Pet_Button) do
-                    if xButton.frame == frame then
-                        HealBot_Media_UpdateUsedAuxText(xButton)
-                    end
+            end
+            for xUnit,xButton in pairs(HealBot_PrivateTarget_Button) do
+                if xButton.frame == frame then
+                    HealBot_Media_UpdateUsedButtonText(xButton)
                 end
-                for _,xButton in pairs(HealBot_Vehicle_Button) do
-                    if xButton.frame == frame then
-                        HealBot_Media_UpdateUsedAuxText(xButton)
-                    end
+            end
+            for _,xButton in pairs(HealBot_Extra_Button) do
+                if xButton.frame == frame then
+                    HealBot_Media_UpdateUsedButtonText(xButton)
                 end
-                for _,xButton in pairs(HealBot_Extra_Button) do
-                    if xButton.frame == frame then
-                        HealBot_Media_UpdateUsedAuxText(xButton)
-                    end
+            end
+            for _,xButton in pairs(HealBot_Test_Button) do
+                if xButton.frame == frame then
+                    HealBot_Media_UpdateUsedButtonText(xButton)
                 end
-                for _,xButton in pairs(HealBot_Test_Button) do
-                    if xButton.frame == frame then
-                        HealBot_Media_UpdateUsedAuxText(xButton)
-                    end
+            end
+
+            for _,xButton in pairs(HealBot_Unit_Button) do
+                if xButton.frame == frame then
+                    HealBot_Media_UpdateUsedAuxText(xButton)
+                end
+            end
+            for _,xButton in pairs(HealBot_Private_Button) do
+                 if xButton.frame == frame then
+                    HealBot_Media_UpdateUsedAuxText(xButton)
+                end
+            end
+            for _,xButton in pairs(HealBot_Enemy_Button) do
+                if xButton.frame == frame then
+                    HealBot_Media_UpdateUsedAuxText(xButton)
+                end
+            end
+            for xUnit,xButton in pairs(HealBot_UnitTarget_Button) do
+                if xButton.frame == frame then
+                    HealBot_Media_UpdateUsedAuxText(xButton)
+                end
+            end
+            for xUnit,xButton in pairs(HealBot_PrivateTarget_Button) do
+                if xButton.frame == frame then
+                    HealBot_Media_UpdateUsedAuxText(xButton)
+                end
+            end
+            for _,xButton in pairs(HealBot_Pet_Button) do
+                if xButton.frame == frame then
+                    HealBot_Media_UpdateUsedAuxText(xButton)
+                end
+            end
+            for _,xButton in pairs(HealBot_Vehicle_Button) do
+                if xButton.frame == frame then
+                    HealBot_Media_UpdateUsedAuxText(xButton)
+                end
+            end
+            for _,xButton in pairs(HealBot_Extra_Button) do
+                if xButton.frame == frame then
+                    HealBot_Media_UpdateUsedAuxText(xButton)
+                end
+            end
+            for _,xButton in pairs(HealBot_Test_Button) do
+                if xButton.frame == frame then
+                    HealBot_Media_UpdateUsedAuxText(xButton)
                 end
             end
         end

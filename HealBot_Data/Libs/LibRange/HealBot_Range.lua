@@ -247,7 +247,7 @@ function HealBot_Range_UpdateUnit(button)
                 HealBot_Action_AdaptiveOORUpdate(button)
                 HealBot_Update_InRangeBar(button)
                 HealBot_Update_PluginsChange(button)
-                if button.status.dirarrowshown>0 or (Healbot_Config_Skins.Icons[Healbot_Config_Skins.Current_Skin][button.frame]["SHOWDIR"] and button.status.range == 0) then
+                if button.status.dirarrowshown>0 or (HealBot_Skins_GetFrameBoolean("Icons", "SHOWDIR", button.frame) and button.status.range == 0) then
                     HealBot_Action_ShowDirectionArrow(button)
                 end
                 if HealBot_Emerg_Button[button.id].state>0 then

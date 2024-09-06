@@ -175,7 +175,7 @@ function HealBot_Aggro_UpdateUnit(button,status,threatData)
         if HealBot_Skins_GetFrameVar("BarAggro", "SHOWTEXT", button.frame)>1 then
             HealBot_Text_setNameText(button)
         end
-        if not Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][button.frame]["TAGAGGROONLYTIP"] then
+        if not HealBot_Skins_GetFrameBoolean("BarText", "TAGAGGROONLYTIP", button.frame) then
             HealBot_Text_setAggroText(button)
         end
         if HealBot_Aggro_luVars["pluginThreat"] and button.status.plugin then HealBot_Plugin_Threat_UnitUpdate(button) end

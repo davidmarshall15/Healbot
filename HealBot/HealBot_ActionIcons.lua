@@ -2631,8 +2631,8 @@ function HealBot_ActionIcons_ClearGUID(guid)
 end
 
 
-local hbVarsDefaults={["NUMICONS"]=0, ["FONT"]=HealBot_Default_FontName,
-                      ["FONTCOUNT"]=HealBot_Default_FontName, ["FONTSIZE"]=18,
+local hbVarsDefaults={["NUMICONS"]=0, ["FONT"]=HealBot_Data_Default_FontName(),
+                      ["FONTCOUNT"]=HealBot_Data_Default_FontName(), ["FONTSIZE"]=18,
                       ["FONTOUTLINE"]=2, ["FONTCOUNTHOFFSET"]=0, ["FONTCOUNTVOFFSET"]=0,
                       ["FONTHOFFSET"]=0, ["FONTVOFFSET"]=0, ["FONTCOUNTOUTLINE"]=2,
                       ["FONTCOUNTSIZE"]=12, ["HIGHLIGHT"]=1, ["FADE"]=0.2,

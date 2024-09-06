@@ -278,7 +278,7 @@ function HealBot_nextRecalcDelay(typeRequired,delay)
         end
         typeRequired=6
     end
-    if typeRequired == 2 and Healbot_Config_Skins.Healing[Healbot_Config_Skins.Current_Skin]["SELFPET"] then
+    if typeRequired == 2 and HealBot_Skins_GetBoolean("Healing", "SELFPET") then
         HealBot_nextRecalcParty(6,delay)
     end
     if not HealBot_RecalcQueue[typeRequired] then
@@ -442,8 +442,8 @@ end
 
 function HealBot_CheckFrameHorizontal(frame, aType)
     local Hcenter=GetScreenWidth()/2
-    local wPct=HealBot_Util_Round(((Healbot_Config_Skins.HealBar[Healbot_Config_Skins.Current_Skin][frame]["WIDTH"]/GetScreenWidth())*100),2)
-    local wAdj=Hcenter-Healbot_Config_Skins.HealBar[Healbot_Config_Skins.Current_Skin][frame]["WIDTH"]
+    local wPct=HealBot_Util_Round(((HealBot_Skins_GetFrameVar("HealBar", "WIDTH", frame)/GetScreenWidth())*100),2)
+    local wAdj=Hcenter-HealBot_Skins_GetFrameVar("HealBar", "WIDTH", frame)
     if aType == "LEFT" then
         if (HealBot_Skins_GetFrameVar("Anchors", "RealX", frame)+Hcenter)<0 then
             HealBot_Skins_SetFrameVar(0-Hcenter, "Anchors", "RealX", frame)
@@ -482,8 +482,8 @@ end
 
 function HealBot_CheckFrameVertical(frame, aType)
     local Vcenter=GetScreenHeight()/2
-    local hPct=HealBot_Util_Round(((Healbot_Config_Skins.HealBar[Healbot_Config_Skins.Current_Skin][frame]["HEIGHT"]/GetScreenHeight())*100),2)
-    local hAdj=Vcenter-Healbot_Config_Skins.HealBar[Healbot_Config_Skins.Current_Skin][frame]["HEIGHT"]
+    local hPct=HealBot_Util_Round(((HealBot_Skins_GetFrameVar("HealBar", "HEIGHT", frame)/GetScreenHeight())*100),2)
+    local hAdj=Vcenter-HealBot_Skins_GetFrameVar("HealBar", "HEIGHT", frame)
     if aType == "TOP" then
         if (HealBot_Skins_GetFrameVar("Anchors", "RealY", frame)+hAdj)<0 then
             HealBot_Skins_SetFrameVar(0-hAdj, "Anchors", "RealY", frame)
@@ -498,7 +498,7 @@ function HealBot_CheckFrameVertical(frame, aType)
     elseif aType == "BOTTOM" then
         if (HealBot_Skins_GetFrameVar("Anchors", "RealY", frame)+Vcenter)<0 then
             HealBot_Skins_SetFrameVar(0-Vcenter, "Anchors", "RealY", frame)
-        elseif (HealBot_Skins_GetFrameVar("Anchors", "RealY", frame)+Vcenter+Healbot_Config_Skins.HealBar[Healbot_Config_Skins.Current_Skin][frame]["HEIGHT"])>GetScreenHeight() then
+        elseif (HealBot_Skins_GetFrameVar("Anchors", "RealY", frame)+Vcenter+HealBot_Skins_GetFrameVar("HealBar", "HEIGHT", frame))>GetScreenHeight() then
             HealBot_Skins_SetFrameVar(hAdj, "Anchors", "RealY", frame)
         end
         if HealBot_Skins_GetFrameVar("Anchors", "Y", frame)<0.01 then
@@ -760,11 +760,11 @@ function HealBot_SlashCmd(cmd)
         elseif (HBcmd == "tci") then
             HealBot_Options_ToggleClearInspect()
         elseif (HBcmd == "spt") then
-            if Healbot_Config_Skins.Healing[Healbot_Config_Skins.Current_Skin]["SELFPET"] then
-                Healbot_Config_Skins.Healing[Healbot_Config_Skins.Current_Skin]["SELFPET"]=false
+            if HealBot_Skins_GetBoolean("Healing", "SELFPET") then
+                HealBot_Skins_SetVar(false, "Healing", "SELFPET")
                 HealBot_AddChat(HEALBOT_CHAT_SELFPETSOFF)
             else
-                Healbot_Config_Skins.Healing[Healbot_Config_Skins.Current_Skin]["SELFPET"]=true
+                HealBot_Skins_SetVar(true, "Healing", "SELFPET")
                 HealBot_AddChat(HEALBOT_CHAT_SELFPETSON)
             end
             HealBot_Timers_Set("OOC","RefreshPartyNextRecalcPlayers")
@@ -964,6 +964,7 @@ function HealBot_SlashCmd(cmd)
             end
         elseif (HBcmd == "zzz") then
             aButton=HealBot_Panel_RaidButton(HealBot_Data["PGUID"])
+            HealBot_Skins_Check_Aux("Standard")
             HealBot_AddDebug("#: UpdateNumUnits="..HealBot_luVars["UpdateNumUnits"].." nProcs="..HealBot_Timers_retLuVars("nProcs"))
 
             HealBot_Action_RemoveInvalidLoadouts()
@@ -1180,7 +1181,7 @@ function HealBot_UpdateUnitNotExists(button, isSetHealButton)
     HealBot_UnitHealth(button, true)
     HealBot_Text_setNameTag(button)
     HealBot_Text_UpdateNameButton(button)
-    if Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][button.frame]["HLTHTXTANCHOR"]~=4 then button.text.healthupdate=true end
+    if HealBot_Skins_GetFrameVar("BarText", "HLTHTXTANCHOR", button.frame)~=4 then button.text.healthupdate=true end
     HealBot_Action_UpdateAllIndicators(button)
     HealBot_Action_EmergBarCheck(button, true)
     button.status.classknown=false
@@ -1643,8 +1644,8 @@ function HealBot_Register_Events()
         HealBot:RegisterEvent("ROLE_CHANGED_INFORM");
         local regThis={}
         for j=1,10 do
-            if Healbot_Config_Skins.RaidIcon[Healbot_Config_Skins.Current_Skin][j]["SHOW"] then regThis["RAIDTARGET"]=true end
-            if Healbot_Config_Skins.Icons[Healbot_Config_Skins.Current_Skin][j]["SHOWRC"] then regThis["READYCHECK"]=true end
+            if HealBot_Skins_GetFrameBoolean("RaidIcon", "SHOW", j) then regThis["RAIDTARGET"]=true end
+            if HealBot_Skins_GetFrameBoolean("Icons", "SHOWRC", j) then regThis["READYCHECK"]=true end
         end
         if regThis["RAIDTARGET"] then HealBot:RegisterEvent("RAID_TARGET_UPDATE") end
         if regThis["READYCHECK"] then HealBot_Register_ReadyCheck() end
@@ -1853,7 +1854,7 @@ end
 
 function HealBot_OverHealText(button)
       --HealBot_setCall("HealBot_OverHealText", button)
-    if Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][button.frame]["OVERHEAL"]>1 then
+    if HealBot_Skins_GetFrameVar("BarText", "OVERHEAL", button.frame)>1 then
         HealBot_Text_setOverHealText(button)
     end
 end
@@ -2387,7 +2388,7 @@ function HealBot_LoadAddOn()
     HealBot_globalVars()
     HealBot_Options_InitVars()
     HealBot_Panel_Init()
-    HealBot_Action_SetCustomClassCols(0)
+    HealBot_Action_SetCustomClassCols(2)
     table.foreach(HealBot_ConfigDefaults, function (key,val)
         if HealBot_Config[key] == nil then
             HealBot_Config[key]=val;
@@ -2743,7 +2744,7 @@ end
 local hbCombatState=false
 function HealBot_UnitAffectingCombat(button)
       --HealBot_setCall("HealBot_UnitAffectingCombat", button)
-    if button.isplayer and Healbot_Config_Skins.Icons[Healbot_Config_Skins.Current_Skin][button.frame]["SHOWCOMBAT"] then
+    if button.isplayer and HealBot_Skins_GetFrameBoolean("Icons", "SHOWCOMBAT", button.frame) then
         hbCombatState=UnitAffectingCombat(button.unit)
     else
         hbCombatState=false
@@ -3086,20 +3087,20 @@ local hbRaidTargetIconsChecked={[1]={[1]=true,[2]=true,[3]=true,[4]=true,[5]=tru
 function HealBot_setRaidTargetChecked()
       --HealBot_setCall("HealBot_setRaidTargetChecked")
     for x=1,10 do
-        hbRaidTargetIconsChecked[x][1]=Healbot_Config_Skins.RaidIcon[Healbot_Config_Skins.Current_Skin][x]["STAR"]
-        hbRaidTargetIconsChecked[x][2]=Healbot_Config_Skins.RaidIcon[Healbot_Config_Skins.Current_Skin][x]["CIRCLE"]
-        hbRaidTargetIconsChecked[x][3]=Healbot_Config_Skins.RaidIcon[Healbot_Config_Skins.Current_Skin][x]["DIAMOND"]
-        hbRaidTargetIconsChecked[x][4]=Healbot_Config_Skins.RaidIcon[Healbot_Config_Skins.Current_Skin][x]["TRIANGLE"]
-        hbRaidTargetIconsChecked[x][5]=Healbot_Config_Skins.RaidIcon[Healbot_Config_Skins.Current_Skin][x]["MOON"]
-        hbRaidTargetIconsChecked[x][6]=Healbot_Config_Skins.RaidIcon[Healbot_Config_Skins.Current_Skin][x]["SQUARE"]
-        hbRaidTargetIconsChecked[x][7]=Healbot_Config_Skins.RaidIcon[Healbot_Config_Skins.Current_Skin][x]["CROSS"]
-        hbRaidTargetIconsChecked[x][8]=Healbot_Config_Skins.RaidIcon[Healbot_Config_Skins.Current_Skin][x]["SKULL"]
+        hbRaidTargetIconsChecked[x][1]=HealBot_Skins_GetFrameBoolean("RaidIcon", "STAR", x)
+        hbRaidTargetIconsChecked[x][2]=HealBot_Skins_GetFrameBoolean("RaidIcon", "CIRCLE", x)
+        hbRaidTargetIconsChecked[x][3]=HealBot_Skins_GetFrameBoolean("RaidIcon", "DIAMOND", x)
+        hbRaidTargetIconsChecked[x][4]=HealBot_Skins_GetFrameBoolean("RaidIcon", "TRIANGLE", x)
+        hbRaidTargetIconsChecked[x][5]=HealBot_Skins_GetFrameBoolean("RaidIcon", "MOON", x)
+        hbRaidTargetIconsChecked[x][6]=HealBot_Skins_GetFrameBoolean("RaidIcon", "SQUARE", x)
+        hbRaidTargetIconsChecked[x][7]=HealBot_Skins_GetFrameBoolean("RaidIcon", "CROSS", x)
+        hbRaidTargetIconsChecked[x][8]=HealBot_Skins_GetFrameBoolean("RaidIcon", "SKULL", x)
     end
 end
 
 function HealBot_RaidTargetUpdate(button)
       --HealBot_setCall("HealBot_RaidTargetUpdate", button)
-    if button.status.current<HealBot_Unit_Status["RESERVED"] and Healbot_Config_Skins.RaidIcon[Healbot_Config_Skins.Current_Skin][button.frame]["SHOW"] then
+    if button.status.current<HealBot_Unit_Status["RESERVED"] and HealBot_Skins_GetFrameBoolean("RaidIcon", "SHOW", button.frame) then
         local x=GetRaidTargetIndex(button.unit)
         if x and hbRaidTargetIconsChecked[button.frame][x] then
             HealBot_Aura_RaidTargetUpdate(button, x)
@@ -3309,7 +3310,7 @@ function HealBot_AfterCombatCleanup()
         HealBot_Timers_Set("LAST","ResetUnitStatus")
         --HealBot_Timers_Set("SKINS","TextUpdateNames")
         HealBot_Timers_Set("LAST","EndAggro")
-        if HealBot_luVars["CheckFramesOnCombat"] then HealBot_Timers_Set("LAST","CheckHideFrames") end
+        if HealBot_luVars["CheckFramesOnCombat"] then HealBot_Timers_Set("LAST","CheckAutoClose") end
         HealBot_Timers_Set("LAST","CheckLowMana")
         HealBot_Timers_Set("PLAYER","PlayerTargetChanged")
         HealBot_Timers_Set("LAST","TargetFocusUpdate")
@@ -4608,10 +4609,10 @@ function HealBot_CheckFramesOnCombatFrame(frame)
       --HealBot_setCall("HealBot_CheckFramesOnCombatFrame")
     local check=true
     if (frame == 8 and Healbot_Config_Skins.HealGroups[Healbot_Config_Skins.Current_Skin][9]["FRAME"] == 8
-                 and Healbot_Config_Skins.Healing[Healbot_Config_Skins.Current_Skin]["TARGETINCOMBAT"] == 1)
+                 and HealBot_Skins_GetVar("Healing", "TARGETINCOMBAT") == 1)
         or
        (frame == 9 and Healbot_Config_Skins.HealGroups[Healbot_Config_Skins.Current_Skin][10]["FRAME"] == 9
-                 and Healbot_Config_Skins.Healing[Healbot_Config_Skins.Current_Skin]["FOCUSINCOMBAT"] == 1) then
+                 and HealBot_Skins_GetVar("Healing", "FOCUSINCOMBAT") == 1) then
         check=false
     end
     if check and prdCheckActiveFrames[frame] and HealBot_Skins_GetFrameVar("Frame", "AUTOCLOSE", frame)>1 then
@@ -4648,49 +4649,49 @@ function HealBot_PlayerRegenDisabled()
     if HealBot_RecalcQueue[0] then HealBot_RecalcQueue[0]=false; HealBot_RefreshTypes[0]=true; end
     if Healbot_Config_Skins.HealGroups[Healbot_Config_Skins.Current_Skin][10]["STATE"] and
        Healbot_Config_Skins.HealGroups[Healbot_Config_Skins.Current_Skin][10]["FRAME"] == 9 and
-       Healbot_Config_Skins.Healing[Healbot_Config_Skins.Current_Skin]["FOCUSINCOMBAT"] == 1 then
+       HealBot_Skins_GetVar("Healing", "FOCUSINCOMBAT") == 1 then
         HealBot_Action_HidePanel(9)
     end
     if Healbot_Config_Skins.HealGroups[Healbot_Config_Skins.Current_Skin][9]["STATE"] and
        Healbot_Config_Skins.HealGroups[Healbot_Config_Skins.Current_Skin][9]["FRAME"] == 8 and
-       Healbot_Config_Skins.Healing[Healbot_Config_Skins.Current_Skin]["TARGETINCOMBAT"] == 1 then
+       HealBot_Skins_GetVar("Healing", "TARGETINCOMBAT") == 1 then
         HealBot_Action_HidePanel(8)
     end
 
     if not HealBot_RefreshTypes[0] then
         if Healbot_Config_Skins.HealGroups[Healbot_Config_Skins.Current_Skin][10]["STATE"] then
             if Healbot_Config_Skins.HealGroups[Healbot_Config_Skins.Current_Skin][10]["FRAME"] == 9 then
-                if not HealBot_Action_FrameIsVisible(9) and Healbot_Config_Skins.Healing[Healbot_Config_Skins.Current_Skin]["FOCUSINCOMBAT"] == 3 then
+                if not HealBot_Action_FrameIsVisible(9) and HealBot_Skins_GetVar("Healing", "FOCUSINCOMBAT") == 3 then
                     HealBot_RefreshTypes[4]=true
                 end
-            elseif Healbot_Config_Skins.Healing[Healbot_Config_Skins.Current_Skin]["FOCUSINCOMBAT"]~=2 then
+            elseif HealBot_Skins_GetVar("Healing", "FOCUSINCOMBAT")~=2 then
                 HealBot_RefreshTypes[6]=true
             end
         end
         if Healbot_Config_Skins.HealGroups[Healbot_Config_Skins.Current_Skin][9]["STATE"] then
             if Healbot_Config_Skins.HealGroups[Healbot_Config_Skins.Current_Skin][9]["FRAME"] == 8 then
-                if not HealBot_Action_FrameIsVisible(8) and Healbot_Config_Skins.Healing[Healbot_Config_Skins.Current_Skin]["TARGETINCOMBAT"] == 3 then
+                if not HealBot_Action_FrameIsVisible(8) and HealBot_Skins_GetVar("Healing", "TARGETINCOMBAT") == 3 then
                     HealBot_RefreshTypes[3]=true
                 end
-            elseif Healbot_Config_Skins.Healing[Healbot_Config_Skins.Current_Skin]["TARGETINCOMBAT"]~=2 then
+            elseif HealBot_Skins_GetVar("Healing", "TARGETINCOMBAT")~=2 then
                 HealBot_RefreshTypes[6]=true
             end
         end
         if Healbot_Config_Skins.HealGroups[Healbot_Config_Skins.Current_Skin][7]["STATE"] then
             if Healbot_Config_Skins.HealGroups[Healbot_Config_Skins.Current_Skin][7]["FRAME"] == 6 then
-                if Healbot_Config_Skins.Healing[Healbot_Config_Skins.Current_Skin]["VEHICLEINCOMBAT"] then
+                if HealBot_Skins_GetBoolean("Healing", "VEHICLEINCOMBAT") then
                     HealBot_RefreshTypes[1]=true
                 end
-            elseif Healbot_Config_Skins.Healing[Healbot_Config_Skins.Current_Skin]["VEHICLEINCOMBAT"] then
+            elseif HealBot_Skins_GetBoolean("Healing", "VEHICLEINCOMBAT") then
                 HealBot_RefreshTypes[6]=true
             end
         end
         if Healbot_Config_Skins.HealGroups[Healbot_Config_Skins.Current_Skin][8]["STATE"] then
             if Healbot_Config_Skins.HealGroups[Healbot_Config_Skins.Current_Skin][8]["FRAME"] == 7 then
-                if Healbot_Config_Skins.Healing[Healbot_Config_Skins.Current_Skin]["PRIVLISTPETSINCOMBAT"] then
+                if HealBot_Skins_GetBoolean("Healing", "PRIVLISTPETSINCOMBAT") then
                     HealBot_RefreshTypes[2]=true
                 end
-            elseif Healbot_Config_Skins.Healing[Healbot_Config_Skins.Current_Skin]["PRIVLISTPETSINCOMBAT"] then
+            elseif HealBot_Skins_GetBoolean("Healing", "PRIVLISTPETSINCOMBAT") then
                 HealBot_RefreshTypes[6]=true
             end
         end
@@ -4720,7 +4721,7 @@ function HealBot_PlayerRegenDisabled()
                     HealBot_Action_ShowPanel(f)
                 end
             end
-            if HealBot_Action_FrameIsVisible(f) and not Healbot_Config_Skins.HealBar[Healbot_Config_Skins.Current_Skin][f]["LOWMANACOMBAT"] then
+            if HealBot_Action_FrameIsVisible(f) and not HealBot_Skins_GetFrameBoolean("HealBar", "LOWMANACOMBAT", f) then
                 HealBot_Update_ClearLowMana(f)
             end
         end
@@ -4943,7 +4944,7 @@ end
 
 function HealBot_ReadyCheckUpdate(button,response)
       --HealBot_setCall("HealBot_ReadyCheckUpdate", button)
-    if HealBot_luVars["rcEnd"] and button.isplayer and Healbot_Config_Skins.Icons[Healbot_Config_Skins.Current_Skin][button.frame]["SHOWRC"] then
+    if HealBot_luVars["rcEnd"] and button.isplayer and HealBot_Skins_GetFrameBoolean("Icons", "SHOWRC", button.frame) then
         if response then
             button.icon.extra.readycheck=HealBot_ReadyCheckStatus["READY"]
         else

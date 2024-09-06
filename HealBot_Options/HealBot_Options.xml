@@ -36593,7 +36593,7 @@
       </Frame>
       <Button name="HealBot_Options_Defaults" inherits="UIPanelButtonTemplate" text="HEALBOT_OPTIONS_DEFAULTS">
         <Size>
-          <AbsDimension x="125" y="22"/>
+          <AbsDimension x="115" y="22"/>
         </Size>
         <Anchors>
           <Anchor point="BOTTOMLEFT" relativePoint="BOTTOMLEFT">
@@ -36604,46 +36604,69 @@
         </Anchors>
         <Scripts>
           <OnClick>HealBot_Options_Defaults_OnClick(self, true)</OnClick>
+          <OnEnter>HealBot_Options_Show_Help("GLOBALDEFAULT",true)</OnEnter>
+          <OnLeave>HealBot_Options_Show_Help("GLOBALDEFAULT",false)</OnLeave>
         </Scripts>
       </Button>
-      <Button name="HealBot_Options_Local_Defaults" inherits="UIPanelButtonTemplate" text="HEALBOT_OPTIONS_LOCALDEFAULTS">
+      <Button name="HealBot_Options_Unused_Defaults" inherits="UIPanelButtonTemplate" text="HEALBOT_OPTIONS_UNUSEDDEFAULTS">
         <Size>
-          <AbsDimension x="125" y="22"/>
+          <AbsDimension x="115" y="22"/>
         </Size>
         <Anchors>
           <Anchor point="LEFT" relativeTo="HealBot_Options_Defaults" relativePoint="RIGHT">
             <Offset>
-              <AbsDimension x="15" y="0"/>
+              <AbsDimension x="5" y="0"/>
+            </Offset>
+          </Anchor>
+        </Anchors>
+        <Scripts>
+          <OnClick>HealBot_Options_Unused_OnClick()</OnClick>
+          <OnEnter>HealBot_Options_Show_Help("UNUSEDDEFAULT",true)</OnEnter>
+          <OnLeave>HealBot_Options_Show_Help("UNUSEDDEFAULT",false)</OnLeave>
+        </Scripts>
+      </Button>
+      <Button name="HealBot_Options_Local_Defaults" inherits="UIPanelButtonTemplate" text="HEALBOT_OPTIONS_LOCALDEFAULTS">
+        <Size>
+          <AbsDimension x="115" y="22"/>
+        </Size>
+        <Anchors>
+          <Anchor point="LEFT" relativeTo="HealBot_Options_Unused_Defaults" relativePoint="RIGHT">
+            <Offset>
+              <AbsDimension x="5" y="0"/>
             </Offset>
           </Anchor>
         </Anchors>
         <Scripts>
           <OnClick>HealBot_Options_Defaults_OnClick(self, false)</OnClick>
+          <OnEnter>HealBot_Options_Show_Help("LOCALDEFAULT",true)</OnEnter>
+          <OnLeave>HealBot_Options_Show_Help("LOCALDEFAULT",false)</OnLeave>
         </Scripts>
       </Button>
       <Button name="HealBot_Options_Reset" inherits="UIPanelButtonTemplate" text="HEALBOT_OPTIONS_SOFTRESET">
         <Size>
-          <AbsDimension x="125" y="22"/>
+          <AbsDimension x="115" y="22"/>
         </Size>
         <Anchors>
           <Anchor point="LEFT" relativeTo="HealBot_Options_Local_Defaults" relativePoint="RIGHT">
             <Offset>
-              <AbsDimension x="15" y="0"/>
+              <AbsDimension x="5" y="0"/>
             </Offset>
           </Anchor>
         </Anchors>
         <Scripts>
           <OnClick>HealBot_Options_Reset_OnClick(self,"SOFT")</OnClick>
+          <OnEnter>HealBot_Options_Show_Help("RESET",true)</OnEnter>
+          <OnLeave>HealBot_Options_Show_Help("RESET",false)</OnLeave>
         </Scripts>
       </Button>
       <Button name="HealBot_Options_Reload" inherits="UIPanelButtonTemplate" text="HEALBOT_OPTIONS_HARDRESET">
         <Size>
-          <AbsDimension x="125" y="22"/>
+          <AbsDimension x="115" y="22"/>
         </Size>
         <Anchors>
           <Anchor point="LEFT" relativeTo="HealBot_Options_Reset" relativePoint="RIGHT">
             <Offset>
-              <AbsDimension x="15" y="0"/>
+              <AbsDimension x="5" y="0"/>
             </Offset>
           </Anchor>
         </Anchors>
@@ -36653,7 +36676,7 @@
       </Button>
       <Button name="HealBot_Options_CloseButton" inherits="UIPanelButtonTemplate" text="HEALBOT_OPTIONS_CLOSE">
         <Size>
-          <AbsDimension x="125" y="22"/>
+          <AbsDimension x="115" y="22"/>
         </Size>
         <Anchors>
           <Anchor point="BOTTOMRIGHT" relativePoint="BOTTOMRIGHT">

@@ -101,6 +101,7 @@ function HealBot_Lang_enALL()
 
     HEALBOT_OPTIONS_TITLE                  =HEALBOT_HEALBOT;
     HEALBOT_OPTIONS_DEFAULTS               ="Global Defaults";
+    HEALBOT_OPTIONS_UNUSEDDEFAULTS         ="Unused Defaults";
     HEALBOT_OPTIONS_LOCALDEFAULTS          ="Local Defaults";
     HEALBOT_OPTIONS_CLOSE                  ="Close";
     HEALBOT_OPTIONS_HARDRESET              ="Reload UI"

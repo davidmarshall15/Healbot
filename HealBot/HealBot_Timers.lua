@@ -281,8 +281,7 @@ function HealBot_Timers_CheckLowMana()
       --HealBot_setCall("HealBot_Timers_CheckLowMana")
     local checkLowMana=false
     for j=1,10 do
-        if Healbot_Config_Skins.HealBar[Healbot_Config_Skins.Current_Skin][j]["LOWMANA"]>1 and
-           Healbot_Config_Skins.HealBar[Healbot_Config_Skins.Current_Skin][j]["LOWMANACOMBAT"] == false then
+        if HealBot_Skins_GetFrameVar("HealBar", "LOWMANA", j)>1 and not HealBot_Skins_GetFrameBoolean("HealBar", "LOWMANACOMBAT", j) then
             checkLowMana=true
             break
         end
@@ -483,7 +482,7 @@ function HealBot_Timers_LastLoad()
     HealBot_Timers_Set("SKINS","TextSetTagInUse",0.45)
     HealBot_Timers_Set("INIT","LastUpdate",0.5)
     HealBot_Timers_Set("INIT","HealBotLoaded",1)
-    HealBot_Timers_Set("OOC","RemoveInvalidLoadouts",15)
+    HealBot_Timers_Set("OOC","RemoveInvalidLoadouts",5)
     HealBot_Timers_MediaLastLoad()
     if not HealBot_Timers_luVars["HelpNotice"] then
         HealBot_Timers_Set("LAST","HealBotLoadedChat")
@@ -793,7 +792,7 @@ local hbTimerFuncs={["INIT"]={
                         ["InitBinds"]=HealBot_Options_InitBinds,
                         ["InitLoadSpells"]=HealBot_Timers_InitSpells,
                         ["SetAutoClose"]=HealBot_Action_setAutoClose,
-                        ["CheckHideFrames"]=HealBot_Action_HideFrames,
+                        ["CheckAutoClose"]=HealBot_Action_CheckAutoClose,
                         ["MountsPetsDalaran"]=HealBot_MountsPets_ClassicDalaranCheck,
                         ["LoadTips"]=HealBot_Options_LoadTips,
                         ["SetInHealAbsorbMax"]=HealBot_Aux_setInHealAbsorbMax,
@@ -879,6 +878,9 @@ local hbTimerFuncs={["INIT"]={
                         ["DeleteAllPlayerFrames"]=HealBot_Panel_PlayersTargetsDelAll,
                         ["FramesRefresh"]=HealBot_Timer_FramesRefresh,
                         ["RemoveInvalidLoadouts"]=HealBot_Action_RemoveInvalidLoadouts,
+                        ["OrphanedCheck"]=HealBot_Skins_Clear_Orphaned,
+                        ["UnusedFramesVarsCheck"]=HealBot_Skins_Clear_UnusedFramesVars,
+                        ["UnusedVarsCheck"]=HealBot_Skins_Clear_UnusedVars,
                     },
                    }
 
