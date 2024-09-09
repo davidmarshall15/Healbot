@@ -1745,6 +1745,122 @@ function HealBot_Update_ConvertClassToPlayer()
     end
 end
 
+function HealBot_Update_NilOnVal(t, key, v)
+    if t[key] and t[key] == v then t[key]=nil end
+end
+
+function HealBot_Update_GlobalVars()
+    local customDebuffPriority=HealBot_Data_DefaultVar("cDebuff")
+    local customBuffPriority=HealBot_Data_DefaultVar("cBuff")
+    for sid,_  in pairs(HealBot_Globals.CustomBuffBarColour) do
+        if sid~=customBuffPriority then
+            if HealBot_Globals.CustomBuffBarColour[sid].R == 0.25 and HealBot_Globals.CustomBuffBarColour[sid].G == 0.58 and HealBot_Globals.CustomBuffBarColour[sid].B == 0.8 then
+                HealBot_Globals.CustomBuffBarColour[sid]=nil
+            end
+        end
+    end
+    for sid,tag in pairs(HealBot_Globals.CustomBuffTag) do
+        if string.len(tag)<3 then
+            HealBot_Globals.CustomBuffTag[sid]=nil
+        end
+    end
+    for sid,tag in pairs(HealBot_Globals.CDCTag) do
+        if string.len(tag)<3 then
+            HealBot_Globals.CDCTag[sid]=nil
+        end
+    end
+    if HealBot_Globals.HealBot_Custom_Buffs_ShowBarCol then
+        for sid,col in pairs(HealBot_Globals.HealBot_Custom_Buffs_ShowBarCol) do
+            HealBot_Update_NilOnVal(HealBot_Globals.HealBot_Custom_Buffs_ShowBarCol, sid, 1)
+        end
+        HealBot_Globals.CustomBuffsShowBarCol=HealBot_Options_copyTable(HealBot_Globals.HealBot_Custom_Buffs_ShowBarCol)
+        HealBot_Globals.HealBot_Custom_Buffs_ShowBarCol=nil
+    end
+    if HealBot_Globals.HealBot_Custom_Buffs_IconGlow then
+        HealBot_Globals.CustomBuffsIconGlow=HealBot_Options_copyTable(HealBot_Globals.HealBot_Custom_Buffs_IconGlow)
+        HealBot_Globals.HealBot_Custom_Buffs_IconGlow=nil
+    end
+    for sid,_ in pairs(HealBot_Globals.CustomBuffsIconGlow) do
+        HealBot_Update_NilOnVal(HealBot_Globals.CustomBuffsIconGlow, sid, 1)
+    end
+    if HealBot_Globals.HealBot_Custom_Buffs_IconSet then
+        HealBot_Globals.CustomBuffsIconSet=HealBot_Options_copyTable(HealBot_Globals.HealBot_Custom_Buffs_IconSet)
+        HealBot_Globals.HealBot_Custom_Buffs_IconSet=nil
+    end
+    for sid,_ in pairs(HealBot_Globals.CustomBuffsIconSet) do
+        HealBot_Update_NilOnVal(HealBot_Globals.CustomBuffsIconSet, sid, 1)
+    end
+    if HealBot_Globals.HealBot_Custom_Buffs then
+        HealBot_Globals.CustomBuffs=HealBot_Options_copyTable(HealBot_Globals.HealBot_Custom_Buffs)
+        HealBot_Globals.HealBot_Custom_Buffs=nil
+    end
+    for sid,_ in pairs(HealBot_Globals.CustomBuffs) do
+        HealBot_Update_NilOnVal(HealBot_Globals.CustomBuffs, sid, 20)
+    end
+    if HealBot_Globals.HealBot_Custom_Debuffs_ShowBarCol then
+        for sid,col in pairs(HealBot_Globals.HealBot_Custom_Debuffs_ShowBarCol) do
+            HealBot_Update_NilOnVal(HealBot_Globals.HealBot_Custom_Debuffs_ShowBarCol, sid, 4)
+        end
+        HealBot_Globals.CustomDebuffsShowBarCol=HealBot_Options_copyTable(HealBot_Globals.HealBot_Custom_Debuffs_ShowBarCol)
+        HealBot_Globals.HealBot_Custom_Debuffs_ShowBarCol=nil
+    end
+    if HealBot_Globals.HealBot_Custom_Debuffs then
+        HealBot_Globals.CustomDebuffs=HealBot_Options_copyTable(HealBot_Globals.HealBot_Custom_Debuffs)
+        HealBot_Globals.HealBot_Custom_Debuffs=nil
+    end
+    if HealBot_Globals.HealBot_Custom_Debuffs_IconGlow then
+        HealBot_Globals.CustomDebuffsIconGlow=HealBot_Options_copyTable(HealBot_Globals.HealBot_Custom_Debuffs_IconGlow)
+        HealBot_Globals.HealBot_Custom_Debuffs_IconGlow=nil
+    end
+    for sid,_ in pairs(HealBot_Globals.CustomDebuffsIconGlow) do
+        HealBot_Update_NilOnVal(HealBot_Globals.CustomDebuffsIconGlow, sid, 1)
+    end
+    if HealBot_Globals.HealBot_Custom_Debuffs_IconSet then
+        HealBot_Globals.CustomDebuffsIconSet=HealBot_Options_copyTable(HealBot_Globals.HealBot_Custom_Debuffs_IconSet)
+        HealBot_Globals.HealBot_Custom_Debuffs_IconSet=nil
+    end
+    for sid,_ in pairs(HealBot_Globals.CustomDebuffsIconSet) do
+        HealBot_Update_NilOnVal(HealBot_Globals.CustomDebuffsIconSet, sid, 1)
+    end
+    if HealBot_Globals.HealBot_PermPrivateDamagers then
+        HealBot_Globals.PermPrivateDamagers=HealBot_Options_copyTable(HealBot_Globals.HealBot_PermPrivateDamagers)
+        HealBot_Globals.HealBot_PermPrivateDamagers=nil
+    end
+    if HealBot_Globals.HealBot_PermPrivateHealers then
+        HealBot_Globals.PermPrivateHealers=HealBot_Options_copyTable(HealBot_Globals.HealBot_PermPrivateHealers)
+        HealBot_Globals.HealBot_PermPrivateHealers=nil
+    end
+    if HealBot_Globals.HealBot_PermPrivateTanks then
+        HealBot_Globals.PermPrivateTanks=HealBot_Options_copyTable(HealBot_Globals.HealBot_PermPrivateTanks)
+        HealBot_Globals.HealBot_PermPrivateTanks=nil
+    end
+    if HealBot_Globals.HealBot_PermMyTargets then
+        HealBot_Globals.PermMyTargets=HealBot_Options_copyTable(HealBot_Globals.HealBot_PermMyTargets)
+        HealBot_Globals.HealBot_PermMyTargets=nil
+    end
+    if HealBot_Globals.HealBot_customPermUserName then
+        HealBot_Globals.PermUserName=HealBot_Options_copyTable(HealBot_Globals.HealBot_customPermUserName)
+        HealBot_Globals.HealBot_customPermUserName=nil
+    end
+    for sid,_  in pairs(HealBot_Globals.CDCBarColour) do
+        if sid~=customDebuffPriority then
+            if HealBot_Globals.CDCBarColour[sid].R == 0.45 and HealBot_Globals.CDCBarColour[sid].G == 0 and HealBot_Globals.CDCBarColour[sid].B == 0.26 then
+                HealBot_Globals.CDCBarColour[sid]=nil
+            end
+        end
+    end
+    HealBot_Globals.HealBot_Emotes=nil
+    HealBot_Globals.HealBot_Custom_Debuffs_EnableBar=nil
+    HealBot_Globals.VersionResetDone=nil
+    HealBot_Globals.HealBot_Custom_Buffs_EnableBar=nil
+    
+    HealBot_Config.BuffReset=nil
+    HealBot_Config.SpecIDAtSave=nil
+    HealBot_Config.Skin_ID=nil
+    HealBot_Config.SpellsUpdatedToV10=nil
+    HealBot_Config.EnableHealthy=nil
+end
+
 local skinName=""
 function HealBot_Update_Skins()
       --HealBot_setCall("HealBot_Update_Skins")
@@ -1772,6 +1888,7 @@ function HealBot_Update_Skins()
         HealBot_Update_luVars["ResetGlobalOld"]=true
         HealBot_Options_SetDefaults(true)
     elseif HealBot_Globals.LastVersionSkinUpdate~=HealBot_Global_Version() then
+        HealBot_Update_GlobalVars()
         for x=1,20 do  -- This can be remove when 9.2.x check is replace with defaults due to old version
             if HealBot_Config_Spells.Binds and HealBot_Config_Spells.Binds[x] and HealBot_Config_Spells.Binds[x] == 1 then HealBot_Config_Spells.Binds[x]=nil end
         end
@@ -1867,11 +1984,11 @@ function HealBot_Update_Skins()
             end
         end
         
-        if not HealBot_Globals.HealBot_Custom_Debuffs_ShowBarCol["DEFAULT"] then
-            HealBot_Globals.HealBot_Custom_Debuffs_ShowBarCol["DEFAULT"]=4
+        if not HealBot_Globals.CustomDebuffsShowBarCol["DEFAULT"] then
+            HealBot_Globals.CustomDebuffsShowBarCol["DEFAULT"]=4
         end
-        if not HealBot_Globals.HealBot_Custom_Buffs_ShowBarCol["DEFAULT"] then
-            HealBot_Globals.HealBot_Custom_Buffs_ShowBarCol["DEFAULT"]=4
+        if not HealBot_Globals.CustomBuffsShowBarCol["DEFAULT"] then
+            HealBot_Globals.CustomBuffsShowBarCol["DEFAULT"]=1
         end
         if HealBot_Globals.UltraPerf~=nil then
             HealBot_Globals.UltraPerf=nil

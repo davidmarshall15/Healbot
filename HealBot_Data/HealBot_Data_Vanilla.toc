@@ -2,8 +2,8 @@
 ## Title: HealBot Data
 ## Author: Strife
 ## Notes: HealBot data, localizations, player saved variables and libraries
-## SavedVariablesPerCharacter:  HealBot_Config, HealBot_Config_Spells, HealBot_Config_Buffs, HealBot_Config_Cures, HealBot_Config_ActionIcons, HealBot_Config_ActionIconsData, HealBot_ActionIcons_Loadouts, HealBot_ActionIconsData_Loadouts, HealBot_Spell_Loadouts
-## SavedVariables: Healbot_Config_Skins, Healbot_Config_Aux, HealBot_Globals, HealBot_Class_Spells, HealBot_Class_Buffs, HealBot_Class_Cures, HealBot_Skins_ActionIcons, HealBot_Skins_ActionIconsData, HealBot_Spells_Loadouts
+## SavedVariablesPerCharacter:  HealBot_Config, HealBot_Config_Spells, HealBot_Config_Buffs, HealBot_Config_Cures, HealBot_ActionIcons_Loadouts, HealBot_ActionIconsData_Loadouts, HealBot_Spell_Loadouts
+## SavedVariables: Healbot_Config_Skins, Healbot_Config_Aux, HealBot_Globals, HealBot_Class_Spells, HealBot_Class_Buffs, HealBot_Class_Cures, HealBot_Skins_ActionIcons, HealBot_Skins_ActionIconsData
 ## IconTexture: Interface\AddOns\HealBot\Images\HealBot.tga
 
 Libs\LibStub\LibStub.lua

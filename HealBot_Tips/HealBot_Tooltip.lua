@@ -5,6 +5,7 @@ local xButton=nil
 local _
 local powerCols={["r"]=1,["g"]=1,["b"]=1}
 local playerPowerCols={["r"]=1,["g"]=1,["b"]=1}
+local customDebuffPriority=HealBot_Data_DefaultVar("cDebuff")
 local hbCommands={ [strlower(HEALBOT_DISABLED_TARGET)]=true,
                    [strlower(HEALBOT_ASSIST)]=true,
                    [strlower(HEALBOT_FOCUS)]=true,
@@ -583,7 +584,6 @@ local function HealBot_Tooltip_addPlayerDebuffLine(uName, debuffId, debuffName)
                                         (HealBot_Config_Cures.CDCBarColour[DebuffType].B or 0.4)+0.2,
                                         1," ",0,0,0,0)
         else
-            local customDebuffPriority=HEALBOT_CUSTOM_en.."15"
             HealBot_Tooltip_SetLine(uName.." suffers from "..debuffName,
                                         (HealBot_Globals.CDCBarColour[customDebuffPriority].R or 0.5)+0.2,
                                         (HealBot_Globals.CDCBarColour[customDebuffPriority].G or 0.2)+0.2,
@@ -1336,13 +1336,9 @@ function HealBot_Tooltip_DisplayIconTooltip(frame, details, name, aType, desc, r
     local iGlow=1
     local iScale=1
     if aType == "Buff" then
-        aPrio=HealBot_Globals.HealBot_Custom_Buffs[details.spellId] or HealBot_Globals.HealBot_Custom_Buffs[name] or 99
-        if aPrio == 99 then
-            local bId=HealBot_Options_MissingBuffPrio(details.spellId)
-            aPrio=HealBot_Globals.HealBot_Custom_Buffs[bId] or 20
-        end
-        aCol=HealBot_Globals.HealBot_Custom_Buffs_ShowBarCol[name] or HealBot_Globals.HealBot_Custom_Buffs_ShowBarCol[details.spellId] or 1
-        iGlow=HealBot_Globals.HealBot_Custom_Buffs_IconGlow[name] or HealBot_Globals.HealBot_Custom_Buffs_IconGlow[details.spellId] or 1
+        aPrio=HealBot_Globals.CustomBuffs[details.spellId] or HealBot_Globals.CustomBuffs[name] or 20
+        aCol=HealBot_Globals.CustomBuffsShowBarCol[name] or HealBot_Globals.CustomBuffsShowBarCol[details.spellId] or 1
+        iGlow=HealBot_Globals.CustomBuffsIconGlow[name] or HealBot_Globals.CustomBuffsIconGlow[details.spellId] or 1
         if id<9 then
             iScale=HealBot_Skins_GetIconVar("BSCALE", frame, 1)
         elseif id<13 then
@@ -1355,8 +1351,8 @@ function HealBot_Tooltip_DisplayIconTooltip(frame, details, name, aType, desc, r
     else
         aPrio, bPrio=HealBot_Options_retDebuffPriority(details.spellId, name, details.debuffType)
         if bPrio<aPrio then aPrio=bPrio end
-        aCol=HealBot_Globals.HealBot_Custom_Debuffs_ShowBarCol[details.spellId] or HealBot_Globals.HealBot_Custom_Debuffs_ShowBarCol[name] or 1
-        iGlow=HealBot_Globals.HealBot_Custom_Debuffs_IconGlow[name] or HealBot_Globals.HealBot_Custom_Debuffs_IconGlow[details.spellId] or 1
+        aCol=HealBot_Globals.CustomDebuffsShowBarCol[details.spellId] or HealBot_Globals.CustomDebuffsShowBarCol[name] or 4
+        iGlow=HealBot_Globals.CustomDebuffsIconGlow[name] or HealBot_Globals.CustomDebuffsIconGlow[details.spellId] or 1
         if id<59 then
             iScale=HealBot_Skins_GetIconVar("DSCALE", frame, 1)
         elseif id<63 then
@@ -1441,7 +1437,6 @@ function HealBot_Tooltip_DebuffIconTooltip(button, id)
                         g=(HealBot_Config_Cures.CDCBarColour[DebuffType].G or 0.2)+0.2
                         b=(HealBot_Config_Cures.CDCBarColour[DebuffType].B or 0.4)+0.2
                     else
-                        local customDebuffPriority=HEALBOT_CUSTOM_en.."15"
                         r=(HealBot_Globals.CDCBarColour[customDebuffPriority].R or 0.5)+0.2
                         g=(HealBot_Globals.CDCBarColour[customDebuffPriority].G or 0.2)+0.2
                         b=(HealBot_Globals.CDCBarColour[customDebuffPriority].B or 0.4)+0.2

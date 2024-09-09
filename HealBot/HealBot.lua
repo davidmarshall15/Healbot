@@ -634,6 +634,9 @@ function HealBot_SlashCmd(cmd)
     local HBcmd, x, y, z=string.split(" ", cmd)
     if type(HBcmd) == "string" then
         HBcmd=string.lower(HBcmd)
+        if x and type(x) == "string" then x = string.lower(x) end
+        if y and type(y) == "string" then y = string.lower(y) end
+        if z and type(z) == "string" then z = string.lower(z) end
         if (HBcmd == "se1") then
             SetCVar("Sound_EnableErrorSpeech", "0");
         elseif (HBcmd == "se2") then
@@ -645,16 +648,20 @@ function HealBot_SlashCmd(cmd)
         elseif (HBcmd == "" or HBcmd == "o" or HBcmd == "options" or HBcmd == "opt" or HBcmd == "config" or HBcmd == "cfg") then
             HealBot_Options_ShowHide()
         elseif (HBcmd == "d" or HBcmd == "defaults") then
-            HealBot_Options_Defaults_OnClick(HealBot_Options_Defaults, true);
+            if HBcmd == "defaults" and x == "force" then
+                HealBot_Options_SetDefaults(true)
+            else
+                HealBot_Options_Defaults_OnClick(HealBot_Options_Defaults, true);
+            end
         elseif (HBcmd == "ui") then
             HealBot_AddChat(HEALBOT_CHAT_HARDRELOAD)
             HealBot_SetResetFlag("HARD")
-        elseif (HBcmd == "ri" or (HBcmd == "reset" and x and string.lower(x) == "healbot")) then
+        elseif (HBcmd == "ri" or (HBcmd == "reset" and (x or "") == "healbot")) then
             HealBot_AddChat(HEALBOT_CHAT_SOFTRELOAD)
             HealBot_SetResetFlag("SOFT")
-        elseif (HBcmd == "rc" or (HBcmd == "reset" and x and string.lower(x) == "customdebuffs")) then
+        elseif (HBcmd == "rc" or (HBcmd == "reset" and (x or "") == "customdebuffs")) then
             HealBot_Timers_Set("RESET","CustomDebuffs")
-        elseif (HBcmd == "rs" or (HBcmd == "reset" and x and string.lower(x) == "skin")) then
+        elseif (HBcmd == "rs" or (HBcmd == "reset" and (x or "") == "skin")) then
             HealBot_Timers_Set("RESET","Skins")
         elseif (HBcmd == "show") then
             HealBot_SetResetFlag("FRAMES")
@@ -733,7 +740,6 @@ function HealBot_SlashCmd(cmd)
             end
             HealBot_Timers_Set("INIT","PrepSetAllAttribs",0.1)
         elseif (HBcmd == "suppress" and x) then
-            x=string.lower(x)
             HealBot_Options_ToggleSuppressSetting(x)
         elseif (HBcmd == "atd" and x) then
             if (tonumber(x)>3) and (tonumber(x)<122) then
@@ -2031,11 +2037,11 @@ end
 
 function HealBot_ResetCustomDebuffs()
       --HealBot_setCall("HealBot_ResetCustomDebuffs")
-    HealBot_Globals.HealBot_Custom_Debuffs=HealBot_Options_copyTable(HealBot_GlobalsDefaults.HealBot_Custom_Debuffs)
+    HealBot_Globals.CustomDebuffs=HealBot_Options_copyTable(HealBot_GlobalsDefaults.CustomDebuffs)
     HealBot_Globals.Custom_Debuff_Categories=HealBot_Options_copyTable(HealBot_GlobalsDefaults.Custom_Debuff_Categories)
     HealBot_Globals.FilterCustomDebuff=HealBot_Options_copyTable(HealBot_GlobalsDefaults.FilterCustomDebuff)
     HealBot_Globals.CDCBarColour=HealBot_Options_copyTable(HealBot_GlobalsDefaults.CDCBarColour)
-    HealBot_Globals.HealBot_Custom_Debuffs_ShowBarCol=HealBot_Options_copyTable(HealBot_GlobalsDefaults.HealBot_Custom_Debuffs_ShowBarCol)
+    HealBot_Globals.CustomDebuffsShowBarCol=HealBot_Options_copyTable(HealBot_GlobalsDefaults.CustomDebuffsShowBarCol)
     HealBot_Globals.IgnoreCustomDebuff=HealBot_Options_copyTable(HealBot_GlobalsDefaults.IgnoreCustomDebuff)
     HealBot_Globals.CDCTag=HealBot_Options_copyTable(HealBot_GlobalsDefaults.CDCTag)
     HealBot_Options_NewCDebuff:SetText("")
@@ -2382,13 +2388,8 @@ end
 
 function HealBot_LoadAddOn()
   --HealBot_setCall("HealBot_LoadAddOn")
-    HealBot_Data_InitVars()
-    HealBot_Lang_InitVars()
-    HealBot_Timers_Lang()
     HealBot_globalVars()
-    HealBot_Options_InitVars()
-    HealBot_Panel_Init()
-    HealBot_Action_SetCustomClassCols(2)
+    HealBot_Data_InitVars()
     table.foreach(HealBot_ConfigDefaults, function (key,val)
         if HealBot_Config[key] == nil then
             HealBot_Config[key]=val;
@@ -2424,6 +2425,12 @@ function HealBot_LoadAddOn()
             HealBot_Config_Cures[key]=val;
         end
     end);
+    if not Healbot_Config_Skins.Current_Skin then Healbot_Config_Skins.Current_Skin=HEALBOT_SKINS_STD end
+    HealBot_Action_SetCustomClassCols(2)
+    HealBot_Lang_InitVars()
+    HealBot_Timers_Lang()
+    HealBot_Options_InitVars()
+    HealBot_Panel_Init()
     for x=1,3 do
         for z=0,3 do
             HealBot_luVars["FPS"][x][z]=HealBot_Globals.FPS
@@ -2469,7 +2476,7 @@ function HealBot_VariablesLoaded()
     HealBot_Data["PGUID"]=UnitGUID("player") or "x"
     HealBot_Options_setClassEn()
     HealBot_Options_setLists()
-    HealBot_customTempUserName=HealBot_Options_copyTable(HealBot_Globals.HealBot_customPermUserName)
+    HealBot_customTempUserName=HealBot_Options_copyTable(HealBot_Globals.PermUserName)
     HealBot_setTooltipUpdateInterval()
     HealBot_Panel_InitOptBars()
     HealBot_luVars["CPUProfilerOn"]=GetCVarBool("scriptProfile")
@@ -5235,55 +5242,6 @@ function HealBot_Update_RecentHealsBar(button)
     button.status.playerlastheal=HealBot_TimeNow+0.3
 end
 
-function HealBot_Options_ResetSetting(resetTab)
-      --HealBot_setCall("HealBot_Options_ResetSetting")
-    if resetTab == "BUFF" then
-        local msg="Healbot recommends resetting the buffs tab \n\n Continue?"
-        StaticPopupDialogs["HEALBOT_OPTIONS_RESETSETTING"]={
-            text=msg,
-            button1=HEALBOT_WORDS_YES,
-            button2=HEALBOT_WORDS_NO,
-            OnAccept=function()
-                HealBot_Globals.VersionResetDone["BUFF"]="9.1.0.0"
-                HealBot_Reset_Buffs()
-            end,
-            timeout=0,
-            whileDead=1,
-            hideOnEscape=1
-        };
-    elseif resetTab == "CDEBUFF" then
-        local msg="Healbot recommends resetting the custom debuffs tab \n\n Continue?"
-        StaticPopupDialogs["HEALBOT_OPTIONS_RESETSETTING"]={
-            text=msg,
-            button1=HEALBOT_WORDS_YES,
-            button2=HEALBOT_WORDS_NO,
-            OnAccept=function()
-                HealBot_Globals.VersionResetDone["CDEBUFF"]="9.1.0.0"
-                HealBot_ResetCustomDebuffs()
-            end,
-            timeout=0,
-            whileDead=1,
-            hideOnEscape=1
-        };
-    elseif resetTab == "ICONS" then
-        local msg="Healbot recommends resetting HoT/buff icons\n\n Continue?"
-        StaticPopupDialogs["HEALBOT_OPTIONS_RESETSETTING"]={
-            text=msg,
-            button1=HEALBOT_WORDS_YES,
-            button2=HEALBOT_WORDS_NO,
-            OnAccept=function()
-                HealBot_Globals.VersionResetDone["ICONS"]="10.0.0.0"
-                HealBot_Reset_Icons()
-            end,
-            timeout=0,
-            whileDead=1,
-            hideOnEscape=1
-        };
-    end
-
-    StaticPopup_Show ("HEALBOT_OPTIONS_RESETSETTING");
-end
-
 function HealBot_Copy_SpellCombo(combo, maxButtons)
       --HealBot_setCall("HealBot_Copy_SpellCombo")
     if combo then
@@ -5379,9 +5337,9 @@ end
 function HealBot_Reset_Icons()
       --HealBot_setCall("HealBot_Reset_Icons")
     HealBot_Globals.IgnoreCustomBuff={}
-    HealBot_Globals.HealBot_Custom_Buffs={}
-    HealBot_Globals.HealBot_Custom_Buffs_ShowBarCol={}
-    HealBot_Globals.CustomBuffBarColour={[HEALBOT_CUSTOM_en.."Buff"]={ R=0.25, G=0.58, B=0.8, },}
+    HealBot_Globals.CustomBuffs={}
+    HealBot_Globals.CustomBuffsShowBarCol={}
+    HealBot_Globals.CustomBuffBarColour={[HealBot_Data_DefaultVar("cBuff")]={ R=0.25, G=0.58, B=0.8, },}
     HealBot_Globals.WatchHoT=HealBot_Options_copyTable(HealBot_GlobalsDefaults.WatchHoT)
     HealBot_Globals.CustomBuffTag=HealBot_Options_copyTable(HealBot_GlobalsDefaults.CustomBuffTag)
     HealBot_Timers_InitExtraOptions()

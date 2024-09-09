@@ -2173,6 +2173,7 @@ function HealBot_Aux_ResetByTypeById(button)
 end
 
 local auxTestText, auxTestCol, auxTestNonTextBarSize, auxTestNonTextTxtSize="", false, 0, 0
+local customDebuffPriority=HealBot_Data_DefaultVar("cDebuff")
 local function HealBot_Aux_SetTestButton(button)
       --HealBot_setCall("HealBot_Aux_SetTestButton", button)
     for x=1,9 do
@@ -2338,12 +2339,12 @@ local function HealBot_Aux_SetTestButton(button)
                 if button.frame<10 then
                     auxTestText=HEALBOT_OPTIONS_TAB_DEBUFFS
                     if HealBot_Aux_GetBarVar("COLOUR", button.frame, x) == 1 then
-                        button.gref.aux[x]:SetStatusBarColor(HealBot_Globals.CDCBarColour[HEALBOT_CUSTOM_en.."15"].R,
-                                                             HealBot_Globals.CDCBarColour[HEALBOT_CUSTOM_en.."15"].G,
-                                                             HealBot_Globals.CDCBarColour[HEALBOT_CUSTOM_en.."15"].B,1)
+                        button.gref.aux[x]:SetStatusBarColor(HealBot_Globals.CDCBarColour[customDebuffPriority].R,
+                                                             HealBot_Globals.CDCBarColour[customDebuffPriority].G,
+                                                             HealBot_Globals.CDCBarColour[customDebuffPriority].B,1)
                     end
                     if HealBot_Aux_GetBarTextVar("COLTYPE", button.frame, x) == 1 then
-                        HealBot_Aux_AutoTextColour(button, x, HealBot_Globals.CDCBarColour[HEALBOT_CUSTOM_en.."15"].R, HealBot_Globals.CDCBarColour[HEALBOT_CUSTOM_en.."15"].G, HealBot_Globals.CDCBarColour[HEALBOT_CUSTOM_en.."15"].B, 0.4)
+                        HealBot_Aux_AutoTextColour(button, x, HealBot_Globals.CDCBarColour[customDebuffPriority].R, HealBot_Globals.CDCBarColour[customDebuffPriority].G, HealBot_Globals.CDCBarColour[customDebuffPriority].B, 0.4)
                         button.gref.auxtxt[x]:SetTextColor(button.auxtxt[x]["R"], button.auxtxt[x]["G"], button.auxtxt[x]["B"],1)
                     end
                     auxTestCol=true

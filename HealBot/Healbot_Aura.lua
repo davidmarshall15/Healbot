@@ -1321,7 +1321,7 @@ function HealBot_Aura_DoUpdateDebuffIcon(button, iconData, index, timer, lastSpe
 end
 
 local hbGlowSpellName,hbGlowIdx="",1
-local customDebuffPriority=HEALBOT_CUSTOM_en.."15"
+local customDebuffPriority=HealBot_Data_DefaultVar("cDebuff")
 function HealBot_Aura_UpdateDebuffIcon(button, iconData, index, timer, spellId)
       --HealBot_setCall("HealBot_Aura_UpdateDebuffIcon", button, nil, nil, true)
     HealBot_Aura_DoUpdateDebuffIcon(button, iconData, index, timer, spellId, false)
@@ -1500,7 +1500,7 @@ function HealBot_Aura_DoUpdateBuffIcon(button, iconData, index, timer, lastSpell
     end
 end
 
-local customBuffPriority=HEALBOT_CUSTOM_en.."Buff"
+local customBuffPriority=HealBot_Data_DefaultVar("cBuff")
 function HealBot_Aura_UpdateBuffIcon(button, iconData, index, timer, spellId)
       --HealBot_setCall("HealBot_Aura_UpdateBuffIcon", button, nil, nil, true)
     HealBot_Aura_DoUpdateBuffIcon(button, iconData, index, timer, spellId, false)
@@ -1779,15 +1779,15 @@ end
 
 function HealBot_Aura_AutoUpdateCustomDebuff(button, name, spellId)
       --HealBot_setCall("HealBot_Aura_AutoUpdateCustomDebuff", button)
-    for dID, x in pairs(HealBot_Globals.HealBot_Custom_Debuffs) do
+    for dID, x in pairs(HealBot_Globals.CustomDebuffs) do
         if not HealBot_WoWAPI_SpellName(dID) and dID == name then
             HealBot_Globals.Custom_Debuff_Categories[spellId]=HealBot_Globals.Custom_Debuff_Categories[name]
-            HealBot_Globals.HealBot_Custom_Debuffs[spellId]=x
+            HealBot_Globals.CustomDebuffs[spellId]=x
             if HealBot_Globals.FilterCustomDebuff[name] then 
                 HealBot_Globals.FilterCustomDebuff[spellId]=HealBot_Globals.FilterCustomDebuff[name]
             end
-            if HealBot_Globals.HealBot_Custom_Debuffs_ShowBarCol[name] then
-                HealBot_Globals.HealBot_Custom_Debuffs_ShowBarCol[spellId]=HealBot_Globals.HealBot_Custom_Debuffs_ShowBarCol[name]
+            if HealBot_Globals.CustomDebuffsShowBarCol[name] then
+                HealBot_Globals.CustomDebuffsShowBarCol[spellId]=HealBot_Globals.CustomDebuffsShowBarCol[name]
             end
             if HealBot_Globals.CDCBarColour[name] then
                 HealBot_Globals.CDCBarColour[spellId]=HealBot_Options_copyTable(HealBot_Globals.CDCBarColour[name])
@@ -1795,11 +1795,11 @@ function HealBot_Aura_AutoUpdateCustomDebuff(button, name, spellId)
             if HealBot_Globals.IgnoreCustomDebuff[name] then
                 HealBot_Globals.IgnoreCustomDebuff[spellId]=HealBot_Options_copyTable(HealBot_Globals.IgnoreCustomDebuff[name])
             end
-            if HealBot_Globals.HealBot_Custom_Debuffs_IconSet[name] then
-                HealBot_Globals.HealBot_Custom_Debuffs_IconSet[spellId]=HealBot_Globals.HealBot_Custom_Debuffs_IconSet[name]
+            if HealBot_Globals.CustomDebuffsIconSet[name] then
+                HealBot_Globals.CustomDebuffsIconSet[spellId]=HealBot_Globals.CustomDebuffsIconSet[name]
             end
-            if HealBot_Globals.HealBot_Custom_Debuffs_IconGlow[name] then
-                HealBot_Globals.HealBot_Custom_Debuffs_IconGlow[spellId]=HealBot_Globals.HealBot_Custom_Debuffs_IconGlow[name]
+            if HealBot_Globals.CustomDebuffsIconGlow[name] then
+                HealBot_Globals.CustomDebuffsIconGlow[spellId]=HealBot_Globals.CustomDebuffsIconGlow[name]
             end
             HealBot_Options_DeleteCDebuff(name, name)
             break
@@ -1986,7 +1986,7 @@ function HealBot_Aura_SetGeneralBuff(button, bName)
             HealBot_Text_setNameTag(button)
         end
     end
-    button.aura.buff.colbar=(HealBot_Globals.HealBot_Custom_Buffs_ShowBarCol["DEFAULT"] or 4)-1
+    button.aura.buff.colbar=(HealBot_Globals.CustomBuffsShowBarCol["DEFAULT"] or 4)-1
     if HealBot_Aura_ID[bName] and HealBot_AuraBuffCache[uaBuffData[button.id][uaBuffSlot].spellId] then
         if not button.aura.buff.temp.active or button.aura.buff.temp.priority>HealBot_AuraBuffCache[uaBuffData[button.id][uaBuffSlot].spellId]["priority"] then
             button.aura.buff.temp.active=true
@@ -2138,7 +2138,6 @@ function HealBot_Aura_ShowCustomBuff(button)
         if buffCustomType then
             if buffCustomType == "S" then
                 if uaBuffData[button.id][uaBuffSlot].sourceUnitIsPlayer then
-                    HealBot_Options_MissingBuffPrio(uaBuffData[button.id][uaBuffSlot].spellId)
                     return true, true, false
                 else
                     return false, true, false
@@ -2146,14 +2145,12 @@ function HealBot_Aura_ShowCustomBuff(button)
             elseif buffCustomType == "C" then
                 _, scbUnitClassEN=UnitClass(uaBuffData[button.id][uaBuffSlot].sourceUnit)
                 if scbUnitClassEN and HealBot_Data["PCLASSTRIM"] == strsub(scbUnitClassEN,1,4) then
-                    HealBot_Options_MissingBuffPrio(uaBuffData[button.id][uaBuffSlot].spellId)
                     HealBot_AuraBuffCache[uaBuffData[button.id][uaBuffSlot].spellId].always=true
                     return true, true, false
                 else
                     return false, true, true
                 end
             elseif buffCustomType == "A" then
-                HealBot_Options_MissingBuffPrio(uaBuffData[button.id][uaBuffSlot].spellId)
                 HealBot_AuraBuffCache[uaBuffData[button.id][uaBuffSlot].spellId].always=true
                 return true, true, false
             end
@@ -2981,7 +2978,7 @@ local function HealBot_Aura_PostUpdateUnitBuffsData(button, spellID, spellName)
                 HealBot_Timers_Set("OOC","BuffIdLookup",0.1)
             end
         end
-        HealBot_AuraBuffCache[spellID]["priority"]=HealBot_Globals.HealBot_Custom_Buffs[spellName] or HealBot_Globals.HealBot_Custom_Buffs[spellID] or 20
+        HealBot_AuraBuffCache[spellID]["priority"]=HealBot_Globals.CustomBuffs[spellName] or HealBot_Globals.CustomBuffs[spellID] or 20
         if HealBot_AuraBuffCache[spellID]["priority"]<10 then
             HealBot_AuraBuffCache[spellID]["pid"]="x0"..HealBot_AuraBuffCache[spellID]["priority"]..spellID
         else
@@ -3194,7 +3191,7 @@ function HealBot_Aura_PostUpdateUnitDebuffsData(button, spellID, spellName, debu
             HealBot_AuraDebuffCache[spellID]["priority"]=99
             HealBot_AuraDebuffCache[spellID]["name"]=spellName
             HealBot_Aura_ID[spellName]=spellID
-            if not HealBot_Globals.HealBot_Custom_Debuffs[spellID] then
+            if not HealBot_Globals.CustomDebuffs[spellID] then
                 HealBot_Aura_AutoUpdateCustomDebuff(button, spellName, spellID)
             end
             if HealBot_Aura_CanDispel[spellID] == nil then
@@ -3444,12 +3441,12 @@ function HealBot_Aura_CheckUnitBuffs(button, selfOnly)
                 end
                 if curBuffName then
                     if HealBot_AuraBuffCache[button.aura.buff.id].isAuto then
-                        buffBarCol=HealBot_Globals.HealBot_Custom_Buffs_ShowBarCol[HEALBOT_CUSTOM_CAT_CUSTOM_AUTOBUFFS] or 1
+                        buffBarCol=HealBot_Globals.CustomBuffsShowBarCol[HEALBOT_CUSTOM_CAT_CUSTOM_AUTOBUFFS] or 1
                     else
-                        buffBarCol=HealBot_Globals.HealBot_Custom_Buffs_ShowBarCol[HealBot_AuraBuffCache[button.aura.buff.id]["name"]] or 1
+                        buffBarCol=HealBot_Globals.CustomBuffsShowBarCol[HealBot_AuraBuffCache[button.aura.buff.id]["name"]] or 1
                     end
-                    if (HealBot_Globals.HealBot_Custom_Buffs_ShowBarCol[button.aura.buff.id] or 1) > buffBarCol then
-                        buffBarCol=HealBot_Globals.HealBot_Custom_Buffs_ShowBarCol[button.aura.buff.id] or 1
+                    if (HealBot_Globals.CustomBuffsShowBarCol[button.aura.buff.id] or 1) > buffBarCol then
+                        buffBarCol=HealBot_Globals.CustomBuffsShowBarCol[button.aura.buff.id] or 1
                     end
                     if buffBarCol>1 and button.aura.buff.colbar == 0 then
                         button.aura.buff.colbar=buffBarCol-1
@@ -3579,12 +3576,12 @@ function HealBot_Aura_CheckUnitDebuffs(button, selfOnly)
         end
         if button.aura.debuff.id>0 and HealBot_Panel_RaidPetUnitButtonCheck(button.guid) then
             if HealBot_AuraDebuffCache[button.aura.debuff.id].isAuto then 
-                debuffBarCol=HealBot_Globals.HealBot_Custom_Debuffs_ShowBarCol[HEALBOT_CUSTOM_CAT_CUSTOM_AUTOMATIC] or 4
+                debuffBarCol=HealBot_Globals.CustomDebuffsShowBarCol[HEALBOT_CUSTOM_CAT_CUSTOM_AUTOMATIC] or 4
             elseif HealBot_AuraDebuffCache[button.aura.debuff.id]["debuffType"] == HEALBOT_CUSTOM_en then
-                debuffBarCol=HealBot_Globals.HealBot_Custom_Debuffs_ShowBarCol[button.aura.debuff.id] or 
-                             HealBot_Globals.HealBot_Custom_Debuffs_ShowBarCol[HealBot_AuraDebuffCache[button.aura.debuff.id]["name"]] or 4
+                debuffBarCol=HealBot_Globals.CustomDebuffsShowBarCol[button.aura.debuff.id] or 
+                             HealBot_Globals.CustomDebuffsShowBarCol[HealBot_AuraDebuffCache[button.aura.debuff.id]["name"]] or 4
             else
-                debuffBarCol=HealBot_Globals.HealBot_Custom_Debuffs_ShowBarCol["DEFAULT"] or 4
+                debuffBarCol=HealBot_Globals.CustomDebuffsShowBarCol["DEFAULT"] or 4
             end
             button.aura.debuff.dispellable=HealBot_Aura_CanDispel[button.aura.debuff.id]
             button.aura.debuff.colbar=debuffBarCol-1
@@ -4325,11 +4322,11 @@ function HealBot_Aura_ConfigClassHoT()
             else
                 HealBot_Aura_ConfigClassAllHoT(id, sName, "A")
             end
-            if HealBot_Globals.HealBot_Custom_Buffs_IconSet[id] then
-                HealBot_Aura_ConfigBuffIconSetId(id, sName, HealBot_Globals.HealBot_Custom_Buffs_IconSet[id])
+            if HealBot_Globals.CustomBuffsIconSet[id] then
+                HealBot_Aura_ConfigBuffIconSetId(id, sName, HealBot_Globals.CustomBuffsIconSet[id])
             end
-            if HealBot_Globals.HealBot_Custom_Buffs_IconGlow[id] then
-                HealBot_Aura_ConfigBuffIconGlowId(id, sName, HealBot_Globals.HealBot_Custom_Buffs_IconGlow[id])
+            if HealBot_Globals.CustomBuffsIconGlow[id] then
+                HealBot_Aura_ConfigBuffIconGlowId(id, sName, HealBot_Globals.CustomBuffsIconGlow[id])
             end
         end
     end
@@ -4373,14 +4370,14 @@ function HealBot_Aura_ConfigDebuffs()
     for id,_ in pairs(HealBot_DebuffIconSet) do
         HealBot_DebuffIconSet[id]=nil
     end
-    for id, _ in pairs(HealBot_Globals.HealBot_Custom_Debuffs) do
-        if HealBot_Globals.HealBot_Custom_Debuffs_IconSet[id] then
+    for id, _ in pairs(HealBot_Globals.CustomDebuffs) do
+        if HealBot_Globals.CustomDebuffsIconSet[id] then
             local sName=HealBot_WoWAPI_SpellName(id)
-            HealBot_Aura_ConfigDebuffIconSetId(id, sName, HealBot_Globals.HealBot_Custom_Debuffs_IconSet[id])
+            HealBot_Aura_ConfigDebuffIconSetId(id, sName, HealBot_Globals.CustomDebuffsIconSet[id])
         end
-        if HealBot_Globals.HealBot_Custom_Debuffs_IconGlow[id] then
+        if HealBot_Globals.CustomDebuffsIconGlow[id] then
             local sName=HealBot_WoWAPI_SpellName(id)
-            HealBot_Aura_ConfigDebuffIconSetGlow(id, sName, HealBot_Globals.HealBot_Custom_Debuffs_IconGlow[id])
+            HealBot_Aura_ConfigDebuffIconSetGlow(id, sName, HealBot_Globals.CustomDebuffsIconGlow[id])
         end
     end
     HealBot_Timers_Set("AURA","UpdateAllDebuffIcons")
@@ -4424,20 +4421,36 @@ function HealBot_Aura_BuffIdLookup()
             if HealBot_Globals.IgnoreCustomBuff[sName] then
                 HealBot_Globals.IgnoreCustomBuff[sID]=HealBot_Options_copyTable(HealBot_Globals.IgnoreCustomBuff[sName])
             end
-            if HealBot_Globals.HealBot_Custom_Buffs[sName] then
-                HealBot_Globals.HealBot_Custom_Buffs[sID]=HealBot_Globals.HealBot_Custom_Buffs[sName]
+            if HealBot_Globals.CustomBuffs[sName] then
+                if HealBot_Globals.CustomBuffs[sName]<20 then
+                    HealBot_Globals.CustomBuffs[sID]=HealBot_Globals.CustomBuffs[sName]
+                else
+                    HealBot_Globals.CustomBuffs[sName]=nil
+                end
             end
             if HealBot_Globals.CustomBuffBarColour[sName] then
                 HealBot_Globals.CustomBuffBarColour[sID]=HealBot_Options_copyTable(HealBot_Globals.CustomBuffBarColour[sName])
             end
-            if HealBot_Globals.HealBot_Custom_Buffs_ShowBarCol[sName] then
-                HealBot_Globals.HealBot_Custom_Buffs_ShowBarCol[sID]=HealBot_Globals.HealBot_Custom_Buffs_ShowBarCol[sName]
+            if HealBot_Globals.CustomBuffsShowBarCol[sName] then
+                if HealBot_Globals.CustomBuffsShowBarCol[sName]>1 then
+                    HealBot_Globals.CustomBuffsShowBarCol[sID]=HealBot_Globals.CustomBuffsShowBarCol[sName]
+                else
+                    HealBot_Globals.CustomBuffsShowBarCol[sName]=nil
+                end
             end
-            if HealBot_Globals.HealBot_Custom_Buffs_IconSet[sName] then
-                HealBot_Globals.HealBot_Custom_Buffs_IconSet[sID]=HealBot_Globals.HealBot_Custom_Buffs_IconSet[sName]
+            if HealBot_Globals.CustomBuffsIconSet[sName] then
+                if HealBot_Globals.CustomBuffsIconSet[sName]>1 then
+                    HealBot_Globals.CustomBuffsIconSet[sID]=HealBot_Globals.CustomBuffsIconSet[sName]
+                else
+                    HealBot_Globals.CustomBuffsIconSet[sName]=nil
+                end
             end
-            if HealBot_Globals.HealBot_Custom_Buffs_IconGlow[sName] then
-                HealBot_Globals.HealBot_Custom_Buffs_IconGlow[sID]=HealBot_Globals.HealBot_Custom_Buffs_IconGlow[sName]
+            if HealBot_Globals.CustomBuffsIconGlow[sName] then
+                if HealBot_Globals.CustomBuffsIconGlow[sName]>1 then
+                    HealBot_Globals.CustomBuffsIconGlow[sID]=HealBot_Globals.CustomBuffsIconGlow[sName]
+                else
+                    HealBot_Globals.CustomBuffsIconGlow[sName]=nil
+                end
             end
             HealBot_Options_DeleteBuffHoT(class, sName, sName)
         end

@@ -4900,13 +4900,13 @@ function HealBot_Action_CustomName(cName)
     local isPerm=hbCustomName["isPerm"]
     if isAdd then
         if isPerm then
-            HealBot_Globals.HealBot_customPermUserName[xGUID]=cName
+            HealBot_Globals.PermUserName[xGUID]=cName
         end
         HealBot_customTempUserName[xGUID]=cName
         HealBot_SetUnitName(cName, xGUID)
     else
         if isPerm then
-            HealBot_Globals.HealBot_customPermUserName[xGUID]=nil
+            HealBot_Globals.PermUserName[xGUID]=nil
         else
             HealBot_customTempUserName[xGUID]=nil
         end
@@ -5211,7 +5211,7 @@ function HealBot_Action_hbmenuFrame_DropDown_Initialize(self,level,menuList)
         info=UIDropDownMenu_CreateInfo();
         info.hasArrow=false; 
         info.notCheckable=true;
-        if HealBot_Globals.HealBot_customPermUserName[UnitGUID(self.unit)] then
+        if HealBot_Globals.PermUserName[UnitGUID(self.unit)] then
             info.text=HEALBOT_WORDS_REMOVEPERMCUSTOMNAME
             info.func=function() HealBot_Action_DelCustomName(UnitGUID(self.unit), false, true); end;
         else
@@ -7745,7 +7745,7 @@ end
 function HealBot_Action_StickyFrameStuckTo(frame,stuckTo,stuckPoint,stuckToPoint,HBframe,cf)
         --HealBot_setCall("HealBot_Action_StickyFrameStuckTo")
     HealBot_Skins_SetFrameVar(true, "StickyFrames", "STUCK", frame)
-    HealBot_Skins_SetFrameVar(stuckTo, "StickyFrames", "stuckTo", frame)
+    HealBot_Skins_SetFrameVar(stuckTo, "StickyFrames", "STUCKTO", frame)
     HealBot_Skins_SetFrameVar(stuckPoint, "StickyFrames", "STUCKPOINT", frame)
     HealBot_Skins_SetFrameVar(stuckToPoint, "StickyFrames", "STUCKTOPOINT", frame)
     HealBot_Action_StickyFrameSetPoint(frame,stuckTo,stuckPoint,stuckToPoint,HBframe,cf)

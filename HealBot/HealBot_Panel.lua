@@ -298,13 +298,13 @@ function HealBot_Panel_addDataStore(unit, nRaidID, isPlayer, nPartyID)
                 hbPanel_dataPetGUIDs[dsGUID]=unit
                 hbPanel_dataPetUnits[unit]=dsGUID
             end
-            if HealBot_MyPrivateTanks[dsGUID] or HealBot_Globals.HealBot_PermPrivateTanks[dsGUID] then
+            if HealBot_MyPrivateTanks[dsGUID] or HealBot_Globals.PermPrivateTanks[dsGUID] then
                 hbPanel_dataRoles[dsGUID]="TANK"
                 hbPanel_dataPlayerRoles[dsGUID]=4
-            elseif HealBot_MyPrivateHealers[dsGUID] or HealBot_Globals.HealBot_PermPrivateHealers[dsGUID] then
+            elseif HealBot_MyPrivateHealers[dsGUID] or HealBot_Globals.PermPrivateHealers[dsGUID] then
                 hbPanel_dataRoles[dsGUID]="HEALER"
                 hbPanel_dataPlayerRoles[dsGUID]=5
-            elseif HealBot_MyPrivateDamagers[dsGUID] or  HealBot_Globals.HealBot_PermPrivateDamagers[dsGUID] then
+            elseif HealBot_MyPrivateDamagers[dsGUID] or  HealBot_Globals.PermPrivateDamagers[dsGUID] then
                 hbPanel_dataRoles[dsGUID]="DAMAGER"
             else
                 hbPanel_dataRoles[dsGUID]=HEALBOT_WORDS_UNKNOWN
@@ -460,7 +460,7 @@ end
 
 function HealBot_Panel_IsMyTarget(guid)
       --HealBot_setCall("HealBot_Panel_IsMyTarget", nil, guid)
-    return HealBot_MyHealTargets[guid] or HealBot_Globals.HealBot_PermMyTargets[guid]
+    return HealBot_MyHealTargets[guid] or HealBot_Globals.PermMyTargets[guid]
 end
 
 function HealBot_Panel_IsTank(guid)
@@ -533,10 +533,10 @@ function HealBot_Panel_ToggelHealTarget(unit, perm)
       --HealBot_setCall("HealBot_Panel_ToggelHealTarget", nil, nil, unit)
     local xGUID=UnitGUID(unit)
     if perm then
-        if HealBot_Globals.HealBot_PermMyTargets[xGUID] then
-            HealBot_Globals.HealBot_PermMyTargets[xGUID]=nil
+        if HealBot_Globals.PermMyTargets[xGUID] then
+            HealBot_Globals.PermMyTargets[xGUID]=nil
         else
-            HealBot_Globals.HealBot_PermMyTargets[xGUID]=UnitName(unit) or "unKnown"
+            HealBot_Globals.PermMyTargets[xGUID]=UnitName(unit) or "unKnown"
         end
     else
         if HealBot_MyHealTargets[xGUID] then
@@ -553,10 +553,10 @@ function HealBot_Panel_ToggelPrivateTanks(unit, perm)
       --HealBot_setCall("HealBot_Panel_ToggelPrivateTanks", nil, nil, unit)
     local xGUID=UnitGUID(unit)
     if perm then
-        if HealBot_Globals.HealBot_PermPrivateTanks[xGUID] then
-            HealBot_Globals.HealBot_PermPrivateTanks[xGUID]=nil
+        if HealBot_Globals.PermPrivateTanks[xGUID] then
+            HealBot_Globals.PermPrivateTanks[xGUID]=nil
         else
-            HealBot_Globals.HealBot_PermPrivateTanks[xGUID]=UnitName(unit) or "unKnown"
+            HealBot_Globals.PermPrivateTanks[xGUID]=UnitName(unit) or "unKnown"
         end
     else
         if HealBot_MyPrivateTanks[xGUID] then
@@ -573,10 +573,10 @@ function HealBot_Panel_ToggelPrivateHealers(unit, perm)
       --HealBot_setCall("HealBot_Panel_ToggelPrivateHealers", nil, nil, unit)
     local xGUID=UnitGUID(unit)
     if perm then
-        if HealBot_Globals.HealBot_PermPrivateHealers[xGUID] then
-            HealBot_Globals.HealBot_PermPrivateHealers[xGUID]=nil
+        if HealBot_Globals.PermPrivateHealers[xGUID] then
+            HealBot_Globals.PermPrivateHealers[xGUID]=nil
         else
-            HealBot_Globals.HealBot_PermPrivateHealers[xGUID]=UnitName(unit) or "unKnown"
+            HealBot_Globals.PermPrivateHealers[xGUID]=UnitName(unit) or "unKnown"
         end
     else
         if HealBot_MyPrivateHealers[xGUID] then
@@ -593,10 +593,10 @@ function HealBot_Panel_ToggelPrivateDamagers(unit, perm)
       --HealBot_setCall("HealBot_Panel_ToggelPrivateDamagers", nil, nil, unit)
     local xGUID=UnitGUID(unit)
     if perm then
-        if HealBot_Globals.HealBot_PermPrivateDamagers[xGUID] then
-            HealBot_Globals.HealBot_PermPrivateDamagers[xGUID]=nil
+        if HealBot_Globals.PermPrivateDamagers[xGUID] then
+            HealBot_Globals.PermPrivateDamagers[xGUID]=nil
         else
-            HealBot_Globals.HealBot_PermPrivateDamagers[xGUID]=UnitName(unit) or "unKnown"
+            HealBot_Globals.PermPrivateDamagers[xGUID]=UnitName(unit) or "unKnown"
         end
     else
         if HealBot_MyPrivateDamagers[xGUID] then
@@ -613,7 +613,7 @@ function HealBot_Panel_RetMyHealTarget(unit, perm)
       --HealBot_setCall("HealBot_Panel_RetMyHealTarget", nil, nil, unit)
     local xGUID=UnitGUID(unit) or unit
     if perm then
-        return HealBot_Globals.HealBot_PermMyTargets[xGUID]
+        return HealBot_Globals.PermMyTargets[xGUID]
     else
         return HealBot_MyHealTargets[xGUID]
     end
@@ -623,7 +623,7 @@ function HealBot_Panel_RetPrivateTanks(unit, perm)
       --HealBot_setCall("HealBot_Panel_RetPrivateTanks", nil, nil, unit)
     local xGUID=UnitGUID(unit) or unit
     if perm then
-        return HealBot_Globals.HealBot_PermPrivateTanks[xGUID]
+        return HealBot_Globals.PermPrivateTanks[xGUID]
     else
         return HealBot_MyPrivateTanks[xGUID]
     end
@@ -633,7 +633,7 @@ function HealBot_Panel_RetPrivateHealers(unit, perm)
       --HealBot_setCall("HealBot_Panel_RetPrivateHealers", nil, nil, unit)
     local xGUID=UnitGUID(unit) or unit
     if perm then
-        return HealBot_Globals.HealBot_PermPrivateHealers[xGUID]
+        return HealBot_Globals.PermPrivateHealers[xGUID]
     else
         return HealBot_MyPrivateHealers[xGUID]
     end
@@ -643,7 +643,7 @@ function HealBot_Panel_RetPrivateDamagers(unit, perm)
       --HealBot_setCall("HealBot_Panel_RetPrivateDamagers", nil, nil, unit)
     local xGUID=UnitGUID(unit) or unit
     if perm then
-        return HealBot_Globals.HealBot_PermPrivateDamagers[xGUID]
+        return HealBot_Globals.PermPrivateDamagers[xGUID]
     else
         return HealBot_MyPrivateDamagers[xGUID]
     end
@@ -2563,7 +2563,7 @@ function HealBot_Panel_enemyPlayerTargets(preCombat, playerFrame)
                                                              playerFrame, vPlayerState, "enemyPlayerTargets - list")
                 end
             end
-            for xGUID,_ in pairs(HealBot_Globals.HealBot_PermMyTargets) do
+            for xGUID,_ in pairs(HealBot_Globals.PermMyTargets) do
                 xUnit=hbPanel_dataGUIDs[xGUID]
                 if xUnit and not vEnemyUnit[xUnit] then
                     vEnemyUnit[xUnit]=true
@@ -2982,7 +2982,7 @@ function HealBot_Panel_myHeals(preCombat)
             HealBot_Panel_addUnit(vMyTargetsUnit, 4, xGUID, false)
         end
     end
-    for xGUID,_ in pairs(HealBot_Globals.HealBot_PermMyTargets) do
+    for xGUID,_ in pairs(HealBot_Globals.PermMyTargets) do
         vMyTargetsUnit=hbPanel_dataGUIDs[xGUID] or hbPanel_dataPetGUIDs[xGUID] or "unknown"
         if UnitExists(vMyTargetsUnit) then
             HealBot_Panel_addUnit(vMyTargetsUnit, 4, xGUID, false)

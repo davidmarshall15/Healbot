@@ -178,6 +178,11 @@ function HealBot_SkinDefault_NilData(skin, id)
     HealBot_Config.SkinDefault[skin][id]=nil
 end
 
+local sVars={["cBuff"]=HEALBOT_CUSTOM_en.."Buff",
+             ["cDebuff"]=HEALBOT_CUSTOM_en.."15"}
+function HealBot_Data_DefaultVar(name)
+    return sVars[name]
+end
 
 HealBot_Config_SpellsDefaults={
   EnabledKeyCombo={["New"]=true},
@@ -365,7 +370,6 @@ function HealBot_Data_InitVars()
         InHealDiv=10,
         HealAbsorbsDiv=10,
         DebugOut=false,
-        VersionResetDone={["ICONS"]="9.1.0.0",["BUFF"]="9.1.0.0",["CBUFF"]="9.1.0.0",["DEBUFF"]="9.1.0.0",["CDEBUFF"]="9.1.0.0"},
         CureCustomDefaultCastBy=1,
         TopRole="TANK",
         TargetBarRestricted=0,
@@ -458,17 +462,11 @@ function HealBot_Data_InitVars()
                              ["Target"]={R=1,G=0.9,B=0.2},["OOR"]={R=0,G=0,B=0},
                              ["Overheals"]={R=1,G=0.2,B=0.2},["Absorbs"]={R=1,G=1,B=1}},
         AuxTextPrefs={},
-        HealBot_customPermUserName={},
-        HealBot_PermMyTargets={},
-        HealBot_PermPrivateTanks={},
-        HealBot_PermPrivateHealers={},
-        HealBot_PermPrivateDamagers={},
-        HealBot_MouseWheelIndex={ ["AltUp"]=2, ["AltDown"]=3 },
-        HealBot_MouseWheelTxt={ ["AltUp"]=HEALBOT_BLIZZARD_MENU, ["AltDown"]=HEALBOT_HB_MENU },
-        HealBot_Emotes={ ["NoneUp"]=HEALBOT_EMOTE_HELLO,  ["NoneDown"]=HEALBOT_EMOTE_HELLO,
-                         ["ShiftUp"]=HEALBOT_EMOTE_HELLO, ["ShiftDown"]=HEALBOT_EMOTE_HELLO,
-                         ["CtrlUp"]=HEALBOT_EMOTE_HELLO,  ["CtrlDown"]=HEALBOT_EMOTE_HELLO,
-                         ["AltUp"]=HEALBOT_EMOTE_HELLO,   ["AltDown"]=HEALBOT_EMOTE_HELLO, },
+        PermUserName={},
+        PermMyTargets={},
+        PermPrivateTanks={},
+        PermPrivateHealers={},
+        PermPrivateDamagers={},
         EmergIncRange={
             [HEALBOT_DRUID]   =false,  [HEALBOT_HUNTER]     =true,   [HEALBOT_MAGE]    =true,
             [HEALBOT_PALADIN] =false,  [HEALBOT_PRIEST]     =false,  [HEALBOT_ROGUE]   =false,
@@ -494,13 +492,13 @@ function HealBot_Data_InitVars()
             [HEALBOT_MONK]    =true,   [HEALBOT_DEATHKNIGHT]=false,  [HEALBOT_MONK]    =false, [HEALBOT_DEMONHUNTER]=false,
         },
         CDCBarColour={
-            [HEALBOT_CUSTOM_en.."15"]={ R=0.45, G=0, B=0.28, },
+            [sVars["cDebuff"]]={ R=0.45, G=0, B=0.28, },
         },
-        HealBot_Custom_Debuffs_ShowBarCol={  
+        CustomDebuffsShowBarCol={  
             [HEALBOT_CUSTOM_CAT_CUSTOM_AUTOMATIC]=4,
             ["DEFAULT"]=4,
         },
-        HealBot_Custom_Debuffs_IconGlow={  
+        CustomDebuffsIconGlow={  
             [HEALBOT_CUSTOM_CAT_CUSTOM_AUTOMATIC]=1,
             ["DEFAULT"]=1,
         },
@@ -509,21 +507,21 @@ function HealBot_Data_InitVars()
         FilterCustomDebuff={
         },
         CustomDebuffIDMethod={},
-        HealBot_Custom_Debuffs={
+        CustomDebuffs={
             -- Defaults
             [HEALBOT_CUSTOM_CAT_CUSTOM_AUTOMATIC]=15,
         },
-        HealBot_Custom_Debuffs_IconSet={},
+        CustomDebuffsIconSet={},
         Custom_Debuff_Categories=HEALBOT_CUSTOM_DEBUFF_CATS,
         CustomBuffTag={},
         IgnoreCustomBuff={},
-        HealBot_Custom_Buffs={},
-        HealBot_Custom_Buffs_IconSet={},
+        CustomBuffs={},
+        CustomBuffsIconSet={},
         CustomBuffBarColour={
-            [HEALBOT_CUSTOM_en.."Buff"]={ R=0.25, G=0.58, B=0.8, },
+            [sVars["cBuff"]]={ R=0.25, G=0.58, B=0.8, },
         },
-        HealBot_Custom_Buffs_ShowBarCol={["DEFAULT"]=4},
-        HealBot_Custom_Buffs_IconGlow={},
+        CustomBuffsShowBarCol={["DEFAULT"]=4},
+        CustomBuffsIconGlow={},
         CustomBuffIDMethod={},
         IconKeyCombo={},
         UseIconCommands=false,
@@ -810,10 +808,7 @@ Healbot_Config_Aux={};
 HealBot_Config_Spells={};
 HealBot_Config_Buffs={};
 HealBot_Config_Cures={};
-HealBot_Config_ActionIcons={}      -- Remove this soon, also from ToC's
-HealBot_Config_ActionIconsData={}  -- Remove this soon, also from ToC's
 HealBot_Class_Spells={};
-HealBot_Spells_Loadouts={};        -- Remove this soon, also from ToC's
 HealBot_Spell_Loadouts={};
 HealBot_Class_Buffs={};
 HealBot_Class_Cures={};

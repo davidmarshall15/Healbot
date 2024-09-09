@@ -2916,6 +2916,14 @@ local hbSkinColsDefaults={["AdaptiveCol"]={["RecentHeals"]={["R"]=0.1, ["G"]=1, 
                                           },
 }
 
+function HealBot_Skins_ColHasDefault(cat, key)
+    if hbSkinColsDefaults[cat] and hbSkinColsDefaults[cat][key] or hbSkinColsDefaults[cat][key] == false then
+        return true
+    else
+        return false
+    end
+end
+
 function HealBot_Skins_GetColVar(cat, key, c)
     if Healbot_Config_Skins[cat][Healbot_Config_Skins.Current_Skin][key] then
         return Healbot_Config_Skins[cat][Healbot_Config_Skins.Current_Skin][key][c] or hbSkinColsDefaults[cat][key][c]
@@ -2940,6 +2948,18 @@ function HealBot_Skins_NilColVarSkin(skin, cat, key, c)
     if Healbot_Config_Skins[cat][skin][key] and Healbot_Config_Skins[cat][skin][key][c] then
         Healbot_Config_Skins[cat][skin][key][c]=nil
         HealBot_Util_EmptyTable(Healbot_Config_Skins[cat][skin], key)
+    end
+end
+
+function HealBot_Skins_SetColArray(value, skin, cat, key, c, override)
+    if hbSkinColsDefaults[cat] then
+        HealBot_Skins_SetColVarSkin(value, skin, cat, key, c)
+    elseif hbPowerCols[key] then
+        HealBot_Skins_SetPowerColSkin(value, skin, key, c, override)
+    elseif hbClassCols[key] then
+        HealBot_Skins_SetClassColSkin(value, skin, key, c, override)
+    elseif hbRoleCols[key] then
+        HealBot_Skins_SetRoleColSkin(value, skin, key, c, override)
     end
 end
 
@@ -3049,7 +3069,7 @@ local hbSkinFrameDefaults={["BarCol"]={["HLTH"]=5, ["BACK"]=1, ["BORDER"]=1,
                                        ["R"]=0.102, ["G"]=0.102, ["B"]=0.102, ["A"]=0.7,
                                       },
                           ["Anchors"]={["FRAME"]=1, ["BARS"]=1, ["GROW"]=2, ["RealFixed"]=false,
-                                       ["X"]=0, ["Y"]=0, ["RealX"]=nil, ["RealY"]=nil,
+                                       ["X"]=0, ["Y"]=0, ["RealX"]=0, ["RealY"]=0,
                                        ["TOP"]=nil, ["LEFT"]=nil, ["BOTTOM"]=nil, ["RIGHT"]=nil,
                                       },
                          ["BarAggro"]={["ALERT"]=2, ["ALERTIND"]=2, ["TEXTFORMAT"]=3, ["SHOWBARSPCT"]=false,
