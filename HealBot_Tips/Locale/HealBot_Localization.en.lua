@@ -641,6 +641,7 @@ function HealBot_Lang_Options_enALL()
                                  ["DEBUFFSCUSTOMFILTER"]=HEALBOT_PLUGIN_FILTER,
                         -- Debuffs Warning tab
                                  ["DEBUFFSWARNINGBAR"]=HEALBOT_OPTIONS_CDCSHOWHBARS,
+                                 ["DEBUFFSWARNINGBARDISPELONLY"]=HEALBOT_OPTIONS_WARNINGDISPELLONLY,
                                  ["DEBUFFSWARNINGENABLEBAR"]=HEALBOT_OPTIONS_ALWAYSENABLEBAR,
                                  ["DEBUFFSWARNINGBARRANGE"]="Range",
                                  ["DEBUFFSWARNINGSHOW"]=HEALBOT_OPTIONS_SHOWDEBUFFWARNING,

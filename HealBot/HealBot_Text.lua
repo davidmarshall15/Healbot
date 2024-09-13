@@ -1434,9 +1434,10 @@ function HealBot_Text_UpdateText(button)
         if button.status.current<HealBot_Unit_Status["DC"] then
             button.text.nr, button.text.ng, button.text.nb=HealBot_Text_TextNameColours(button)
             if button.status.enabled or button.status.summons then
-                button.text.na=HealBot_Action_BarColourAlpha(button, HealBot_Skins_GetFrameVar("BarTextCol", "HCA", button.framecol), 1)
+                button.text.na=HealBot_Action_BarColourAlpha(button, HealBot_Skins_GetFrameVar("BarTextCol", "NCA", button.framecol), 1)
             else
-                button.text.na=HealBot_Action_BarColourAlpha(button, HealBot_Skins_GetFrameVar("BarTextCol", "HCDA", button.framecol), 1)
+                button.text.na=HealBot_Action_BarColourAlpha(button, HealBot_Skins_GetFrameVar("BarTextCol", "NCDA", button.framecol), 1)
+                --button.text.na=1
             end
         else
             button.text.nr, button.text.ng, button.text.nb, button.text.na= 0.58, 0.58, 0.58, 0.7

@@ -10640,9 +10640,8 @@ function HealBot_Options_hbProfile_setGlobalSpells(combo, globalcombo, maxButton
     end
 end
 
-function HealBot_Options_ValidSpell(sCode,gCheck)
+function HealBot_Options_ValidSpell(sType, sID, gCheck)
       --HealBot_setCall("HealBot_Options_KnownSpellCheckSetColour")
-    local sType,sID,sName=string.split(":", sCode)
     if sType and not sID and HealBot_Spells_KnownByName(sType) then
         sID=HealBot_Spells_KnownByName(sType)
     end
@@ -10652,7 +10651,7 @@ function HealBot_Options_ValidSpell(sCode,gCheck)
         elseif HealBot_Spells_KnownByID(sID) then
             return true
         end
-    elseif GetMacroIndexByName(sCode)>0 then
+    elseif GetMacroIndexByName(sType)>0 then
         return true
     end
     return false
@@ -10660,8 +10659,10 @@ end
 
 function HealBot_Options_LoadProfileSpec(combo, speccombo)
       --HealBot_setCall("HealBot_Options_LoadProfileSpec")
+    local sType, sID, sName="",0,""
     table.foreach(speccombo.EnabledKeyCombo, function (key,val)
-        if HealBot_Options_ValidSpell(val, HealBot_Config.Profile) then
+        sType, sID=string.split(":", val)
+        if HealBot_Options_ValidSpell(sType, sID, HealBot_Config.Profile) then
             combo.EnabledKeyCombo[key]=val;
             combo.EnabledSpellTarget[key]=speccombo.EnabledSpellTarget[key]
             combo.EnabledSpellTrinket1[key]=speccombo.EnabledSpellTrinket1[key]
@@ -10670,7 +10671,8 @@ function HealBot_Options_LoadProfileSpec(combo, speccombo)
         end
     end);
     table.foreach(speccombo.EnemyKeyCombo, function (key,val)
-        if HealBot_Options_ValidSpell(val, HealBot_Config.Profile) then
+        sType, sID=string.split(":", val)
+        if HealBot_Options_ValidSpell(sType, sID, HealBot_Config.Profile) then
             combo.EnemyKeyCombo[key]=val;
             combo.EnemySpellTarget[key]=speccombo.EnemySpellTarget[key]
             combo.EnemySpellTrinket1[key]=speccombo.EnemySpellTrinket1[key]
@@ -10679,7 +10681,8 @@ function HealBot_Options_LoadProfileSpec(combo, speccombo)
         end
     end);
     table.foreach(speccombo.EmergKeyCombo, function (key,val)
-        if HealBot_Options_ValidSpell(val, HealBot_Config.Profile) then
+        sType, sID=string.split(":", val)
+        if HealBot_Options_ValidSpell(sType, sID, HealBot_Config.Profile) then
             combo.EmergKeyCombo[key]=val;
             combo.EmergSpellTarget[key]=speccombo.EmergSpellTarget[key]
             combo.EmergSpellTrinket1[key]=speccombo.EmergSpellTrinket1[key]
@@ -10688,18 +10691,33 @@ function HealBot_Options_LoadProfileSpec(combo, speccombo)
         end
     end);
     table.foreach(combo.EnabledKeyCombo, function (key,val)
-        if not HealBot_Options_ValidSpell(val, 1) then
-            combo.EnabledKeyCombo[key]=nil
+        sType, sID, sName=string.split(":", val)
+        if not HealBot_Options_ValidSpell(sType, sID, 1) then
+            if sType == "S" and sName then
+                combo.EnabledKeyCombo[key]=sName
+            else
+                combo.EnabledKeyCombo[key]=nil
+            end
         end
     end);
     table.foreach(combo.EnemyKeyCombo, function (key,val)
-        if not HealBot_Options_ValidSpell(val, 1) then
-            combo.EnemyKeyCombo[key]=nil
+        sType, sID, sName=string.split(":", val)
+        if not HealBot_Options_ValidSpell(sType, sID, 1) then
+            if sType == "S" and sName then
+                combo.EnemyKeyCombo[key]=sName
+            else
+                combo.EnemyKeyCombo[key]=nil
+            end
         end
     end);
     table.foreach(combo.EmergKeyCombo, function (key,val)
-        if not HealBot_Options_ValidSpell(val, 1) then
-            combo.EmergKeyCombo[key]=nil
+        sType, sID, sName=string.split(":", val)
+        if not HealBot_Options_ValidSpell(sType, sID, 1) then
+            if sType == "S" and sName then
+                combo.EmergKeyCombo[key]=sName
+            else
+                combo.EmergKeyCombo[key]=nil
+            end
         end
     end);
     combo.SpellTargetLastTarget=HealBot_Options_copyTable(speccombo.SpellTargetLastTarget)
@@ -22228,6 +22246,7 @@ function HealBot_Options_SpellsCheckTextValid()
         end
     end
 end
+
 function HealBot_Options_SetBuffExtraItemTextColour(object, item, incSpell)
       --HealBot_setCall("HealBot_Options_SetBuffExtraItemTextColour")
     if HealBot_IsKnownItem(item) then

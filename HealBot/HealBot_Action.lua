@@ -3202,7 +3202,7 @@ end
 
 function HealBot_Action_setFrameHeader(f)
       --HealBot_setCall("HealBot_Action_setFrameHeader")
-    if HealBot_Skins_GetFrameBoolean("FrameAlias", "SHOW", frame) and grpFrame[f]:GetRight() then
+    if HealBot_Skins_GetFrameBoolean("FrameAlias", "SHOW", f) and grpFrame[f]:GetRight() then
         grpFrameBar[f]:SetPoint("BOTTOM",grpFrame[f],"TOP",0,HealBot_Skins_GetFrameVar("FrameAliasBar", "OFFSET", f))
         local fWidth=grpFrame[f]:GetRight()-grpFrame[f]:GetLeft()
         local hwidth=ceil(fWidth*HealBot_Skins_GetFrameVar("FrameAliasBar", "WIDTH", f))
@@ -4573,11 +4573,7 @@ function HealBot_Action_SetSpell(cType, cKey, sText)
             else
                 local spellId=HealBot_Spells_KnownByName(sText)
                 if spellId then
-                    if HEALBOT_GAME_VERSION == 1 then
-                        sText="S:"..spellId..":"..sText
-                    else
-                        sText="S:"..spellId
-                    end
+                    sText="S:"..spellId..":"..sText
                 else
                     local itemID=HealBot_WoWAPI_ItemInfoInstant(sText)
                     if itemID then 

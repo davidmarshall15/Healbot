@@ -1162,7 +1162,7 @@ function HealBot_Share_BuildRowSkin(skin, cat, id, vType, frame, msg)
         d=HealBot_Options_StringSplit(msg, ",")
         for j=1,getn(d) do
             local key, v=string.split("=", d[j])
-            if key and dat then
+            if key and v then
                 v=HealBot_Share_DecodeDat(v)
                 HealBot_Skins_SetVarSkin(v, skin, cat, key)
             elseif key then
