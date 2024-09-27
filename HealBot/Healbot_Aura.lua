@@ -2044,7 +2044,7 @@ function HealBot_Aura_CheckGeneralBuff(button)
                     buffCheckThis=true
                 elseif buffWatchTarget[button.text.classtrim] then
                     buffCheckThis=true
-                elseif buffWatchTarget["Name"] and button.guid == HealBot_Config.MyFriend then
+                elseif buffWatchTarget["Name"] and button.guid == HealBot_Config.PrivFocus then
                     buffCheckThis=true
                 elseif buffWatchTarget["Focus"] and UnitIsUnit(button.unit, "focus") then
                     buffCheckThis=true
@@ -2374,7 +2374,7 @@ function HealBot_Aura_CheckCurDebuff(button)
                     ccdbCheckthis=true
                 elseif ccdbWatchTarget[button.text.classtrim] then
                     ccdbCheckthis=true;
-                elseif ccdbWatchTarget["Name"] and button.guid == HealBot_Config.MyFriend then
+                elseif ccdbWatchTarget["Name"] and button.guid == HealBot_Config.PrivFocus then
                     ccdbCheckthis=true
                 elseif ccdbWatchTarget["Focus"] and UnitIsUnit(button.unit, "focus") then
                     ccdbCheckthis=true;
@@ -4825,52 +4825,34 @@ function HealBot_Aura_InitData()
             end
 
             if HEALBOT_GAME_VERSION<3 then
-                HealBot_BuffMinLevels={[HealBot_WoWAPI_SpellName(HEALBOT_POWER_WORD_FORTITUDE)]=48,
-                                       [HealBot_WoWAPI_SpellName(HBC_DIVINE_SPIRIT)]=20,
-                                       [HealBot_WoWAPI_SpellName(HBC_PRAYER_OF_SPIRIT)]=60,
-                                       [HealBot_WoWAPI_SpellName(HBC_PRAYER_OF_SHADOW_PROTECTION)]=56,
-                                       [HealBot_WoWAPI_SpellName(HBC_SHADOW_PROTECTION)]=30,
-                                       [HealBot_WoWAPI_SpellName(HBC_GIFT_OF_THE_WILD)]=50,
-                                       [HealBot_WoWAPI_SpellName(HBC_THORNS)]=6,
-                                       [HealBot_WoWAPI_SpellName(HBC_ARCANE_BRILLIANCE)]=56,
-                                       [HealBot_WoWAPI_SpellName(HBC_GREATER_BLESSING_OF_LIGHT)]=60,
-                                       [HealBot_WoWAPI_SpellName(HBC_BLESSING_OF_LIGHT)]=40,
-                                       [HealBot_WoWAPI_SpellName(HBC_GREATER_BLESSING_OF_MIGHT)]=52,
-                                       [HealBot_WoWAPI_SpellName(HBC_BLESSING_OF_MIGHT)]=4,
-                                       [HealBot_WoWAPI_SpellName(HBC_GREATER_BLESSING_OF_SALVATION)]=60,
-                                       [HealBot_WoWAPI_SpellName(HBC_BLESSING_OF_SALVATION)]=26,
-                                       [HealBot_WoWAPI_SpellName(HBC_GREATER_BLESSING_OF_WISDOM)]=54,
-                                       [HealBot_WoWAPI_SpellName(HBC_BLESSING_OF_WISDOM)]=14,
-                                       [HealBot_WoWAPI_SpellName(HBC_GREATER_BLESSING_OF_SANCTUARY)]=60,
-                                       [HealBot_WoWAPI_SpellName(HBC_GREATER_BLESSING_OF_KINGS)]=60,
-                                      }
-            elseif HEALBOT_GAME_VERSION<4 then
-                HealBot_BuffMinLevels={[HealBot_WoWAPI_SpellName(HEALBOT_POWER_WORD_FORTITUDE)]=48,
-                                       [HealBot_WoWAPI_SpellName(HBC_DIVINE_SPIRIT)]=20,
-                                       [HealBot_WoWAPI_SpellName(HBC_PRAYER_OF_SPIRIT)]=60,
-                                       [HealBot_WoWAPI_SpellName(HBC_PRAYER_OF_SHADOW_PROTECTION)]=56,
-                                       [HealBot_WoWAPI_SpellName(HBC_SHADOW_PROTECTION)]=30,
-                                       [HealBot_WoWAPI_SpellName(HBC_GIFT_OF_THE_WILD)]=50,
-                                       [HealBot_WoWAPI_SpellName(HBC_THORNS)]=6,
-                                       [HealBot_WoWAPI_SpellName(HBC_ARCANE_BRILLIANCE)]=56,
-                                       [HealBot_WoWAPI_SpellName(HEALBOT_DALARAN_BRILLIANCE)]=56,
-                                       [HealBot_WoWAPI_SpellName(HBC_GREATER_BLESSING_OF_MIGHT)]=52,
-                                       [HealBot_WoWAPI_SpellName(HBC_BLESSING_OF_MIGHT)]=4,
-                                       [HealBot_WoWAPI_SpellName(HBC_BLESSING_OF_SALVATION)]=26,
-                                       [HealBot_WoWAPI_SpellName(HBC_GREATER_BLESSING_OF_WISDOM)]=54,
-                                       [HealBot_WoWAPI_SpellName(HBC_BLESSING_OF_WISDOM)]=14,
-                                       [HealBot_WoWAPI_SpellName(HBC_GREATER_BLESSING_OF_SANCTUARY)]=60,
-                                       [HealBot_WoWAPI_SpellName(HBC_GREATER_BLESSING_OF_KINGS)]=60,
+                HealBot_BuffMinLevels={[HealBot_WoWAPI_SpellName(HEALBOT_POWER_WORD_FORTITUDE) or "x"]=48,
+                                       [HealBot_WoWAPI_SpellName(HBC_DIVINE_SPIRIT) or "x"]=20,
+                                       [HealBot_WoWAPI_SpellName(HBC_PRAYER_OF_SPIRIT) or "x"]=60,
+                                       [HealBot_WoWAPI_SpellName(HBC_PRAYER_OF_SHADOW_PROTECTION) or "x"]=56,
+                                       [HealBot_WoWAPI_SpellName(HBC_SHADOW_PROTECTION) or "x"]=30,
+                                       [HealBot_WoWAPI_SpellName(HBC_GIFT_OF_THE_WILD) or "x"]=50,
+                                       [HealBot_WoWAPI_SpellName(HBC_THORNS) or "x"]=6,
+                                       [HealBot_WoWAPI_SpellName(HBC_ARCANE_BRILLIANCE) or "x"]=56,
+                                       [HealBot_WoWAPI_SpellName(HBC_GREATER_BLESSING_OF_LIGHT) or "x"]=60,
+                                       [HealBot_WoWAPI_SpellName(HBC_BLESSING_OF_LIGHT) or "x"]=40,
+                                       [HealBot_WoWAPI_SpellName(HBC_GREATER_BLESSING_OF_MIGHT) or "x"]=52,
+                                       [HealBot_WoWAPI_SpellName(HBC_BLESSING_OF_MIGHT) or "x"]=4,
+                                       [HealBot_WoWAPI_SpellName(HBC_GREATER_BLESSING_OF_SALVATION) or "x"]=60,
+                                       [HealBot_WoWAPI_SpellName(HBC_BLESSING_OF_SALVATION) or "x"]=26,
+                                       [HealBot_WoWAPI_SpellName(HBC_GREATER_BLESSING_OF_WISDOM) or "x"]=54,
+                                       [HealBot_WoWAPI_SpellName(HBC_BLESSING_OF_WISDOM) or "x"]=14,
+                                       [HealBot_WoWAPI_SpellName(HBC_GREATER_BLESSING_OF_SANCTUARY) or "x"]=60,
+                                       [HealBot_WoWAPI_SpellName(HBC_GREATER_BLESSING_OF_KINGS) or "x"]=60,
                                       }
             else
-                HealBot_BuffMinLevels={[HealBot_WoWAPI_SpellName(HEALBOT_POWER_WORD_FORTITUDE)]=48,
-                                       [HealBot_WoWAPI_SpellName(HEALBOT_SHADOW_PROTECTION)]=56,
-                                       [HealBot_WoWAPI_SpellName(HEALBOT_MARK_OF_THE_WILD)]=85,
-                                       [HealBot_WoWAPI_SpellName(HBC_THORNS)]=6,
-                                       [HealBot_WoWAPI_SpellName(HEALBOT_ARCANE_BRILLIANCE)]=86,
-                                       [HealBot_WoWAPI_SpellName(HEALBOT_DALARAN_BRILLIANCE)]=56,
-                                       [HealBot_WoWAPI_SpellName(HBC_BLESSING_OF_MIGHT)]=56,
-                                       [HealBot_WoWAPI_SpellName(HBC_BLESSING_OF_KINGS)]=65,
+                HealBot_BuffMinLevels={[HealBot_WoWAPI_SpellName(HEALBOT_POWER_WORD_FORTITUDE) or "x"]=48,
+                                       [HealBot_WoWAPI_SpellName(HEALBOT_SHADOW_PROTECTION) or "x"]=56,
+                                       [HealBot_WoWAPI_SpellName(HEALBOT_MARK_OF_THE_WILD) or "x"]=85,
+                                       [HealBot_WoWAPI_SpellName(HBC_THORNS) or "x"]=6,
+                                       [HealBot_WoWAPI_SpellName(HEALBOT_ARCANE_BRILLIANCE) or "x"]=86,
+                                       [HealBot_WoWAPI_SpellName(HEALBOT_DALARAN_BRILLIANCE) or "x"]=56,
+                                       [HealBot_WoWAPI_SpellName(HBC_BLESSING_OF_MIGHT) or "x"]=56,
+                                       [HealBot_WoWAPI_SpellName(HBC_BLESSING_OF_KINGS) or "x"]=65,
                                       }
             end
             

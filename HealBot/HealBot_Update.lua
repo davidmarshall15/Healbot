@@ -1892,13 +1892,6 @@ function HealBot_Update_Skins()
         for x=1,20 do  -- This can be remove when 9.2.x check is replace with defaults due to old version
             if HealBot_Config_Spells.Binds and HealBot_Config_Spells.Binds[x] and HealBot_Config_Spells.Binds[x] == 1 then HealBot_Config_Spells.Binds[x]=nil end
         end
-        for x,_ in pairs(HealBot_Class_Spells) do
-            if x ~= "SpellsReset" then
-                for n=1,20 do
-                    if HealBot_Class_Spells[x].Binds and HealBot_Class_Spells[x].Binds[n] and HealBot_Class_Spells[x].Binds[n] == 1 then HealBot_Class_Spells[x].Binds[n]=nil end
-                end
-            end
-        end
         for x in pairs (Healbot_Config_Skins.Skins) do
             skinName=Healbot_Config_Skins.Skins[x]
             if HealBot_Config.SkinDefault[skinName] then
@@ -1915,6 +1908,7 @@ function HealBot_Update_Skins()
             end
         end
         if HealBot_Class_Spells[""] then HealBot_Class_Spells[""]=nil end
+        if HealBot_Class_Spells.SpellsReset then HealBot_Class_Spells.SpellsReset=nil end
         if HealBot_Class_Buffs[""] then HealBot_Class_Buffs[""]=nil end
         if HealBot_Class_Cures[""] then HealBot_Class_Cures[""]=nil end
         Healbot_Config_Skins.AuxBar=nil
@@ -1963,24 +1957,10 @@ function HealBot_Update_Skins()
             HealBot_Update_luVars["UpdateMsg"]=true
             HealBot_Globals.OneTimeMsg["VERSION"]=false
         end
-        if HealBot_Class_Spells[""] then HealBot_Class_Spells[""]=nil end
-        for _,cTrim in pairs(HealBot_Class_En) do
-            if HealBot_Class_Spells[cTrim] then
-                if HealBot_Class_Spells[cTrim].ActionIconsData then HealBot_Class_Spells[cTrim].ActionIconsData=nil end
-                if HealBot_Class_Spells[cTrim].ActionIcons then HealBot_Class_Spells[cTrim].ActionIcons=nil end
-            end
-        end
-
         local vClasses={["DRUI"]=1,["HUNT"]=1,["MAGE"]=1,["PALA"]=1,["PRIE"]=1,["ROGU"]=1,["SHAM"]=1,["WARL"]=1,["WARR"]=1,["EVOK"]=1,["DEAT"]=1,["MONK"]=1,["DEMO"]=1,["GLOBAL"]=1}
         for x,_ in pairs(HealBot_Class_Spells) do
             if not vClasses[x] then
                 HealBot_Class_Spells[x]=nil
-            else
-                table.foreach(HealBot_Class_Spells[x], function (key,val)
-                    if not HealBot_Config_SpellsDefaults[key] then
-                        HealBot_Class_Spells[x][key]=nil
-                    end
-                end);
             end
         end
         

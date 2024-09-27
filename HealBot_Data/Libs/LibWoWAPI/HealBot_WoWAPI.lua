@@ -95,7 +95,8 @@ local HealBot_WoWAPI_IsSpellInRange=IsSpellInRange
 if C_Spell then
     if C_Spell.GetSpellName then
         HealBot_WoWAPI_GetSpellName=HealBot_WoWAPI_GetSpellNameV11
-        GetSpellName=C_Spell.GetSpellName
+       -- GetSpellName=C_Spell.GetSpellName
+        GetSpellName=C_Spell.GetSpellInfo
     end
     if C_Spell.GetSpellIDForSpellIdentifier then
         HealBot_WoWAPI_GetSpellId=HealBot_WoWAPI_GetSpellIdV11
@@ -132,7 +133,6 @@ if C_Spell then
     local vGameVersion=tonumber(vMajor)
     if vGameVersion>10 then
         HealBot_WoWAPI_IsHelpfulSpell=HealBot_WoWAPI_True
-        GetSpellName=C_Spell.GetSpellInfo
     end
 end
 

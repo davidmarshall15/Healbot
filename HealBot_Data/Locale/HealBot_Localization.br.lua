@@ -220,7 +220,7 @@ function HealBot_Lang_ptBR()
     
     
     HEALBOT_ASSIST                          = "Assist\195\170ncia";
-    HEALBOT_FOCUS                           = "Foco";
+    HEALBOT_WORD_FOCUS                      = "Foco";
     HEALBOT_MAINTANK                        = "TanquePrincipal";
     HEALBOT_STOP                            = "Parar";
     HEALBOT_TELL                            = "Dizer";
@@ -291,7 +291,7 @@ function HealBot_Lang_ptBR()
     HEALBOT_OPTIONS_AGGROBARSIZE            = "Tamanho da barra de aggro"
     HEALBOT_OPTIONS_DOUBLETEXTLINES         = "Linha dupla de texto"
     HEALBOT_OPTIONS_TEXTALIGNMENT           = "Alinhamento de texto"
-    HEALBOT_VEHICLE                         = "Ve\195\173culo"
+    HEALBOT_WORD_VEHICLE                    = "Ve\195\173culo"
     HEALBOT_WORDS_ERROR                     = "Erro"
     HEALBOT_SPELL_NOT_FOUND                 = "Magia n\195\163o encontrada"
     HEALBOT_OPTIONS_DISABLETOOLTIPINCOMBAT  = "Ocultar dica em Combate"

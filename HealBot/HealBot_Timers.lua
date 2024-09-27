@@ -68,13 +68,13 @@ function HealBot_Timers_SetnProcs(cpuProfilerOn)
         HealBot_Timers_luVars["nProcsOn"]=2
         HealBot_Timers_luVars["nProcsOff"]=1
     else
-        HealBot_Timers_luVars["nProcsOn"]=HealBot_Util_PerfVal1(150)
-        if HealBot_Timers_luVars["nProcsOn"]<2 then
-            HealBot_Timers_luVars["nProcsOn"]=2
+        HealBot_Timers_luVars["nProcsOn"]=HealBot_Util_PerfVal1(500)
+        if HealBot_Timers_luVars["nProcsOn"]<5 then
+            HealBot_Timers_luVars["nProcsOn"]=5
         end
-        HealBot_Timers_luVars["nProcsOff"]=HealBot_Util_PerfVal1(50)
-        if HealBot_Timers_luVars["nProcsOff"]<1 then
-            HealBot_Timers_luVars["nProcsOff"]=1
+        HealBot_Timers_luVars["nProcsOff"]=HealBot_Util_PerfVal1(250)
+        if HealBot_Timers_luVars["nProcsOff"]<3 then
+            HealBot_Timers_luVars["nProcsOff"]=3
         end
     end
     HealBot_Debug_PerfUpdate("TimersOn", HealBot_Timers_luVars["nProcsOn"])
@@ -480,6 +480,7 @@ function HealBot_Timers_LastLoad()
     HealBot_Timers_Set("AURA","BuffsReset",0.375)
     HealBot_Timers_Set("AUX","ResetTextButtons",0.4)
     HealBot_Timers_Set("SKINS","TextSetTagInUse",0.45)
+    HealBot_Timers_Set("OOC","EventsSetFrameUnits",0.475)
     HealBot_Timers_Set("INIT","LastUpdate",0.5)
     HealBot_Timers_Set("INIT","HealBotLoaded",1)
     HealBot_Timers_Set("OOC","RemoveInvalidLoadouts",5)
@@ -881,6 +882,7 @@ local hbTimerFuncs={["INIT"]={
                         ["OrphanedCheck"]=HealBot_Skins_Clear_Orphaned,
                         ["UnusedFramesVarsCheck"]=HealBot_Skins_Clear_UnusedFramesVars,
                         ["UnusedVarsCheck"]=HealBot_Skins_Clear_UnusedVars,
+                        ["EventsSetFrameUnits"]=HealBot_Events_SetFrameUnits,
                     },
                    }
 

@@ -2698,7 +2698,7 @@ end
 
 function HealBot_Action_BarColourAlphaFG(button, a, dMult)
       --HealBot_setCall("HealBot_Action_BarColourAlphaFG", button, nil, nil, true)
-    if button.status.unittype == 5 and not HealBot_Action_luVars["FGroups"][button.group] then
+    if hbVars_IsUnitType(button.status.unittype, HEALBOT_RAID) and not HealBot_Action_luVars["FGroups"][button.group] then
         hbBarColourAlpha=a/(HealBot_Action_luVars["FGDimming"]*dMult)
     else
         hbBarColourAlpha=a
@@ -2718,7 +2718,7 @@ function HealBot_Action_BarColourAlphaGDFG(button, a, dMult)
       --HealBot_setCall("HealBot_Action_BarColourAlphaGDFG", button, nil, nil, true)
     if HealBot_Action_luVars["GlobalDimming"]>0 then
         hbBarColourAlpha=a/(HealBot_Action_luVars["GlobalDimming"]*dMult)
-    elseif button.status.unittype == 5 and not HealBot_Action_luVars["FGroups"][button.group] then
+    elseif hbVars_IsUnitType(button.status.unittype, HEALBOT_RAID) and not HealBot_Action_luVars["FGroups"][button.group] then
         hbBarColourAlpha=a/(HealBot_Action_luVars["FGDimming"]*dMult)
     else
         hbBarColourAlpha=a
@@ -2738,7 +2738,7 @@ end
 
 function HealBot_Action_BarColourAlphaFGHB(button, a, dMult)
       --HealBot_setCall("HealBot_Action_BarColourAlphaFGHB", button, nil, nil, true)
-    if button.status.unittype == 5 and not HealBot_Action_luVars["FGroups"][button.group] then
+    if hbVars_IsUnitType(button.status.unittype, HEALBOT_RAID) and not HealBot_Action_luVars["FGroups"][button.group] then
         hbBarColourAlpha=a/(HealBot_Action_luVars["FGDimming"]*dMult)
     elseif not button.hotbars.state then
         hbBarColourAlpha=a/(HealBot_Action_luVars["HotBarDimming"]*dMult)
@@ -2751,7 +2751,7 @@ function HealBot_Action_BarColourAlphaGDFGHB(button, a, dMult)
       --HealBot_setCall("HealBot_Action_BarColourAlphaGDFGHB", button, nil, nil, true)
     if HealBot_Action_luVars["GlobalDimming"]>0 then
         hbBarColourAlpha=a/(HealBot_Action_luVars["GlobalDimming"]*dMult)
-    elseif button.status.unittype == 5 and not HealBot_Action_luVars["FGroups"][button.group] then
+    elseif hbVars_IsUnitType(button.status.unittype, HEALBOT_RAID) and not HealBot_Action_luVars["FGroups"][button.group] then
         hbBarColourAlpha=a/(HealBot_Action_luVars["FGDimming"]*dMult)
     elseif not button.hotbars.state then
         hbBarColourAlpha=a/(HealBot_Action_luVars["HotBarDimming"]*dMult)
@@ -3331,6 +3331,7 @@ function HealBot_Action_InitFrames()
             HealBot_Panel_ParentFrameID(x)
         end
     end
+    HealBot_Events_Frame()
     HealBot_Action_luVars["FrameInitDone"]=true
 end
 
@@ -3627,7 +3628,11 @@ function HealBot_Action_InitButton(button, prefix)
     button.aura.debuff={}
     button.aura.debuff.temp={}
     button.status={}
+    button.special={}
     button.debug={}
+    button.special.unit=false
+    button.special.aura=false
+    button.special.auraupdate=0
     erButton.status={}
     button.update={}
     button.checks={}
@@ -4415,7 +4420,7 @@ function HealBot_Action_SpellCmdCodes(cType, cText)
     if cType == "ENEMY" then
         if cText == HEALBOT_DISABLED_TARGET then
             cID="A"
-        elseif cText == HEALBOT_FOCUS then
+        elseif cText == HEALBOT_WORD_FOCUS then
             cID="B"
         end
     elseif cType == "ICON" then
@@ -4455,7 +4460,7 @@ function HealBot_Action_SpellCmdCodes(cType, cText)
             cID="A"
         elseif cText == HEALBOT_ASSIST then
             cID="B"
-        elseif cText == HEALBOT_FOCUS then
+        elseif cText == HEALBOT_WORD_FOCUS then
             cID="C"
         elseif cText == HEALBOT_MENU then
             cID="D"
@@ -4491,7 +4496,7 @@ function HealBot_Action_SpellCmdText(cType, cID)
         if cID == "A" then
             cText=HEALBOT_DISABLED_TARGET
         elseif cID == "B" then
-            cText=HEALBOT_FOCUS
+            cText=HEALBOT_WORD_FOCUS
         end
     elseif cType == "ICON" then
         if cID == "A" then
@@ -4531,7 +4536,7 @@ function HealBot_Action_SpellCmdText(cType, cID)
         elseif cID == "B" then
             cText=HEALBOT_ASSIST
         elseif cID == "C" then
-            cText=HEALBOT_FOCUS
+            cText=HEALBOT_WORD_FOCUS
         elseif cID == "D" then
             cText=HEALBOT_MENU
         elseif cID == "E" then
@@ -4573,7 +4578,7 @@ function HealBot_Action_SetSpell(cType, cKey, sText)
             else
                 local spellId=HealBot_Spells_KnownByName(sText)
                 if spellId then
-                    sText="S:"..spellId..":"..sText
+                    sText="S:"..spellId.."^"..sText
                 else
                     local itemID=HealBot_WoWAPI_ItemInfoInstant(sText)
                     if itemID then 
@@ -4743,7 +4748,9 @@ function HealBot_Action_GetSpell(cType, cKey)
             vSpellText=HealBot_Globals.IconKeyCombo[cKey]
         end
         if vSpellText and HealBot_Text_Len(vSpellText)>2 then
-            local sType,sID,sName=string.split(":", vSpellText)
+            local sName
+            local sType,sID=string.split(":", vSpellText)
+            if sID then sID,sName=string.split("^", sID) end
             if sType and not sID and HealBot_Spells_KnownByName(sType) then
                 sID=HealBot_Spells_KnownByName(sType)
             end
@@ -4945,27 +4952,6 @@ function HealBot_Action_DelCustomName(guid, isAdd, isPerm)
     HealBot_Action_CustomName()
 end
 
-function HealBot_Action_DoToggelMyFriend(button)
-      --HealBot_setCall("HealBot_Action_DoToggelMyFriend", button)
-    if HealBot_Config.MyFriend == button.guid then
-        HealBot_Config.MyFriend="x"
-    else
-        HealBot_Config.MyFriend=button.guid
-    end
-    HealBot_Events_UnitBuff(button)
-    HealBot_Timers_Set("OOC","UpdateTargetMyFriend")
-end
-
-function HealBot_Action_ToggelMyFriend(unit)
-      --HealBot_setCall("HealBot_Action_ToggelMyFriend", nil, nil, unit)
-    _,xButton,pButton=HealBot_UnitID(unit)
-    if xButton then 
-        HealBot_Action_DoToggelMyFriend(xButton)
-    elseif pButton then
-        HealBot_Action_DoToggelMyFriend(pButton)
-    end
-end
-
 function HealBot_Action_hbmountmenuFrame_DropDown_Initialize()
       --HealBot_setCall("HealBot_Action_hbmountmenuFrame_DropDown_Initialize")
     local info
@@ -5050,12 +5036,12 @@ function HealBot_Action_hbmenuFrame_DropDown_Initialize(self,level,menuList)
         info=UIDropDownMenu_CreateInfo();
         info.hasArrow=false; 
         info.notCheckable=true;
-        if HealBot_Config.MyFriend == UnitGUID(self.unit) then
-            info.text=HEALBOT_WORDS_UNSET.." "..HEALBOT_OPTIONS_MYFRIEND;
+        if HealBot_Config.PrivFocus == UnitGUID(self.unit) then
+            info.text=HEALBOT_WORDS_UNSET.." "..HEALBOT_OPTIONS_PRIVFOCUS
         else
-            info.text=HEALBOT_WORDS_SETAS.." "..HEALBOT_OPTIONS_MYFRIEND
+            info.text=HEALBOT_WORDS_SETAS.." "..HEALBOT_OPTIONS_PRIVFOCUS
         end
-        info.func=function() HealBot_Action_ToggelMyFriend(self.unit); end;
+        info.func=function() HealBot_Panel_ToggelPrivFocus(self.unit); end;
         UIDropDownMenu_AddButton(info, 1);
 
         if UnitIsPlayer(self.unit) then
@@ -5416,7 +5402,7 @@ function HealBot_Action_DoSetButtonAttrib(button,cType,j,unit,HB_prefix,buttonTy
                 button:SetAttribute(HB_prefix.."type"..j, "macro")
                 button:SetAttribute(HB_prefix.."macrotext"..j, "/target "..pet..";")
             end
-        elseif strlower(sName) == strlower(HEALBOT_FOCUS) then
+        elseif strlower(sName) == strlower(HEALBOT_WORD_FOCUS) then
             button:SetAttribute(HB_prefix..buttonType..j, "focus"..j);
             button:SetAttribute(HB_prefix.."type"..j, "focus")
             button:SetAttribute(HB_prefix.."type-focus"..j, "focus")
@@ -5530,6 +5516,11 @@ function HealBot_Action_DoSetButtonAttrib(button,cType,j,unit,HB_prefix,buttonTy
                 button:SetAttribute(HB_prefix..buttonType..j, nil);
                 button:SetAttribute(HB_prefix.."type"..j, "macro")
                 button:SetAttribute(HB_prefix.."macrotext"..j, "/run DoEmote(\""..t.."\", "..unit..")")
+            elseif e and strlower(e) == strlower(HEALBOT_ACTION) and t and (tonumber(t) or 0)>0 then
+                button:SetAttribute(HB_prefix..buttonType..j, nil);
+                button:SetAttribute(HB_prefix.."type"..j, "action")
+                button:SetAttribute(HB_prefix.."action"..j, tonumber(t))
+                HealBot_AddDebug("Setting Action to "..t)
             elseif sTar or sTrin1 or sTrin2 or AvoidBC then
                 local mText=HealBot_Action_AlterSpell2Macro(sName, sTar, sTrin1, sTrin2, AvoidBC, unit, cType)
                 button:SetAttribute(HB_prefix..buttonType..j, nil);
@@ -5542,7 +5533,6 @@ function HealBot_Action_DoSetButtonAttrib(button,cType,j,unit,HB_prefix,buttonTy
                 HealBot_Action_UpdateAttribsMinReset(button, HB_prefix, cType, j, 2)
             end
         end
-        button:SetAttribute(HB_prefix.."checkselfcast"..j, "false")
         return true
     else
         button:SetAttribute(HB_prefix..buttonType..j, nil);
@@ -5868,37 +5858,37 @@ function HealBot_Action_SetHealButton(unit,guid,frame,unitType,duplicate,role,pr
       --HealBot_setCall("HealBot_Action_SetHealButton", nil, guid)
     hButton=false
     if guid then
-        if unitType<5 then
+        if unitType<10 then
             if not HealBot_Action_Private_Button[unit] then
                 HealBot_Action_Private_Button[unit]=HealBot_Action_CreateButton(frame, "HealBot_")
             end
             hButton=HealBot_Action_Private_Button[unit]
-        elseif unitType == 8 then
+        elseif hbVars_IsUnitType(unitType, HEALBOT_PET) then
             if not HealBot_Action_Pet_Button[unit] then 
                 HealBot_Action_Pet_Button[unit]=HealBot_Action_CreateButton(frame, "hbPet_") 
             end
             hButton=HealBot_Action_Pet_Button[unit]
-        elseif unitType == 7 then
+        elseif hbVars_IsUnitType(unitType, HEALBOT_VEHICLE) then
             if not HealBot_Action_Vehicle_Button[unit] then 
                 HealBot_Action_Vehicle_Button[unit]=HealBot_Action_CreateButton(frame, "hbVehicle_") 
             end
             hButton=HealBot_Action_Vehicle_Button[unit]
-        elseif unitType>12 then
+        elseif hbVars_IsUnitType(unitType, HEALBOT_PRIVATETARGET) then
             if not HealBot_Action_PrivateTarget_Button[unit] then 
                 HealBot_Action_PrivateTarget_Button[unit]=HealBot_Action_CreateButton(frame, "hbPrivTar_") 
             end
             hButton=HealBot_Action_PrivateTarget_Button[unit]
-        elseif unitType>11 then
+        elseif hbVars_IsUnitType(unitType, HEALBOT_PLAYERTARGET) then
             if not HealBot_Action_UnitTarget_Button[unit] then 
                 HealBot_Action_UnitTarget_Button[unit]=HealBot_Action_CreateButton(frame, "hbUnitTar_") 
             end
             hButton=HealBot_Action_UnitTarget_Button[unit]
-        elseif unitType>10 then
+        elseif hbVars_IsUnitType(unitType, HEALBOT_ENEMY) then
             if not HealBot_Action_Enemy_Button[unit] then 
                 HealBot_Action_Enemy_Button[unit]=HealBot_Action_CreateButton(frame, "hbEnemy_") 
             end
             hButton=HealBot_Action_Enemy_Button[unit]
-        elseif unitType>8 then
+        elseif unitType>30 then
             if not HealBot_Action_Extra_Button[unit] then 
                 HealBot_Action_Extra_Button[unit]=HealBot_Action_CreateButton(frame, "hbExtra_") 
             end
@@ -5931,7 +5921,7 @@ function HealBot_Action_SetHealButton(unit,guid,frame,unitType,duplicate,role,pr
                 for x=1,9 do
                     HealBot_Action_InitAuxGlow(x, frame, hButton)
                 end
-            elseif unitType>11 then
+            elseif unitType>41 then
                 hButton.skinreset=true
             end
             hButton.framecol=colFrame or frame
@@ -5955,33 +5945,49 @@ function HealBot_Action_SetHealButton(unit,guid,frame,unitType,duplicate,role,pr
                 HealBot_Data["PLAYERGROUP"]=hButton.group
             end
             if hButton.unit~=unit or hButton.reset or hButton.guid~=guid or hButton.status.unittype~=unitType then
-                hButton.status.unittype=unitType            -- 1=Tanks  2=Healers  3=Self  4=Private  5=Raid  6=Group
-                if unitType>12 then                           -- 7=vehicle  8=pet  9=target  10=focus  11=enemy 12=Player Target 13=Private Target
-                    HealBot_PrivateTarget_Button[unit]=hButton
-                    hButton:SetAttribute("toggleForVehicle", false)
-                elseif unitType>11 then 
+                hButton.status.unittype=unitType                                           -- 1=Tanks  2=Healers  3=Self  4=Private  5=privfocus  8=privfocusToT
+                if hbVars_IsUnitType(unitType, HEALBOT_PRIVATETARGET) then                 -- 11=Raid  12=Group
+                    HealBot_PrivateTarget_Button[unit]=hButton                             -- 21=vehicle  22=pet
+                    hButton:SetAttribute("toggleForVehicle", false)                        -- 31=target  32=tot  33=tof  35=focus
+                    hButton.special.unit=true                                              -- 41=enemy  42=Player Target  43=Private Target
+                elseif hbVars_IsUnitType(unitType, HEALBOT_PLAYERTARGET) then
                     HealBot_UnitTarget_Button[unit]=hButton
                     hButton:SetAttribute("toggleForVehicle", false)
-                elseif unitType>10 then 
+                    hButton.special.unit=true
+                elseif hbVars_IsUnitType(unitType, HEALBOT_ENEMY) then 
                     HealBot_Enemy_Button[unit]=hButton
                     hButton:SetAttribute("toggleForVehicle", false)
-                elseif unitType == 8 then 
+                    hButton.special.unit=true
+                elseif hbVars_IsUnitType(unitType, HEALBOT_PET) then 
                     HealBot_Pet_Button[unit]=hButton
                     hButton:SetAttribute("toggleForVehicle", false)
-                elseif unitType == 7 then
+                    hButton.special.unit=false
+                elseif hbVars_IsUnitType(unitType, HEALBOT_VEHICLE) then
                     HealBot_Vehicle_Button[unit]=hButton
                     hButton:SetAttribute("toggleForVehicle", false)
-                elseif unitType<5 then
+                    hButton.special.unit=false
+                elseif unitType<10 then
                     HealBot_Private_Button[unit]=hButton
                     hbShouldHealSomePrivateFrames[frame]=true
                     hButton:SetAttribute("toggleForVehicle", true)
-                elseif unitType>8 then
+                    if unitType == 8 then
+                        hButton.special.unit=true
+                    else
+                        hButton.special.unit=false
+                    end
+                elseif unitType>30 then
                     HealBot_Extra_Button[unit]=hButton
                     hButton:SetAttribute("toggleForVehicle", true)
+                    if unitType == 32 or unitType == 33 then
+                        hButton.special.unit=true
+                    else
+                        hButton.special.unit=false
+                    end
                 else
                     HealBot_Unit_Button[unit]=hButton
                     hbShouldHealSomePlayerFrames[frame]=true
                     hButton:SetAttribute("toggleForVehicle", true)
+                    hButton.special.unit=false
                 end
                 if hButton.unit~=unit or hButton.guid~=guid or hButton.reset then 
                     hButton.reset=false
@@ -6013,11 +6019,11 @@ function HealBot_Action_SetHealButton(unit,guid,frame,unitType,duplicate,role,pr
                 end
                 if not hButton.status.events then HealBot_Action_RegisterUnitEvents(hButton) end
             end
-            if unitType<5 then
+            if unitType<10 then
                 HealBot_Panel_setButtonpGUID(hButton)
-            elseif unitType<7 then
+            elseif unitType<20 then
                 HealBot_Panel_setButtonGUID(hButton)
-            elseif unitType<9 then
+            elseif unitType<30 then
                 HealBot_Panel_setButtonPetGUID(hButton)
             end
             if hButton.skinreset or hButton.enemyreset or hButton.icon.reset or hButton.indreset or hButton.auxreset or hButton.text.reset then
@@ -6026,11 +6032,11 @@ function HealBot_Action_SetHealButton(unit,guid,frame,unitType,duplicate,role,pr
                 HealBot_Skins_ResetSkinWidth(hButton)
             end
         else                
-            if unitType>10 then
+            if unitType>40 then
                 HealBot_Timers_Set("OOC","RefreshPartyNextRecalcEnemy",1)
-            elseif unitType == 8 then 
+            elseif hbVars_IsUnitType(unitType, HEALBOT_PET) then 
                 HealBot_Timers_Set("OOC","RefreshPartyNextRecalcPets",1)
-            elseif unitType == 7 then
+            elseif hbVars_IsUnitType(unitType, HEALBOT_VEHICLE) then
                 HealBot_Timers_Set("OOC","RefreshPartyNextRecalcVehicle",1)
             else
                 HealBot_Timers_Set("OOC","RefreshPartyNextRecalcPlayers",1)
@@ -6054,7 +6060,7 @@ local testBarsManaClass={["DRUI"]=true,["MAGE"]=true,["PALA"]=true,["PRIE"]=true
 function HealBot_Action_UpdateTestButton(button)
       --HealBot_setCall("HealBot_Action_UpdateTestButton")
     button.testup=false
-    button.status.unittype=5
+    button.status.unittype=hbVars_GetUnitType(HEALBOT_RAID)
     if button.skin~=Healbot_Config_Skins.Current_Skin then
         button.skin=Healbot_Config_Skins.Current_Skin
     end
@@ -6753,7 +6759,7 @@ function HealBot_Action_ShowFramesOnSkinChange()
     for j=1,10 do
         initFrame[j]=false
     end
-    for j=1,11 do
+    for j=1,15 do
         if Healbot_Config_Skins.HealGroups[Healbot_Config_Skins.Current_Skin][j]["STATE"] then
             initFrame[Healbot_Config_Skins.HealGroups[Healbot_Config_Skins.Current_Skin][j]["FRAME"]]=true
         end
@@ -6761,7 +6767,7 @@ function HealBot_Action_ShowFramesOnSkinChange()
     for j=1,10 do
         if initFrame[j] and not HealBot_Action_FrameIsVisible(j) then
             HealBot_Action_ShowPanel(j, true)
-            HealBot_Action_setPoint(j, true)
+            -- HealBot_Action_setPoint(j, true)
             HealBot_Action_HidePanel(j, true)
         end
     end
@@ -6926,6 +6932,13 @@ local function HealBot_Action_AuxClearHighlightBar(button)
     if HealBot_Action_AuxAssigns["HealthOverlayHighlight"][button.frame] then
         HealBot_Aux_UpdateHealthOverLay(button, 5, false)
     end
+end
+
+function HealBot_Action_ValidComboTypes(cType)
+    if cType == "Enabled" or cType == "Enemy" or cType == "Emerg" then
+        return true
+    end
+    return false
 end
 
 function HealBot_Action_HealUnit_OnEnter(self)

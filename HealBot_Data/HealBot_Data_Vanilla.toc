@@ -1,4 +1,4 @@
-## Interface: 11503
+## Interface: 11504
 ## Title: HealBot Data
 ## Author: Strife
 ## Notes: HealBot data, localizations, player saved variables and libraries
@@ -9,6 +9,7 @@
 Libs\LibStub\LibStub.lua
 Libs\CallbackHandler-1.0\CallbackHandler-1.0.xml
 
+Libs\AceSerializer-3.0\AceSerializer-3.0.xml
 Libs\LibSharedMedia-3.0\lib.xml
 Libs\libdatabroker-1-1\LibDataBroker-1.1.lua
 Libs\LibDBIcon-1.0\lib.xml
@@ -26,6 +27,7 @@ Libs\LibRange\HealBot_Range.lua
 Locale\HealBot_Global.lua
 Locale\HealBot_Localization.en.lua
 Libs\HealBot_Libs.lua
+HealBot_Vars.lua
 HealBot_Data.lua
 
 Locale\HealBot_Localization.br.lua

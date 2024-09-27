@@ -228,7 +228,7 @@ function HealBot_Lang_itIT()
     HEALBOT_OPTIONS_DISABLEHEALBOT          = "Disabilita HealBot";
 
     HEALBOT_ASSIST                          = "Assistere";
-    HEALBOT_FOCUS                           = "Fokus";
+    HEALBOT_WORD_FOCUS                      = "Fokus";
     HEALBOT_MENU                            = "Menù";
     HEALBOT_MAINTANK                        = "Difensore principale";
     HEALBOT_MAINASSIST                      = "Assistente principale";
@@ -298,7 +298,7 @@ function HealBot_Lang_itIT()
     HEALBOT_OPTIONS_AGGROBARSIZE            = "Dimensione barra Aggro"
     HEALBOT_OPTIONS_DOUBLETEXTLINES         = "Raddoppia le righe di testo"
     HEALBOT_OPTIONS_TEXTALIGNMENT           = "Allineamento testo"
-    HEALBOT_VEHICLE                         = "Veicolo"
+    HEALBOT_WORD_VEHICLE                    = "Veicolo"
     HEALBOT_WORDS_ERROR                     = "Errore"
     HEALBOT_SPELL_NOT_FOUND	                = "Incantesimo non trovato"
     HEALBOT_OPTIONS_DISABLETOOLTIPINCOMBAT  = "Nacondi Tooltip in Combattimento"

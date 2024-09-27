@@ -1,3 +1,5 @@
+local LibDeflate=HealBot_Libs_LibC()
+local LibSerial=HealBot_Libs_LibSerial()
 local HealBot_Util_luVars={}
 
 function HealBot_Util_setLuVars(vName, vValue)
@@ -102,5 +104,48 @@ function HealBot_Util_EmptyTable(t, key)
     end
     if HealBot_Util_luVars["emptyTable"] then
         t[key]=nil
+    end
+end
+
+function HealBot_Util_Compress(s)
+      --HealBot_setCall("HealBot_Util_Compress")
+    local compressed=LibDeflate:CompressDeflate(s, {level=9})
+    if compressed then
+        local encoded=LibDeflate:EncodeForPrint(compressed)
+        return encoded or s
+    else
+        return s
+    end
+end
+
+function HealBot_Util_Decompress(s)
+      --HealBot_setCall("HealBot_Util_Decompress")
+    local decoded=LibDeflate:DecodeForPrint(s)
+    if decoded then
+        local decompressed=LibDeflate:DecompressDeflate(decoded)
+        return decompressed or s
+    else
+        return s
+    end
+end
+
+function HealBot_Util_Serialize(s, c)
+    local serial=LibSerial:Serialize(s)
+    if c then 
+        serial=HealBot_Util_Compress(serial)
+    end
+    return serial
+end
+
+function HealBot_Util_Deserialize(s)
+    if type(s) == "string" then
+        local plain=HealBot_Util_Decompress(s)
+        local deserial, dat=LibSerial:Deserialize(plain)
+        if deserial then 
+            return dat
+        end
+        return plain
+    else
+        return s
     end
 end

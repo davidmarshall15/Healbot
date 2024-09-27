@@ -225,7 +225,7 @@ function HealBot_Lang_grGR()
     HEALBOT_OPTIONS_AGGROBARSIZE            = "Μεγεθος Aggro bar";
     HEALBOT_OPTIONS_DOUBLETEXTLINES         = "Διπλες γραμμες κειμενου";
     HEALBOT_OPTIONS_TEXTALIGNMENT           = "Ευθυγραμμιση κειμενου";
-    HEALBOT_VEHICLE                         = "Οχημα";
+    HEALBOT_WORD_VEHICLE                    = "Οχημα";
     HEALBOT_WORDS_ERROR                     = "ΛΑθΟΣ";
     HEALBOT_SPELL_NOT_FOUND	                = "Το Spell δεν βρεθηκε";
     HEALBOT_OPTIONS_DISABLETOOLTIPINCOMBAT  = "Αποκρυψη	Tooltip οταν ειμαι σε Combat";

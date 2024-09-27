@@ -301,7 +301,7 @@ function HealBot_Lang_frFR()
     HEALBOT_OPTIONS_AGGROBARSIZE    = "Taille de la barre d\'aggro"
     HEALBOT_OPTIONS_DOUBLETEXTLINES = "Texte sur deux lignes"
     HEALBOT_OPTIONS_TEXTALIGNMENT   = "Alignement du texte"
-    HEALBOT_VEHICLE                 = "V\195\169hicules"
+    HEALBOT_WORD_VEHICLE            = "V\195\169hicules"
     HEALBOT_WORDS_ERROR             = "Erreur"
     HEALBOT_SPELL_NOT_FOUND         = "Sort pas trouv\195\169"
     HEALBOT_OPTIONS_DISABLETOOLTIPINCOMBAT = "Masquer les infos durant les combats"

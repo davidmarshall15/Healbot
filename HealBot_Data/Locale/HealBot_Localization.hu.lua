@@ -230,7 +230,7 @@ function HealBot_Lang_huHU()
     HEALBOT_OPTIONS_AGGROBARSIZE            = "Aggro bar size/nagysága"
     HEALBOT_OPTIONS_DOUBLETEXTLINES         = "Kettös szövegsorral"
     HEALBOT_OPTIONS_TEXTALIGNMENT           = "szöveg igazitása"
-    HEALBOT_VEHICLE                         = "Vehicle/jármü"
+    HEALBOT_WORD_VEHICLE                    = "Vehicle/jármü"
     HEALBOT_WORDS_ERROR                     = "Error/Hiba"
     HEALBOT_SPELL_NOT_FOUND	                = "A Spell nem találhato"
     HEALBOT_OPTIONS_DISABLETOOLTIPINCOMBAT  = "rejtsd el a gyorstippeket in Combat"

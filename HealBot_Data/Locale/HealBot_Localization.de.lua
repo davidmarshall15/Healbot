@@ -227,7 +227,7 @@ function HealBot_Lang_deDE()
     HEALBOT_OPTIONS_DISABLEHEALBOT          = "HealBot deaktivieren";
 
     HEALBOT_ASSIST                          = "Helfen";
-    HEALBOT_FOCUS                           = "Fokus";
+    HEALBOT_WORD_FOCUS                      = "Fokus";
     HEALBOT_MENU                            = "Men\195\188";
     HEALBOT_STOP                            = "Stop";
     HEALBOT_TELL                            = "Sagen";
@@ -293,7 +293,7 @@ function HealBot_Lang_deDE()
     HEALBOT_OPTIONS_AGGROBARSIZE            = "Gr\195\182\195\159e des Aggrobalkens";
     HEALBOT_OPTIONS_DOUBLETEXTLINES         = "Zweifache Textzeilen";
     HEALBOT_OPTIONS_TEXTALIGNMENT           = "Text-Ausrichtung";
-    HEALBOT_VEHICLE                         = "Fahrzeug"
+    HEALBOT_WORD_VEHICLE                    = "Fahrzeug"
     HEALBOT_WORDS_ERROR                     = "Fehler"
     HEALBOT_SPELL_NOT_FOUND                 = "Zauber nicht gefunden"
     HEALBOT_OPTIONS_DISABLETOOLTIPINCOMBAT  = "Kein Tooltipp w\195\164hrend eines Kampfes"

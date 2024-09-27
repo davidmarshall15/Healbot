@@ -232,7 +232,7 @@ HEALBOT_MONK                            = "Monk";
     HEALBOT_OPTIONS_DISABLEHEALBOT = "HealBot 사용 안함";
 
     HEALBOT_ASSIST = "지원";
-    HEALBOT_FOCUS = "주시";
+    HEALBOT_WORD_FOCUS = "주시";
     HEALBOT_MENU = "메뉴";
     HEALBOT_MAINTANK = "방어  담당";
     HEALBOT_MAINASSIST = "공격 담당";
@@ -301,7 +301,7 @@ HEALBOT_MONK                            = "Monk";
     HEALBOT_OPTIONS_AGGROBARSIZE = "어그로 바 크기"
     HEALBOT_OPTIONS_DOUBLETEXTLINES = "이중 문자 라인"
     HEALBOT_OPTIONS_TEXTALIGNMENT = "문자 정렬"
-    HEALBOT_VEHICLE = "차량"
+    HEALBOT_WORD_VEHICLE = "차량"
     HEALBOT_WORDS_ERROR = "오류"
     HEALBOT_SPELL_NOT_FOUND = "주문을 찾을수 없음"
     HEALBOT_OPTIONS_DISABLETOOLTIPINCOMBAT = "중투 상태시 툴팁 숨김"

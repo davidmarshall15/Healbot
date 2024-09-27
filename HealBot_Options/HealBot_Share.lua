@@ -1,4 +1,3 @@
-local LibDeflate=HealBot_Libs_LibC()
 local hbLinkFrame=nil
 local hbLinkFrameObjects={}
 local hbLinkFrameText={}
@@ -50,28 +49,6 @@ end
 function HealBot_Share_retLuVars(vName)
       --HealBot_setCall("HealBot_Share_retLuVars - "..vName)
     return HealBot_Share_luVars[vName]
-end
-
-function HealBot_Share_Compress(s)
-      --HealBot_setCall("HealBot_Share_Compress")
-    local compressed=LibDeflate:CompressDeflate(s, {level=9})
-    if compressed then
-        local encoded=LibDeflate:EncodeForPrint(compressed)
-        return encoded or s
-    else
-        return s
-    end
-end
-
-function HealBot_Share_Decompress(s)
-      --HealBot_setCall("HealBot_Share_Decompress")
-    local decoded=LibDeflate:DecodeForPrint(s)
-    if decoded then
-        local decompressed=LibDeflate:DecompressDeflate(decoded)
-        return decompressed or s
-    else
-        return s
-    end
 end
 
 local function HealBot_Comms_SendShareAddonMsg(msg, pName)
@@ -228,7 +205,7 @@ end
 hooksecurefunc("SetItemRef", function(link, text)
     if link == "garrmission:healbot" then
         local _, encoded=strsplit("~", text)
-        local s=HealBot_Share_Decompress(encoded)
+        local s=HealBot_Util_Decompress(encoded)
        -- HealBot_AddDebug("link="..(link or "nil"), "Share", true)
        -- HealBot_AddDebug("text="..(text or "nil"), "Share", true)
        -- HealBot_AddDebug("encoded="..(encoded or "nil"), "Share", true)
@@ -274,7 +251,7 @@ end
 
 function HealBot_Share_ValidateData(sType, sIn)
       --HealBot_setCall("HealBot_Share_ValidateData")
-    local sStr=HealBot_Share_Decompress(sIn)
+    local sStr=HealBot_Util_Decompress(sIn)
     local id=nil
     local extra=nil
     for l in string.gmatch(sStr, "[^\n]+") do
@@ -315,7 +292,7 @@ function HealBot_Share_ExportPresetCols(lData)
         ssStr=ssStr..HealBot_Globals.PresetColours[x]["A"].."\n"
     end
     if lData or HealBot_Globals.CompressExport then
-        ssStr=HealBot_Share_Compress(ssStr)
+        ssStr=HealBot_Util_Compress(ssStr)
     end
     if lData then
         HealBot_Share_ProcessLinkData(ssStr)
@@ -332,7 +309,7 @@ end
 
 function HealBot_Share_LoadPresetCols(sIn)
       --HealBot_setCall("HealBot_Share_LoadPresetCols")
-    local sStr=HealBot_Share_Decompress(sIn)
+    local sStr=HealBot_Util_Decompress(sIn)
     local ssTab={}
     local i=0
     for l in string.gmatch(sStr, "[^\n]+") do
@@ -421,7 +398,7 @@ function HealBot_Share_ExportSpells(lData)
         end
     end
     if lData or HealBot_Globals.CompressExport then
-        ssStr=HealBot_Share_Compress(ssStr)
+        ssStr=HealBot_Util_Compress(ssStr)
     end
     if lData then
         HealBot_Share_ProcessLinkData(ssStr)
@@ -438,7 +415,7 @@ end
 
 function HealBot_Share_LoadSpells(sIn)
       --HealBot_setCall("HealBot_Share_LoadSpells")
-    local sStr=HealBot_Share_Decompress(sIn)
+    local sStr=HealBot_Util_Decompress(sIn)
     local ssTab={}
     local i=0
     local HealBot_Keys_List=HealBot_Action_retComboKeysList()
@@ -541,7 +518,7 @@ function HealBot_Share_ExportBuffs(lData)
         end
     end
     if lData or HealBot_Globals.CompressExport then
-        ssStr=HealBot_Share_Compress(ssStr)
+        ssStr=HealBot_Util_Compress(ssStr)
     end
     if lData then
         HealBot_Share_ProcessLinkData(ssStr)
@@ -559,7 +536,7 @@ end
 local customBuffPriority=HealBot_Data_DefaultVar("cBuff")
 function HealBot_Share_LoadBuffs(sIn)
       --HealBot_setCall("HealBot_Share_LoadBuffs")
-    local scbStr=HealBot_Share_Decompress(sIn)
+    local scbStr=HealBot_Util_Decompress(sIn)
     local ssTab={}
     local i=0
     for l in string.gmatch(scbStr, "[^\n]+") do
@@ -713,7 +690,7 @@ function HealBot_Share_ExportDebuffs(lData)
         end
     end
     if lData or HealBot_Globals.CompressExport then
-        ssStr=HealBot_Share_Compress(ssStr)
+        ssStr=HealBot_Util_Compress(ssStr)
     end
     if lData then
         HealBot_Share_ProcessLinkData(ssStr)
@@ -731,7 +708,7 @@ end
 local customDebuffPriority=HealBot_Data_DefaultVar("cDebuff")
 function HealBot_Share_LoadDebuffs(sIn)
       --HealBot_setCall("HealBot_Share_LoadDebuffs")
-    local scdStr=HealBot_Share_Decompress(sIn)
+    local scdStr=HealBot_Util_Decompress(sIn)
     local ssTab={}
     local i=0
     for l in string.gmatch(scdStr, "[^\n]+") do
@@ -983,7 +960,7 @@ function HealBot_Share_BuildSkinData(cmd, msg, lData)
         ssData=ssData.."\n"..cmd.."!"..msg
         if cmd == "Complete" then
             if lData or HealBot_Globals.CompressExport then
-                ssData=HealBot_Share_Compress(ssData)
+                ssData=HealBot_Util_Compress(ssData)
             end
             if lData then
                 HealBot_Share_ProcessLinkData(ssData)
@@ -1098,9 +1075,13 @@ function HealBot_Share_ExportSkin(skinName, lData)
     for j=1, getn(SkinTFVars), 1 do
         local varName=SkinTFVars[j]
         HealBot_Share_ExportSkinFrames(skinName, varName, 0, "~s")
-        if varName == "HealGroups" and Healbot_Config_Skins[varName][skinName][11] then
-            tabStr=HealBot_Options_tab2str(Healbot_Config_Skins[varName][skinName][11])
-            HealBot_Share_BuildSkinData(varName.."~0~s~f~11", tabStr)
+        if varName == "HealGroups" then
+            for g=11,15 do
+                if Healbot_Config_Skins[varName][skinName][g] then
+                    tabStr=HealBot_Options_tab2str(Healbot_Config_Skins[varName][skinName][g])
+                    HealBot_Share_BuildSkinData(varName.."~0~s~f~"..g, tabStr)
+                end
+            end
         end
     end
     for j=1, getn(SkinTAuxFVars), 1 do
@@ -1272,7 +1253,7 @@ local hbOptGetSkinName=" "
 local hbWarnSharedMedia=false
 function HealBot_Share_SkinLoad(sIn, internal, v3)
       --HealBot_setCall("HealBot_Share_SkinLoad")
-    local ssStr=HealBot_Share_Decompress(sIn)
+    local ssStr=HealBot_Util_Decompress(sIn)
     local ssTab={}
     local i=0
     for l in string.gmatch(ssStr, "[^\n]+") do
@@ -1381,9 +1362,11 @@ function HealBot_Share_BuildSkinRecMsg(skinName, cmd, parts, msg)
                     end
                 end
             end
-            if varName == "HealGroups" then
-                if not Healbot_Config_Skins[varName][skinName][11] then Healbot_Config_Skins[varName][skinName][11]={} end
-            end
+            --if varName == "HealGroups" then
+                --for g=11,15 do
+                --    if not Healbot_Config_Skins[varName][skinName][g] then Healbot_Config_Skins[varName][skinName][g]={} end
+                --end
+            --end
             if varName == "IconSets" or varName == "IconSetsText" then
                 if tonumber(aID) then
                     aID=tonumber(aID)
@@ -1769,14 +1752,14 @@ end
 
 function HealBot_Share_DisplayLink(s)
       --HealBot_setCall("HealBot_Share_DisplayLink")
-    s=HealBot_Share_Decompress(s)
+    s=HealBot_Util_Decompress(s)
     HealBot_AddChat(s)
 end
 
 function HealBot_Share_PostLink()
       --HealBot_setCall("HealBot_Share_PostLink")
     local s="|cffe6cc80|Hgarrmission:healbot|hHealBot Share [~"..HealBot_Share_luVars["RequestString"].."~]|h|r"
-    s=HealBot_Share_Compress(s)
+    s=HealBot_Util_Compress(s)
     if HealBot_Share_luVars["PostChannel"]<3 then
         HealBot_Comms_SendInstantAddonMsg("L:L~"..s)
     elseif HealBot_Share_luVars["PostChannel"] == 3 then
@@ -1932,7 +1915,7 @@ function HealBot_Share_ShowPostSkinFrame()
     local g=_G["HealBot_Options_ShareExternalEditBox"]
     local h=_G["HealBot_Options_ShareExternalScroll"]
     local f=_G["HealBot_Options_ShareExternalEditBoxFrame"]
-    HealBot_Share_luVars["RequestString"]=HealBot_Share_Compress("~"..sType.."~"..UnitName("player").."~"..Healbot_Config_Skins.Skins[HealBot_Share_luVars["InOutSkin"]])
+    HealBot_Share_luVars["RequestString"]=HealBot_Util_Compress("~"..sType.."~"..UnitName("player").."~"..Healbot_Config_Skins.Skins[HealBot_Share_luVars["InOutSkin"]])
     HealBot_Share_ShowPostFrame(g,h,f,shareType[sType].." ("..Healbot_Config_Skins.Skins[HealBot_Share_luVars["InOutSkin"]]..")")
 end
 
@@ -1942,7 +1925,7 @@ function HealBot_Share_ShowPostDebuffFrame()
     local g=_G["HealBot_Options_ShareCDebuffExternalEditBox"]
     local h=_G["HealBot_Options_ShareCDebuffExternalScroll"]
     local f=_G["HealBot_Options_ShareCDebuffExternalEditBoxFrame"]
-    HealBot_Share_luVars["RequestString"]=HealBot_Share_Compress("~"..sType.."~"..UnitName("player"))
+    HealBot_Share_luVars["RequestString"]=HealBot_Util_Compress("~"..sType.."~"..UnitName("player"))
     HealBot_Share_ShowPostFrame(g,h,f,shareType[sType])
 end
 
@@ -1952,7 +1935,7 @@ function HealBot_Share_ShowPostBuffFrame()
     local g=_G["HealBot_Options_ShareBuffsExternalEditBox"]
     local h=_G["HealBot_Options_ShareBuffsExternalScroll"]
     local f=_G["HealBot_Options_ShareBuffsExternalEditBoxFrame"]
-    HealBot_Share_luVars["RequestString"]=HealBot_Share_Compress("~"..sType.."~"..UnitName("player"))
+    HealBot_Share_luVars["RequestString"]=HealBot_Util_Compress("~"..sType.."~"..UnitName("player"))
     HealBot_Share_ShowPostFrame(g,h,f,shareType[sType])
 end
 
@@ -1962,7 +1945,7 @@ function HealBot_Share_ShowPostSpellsFrame()
     local g=_G["HealBot_Options_ShareSpellsExternalEditBox"]
     local h=_G["HealBot_Options_ShareSpellsExternalScroll"]
     local f=_G["HealBot_Options_ShareSpellsExternalEditBoxFrame"]
-    HealBot_Share_luVars["RequestString"]=HealBot_Share_Compress("~"..sType.."~"..UnitName("player"))
+    HealBot_Share_luVars["RequestString"]=HealBot_Util_Compress("~"..sType.."~"..UnitName("player"))
     HealBot_Share_ShowPostFrame(g,h,f,shareType[sType])
 end
 
@@ -1972,6 +1955,6 @@ function HealBot_Share_ShowPostPresetColsFrame()
     local g=_G["HealBot_Options_SharePresetColsExternalEditBox"]
     local h=_G["HealBot_Options_SharePresetColsExternalScroll"]
     local f=_G["HealBot_Options_SharePresetColsExternalEditBoxFrame"]
-    HealBot_Share_luVars["RequestString"]=HealBot_Share_Compress("~"..sType.."~"..UnitName("player"))
+    HealBot_Share_luVars["RequestString"]=HealBot_Util_Compress("~"..sType.."~"..UnitName("player"))
     HealBot_Share_ShowPostFrame(g,h,f,shareType[sType])
 end

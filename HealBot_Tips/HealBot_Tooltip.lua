@@ -8,7 +8,7 @@ local playerPowerCols={["r"]=1,["g"]=1,["b"]=1}
 local customDebuffPriority=HealBot_Data_DefaultVar("cDebuff")
 local hbCommands={ [strlower(HEALBOT_DISABLED_TARGET)]=true,
                    [strlower(HEALBOT_ASSIST)]=true,
-                   [strlower(HEALBOT_FOCUS)]=true,
+                   [strlower(HEALBOT_WORD_FOCUS)]=true,
                    [strlower(HEALBOT_MENU)]=true,
                    [strlower(HEALBOT_HBMENU)]=true,
                    [strlower(HEALBOT_STOP)]=true,
@@ -35,7 +35,6 @@ elseif HEALBOT_GAME_VERSION>2 then
 end
 local hbTip=HealBot_GameTooltip
 HealBot_Data["TIPTYPE"]="Enabled" -- Initialize
-
 local hbCustomTipAnchor=nil
 local hbCustomTipAnchorText={}
 local hbCustomTipAnchorObjects={}
@@ -599,19 +598,21 @@ function HealBot_Tooltip_setPlayerPowerCols(r,g,b)
 end
 
 function HealBot_Action_setSpellInfo(button)
-    local bId, bName, sName, sType, sDisplayName, bR, bG, bB
-    for x=1,HealBot_Globals.Tooltip_MaxButtons do
-        bId, bName=HealBot_Options_ComboClass_Button(x)
-        sName=HealBot_Action_SpellPattern(bId, string.upper(HealBot_Data["TIPTYPE"]))
-        if x == 1 and HealBot_Globals.SmartCast and button.status.current<HealBot_Unit_Status["DC"] and not IsModifierKeyDown() and UnitIsFriend("player",button.unit) and not HealBot_Data["UILOCK"] then
-            sName=HealBot_Action_SmartCast(button) or sName
-        end
-        sDisplayName, bR, bG, bB, sType=HealBot_Tooltip_setspellName(button, sName)
-        if sDisplayName then
-            if HealBot_Globals.Tooltip_ShowSpellExtra then
-                HealBot_Tooltip_SetLine(bName..": "..sDisplayName, bR, bG, bB,1,HealBot_Tooltip_SpellSummary(sName, sType),playerPowerCols.r,playerPowerCols.g,playerPowerCols.b,1)
-            else
-                HealBot_Tooltip_SetLine(bName..": "..sDisplayName, bR, bG, bB,1)
+    if HealBot_Action_ValidComboTypes(HealBot_Data["TIPTYPE"]) then
+        local bId, bName, sName, sType, sDisplayName, bR, bG, bB
+        for x=1,HealBot_Globals.Tooltip_MaxButtons do
+            bId, bName=HealBot_Options_ComboClass_Button(x)
+            sName=HealBot_Action_SpellPattern(bId, string.upper(HealBot_Data["TIPTYPE"]))
+            if x == 1 and HealBot_Globals.SmartCast and button.status.current<HealBot_Unit_Status["DC"] and not IsModifierKeyDown() and UnitIsFriend("player",button.unit) and not HealBot_Data["UILOCK"] then
+                sName=HealBot_Action_SmartCast(button) or sName
+            end
+            sDisplayName, bR, bG, bB, sType=HealBot_Tooltip_setspellName(button, sName)
+            if sDisplayName then
+                if HealBot_Globals.Tooltip_ShowSpellExtra then
+                    HealBot_Tooltip_SetLine(bName..": "..sDisplayName, bR, bG, bB,1,HealBot_Tooltip_SpellSummary(sName, sType),playerPowerCols.r,playerPowerCols.g,playerPowerCols.b,1)
+                else
+                    HealBot_Tooltip_SetLine(bName..": "..sDisplayName, bR, bG, bB,1)
+                end
             end
         end
     end
@@ -1861,6 +1862,6 @@ function HealBot_Tooltip_SetVar(value, key)
 end
 
 function HealBot_Tooltip_NilVar(key)
-    Healbot_Config_Skins.ToolTip[Healbot_Config_Skins.Current_Skin][key]=nil
+    if Healbot_Config_Skins.ToolTip[Healbot_Config_Skins.Current_Skin] then Healbot_Config_Skins.ToolTip[Healbot_Config_Skins.Current_Skin][key]=nil end
     HealBot_Util_EmptyTable(Healbot_Config_Skins.ToolTip, Healbot_Config_Skins.Current_Skin)
 end    

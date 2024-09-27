@@ -6,10 +6,10 @@ local vMajor        =string.split(".", select(1, GetBuildInfo()))
 HEALBOT_GAME_VERSION=tonumber(vMajor)
 
 function HealBot_Global_Version()
-    return "11.0.2.9"
+    return "11.0.2.11.10"
 end
 function HealBot_Global_InitVersion()
-    return "11.0.2.8"  -- Keep just behind the global version
+    return "11.0.2.10"  -- Keep just behind the global version
 end
 
 function HealBot_globalVars()
@@ -742,6 +742,7 @@ function HealBot_globalVars()
     HBC_DRUID_ABOLISH_POISON               =HealBot_WoWAPI_SpellName(2893) or "--DRUID_ABOLISH_POISON"
     HEALBOT_DETOX                          =HealBot_WoWAPI_SpellName(115450) or "--DETOX"
     HEALBOT_NATURES_CURE                   =HealBot_WoWAPI_SpellName(88423) or "--NATURES_CURE"
+    HEALBOT_IMPROVED_NATURES_CURE          =HealBot_WoWAPI_SpellName(392378) or "--IMPROVED_NATURES_CURE"
     HEALBOT_PURIFY                         =HealBot_WoWAPI_SpellName(527) or "--PURIFY"
     HBC_PURIFY                             =HealBot_WoWAPI_SpellName(1152) or "--PURIFY"
     HEALBOT_PURIFY_SPIRIT                  =HealBot_WoWAPI_SpellName(77130) or "--PURIFY_SPIRIT"
@@ -794,6 +795,24 @@ function HealBot_globalVars()
     HEALBOT_FLESHCRAFT                     =324631
 end
 HealBot_globalVars()
+ 
+HEALBOT_TANK=1
+HEALBOT_HEALER=2
+HEALBOT_SELF=3
+HEALBOT_PRIVATELIST=4
+HEALBOT_PRIVATEFOCUS=5
+HEALBOT_RAID=6
+HEALBOT_GROUP=7
+HEALBOT_VEHICLE=8
+HEALBOT_PET=9
+HEALBOT_TARGET=10
+HEALBOT_TOT=11
+HEALBOT_TOF=12
+HEALBOT_PRIVFOCUSTOT=13
+HEALBOT_FOCUS=14
+HEALBOT_ENEMY=15
+HEALBOT_PLAYERTARGET=16
+HEALBOT_PRIVATETARGET=17
 
 HEALBOT_DISEASE_en                     ="Disease";  -- Do NOT localize this value.
 HEALBOT_MAGIC_en                       ="Magic";  -- Do NOT localize this value.

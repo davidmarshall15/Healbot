@@ -9155,6 +9155,19 @@
                 <Size>
                   <AbsDimension y="540"/>
                 </Size>
+                <Layers>
+                  <Layer level="BACKGROUND">
+                    <FontString name="HealBot_HealGroups_Text" inherits="GameFontNormal">
+                      <Anchors>
+                        <Anchor point="TOP">
+                          <Offset>
+                            <AbsDimension x="0" y="-8" />
+                          </Offset>
+                        </Anchor>
+                      </Anchors>
+                    </FontString>
+                  </Layer>
+                </Layers>
                 <Anchors>
                   <Anchor point="TOPLEFT">
                     <Offset>
@@ -9172,7 +9185,7 @@
                     <Anchors>
                       <Anchor point="TOPLEFT">
                         <Offset>
-                          <AbsDimension x="350" y="-55" />
+                          <AbsDimension x="180" y="-75" />
                         </Offset>
                       </Anchor>
                     </Anchors>
@@ -9199,7 +9212,7 @@
                     <Anchors>
                       <Anchor point="TOPRIGHT" relativeTo="HealBot_Options_HealGroups1" relativePoint="TOPLEFT">
                         <Offset>
-                          <AbsDimension x="-5" y="0" />
+                          <AbsDimension x="5" y="0" />
                         </Offset>
                       </Anchor>
                     </Anchors>
@@ -9217,7 +9230,7 @@
                       </Layer>
                     </Layers>
                     <Scripts>
-                      <OnLoad>HealBot_Options_UIDropDownMenu_OnLoad(self, 125)</OnLoad>
+                      <OnLoad>HealBot_Options_UIDropDownMenu_OnLoad(self, 90)</OnLoad>
                       <OnEnter>HealBot_Options_Show_Help("SELECTFRAMEFORGROUP",true)</OnEnter>
                       <OnLeave>HealBot_Options_Show_Help("SELECTFRAMEFORGROUP",false)</OnLeave>
                     </Scripts>
@@ -9229,7 +9242,7 @@
                     <Anchors>
                       <Anchor point="TOPLEFT" relativeTo="HealBot_Options_HealGroups1Frame"  relativePoint="TOPLEFT">
                         <Offset>
-                          <AbsDimension x="-35" y="0"/>
+                          <AbsDimension x="-30" y="0"/>
                         </Offset>
                       </Anchor>
                     </Anchors>
@@ -9245,7 +9258,7 @@
                     <Anchors>
                       <Anchor point="TOPLEFT" relativeTo="HealBot_Options_HealGroups1" relativePoint="TOPLEFT">
                         <Offset>
-                          <AbsDimension x="0" y="-40" />
+                          <AbsDimension x="0" y="-50" />
                         </Offset>
                       </Anchor>
                     </Anchors>
@@ -9259,12 +9272,12 @@
                     <Anchors>
                       <Anchor point="TOPRIGHT" relativeTo="HealBot_Options_HealGroups2" relativePoint="TOPLEFT">
                         <Offset>
-                          <AbsDimension x="-5" y="0" />
+                          <AbsDimension x="5" y="0" />
                         </Offset>
                       </Anchor>
                     </Anchors>
                     <Scripts>
-                      <OnLoad>HealBot_Options_UIDropDownMenu_OnLoad(self, 125)</OnLoad>
+                      <OnLoad>HealBot_Options_UIDropDownMenu_OnLoad(self, 90)</OnLoad>
                       <OnEnter>HealBot_Options_Show_Help("SELECTFRAMEFORGROUP",true)</OnEnter>
                       <OnLeave>HealBot_Options_Show_Help("SELECTFRAMEFORGROUP",false)</OnLeave>
                     </Scripts>
@@ -9276,7 +9289,7 @@
                     <Anchors>
                       <Anchor point="TOPLEFT" relativeTo="HealBot_Options_HealGroups2Frame"  relativePoint="TOPLEFT">
                         <Offset>
-                          <AbsDimension x="-45" y="1"/>
+                          <AbsDimension x="-40" y="1"/>
                         </Offset>
                       </Anchor>
                     </Anchors>
@@ -9295,7 +9308,7 @@
                     <Anchors>
                       <Anchor point="TOPLEFT" relativeTo="HealBot_Options_HealGroups2Frame"  relativePoint="TOPLEFT">
                         <Offset>
-                          <AbsDimension x="-25" y="0"/>
+                          <AbsDimension x="-20" y="0"/>
                         </Offset>
                       </Anchor>
                     </Anchors>
@@ -9311,7 +9324,7 @@
                     <Anchors>
                       <Anchor point="TOPLEFT" relativeTo="HealBot_Options_HealGroups2" relativePoint="TOPLEFT">
                         <Offset>
-                          <AbsDimension x="0" y="-40" />
+                          <AbsDimension x="0" y="-50" />
                         </Offset>
                       </Anchor>
                     </Anchors>
@@ -9325,12 +9338,12 @@
                     <Anchors>
                       <Anchor point="TOPRIGHT" relativeTo="HealBot_Options_HealGroups3" relativePoint="TOPLEFT">
                         <Offset>
-                          <AbsDimension x="-5" y="0" />
+                          <AbsDimension x="5" y="0" />
                         </Offset>
                       </Anchor>
                     </Anchors>
                     <Scripts>
-                      <OnLoad>HealBot_Options_UIDropDownMenu_OnLoad(self, 125)</OnLoad>
+                      <OnLoad>HealBot_Options_UIDropDownMenu_OnLoad(self, 90)</OnLoad>
                       <OnEnter>HealBot_Options_Show_Help("SELECTFRAMEFORGROUP",true)</OnEnter>
                       <OnLeave>HealBot_Options_Show_Help("SELECTFRAMEFORGROUP",false)</OnLeave>
                     </Scripts>
@@ -9342,7 +9355,7 @@
                     <Anchors>
                       <Anchor point="TOPLEFT" relativeTo="HealBot_Options_HealGroups3Frame"  relativePoint="TOPLEFT">
                         <Offset>
-                          <AbsDimension x="-45" y="1"/>
+                          <AbsDimension x="-40" y="1"/>
                         </Offset>
                       </Anchor>
                     </Anchors>
@@ -9361,7 +9374,7 @@
                     <Anchors>
                       <Anchor point="TOPLEFT" relativeTo="HealBot_Options_HealGroups3Frame"  relativePoint="TOPLEFT">
                         <Offset>
-                          <AbsDimension x="-25" y="0"/>
+                          <AbsDimension x="-20" y="0"/>
                         </Offset>
                       </Anchor>
                     </Anchors>
@@ -9377,7 +9390,7 @@
                     <Anchors>
                       <Anchor point="TOPLEFT" relativeTo="HealBot_Options_HealGroups3" relativePoint="TOPLEFT">
                         <Offset>
-                          <AbsDimension x="0" y="-40" />
+                          <AbsDimension x="0" y="-50" />
                         </Offset>
                       </Anchor>
                     </Anchors>
@@ -9391,12 +9404,12 @@
                     <Anchors>
                       <Anchor point="TOPRIGHT" relativeTo="HealBot_Options_HealGroups4" relativePoint="TOPLEFT">
                         <Offset>
-                          <AbsDimension x="-5" y="0" />
+                          <AbsDimension x="5" y="0" />
                         </Offset>
                       </Anchor>
                     </Anchors>
                     <Scripts>
-                      <OnLoad>HealBot_Options_UIDropDownMenu_OnLoad(self, 125)</OnLoad>
+                      <OnLoad>HealBot_Options_UIDropDownMenu_OnLoad(self, 90)</OnLoad>
                       <OnEnter>HealBot_Options_Show_Help("SELECTFRAMEFORGROUP",true)</OnEnter>
                       <OnLeave>HealBot_Options_Show_Help("SELECTFRAMEFORGROUP",false)</OnLeave>
                     </Scripts>
@@ -9408,7 +9421,7 @@
                     <Anchors>
                       <Anchor point="TOPLEFT" relativeTo="HealBot_Options_HealGroups4Frame"  relativePoint="TOPLEFT">
                         <Offset>
-                          <AbsDimension x="-45" y="1"/>
+                          <AbsDimension x="-40" y="1"/>
                         </Offset>
                       </Anchor>
                     </Anchors>
@@ -9427,7 +9440,7 @@
                     <Anchors>
                       <Anchor point="TOPLEFT" relativeTo="HealBot_Options_HealGroups4Frame"  relativePoint="TOPLEFT">
                         <Offset>
-                          <AbsDimension x="-25" y="0"/>
+                          <AbsDimension x="-20" y="0"/>
                         </Offset>
                       </Anchor>
                     </Anchors>
@@ -9443,7 +9456,7 @@
                     <Anchors>
                       <Anchor point="TOPLEFT" relativeTo="HealBot_Options_HealGroups4" relativePoint="TOPLEFT">
                         <Offset>
-                          <AbsDimension x="0" y="-40" />
+                          <AbsDimension x="0" y="-50" />
                         </Offset>
                       </Anchor>
                     </Anchors>
@@ -9457,12 +9470,12 @@
                     <Anchors>
                       <Anchor point="TOPRIGHT" relativeTo="HealBot_Options_HealGroups5" relativePoint="TOPLEFT">
                         <Offset>
-                          <AbsDimension x="-5" y="0" />
+                          <AbsDimension x="5" y="0" />
                         </Offset>
                       </Anchor>
                     </Anchors>
                     <Scripts>
-                      <OnLoad>HealBot_Options_UIDropDownMenu_OnLoad(self, 125)</OnLoad>
+                      <OnLoad>HealBot_Options_UIDropDownMenu_OnLoad(self, 90)</OnLoad>
                       <OnEnter>HealBot_Options_Show_Help("SELECTFRAMEFORGROUP",true)</OnEnter>
                       <OnLeave>HealBot_Options_Show_Help("SELECTFRAMEFORGROUP",false)</OnLeave>
                     </Scripts>
@@ -9474,7 +9487,7 @@
                     <Anchors>
                       <Anchor point="TOPLEFT" relativeTo="HealBot_Options_HealGroups5Frame"  relativePoint="TOPLEFT">
                         <Offset>
-                          <AbsDimension x="-45" y="1"/>
+                          <AbsDimension x="-40" y="1"/>
                         </Offset>
                       </Anchor>
                     </Anchors>
@@ -9493,7 +9506,7 @@
                     <Anchors>
                       <Anchor point="TOPLEFT" relativeTo="HealBot_Options_HealGroups5Frame"  relativePoint="TOPLEFT">
                         <Offset>
-                          <AbsDimension x="-25" y="0"/>
+                          <AbsDimension x="-20" y="0"/>
                         </Offset>
                       </Anchor>
                     </Anchors>
@@ -9509,7 +9522,7 @@
                     <Anchors>
                       <Anchor point="TOPLEFT" relativeTo="HealBot_Options_HealGroups5" relativePoint="TOPLEFT">
                         <Offset>
-                          <AbsDimension x="0" y="-40" />
+                          <AbsDimension x="0" y="-50" />
                         </Offset>
                       </Anchor>
                     </Anchors>
@@ -9523,12 +9536,12 @@
                     <Anchors>
                       <Anchor point="TOPRIGHT" relativeTo="HealBot_Options_HealGroups6" relativePoint="TOPLEFT">
                         <Offset>
-                          <AbsDimension x="-5" y="0" />
+                          <AbsDimension x="5" y="0" />
                         </Offset>
                       </Anchor>
                     </Anchors>
                     <Scripts>
-                      <OnLoad>HealBot_Options_UIDropDownMenu_OnLoad(self, 125)</OnLoad>
+                      <OnLoad>HealBot_Options_UIDropDownMenu_OnLoad(self, 90)</OnLoad>
                       <OnEnter>HealBot_Options_Show_Help("SELECTFRAMEFORGROUP",true)</OnEnter>
                       <OnLeave>HealBot_Options_Show_Help("SELECTFRAMEFORGROUP",false)</OnLeave>
                     </Scripts>
@@ -9540,7 +9553,7 @@
                     <Anchors>
                       <Anchor point="TOPLEFT" relativeTo="HealBot_Options_HealGroups6Frame"  relativePoint="TOPLEFT">
                         <Offset>
-                          <AbsDimension x="-35" y="1"/>
+                          <AbsDimension x="-40" y="1"/>
                         </Offset>
                       </Anchor>
                     </Anchors>
@@ -9552,11 +9565,30 @@
                       <OnLeave>HealBot_Options_Show_Help("HEALGROUPUP",false)</OnLeave>
                     </Scripts>
                   </Button>
+                  <Button name="HealBot_Options_HealGroups6Down">
+                    <Size>
+                      <AbsDimension x="25" y="25"/>
+                    </Size>
+                    <Anchors>
+                      <Anchor point="TOPLEFT" relativeTo="HealBot_Options_HealGroups6Frame"  relativePoint="TOPLEFT">
+                        <Offset>
+                          <AbsDimension x="-20" y="0"/>
+                        </Offset>
+                      </Anchor>
+                    </Anchors>
+                    <NormalTexture name="$parenttd" file="Interface\AddOns\HealBot\Images\downArrow"/>
+                    <HighlightTexture name="$parenttdh" file="Interface\AddOns\HealBot\Images\downArrowhl"/>
+                    <Scripts>
+                      <OnClick>HealBot_Options_HealGroupDown_OnClick(self, 6)</OnClick>
+                      <OnEnter>HealBot_Options_Show_Help("HEALGROUPDOWN",true)</OnEnter>
+                      <OnLeave>HealBot_Options_Show_Help("HEALGROUPDOWN",false)</OnLeave>
+                    </Scripts>
+                  </Button>
                   <CheckButton name="HealBot_Options_HealGroups7" inherits="HealBotUIPanelCheckButton">
                     <Anchors>
                       <Anchor point="TOPLEFT" relativeTo="HealBot_Options_HealGroups6" relativePoint="TOPLEFT">
                         <Offset>
-                          <AbsDimension x="0" y="-40" />
+                          <AbsDimension x="0" y="-50" />
                         </Offset>
                       </Anchor>
                     </Anchors>
@@ -9570,24 +9602,56 @@
                     <Anchors>
                       <Anchor point="TOPRIGHT" relativeTo="HealBot_Options_HealGroups7" relativePoint="TOPLEFT">
                         <Offset>
-                          <AbsDimension x="-5" y="0" />
+                          <AbsDimension x="5" y="0" />
                         </Offset>
                       </Anchor>
                     </Anchors>
                     <Scripts>
-                      <OnLoad>HealBot_Options_UIDropDownMenu_OnLoad(self, 125)</OnLoad>
-                      <OnEnter>HealBot_Options_Show_Help("SELECTFRAMEFORGROUPVEHICLE",true)</OnEnter>
-                      <OnLeave>HealBot_Options_Show_Help("SELECTFRAMEFORGROUPVEHICLE",false)</OnLeave>
+                      <OnLoad>HealBot_Options_UIDropDownMenu_OnLoad(self, 90)</OnLoad>
+                      <OnEnter>HealBot_Options_Show_Help("SELECTFRAMEFORGROUP",true)</OnEnter>
+                      <OnLeave>HealBot_Options_Show_Help("SELECTFRAMEFORGROUP",false)</OnLeave>
                     </Scripts>
                   </Frame>
-                  <CheckButton name="HealBot_Options_HealGroups8" inherits="HealBotUIPanelCheckButton">
+                  <Button name="HealBot_Options_HealGroups7Up">
+                    <Size>
+                      <AbsDimension x="25" y="25"/>
+                    </Size>
                     <Anchors>
-                      <Anchor point="TOPLEFT" relativeTo="HealBot_Options_HealGroups7" relativePoint="TOPLEFT">
+                      <Anchor point="TOPLEFT" relativeTo="HealBot_Options_HealGroups7Frame"  relativePoint="TOPLEFT">
                         <Offset>
-                          <AbsDimension x="0" y="-40" />
+                          <AbsDimension x="-30" y="1"/>
                         </Offset>
                       </Anchor>
                     </Anchors>
+                    <NormalTexture name="$parenttd" file="Interface\AddOns\HealBot\Images\upArrow"/>
+                    <HighlightTexture name="$parenttdh" file="Interface\AddOns\HealBot\Images\upArrowhl"/>
+                    <Scripts>
+                      <OnClick>HealBot_Options_HealGroupUp_OnClick(self, 7)</OnClick>
+                      <OnEnter>HealBot_Options_Show_Help("HEALGROUPUP",true)</OnEnter>
+                      <OnLeave>HealBot_Options_Show_Help("HEALGROUPUP",false)</OnLeave>
+                    </Scripts>
+                  </Button>
+                  <CheckButton name="HealBot_Options_HealGroups8" inherits="HealBotUIPanelCheckButton">
+                    <Anchors>
+                      <Anchor point="TOPLEFT">
+                        <Offset>
+                          <AbsDimension x="450" y="-75" />
+                        </Offset>
+                      </Anchor>
+                    </Anchors>
+                    <Layers>
+                      <Layer level="BACKGROUND">
+                        <FontString name="HealBot_HealButtonsGroups8_Text" inherits="GameFontNormal">
+                          <Anchors>
+                            <Anchor point="BOTTOMLEFT" relativeTo="HealBot_Options_HealGroups8" relativePoint="TOPLEFT">
+                              <Offset>
+                                <AbsDimension x="18" y="5" />
+                              </Offset>
+                            </Anchor>
+                          </Anchors>
+                        </FontString>
+                      </Layer>
+                    </Layers>
                     <Scripts>
                       <OnClick>HealBot_Options_HealGroups_OnClick(self, 8)</OnClick>
                       <OnEnter>HealBot_Options_Show_Help("ENABLEHEALGROUP",true)</OnEnter>
@@ -9598,21 +9662,34 @@
                     <Anchors>
                       <Anchor point="TOPRIGHT" relativeTo="HealBot_Options_HealGroups8" relativePoint="TOPLEFT">
                         <Offset>
-                          <AbsDimension x="-5" y="0" />
+                          <AbsDimension x="5" y="0" />
                         </Offset>
                       </Anchor>
                     </Anchors>
+                    <Layers>
+                      <Layer level="BACKGROUND">
+                        <FontString name="HealBot_HealButtonsFrames8_Text" inherits="GameFontNormal">
+                          <Anchors>
+                            <Anchor point="BOTTOM" relativeTo="HealBot_Options_HealGroups8Frame" relativePoint="TOP">
+                              <Offset>
+                                <AbsDimension x="0" y="5" />
+                              </Offset>
+                            </Anchor>
+                          </Anchors>
+                        </FontString>
+                      </Layer>
+                    </Layers>
                     <Scripts>
-                      <OnLoad>HealBot_Options_UIDropDownMenu_OnLoad(self, 125)</OnLoad>
-                      <OnEnter>HealBot_Options_Show_Help("SELECTFRAMEFORGROUPPETS",true)</OnEnter>
-                      <OnLeave>HealBot_Options_Show_Help("SELECTFRAMEFORGROUPPETS",false)</OnLeave>
+                      <OnLoad>HealBot_Options_UIDropDownMenu_OnLoad(self, 90)</OnLoad>
+                      <OnEnter>HealBot_Options_Show_Help("SELECTFRAMEFORGROUPVEHICLE",true)</OnEnter>
+                      <OnLeave>HealBot_Options_Show_Help("SELECTFRAMEFORGROUPVEHICLE",false)</OnLeave>
                     </Scripts>
                   </Frame>
                   <CheckButton name="HealBot_Options_HealGroups9" inherits="HealBotUIPanelCheckButton">
                     <Anchors>
                       <Anchor point="TOPLEFT" relativeTo="HealBot_Options_HealGroups8" relativePoint="TOPLEFT">
                         <Offset>
-                          <AbsDimension x="0" y="-40" />
+                          <AbsDimension x="0" y="-50" />
                         </Offset>
                       </Anchor>
                     </Anchors>
@@ -9626,77 +9703,189 @@
                     <Anchors>
                       <Anchor point="TOPRIGHT" relativeTo="HealBot_Options_HealGroups9" relativePoint="TOPLEFT">
                         <Offset>
-                          <AbsDimension x="-5" y="0" />
+                          <AbsDimension x="5" y="0" />
                         </Offset>
                       </Anchor>
                     </Anchors>
                     <Scripts>
-                      <OnLoad>HealBot_Options_UIDropDownMenu_OnLoad(self, 125)</OnLoad>
-                      <OnEnter>HealBot_Options_Show_Help("SELECTFRAMEFORGROUPTARGET",true)</OnEnter>
-                      <OnLeave>HealBot_Options_Show_Help("SELECTFRAMEFORGROUPTARGET",false)</OnLeave>
+                      <OnLoad>HealBot_Options_UIDropDownMenu_OnLoad(self, 90)</OnLoad>
+                      <OnEnter>HealBot_Options_Show_Help("SELECTFRAMEFORGROUPPETS",true)</OnEnter>
+                      <OnLeave>HealBot_Options_Show_Help("SELECTFRAMEFORGROUPPETS",false)</OnLeave>
                     </Scripts>
                   </Frame>
                   <CheckButton name="HealBot_Options_HealGroups10" inherits="HealBotUIPanelCheckButton">
                     <Anchors>
                       <Anchor point="TOPLEFT" relativeTo="HealBot_Options_HealGroups9" relativePoint="TOPLEFT">
                         <Offset>
-                          <AbsDimension x="0" y="-40" />
+                          <AbsDimension x="0" y="-50" />
                         </Offset>
                       </Anchor>
                     </Anchors>
                     <Scripts>
                       <OnClick>HealBot_Options_HealGroups_OnClick(self, 10)</OnClick>
-                      <OnEnter>HealBot_Options_Show_Help("ENABLEHEALGROUP",true)</OnEnter>
-                      <OnLeave>HealBot_Options_Show_Help("ENABLEHEALGROUP",false)</OnLeave>
+                      <OnEnter>HealBot_Options_Show_Help("ENABLEHEALGROUPVIS",true)</OnEnter>
+                      <OnLeave>HealBot_Options_Show_Help("ENABLEHEALGROUPVIS",false)</OnLeave>
                     </Scripts>
                   </CheckButton>
                   <Frame name="HealBot_Options_HealGroups10Frame" inherits="UIDropDownMenuTemplate">
                     <Anchors>
                       <Anchor point="TOPRIGHT" relativeTo="HealBot_Options_HealGroups10" relativePoint="TOPLEFT">
                         <Offset>
-                          <AbsDimension x="-5" y="0" />
+                          <AbsDimension x="5" y="0" />
                         </Offset>
                       </Anchor>
                     </Anchors>
                     <Scripts>
-                      <OnLoad>HealBot_Options_UIDropDownMenu_OnLoad(self, 125)</OnLoad>
-                      <OnEnter>HealBot_Options_Show_Help("SELECTFRAMEFORGROUPFOCUS",true)</OnEnter>
-                      <OnLeave>HealBot_Options_Show_Help("SELECTFRAMEFORGROUPFOCUS",false)</OnLeave>
+                      <OnLoad>HealBot_Options_UIDropDownMenu_OnLoad(self, 90)</OnLoad>
+                      <OnEnter>HealBot_Options_Show_Help("SELECTFRAMEFORGROUPTARGET",true)</OnEnter>
+                      <OnLeave>HealBot_Options_Show_Help("SELECTFRAMEFORGROUPTARGET",false)</OnLeave>
                     </Scripts>
                   </Frame>
                   <CheckButton name="HealBot_Options_HealGroups11" inherits="HealBotUIPanelCheckButton">
                     <Anchors>
                       <Anchor point="TOPLEFT" relativeTo="HealBot_Options_HealGroups10" relativePoint="TOPLEFT">
                         <Offset>
-                          <AbsDimension x="0" y="-40" />
+                          <AbsDimension x="0" y="-50" />
                         </Offset>
                       </Anchor>
                     </Anchors>
                     <Scripts>
                       <OnClick>HealBot_Options_HealGroups_OnClick(self, 11)</OnClick>
-                      <OnEnter>HealBot_Options_Show_Help("ENABLEHEALGROUP",true)</OnEnter>
-                      <OnLeave>HealBot_Options_Show_Help("ENABLEHEALGROUP",false)</OnLeave>
+                      <OnEnter>HealBot_Options_Show_Help("ENABLEHEALGROUPVIS",true)</OnEnter>
+                      <OnLeave>HealBot_Options_Show_Help("ENABLEHEALGROUPVIS",false)</OnLeave>
                     </Scripts>
                   </CheckButton>
                   <Frame name="HealBot_Options_HealGroups11Frame" inherits="UIDropDownMenuTemplate">
                     <Anchors>
                       <Anchor point="TOPRIGHT" relativeTo="HealBot_Options_HealGroups11" relativePoint="TOPLEFT">
                         <Offset>
-                          <AbsDimension x="-5" y="0" />
+                          <AbsDimension x="5" y="0" />
                         </Offset>
                       </Anchor>
                     </Anchors>
                     <Scripts>
-                      <OnLoad>HealBot_Options_UIDropDownMenu_OnLoad(self, 125)</OnLoad>
+                      <OnLoad>HealBot_Options_UIDropDownMenu_OnLoad(self, 90)</OnLoad>
+                      <OnEnter>HealBot_Options_Show_Help("SELECTFRAMEFORGROUPTARGET",true)</OnEnter>
+                      <OnLeave>HealBot_Options_Show_Help("SELECTFRAMEFORGROUPTARGET",false)</OnLeave>
+                    </Scripts>
+                  </Frame>
+                  <CheckButton name="HealBot_Options_HealGroups12" inherits="HealBotUIPanelCheckButton">
+                    <Anchors>
+                      <Anchor point="TOPLEFT" relativeTo="HealBot_Options_HealGroups11" relativePoint="TOPLEFT">
+                        <Offset>
+                          <AbsDimension x="0" y="-50" />
+                        </Offset>
+                      </Anchor>
+                    </Anchors>
+                    <Scripts>
+                      <OnClick>HealBot_Options_HealGroups_OnClick(self, 12)</OnClick>
+                      <OnEnter>HealBot_Options_Show_Help("ENABLEHEALGROUPVIS",true)</OnEnter>
+                      <OnLeave>HealBot_Options_Show_Help("ENABLEHEALGROUPVIS",false)</OnLeave>
+                    </Scripts>
+                  </CheckButton>
+                  <Frame name="HealBot_Options_HealGroups12Frame" inherits="UIDropDownMenuTemplate">
+                    <Anchors>
+                      <Anchor point="TOPRIGHT" relativeTo="HealBot_Options_HealGroups12" relativePoint="TOPLEFT">
+                        <Offset>
+                          <AbsDimension x="5" y="0" />
+                        </Offset>
+                      </Anchor>
+                    </Anchors>
+                    <Scripts>
+                      <OnLoad>HealBot_Options_UIDropDownMenu_OnLoad(self, 90)</OnLoad>
+                      <OnEnter>HealBot_Options_Show_Help("SELECTFRAMEFORGROUPTARGET",true)</OnEnter>
+                      <OnLeave>HealBot_Options_Show_Help("SELECTFRAMEFORGROUPTARGET",false)</OnLeave>
+                    </Scripts>
+                  </Frame>
+                  <CheckButton name="HealBot_Options_HealGroups13" inherits="HealBotUIPanelCheckButton">
+                    <Anchors>
+                      <Anchor point="TOPLEFT" relativeTo="HealBot_Options_HealGroups12" relativePoint="TOPLEFT">
+                        <Offset>
+                          <AbsDimension x="0" y="-50" />
+                        </Offset>
+                      </Anchor>
+                    </Anchors>
+                    <Scripts>
+                      <OnClick>HealBot_Options_HealGroups_OnClick(self, 13)</OnClick>
+                      <OnEnter>HealBot_Options_Show_Help("ENABLEHEALGROUPVIS",true)</OnEnter>
+                      <OnLeave>HealBot_Options_Show_Help("ENABLEHEALGROUPVIS",false)</OnLeave>
+                    </Scripts>
+                  </CheckButton>
+                  <Frame name="HealBot_Options_HealGroups13Frame" inherits="UIDropDownMenuTemplate">
+                    <Anchors>
+                      <Anchor point="TOPRIGHT" relativeTo="HealBot_Options_HealGroups13" relativePoint="TOPLEFT">
+                        <Offset>
+                          <AbsDimension x="5" y="0" />
+                        </Offset>
+                      </Anchor>
+                    </Anchors>
+                    <Scripts>
+                      <OnLoad>HealBot_Options_UIDropDownMenu_OnLoad(self, 90)</OnLoad>
+                      <OnEnter>HealBot_Options_Show_Help("SELECTFRAMEFORGROUPTARGET",true)</OnEnter>
+                      <OnLeave>HealBot_Options_Show_Help("SELECTFRAMEFORGROUPTARGET",false)</OnLeave>
+                    </Scripts>
+                  </Frame>
+                  <CheckButton name="HealBot_Options_HealGroups14" inherits="HealBotUIPanelCheckButton">
+                    <Anchors>
+                      <Anchor point="TOPLEFT" relativeTo="HealBot_Options_HealGroups13" relativePoint="TOPLEFT">
+                        <Offset>
+                          <AbsDimension x="0" y="-50" />
+                        </Offset>
+                      </Anchor>
+                    </Anchors>
+                    <Scripts>
+                      <OnClick>HealBot_Options_HealGroups_OnClick(self, 14)</OnClick>
+                      <OnEnter>HealBot_Options_Show_Help("ENABLEHEALGROUPVIS",true)</OnEnter>
+                      <OnLeave>HealBot_Options_Show_Help("ENABLEHEALGROUPVIS",false)</OnLeave>
+                    </Scripts>
+                  </CheckButton>
+                  <Frame name="HealBot_Options_HealGroups14Frame" inherits="UIDropDownMenuTemplate">
+                    <Anchors>
+                      <Anchor point="TOPRIGHT" relativeTo="HealBot_Options_HealGroups14" relativePoint="TOPLEFT">
+                        <Offset>
+                          <AbsDimension x="5" y="0" />
+                        </Offset>
+                      </Anchor>
+                    </Anchors>
+                    <Scripts>
+                      <OnLoad>HealBot_Options_UIDropDownMenu_OnLoad(self, 90)</OnLoad>
+                      <OnEnter>HealBot_Options_Show_Help("SELECTFRAMEFORGROUPFOCUS",true)</OnEnter>
+                      <OnLeave>HealBot_Options_Show_Help("SELECTFRAMEFORGROUPFOCUS",false)</OnLeave>
+                    </Scripts>
+                  </Frame>
+                  <CheckButton name="HealBot_Options_HealGroups15" inherits="HealBotUIPanelCheckButton">
+                    <Anchors>
+                      <Anchor point="TOPLEFT" relativeTo="HealBot_Options_HealGroups14" relativePoint="TOPLEFT">
+                        <Offset>
+                          <AbsDimension x="0" y="-50" />
+                        </Offset>
+                      </Anchor>
+                    </Anchors>
+                    <Scripts>
+                      <OnClick>HealBot_Options_HealGroups_OnClick(self, 15)</OnClick>
+                      <OnEnter>HealBot_Options_Show_Help("ENABLEHEALGROUPENEMY",true)</OnEnter>
+                      <OnLeave>HealBot_Options_Show_Help("ENABLEHEALGROUPENEMY",false)</OnLeave>
+                    </Scripts>
+                  </CheckButton>
+                  <Frame name="HealBot_Options_HealGroups15Frame" inherits="UIDropDownMenuTemplate">
+                    <Anchors>
+                      <Anchor point="TOPRIGHT" relativeTo="HealBot_Options_HealGroups15" relativePoint="TOPLEFT">
+                        <Offset>
+                          <AbsDimension x="5" y="0" />
+                        </Offset>
+                      </Anchor>
+                    </Anchors>
+                    <Scripts>
+                      <OnLoad>HealBot_Options_UIDropDownMenu_OnLoad(self, 90)</OnLoad>
                       <OnEnter>HealBot_Options_Show_Help("SELECTFRAMEFORGROUP",true)</OnEnter>
                       <OnLeave>HealBot_Options_Show_Help("SELECTFRAMEFORGROUP",false)</OnLeave>
                     </Scripts>
                   </Frame>
                   <CheckButton name="HealBot_Options_HealGroupsAllowDups" inherits="HealBotUIPanelCheckButton">
                     <Anchors>
-                      <Anchor point="BOTTOM">
+                      <Anchor point="TOPLEFT" relativeTo="HealBot_Options_HealGroups7Frame" relativePoint="TOPLEFT">
                         <Offset>
-                          <AbsDimension x="-84" y="20" />
+                          <AbsDimension x="5" y="-52" />
                         </Offset>
                       </Anchor>
                     </Anchors>
@@ -18351,7 +18540,7 @@
                         <Anchors>
                           <Anchor point="TOP">
                             <Offset>
-                              <AbsDimension x="0" y="-80" />
+                              <AbsDimension x="0" y="-75" />
                             </Offset>
                           </Anchor>
                         </Anchors>
@@ -18368,7 +18557,7 @@
                         <Anchors>
                           <Anchor point="TOP">
                             <Offset>
-                              <AbsDimension x="0" y="-150" />
+                              <AbsDimension x="0" y="-140" />
                             </Offset>
                           </Anchor>
                         </Anchors>
@@ -18382,7 +18571,7 @@
                         <Anchors>
                           <Anchor point="TOP" relativeTo="HealBot_Options_AlertLevelOC" relativePoint="BOTTOM">
                             <Offset>
-                              <AbsDimension x="-150" y="-30"/>
+                              <AbsDimension x="-150" y="-25"/>
                             </Offset>
                           </Anchor>
                         </Anchors>
@@ -18396,7 +18585,7 @@
                         <Anchors>
                           <Anchor point="TOP" relativeTo="HealBot_Options_HideBars" relativePoint="BOTTOM">
                             <Offset>
-                              <AbsDimension x="0" y="-15"/>
+                              <AbsDimension x="0" y="-10"/>
                             </Offset>
                           </Anchor>
                         </Anchors>
@@ -18410,7 +18599,7 @@
                         <Anchors>
                           <Anchor point="TOP" relativeTo="HealBot_Options_VehicleInCombat" relativePoint="BOTTOM">
                             <Offset>
-                              <AbsDimension x="0" y="-15"/>
+                              <AbsDimension x="0" y="-10"/>
                             </Offset>
                           </Anchor>
                         </Anchors>
@@ -18424,7 +18613,7 @@
                         <Anchors>
                           <Anchor point="BOTTOMLEFT">
                             <Offset>
-                              <AbsDimension x="58" y="100" />
+                              <AbsDimension x="20" y="120" />
                             </Offset>
                           </Anchor>
                         </Anchors>
@@ -18451,16 +18640,16 @@
                           </Layer>
                         </Layers>
                         <Scripts>
-                          <OnLoad>HealBot_Options_UIDropDownMenu_OnLoad(self, 145)</OnLoad>
+                          <OnLoad>HealBot_Options_UIDropDownMenu_OnLoad(self, 140)</OnLoad>
                           <OnEnter>HealBot_Options_Show_Help("HEALBARSVISTARGETIC",true)</OnEnter>
                           <OnLeave>HealBot_Options_Show_Help("HEALBARSVISTARGETIC",false)</OnLeave>
                         </Scripts>
                       </Frame>
                       <Frame name="HealBot_Options_FocusInCombat" inherits="UIDropDownMenuTemplate" id="1">
                         <Anchors>
-                          <Anchor point="BOTTOMRIGHT">
+                          <Anchor point="BOTTOM">
                             <Offset>
-                              <AbsDimension x="-70" y="100" />
+                              <AbsDimension x="0" y="120" />
                             </Offset>
                           </Anchor>
                         </Anchors>
@@ -18475,7 +18664,7 @@
                                 </Anchor>
                               </Anchors>
                             </FontString>
-                            <FontString name="healbotfocusincombatfontstr" inherits="GameFontNormal" text="HEALBOT_FOCUS">
+                            <FontString name="healbotfocusincombatfontstr" inherits="GameFontNormal" text="HEALBOT_WORD_FOCUS">
                               <Anchors>
                                 <Anchor point="BOTTOM" relativeTo="HealBot_Options_FocusInCombat" relativePoint="TOP">
                                   <Offset>
@@ -18487,26 +18676,35 @@
                           </Layer>
                         </Layers>
                         <Scripts>
-                          <OnLoad>HealBot_Options_UIDropDownMenu_OnLoad(self, 145)</OnLoad>
+                          <OnLoad>HealBot_Options_UIDropDownMenu_OnLoad(self, 140)</OnLoad>
                           <OnEnter>HealBot_Options_Show_Help("HEALBARSVISFOCUSIC",true)</OnEnter>
                           <OnLeave>HealBot_Options_Show_Help("HEALBARSVISFOCUSIC",false)</OnLeave>
                         </Scripts>
                       </Frame>
-                      <CheckButton name="HealBot_Options_TargetOnlyFriend" inherits="SendMailRadioButtonTemplate">
+                      <Frame name="HealBot_Options_PrivateFocusInCombat" inherits="UIDropDownMenuTemplate" id="1">
                         <Anchors>
-                          <Anchor point="TOPLEFT" relativeTo="HealBot_Options_TargetInCombat" relativePoint="BOTTOMLEFT">
+                          <Anchor point="BOTTOMRIGHT">
                             <Offset>
-                              <AbsDimension x="32" y="-32"/>
+                              <AbsDimension x="-20" y="120" />
                             </Offset>
                           </Anchor>
                         </Anchors>
                         <Layers>
-                          <Layer level="BACKGROUND">
-                            <FontString name="HealBot_TargetOutOfCombat_Text" text="HEALBOT_OPTIONS_OUTOFCOMBAT" inherits="GameFontNormal">
+                          <Layer level="OVERLAY">
+                            <FontString name="healbotpfincombatfontstr" inherits="GameFontNormal" text="HEALBOT_OPTIONS_ENTERINGCOMBAT">
                               <Anchors>
-                                <Anchor point="BOTTOMLEFT" relativeTo="HealBot_Options_TargetOnlyFriend" relativePoint="TOPRIGHT">
+                                <Anchor point="BOTTOM" relativeTo="HealBot_Options_PrivateFocusInCombat" relativePoint="TOP">
                                   <Offset>
-                                    <AbsDimension x="-14" y="8" />
+                                    <AbsDimension x="0" y="5"/>
+                                  </Offset>
+                                </Anchor>
+                              </Anchors>
+                            </FontString>
+                            <FontString name="healbotprivfocusincombatfontstr" inherits="GameFontNormal" text="HEALBOT_OPTIONS_PRIVFOCUS">
+                              <Anchors>
+                                <Anchor point="BOTTOM" relativeTo="HealBot_Options_PrivateFocusInCombat" relativePoint="TOP">
+                                  <Offset>
+                                    <AbsDimension x="0" y="22"/>
                                   </Offset>
                                 </Anchor>
                               </Anchors>
@@ -18514,40 +18712,35 @@
                           </Layer>
                         </Layers>
                         <Scripts>
-                          <OnClick>HealBot_Options_TargetOnlyFriend_OnClick(self)</OnClick>
-                          <OnEnter>HealBot_Options_Show_Help("HEALBARSVISTARGETFRIEND",true)</OnEnter>
-                          <OnLeave>HealBot_Options_Show_Help("HEALBARSVISTARGETFRIEND",false)</OnLeave>
+                          <OnLoad>HealBot_Options_UIDropDownMenu_OnLoad(self, 140)</OnLoad>
+                          <OnEnter>HealBot_Options_Show_Help("HEALBARSVISPRIVFOCUSIC",true)</OnEnter>
+                          <OnLeave>HealBot_Options_Show_Help("HEALBARSVISPRIVFOCUSIC",false)</OnLeave>
                         </Scripts>
-                      </CheckButton>
-                      <CheckButton name="HealBot_Options_TargetExcludeRaid" inherits="SendMailRadioButtonTemplate">
+                      </Frame>
+                      <Frame name="HealBot_Options_ToTInCombat" inherits="UIDropDownMenuTemplate" id="1">
                         <Anchors>
-                          <Anchor point="TOPLEFT" relativeTo="HealBot_Options_TargetOnlyFriend" relativePoint="BOTTOMLEFT">
+                          <Anchor point="BOTTOMLEFT">
                             <Offset>
-                              <AbsDimension x="0" y="-5"/>
-                            </Offset>
-                          </Anchor>
-                        </Anchors>
-                        <Scripts>
-                          <OnClick>HealBot_Options_TargetExcludeRaid_OnClick(self)</OnClick>
-                          <OnEnter>HealBot_Options_Show_Help("HEALBARSVISEXCLUDERAID",true)</OnEnter>
-                          <OnLeave>HealBot_Options_Show_Help("HEALBARSVISEXCLUDERAID",false)</OnLeave>
-                        </Scripts>
-                      </CheckButton>
-                      <CheckButton name="HealBot_Options_FocusOnlyFriend" inherits="SendMailRadioButtonTemplate">
-                        <Anchors>
-                          <Anchor point="TOPLEFT" relativeTo="HealBot_Options_FocusInCombat" relativePoint="BOTTOMLEFT">
-                            <Offset>
-                              <AbsDimension x="32" y="-35"/>
+                              <AbsDimension x="20" y="25" />
                             </Offset>
                           </Anchor>
                         </Anchors>
                         <Layers>
-                          <Layer level="BACKGROUND">
-                            <FontString name="HealBot_FocusOutOfCombat_Text" text="HEALBOT_OPTIONS_OUTOFCOMBAT" inherits="GameFontNormal">
+                          <Layer level="OVERLAY">
+                            <FontString name="healbottotincombatfontstr" inherits="GameFontNormal" text="HEALBOT_OPTIONS_ENTERINGCOMBAT">
                               <Anchors>
-                                <Anchor point="BOTTOMLEFT" relativeTo="HealBot_Options_FocusOnlyFriend" relativePoint="TOPRIGHT">
+                                <Anchor point="BOTTOM" relativeTo="HealBot_Options_ToTInCombat" relativePoint="TOP">
                                   <Offset>
-                                    <AbsDimension x="-14" y="8" />
+                                    <AbsDimension x="0" y="5"/>
+                                  </Offset>
+                                </Anchor>
+                              </Anchors>
+                            </FontString>
+                            <FontString name="healbottargetotargetincombatfontstr" inherits="GameFontNormal" text="HEALBOT_OPTIONS_TAB_TARGETOFTARGET">
+                              <Anchors>
+                                <Anchor point="BOTTOM" relativeTo="HealBot_Options_ToTInCombat" relativePoint="TOP">
+                                  <Offset>
+                                    <AbsDimension x="0" y="22"/>
                                   </Offset>
                                 </Anchor>
                               </Anchors>
@@ -18555,25 +18748,83 @@
                           </Layer>
                         </Layers>
                         <Scripts>
-                          <OnClick>HealBot_Options_FocusOnlyFriend_OnClick(self)</OnClick>
-                          <OnEnter>HealBot_Options_Show_Help("HEALBARSVISFOCUSFRIEND",true)</OnEnter>
-                          <OnLeave>HealBot_Options_Show_Help("HEALBARSVISFOCUSFRIEND",false)</OnLeave>
+                          <OnLoad>HealBot_Options_UIDropDownMenu_OnLoad(self, 140)</OnLoad>
+                          <OnEnter>HealBot_Options_Show_Help("HEALBARSVISTOTIC",true)</OnEnter>
+                          <OnLeave>HealBot_Options_Show_Help("HEALBARSVISTOTIC",false)</OnLeave>
                         </Scripts>
-                      </CheckButton>
-                      <CheckButton name="HealBot_Options_FocusExcludeRaid" inherits="SendMailRadioButtonTemplate">
+                      </Frame>
+                      <Frame name="HealBot_Options_ToFInCombat" inherits="UIDropDownMenuTemplate" id="1">
                         <Anchors>
-                          <Anchor point="TOPLEFT" relativeTo="HealBot_Options_FocusOnlyFriend" relativePoint="BOTTOMLEFT">
+                          <Anchor point="BOTTOM">
                             <Offset>
-                              <AbsDimension x="0" y="-5"/>
+                              <AbsDimension x="0" y="25" />
                             </Offset>
                           </Anchor>
                         </Anchors>
+                        <Layers>
+                          <Layer level="OVERLAY">
+                            <FontString name="healbottofincombatfontstr" inherits="GameFontNormal" text="HEALBOT_OPTIONS_ENTERINGCOMBAT">
+                              <Anchors>
+                                <Anchor point="BOTTOM" relativeTo="HealBot_Options_ToFInCombat" relativePoint="TOP">
+                                  <Offset>
+                                    <AbsDimension x="0" y="5"/>
+                                  </Offset>
+                                </Anchor>
+                              </Anchors>
+                            </FontString>
+                            <FontString name="healbottargetofocusincombatfontstr" inherits="GameFontNormal" text="HEALBOT_OPTIONS_TARGETOFFOCUS">
+                              <Anchors>
+                                <Anchor point="BOTTOM" relativeTo="HealBot_Options_ToFInCombat" relativePoint="TOP">
+                                  <Offset>
+                                    <AbsDimension x="0" y="22"/>
+                                  </Offset>
+                                </Anchor>
+                              </Anchors>
+                            </FontString>
+                          </Layer>
+                        </Layers>
                         <Scripts>
-                          <OnClick>HealBot_Options_FocusExcludeRaid_OnClick(self)</OnClick>
-                          <OnEnter>HealBot_Options_Show_Help("HEALBARSVISEXCLUDERAID",true)</OnEnter>
-                          <OnLeave>HealBot_Options_Show_Help("HEALBARSVISEXCLUDERAID",false)</OnLeave>
+                          <OnLoad>HealBot_Options_UIDropDownMenu_OnLoad(self, 140)</OnLoad>
+                          <OnEnter>HealBot_Options_Show_Help("HEALBARSVISFOCUSTARIC",true)</OnEnter>
+                          <OnLeave>HealBot_Options_Show_Help("HEALBARSVISFOCUSTARIC",false)</OnLeave>
                         </Scripts>
-                      </CheckButton>
+                      </Frame>
+                      <Frame name="HealBot_Options_PrivFocusToTInCombat" inherits="UIDropDownMenuTemplate" id="1">
+                        <Anchors>
+                          <Anchor point="BOTTOMRIGHT">
+                            <Offset>
+                              <AbsDimension x="-20" y="25" />
+                            </Offset>
+                          </Anchor>
+                        </Anchors>
+                        <Layers>
+                          <Layer level="OVERLAY">
+                            <FontString name="healbotpftotincombatfontstr" inherits="GameFontNormal" text="HEALBOT_OPTIONS_ENTERINGCOMBAT">
+                              <Anchors>
+                                <Anchor point="BOTTOM" relativeTo="HealBot_Options_PrivFocusToTInCombat" relativePoint="TOP">
+                                  <Offset>
+                                    <AbsDimension x="0" y="5"/>
+                                  </Offset>
+                                </Anchor>
+                              </Anchors>
+                            </FontString>
+                            <FontString name="healbotprivfocustotincombatfontstr" inherits="GameFontNormal" text="HEALBOT_DISABLED_TARGET">
+                              <Anchors>
+                                <Anchor point="BOTTOM" relativeTo="HealBot_Options_PrivFocusToTInCombat" relativePoint="TOP">
+                                  <Offset>
+                                    <AbsDimension x="0" y="22"/>
+                                  </Offset>
+                                </Anchor>
+                              </Anchors>
+                            </FontString>
+                          </Layer>
+                        </Layers>
+                        <Scripts>
+                          <OnLoad>HealBot_Options_UIDropDownMenu_OnLoad(self, 140)</OnLoad>
+                          <OnEnter>HealBot_Options_Show_Help("HEALBARSVISPFTOTIC",true)</OnEnter>
+                          <OnLeave>HealBot_Options_Show_Help("HEALBARSVISPFTOTIC",false)</OnLeave>
+                        </Scripts>
+                      </Frame>
                     </Frames>
                   </Frame>
                   <Frame name="HealBot_Options_SkinsFramesBarsAggro" hidden="true" inherits="BackdropTemplate">

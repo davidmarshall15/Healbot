@@ -1625,7 +1625,7 @@ function HealBot_Skins_DefaultUnusedFrames(skin)
     for j=1,10 do
         defaultFrame[j]=true
     end
-    for j=1,11 do
+    for j=1,15 do
         if Healbot_Config_Skins.HealGroups[Healbot_Config_Skins.Current_Skin][j]["STATE"] then
             defaultFrame[Healbot_Config_Skins.HealGroups[Healbot_Config_Skins.Current_Skin][j]["FRAME"]]=false
         end
@@ -1733,6 +1733,26 @@ function HealBot_Skins_Clear_UnusedVars()
     end
 end
 
+function HealBot_Skins_ResetHealGroups(SkinName)
+    Healbot_Config_Skins.HealGroups[SkinName]={
+        [1]={["NAME"]=HEALBOT_OPTIONS_SELFHEALS_en,["STATE"]=false,["FRAME"]=1},
+        [2]={["NAME"]=HEALBOT_OPTIONS_TANKHEALS_en,["STATE"]=false,["FRAME"]=1},
+        [3]={["NAME"]=HEALBOT_CLASSES_HEALERS_en,["STATE"]=false,["FRAME"]=1},
+        [5]={["NAME"]=HEALBOT_OPTIONS_EMERGENCYHEALS_en,["STATE"]=true,["FRAME"]=1},
+        [4]={["NAME"]=HEALBOT_OPTIONS_GROUPHEALS_en,["STATE"]=false,["FRAME"]=1},
+        [6]={["NAME"]=HEALBOT_OPTIONS_MYTARGET_en,["STATE"]=false,["FRAME"]=1},
+        [7]={["NAME"]=HEALBOT_OPTIONS_PRIVFOCUS_en,["STATE"]=false,["FRAME"]=1},
+        [8]={["NAME"]=HEALBOT_OPTIONS_TARGETOFPRIVFOCUSTARGET_en,["STATE"]=false,["FRAME"]=5},
+        [9]={["NAME"]=HEALBOT_VEHICLE_en,["STATE"]=false,["FRAME"]=6},
+       [10]={["NAME"]=HEALBOT_OPTIONS_PETHEALS_en,["STATE"]=false,["FRAME"]=7},
+       [11]={["NAME"]=HEALBOT_OPTIONS_TARGETHEALS_en,["STATE"]=false,["FRAME"]=8},
+       [12]={["NAME"]=HEALBOT_OPTIONS_TARGETOFTARGET_en,["STATE"]=false,["FRAME"]=8},
+       [13]={["NAME"]=HEALBOT_FOCUS_en,["STATE"]=false,["FRAME"]=9},
+       [14]={["NAME"]=HEALBOT_OPTIONS_TARGETOFFOCUS_en,["STATE"]=false,["FRAME"]=9},
+       [15]={["NAME"]=HEALBOT_CUSTOM_CASTBY_ENEMY_en,["STATE"]=false,["FRAME"]=10},
+   }
+end
+
 function HealBot_Skins_Check_Skin(SkinName)
     HealBot_Skins_Check_Aux(SkinName)
       --HealBot_setCall("HealBot_Skins_Check_Skin")
@@ -1743,33 +1763,56 @@ function HealBot_Skins_Check_Skin(SkinName)
 
     if not HealBot_Config.SkinDefault[SkinName] then HealBot_Config.SkinDefault[SkinName]={} end
 
-    if not Healbot_Config_Skins.HealGroups[SkinName] then Healbot_Config_Skins.HealGroups[SkinName]={
-        [1]={["NAME"]=HEALBOT_OPTIONS_SELFHEALS_en,["STATE"]=false,["FRAME"]=1},
-        [2]={["NAME"]=HEALBOT_OPTIONS_TANKHEALS_en,["STATE"]=false,["FRAME"]=1},
-        [3]={["NAME"]=HEALBOT_CLASSES_HEALERS_en,["STATE"]=false,["FRAME"]=1},
-        [5]={["NAME"]=HEALBOT_OPTIONS_EMERGENCYHEALS_en,["STATE"]=true,["FRAME"]=1},
-        [4]={["NAME"]=HEALBOT_OPTIONS_GROUPHEALS_en,["STATE"]=false,["FRAME"]=1},
-        [6]={["NAME"]=HEALBOT_OPTIONS_MYTARGET_en,["STATE"]=false,["FRAME"]=1},
-        [7]={["NAME"]=HEALBOT_VEHICLE_en,["STATE"]=false,["FRAME"]=6},
-        [8]={["NAME"]=HEALBOT_OPTIONS_PETHEALS_en,["STATE"]=false,["FRAME"]=7},
-        [9]={["NAME"]=HEALBOT_OPTIONS_TARGETHEALS_en,["STATE"]=false,["FRAME"]=8},
-       [10]={["NAME"]=HEALBOT_FOCUS_en,["STATE"]=false,["FRAME"]=9},
-       [11]={["NAME"]=HEALBOT_CUSTOM_CASTBY_ENEMY_en,["STATE"]=false,["FRAME"]=10},}
+    if not Healbot_Config_Skins.HealGroups[SkinName] then 
+        HealBot_Skins_ResetHealGroups(SkinName)
     else
-        for id=1,11 do
+        for id=1,5 do
             if Healbot_Config_Skins.HealGroups[SkinName][id]["NAME"] == "My Targets" then
                 Healbot_Config_Skins.HealGroups[SkinName][id]["NAME"]=HEALBOT_OPTIONS_MYTARGET
             end
         end
-        for gl=1,11 do
+        if not Healbot_Config_Skins.HealGroups[SkinName][15] then 
+            for gl=1,15 do
+                if not Healbot_Config_Skins.HealGroups[SkinName][gl] then 
+                    Healbot_Config_Skins.HealGroups[SkinName][gl]={}
+                    Healbot_Config_Skins.HealGroups[SkinName][gl]["STATE"]=false
+                end
+            end
+            Healbot_Config_Skins.HealGroups[SkinName][15]=HealBot_Options_copyTable(Healbot_Config_Skins.HealGroups[SkinName][11])
+            Healbot_Config_Skins.HealGroups[SkinName][13]=HealBot_Options_copyTable(Healbot_Config_Skins.HealGroups[SkinName][10])
+            Healbot_Config_Skins.HealGroups[SkinName][11]=HealBot_Options_copyTable(Healbot_Config_Skins.HealGroups[SkinName][9])
+            Healbot_Config_Skins.HealGroups[SkinName][10]=HealBot_Options_copyTable(Healbot_Config_Skins.HealGroups[SkinName][8])
+            Healbot_Config_Skins.HealGroups[SkinName][9]=HealBot_Options_copyTable(Healbot_Config_Skins.HealGroups[SkinName][7])
+            Healbot_Config_Skins.HealGroups[SkinName][7]["NAME"]=HEALBOT_OPTIONS_PRIVFOCUS_en
+            Healbot_Config_Skins.HealGroups[SkinName][7]["FRAME"]=1
+            Healbot_Config_Skins.HealGroups[SkinName][7]["STATE"]=false
+            Healbot_Config_Skins.HealGroups[SkinName][8]["FRAME"]=5
+            Healbot_Config_Skins.HealGroups[SkinName][12]["FRAME"]=8
+            Healbot_Config_Skins.HealGroups[SkinName][14]["FRAME"]=9
+            Healbot_Config_Skins.HealGroups[SkinName][15]["FRAME"]=10
+        end
+        Healbot_Config_Skins.HealGroups[SkinName][8]["NAME"]=HEALBOT_OPTIONS_TARGETOFPRIVFOCUSTARGET_en
+        Healbot_Config_Skins.HealGroups[SkinName][9]["NAME"]=HEALBOT_VEHICLE_en
+        Healbot_Config_Skins.HealGroups[SkinName][10]["NAME"]=HEALBOT_OPTIONS_PETHEALS_en
+        Healbot_Config_Skins.HealGroups[SkinName][11]["NAME"]=HEALBOT_OPTIONS_TARGETHEALS_en
+        Healbot_Config_Skins.HealGroups[SkinName][12]["NAME"]=HEALBOT_OPTIONS_TARGETOFTARGET_en
+        Healbot_Config_Skins.HealGroups[SkinName][13]["NAME"]=HEALBOT_FOCUS_en
+        Healbot_Config_Skins.HealGroups[SkinName][14]["NAME"]=HEALBOT_OPTIONS_TARGETOFFOCUS_en
+        Healbot_Config_Skins.HealGroups[SkinName][15]["NAME"]=HEALBOT_CUSTOM_CASTBY_ENEMY_en
+        for gl=1,15 do
+            if not Healbot_Config_Skins.HealGroups[SkinName][gl] then Healbot_Config_Skins.HealGroups[SkinName][gl]={} end
             if not Healbot_Config_Skins.HealGroups[SkinName][gl]["STATE"] then Healbot_Config_Skins.HealGroups[SkinName][gl]["STATE"]=false end
             if not Healbot_Config_Skins.HealGroups[SkinName][gl]["FRAME"] then
                 if Healbot_Config_Skins.HealGroups[SkinName][gl]["NAME"] == HEALBOT_CUSTOM_CASTBY_ENEMY_en then
                     Healbot_Config_Skins.HealGroups[SkinName][gl]["FRAME"]=10
-                elseif Healbot_Config_Skins.HealGroups[SkinName][gl]["NAME"] == HEALBOT_FOCUS_en then
+                elseif Healbot_Config_Skins.HealGroups[SkinName][gl]["NAME"] == HEALBOT_FOCUS_en or 
+                       Healbot_Config_Skins.HealGroups[SkinName][gl]["NAME"] == HEALBOT_OPTIONS_TARGETOFFOCUS_en then
                     Healbot_Config_Skins.HealGroups[SkinName][gl]["FRAME"]=9
-                elseif Healbot_Config_Skins.HealGroups[SkinName][gl]["NAME"] == HEALBOT_OPTIONS_TARGETHEALS_en then
+                elseif Healbot_Config_Skins.HealGroups[SkinName][gl]["NAME"] == HEALBOT_OPTIONS_TARGETHEALS_en or
+                       Healbot_Config_Skins.HealGroups[SkinName][gl]["NAME"] == HEALBOT_OPTIONS_TARGETOFTARGET_en then
                     Healbot_Config_Skins.HealGroups[SkinName][gl]["FRAME"]=8
+                elseif  Healbot_Config_Skins.HealGroups[SkinName][gl]["NAME"] == HEALBOT_OPTIONS_TARGETOFPRIVFOCUSTARGET_en then
+                    Healbot_Config_Skins.HealGroups[SkinName][gl]["FRAME"]=5
                 elseif Healbot_Config_Skins.HealGroups[SkinName][gl]["NAME"] == HEALBOT_OPTIONS_PETHEALS_en then
                     Healbot_Config_Skins.HealGroups[SkinName][gl]["FRAME"]=7
                 elseif Healbot_Config_Skins.HealGroups[SkinName][gl]["NAME"] == HEALBOT_VEHICLE_en then
@@ -1777,6 +1820,8 @@ function HealBot_Skins_Check_Skin(SkinName)
                 else
                     Healbot_Config_Skins.HealGroups[SkinName][gl]["FRAME"]=1
                 end
+            elseif Healbot_Config_Skins.HealGroups[SkinName][gl]["NAME"] == HEALBOT_OPTIONS_TARGETOFPRIVFOCUSTARGET_en and Healbot_Config_Skins.HealGroups[SkinName][gl]["FRAME"]>5 then
+                Healbot_Config_Skins.HealGroups[SkinName][gl]["FRAME"]=5
             end
         end
     end
@@ -1857,7 +1902,7 @@ function HealBot_Skins_Check_Skin(SkinName)
             if Healbot_Config_Skins.BarAggro[SkinName][gl]["SHOWIND"] then Healbot_Config_Skins.BarAggro[SkinName][gl]["SHOWIND"]=nil end
             if Healbot_Config_Skins.BarAggro[SkinName][gl]["SHOWBARS"] then Healbot_Config_Skins.BarAggro[SkinName][gl]["SHOWBARS"]=nil end
             if Healbot_Config_Skins.BarAggro[SkinName][gl]["SHOW"] then Healbot_Config_Skins.BarAggro[SkinName][gl]["SHOW"]=nil end
-            if Healbot_Config_Skins.BarAggro[SkinName][gl]["HAZARD"] then Healbot_Config_Skins.BarAggro[SkinName][gl]["HAZARD"]=nil end
+            if Healbot_Config_Skins.BarAggro[SkinName][gl]["HAZARD"] == false then Healbot_Config_Skins.BarAggro[SkinName][gl]["HAZARD"]=nil end
             Healbot_Config_Skins.BarAggro[SkinName][gl]["ALERTADAP"]=nil
             Healbot_Config_Skins.BarAggro[SkinName][gl]["SHOWBARSPCT"]=nil
             Healbot_Config_Skins.BarAggro[SkinName][gl]["SHOWBARS"]=nil
@@ -2400,10 +2445,10 @@ function HealBot_Skins_Check_Skin(SkinName)
     if Healbot_Config_Skins.Healing[SkinName]["SELFPET"] == false then Healbot_Config_Skins.Healing[SkinName]["SELFPET"]=nil end
     if (Healbot_Config_Skins.Healing[SkinName]["TARGETINCOMBAT"] or 99) == 2 then Healbot_Config_Skins.Healing[SkinName]["TARGETINCOMBAT"]=nil end
     if (Healbot_Config_Skins.Healing[SkinName]["FOCUSINCOMBAT"] or 99) == 2 then Healbot_Config_Skins.Healing[SkinName]["FOCUSINCOMBAT"]=nil end
-    if Healbot_Config_Skins.Healing[SkinName]["TONLYFRIEND"] == false then Healbot_Config_Skins.Healing[SkinName]["TONLYFRIEND"]=nil end
-    if Healbot_Config_Skins.Healing[SkinName]["FONLYFRIEND"] == false then Healbot_Config_Skins.Healing[SkinName]["FONLYFRIEND"]=nil end
-    if Healbot_Config_Skins.Healing[SkinName]["TEXRAID"] == false then Healbot_Config_Skins.Healing[SkinName]["TEXRAID"]=nil end
-    if Healbot_Config_Skins.Healing[SkinName]["FEXRAID"] == false then Healbot_Config_Skins.Healing[SkinName]["FEXRAID"]=nil end
+    Healbot_Config_Skins.Healing[SkinName]["TONLYFRIEND"]=nil
+    Healbot_Config_Skins.Healing[SkinName]["FONLYFRIEND"]=nil
+    Healbot_Config_Skins.Healing[SkinName]["TEXRAID"]=nil
+    Healbot_Config_Skins.Healing[SkinName]["FEXRAID"]=nil
     if Healbot_Config_Skins.Healing[SkinName]["PRIVLISTPETSINCOMBAT"] == false then Healbot_Config_Skins.Healing[SkinName]["PRIVLISTPETSINCOMBAT"]=nil end
     if Healbot_Config_Skins.Healing[SkinName]["VEHICLEINCOMBAT"] == false then Healbot_Config_Skins.Healing[SkinName]["VEHICLEINCOMBAT"]=nil end
     if Healbot_Config_Skins.General[SkinName]["HIDEPARTYF"] == false then Healbot_Config_Skins.General[SkinName]["HIDEPARTYF"]=nil end
@@ -2443,7 +2488,7 @@ function HealBot_Skins_Check_Skin(SkinName)
     if Healbot_Config_Skins.DuplicateBars[SkinName] == nil then Healbot_Config_Skins.DuplicateBars[SkinName]=false end
     if Healbot_Config_Skins.Enemy[SkinName] then
         if Healbot_Config_Skins.Enemy[SkinName]["INCSELF"] == false then Healbot_Config_Skins.Enemy[SkinName]["INCSELF"]=nil end
-        if Healbot_Config_Skins.Enemy[SkinName]["INCTANKS"] then Healbot_Config_Skins.Enemy[SkinName]["INCTANKS"]=nil end
+        if Healbot_Config_Skins.Enemy[SkinName]["INCTANKS"] == false then Healbot_Config_Skins.Enemy[SkinName]["INCTANKS"]=nil end
         if Healbot_Config_Skins.Enemy[SkinName]["INCFOCUS"] then Healbot_Config_Skins.Enemy[SkinName]["INCFOCUS"]=nil end
         if Healbot_Config_Skins.Enemy[SkinName]["INCMYTAR"] == false then Healbot_Config_Skins.Enemy[SkinName]["INCMYTAR"]=nil end
         if Healbot_Config_Skins.Enemy[SkinName]["INCARENA"] then Healbot_Config_Skins.Enemy[SkinName]["INCARENA"]=nil end
@@ -2464,7 +2509,7 @@ function HealBot_Skins_Check_Skin(SkinName)
         if (Healbot_Config_Skins.Enemy[SkinName]["PLAYERTARGETSIZE"] or 99) == 0.5 then Healbot_Config_Skins.Enemy[SkinName]["PLAYERTARGETSIZE"]=nil end
         if (Healbot_Config_Skins.Enemy[SkinName]["INCOMBATSHOWSELF"] or 99) == 2 then Healbot_Config_Skins.Enemy[SkinName]["INCOMBATSHOWSELF"]=nil end
         if (Healbot_Config_Skins.Enemy[SkinName]["INCOMBATSHOWFOCUS"] or 99) == 2 then Healbot_Config_Skins.Enemy[SkinName]["INCOMBATSHOWFOCUS"]=nil end
-        if (Healbot_Config_Skins.Enemy[SkinName]["INCOMBATSHOWTANK"] or 99) == 2 then Healbot_Config_Skins.Enemy[SkinName]["INCOMBATSHOWTANK"]=nil end
+        if (Healbot_Config_Skins.Enemy[SkinName]["INCOMBATSHOWTANK"] or 99) == 3 then Healbot_Config_Skins.Enemy[SkinName]["INCOMBATSHOWTANK"]=nil end
         if (Healbot_Config_Skins.Enemy[SkinName]["INCOMBATSHOWGROUP"] or 99) == 2 then Healbot_Config_Skins.Enemy[SkinName]["INCOMBATSHOWGROUP"]=nil end
         if (Healbot_Config_Skins.Enemy[SkinName]["INCOMBATSHOWRAID"] or 99) == 2 then Healbot_Config_Skins.Enemy[SkinName]["INCOMBATSHOWRAID"]=nil end
         if (Healbot_Config_Skins.Enemy[SkinName]["SELFUSEFRAME"] or 99) == 1 then Healbot_Config_Skins.Enemy[SkinName]["SELFUSEFRAME"]=nil end
@@ -2591,56 +2636,32 @@ function HealBot_Skins_Check_Skin(SkinName)
     end
 
     -- Fix Frames
-    for id=1,10 do
-        if Healbot_Config_Skins.HealGroups[SkinName][id]["NAME"] == HEALBOT_CUSTOM_CASTBY_ENEMY_en then
-            HealBot_Options_HealGroupSwap(SkinName, 11, id)
-            break
-        end
+    Healbot_Config_Skins.HealGroups[SkinName][15]["FRAME"]=10
+    if Healbot_Config_Skins.HealGroups[SkinName][14]["FRAME"]>5 and Healbot_Config_Skins.HealGroups[SkinName][14]["FRAME"]~=9 then
+        Healbot_Config_Skins.HealGroups[SkinName][14]["FRAME"]=9
     end
-    for id=1,9 do
-        if Healbot_Config_Skins.HealGroups[SkinName][id]["NAME"] == HEALBOT_FOCUS_en then
-            HealBot_Options_HealGroupSwap(SkinName, 10, id)
-            break
-        end
+    if Healbot_Config_Skins.HealGroups[SkinName][13]["FRAME"]>5 and Healbot_Config_Skins.HealGroups[SkinName][13]["FRAME"]~=9 then
+        Healbot_Config_Skins.HealGroups[SkinName][13]["FRAME"]=9
     end
-    for id=1,8 do
-        if Healbot_Config_Skins.HealGroups[SkinName][id]["NAME"] == HEALBOT_OPTIONS_TARGETHEALS_en then
-            HealBot_Options_HealGroupSwap(SkinName, 9, id)
-            break
-        end
+    if Healbot_Config_Skins.HealGroups[SkinName][11]["FRAME"]>5 and Healbot_Config_Skins.HealGroups[SkinName][11]["FRAME"]~=8 then
+        Healbot_Config_Skins.HealGroups[SkinName][11]["FRAME"]=8
     end
-    for id=1,7 do
-        if Healbot_Config_Skins.HealGroups[SkinName][id]["NAME"] == HEALBOT_OPTIONS_PETHEALS_en then
-            HealBot_Options_HealGroupSwap(SkinName, 8, id)
-            break
-        end
+    if Healbot_Config_Skins.HealGroups[SkinName][12]["FRAME"]>5 and Healbot_Config_Skins.HealGroups[SkinName][12]["FRAME"]~=8 then
+        Healbot_Config_Skins.HealGroups[SkinName][12]["FRAME"]=8
     end
-    for id=1,6 do
-        if Healbot_Config_Skins.HealGroups[SkinName][id]["NAME"] == HEALBOT_VEHICLE_en then
-            HealBot_Options_HealGroupSwap(SkinName, 7, id)
-            break
-        end
+    if Healbot_Config_Skins.HealGroups[SkinName][10]["FRAME"]>5 and Healbot_Config_Skins.HealGroups[SkinName][10]["FRAME"]~=7 then
+        Healbot_Config_Skins.HealGroups[SkinName][10]["FRAME"]=7
     end
-    Healbot_Config_Skins.HealGroups[SkinName][11]["FRAME"]=10
-    if Healbot_Config_Skins.HealGroups[SkinName][10]["FRAME"]>5 and Healbot_Config_Skins.HealGroups[SkinName][10]["FRAME"]~=9 then
-        Healbot_Config_Skins.HealGroups[SkinName][10]["FRAME"]=9
+    if Healbot_Config_Skins.HealGroups[SkinName][9]["FRAME"]>6 then
+        Healbot_Config_Skins.HealGroups[SkinName][9]["FRAME"]=6
     end
-    if Healbot_Config_Skins.HealGroups[SkinName][9]["FRAME"]>5 and Healbot_Config_Skins.HealGroups[SkinName][9]["FRAME"]~=8 then
-        Healbot_Config_Skins.HealGroups[SkinName][9]["FRAME"]=8
-    end
-    if Healbot_Config_Skins.HealGroups[SkinName][8]["FRAME"]>5 and Healbot_Config_Skins.HealGroups[SkinName][8]["FRAME"]~=7 then
-        Healbot_Config_Skins.HealGroups[SkinName][8]["FRAME"]=7
-    end
-    if Healbot_Config_Skins.HealGroups[SkinName][7]["FRAME"]>6 then
-        Healbot_Config_Skins.HealGroups[SkinName][7]["FRAME"]=6
-    end
-    HealBot_Skins_SetFrameVar(HEALBOT_VEHICLE_en, "FrameAlias", "ALIAS", 6)
-    HealBot_Skins_SetFrameVar(HEALBOT_OPTIONS_PETHEALS_en, "FrameAlias", "ALIAS", 7)
-    HealBot_Skins_SetFrameVar(HEALBOT_OPTIONS_TARGETHEALS_en, "FrameAlias", "ALIAS", 8)
-    HealBot_Skins_SetFrameVar(HEALBOT_FOCUS_en, "FrameAlias", "ALIAS", 9)
-    HealBot_Skins_SetFrameVar(HEALBOT_CUSTOM_CASTBY_ENEMY_en, "FrameAlias", "ALIAS", 10)
+    HealBot_Skins_SetFrameVar(HEALBOT_WORD_VEHICLE, "FrameAlias", "ALIAS", 6)
+    HealBot_Skins_SetFrameVar(HEALBOT_OPTIONS_PETHEALS, "FrameAlias", "ALIAS", 7)
+    HealBot_Skins_SetFrameVar(HEALBOT_OPTIONS_TARGETHEALS, "FrameAlias", "ALIAS", 8)
+    HealBot_Skins_SetFrameVar(HEALBOT_WORD_FOCUS, "FrameAlias", "ALIAS", 9)
+    HealBot_Skins_SetFrameVar(HEALBOT_CUSTOM_CASTBY_ENEMY, "FrameAlias", "ALIAS", 10)
 
-    for id=1,6 do
+    for id=1,8 do
         if Healbot_Config_Skins.HealGroups[SkinName][id]["FRAME"]>5 then
             Healbot_Config_Skins.HealGroups[SkinName][id]["FRAME"]=1
         end
@@ -2963,16 +2984,16 @@ function HealBot_Skins_SetColArray(value, skin, cat, key, c, override)
     end
 end
 
-local hbSkinDefaults={["Enemy"]={["INCSELF"]=false, ["INCTANKS"]=false, ["INCFOCUS"]=false,
+local hbSkinDefaults={["Enemy"]={["INCSELF"]=true, ["INCTANKS"]=true, ["INCFOCUS"]=false,
                                  ["INCMYTAR"]=false, ["INCARENA"]=false, ["INCARENAPETS"]=false,
                                  ["SHOWDEBUFFS"]=false, ["SHOWDEBUFFSPLAYERFRAMES"]=false,
                                  ["NUMBOSS"]=8, ["SELFDEBUFFS"]=false, ["SELFDEBUFFSPLAYERFRAMES"]=false,
                                  ["SHOWBUFFS"]=false, ["SHOWBUFFSPLAYERFRAMES"]=false, 
                                  ["SELFBUFFS"]=false, ["SELFBUFFSPLAYERFRAMES"]=false, ["EXISTSHOWGROUP"]=1,
-                                 ["EXISTSHOWRAID"]=1, ["EXISTSHOWBOSS"]=false, ["ENEMYTARGET"]=false,
+                                 ["EXISTSHOWRAID"]=1, ["EXISTSHOWBOSS"]=true, ["ENEMYTARGET"]=false,
                                  ["TARUSEENEMYCOLS"]=false, ["TOTUSEENEMYCOLS"]=false, ["ENEMYTARGETSIZE"]=0.4,
                                  ["ENEMYTARGETSIZEPLAYERFRAMES"]=0.4, ["PLAYERTARGETSIZE"]=0.5, ["INCOMBATSHOWSELF"]=2,
-                                 ["INCOMBATSHOWFOCUS"]=2, ["INCOMBATSHOWTANK"]=2, ["INCOMBATSHOWGROUP"]=2,
+                                 ["INCOMBATSHOWFOCUS"]=2, ["INCOMBATSHOWTANK"]=3, ["INCOMBATSHOWGROUP"]=2,
                                  ["INCOMBATSHOWRAID"]=2, ["SELFUSEFRAME"]=1, ["PRIVATELISTUSEFRAME"]=1,
                                  ["TANKUSEFRAME"]=1, ["GROUPUSEFRAME"]=1, ["RAIDUSEFRAME"]=1,
                                  ["INCOMBATSHOWLIST"]=2, ["INCOMBATSHOWARENA"]=2, ["EXISTSHOWPTAR"]=1,
@@ -2989,8 +3010,8 @@ local hbSkinDefaults={["Enemy"]={["INCSELF"]=false, ["INCTANKS"]=false, ["INCFOC
                                  ["HAZARDFREQ"]=0.3, ["HAZARDMINALPHA"]=0.25, ["VC"]=0,
                                 },
                     ["Healing"]={["GROUPPETS"]=true, ["SELFPET"]=false, ["TARGETINCOMBAT"]=2, ["FOCUSINCOMBAT"]=2,
-                                 ["TONLYFRIEND"]=false, ["FONLYFRIEND"]=false, ["TEXRAID"]=false, ["FEXRAID"]=false,
-                                 ["PRIVLISTPETSINCOMBAT"]=false, ["VEHICLEINCOMBAT"]=false,
+                                 ["PRIVFOCUSINCOMBAT"]=2, ["TOTINCOMBAT"]=3, ["TOFINCOMBAT"]=3,
+                                 ["PRIVFOCUSTOTINCOMBAT"]=3, ["PRIVLISTPETSINCOMBAT"]=false, ["VEHICLEINCOMBAT"]=false,
                                 },
                    ["Adaptive"]={["Plugin"]=true, ["RecentHeals"]=false, ["Threat"]=false, ["Debuffs"]=true,
                                  ["Aggro"]=true, ["Highlight"]=false, ["Target"]=false, ["OOR"]=false,
@@ -3074,7 +3095,7 @@ local hbSkinFrameDefaults={["BarCol"]={["HLTH"]=5, ["BACK"]=1, ["BORDER"]=1,
                                       },
                          ["BarAggro"]={["ALERT"]=2, ["ALERTIND"]=2, ["TEXTFORMAT"]=3, ["SHOWBARSPCT"]=false,
                                        ["R"]=1, ["G"]=0, ["B"]=0, ["SHOWTEXT"]=1, ["SHOWIND"]=true,
-                                       ["SHOWBARS"]=true, ["SHOW"]=true, ["HAZARD"]=true,
+                                       ["SHOWBARS"]=true, ["SHOW"]=true, ["HAZARD"]=false,
                                       },
                             ["Frame"]={["TIPLOC"]=5, ["LOCKED"]=1, ["SCALE"]=1, ["GLOW"]=3, ["PADDING"]=1, 
                                        ["ICONGLOW"]=2, ["AUTOCLOSE"]=1, ["SFOFFSETH"]=0, ["SFOFFSETV"]=0, 

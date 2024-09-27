@@ -513,11 +513,9 @@ function HealBot_Init_Spells_CataPriest(spellID, spellName, spellTexture)
 end
 
 local iSpellName, iSpellRank
-local wtfBlizz={}
 local function HealBot_Init_CheckSpell(sType, s, sId, iSpellName, iSpellRank)
     if sType == "SPELL" and not HealBot_WoWAPI_IsSpellPassive(sId) and HealBot_Spells_KnownByName(iSpellName) and not string.find(iSpellName," Rune Ability") then -- and (string.len(iSpellRank)<1 or string.find(iSpellRank,"Rank"))
         HealBot_Init_Spells_addSpell(sId, iSpellName, s, iSpellRank)
-        if iSpellName == HEALBOT_PURIFY_SPIRIT then wtfBlizz[HEALBOT_PURIFY_SPIRIT]=true end
     elseif sType == "FLYOUT" then
         local _, _, numFlyoutSlots, flyoutKnown=GetFlyoutInfo(sId)
         if flyoutKnown then
@@ -566,7 +564,6 @@ function HealBot_Init_Spells_Defaults()
         end
 
         HealBot_Init_SkipSpells()
-        wtfBlizz[HEALBOT_PURIFY_SPIRIT]=false
 
         for j=1,nTabs do
             local _, _, offset, numEntries, _, offspecID=HealBot_WoWAPI_SpellTabInfo(j)
@@ -586,8 +583,12 @@ function HealBot_Init_Spells_Defaults()
                 end
             end
         end
-        if HEALBOT_GAME_VERSION>10 and HealBot_Data["PCLASSTRIM"] == "SHAM" and HealBot_Data["PLEVEL"]>10 and not wtfBlizz[HEALBOT_PURIFY_SPIRIT] then
-            HealBot_Init_CheckSpell("SPELL", nil, 77130, HEALBOT_PURIFY_SPIRIT, nil)
+        if HEALBOT_GAME_VERSION>10 then 
+            if HealBot_Data["PCLASSTRIM"] == "SHAM" then
+                HealBot_Init_CheckSpell("SPELL", nil, 77130, HEALBOT_PURIFY_SPIRIT, nil)
+            --elseif HealBot_Data["PCLASSTRIM"] == "DRUI" then
+            --    HealBot_Init_CheckSpell("SPELL", nil, 88423, HEALBOT_NATURES_CURE, nil)
+            end
         end
         if HEALBOT_GAME_VERSION<3 then
             HealBot_InitValidateRanks()

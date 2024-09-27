@@ -321,7 +321,7 @@ function HealBot_Lang_ruRU()
     HEALBOT_WORK_HIGH                       = "Высокая"
 
     HEALBOT_ASSIST                          = "Помощник";
-    HEALBOT_FOCUS                           = "Фокус";
+    HEALBOT_WORD_FOCUS                      = "Фокус";
     HEALBOT_MENU                            = "Меню";
     HEALBOT_MAINTANK                        = "Главный Танк";
     HEALBOT_STOP                            = "Стоп";
@@ -411,7 +411,7 @@ function HealBot_Lang_ruRU()
     HEALBOT_OPTIONS_TXTDEPTH                = "Высота";
     HEALBOT_OPTIONS_TXTSIZE                 = "Размер";
     HEALBOT_OPTIONS_MAXCHARS                = "Максимально Символов";
-    HEALBOT_VEHICLE                         = "Транспорт";
+    HEALBOT_WORD_VEHICLE                    = "Транспорт";
     HEALBOT_WORDS_ERROR                     = "Ошибка";
     HEALBOT_SPELL_NOT_FOUND                 = "Заклинание не найдено";
     HEALBOT_OPTIONS_DISABLETOOLTIPINCOMBAT  = "Скрыть подсказки в бою";

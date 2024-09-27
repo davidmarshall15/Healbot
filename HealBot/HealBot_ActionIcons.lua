@@ -1359,9 +1359,9 @@ function HealBot_ActionIcons_UpdateTargetMyFriendFrame(frame)
         --HealBot_setCall("HealBot_ActionIcons_UpdateTargetMyFriendFrame")
     if iconFrame[frame].numIcons>0 then
         for y=1,iconFrame[frame].numIcons do
-            if HealBot_ActionIcons_GetData("Target", frame, y) == HEALBOT_OPTIONS_MYFRIEND then
-                if HealBot_Panel_RaidPetUnitButtonCheck(HealBot_Config.MyFriend) then
-                    aButton=HealBot_Panel_RaidPetButton(HealBot_Config.MyFriend)
+            if HealBot_ActionIcons_GetData("Target", frame, y) == HEALBOT_OPTIONS_PRIVFOCUS then
+                if HealBot_Panel_AllUnitButtonCheck(HealBot_Config.PrivFocus) then
+                    aButton=HealBot_Panel_AllButton(HealBot_Config.PrivFocus)
                     HealBot_ActionIcons_UpdateSetTarget(frame, y, aButton.unit)
                 else
                     HealBot_ActionIcons_SetTarget(frame, y)
@@ -1387,7 +1387,7 @@ function HealBot_ActionIcons_UpdateTarget(frame, id)
     utTarget=HealBot_ActionIcons_GetData("Target", frame, id)
     if utTarget == HEALBOT_OPTIONS_SELFHEALS then
         HealBot_ActionIcons_UpdateSetTarget(frame, id, "player")
-    elseif utTarget == HEALBOT_FOCUS then
+    elseif utTarget == HEALBOT_WORD_FOCUS then
         HealBot_ActionIcons_SetTarget(frame, id, "focus")
     elseif utTarget == HEALBOT_OPTIONS_TARGETHEALS then
         HealBot_ActionIcons_SetTarget(frame, id, "target")
@@ -1406,8 +1406,8 @@ function HealBot_ActionIcons_UpdateTarget(frame, id)
     elseif utTarget == HEALBOT_OPTIONS_SINGLECASTER then
         utUnit=HealBot_Panel_PlayerUnitGUID(hb_lVars["DPSGUIDCaster"])
         if utUnit then HealBot_ActionIcons_UpdateSetTarget(frame, id, utUnit) end
-    elseif utTarget == HEALBOT_OPTIONS_MYFRIEND and HealBot_Panel_RaidPetUnitButtonCheck(HealBot_Config.MyFriend) then
-        aButton=HealBot_Panel_RaidPetButton(HealBot_Config.MyFriend)
+    elseif utTarget == HEALBOT_OPTIONS_PRIVFOCUS and HealBot_Panel_AllUnitButtonCheck(HealBot_Config.PrivFocus) then
+        aButton=HealBot_Panel_AllButton(HealBot_Config.PrivFocus)
         HealBot_ActionIcons_UpdateSetTarget(frame, id, aButton.unit)
     elseif HealBot_Panel_RaidUnitName(utTarget) then
         HealBot_ActionIcons_UpdateSetTarget(frame, id, HealBot_Panel_RaidUnitName(utTarget))
@@ -2570,7 +2570,9 @@ function HealBot_ActionIcons_GetSpell(spellCode)
     vSpellText=HealBot_ActionIcons_SpellCache["name"][spellCode]
     if not vSpellText then
         if spellCode and HealBot_Text_Len(spellCode)>2 then
+            local sName
             local sType,sID=string.split(":", spellCode)
+            sID,sName=string.split("^", sID)
             if HEALBOT_GAME_VERSION == 4 then
                 if spellCode == HEALBOT_SPELL_HOLYWORDSERENITY then 
                     sType="S"

@@ -54,6 +54,11 @@ function HealBot_Spells_Reset(pClassTrim)
         HealBot_Action_SetSpell("ENABLED", "CtrlLeft", HealBot_WoWAPI_SpellName(HEALBOT_REMOVE_CORRUPTION))
         HealBot_Action_SetSpell("ENABLED", "Right", HealBot_WoWAPI_SpellName(HEALBOT_HEALING_TOUCH))
         HealBot_Action_SetSpell("ENABLED", "CtrlRight", HealBot_WoWAPI_SpellName(HEALBOT_NATURES_CURE))
+        if HealBot_Spells_KnownByName(HEALBOT_NATURES_CURE) then
+            HealBot_Action_SetSpell("ENABLED", "CtrlRight", HealBot_WoWAPI_SpellName(HEALBOT_NATURES_CURE))
+        elseif HealBot_Spells_KnownByName(HEALBOT_IMPROVED_NATURES_CURE) then
+            HealBot_Action_SetSpell("ENABLED", "CtrlRight", HealBot_WoWAPI_SpellName(HEALBOT_IMPROVED_NATURES_CURE))
+        end
         HealBot_Action_SetSpell("ENABLED", "Middle", HealBot_WoWAPI_SpellName(HEALBOT_REJUVENATION))
         HealBot_Action_SetSpell("ENABLED", "CtrlMiddle", HealBot_WoWAPI_SpellName(HEALBOT_NOURISH))
         HealBot_Action_SetSpell("ENABLED", "CtrlMiddle", HealBot_WoWAPI_SpellName(HBC_NOURISH))
@@ -158,6 +163,12 @@ function HealBot_Spells_ResetCures(pClassTrim)
                     HealBot_Config_Cures.HealBotDebuffText={[1]=HEALBOT_REMOVE_CORRUPTION,[2]=HEALBOT_NATURES_CURE,[3]=HEALBOT_WORDS_NONE}
                 else
                     HealBot_Config_Cures.HealBotDebuffText={[1]=HEALBOT_NATURES_CURE,[2]=HEALBOT_WORDS_NONE,[3]=HEALBOT_WORDS_NONE}
+                end
+            elseif HealBot_Spells_KnownByName(HEALBOT_IMPROVED_NATURES_CURE) then
+                if HealBot_Spells_KnownByName(HEALBOT_REMOVE_CORRUPTION) then
+                    HealBot_Config_Cures.HealBotDebuffText={[1]=HEALBOT_REMOVE_CORRUPTION,[2]=HEALBOT_IMPROVED_NATURES_CURE,[3]=HEALBOT_WORDS_NONE}
+                else
+                    HealBot_Config_Cures.HealBotDebuffText={[1]=HEALBOT_IMPROVED_NATURES_CURE,[2]=HEALBOT_WORDS_NONE,[3]=HEALBOT_WORDS_NONE}
                 end
             elseif HealBot_Spells_KnownByName(HEALBOT_REMOVE_CORRUPTION) then
                 HealBot_Config_Cures.HealBotDebuffText={[1]=HEALBOT_REMOVE_CORRUPTION,[2]=HEALBOT_WORDS_NONE,[3]=HEALBOT_WORDS_NONE}

@@ -260,9 +260,9 @@ function HealBot_Range_UpdateUnit(button)
                     HealBot_Text_setNameTag(button)
                 end
                 if HealBot_Skins_GetFrameBoolean("BarSort", "OORLAST", button.frame) then
-                    if button.status.unittype<7 then
+                    if button.status.unittype<20 then
                         HealBot_Timers_Set("OOC","RefreshPartyNextRecalcPlayers")
-                    elseif button.status.unittype<9 then
+                    elseif button.status.unittype<30 then
                         HealBot_Timers_Set("OOC","RefreshPartyNextRecalcPets")
                     end
                 end
