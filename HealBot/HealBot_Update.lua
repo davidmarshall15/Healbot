@@ -1750,8 +1750,8 @@ function HealBot_Update_NilOnVal(t, key, v)
 end
 
 function HealBot_Update_GlobalVars()
-    local customDebuffPriority=HealBot_Data_DefaultVar("cDebuff")
-    local customBuffPriority=HealBot_Data_DefaultVar("cBuff")
+    local customDebuffPriority=hbv_Default("cDebuff")
+    local customBuffPriority=hbv_Default("cBuff")
     for sid,_  in pairs(HealBot_Globals.CustomBuffBarColour) do
         if sid~=customBuffPriority then
             if HealBot_Globals.CustomBuffBarColour[sid].R == 0.25 and HealBot_Globals.CustomBuffBarColour[sid].G == 0.58 and HealBot_Globals.CustomBuffBarColour[sid].B == 0.8 then
@@ -1895,16 +1895,16 @@ function HealBot_Update_Skins()
         for x in pairs (Healbot_Config_Skins.Skins) do
             skinName=Healbot_Config_Skins.Skins[x]
             if HealBot_Config.SkinDefault[skinName] then
-                if HealBot_Config.SkinDefault[skinName][HEALBOT_WORD_SOLO]~=nil then HealBot_SkinDefault_SetData(HealBot_Config.SkinDefault[skinName][HEALBOT_WORD_SOLO], skinName, HEALBOT_WORD_SOLO) end
-                if HealBot_Config.SkinDefault[skinName][HEALBOT_WORD_PARTY]~=nil then HealBot_SkinDefault_SetData(HealBot_Config.SkinDefault[skinName][HEALBOT_WORD_PARTY], skinName, HEALBOT_WORD_PARTY) end
-                if HealBot_Config.SkinDefault[skinName][HEALBOT_OPTIONS_RAID10]~=nil then HealBot_SkinDefault_SetData(HealBot_Config.SkinDefault[skinName][HEALBOT_OPTIONS_RAID10], skinName, HEALBOT_OPTIONS_RAID10) end
-                if HealBot_Config.SkinDefault[skinName][HEALBOT_OPTIONS_RAID25]~=nil then HealBot_SkinDefault_SetData(HealBot_Config.SkinDefault[skinName][HEALBOT_OPTIONS_RAID25], skinName, HEALBOT_OPTIONS_RAID25) end
-                if HealBot_Config.SkinDefault[skinName][HEALBOT_OPTIONS_RAID40]~=nil then HealBot_SkinDefault_SetData(HealBot_Config.SkinDefault[skinName][HEALBOT_OPTIONS_RAID40], skinName, HEALBOT_OPTIONS_RAID40) end
-                if HealBot_Config.SkinDefault[skinName][HEALBOT_WORD_ARENA]~=nil then HealBot_SkinDefault_SetData(HealBot_Config.SkinDefault[skinName][HEALBOT_WORD_ARENA], skinName, HEALBOT_WORD_ARENA) end
-                if HealBot_Config.SkinDefault[skinName][HEALBOT_WORD_BG10]~=nil then HealBot_SkinDefault_SetData(HealBot_Config.SkinDefault[skinName][HEALBOT_WORD_BG10], skinName, HEALBOT_WORD_BG10) end
-                if HealBot_Config.SkinDefault[skinName][HEALBOT_WORD_BG15]~=nil then HealBot_SkinDefault_SetData(HealBot_Config.SkinDefault[skinName][HEALBOT_WORD_BG15], skinName, HEALBOT_WORD_BG15) end
-                if HealBot_Config.SkinDefault[skinName][HEALBOT_WORD_BG40]~=nil then HealBot_SkinDefault_SetData(HealBot_Config.SkinDefault[skinName][HEALBOT_WORD_BG40], skinName, HEALBOT_WORD_BG40) end
-                if HealBot_Config.SkinDefault[skinName][HEALBOT_WORD_PETBATTLE]~=nil then HealBot_SkinDefault_SetData(HealBot_Config.SkinDefault[skinName][HEALBOT_WORD_PETBATTLE], skinName, HEALBOT_WORD_PETBATTLE) end
+                if HealBot_Config.SkinDefault[skinName][HEALBOT_WORD_SOLO]~=nil then hbv_SkinDefault_SetData(HealBot_Config.SkinDefault[skinName][HEALBOT_WORD_SOLO], skinName, HEALBOT_WORD_SOLO) end
+                if HealBot_Config.SkinDefault[skinName][HEALBOT_WORD_PARTY]~=nil then hbv_SkinDefault_SetData(HealBot_Config.SkinDefault[skinName][HEALBOT_WORD_PARTY], skinName, HEALBOT_WORD_PARTY) end
+                if HealBot_Config.SkinDefault[skinName][HEALBOT_OPTIONS_RAID10]~=nil then hbv_SkinDefault_SetData(HealBot_Config.SkinDefault[skinName][HEALBOT_OPTIONS_RAID10], skinName, HEALBOT_OPTIONS_RAID10) end
+                if HealBot_Config.SkinDefault[skinName][HEALBOT_OPTIONS_RAID25]~=nil then hbv_SkinDefault_SetData(HealBot_Config.SkinDefault[skinName][HEALBOT_OPTIONS_RAID25], skinName, HEALBOT_OPTIONS_RAID25) end
+                if HealBot_Config.SkinDefault[skinName][HEALBOT_OPTIONS_RAID40]~=nil then hbv_SkinDefault_SetData(HealBot_Config.SkinDefault[skinName][HEALBOT_OPTIONS_RAID40], skinName, HEALBOT_OPTIONS_RAID40) end
+                if HealBot_Config.SkinDefault[skinName][HEALBOT_WORD_ARENA]~=nil then hbv_SkinDefault_SetData(HealBot_Config.SkinDefault[skinName][HEALBOT_WORD_ARENA], skinName, HEALBOT_WORD_ARENA) end
+                if HealBot_Config.SkinDefault[skinName][HEALBOT_WORD_BG10]~=nil then hbv_SkinDefault_SetData(HealBot_Config.SkinDefault[skinName][HEALBOT_WORD_BG10], skinName, HEALBOT_WORD_BG10) end
+                if HealBot_Config.SkinDefault[skinName][HEALBOT_WORD_BG15]~=nil then hbv_SkinDefault_SetData(HealBot_Config.SkinDefault[skinName][HEALBOT_WORD_BG15], skinName, HEALBOT_WORD_BG15) end
+                if HealBot_Config.SkinDefault[skinName][HEALBOT_WORD_BG40]~=nil then hbv_SkinDefault_SetData(HealBot_Config.SkinDefault[skinName][HEALBOT_WORD_BG40], skinName, HEALBOT_WORD_BG40) end
+                if HealBot_Config.SkinDefault[skinName][HEALBOT_WORD_PETBATTLE]~=nil then hbv_SkinDefault_SetData(HealBot_Config.SkinDefault[skinName][HEALBOT_WORD_PETBATTLE], skinName, HEALBOT_WORD_PETBATTLE) end
             end
         end
         if HealBot_Class_Spells[""] then HealBot_Class_Spells[""]=nil end
@@ -1985,31 +1985,31 @@ function HealBot_Update_Skins()
         if not HealBot_Globals.Custom_Debuff_Categories[HEALBOT_CUSTOM_CAT_CUSTOM_AUTOMATIC] then HealBot_Globals.Custom_Debuff_Categories[HEALBOT_CUSTOM_CAT_CUSTOM_AUTOMATIC]=1 end
         HealBot_Config.KnownLoadouts=nil
         HealBot_Update_BuffsForSpec("Debuff")
-        HealBot_Skins_CheckRoleCol("", "TANK", true)          -- This is old when 11.0 is old.
-        HealBot_Skins_CheckRoleCol("", "HEALER", true)
-        HealBot_Skins_CheckRoleCol("", "DAMAGER", true)
-        HealBot_Skins_CheckClassCol("", "DEMO", true)
-        HealBot_Skins_CheckClassCol("", "DRUI", true)
-        HealBot_Skins_CheckClassCol("", "HUNT", true)
-        HealBot_Skins_CheckClassCol("", "MAGE", true)
-        HealBot_Skins_CheckClassCol("", "MONK", true)
-        HealBot_Skins_CheckClassCol("", "PALA", true)
-        HealBot_Skins_CheckClassCol("", "PRIE", true)
-        HealBot_Skins_CheckClassCol("", "ROGU", true)
-        HealBot_Skins_CheckClassCol("", "SHAM", true)
-        HealBot_Skins_CheckClassCol("", "WARL", true)
-        HealBot_Skins_CheckClassCol("", "DEAT", true)
-        HealBot_Skins_CheckClassCol("", "WARR", true)
-        HealBot_Skins_CheckClassCol("", "EVOK", true)
-        HealBot_Skins_CheckPowerCol("", "MANA", true)
-        HealBot_Skins_CheckPowerCol("", "RAGE", true)
-        HealBot_Skins_CheckPowerCol("", "FOCUS", true)
-        HealBot_Skins_CheckPowerCol("", "ENERGY", true)
-        HealBot_Skins_CheckPowerCol("", "RUNIC_POWER", true)
-        HealBot_Skins_CheckPowerCol("", "INSANITY", true)
-        HealBot_Skins_CheckPowerCol("", "LUNAR_POWER", true)
-        HealBot_Skins_CheckPowerCol("", "MAELSTROM", true)
-        HealBot_Skins_CheckPowerCol("", "FURY", true)
+        hbv_Skins_CheckRoleCol("", "TANK", true)          -- This is old when 11.0 is old.
+        hbv_Skins_CheckRoleCol("", "HEALER", true)
+        hbv_Skins_CheckRoleCol("", "DAMAGER", true)
+        hbv_Skins_CheckClassCol("", "DEMO", true)
+        hbv_Skins_CheckClassCol("", "DRUI", true)
+        hbv_Skins_CheckClassCol("", "HUNT", true)
+        hbv_Skins_CheckClassCol("", "MAGE", true)
+        hbv_Skins_CheckClassCol("", "MONK", true)
+        hbv_Skins_CheckClassCol("", "PALA", true)
+        hbv_Skins_CheckClassCol("", "PRIE", true)
+        hbv_Skins_CheckClassCol("", "ROGU", true)
+        hbv_Skins_CheckClassCol("", "SHAM", true)
+        hbv_Skins_CheckClassCol("", "WARL", true)
+        hbv_Skins_CheckClassCol("", "DEAT", true)
+        hbv_Skins_CheckClassCol("", "WARR", true)
+        hbv_Skins_CheckClassCol("", "EVOK", true)
+        hbv_Skins_CheckPowerCol("", "MANA", true)
+        hbv_Skins_CheckPowerCol("", "RAGE", true)
+        hbv_Skins_CheckPowerCol("", "FOCUS", true)
+        hbv_Skins_CheckPowerCol("", "ENERGY", true)
+        hbv_Skins_CheckPowerCol("", "RUNIC_POWER", true)
+        hbv_Skins_CheckPowerCol("", "INSANITY", true)
+        hbv_Skins_CheckPowerCol("", "LUNAR_POWER", true)
+        hbv_Skins_CheckPowerCol("", "MAELSTROM", true)
+        hbv_Skins_CheckPowerCol("", "FURY", true)
         
         if not HealBot_Globals.OverrideEffects["HEALTHDROPTIME"] then HealBot_Globals.OverrideEffects["HEALTHDROPTIME"]=3 end
         if not HealBot_Globals.OverrideEffects["HEALTHDROPCANCEL"] then HealBot_Globals.OverrideEffects["HEALTHDROPCANCEL"]=200 end

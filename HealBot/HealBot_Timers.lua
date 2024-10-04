@@ -68,11 +68,11 @@ function HealBot_Timers_SetnProcs(cpuProfilerOn)
         HealBot_Timers_luVars["nProcsOn"]=2
         HealBot_Timers_luVars["nProcsOff"]=1
     else
-        HealBot_Timers_luVars["nProcsOn"]=HealBot_Util_PerfVal1(500)
+        HealBot_Timers_luVars["nProcsOn"]=HealBot_Util_PerfVal1(550)
         if HealBot_Timers_luVars["nProcsOn"]<5 then
             HealBot_Timers_luVars["nProcsOn"]=5
         end
-        HealBot_Timers_luVars["nProcsOff"]=HealBot_Util_PerfVal1(250)
+        HealBot_Timers_luVars["nProcsOff"]=HealBot_Util_PerfVal1(275)
         if HealBot_Timers_luVars["nProcsOff"]<3 then
             HealBot_Timers_luVars["nProcsOff"]=3
         end
@@ -281,7 +281,7 @@ function HealBot_Timers_CheckLowMana()
       --HealBot_setCall("HealBot_Timers_CheckLowMana")
     local checkLowMana=false
     for j=1,10 do
-        if HealBot_Skins_GetFrameVar("HealBar", "LOWMANA", j)>1 and not HealBot_Skins_GetFrameBoolean("HealBar", "LOWMANACOMBAT", j) then
+        if hbv_Skins_GetFrameVar("HealBar", "LOWMANA", j)>1 and not hbv_Skins_GetFrameBoolean("HealBar", "LOWMANACOMBAT", j) then
             checkLowMana=true
             break
         end

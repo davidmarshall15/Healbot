@@ -533,7 +533,7 @@ function HealBot_Share_ExportBuffs_OnClick()
     HealBot_Share_ExportBuffs()
 end
 
-local customBuffPriority=HealBot_Data_DefaultVar("cBuff")
+local customBuffPriority=hbv_Default("cBuff")
 function HealBot_Share_LoadBuffs(sIn)
       --HealBot_setCall("HealBot_Share_LoadBuffs")
     local scbStr=HealBot_Util_Decompress(sIn)
@@ -705,7 +705,7 @@ function HealBot_Share_ExportDebuffs_OnClick()
     HealBot_Share_ExportDebuffs()
 end
 
-local customDebuffPriority=HealBot_Data_DefaultVar("cDebuff")
+local customDebuffPriority=hbv_Default("cDebuff")
 function HealBot_Share_LoadDebuffs(sIn)
       --HealBot_setCall("HealBot_Share_LoadDebuffs")
     local scdStr=HealBot_Util_Decompress(sIn)
@@ -994,7 +994,7 @@ local function HealBot_Share_ExportSkinFrames(skinName, varName, id, xType, icon
             if Healbot_Config_Aux[varName][skinName][f] and Healbot_Config_Aux[varName][skinName][f][id] then
                 tmpTab=HealBot_Options_copyTable(Healbot_Config_Aux[varName][skinName][f][id])
                 if varName == "Bar" then
-                    tmpTab["USE"]=HealBot_Share_SkinEncodeAux(HealBot_Aux_GetBarSkin(skinName, "USE", f, id), f)
+                    tmpTab["USE"]=HealBot_Share_SkinEncodeAux(hbv_Aux_GetBarSkin(skinName, "USE", f, id), f)
                 end
                 tabStr=HealBot_Options_tab2str(tmpTab)
             else
@@ -1130,11 +1130,11 @@ function HealBot_Share_BuildRowSkin(skin, cat, id, vType, frame, msg)
             if key and v then
                 v=HealBot_Share_DecodeDat(v)
                 if cat == "IconSets" then
-                    HealBot_Skins_SetIconVarSkin(v, skin, key, frame, id)
+                    hbv_Skins_SetIconVarSkin(v, skin, key, frame, id)
                 elseif cat == "IconSetsText" then
-                    HealBot_Skins_SetIconTextVarSkin(v, skin, key, frame, id)
+                    hbv_Skins_SetIconTextVarSkin(v, skin, key, frame, id)
                 else
-                    HealBot_Skins_SetFrameVarSkin(v, skin, cat, key, frame)
+                    hbv_Skins_SetFrameVarSkin(v, skin, cat, key, frame)
                 end
             end
             lFrame=frame
@@ -1145,10 +1145,10 @@ function HealBot_Share_BuildRowSkin(skin, cat, id, vType, frame, msg)
             local key, v=string.split("=", d[j])
             if key and v then
                 v=HealBot_Share_DecodeDat(v)
-                HealBot_Skins_SetVarSkin(v, skin, cat, key)
+                hbv_Skins_SetVarSkin(v, skin, cat, key)
             elseif key then
                 key=HealBot_Share_DecodeDat(key)
-                HealBot_Skins_SetVarSkin(key, skin, cat, j)
+                hbv_Skins_SetVarSkin(key, skin, cat, j)
             end
         end
     elseif vType == "a" then
@@ -1164,7 +1164,7 @@ function HealBot_Share_BuildRowSkin(skin, cat, id, vType, frame, msg)
                 for j=1,getn(d) do
                     local var, v=string.split("=", d[j])
                     if var and v then
-                        HealBot_Skins_SetColArray(v, skin, cat, key, var, false)
+                        hbv_Skins_SetColArray(v, skin, cat, key, var, false)
                     end
                 end
             end
@@ -1201,11 +1201,11 @@ function HealBot_Share_BuildRowAux(skin, cat, id, vType, frame, msg)
                     v=HealBot_Share_DecodeDat(v)
                 end
                 if cat == "Bar" then
-                    HealBot_Aux_SetBarSkin(v, skin, key, frame, id)
+                    hbv_Aux_SetBarSkin(v, skin, key, frame, id)
                 elseif cat == "BarText" then
-                    HealBot_Aux_SetBarTextSkin(v, skin, key, frame, id)
+                    hbv_Aux_SetBarTextSkin(v, skin, key, frame, id)
                 else
-                    HealBot_Aux_SetOverlaySkin(v, skin, key, frame)
+                    hbv_Aux_SetOverlaySkin(v, skin, key, frame)
                 end
             end
             lFrame=frame
@@ -1339,13 +1339,10 @@ function HealBot_Share_BuildSkinRecMsg(skinName, cmd, parts, msg)
                         end
                         if varName == "AuxBar" then
                             if not Healbot_Config_Aux.Bar[skinName] then Healbot_Config_Aux.Bar[skinName]={} end
-                            HealBot_Aux_SetBarSkin(dat, skinName, var, fNo, aID)
-                            if (var == "USE" and dat > 1) then
-                                HealBot_AddDebug("AuxBar import AuxBar, var="..var..", fNo="..fNo..", aID="..aID..", dat="..dat,"Import",true)
-                            end
+                            hbv_Aux_SetBarSkin(dat, skinName, var, fNo, aID)
                         else
                             if not Healbot_Config_Aux.BarText[skinName] then Healbot_Config_Aux.BarText[skinName]={} end
-                            HealBot_Aux_SetBarTextSkin(dat, skinName, var, fNo, aID)
+                            hbv_Aux_SetBarTextSkin(dat, skinName, var, fNo, aID)
                         end
                     end
                     lFrame=fNo
@@ -1378,7 +1375,7 @@ function HealBot_Share_BuildSkinRecMsg(skinName, cmd, parts, msg)
                         if var and dat then
                             dat=HealBot_Share_DecodeDat(dat)
                             if varName == "IconSetsText" then
-                                HealBot_Skins_SetIconTextVar(dat, var, fNo, aID)
+                                hbv_Skins_SetIconTextVar(dat, var, fNo, aID)
                             else
                                 Healbot_Config_Skins[varName][skinName][fNo][aID][var]=dat
                             end
@@ -1394,7 +1391,7 @@ function HealBot_Share_BuildSkinRecMsg(skinName, cmd, parts, msg)
                     local var, dat=string.split("=", d[j])
                     if var and dat then
                         dat=HealBot_Share_DecodeDat(dat)
-                        HealBot_Skins_SetFrameVarSkin(dat, skinName, varName, var, fNo)                    
+                        hbv_Skins_SetFrameVarSkin(dat, skinName, varName, var, fNo)                    
                     end
                     lFrame=fNo
                 end
@@ -1433,10 +1430,10 @@ function HealBot_Share_BuildSkinRecMsg(skinName, cmd, parts, msg)
             local var, dat=string.split("=", d[j])
             if var and dat then
                 dat=HealBot_Share_DecodeDat(dat)
-                HealBot_Skins_SetVarSkin(dat, skinName, varName, var)
+                hbv_Skins_SetVarSkin(dat, skinName, varName, var)
             elseif var then
                 var=HealBot_Share_DecodeDat(var)
-                HealBot_Skins_SetVarSkin(var, skinName, varName, j)
+                hbv_Skins_SetVarSkin(var, skinName, varName, j)
             end
         end
     elseif vType == "a" and Healbot_Config_Skins[varName] then

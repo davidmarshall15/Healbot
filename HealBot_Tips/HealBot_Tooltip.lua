@@ -5,7 +5,7 @@ local xButton=nil
 local _
 local powerCols={["r"]=1,["g"]=1,["b"]=1}
 local playerPowerCols={["r"]=1,["g"]=1,["b"]=1}
-local customDebuffPriority=HealBot_Data_DefaultVar("cDebuff")
+local customDebuffPriority=hbv_Default("cDebuff")
 local hbCommands={ [strlower(HEALBOT_DISABLED_TARGET)]=true,
                    [strlower(HEALBOT_ASSIST)]=true,
                    [strlower(HEALBOT_WORD_FOCUS)]=true,
@@ -495,18 +495,18 @@ function HealBot_ToolTip_SetTooltipPos(frame)
     hbtPosFrm=_G["f"..frame.."_HealBot_Action"]
     hbtPosTop=hbtPosFrm:GetTop();
     hbtPosX, hbtPosY=GetCursorPosition();
-    if HealBot_Skins_GetFrameVar("Frame", "TIPLOC", frame)>1 then
-        if HealBot_Skins_GetFrameVar("Frame", "TIPLOC", frame) == 2 then
+    if hbv_Skins_GetFrameVar("Frame", "TIPLOC", frame)>1 then
+        if hbv_Skins_GetFrameVar("Frame", "TIPLOC", frame) == 2 then
             hbtPosY=hbtPosY/UIParent:GetScale();
             hbTip:SetOwner(hbtPosFrm, "ANCHOR_LEFT", 0, 0-(hbtPosTop-(hbtPosY-50)))
-        elseif HealBot_Skins_GetFrameVar("Frame", "TIPLOC", frame) == 3 then
+        elseif hbv_Skins_GetFrameVar("Frame", "TIPLOC", frame) == 3 then
             hbtPosY=hbtPosY/UIParent:GetScale();
             hbTip:SetOwner(hbtPosFrm, "ANCHOR_RIGHT", 0, 0-(hbtPosTop-(hbtPosY-50)))
-        elseif HealBot_Skins_GetFrameVar("Frame", "TIPLOC", frame) == 4 then
+        elseif hbv_Skins_GetFrameVar("Frame", "TIPLOC", frame) == 4 then
            hbTip:SetOwner(hbtPosFrm, "ANCHOR_TOP")
-        elseif HealBot_Skins_GetFrameVar("Frame", "TIPLOC", frame) == 5 then
+        elseif hbv_Skins_GetFrameVar("Frame", "TIPLOC", frame) == 5 then
            hbTip:SetOwner(hbtPosFrm, "ANCHOR_BOTTOM")
-        elseif HealBot_Skins_GetFrameVar("Frame", "TIPLOC", frame) == 6 then
+        elseif hbv_Skins_GetFrameVar("Frame", "TIPLOC", frame) == 6 then
             hbtPosX=hbtPosX/UIParent:GetScale();
             hbtPosY=hbtPosY/UIParent:GetScale();
             hbTip:SetOwner(hbtPosFrm, "ANCHOR_NONE")
@@ -648,11 +648,6 @@ function HealBot_Action_DoRefreshTooltip()
         if HealBot_Data["TIPTYPE"] == "WoWUnit" then
             hbTip:SetUnit(xUnit)
         else
-            if xUnit == "target" and HealBot_Globals.TargetBarRestricted == 1 then
-                HealBot_Action_RefreshTargetTooltip(xButton)
-                return
-            end
-
             local hlth=xButton.health.current
             local maxhlth=xButton.health.max
             local mana=xButton.mana.current
@@ -868,7 +863,7 @@ function HealBot_Action_DoRefreshTooltip()
                     UnitDebuffIcons=HealBot_Aura_ReturnDebuffdetails(xButton.id)
                     if UnitDebuffIcons then
                         HealBot_Tooltip_luVars["CrDebuffLine"]=false
-                        for i=51,HealBot_Skins_GetIconVar("MAXDICONS", xButton.frame, 1)+50 do
+                        for i=51,hbv_Skins_GetIconVar("MAXDICONS", xButton.frame, 1)+50 do
                             if UnitDebuffIcons[i].current then
                                 ttName=HealBot_Aura_ReturnDebuffdetailsname(UnitDebuffIcons[i].spellId)
                                 if ttName then
@@ -878,7 +873,7 @@ function HealBot_Action_DoRefreshTooltip()
                                 break
                             end
                         end
-                        for i=56,HealBot_Skins_GetIconVar("MAXDICONS", xButton.frame, 2)+55 do
+                        for i=56,hbv_Skins_GetIconVar("MAXDICONS", xButton.frame, 2)+55 do
                             if UnitDebuffIcons[i].current then
                                 ttName=HealBot_Aura_ReturnDebuffdetailsname(UnitDebuffIcons[i].spellId)
                                 if ttName then
@@ -888,7 +883,7 @@ function HealBot_Action_DoRefreshTooltip()
                                 break
                             end
                         end
-                        for i=58,HealBot_Skins_GetIconVar("MAXDICONS", xButton.frame, 3)+57 do
+                        for i=58,hbv_Skins_GetIconVar("MAXDICONS", xButton.frame, 3)+57 do
                             if UnitDebuffIcons[i].current then
                                 ttName=HealBot_Aura_ReturnDebuffdetailsname(UnitDebuffIcons[i].spellId)
                                 if ttName then
@@ -965,33 +960,6 @@ function HealBot_Action_DoRefreshTooltip()
     HealBot_Tooltip_Show()
 end
 
-function HealBot_Action_DoRefreshTargetTooltip(button)
-      --HealBot_setCall("HealBot_Action_DoRefreshTargetTooltip", button)
-    if HealBot_Tooltip_luVars["doInit"] then
-        HealBot_Tooltip_Init()
-    end
-    HealBot_SetToolTip(hbTip)
-    hbTip:ClearLines()
-    local r,g,b=button.text.r,button.text.g,button.text.b
-
-    if UnitClass(button.unit) then
-        HealBot_Tooltip_SetLine(button.text.nameonly,r,g,b,1,"Level "..button.level..button.spec..UnitClass(button.unit),r,g,b,1)
-    else
-        HealBot_Tooltip_SetLine(button.text.nameonly,r,g,b,1,rText,rR,rG,rB,ra)
-    end
-    HealBot_Tooltip_SetLine(HEALBOT_TOOLTIP_TARGETBAR,1,1,0.5,1,HEALBOT_OPTIONS_TAB_SPELLS.." "..HEALBOT_SKIN_DISTEXT,1,1,0,1)
-    if HealBot_Globals.SmartCast then
-        HealBot_Tooltip_SetLine(" "..HEALBOT_OPTIONS_BUTTONLEFT..":",1,1,0.2,1,HEALBOT_TITAN_SMARTCAST.." ",1,1,1,1)
-    end
-    HealBot_Tooltip_SetLine(" "..HEALBOT_OPTIONS_BUTTONRIGHT..":",1,1,0.2,1)
-    if HealBot_Panel_RetMyHealTarget(button.unit) then
-        HealBot_Tooltip_SetLine(" "..HEALBOT_OPTIONS_BUTTONRIGHT..":",1,1,0.2,1,HEALBOT_WORDS_REMOVEFROM.." "..HEALBOT_OPTIONS_MYTARGET.." ",1,1,1,1)
-    else
-        HealBot_Tooltip_SetLine(" "..HEALBOT_OPTIONS_BUTTONRIGHT..":",1,1,0.2,1,HEALBOT_WORDS_ADDTO.." "..HEALBOT_OPTIONS_MYTARGET.." ",1,1,1,1)
-    end
-    HealBot_Tooltip_Show()
-end
-
 function HealBot_Action_RefreshTooltip()
     HealBot_Action_DoRefreshTooltip()
 end
@@ -1035,11 +1003,11 @@ end
 
 function HealBot_Tooltip_DebugActionIconCondition(icon, index, cond)
       --HealBot_setCall("HealBot_Tooltip_DebugActionIconCondition")
-    local cond=HealBot_ActionIcons_GetData("AlertFilter", icon.frame, icon.id, index)
+    local cond=hbv_ActionIcons_GetData("AlertFilter", icon.frame, icon.id, index)
     if cond>1 then
         if cond<6 then
             if cond == 3 then
-                HealBot_Tooltip_SetLine("Condition "..index.." is "..HealBot_Options_RetActionIconsAlertFilter(cond),1,1,1,1,HealBot_ActionIcons_GetData("AlertBuffTag", icon.frame, icon.id, index))
+                HealBot_Tooltip_SetLine("Condition "..index.." is "..HealBot_Options_RetActionIconsAlertFilter(cond),1,1,1,1,hbv_ActionIcons_GetData("AlertBuffTag", icon.frame, icon.id, index))
                 if HealBot_ActionIcons_CurrentBuffTag(icon.frame, icon.id, index) then
                     HealBot_Tooltip_SetLine("Buff exists with tag",0.4,1,1,1,"TRUE",0.25,1,0.25,1)
                 else
@@ -1050,9 +1018,9 @@ function HealBot_Tooltip_DebugActionIconCondition(icon, index, cond)
                 if cond == 2 then
                     if HealBot_ActionIcons_CurrentBuff(icon.frame, icon.id, index) then
                         HealBot_Tooltip_SetLine("Buff exists",0.4,1,1,1,"TRUE",0.25,1,0.25,1)
-                        if (icon.auraIsSelf[index] or not HealBot_ActionIcons_GetBoolean("AlertBuffSelf", icon.frame, icon.id, index)) and
-                            icon.auraStacks[index]>=HealBot_ActionIcons_GetData("AlertBuffMinStacks", icon.frame, icon.id, index) and
-                            icon.auraStacks[index]<=HealBot_ActionIcons_GetData("AlertBuffMaxStacks", icon.frame, icon.id, index) then
+                        if (icon.auraIsSelf[index] or not hbv_ActionIcons_GetBooleanData("AlertBuffSelf", icon.frame, icon.id, index)) and
+                            icon.auraStacks[index]>=hbv_ActionIcons_GetData("AlertBuffMinStacks", icon.frame, icon.id, index) and
+                            icon.auraStacks[index]<=hbv_ActionIcons_GetData("AlertBuffMaxStacks", icon.frame, icon.id, index) then
                             HealBot_Tooltip_SetLine("Buff cast conditions met",0.4,1,1,1,"TRUE",0.25,1,0.25,1)
                         else
                             HealBot_Tooltip_SetLine("Buff cast conditions met",0.4,1,1,1,"FALSE",1,0.25,0.25,1)
@@ -1063,9 +1031,9 @@ function HealBot_Tooltip_DebugActionIconCondition(icon, index, cond)
                 elseif cond == 4 then
                     if HealBot_ActionIcons_CurrentBuff(icon.frame, icon.id, index) then
                         HealBot_Tooltip_SetLine("Buff exists",0.4,1,1,1,"TRUE",0.25,1,0.25,1)
-                        if (icon.auraIsSelf[index] or not HealBot_ActionIcons_GetBoolean("AlertBuffSelf", icon.frame, icon.id, index)) and
-                             icon.auraStacks[index]>=HealBot_ActionIcons_GetData("AlertBuffMinStacks", icon.frame, icon.id, index) and
-                            icon.auraStacks[index]<=HealBot_ActionIcons_GetData("AlertBuffMaxStacks", icon.frame, icon.id, index) then
+                        if (icon.auraIsSelf[index] or not hbv_ActionIcons_GetBooleanData("AlertBuffSelf", icon.frame, icon.id, index)) and
+                             icon.auraStacks[index]>=hbv_ActionIcons_GetData("AlertBuffMinStacks", icon.frame, icon.id, index) and
+                            icon.auraStacks[index]<=hbv_ActionIcons_GetData("AlertBuffMaxStacks", icon.frame, icon.id, index) then
                             HealBot_Tooltip_SetLine("Buff cast conditions met",0.4,1,1,1,"TRUE",0.25,1,0.25,1)
                         else
                             HealBot_Tooltip_SetLine("Buff cast conditions met",0.4,1,1,1,"FALSE",1,0.25,0.25,1)
@@ -1083,7 +1051,7 @@ function HealBot_Tooltip_DebugActionIconCondition(icon, index, cond)
             end
         elseif cond<10 then
             if cond == 7 then
-                HealBot_Tooltip_SetLine("Condition "..index.." is "..HealBot_Options_RetActionIconsAlertFilter(cond),1,1,1,1,HealBot_ActionIcons_GetData("AlertDebuffTag", icon.frame, icon.id, index))
+                HealBot_Tooltip_SetLine("Condition "..index.." is "..HealBot_Options_RetActionIconsAlertFilter(cond),1,1,1,1,hbv_ActionIcons_GetData("AlertDebuffTag", icon.frame, icon.id, index))
                 if HealBot_ActionIcons_CurrentDebuffTag(icon.frame, icon.id, index) then
                     HealBot_Tooltip_SetLine("Debuff exists with tag",0.4,1,1,1,"TRUE",0.25,1,0.25,1)
                 else
@@ -1094,9 +1062,9 @@ function HealBot_Tooltip_DebugActionIconCondition(icon, index, cond)
                 if cond == 6 then
                     if HealBot_ActionIcons_CurrentDebuff(icon.frame, icon.id, index) then
                         HealBot_Tooltip_SetLine("Debuff exists",0.4,1,1,1,"TRUE",0.25,1,0.25,1)
-                        if (icon.auraIsSelf[index] or not HealBot_ActionIcons_GetBoolean("AlertDebuffSelf", icon.frame, icon.id, index)) and
-                            icon.auraStacks[index]>=HealBot_ActionIcons_GetData("AlertDebuffMinStacks", icon.frame, icon.id, index) and
-                            icon.auraStacks[index]<=HealBot_ActionIcons_GetData("AlertDebuffMaxStacks", icon.frame, icon.id, index) then
+                        if (icon.auraIsSelf[index] or not hbv_ActionIcons_GetBooleanData("AlertDebuffSelf", icon.frame, icon.id, index)) and
+                            icon.auraStacks[index]>=hbv_ActionIcons_GetData("AlertDebuffMinStacks", icon.frame, icon.id, index) and
+                            icon.auraStacks[index]<=hbv_ActionIcons_GetData("AlertDebuffMaxStacks", icon.frame, icon.id, index) then
                             HealBot_Tooltip_SetLine("Debuff cast conditions met",0.4,1,1,1,"TRUE",0.25,1,0.25,1)
                         else
                             HealBot_Tooltip_SetLine("Debuff cast conditions met",0.4,1,1,1,"FALSE",1,0.25,0.25,1)
@@ -1107,9 +1075,9 @@ function HealBot_Tooltip_DebugActionIconCondition(icon, index, cond)
                 elseif cond == 8 then
                     if HealBot_ActionIcons_CurrentDebuff(icon.frame, icon.id, index) then
                         HealBot_Tooltip_SetLine("Debuff exists",0.4,1,1,1,"TRUE",0.25,1,0.25,1)
-                        if (icon.auraIsSelf[index] or not HealBot_ActionIcons_GetBoolean("AlertDebuffSelf", icon.frame, icon.id, index)) and
-                            icon.auraStacks[index]>=HealBot_ActionIcons_GetData("AlertDebuffMinStacks", icon.frame, icon.id, index) and
-                            icon.auraStacks[index]<=HealBot_ActionIcons_GetData("AlertDebuffMaxStacks", icon.frame, icon.id, index) then
+                        if (icon.auraIsSelf[index] or not hbv_ActionIcons_GetBooleanData("AlertDebuffSelf", icon.frame, icon.id, index)) and
+                            icon.auraStacks[index]>=hbv_ActionIcons_GetData("AlertDebuffMinStacks", icon.frame, icon.id, index) and
+                            icon.auraStacks[index]<=hbv_ActionIcons_GetData("AlertDebuffMaxStacks", icon.frame, icon.id, index) then
                             HealBot_Tooltip_SetLine("Debuff cast conditions met",0.4,1,1,1,"TRUE",0.25,1,0.25,1)
                         else
                             HealBot_Tooltip_SetLine("Debuff cast conditions met",0.4,1,1,1,"FALSE",1,0.25,0.25,1)
@@ -1127,15 +1095,15 @@ function HealBot_Tooltip_DebugActionIconCondition(icon, index, cond)
             end
         elseif cond == 10 or cond == 11 then
             if cond == 10 then
-                HealBot_Tooltip_SetLine("Condition "..index.." is "..HealBot_Options_RetActionIconsAlertFilter(cond),1,1,1,1,HealBot_ActionIcons_GetData("AlertHealth", icon.frame, icon.id))
-                if icon.health<=HealBot_ActionIcons_GetData("AlertHealth", icon.frame, icon.id) then
+                HealBot_Tooltip_SetLine("Condition "..index.." is "..HealBot_Options_RetActionIconsAlertFilter(cond),1,1,1,1,hbv_ActionIcons_GetData("AlertHealth", icon.frame, icon.id))
+                if icon.health<=hbv_ActionIcons_GetData("AlertHealth", icon.frame, icon.id) then
                     HealBot_Tooltip_SetLine("icon.health is ",0.4,1,1,1,icon.health,0.25,1,0.25,1)
                 else
                     HealBot_Tooltip_SetLine("icon.health is ",0.4,1,1,1,icon.health,1,0.25,0.25,1)
                 end
             else
-                HealBot_Tooltip_SetLine("Condition "..index.." is "..HealBot_Options_RetActionIconsAlertFilter(cond),1,1,1,1,HealBot_ActionIcons_GetData("AlertHealthAbove", icon.frame, icon.id))
-                if icon.health>=HealBot_ActionIcons_GetData("AlertHealthAbove", icon.frame, icon.id) then
+                HealBot_Tooltip_SetLine("Condition "..index.." is "..HealBot_Options_RetActionIconsAlertFilter(cond),1,1,1,1,hbv_ActionIcons_GetData("AlertHealthAbove", icon.frame, icon.id))
+                if icon.health>=hbv_ActionIcons_GetData("AlertHealthAbove", icon.frame, icon.id) then
                     HealBot_Tooltip_SetLine("icon.health is ",0.4,1,1,1,icon.health,0.25,1,0.25,1)
                 else
                     HealBot_Tooltip_SetLine("icon.health is ",0.4,1,1,1,icon.health,1,0.25,0.25,1)
@@ -1143,23 +1111,23 @@ function HealBot_Tooltip_DebugActionIconCondition(icon, index, cond)
             end
         elseif cond == 12 or cond == 13 then
             if cond == 12 then
-                HealBot_Tooltip_SetLine("Condition "..index.." is "..HealBot_Options_RetActionIconsAlertFilter(cond),1,1,1,1,HealBot_ActionIcons_GetData("AlertMana", icon.frame, icon.id))
-                if icon.mana<=HealBot_ActionIcons_GetData("AlertMana", icon.frame, icon.id) then
+                HealBot_Tooltip_SetLine("Condition "..index.." is "..HealBot_Options_RetActionIconsAlertFilter(cond),1,1,1,1,hbv_ActionIcons_GetData("AlertMana", icon.frame, icon.id))
+                if icon.mana<=hbv_ActionIcons_GetData("AlertMana", icon.frame, icon.id) then
                     HealBot_Tooltip_SetLine("icon.mana is ",0.4,1,1,1,icon.mana,0.25,1,0.25,1)
                 else
                     HealBot_Tooltip_SetLine("icon.mana is ",0.4,1,1,1,icon.mana,1,0.25,0.25,1)
                 end
             else
-                HealBot_Tooltip_SetLine("Condition "..index.." is "..HealBot_Options_RetActionIconsAlertFilter(cond),1,1,1,1,HealBot_ActionIcons_GetData("AlertManaAbove", icon.frame, icon.id))
-                if icon.mana>=HealBot_ActionIcons_GetData("AlertManaAbove", icon.frame, icon.id) then
+                HealBot_Tooltip_SetLine("Condition "..index.." is "..HealBot_Options_RetActionIconsAlertFilter(cond),1,1,1,1,hbv_ActionIcons_GetData("AlertManaAbove", icon.frame, icon.id))
+                if icon.mana>=hbv_ActionIcons_GetData("AlertManaAbove", icon.frame, icon.id) then
                     HealBot_Tooltip_SetLine("icon.mana is ",0.4,1,1,1,icon.mana,0.25,1,0.25,1)
                 else
                     HealBot_Tooltip_SetLine("icon.mana is ",0.4,1,1,1,icon.mana,1,0.25,0.25,1)
                 end
             end
         elseif cond == 14 then
-            HealBot_Tooltip_SetLine("Condition "..index.." is "..HealBot_Options_RetActionIconsAlertFilter(cond),1,1,1,1,HealBot_ActionIcons_GetData("AlertAggro", icon.frame, icon.id))
-            if icon.aggro>=HealBot_ActionIcons_GetData("AlertAggro", icon.frame, icon.id) then
+            HealBot_Tooltip_SetLine("Condition "..index.." is "..HealBot_Options_RetActionIconsAlertFilter(cond),1,1,1,1,hbv_ActionIcons_GetData("AlertAggro", icon.frame, icon.id))
+            if icon.aggro>=hbv_ActionIcons_GetData("AlertAggro", icon.frame, icon.id) then
                 HealBot_Tooltip_SetLine("icon.aggro is ",0.4,1,1,1,icon.aggro,0.25,1,0.25,1)
             else
                 HealBot_Tooltip_SetLine("icon.aggro is ",0.4,1,1,1,icon.aggro,1,0.25,0.25,1)
@@ -1341,12 +1309,12 @@ function HealBot_Tooltip_DisplayIconTooltip(frame, details, name, aType, desc, r
         aCol=HealBot_Globals.CustomBuffsShowBarCol[name] or HealBot_Globals.CustomBuffsShowBarCol[details.spellId] or 1
         iGlow=HealBot_Globals.CustomBuffsIconGlow[name] or HealBot_Globals.CustomBuffsIconGlow[details.spellId] or 1
         if id<9 then
-            iScale=HealBot_Skins_GetIconVar("BSCALE", frame, 1)
+            iScale=hbv_Skins_GetIconVar("BSCALE", frame, 1)
         elseif id<13 then
-            iScale=HealBot_Skins_GetIconVar("BSCALE", frame, 2)
+            iScale=hbv_Skins_GetIconVar("BSCALE", frame, 2)
             iSet=2
         else
-            iScale=HealBot_Skins_GetIconVar("BSCALE", frame, 3)
+            iScale=hbv_Skins_GetIconVar("BSCALE", frame, 3)
             iSet=3
         end
     else
@@ -1355,12 +1323,12 @@ function HealBot_Tooltip_DisplayIconTooltip(frame, details, name, aType, desc, r
         aCol=HealBot_Globals.CustomDebuffsShowBarCol[details.spellId] or HealBot_Globals.CustomDebuffsShowBarCol[name] or 4
         iGlow=HealBot_Globals.CustomDebuffsIconGlow[name] or HealBot_Globals.CustomDebuffsIconGlow[details.spellId] or 1
         if id<59 then
-            iScale=HealBot_Skins_GetIconVar("DSCALE", frame, 1)
+            iScale=hbv_Skins_GetIconVar("DSCALE", frame, 1)
         elseif id<63 then
-            iScale=HealBot_Skins_GetIconVar("DSCALE", frame, 2)
+            iScale=hbv_Skins_GetIconVar("DSCALE", frame, 2)
             iSet=2
         else
-            iScale=HealBot_Skins_GetIconVar("DSCALE", frame, 3)
+            iScale=hbv_Skins_GetIconVar("DSCALE", frame, 3)
             iSet=3
         end
     end
@@ -1546,11 +1514,6 @@ function HealBot_Tooltip_UpdateIconTooltip()
     else
         HealBot_Tooltip_DebuffIconTooltip(HealBot_Data["TIPICON"], hbIconTip["id"])
     end
-end
-
-function HealBot_Action_RefreshTargetTooltip(button)
-      --HealBot_setCall("HealBot_Action_RefreshTargetTooltip", button)
-    HealBot_Action_DoRefreshTargetTooltip(button)
 end
 
 local tLine={}
@@ -1857,6 +1820,7 @@ function HealBot_Tooltip_SetVar(value, key)
     if value == hbDefaultTips[key] then
         HealBot_Tooltip_NilVar(key)
     else
+        if not Healbot_Config_Skins.ToolTip[Healbot_Config_Skins.Current_Skin] then Healbot_Config_Skins.ToolTip[Healbot_Config_Skins.Current_Skin]={} end
         Healbot_Config_Skins.ToolTip[Healbot_Config_Skins.Current_Skin][key]=value
     end
 end

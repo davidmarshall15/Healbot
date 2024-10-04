@@ -500,8 +500,8 @@ function HealBot_Events_UnitSpellCastSent(caster,unitName,castGUID,spellID)
 
         if uscUnit and uscUnitName then
             _,xButton,pButton=HealBot_UnitID(uscUnit)
-            if (xButton and HealBot_Skins_GetFrameVar("BarText", "OVERHEAL", xButton.frame)<3) or
-               (pButton and HealBot_Skins_GetFrameVar("BarText", "OVERHEAL", pButton.frame)<3) then
+            if (xButton and hbv_Skins_GetFrameVar("BarText", "OVERHEAL", xButton.frame)<3) or
+               (pButton and hbv_Skins_GetFrameVar("BarText", "OVERHEAL", pButton.frame)<3) then
                 HealBot_setLuVars("overhealUnit", uscUnit)
                 HealBot_Events_luVars["overhealUnit"]=uscUnit
                 HealBot_Events_luVars["overhealCastID"]=castGUID
@@ -541,11 +541,11 @@ end
 
 function HealBot_Events_EnemyDebuff(button)
     if button.frame == 10 then
-        if HealBot_Skins_GetBoolean("Enemy", "SHOWDEBUFFS") then
-            HealBot_Aura_CheckUnitAuras(button, true, HealBot_Skins_GetBoolean("Enemy", "SELFDEBUFFS"))
+        if hbv_Skins_GetBoolean("Enemy", "SHOWDEBUFFS") then
+            HealBot_Aura_CheckUnitAuras(button, true, hbv_Skins_GetBoolean("Enemy", "SELFDEBUFFS"))
         end
-    elseif HealBot_Skins_GetBoolean("Enemy", "SHOWDEBUFFSPLAYERFRAMES") then
-        HealBot_Aura_CheckUnitAuras(button, true, HealBot_Skins_GetBoolean("Enemy", "SELFDEBUFFSPLAYERFRAMES"))
+    elseif hbv_Skins_GetBoolean("Enemy", "SHOWDEBUFFSPLAYERFRAMES") then
+        HealBot_Aura_CheckUnitAuras(button, true, hbv_Skins_GetBoolean("Enemy", "SELFDEBUFFSPLAYERFRAMES"))
     end
 end
 
@@ -572,11 +572,11 @@ end
 
 function HealBot_Events_EnemyBuff(button)
     if button.frame == 10 then
-        if HealBot_Skins_GetBoolean("Enemy", "SHOWBUFFS") then
-            HealBot_Aura_CheckUnitAuras(button, false, HealBot_Skins_GetBoolean("Enemy", "SELFBUFFS"))
+        if hbv_Skins_GetBoolean("Enemy", "SHOWBUFFS") then
+            HealBot_Aura_CheckUnitAuras(button, false, hbv_Skins_GetBoolean("Enemy", "SELFBUFFS"))
         end
-    elseif HealBot_Skins_GetBoolean("Enemy", "SHOWBUFFSPLAYERFRAMES") then
-        HealBot_Aura_CheckUnitAuras(button, false, HealBot_Skins_GetBoolean("Enemy", "SELFBUFFSPLAYERFRAMES"))
+    elseif hbv_Skins_GetBoolean("Enemy", "SHOWBUFFSPLAYERFRAMES") then
+        HealBot_Aura_CheckUnitAuras(button, false, hbv_Skins_GetBoolean("Enemy", "SELFBUFFSPLAYERFRAMES"))
     end
 end
 
@@ -712,9 +712,9 @@ function HealBot_Events_UnitThreat(button)
     if UnitAffectingCombat(button.unit) then
         if button.status.current<HealBot_Unit_Status["DC"] then
             if not HealBot_Data["UILOCK"] and HealBot_retLuVars("UpdateEnemyFrame") and HealBot_Data["PALIVE"] then
-                if HealBot_Skins_GetVar("General", "UNITINCOMBAT")>1 and button.status.range>0 and
+                if hbv_Skins_GetVar("General", "UNITINCOMBAT")>1 and button.status.range>0 and
                    HealBot_ValidLivingEnemy(button.unit, button.unit.."target") and UnitIsUnit(button.unit, button.unit.."targettarget") then
-                    if HealBot_Skins_GetVar("General", "UNITINCOMBAT") == 3 then
+                    if hbv_Skins_GetVar("General", "UNITINCOMBAT") == 3 then
                         HealBot_PlayerRegenDisabled()
                     else
                         HealBot_UnitInCombat()
@@ -796,7 +796,7 @@ function HealBot_Events_ClassificationChanged(button)
         HealBot_Range_ButtonSpell(button)
     end
     if button.status.hostile~=button.icon.extra.hostile then
-        if not button.status.hostile or HealBot_Skins_GetFrameBoolean("Icons", "SHOWHOSTILE", button.frame) then
+        if not button.status.hostile or hbv_Skins_GetFrameBoolean("Icons", "SHOWHOSTILE", button.frame) then
             button.icon.extra.hostile=button.status.hostile
             HealBot_Aura_UpdateState(button)
         end
@@ -807,7 +807,7 @@ local hbafk=false
 function HealBot_Events_UnitFlagsChanged(button)
           --HealBot_setCall("HealBot_Events_UnitFlagsChanged", button)
     hbafk=false
-    if HealBot_Skins_GetFrameBoolean("Icons", "SHOWAFK", button.frame) and UnitIsAFK(button.unit) then
+    if hbv_Skins_GetFrameBoolean("Icons", "SHOWAFK", button.frame) and UnitIsAFK(button.unit) then
         hbafk=true
     end
     if button.status.afk~=hbafk then
@@ -830,7 +830,7 @@ end
 
 function HealBot_Events_FocusChanged()
       --HealBot_setCall("HealBot_Events_FocusChanged")
-    if (Healbot_Config_Skins.HealGroups[Healbot_Config_Skins.Current_Skin][13]["STATE"] or Healbot_Config_Skins.HealGroups[Healbot_Config_Skins.Current_Skin][14]["STATE"]) and HealBot_Skins_GetBoolean("Enemy", "INCFOCUS") then
+    if (Healbot_Config_Skins.HealGroups[Healbot_Config_Skins.Current_Skin][13]["STATE"] or Healbot_Config_Skins.HealGroups[Healbot_Config_Skins.Current_Skin][14]["STATE"]) and hbv_Skins_GetBoolean("Enemy", "INCFOCUS") then
         HealBot_nextRecalcParty(5,0.05)
     end
     HealBot_FocusChanged()
@@ -906,13 +906,13 @@ function HealBot_Events_ReadyCheck(unitName,timer)
         local lUnit=HealBot_Panel_RaidUnitName(HealBot_UnitNameOnly(unitName))
         HealBot_setLuVars("rcEnd", HealBot_TimeNow+timer)
         for _,xButton in pairs(HealBot_Unit_Button) do
-            if HealBot_Skins_GetFrameBoolean("Icons", "SHOWRC", xButton.frame) then
+            if hbv_Skins_GetFrameBoolean("Icons", "SHOWRC", xButton.frame) then
                 xButton.icon.extra.readycheck=HealBot_ReadyCheckStatus["WAITING"]
                 HealBot_Aura_UpdateState(xButton)
             end
         end
         for _,xButton in pairs(HealBot_Private_Button) do
-            if HealBot_Skins_GetFrameBoolean("Icons", "SHOWRC", xButton.frame) then
+            if hbv_Skins_GetFrameBoolean("Icons", "SHOWRC", xButton.frame) then
                 xButton.icon.extra.readycheck=HealBot_ReadyCheckStatus["WAITING"]
                 HealBot_Aura_UpdateState(xButton)
             end
@@ -1080,7 +1080,6 @@ function HealBot_Events_ModifierChange()
     HealBot_Action_SetCurrentModKeys()
     if HealBot_Data["TIPBUTTON"] then
         HealBot_setTooltipUpdateNow()
---        HealBot_AddDebug("RefreshTooltip","Tooltip",true)
     elseif HealBot_Data["TIPICON"] then
         HealBot_Tooltip_UpdateIconTooltip()
     end

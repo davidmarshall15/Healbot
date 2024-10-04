@@ -41,12 +41,12 @@ function HealBot_Media_PluginChange()
 end
 
 local function HealBot_Default_Media()
-    HealBot_Default_Texture=HealBot_Data_Default_Texture()
-    HealBot_Default_TextureName=HealBot_Data_Default_TextureName()
-    HealBot_Default_Font=HealBot_Data_Default_Font()
-    HealBot_Default_FontName=HealBot_Data_Default_FontName()
-    HealBot_Default_Sound=HealBot_Data_Default_Sound()
-    HealBot_Default_SoundName=HealBot_Data_Default_SoundName()
+    HealBot_Default_Texture=hbv_Default_TextureFile()
+    HealBot_Default_TextureName=hbv_Default_TextureName()
+    HealBot_Default_Font=hbv_Default_FontFile()
+    HealBot_Default_FontName=hbv_Default_FontName()
+    HealBot_Default_Sound=hbv_Default_SoundFile()
+    HealBot_Default_SoundName=hbv_Default_SoundName()
 end
 
 function HealBot_Media_Register()
@@ -236,24 +236,24 @@ function HealBot_Media_UpdateType(mType, frame, auxId)
       --HealBot_setCall("HealBot_Options_UpdateMedia")
     if HealBot_Options:IsVisible() then
         if mType == "Textures" then
-            HealBot_Options_UpdateMediaTexture(HealBot_Options_SkinFrameAliasTextureS,HealBot_Skins_GetFrameVar("FrameAliasBar", "TEXTURE", frame))
-            HealBot_Options_UpdateMediaTexture(HealBot_Options_BarTextureS,HealBot_Skins_GetFrameVar("HealBar", "TEXTURE", frame))
-            HealBot_Options_UpdateMediaTexture(HealBot_Options_HeadTextureS,HealBot_Skins_GetFrameVar("HeadBar", "TEXTURE", frame))
-            HealBot_Options_UpdateMediaTexture(HealBot_EmergBarTexture, HealBot_Skins_GetFrameVar("Emerg", "TEXTURE", frame))
+            HealBot_Options_UpdateMediaTexture(HealBot_Options_SkinFrameAliasTextureS,hbv_Skins_GetFrameVar("FrameAliasBar", "TEXTURE", frame))
+            HealBot_Options_UpdateMediaTexture(HealBot_Options_BarTextureS,hbv_Skins_GetFrameVar("HealBar", "TEXTURE", frame))
+            HealBot_Options_UpdateMediaTexture(HealBot_Options_HeadTextureS,hbv_Skins_GetFrameVar("HeadBar", "TEXTURE", frame))
+            HealBot_Options_UpdateMediaTexture(HealBot_EmergBarTexture, hbv_Skins_GetFrameVar("Emerg", "TEXTURE", frame))
         elseif mType == "Fonts" then
-            HealBot_Options_UpdateMediaFont(HealBot_Options_HeadFontNameS,HealBot_Skins_GetFrameVar("HeadText", "FONT", frame))
-            HealBot_Options_UpdateMediaFont(HealBot_Options_AliasFontName,HealBot_Skins_GetFrameVar("FrameAlias", "FONT", frame))
-            HealBot_Options_UpdateMediaFont(HealBot_Options_HealthFontName,HealBot_Skins_GetFrameVar("BarText", "HFONT", frame))
-            HealBot_Options_UpdateMediaFont(HealBot_Options_AggroFontName,HealBot_Skins_GetFrameVar("BarText", "AFONT", frame))
-            HealBot_Options_UpdateMediaFont(HealBot_Options_AuxFontName,HealBot_Aux_GetBarTextVar("FONT", frame, auxId))
-            HealBot_Options_UpdateMediaFont(HealBot_Options_StateFontName,HealBot_Skins_GetFrameVar("BarText", "SFONT", frame))
-            HealBot_Options_UpdateMediaFont(HealBot_Options_ActionIconsFontName,HealBot_ActionIcons_GetVars("FONT", frame))
-            HealBot_Options_UpdateMediaFont(HealBot_Options_ActionIconsFontCountName,HealBot_ActionIcons_GetVars("FONTCOUNT", frame))
+            HealBot_Options_UpdateMediaFont(HealBot_Options_HeadFontNameS,hbv_Skins_GetFrameVar("HeadText", "FONT", frame))
+            HealBot_Options_UpdateMediaFont(HealBot_Options_AliasFontName,hbv_Skins_GetFrameVar("FrameAlias", "FONT", frame))
+            HealBot_Options_UpdateMediaFont(HealBot_Options_HealthFontName,hbv_Skins_GetFrameVar("BarText", "HFONT", frame))
+            HealBot_Options_UpdateMediaFont(HealBot_Options_AggroFontName,hbv_Skins_GetFrameVar("BarText", "AFONT", frame))
+            HealBot_Options_UpdateMediaFont(HealBot_Options_AuxFontName,hbv_Aux_GetBarTextVar("FONT", frame, auxId))
+            HealBot_Options_UpdateMediaFont(HealBot_Options_StateFontName,hbv_Skins_GetFrameVar("BarText", "SFONT", frame))
+            HealBot_Options_UpdateMediaFont(HealBot_Options_ActionIconsFontName,hbv_ActionIcons_GetVars("FONT", frame))
+            HealBot_Options_UpdateMediaFont(HealBot_Options_ActionIconsFontCountName,hbv_ActionIcons_GetVars("FONTCOUNT", frame))
             for z=1,3 do
-                HealBot_Options_UpdateMediaFont(HealBot_BarButtonIconBuffFont,HealBot_Skins_GetIconTextVar("BUFFFONT", frame, z))
-                HealBot_Options_UpdateMediaFont(HealBot_BarButtonIconFont, HealBot_Skins_GetIconTextVar("DBFONT", frame, z))
+                HealBot_Options_UpdateMediaFont(HealBot_BarButtonIconBuffFont,hbv_Skins_GetIconTextVar("BUFFFONT", frame, z))
+                HealBot_Options_UpdateMediaFont(HealBot_BarButtonIconFont, hbv_Skins_GetIconTextVar("DBFONT", frame, z))
             end
-            HealBot_Options_UpdateMediaFont(HealBot_Options_FontName, HealBot_Skins_GetFrameVar("BarText", "FONT", frame))
+            HealBot_Options_UpdateMediaFont(HealBot_Options_FontName, hbv_Skins_GetFrameVar("BarText", "FONT", frame))
         else
             HealBot_Options_val_OnLoad(HealBot_Options_WarningSound,HEALBOT_OPTIONS_SOUND,1,#HealBot_Sounds,1,2)
             HealBot_Options_SetText(HealBot_Options_WarningSound,HEALBOT_OPTIONS_SOUND)
@@ -267,56 +267,56 @@ end
 
 local function HealBot_Media_UpdateUsedTextures(button)
       --HealBot_setCall("HealBot_Media_UpdateUsedTextures", button)
-    HealBot_Media_UpdateTexture(button.gref["Bar"], HealBot_Skins_GetFrameVar("HealBar", "TEXTURE", button.frame), "Media_UpdateUsedTextures - HealBar")
-    HealBot_Media_UpdateTexture(button.gref["InHeal"], HealBot_Skins_GetFrameVar("HealBar", "TEXTURE", button.frame), "Media_UpdateUsedTextures - HealBar")
+    HealBot_Media_UpdateTexture(button.gref["Bar"], hbv_Skins_GetFrameVar("HealBar", "TEXTURE", button.frame), "Media_UpdateUsedTextures - HealBar")
+    HealBot_Media_UpdateTexture(button.gref["InHeal"], hbv_Skins_GetFrameVar("HealBar", "TEXTURE", button.frame), "Media_UpdateUsedTextures - HealBar")
     for x=1,9 do
-        HealBot_Media_UpdateTexture(button.gref.aux[x], HealBot_Skins_GetFrameVar("HealBar", "TEXTURE", button.frame), "Media_UpdateUsedTextures - HealBar")
+        HealBot_Media_UpdateTexture(button.gref.aux[x], hbv_Skins_GetFrameVar("HealBar", "TEXTURE", button.frame), "Media_UpdateUsedTextures - HealBar")
     end
-    HealBot_Media_UpdateTexture(button.gref["Absorb"], HealBot_Skins_GetFrameVar("HealBar", "TEXTURE", button.frame), "Media_UpdateUsedTextures - HealBar")
+    HealBot_Media_UpdateTexture(button.gref["Absorb"], hbv_Skins_GetFrameVar("HealBar", "TEXTURE", button.frame), "Media_UpdateUsedTextures - HealBar")
     button.gref["Bar"]:GetStatusBarTexture():SetHorizTile(false)
     button.gref["InHeal"]:GetStatusBarTexture():SetHorizTile(false)
     for x=1,9 do
         button.gref.aux[x]:GetStatusBarTexture():SetHorizTile(false)
     end
     button.gref["Absorb"]:GetStatusBarTexture():SetHorizTile(false)
-    HealBot_Media_UpdateTexture(HealBot_Emerg_Button[button.id].bar, HealBot_Skins_GetFrameVar("Emerg", "TEXTURE", button.frame), "Media_UpdateUsedTextures - Emerg")
+    HealBot_Media_UpdateTexture(HealBot_Emerg_Button[button.id].bar, hbv_Skins_GetFrameVar("Emerg", "TEXTURE", button.frame), "Media_UpdateUsedTextures - Emerg")
     HealBot_Emerg_Button[button.id].bar:GetStatusBarTexture():SetHorizTile(false)
 end
 
 local function HealBot_Media_UpdateUsedButtonText(button)
       --HealBot_setCall("HealBot_Media_UpdateUsedButtonText", button)
     HealBot_Media_UpdateFont(button.gref.txt["text"], 
-                             HealBot_Skins_GetFrameVar("BarText", "FONT", button.frame), 
-                             ceil(HealBot_Skins_GetFrameVar("BarText", "HEIGHT", button.frame)*HealBot_Skins_GetFrameVar("Frame", "SCALE", button.frame)), 
-                             HealBot_Skins_GetFrameVar("BarText", "OUTLINE", button.frame),
+                             hbv_Skins_GetFrameVar("BarText", "FONT", button.frame), 
+                             ceil(hbv_Skins_GetFrameVar("BarText", "HEIGHT", button.frame)*hbv_Skins_GetFrameVar("Frame", "SCALE", button.frame)), 
+                             hbv_Skins_GetFrameVar("BarText", "OUTLINE", button.frame),
                              "Media_UpdateUsedButtonText - BarText")
     HealBot_Media_UpdateFont(button.gref.txt["text2"], 
-                             HealBot_Skins_GetFrameVar("BarText", "HFONT", button.frame), 
-                             ceil(HealBot_Skins_GetFrameVar("BarText", "HHEIGHT", button.frame)*HealBot_Skins_GetFrameVar("Frame", "SCALE", button.frame)), 
-                             HealBot_Skins_GetFrameVar("BarText", "HOUTLINE", button.frame),
+                             hbv_Skins_GetFrameVar("BarText", "HFONT", button.frame), 
+                             ceil(hbv_Skins_GetFrameVar("BarText", "HHEIGHT", button.frame)*hbv_Skins_GetFrameVar("Frame", "SCALE", button.frame)), 
+                             hbv_Skins_GetFrameVar("BarText", "HOUTLINE", button.frame),
                              "Media_UpdateUsedButtonText - BarText")
     HealBot_Media_UpdateFont(button.gref.txt["text3"], 
-                             HealBot_Skins_GetFrameVar("BarText", "SFONT", button.frame), 
-                             ceil(HealBot_Skins_GetFrameVar("BarText", "SHEIGHT", button.frame)*HealBot_Skins_GetFrameVar("Frame", "SCALE", button.frame)), 
-                             HealBot_Skins_GetFrameVar("BarText", "SOUTLINE", button.frame),
+                             hbv_Skins_GetFrameVar("BarText", "SFONT", button.frame), 
+                             ceil(hbv_Skins_GetFrameVar("BarText", "SHEIGHT", button.frame)*hbv_Skins_GetFrameVar("Frame", "SCALE", button.frame)), 
+                             hbv_Skins_GetFrameVar("BarText", "SOUTLINE", button.frame),
                              "Media_UpdateUsedButtonText - BarText")
     HealBot_Media_UpdateFont(button.gref.txt["text4"], 
-                             HealBot_Skins_GetFrameVar("BarText", "AFONT", button.frame), 
-                             ceil(HealBot_Skins_GetFrameVar("BarText", "AHEIGHT", button.frame)*HealBot_Skins_GetFrameVar("Frame", "SCALE", button.frame)), 
-                             HealBot_Skins_GetFrameVar("BarText", "AOUTLINE", button.frame),
+                             hbv_Skins_GetFrameVar("BarText", "AFONT", button.frame), 
+                             ceil(hbv_Skins_GetFrameVar("BarText", "AHEIGHT", button.frame)*hbv_Skins_GetFrameVar("Frame", "SCALE", button.frame)), 
+                             hbv_Skins_GetFrameVar("BarText", "AOUTLINE", button.frame),
                              "Media_UpdateUsedButtonText - BarText")
-    if ceil(HealBot_Skins_GetFrameVar("BarText", "HHEIGHT", button.frame)*HealBot_Skins_GetFrameVar("Frame", "SCALE", button.frame))-HealBot_Globals.VehicleFontSizeReduction<2 then
+    if ceil(hbv_Skins_GetFrameVar("BarText", "HHEIGHT", button.frame)*hbv_Skins_GetFrameVar("Frame", "SCALE", button.frame))-HealBot_Globals.VehicleFontSizeReduction<2 then
         HealBot_Media_UpdateFont(button.gref.txt["text5"],
-                                 HealBot_Skins_GetFrameVar("Frame", "HFONT", button.frame),
+                                 hbv_Skins_GetFrameVar("Frame", "HFONT", button.frame),
                                  2,
-                                 HealBot_Skins_GetFrameVar("Frame", "HOUTLINE", button.frame),
+                                 hbv_Skins_GetFrameVar("Frame", "HOUTLINE", button.frame),
                                  "Media_UpdateUsedButtonText - BarText")
 
     else
         HealBot_Media_UpdateFont(button.gref.txt["text5"], 
-                                 HealBot_Skins_GetFrameVar("Frame", "HFONT", button.frame), 
-                                 ceil(HealBot_Skins_GetFrameVar("BarText", "HHEIGHT", button.frame)*HealBot_Skins_GetFrameVar("Frame", "SCALE", button.frame))-HealBot_Globals.VehicleFontSizeReduction,
-                                 HealBot_Skins_GetFrameVar("BarText", "HOUTLINE", button.frame),
+                                 hbv_Skins_GetFrameVar("Frame", "HFONT", button.frame), 
+                                 ceil(hbv_Skins_GetFrameVar("BarText", "HHEIGHT", button.frame)*hbv_Skins_GetFrameVar("Frame", "SCALE", button.frame))-HealBot_Globals.VehicleFontSizeReduction,
+                                 hbv_Skins_GetFrameVar("BarText", "HOUTLINE", button.frame),
                                  "Media_UpdateUsedButtonText - BarText")
     end
 end
@@ -325,10 +325,10 @@ local function HealBot_Media_UpdateUsedAuxText(button)
       --HealBot_setCall("HealBot_Media_UpdateUsedAuxText")
     for x=1,9 do
         HealBot_Media_UpdateFont(button.gref.auxtxt[x],
-                                 HealBot_Aux_GetBarTextVar("FONT", button.frame, x),
-                                 ceil(HealBot_Aux_GetBarTextVar("HEIGHT", button.frame, x)*
-                                      HealBot_Skins_GetFrameVar("Frame", "SCALE", button.frame)),
-                                 HealBot_Aux_GetBarTextVar("OUTLINE", button.frame, x),
+                                 hbv_Aux_GetBarTextVar("FONT", button.frame, x),
+                                 ceil(hbv_Aux_GetBarTextVar("HEIGHT", button.frame, x)*
+                                      hbv_Skins_GetFrameVar("Frame", "SCALE", button.frame)),
+                                 hbv_Aux_GetBarTextVar("OUTLINE", button.frame, x),
                                  "Media_UpdateUsedButtonText - AuxBarText")
     end
 end
@@ -352,7 +352,7 @@ local function HealBot_Media_DoUpdateUsedMedia(mediatype, frame)
                 if h then
                     local bar=_G[h:GetName().."Bar"]
                     if bar then
-                        HealBot_Media_UpdateTexture(bar, HealBot_Skins_GetFrameVar("HeadBar", "TEXTURE", frame), "Media_DoUpdateUsedMedia - HeadBar")
+                        HealBot_Media_UpdateTexture(bar, hbv_Skins_GetFrameVar("HeadBar", "TEXTURE", frame), "Media_DoUpdateUsedMedia - HeadBar")
                         bar:GetStatusBarTexture():SetHorizTile(false)
                     end
                 end
@@ -409,9 +409,9 @@ local function HealBot_Media_DoUpdateUsedMedia(mediatype, frame)
                     local bar=_G[h:GetName().."Bar_text"]
                     if bar then
                         HealBot_Media_UpdateFont(bar, 
-                                                 HealBot_Skins_GetFrameVar("HeadText", "FONT", frame),
-                                                 HealBot_Skins_GetFrameVar("HeadText", "HEIGHT", frame),
-                                                 HealBot_Skins_GetFrameVar("HeadText", "OUTLINE", frame),
+                                                 hbv_Skins_GetFrameVar("HeadText", "FONT", frame),
+                                                 hbv_Skins_GetFrameVar("HeadText", "HEIGHT", frame),
+                                                 hbv_Skins_GetFrameVar("HeadText", "OUTLINE", frame),
                                                  "Media_DoUpdateUsedMedia - HeadText")
                     end
                 end

@@ -95,15 +95,17 @@ function HealBot_Util_PerfVal4(mod)  -- max mod is 100, returns fraction of fps 
 end
 
 function HealBot_Util_EmptyTable(t, key)
-    HealBot_Util_luVars["emptyTable"]=true
-    for _,v in pairs(t[key]) do
-        if v then
-            HealBot_Util_luVars["emptyTable"]=false
-            break
+    if t[key] then
+        HealBot_Util_luVars["emptyTable"]=true
+        for _,v in pairs(t[key]) do
+            if v then
+                HealBot_Util_luVars["emptyTable"]=false
+                break
+            end
         end
-    end
-    if HealBot_Util_luVars["emptyTable"] then
-        t[key]=nil
+        if HealBot_Util_luVars["emptyTable"] then
+            t[key]=nil
+        end
     end
 end
 

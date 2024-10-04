@@ -1301,8 +1301,6 @@ function HealBot_Lang_enALL()
     HEALBOT_RESLAG_INDICATOR               ="Keep name green after res set to"
     HEALBOT_CLASSIC_HOT_IHDUR              ="Classic HoT incoming heal duration set to"
     HEALBOT_RESLAG_INDICATOR_ERROR         ="Invalid number - The number must be between 1 and 30"
-    HEALBOT_RESTRICTTARGETBAR_ON           ="Restrict Target bar turned On"
-    HEALBOT_RESTRICTTARGETBAR_OFF          ="Restrict Target bar turned Off"
     HEALBOT_AGGRO2_ERROR_MSG               ="To set aggro level 2, threat percentage must be between 25 and 95"
     HEALBOT_AGGRO3_ERROR_MSG               ="To set aggro level 3, threat percentage must be between 75 and 100"
     HEALBOT_AGGRO2_SET_MSG                 ="Aggro level 2 set at threat percentage "

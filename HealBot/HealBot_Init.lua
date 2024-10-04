@@ -159,30 +159,55 @@ local function HealBot_Init_ManaCost(spellId, spellBookId, tipSet)
     if hbMana and hbMana[1] and hbMana[1].cost then
         manaCost=hbMana[1].cost
     end
-    if spellBookId then
-        if manaCost == 0 then
-            if not tipSet then
-                HealBot_SetToolTip(HealBot_ScanTooltip)
-                HealBot_ScanTooltip:SetSpellBookItem(spellBookId, BOOKTYPE_SPELL);
+    if spellBookId and manaCost == 0 then
+        if not tipSet then
+            HealBot_SetToolTip(HealBot_ScanTooltip)
+            HealBot_ScanTooltip:SetSpellBookItem(spellBookId, BOOKTYPE_SPELL);
+        end
+        local ttText=getglobal("HealBot_ScanTooltipTextLeft2");
+        if (ttText:GetText()) then
+            local line=ttText:GetText();
+            if line then
+                manaCost=tonumber((gsub(line, "%D", "")))
             end
-            local ttText=getglobal("HealBot_ScanTooltipTextLeft2");
-            if (ttText:GetText()) then
-                local line=ttText:GetText();
+            if manaCost == 0 then
+                ttText=getglobal("HealBot_ScanTooltipTextLeft3")
+                line=ttText:GetText()
                 if line then
                     manaCost=tonumber((gsub(line, "%D", "")))
-                end
-                if manaCost == 0 then
-                    ttText=getglobal("HealBot_ScanTooltipTextLeft3")
-                    line=ttText:GetText()
-                    if line then
-                        manaCost=tonumber((gsub(line, "%D", "")))
-                    end
                 end
             end
         end
     end
     if not manaCost or type(manaCost)~="number" then manaCost=0 end
     return manaCost
+end
+
+local function HealBot_Init_Range(spellId, spellBookId, tipSet)
+      --HealBot_setCall("HealBot_Init_ManaCost")
+    local range=0
+    if spellBookId then
+        if not tipSet then
+            HealBot_SetToolTip(HealBot_ScanTooltip)
+            HealBot_ScanTooltip:SetSpellBookItem(spellBookId, BOOKTYPE_SPELL);
+        end
+        local ttText=getglobal("HealBot_ScanTooltipTextRight2");
+        if (ttText:GetText()) then
+            local line=ttText:GetText();
+            if line then
+                range=tonumber((gsub(line, "%D", "")))
+            end
+            if range == 0 then
+                ttText=getglobal("HealBot_ScanTooltipTextRight3")
+                line=ttText:GetText()
+                if line then
+                    range=tonumber((gsub(line, "%D", "")))
+                end
+            end
+        end
+    end
+    if not range or type(range)~="number" then range=0 end
+    return range
 end
 
 local HealBot_Spell_Ranges={}
@@ -247,7 +272,6 @@ end
 function HealBot_Init_SetRangeSpells(sType, spellName, spellId)
     if HealBot_Spell_RangesPref[spellId] then
         HealBot_Range_InitSpell(sType, spellName)
-        if (HealBot_Spell_Ranges[sType] or "z")~="Set" then HealBot_AddDebug("["..sType.."] Init range for "..spellName.." is Preferred | id="..spellId, "Init Range Spell",true) end
         HealBot_Spell_Ranges[sType]="Set"
     elseif not HealBot_Spell_Ranges[sType] then
         HealBot_Spell_Ranges[sType]=spellName
@@ -259,18 +283,14 @@ function HealBot_Init_SetSpellRange(id, spellName, range)
     if range == 30 then
         if HealBot_WoWAPI_HelpfulSpell(spellName) then
             HealBot_Init_SetRangeSpells("HEAL30", spellName, id)
-        --    HealBot_AddDebug("[HEAL30] Init range for "..spellName.." is "..range,"Range Helpful 30",true)
         elseif IsHarmfulSpell(spellName) then
             HealBot_Init_SetRangeSpells("HARM30", spellName, id)
-            --HealBot_AddDebug("[HARM30] Init range for "..spellName.." is "..range,"Range Harmful 30",true)
         end
     elseif range == 40 then
         if HealBot_WoWAPI_HelpfulSpell(spellName) then
             HealBot_Init_SetRangeSpells("HEAL", spellName, id)
-            --HealBot_AddDebug([HEAL] "Init range for "..spellName.." is "..range,"Range Helpful 40",true)
         elseif IsHarmfulSpell(spellName) then
             HealBot_Init_SetRangeSpells("HARM", spellName, id)
-            --HealBot_AddDebug([HARM] "Init range for "..spellName.." is "..range,"Range Harmful 40",true)
         end
     end
 end
@@ -282,7 +302,7 @@ function HealBot_Init_FindSpellRangeCast(id, spellName, spellBookId)
 
     local spell, _, texture, msCast, _, hbRange=HealBot_WoWAPI_SpellInfo(id);
     local cooldown=GetSpellBaseCooldown(id)
-
+    
     if ( not spell ) then return false; end
     if not spellName then spellName=spell end
 
@@ -348,6 +368,10 @@ function HealBot_Init_FindSpellRangeCast(id, spellName, spellBookId)
         end
     elseif HealBot_Data["PCLASSTRIM"] == "MONK" then
         --HealBot_Timers_Set("LAST","TalentsLookupImproved",1)
+    end
+
+    if hbRange == 0 then
+        hbRange=HealBot_Init_Range(id, spellBookId, true)
     end
 
     local hbCastTime=tonumber(msCast or 0);
@@ -569,7 +593,6 @@ function HealBot_Init_Spells_Defaults()
             local _, _, offset, numEntries, _, offspecID=HealBot_WoWAPI_SpellTabInfo(j)
             if offspecID == 0 then
                 for s=offset+1,offset+numEntries do
-                    --HealBot_AddDebug("Tabinfo slot="..s,"Init Spells",true)
                     --local sName, cRank=HealBot_WoWAPI_SpellBookItemName(s)
                     local sType, sId=HealBot_WoWAPI_SpellBookItemInfo(s)
                     if HEALBOT_GAME_VERSION>10 then
@@ -600,21 +623,16 @@ function HealBot_Init_Spells_Defaults()
         end
         if HealBot_Spell_Ranges["HEAL30"] and HealBot_Spell_Ranges["HEAL30"]~="Set" then
             HealBot_Range_InitSpell("HEAL30", HealBot_Spell_Ranges["HEAL30"])
-            HealBot_AddDebug("[HEAL30] Init range for "..HealBot_Spell_Ranges["HEAL30"], "Init Range Spell",true)
         end
         if HealBot_Spell_Ranges["HARM30"] and HealBot_Spell_Ranges["HARM30"]~="Set" then
             HealBot_Range_InitSpell("HARM30", HealBot_Spell_Ranges["HARM30"])
-            HealBot_AddDebug("[HARM30] Init range for "..HealBot_Spell_Ranges["HARM30"], "Init Range Spell",true)
         end
         if HealBot_Spell_Ranges["HEAL"] and HealBot_Spell_Ranges["HEAL"]~="Set" then
             HealBot_Range_InitSpell("HEAL", HealBot_Spell_Ranges["HEAL"])
-            HealBot_AddDebug("[HEAL] Init range for "..HealBot_Spell_Ranges["HEAL"], "Init Range Spell",true)
         end
         if HealBot_Spell_Ranges["HARM"] and HealBot_Spell_Ranges["HARM"]~="Set" then
             HealBot_Range_InitSpell("HARM", HealBot_Spell_Ranges["HARM"])
-            HealBot_AddDebug("[HARM] Init range for "..HealBot_Spell_Ranges["HARM"], "Init Range Spell",true)
         end
-        HealBot_AddDebug("-- ", "Init Range Spell",true)
     else
         HealBot_SetPlayerData()
         HealBot_Timers_Set("INIT","InitSpellsDefaults",0.1)

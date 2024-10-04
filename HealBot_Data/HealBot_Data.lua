@@ -30,32 +30,12 @@ HealBot_Supplied_Textures={
     [29]= {name="Minimalist", file=[[Interface\Addons\HealBot\Images\Minimalist.tga]]},
     [30]= {name="Ruben", file=[[Interface\Addons\HealBot\Images\Ruben.tga]]},
 };
-function HealBot_Data_Default_TextureIndex()
-    return 20
-end
-function HealBot_Data_Default_Texture()
-    --return HealBot_Supplied_Textures[HealBot_Data_Default_TextureIndex()].file
-    return 'Interface\\Addons\\HealBot\\Images\\Smoothv2.tga'
-end
-function HealBot_Data_Default_TextureName()
-    --return HealBot_Supplied_Textures[HealBot_Data_Default_TextureIndex()].name
-    return "Smooth v2"
-end
 
 HealBot_Supplied_Sounds={
     [1]= {name="Tribal Bass Drum", file=566027},
     [2]= {name="Thorns", file=569022},
     [3]= {name="Elf Bell Toll", file=566558},
 };
-function HealBot_Data_Default_SoundIndex()
-    return 3
-end
-function HealBot_Data_Default_Sound()
-    return HealBot_Supplied_Sounds[HealBot_Data_Default_SoundIndex()].file
-end
-function HealBot_Data_Default_SoundName()
-    return HealBot_Supplied_Sounds[HealBot_Data_Default_SoundIndex()].name
-end
 
 HealBot_Supplied_Fonts={
     [1]= {name="Aovel Sans Black", file=[[Interface\AddOns\HealBot\Fonts\ASansBlack.ttf]]},
@@ -84,15 +64,6 @@ HealBot_Supplied_Fonts={
     [24]= {name="Impact", file=[[Interface\AddOns\HealBot\Fonts\Impact.ttf]]},
     [25]= {name="Olde English", file=[[Interface\AddOns\HealBot\Fonts\OldeEnglish.ttf]]},
 };
-function HealBot_Data_Default_FontIndex()
-    return 15
-end
-function HealBot_Data_Default_Font()
-    return HealBot_Supplied_Fonts[HealBot_Data_Default_FontIndex()].file
-end
-function HealBot_Data_Default_FontName()
-    return HealBot_Supplied_Fonts[HealBot_Data_Default_FontIndex()].name
-end
 
 HealBot_ConfigDefaults={
   PrivFocus="x",
@@ -157,34 +128,6 @@ HealBot_ConfigDefaults={
   SpecProfAtSave=0,
   };
 
-
-local hbSkinDefault=false
-function HealBot_SkinDefault_GetData(skin, id)
-    if HealBot_Config.SkinDefault[skin] then
-        return HealBot_Config.SkinDefault[skin][id] or hbSkinDefault
-    end
-    return false
-end
-
-function HealBot_SkinDefault_SetData(value, skin, id)
-    if hbSkinDefault == value then
-        HealBot_SkinDefault_NilData(skin, id)
-    else
-        if not HealBot_Config.SkinDefault[skin] then HealBot_Config.SkinDefault[skin]={} end
-        HealBot_Config.SkinDefault[skin][id]=value
-    end
-end
-
-function HealBot_SkinDefault_NilData(skin, id)
-    HealBot_Config.SkinDefault[skin][id]=nil
-end
-
-local sVars={["cBuff"]=HEALBOT_CUSTOM_en.."Buff",
-             ["cDebuff"]=HEALBOT_CUSTOM_en.."15"}
-function HealBot_Data_DefaultVar(name)
-    return sVars[name]
-end
-
 HealBot_Config_SpellsDefaults={
   EnabledKeyCombo={["New"]=true},
   EnabledSpellTarget={},
@@ -235,7 +178,7 @@ HealBot_Config_BuffsDefaults={
   EnableBar=true,
   ShowBuffWarning=false,
   SoundBuffWarning=false,
-  SoundBuffPlay=HealBot_Data_Default_SoundName(),
+  SoundBuffPlay=hbv_Default_SoundName(),
   WarnRange_Bar=2,
   WarnRange_Screen=2,
   WarnRange_Sound=3,
@@ -257,7 +200,7 @@ HealBot_Config_CuresDefaults={
   IgnoreOnCooldownDebuffs=false,
   IgnoreFriendDebuffs=false,
   IgnoreCannotDispell=false,
-  SoundDebuffPlay=HealBot_Data_Default_SoundName(),
+  SoundDebuffPlay=hbv_Default_SoundName(),
   DebuffWatchInCombat=true,
   DebuffWatchWhenGrouped=false,
   DebuffWatchWhenMounted=false,
@@ -381,7 +324,6 @@ function HealBot_Data_InitVars()
         DebugOut=false,
         CureCustomDefaultCastBy=1,
         TopRole="TANK",
-        TargetBarRestricted=0,
         ShowTooltip=true,
         Tooltip_ShowTarget=true,
         Tooltip_ShowMyBuffs=false,
@@ -407,7 +349,7 @@ function HealBot_Data_InitVars()
         Tooltip_Alpha=1,
         Tooltip_HeaderFont=HealBot_Supplied_Fonts[14].name,
         Tooltip_HeaderFontSize=14,
-        Tooltip_DetailFont=HealBot_Data_Default_FontName(),
+        Tooltip_DetailFont=hbv_Default_FontName(),
         Tooltip_DetailFontSize=12,
         DisableToolTipInCombat=false,
         HideOptions=true,
@@ -501,7 +443,7 @@ function HealBot_Data_InitVars()
             [HEALBOT_MONK]    =true,   [HEALBOT_DEATHKNIGHT]=false,  [HEALBOT_MONK]    =false, [HEALBOT_DEMONHUNTER]=false,
         },
         CDCBarColour={
-            [sVars["cDebuff"]]={ R=0.45, G=0, B=0.28, },
+            [hbv_Default("cDebuff")]={ R=0.45, G=0, B=0.28, },
         },
         CustomDebuffsShowBarCol={  
             [HEALBOT_CUSTOM_CAT_CUSTOM_AUTOMATIC]=4,
@@ -527,7 +469,7 @@ function HealBot_Data_InitVars()
         CustomBuffs={},
         CustomBuffsIconSet={},
         CustomBuffBarColour={
-            [sVars["cBuff"]]={ R=0.25, G=0.58, B=0.8, },
+            [hbv_Default("cBuff")]={ R=0.25, G=0.58, B=0.8, },
         },
         CustomBuffsShowBarCol={["DEFAULT"]=4},
         CustomBuffsIconGlow={},
