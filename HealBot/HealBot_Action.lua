@@ -60,7 +60,7 @@ HealBot_Action_luVars["pluginHealthWatch"]=false
 HealBot_Action_luVars["pluginManaWatch"]=false
 HealBot_Action_luVars["showTestPowerIndicator"]=0
 HealBot_Action_luVars["FocusGroups"]=false
-HealBot_Action_luVars["FGDimming"]=2
+HealBot_Action_luVars["FocusGroupDimming"]=2
 HealBot_Action_luVars["GlobalDimming"]=0
 HealBot_Action_luVars["HotBarDimming"]=4
 HealBot_Action_luVars["HotBarsHealth"]=0
@@ -79,6 +79,11 @@ HealBot_Action_luVars["NumAuxOutlines"]=0
 HealBot_Action_luVars["BarGlowSize"]=3
 HealBot_Action_luVars["IconGlowSize"]=2
 HealBot_Action_luVars["buttonFrameLevel"]=20
+HealBot_Action_luVars["GroupBarsDimming"]=0
+HealBot_Action_luVars["GroupBarsHealth"]=500
+HealBot_Action_luVars["GroupBarsNumUnits"]=2
+HealBot_Action_luVars["GroupBarsRange"]=-1
+HealBot_Action_luVars["GroupBarsEnabled"]=false
 
 function HealBot_Action_setLuVars(vName, vValue)
       --HealBot_setCall("HealBot_Action_setLuVars - "..vName)
@@ -2475,14 +2480,119 @@ function HealBot_Action_IsUnitDead(button, guid)
     return false
 end
 
-function HealBot_Action_UpdateHealthHotBar(button)
+local hbGroupHealthAuraWatch={}
+function HealBot_Action_GroupHealthWatch(guid, enable)
+      --HealBot_setCall("HealBot_TargetWatch", nil, guid)
+    if enable then
+        hbGroupHealthAuraWatch[guid]=true
+    else
+        hbGroupHealthAuraWatch[guid]=nil
+    end
+end
+
+local hbGroupHealthActionIcons={}
+function HealBot_Action_GroupHealthActionIcons(guid, state)
+      --HealBot_setCall("HealBot_ActionWatchSwimming", nil, guid)
+    if state then
+        hbGroupHealthActionIcons[guid]=true
+    else
+        hbGroupHealthActionIcons[guid]=nil
+    end
+end
+
+local HealBot_Action_GroupHealth={}
+function HealBot_Action_SetGroupHealthVars(dimming, minHealth, numUnits, unitRange)
+numUnits=numUnits-1
+minHealth=minHealth+150
+    if HealBot_Action_luVars["GroupBarsHealth"] ~= minHealth or HealBot_Action_luVars["GroupBarsNumUnits"] ~= numUnits or HealBot_Action_luVars["GroupBarsRange"] ~= unitRange then
+        HealBot_Action_luVars["GroupBarsHealth"]=minHealth
+        HealBot_Action_luVars["GroupBarsNumUnits"]=numUnits
+        HealBot_Action_luVars["GroupBarsRange"]=unitRange
+        for x=#HealBot_Action_GroupHealth,1,-1 do
+            HealBot_Action_UpdateGroupHealth(HealBot_Buttons[HealBot_Action_GroupHealth[x]])
+        end
+    end
+    if HealBot_Action_luVars["GroupBarsDimming"] ~= dimming then
+        HealBot_Action_luVars["GroupBarsDimming"]=dimming
+        HealBot_Action_BarColourAlphaSetFunc()
+        HealBot_Timers_Set("LAST","ResetUnitStatus",0.1)
+    end
+end
+
+function HealBot_Action_GroupHealthUpdateExtras()
+    for x=1,#HealBot_Action_GroupHealth do
+        if hbGroupHealthAuraWatch[HealBot_Buttons[HealBot_Action_GroupHealth[x]].guid] then
+            HealBot_Plugin_AuraWatch_GroupHealthUpdate(HealBot_Buttons[HealBot_Action_GroupHealth[x]])
+        end
+    end
+    for guid in pairs(hbGroupHealthActionIcons) do
+        HealBot_ActionIcons_UpdateGroupHealth(guid, HealBot_Action_luVars["GroupBarsEnabled"])
+    end
+end
+
+function HealBot_Action_RemoveGroupHealth(button)
+    button.hotbars.grouphealth=false
+    for x=1,#HealBot_Action_GroupHealth do
+        if HealBot_Action_GroupHealth[x] == button.id then
+            table.remove(HealBot_Action_GroupHealth, x)
+            break
+        end
+    end
+    if #HealBot_Action_GroupHealth<HealBot_Action_luVars["GroupBarsNumUnits"] and HealBot_Action_luVars["GroupBarsEnabled"] then
+        HealBot_Action_luVars["GroupBarsEnabled"]=false
+        if HealBot_Action_luVars["GroupBarsDimming"]>0 then
+            HealBot_Action_BarColourAlphaSetFunc()
+            HealBot_Timers_Set("LAST","ResetUnitStatus")
+        end
+        HealBot_Action_GroupHealthUpdateExtras()
+    end
+    if hbGroupHealthAuraWatch[button.guid] then
+        HealBot_Plugin_AuraWatch_GroupHealthUpdate(button)
+    end
+end
+
+function HealBot_Action_AddGroupHealth(button)
+    button.hotbars.grouphealth=true
+    if not button.status.duplicate then
+        table.insert(HealBot_Action_GroupHealth, button.id)
+    end
+    if #HealBot_Action_GroupHealth>=HealBot_Action_luVars["GroupBarsNumUnits"] and not HealBot_Action_luVars["GroupBarsEnabled"] then
+        HealBot_Action_luVars["GroupBarsEnabled"]=true
+        if HealBot_Action_luVars["GroupBarsDimming"]>0 then
+            HealBot_Action_BarColourAlphaSetFunc()
+            HealBot_Timers_Set("LAST","ResetUnitStatus")
+        end
+        HealBot_Action_GroupHealthUpdateExtras()
+    elseif hbGroupHealthAuraWatch[button.guid] then
+        HealBot_Plugin_AuraWatch_GroupHealthUpdate(button)
+    end
+end
+
+function HealBot_Action_UpdateGroupHealth(button)
       --HealBot_setCall("HealBot_Action_UpdateHealthHotBar", button)
-    if HealBot_Action_luVars["HotBarsHealth"]>0 then
-        if button.isplayer and button.frame<10 and button.status.range>0 and button.health.hpct>0 and (button.health.hpct+button.health.absorbspctc)<HealBot_Action_luVars["HotBarsHealth"] then
+    if (button.isplayer or button.isgroupraid) and button.frame<10 then
+        if button.status.range>HealBot_Action_luVars["GroupBarsRange"] and button.health.hpct>0 and button.health.hpct<HealBot_Action_luVars["GroupBarsHealth"] then
+            if not button.hotbars.grouphealth then
+                HealBot_Action_AddGroupHealth(button)
+            end
+        elseif button.hotbars.grouphealth then
+            HealBot_Action_RemoveGroupHealth(button)
+        end
+    elseif button.hotbars.grouphealth then 
+        HealBot_Action_RemoveGroupHealth(button)
+    end
+end
+
+function HealBot_Action_UpdateHotBars(button)
+      --HealBot_setCall("HealBot_Action_UpdateHealthHotBar", button)
+    if (button.isplayer or button.isgroupraid) and button.frame<10 then
+        if button.status.range>0 and button.health.hpct>0 and (button.health.hpct+button.health.absorbspctc)<HealBot_Action_luVars["HotBarsHealth"] then
             HealBot_Action_BarHotEnable(button, "HEALTH")
         elseif button.hotbars.health then
             HealBot_Action_BarHotDisable(button, "HEALTH")
         end
+    elseif button.hotbars.health then 
+        HealBot_Action_BarHotDisable(button, "HEALTH")
     end
 end
 
@@ -2491,7 +2601,7 @@ function HealBot_Action_UpdateHotBar(button)
     if HealBot_Action_luVars["HotBarsHealth"] == 0 then
         if button.hotbars.health then HealBot_Action_BarHotDisable(button, "HEALTH") end
     else
-        HealBot_Action_UpdateHealthHotBar(button)
+        HealBot_Action_UpdateHotBars(button)
     end
     if button.aura.debuff.name then HealBot_Aura_DebuffWarnings(button, button.aura.debuff.name, true, 0) end
 end
@@ -2582,7 +2692,8 @@ function HealBot_Action_UpdateHealthButton(button, hlthevent)
            HealBot_TextColChangeWithHealth[hbv_Skins_GetFrameVar("BarTextCol", "HLTH", button.frame)] then 
             button.text.healthupdate=true
         end
-        HealBot_Action_UpdateHealthHotBar(button)
+        HealBot_Action_UpdateHotBar(button)
+        HealBot_Action_UpdateGroupHealth(button)
         HealBot_Text_setHealthText(button)
         HealBot_Text_UpdateText(button)
         --if button.aux[button.frame].sticky then
@@ -2698,7 +2809,7 @@ end
 function HealBot_Action_BarColourAlphaFG(button, a, dMult)
       --HealBot_setCall("HealBot_Action_BarColourAlphaFG", button, nil, nil, true)
     if hbv_IsUnitType(button.status.unittype, HEALBOT_RAID) and not HealBot_Action_luVars["FGroups"][button.group] then
-        hbBarColourAlpha=a/(HealBot_Action_luVars["FGDimming"]*dMult)
+        hbBarColourAlpha=a/(HealBot_Action_luVars["FocusGroupDimming"]*dMult)
     else
         hbBarColourAlpha=a
     end
@@ -2713,12 +2824,32 @@ function HealBot_Action_BarColourAlphaHB(button, a, dMult)
     end
 end
 
+function HealBot_Action_BarColourAlphaGH(button, a, dMult)
+      --HealBot_setCall("HealBot_Action_BarColourAlphaHB", button, nil, nil, true)
+    if not button.hotbars.grouphealth then
+        hbBarColourAlpha=a/(HealBot_Action_luVars["GroupBarsDimming"]*dMult)
+    else
+        hbBarColourAlpha=a
+    end
+end
+
 function HealBot_Action_BarColourAlphaGDFG(button, a, dMult)
       --HealBot_setCall("HealBot_Action_BarColourAlphaGDFG", button, nil, nil, true)
     if HealBot_Action_luVars["GlobalDimming"]>0 then
         hbBarColourAlpha=a/(HealBot_Action_luVars["GlobalDimming"]*dMult)
     elseif hbv_IsUnitType(button.status.unittype, HEALBOT_RAID) and not HealBot_Action_luVars["FGroups"][button.group] then
-        hbBarColourAlpha=a/(HealBot_Action_luVars["FGDimming"]*dMult)
+        hbBarColourAlpha=a/(HealBot_Action_luVars["FocusGroupDimming"]*dMult)
+    else
+        hbBarColourAlpha=a
+    end
+end
+
+function HealBot_Action_BarColourAlphaGDGH(button, a, dMult)
+      --HealBot_setCall("HealBot_Action_BarColourAlphaGDHB", button, nil, nil, true)
+    if HealBot_Action_luVars["GlobalDimming"]>0 then
+        hbBarColourAlpha=a/(HealBot_Action_luVars["GlobalDimming"]*dMult)
+    elseif not button.hotbars.grouphealth then
+        hbBarColourAlpha=a/(HealBot_Action_luVars["GroupBarsDimming"]*dMult)
     else
         hbBarColourAlpha=a
     end
@@ -2735,12 +2866,36 @@ function HealBot_Action_BarColourAlphaGDHB(button, a, dMult)
     end
 end
 
+function HealBot_Action_BarColourAlphaFGGH(button, a, dMult)
+      --HealBot_setCall("HealBot_Action_BarColourAlphaFGHB", button, nil, nil, true)
+    if hbv_IsUnitType(button.status.unittype, HEALBOT_RAID) and not HealBot_Action_luVars["FGroups"][button.group] then
+        hbBarColourAlpha=a/(HealBot_Action_luVars["FocusGroupDimming"]*dMult)
+    elseif not button.hotbars.grouphealth then
+        hbBarColourAlpha=a/(HealBot_Action_luVars["GroupBarsDimming"]*dMult)
+    else
+        hbBarColourAlpha=a
+    end
+end
+
 function HealBot_Action_BarColourAlphaFGHB(button, a, dMult)
       --HealBot_setCall("HealBot_Action_BarColourAlphaFGHB", button, nil, nil, true)
     if hbv_IsUnitType(button.status.unittype, HEALBOT_RAID) and not HealBot_Action_luVars["FGroups"][button.group] then
-        hbBarColourAlpha=a/(HealBot_Action_luVars["FGDimming"]*dMult)
+        hbBarColourAlpha=a/(HealBot_Action_luVars["FocusGroupDimming"]*dMult)
     elseif not button.hotbars.state then
         hbBarColourAlpha=a/(HealBot_Action_luVars["HotBarDimming"]*dMult)
+    else
+        hbBarColourAlpha=a
+    end
+end
+
+function HealBot_Action_BarColourAlphaGDFGGH(button, a, dMult)
+      --HealBot_setCall("HealBot_Action_BarColourAlphaGDFGHB", button, nil, nil, true)
+    if HealBot_Action_luVars["GlobalDimming"]>0 then
+        hbBarColourAlpha=a/(HealBot_Action_luVars["GlobalDimming"]*dMult)
+    elseif hbv_IsUnitType(button.status.unittype, HEALBOT_RAID) and not HealBot_Action_luVars["FGroups"][button.group] then
+        hbBarColourAlpha=a/(HealBot_Action_luVars["FocusGroupDimming"]*dMult)
+    elseif not button.hotbars.grouphealth then
+        hbBarColourAlpha=a/(HealBot_Action_luVars["GroupBarsDimming"]*dMult)
     else
         hbBarColourAlpha=a
     end
@@ -2751,7 +2906,7 @@ function HealBot_Action_BarColourAlphaGDFGHB(button, a, dMult)
     if HealBot_Action_luVars["GlobalDimming"]>0 then
         hbBarColourAlpha=a/(HealBot_Action_luVars["GlobalDimming"]*dMult)
     elseif hbv_IsUnitType(button.status.unittype, HEALBOT_RAID) and not HealBot_Action_luVars["FGroups"][button.group] then
-        hbBarColourAlpha=a/(HealBot_Action_luVars["FGDimming"]*dMult)
+        hbBarColourAlpha=a/(HealBot_Action_luVars["FocusGroupDimming"]*dMult)
     elseif not button.hotbars.state then
         hbBarColourAlpha=a/(HealBot_Action_luVars["HotBarDimming"]*dMult)
     else
@@ -2764,22 +2919,30 @@ function HealBot_Action_BarColourAlphaSetFunc()
       --HealBot_setCall("HealBot_Action_BarColourAlphaSetFunc")
     if hbv_Skins_GetVar("General", "GLOBALDIMMING")>1 then
         if HealBot_Action_luVars["FocusGroups"] == 2 then
-            if HealBot_Action_luVars["HotBarsEnabled"] then
+            if HealBot_Action_luVars["GroupBarsEnabled"] and HealBot_Action_luVars["GroupBarsDimming"]>0 then
+                hbBarColourAlphaFunc=HealBot_Action_BarColourAlphaGDFGGH
+            elseif HealBot_Action_luVars["HotBarsEnabled"] then
                 hbBarColourAlphaFunc=HealBot_Action_BarColourAlphaGDFGHB
             else
                 hbBarColourAlphaFunc=HealBot_Action_BarColourAlphaGDFG
             end
+        elseif HealBot_Action_luVars["GroupBarsEnabled"] and HealBot_Action_luVars["GroupBarsDimming"]>0 then
+            hbBarColourAlphaFunc=HealBot_Action_BarColourAlphaGDGH
         elseif HealBot_Action_luVars["HotBarsEnabled"] then
             hbBarColourAlphaFunc=HealBot_Action_BarColourAlphaGDHB
         else
             hbBarColourAlphaFunc=HealBot_Action_BarColourAlphaGD
         end
     elseif HealBot_Action_luVars["FocusGroups"] == 2 then
-        if HealBot_Action_luVars["HotBarsEnabled"] then
+        if HealBot_Action_luVars["GroupBarsEnabled"] and HealBot_Action_luVars["GroupBarsDimming"]>0 then
+            hbBarColourAlphaFunc=HealBot_Action_BarColourAlphaFGGH
+        elseif HealBot_Action_luVars["HotBarsEnabled"] then
             hbBarColourAlphaFunc=HealBot_Action_BarColourAlphaFGHB
         else
             hbBarColourAlphaFunc=HealBot_Action_BarColourAlphaFG
         end
+    elseif HealBot_Action_luVars["GroupBarsEnabled"] and HealBot_Action_luVars["GroupBarsDimming"]>0 then
+        hbBarColourAlphaFunc=HealBot_Action_BarColourAlphaGH
     elseif HealBot_Action_luVars["HotBarsEnabled"] then
         hbBarColourAlphaFunc=HealBot_Action_BarColourAlphaHB
     else
@@ -2798,17 +2961,17 @@ end
 
 function HealBot_Action_SetFocusGroups()
       --HealBot_setCall("HealBot_Action_SetFocusGroups")
-    if HealBot_Globals.OverrideEffects["USE"] == 2 then
+    if HealBot_Globals.OverrideEffects["USEBARS"] == 2 then
         HealBot_Action_luVars["FocusGroups"]=HealBot_Globals.OverrideEffects["FOCUSGROUPS"]
         HealBot_Action_luVars["FGroups"]=HealBot_Globals.OverrideFocusGroups
-        HealBot_Action_luVars["FGDimming"]=HealBot_Globals.OverrideEffects["FGDIMMING"]
+        HealBot_Action_luVars["FocusGroupDimming"]=HealBot_Globals.OverrideEffects["FGDIMMING"]
     else
         HealBot_Action_luVars["FocusGroups"]=hbv_Skins_GetVar("General", "FOCUSGROUPS")
         for x=1,8 do
             HealBot_Action_luVars["FGroups"][x]=hbv_Skins_GetFocusGroup(x)
         end
         
-        HealBot_Action_luVars["FGDimming"]=hbv_Skins_GetVar("General", "FGDIMMING")
+        HealBot_Action_luVars["FocusGroupDimming"]=hbv_Skins_GetVar("General", "FGDIMMING")
     end
     HealBot_Timers_Set("SKINS","UpdateTextButtons")
     HealBot_Panel_SetFocusGroups()
@@ -3631,6 +3794,7 @@ function HealBot_Action_InitButton(button, prefix)
     button.special.unit=false
     button.special.aura=false
     button.special.auraupdate=0
+    button.raidid=0
     erButton.status={}
     button.update={}
     button.checks={}
@@ -4003,6 +4167,7 @@ function HealBot_Action_InitButton(button, prefix)
     button.roletxt="DAMAGER"
     button.player=false
     button.isplayer=false
+    button.isgroupraid=false
     button.level=1
     button.status.events=false
     button.status.duplicate=false
@@ -5942,7 +6107,7 @@ function HealBot_Action_SetHealButton(unit,guid,frame,unitType,duplicate,role,pr
             end
             if hButton.unit~=unit or hButton.reset or hButton.guid~=guid or hButton.status.unittype~=unitType then
                 hButton.status.unittype=unitType                                           -- 1=Tanks  2=Healers  3=Self  4=Private  5=privfocus  8=privfocusToT
-                if hbv_IsUnitType(unitType, HEALBOT_PRIVATETARGET) then                 -- 11=Raid  12=Group
+                if hbv_IsUnitType(unitType, HEALBOT_PRIVATETARGET) then                    -- 11=Raid  12=Group
                     HealBot_PrivateTarget_Button[unit]=hButton                             -- 21=vehicle  22=pet
                     hButton:SetAttribute("toggleForVehicle", false)                        -- 31=target  32=tot  33=tof  35=focus
                     hButton.special.unit=true                                              -- 41=enemy  42=Player Target  43=Private Target
@@ -5985,7 +6150,22 @@ function HealBot_Action_SetHealButton(unit,guid,frame,unitType,duplicate,role,pr
                     hButton:SetAttribute("toggleForVehicle", true)
                     hButton.special.unit=false
                 end
-                if hButton.unit~=unit or hButton.guid~=guid or hButton.reset then 
+                if hButton.unit~=unit or hButton.guid~=guid or hButton.reset then
+                    if HealBot_Private_Button[unit] or HealBot_Unit_Button[unit] then
+                        if UnitInRaid(unit) then
+                            hButton.isgroupraid=true
+                            hButton.raidid=UnitInRaid(unit)
+                        else
+                            hButton.raidid=0
+                            if UnitInParty(unit) or (IsInGroup() and UnitIsUnit(unit, "player")) then
+                                hButton.isgroupraid=true
+                            else
+                                hButton.isgroupraid=false
+                            end
+                        end
+                    else
+                        hButton.isgroupraid=false
+                    end
                     hButton.reset=false
                     hButton.unit=unit
                     erButton.unit=unit

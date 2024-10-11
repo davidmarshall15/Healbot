@@ -928,6 +928,11 @@ function HealBot_Options_setLists()
         HEALBOT_FIVE,
     }
 
+    HealBot_Options_Lists["GroupHealthRange"]={
+        HEALBOT_VISIBLE_RANGE,
+        HEALBOT_SPELL_RANGE,
+    }
+
     HealBot_Options_UseOverrideFocusGroups_List={
         HEALBOT_OPTIONS_FOCUSGROUPS1,
         HEALBOT_OPTIONS_FOCUSGROUPS2,
@@ -953,7 +958,7 @@ function HealBot_Options_setLists()
     }
 
     HealBot_Options_ExtraSkinsCat_List={
-        HEALBOT_EXTRASKINS_CAT_GROUP,
+        HEALBOT_SORTBY_GROUP,
         HEALBOT_EXTRASKINS_CAT_SRAID,
         HEALBOT_EXTRASKINS_CAT_LRAID,
     }
@@ -1270,6 +1275,7 @@ function HealBot_Options_setLists()
                                                        HEALBOT_PLUGIN_AURAWATCHAGGROLEVEL,
                                                        HEALBOT_OPTION_ISFALLING,
                                                        HEALBOT_OPTION_ISSWIMMING,
+                                                       HEALBOT_OPTION_GOURPHEALSEFFECT,
     }
 
     HealBot_Options_AggroAlertLevel_List={
@@ -2955,6 +2961,16 @@ function HealBot_Options_HotBarDimming_OnValueChanged(self)
     end
 end
 
+function HealBot_Options_GroupHealthDimming_OnValueChanged(self)
+      --HealBot_setCall("HealBot_Options_HotBarDimming_OnValueChanged")
+    local val=HealBot_Util_Round(self:GetValue(),1)
+    val=val/10;
+    if hbv_Skins_GetVar("General", "GHDIMMING")~=val then
+        hbv_Skins_SetVar(val, "General", "GHDIMMING")
+        HealBot_Timers_Set("LAST","BarFreqVars")
+    end
+end
+
 function HealBot_Options_TooltipScale_OnValueChanged(self)
       --HealBot_setCall("HealBot_Options_TooltipScale_OnValueChanged")
     local val=HealBot_Util_Round(self:GetValue(),2)
@@ -3000,10 +3016,20 @@ function HealBot_Options_OverrideHotBarDimming_OnValueChanged(self)
     end
 end
 
+function HealBot_Options_OverrideGroupHealthDimming_OnValueChanged(self)
+      --HealBot_setCall("HealBot_Options_OverrideHotBarDimming_OnValueChanged")
+    local val=HealBot_Util_Round(self:GetValue(),1)
+    val=val/10;
+    if HealBot_Globals.OverrideEffects["GHDIMMING"]~=val then
+        HealBot_Globals.OverrideEffects["GHDIMMING"]=val;
+        HealBot_Timers_Set("LAST","BarFreqVars")
+    end
+end
+
 function HealBot_Options_UseOverrideFocusGroups_DropDown()
       --HealBot_setCall("HealBot_Options_UseOverrideFocusGroups_DropDown")
     local info=UIDropDownMenu_CreateInfo()
-    if HealBot_Globals.OverrideEffects["USE"] == 1 then
+    if HealBot_Globals.OverrideEffects["USEBARS"] == 1 then
         info.text=" "
         UIDropDownMenu_AddButton(info);
     else
@@ -3026,7 +3052,7 @@ end
 function HealBot_Options_UseFocusGroups_DropDown()
       --HealBot_setCall("HealBot_Options_UseFocusGroups_DropDown")
     local info=UIDropDownMenu_CreateInfo()
-    if HealBot_Globals.OverrideEffects["USE"] == 2 then
+    if HealBot_Globals.OverrideEffects["USEBARS"] == 2 then
         info.text=" "
         UIDropDownMenu_AddButton(info);
     else
@@ -3049,7 +3075,7 @@ end
 function HealBot_Options_HotBarDebuffPrio_DropDown()
       --HealBot_setCall("HealBot_Options_HotBarDebuffPrio_DropDown")
     local info=UIDropDownMenu_CreateInfo()
-    if HealBot_Globals.OverrideEffects["USE"] == 2 then
+    if HealBot_Globals.OverrideEffects["USEBARS"] == 2 then
         info.text=" "
         UIDropDownMenu_AddButton(info);
     else
@@ -3069,10 +3095,33 @@ function HealBot_Options_HotBarDebuffPrio_DropDown()
     end
 end
 
+function HealBot_Options_GroupHealthRange_DropDown()
+      --HealBot_setCall("HealBot_Options_HotBarDebuffPrio_DropDown")
+    local info=UIDropDownMenu_CreateInfo()
+    if HealBot_Globals.OverrideEffects["USEBARS"] == 2 then
+        info.text=" "
+        UIDropDownMenu_AddButton(info);
+    else
+        for j=1, getn(HealBot_Options_Lists["GroupHealthRange"]), 1 do
+            info.text=HealBot_Options_Lists["GroupHealthRange"][j];
+            info.func=function(self)
+                            if hbv_Skins_GetVar("General", "GHRANGE") ~= self:GetID() then
+                                hbv_Skins_SetVar(self:GetID(), "General", "GHRANGE")
+                                UIDropDownMenu_SetText(HealBot_Options_GroupHealthRange, HealBot_Options_Lists["GroupHealthRange"][hbv_Skins_GetVar("General", "GHRANGE")])
+                                HealBot_Timers_Set("LAST","BarFreqVars")
+                            end
+                        end
+            info.checked=false;
+            if hbv_Skins_GetVar("General", "GHRANGE") == j then info.checked=true end
+            UIDropDownMenu_AddButton(info);
+        end
+    end
+end
+
 function HealBot_Options_OverrideHotBarDebuffPrio_DropDown()
       --HealBot_setCall("HealBot_Options_OverrideHotBarDebuffPrio_DropDown")
     local info=UIDropDownMenu_CreateInfo()
-    if HealBot_Globals.OverrideEffects["USE"] == 1 then
+    if HealBot_Globals.OverrideEffects["USEBARS"] == 1 then
         info.text=" "
         UIDropDownMenu_AddButton(info);
     else
@@ -3087,6 +3136,29 @@ function HealBot_Options_OverrideHotBarDebuffPrio_DropDown()
                         end
             info.checked=false;
             if HealBot_Globals.OverrideEffects["HOTBARDEBUFF"] == j then info.checked=true end
+            UIDropDownMenu_AddButton(info);
+        end
+    end
+end
+
+function HealBot_Options_OverrideGroupHealthRange_DropDown()
+      --HealBot_setCall("HealBot_Options_OverrideGroupHealthRange_DropDown")
+    local info=UIDropDownMenu_CreateInfo()
+    if HealBot_Globals.OverrideEffects["USEBARS"] == 1 then
+        info.text=" "
+        UIDropDownMenu_AddButton(info);
+    else
+        for j=1, getn(HealBot_Options_Lists["GroupHealthRange"]), 1 do
+            info.text=HealBot_Options_Lists["GroupHealthRange"][j];
+            info.func=function(self)
+                            if HealBot_Globals.OverrideEffects["GHRANGE"] ~= self:GetID() then
+                                HealBot_Globals.OverrideEffects["GHRANGE"]=self:GetID()
+                                UIDropDownMenu_SetText(HealBot_Options_OverrideGroupHealthRange, HealBot_Options_Lists["GroupHealthRange"][HealBot_Globals.OverrideEffects["GHRANGE"]])
+                                HealBot_Timers_Set("LAST","BarFreqVars")
+                            end
+                        end
+            info.checked=false;
+            if HealBot_Globals.OverrideEffects["GHRANGE"] == j then info.checked=true end
             UIDropDownMenu_AddButton(info);
         end
     end
@@ -5678,15 +5750,28 @@ function HealBot_Options_BarFreq_setVars()
     local hotBarDimming=4
     local hazardFreq=0.3
     local hazardMinAlpha=0.25
+    local grpHealthRange=1
+    local grpHealthMinUnits=5
+    local grpHealthThreshold=700
+    local grpHealthDiming=0
     if HealBot_Globals.OverrideEffects["USE"] == 1 then
+        hazardFreq=hbv_Skins_GetVar("General", "HAZARDFREQ")
+        hazardMinAlpha=hbv_Skins_GetVar("General", "HAZARDMINALPHA")
+    else
+        hazardFreq=HealBot_Globals.OverrideEffects["HAZARDFREQ"] or 0.3
+        hazardMinAlpha=HealBot_Globals.OverrideEffects["HAZARDMINALPHA"] or 0.25
+    end
+    if HealBot_Globals.OverrideEffects["USEBARS"] == 1 then
         flashFreqUpd=0.05+(hbv_Skins_GetVar("General", "OFREQ")*0.4)
         fluidFreq=HealBot_Util_Round(hb_lVars["FluidFreqAdj"]-(hbv_Skins_GetVar("General", "FLUIDFREQ")/1500),4)
         smoothAdj=9-ceil(hbv_Skins_GetVar("General", "FLUIDFREQ")/2)
         hotBarHlth=hbv_Skins_GetVar("General", "HOTBARHLTH")*10
         hotBarDebuff=hbv_Skins_GetVar("General", "HOTBARDEBUFF")-1
         hotBarDimming=hbv_Skins_GetVar("General", "HBDIMMING")
-        hazardFreq=hbv_Skins_GetVar("General", "HAZARDFREQ")
-        hazardMinAlpha=hbv_Skins_GetVar("General", "HAZARDMINALPHA")
+        grpHealthRange=hbv_Skins_GetVar("General", "GHRANGE")-2
+        grpHealthMinUnits=hbv_Skins_GetVar("General", "GHMINUNITS")
+        grpHealthThreshold=hbv_Skins_GetVar("General", "GHTHRESHOLD")*10
+        grpHealthDiming=hbv_Skins_GetVar("General", "GHDIMMING")
     else
         flashFreqUpd=0.05+(HealBot_Globals.OverrideEffects["OFREQ"]*0.4)
         fluidFreq=HealBot_Util_Round(hb_lVars["FluidFreqAdj"]-(HealBot_Globals.OverrideEffects["FLUIDFREQ"]/1500),4)
@@ -5694,8 +5779,10 @@ function HealBot_Options_BarFreq_setVars()
         hotBarHlth=HealBot_Globals.OverrideEffects["HOTBARHLTH"]*10
         hotBarDebuff=HealBot_Globals.OverrideEffects["HOTBARDEBUFF"]-1
         hotBarDimming=HealBot_Globals.OverrideEffects["HBDIMMING"]
-        hazardFreq=HealBot_Globals.OverrideEffects["HAZARDFREQ"] or 0.3
-        hazardMinAlpha=HealBot_Globals.OverrideEffects["HAZARDMINALPHA"] or 0.25
+        grpHealthRange=HealBot_Globals.OverrideEffects["GHRANGE"]-2
+        grpHealthMinUnits=HealBot_Globals.OverrideEffects["GHMINUNITS"]
+        grpHealthThreshold=HealBot_Globals.OverrideEffects["GHTHRESHOLD"]*10
+        grpHealthDiming=HealBot_Globals.OverrideEffects["GHDIMMING"]
     end
     flashFreq=HealBot_Util_Round(hb_lVars["FlashFreqAdj"]-(flashFreqUpd/8),4)
     hazardFreq=hazardFreq-0.05
@@ -5717,6 +5804,7 @@ function HealBot_Options_BarFreq_setVars()
     HealBot_Action_setLuVars("HotBarDimming", hotBarDimming)
     HealBot_Action_setLuVars("HazardFreq", hazardFreq)
     HealBot_Action_setLuVars("HazardMinAlpha", hazardMinAlpha)
+    HealBot_Action_SetGroupHealthVars(grpHealthDiming, grpHealthThreshold, grpHealthMinUnits, grpHealthRange)
     HealBot_ActionIcons_setLuVars("HazardFreq", hazardFreq)
     HealBot_ActionIcons_setLuVars("HazardMinAlpha", hazardMinAlpha)
 
@@ -5751,6 +5839,30 @@ function HealBot_Options_OverrideHotBarHealthThres_OnValueChanged(self)
     elseif HealBot_Globals.OverrideEffects["HOTBARHLTH"]~=val then
         HealBot_Globals.OverrideEffects["HOTBARHLTH"]=val;
         HealBot_Options_SetText(HealBot_Options_OverrideHotBarHealthThres, HEALBOT_OPTION_HOTBARHEALTHPCT..val.."%")
+        HealBot_Timers_Set("LAST","BarFreqVars")
+    end
+end
+
+function HealBot_Options_OverrideGroupHealthMinUnits_OnValueChanged(self)
+      --HealBot_setCall("HealBot_Options_OverrideHotBarHealthThres_OnValueChanged")
+    local val=floor(self:GetValue()+0.5)
+    if val~=self:GetValue() then
+        self:SetValue(val)
+    elseif HealBot_Globals.OverrideEffects["GHMINUNITS"]~=val then
+        HealBot_Globals.OverrideEffects["GHMINUNITS"]=val;
+        HealBot_Options_SetText(HealBot_Options_OverrideGroupHealthMinUnits, HEALBOT_OPTIONS_MINUNITS.." "..val)
+        HealBot_Timers_Set("LAST","BarFreqVars")
+    end
+end
+
+function HealBot_Options_OverrideGroupHealthThres_OnValueChanged(self)
+      --HealBot_setCall("HealBot_Options_OverrideHotBarHealthThres_OnValueChanged")
+    local val=floor(self:GetValue()+0.5)
+    if val~=self:GetValue() then
+        self:SetValue(val)
+    elseif HealBot_Globals.OverrideEffects["GHTHRESHOLD"]~=val then
+        HealBot_Globals.OverrideEffects["GHTHRESHOLD"]=val;
+        HealBot_Options_SetText(HealBot_Options_OverrideGroupHealthThres, HEALBOT_PLUGIN_AURAWATCHHEALTHBELOW.." "..val.."%")
         HealBot_Timers_Set("LAST","BarFreqVars")
     end
 end
@@ -5845,6 +5957,30 @@ function HealBot_Options_HotBarHealthThres_OnValueChanged(self)
     elseif hbv_Skins_GetVar("General", "HOTBARHLTH")~=val then
         hbv_Skins_SetVar(val, "General", "HOTBARHLTH")
         HealBot_Options_SetText(HealBot_Options_HotBarHealthThres, HEALBOT_OPTION_HOTBARHEALTHPCT..val.."%")
+        HealBot_Timers_Set("LAST","BarFreqVars")
+    end
+end
+
+function HealBot_Options_GroupHealthMinUnits_OnValueChanged(self)
+      --HealBot_setCall("HealBot_Options_HotBarHealthThres_OnValueChanged")
+    local val=floor(self:GetValue()+0.5)
+    if val~=self:GetValue() then
+        self:SetValue(val)
+    elseif hbv_Skins_GetVar("General", "GHMINUNITS")~=val then
+        hbv_Skins_SetVar(val, "General", "GHMINUNITS")
+        HealBot_Options_SetText(HealBot_Options_GroupHealthMinUnits, HEALBOT_OPTIONS_MINUNITS.." "..val)
+        HealBot_Timers_Set("LAST","BarFreqVars")
+    end
+end
+
+function HealBot_Options_GroupHealthThres_OnValueChanged(self)
+      --HealBot_setCall("HealBot_Options_HotBarHealthThres_OnValueChanged")
+    local val=floor(self:GetValue()+0.5)
+    if val~=self:GetValue() then
+        self:SetValue(val)
+    elseif hbv_Skins_GetVar("General", "GHTHRESHOLD")~=val then
+        hbv_Skins_SetVar(val, "General", "GHTHRESHOLD")
+        HealBot_Options_SetText(HealBot_Options_GroupHealthThres, HEALBOT_PLUGIN_AURAWATCHHEALTHBELOW.." "..val.."%")
         HealBot_Timers_Set("LAST","BarFreqVars")
     end
 end
@@ -6481,17 +6617,20 @@ function HealBot_Options_FluidFlashInUse()
       --HealBot_setCall("HealBot_Options_FluidFlashInUse")
     if HealBot_Globals.CPUUsage>7 then
         if HealBot_Globals.OverrideEffects["USE"] == 1 then
-            HealBot_Aux_setLuVars("FluidInUse", hbv_Skins_GetBoolean("General", "FLUIDBARS"))
-            HealBot_Action_setLuVars("FluidInUse", hbv_Skins_GetBoolean("General", "FLUIDBARS"))
             HealBot_setLuVars("UseHealthDrop", hbv_Skins_GetBoolean("General", "HEALTHDROP"))
             HealBot_Action_setLuVars("HealthDropTime", hbv_Skins_GetVar("General", "HEALTHDROPTIME"))
             HealBot_setLuVars("HealthDropCancelPct", hbv_Skins_GetVar("General", "HEALTHDROPCANCEL"))
         else
-            HealBot_Aux_setLuVars("FluidInUse", HealBot_Globals.OverrideEffects["FLUIDBARS"])
-            HealBot_Action_setLuVars("FluidInUse", HealBot_Globals.OverrideEffects["FLUIDBARS"])
             HealBot_setLuVars("UseHealthDrop", HealBot_Globals.OverrideEffects["HEALTHDROP"])
             HealBot_Action_setLuVars("HealthDropTime", HealBot_Globals.OverrideEffects["HEALTHDROPTIME"])
             HealBot_setLuVars("HealthDropCancelPct", HealBot_Globals.OverrideEffects["HEALTHDROPCANCEL"])
+        end
+        if HealBot_Globals.OverrideEffects["USEBARS"] == 1 then
+            HealBot_Aux_setLuVars("FluidInUse", hbv_Skins_GetBoolean("General", "FLUIDBARS"))
+            HealBot_Action_setLuVars("FluidInUse", hbv_Skins_GetBoolean("General", "FLUIDBARS"))
+        else
+            HealBot_Aux_setLuVars("FluidInUse", HealBot_Globals.OverrideEffects["FLUIDBARS"])
+            HealBot_Action_setLuVars("FluidInUse", HealBot_Globals.OverrideEffects["FLUIDBARS"])
         end
     else
         HealBot_Aux_setLuVars("FluidInUse", false)
@@ -10569,7 +10708,7 @@ function HealBot_Options_CommandsButton_OnClick(self)
     elseif hb_lVars["hbCommands"] == 16 then
         HealBot_Options_ToggleMainAssist()
     elseif hb_lVars["hbCommands"] == 17 then
-        HealBot_Include_Skin(HEALBOT_OPTIONS_GROUPHEALS, false)
+        HealBot_Include_Skin(HEALBOT_SORTBY_GROUP, false)
     elseif hb_lVars["hbCommands"] == 18 then
         HealBot_Include_Skin(HEALBOT_OPTIONS_RAID25, false)
     elseif hb_lVars["hbCommands"] == 19 then
@@ -11100,6 +11239,21 @@ function HealBot_Options_ExtraSubSort_DropDown()
 end
 
 --------------------------------------------------------------------------------
+function HealBot_Options_Override_EffectsBarsUse_DropDown()
+      --HealBot_setCall("HealBot_Options_Override_EffectsBarsUse_DropDown")
+    local info=UIDropDownMenu_CreateInfo()
+    for j=1, getn(HealBot_Options_UseOverrides_List), 1 do
+        info.text=HealBot_Options_UseOverrides_List[j];
+        info.func=function(self)
+                        HealBot_Globals.OverrideEffects["USEBARS"]=self:GetID()
+                        UIDropDownMenu_SetText(HealBot_Options_Override_EffectsBarsUse,HealBot_Options_UseOverrides_List[HealBot_Globals.OverrideEffects["USEBARS"]])
+                        HealBot_Timers_Set("LAST","OverrideEffectsUseToggle")
+                    end
+        info.checked=false;
+        if HealBot_Globals.OverrideEffects["USEBARS"] == j then info.checked=true end
+        UIDropDownMenu_AddButton(info);
+    end
+end
 
 function HealBot_Options_Override_EffectsUse_DropDown()
       --HealBot_setCall("HealBot_Options_Override_EffectsUse_DropDown")
@@ -11122,16 +11276,9 @@ function HealBot_Options_Override_EffectsUse_Toggle()
     HealBot_Options_DoEffects_DropDowns()
     if HealBot_Globals.OverrideEffects["USE"] == 1 then
         HealBot_Options_ObjectsEnableDisable("HealBot_Options_OverrideUseHealthDrop",false)
-        HealBot_Options_ObjectsEnableDisable("HealBot_Options_OverrideUseFluidBars",false)
-        HealBot_Options_UseOverrideFocusGroups:SetAlpha(0.4)
-        HealBot_Options_OverrideHotBarDebuffPrio:SetAlpha(0.4)
-        HealBot_Options_ObjectsEnableDisable("HealBot_Options_OverrideBarUpdateFreq",false)
         HealBot_Options_ObjectsEnableDisable("HealBot_Options_OverrideHealthDropPct",false)
-        HealBot_Options_ObjectsEnableDisable("HealBot_Options_OverrideHotBarHealthThres",false)
         HealBot_Options_ObjectsEnableDisable("HealBot_Options_OverrideHealthDropSpeed",false)
         HealBot_Options_ObjectsEnableDisable("HealBot_Options_OverrideHealthDropCancel",false)
-        HealBot_Options_ObjectsEnableDisable("HealBot_Options_OverrideFocusGroupDimming",false)
-        HealBot_Options_ObjectsEnableDisable("HealBot_Options_OverrideHotBarDimming",false)
         HealBot_Options_ObjectsEnableDisable("HealBot_Options_OverrideAuxBarFlashFreq",false)
         HealBot_Options_ObjectsEnableDisable("HealBot_Options_OverrideAuxBarFlashAlphaMin",false)
         HealBot_Options_ObjectsEnableDisable("HealBot_Options_OverrideAuxBarFlashAlphaMax",false)
@@ -11141,22 +11288,9 @@ function HealBot_Options_Override_EffectsUse_Toggle()
         HealBot_Options_ObjectsEnableDisable("HealBot_Options_OverrideGlowSizeBar",false)
         HealBot_Options_ObjectsEnableDisable("HealBot_Options_OverrideGlowSizeIcon",false)
         HealBot_Options_ObjectsEnableDisable("HealBot_Options_UseHealthDrop",true)
-        HealBot_Options_ObjectsEnableDisable("HealBot_Options_UseFluidBars",true)
-        HealBot_Options_UseFocusGroups:SetAlpha(1)
-        HealBot_Options_HotBarDebuffPrio:SetAlpha(1)
-        for x=1,8 do
-            HealBot_Options_ObjectsEnableDisable("HealBot_Options_OverrideEFGroup"..x,false)
-        end
-        for x=1,8 do
-            HealBot_Options_ObjectsEnableDisable("HealBot_Options_EFGroup"..x,true)
-        end
         HealBot_Options_ObjectsEnableDisable("HealBot_Options_HealthDropPct",true)
         HealBot_Options_ObjectsEnableDisable("HealBot_Options_HealthDropSpeed",true)
         HealBot_Options_ObjectsEnableDisable("HealBot_Options_HealthDropCancel",true)
-        HealBot_Options_ObjectsEnableDisable("HealBot_Options_HotBarHealthThres",true)
-        HealBot_Options_ObjectsEnableDisable("HealBot_Options_BarUpdateFreq",true)
-        HealBot_Options_ObjectsEnableDisable("HealBot_Options_FocusGroupDimming",true)
-        HealBot_Options_ObjectsEnableDisable("HealBot_Options_HotBarDimming",true)
         HealBot_Options_ObjectsEnableDisable("HealBot_Options_AuxBarFlashFreq",true)
         HealBot_Options_ObjectsEnableDisable("HealBot_Options_AuxBarFlashAlphaMin",true)
         HealBot_Options_ObjectsEnableDisable("HealBot_Options_AuxBarFlashAlphaMax",true)
@@ -11167,12 +11301,6 @@ function HealBot_Options_Override_EffectsUse_Toggle()
         HealBot_Options_ObjectsEnableDisable("HealBot_Options_GlowSizeIcon",true)
         g=_G["HealBot_OverrideHealthDrop_FontStr"]
         g:SetTextColor(1,1,1,0.4)
-        g=_G["HealBot_OverrideHotBars_FontStr"]
-        g:SetTextColor(1,1,1,0.4)
-        g=_G["HealBot_OverrideEffectsFluid_FontStr"]
-        g:SetTextColor(1,1,1,0.4)
-        g=_G["HealBot_SkinsOverrideFocusGroupsText"]
-        g:SetTextColor(1,1,1,0.4)
         g=_G["HealBot_SkinsOverrideBorderHazardText"]
         g:SetTextColor(1,1,1,0.4)
         g=_G["HealBot_SkinsOverrideGlowSizeText"]
@@ -11181,32 +11309,19 @@ function HealBot_Options_Override_EffectsUse_Toggle()
         g:SetTextColor(1,1,1,0.4)
         g=_G["HealBot_HealthDrop_FontStr"]
         g:SetTextColor(1,1,1,1)
-        g=_G["HealBot_EffectsFluid_FontStr"]
-        g:SetTextColor(1,1,1,1)
         g=_G["HealBot_AuxBarsAssign_FontStr"]
         g:SetTextColor(1,1,1,1)
         g=_G["HealBot_SkinsBorderHazardText"]
         g:SetTextColor(1,1,1,1)
         g=_G["HealBot_SkinsGlowSizeText"]
         g:SetTextColor(1,1,1,1)
-        g=_G["HealBot_SkinsFocusGroupsText"]
-        g:SetTextColor(1,1,1,1)
-        g=_G["HealBot_HotBars_FontStr"]
-        g:SetTextColor(1,1,1,1)
         HealBot_Options_Skin_EffectsOverrideLink:Hide()
         HealBot_Options_Override_EffectsSkinLink:Show()
     else
         HealBot_Options_ObjectsEnableDisable("HealBot_Options_OverrideUseHealthDrop",true)
-        HealBot_Options_ObjectsEnableDisable("HealBot_Options_OverrideUseFluidBars",true)
-        HealBot_Options_UseOverrideFocusGroups:SetAlpha(1)
-        HealBot_Options_OverrideHotBarDebuffPrio:SetAlpha(1)
-        HealBot_Options_ObjectsEnableDisable("HealBot_Options_OverrideBarUpdateFreq",true)
         HealBot_Options_ObjectsEnableDisable("HealBot_Options_OverrideHealthDropPct",true)
-        HealBot_Options_ObjectsEnableDisable("HealBot_Options_OverrideHotBarHealthThres",true)
         HealBot_Options_ObjectsEnableDisable("HealBot_Options_OverrideHealthDropSpeed",true)
         HealBot_Options_ObjectsEnableDisable("HealBot_Options_OverrideHealthDropCancel",true)
-        HealBot_Options_ObjectsEnableDisable("HealBot_Options_OverrideFocusGroupDimming",true)
-        HealBot_Options_ObjectsEnableDisable("HealBot_Options_OverrideHotBarDimming",true)
         HealBot_Options_ObjectsEnableDisable("HealBot_Options_OverrideAuxBarFlashFreq",true)
         HealBot_Options_ObjectsEnableDisable("HealBot_Options_OverrideAuxBarFlashAlphaMin",true)
         HealBot_Options_ObjectsEnableDisable("HealBot_Options_OverrideAuxBarFlashAlphaMax",true)
@@ -11216,22 +11331,9 @@ function HealBot_Options_Override_EffectsUse_Toggle()
         HealBot_Options_ObjectsEnableDisable("HealBot_Options_OverrideGlowSizeBar",true)
         HealBot_Options_ObjectsEnableDisable("HealBot_Options_OverrideGlowSizeIcon",true)
         HealBot_Options_ObjectsEnableDisable("HealBot_Options_UseHealthDrop",false)
-        HealBot_Options_ObjectsEnableDisable("HealBot_Options_UseFluidBars",false)
-        HealBot_Options_UseFocusGroups:SetAlpha(0.4)
-        HealBot_Options_HotBarDebuffPrio:SetAlpha(0.4)
-        for x=1,8 do
-            HealBot_Options_ObjectsEnableDisable("HealBot_Options_OverrideEFGroup"..x,true)
-        end
-        for x=1,8 do
-            HealBot_Options_ObjectsEnableDisable("HealBot_Options_EFGroup"..x,false)
-        end
         HealBot_Options_ObjectsEnableDisable("HealBot_Options_HealthDropPct",false)
         HealBot_Options_ObjectsEnableDisable("HealBot_Options_HealthDropSpeed",false)
         HealBot_Options_ObjectsEnableDisable("HealBot_Options_HealthDropCancel",false)
-        HealBot_Options_ObjectsEnableDisable("HealBot_Options_HotBarHealthThres",false)
-        HealBot_Options_ObjectsEnableDisable("HealBot_Options_BarUpdateFreq",false)
-        HealBot_Options_ObjectsEnableDisable("HealBot_Options_FocusGroupDimming",false)
-        HealBot_Options_ObjectsEnableDisable("HealBot_Options_HotBarDimming",false)
         HealBot_Options_ObjectsEnableDisable("HealBot_Options_AuxBarFlashFreq",false)
         HealBot_Options_ObjectsEnableDisable("HealBot_Options_AuxBarFlashAlphaMin",false)
         HealBot_Options_ObjectsEnableDisable("HealBot_Options_AuxBarFlashAlphaMax",false)
@@ -11240,27 +11342,15 @@ function HealBot_Options_Override_EffectsUse_Toggle()
         HealBot_Options_ObjectsEnableDisable("HealBot_Options_BorderHazardMinAlpha",false)
         HealBot_Options_ObjectsEnableDisable("HealBot_Options_GlowSizeBar",false)
         HealBot_Options_ObjectsEnableDisable("HealBot_Options_GlowSizeIcon",false)
-        g=_G["HealBot_EffectsFluid_FontStr"]
-        g:SetTextColor(1,1,1,0.4)
         g=_G["HealBot_AuxBarsAssign_FontStr"]
         g:SetTextColor(1,1,1,0.4)
         g=_G["HealBot_SkinsBorderHazardText"]
         g:SetTextColor(1,1,1,0.4)
         g=_G["HealBot_SkinsGlowSizeText"]
         g:SetTextColor(1,1,1,0.4)
-        g=_G["HealBot_SkinsFocusGroupsText"]
-        g:SetTextColor(1,1,1,0.4)
         g=_G["HealBot_HealthDrop_FontStr"]
         g:SetTextColor(1,1,1,0.4)
-        g=_G["HealBot_HotBars_FontStr"]
-        g:SetTextColor(1,1,1,0.4)
-        g=_G["HealBot_OverrideEffectsFluid_FontStr"]
-        g:SetTextColor(1,1,1,1)
         g=_G["HealBot_OverrideHealthDrop_FontStr"]
-        g:SetTextColor(1,1,1,1)
-        g=_G["HealBot_OverrideHotBars_FontStr"]
-        g:SetTextColor(1,1,1,1)
-        g=_G["HealBot_SkinsOverrideFocusGroupsText"]
         g:SetTextColor(1,1,1,1)
         g=_G["HealBot_SkinsOverrideGlowSizeText"]
         g:SetTextColor(1,1,1,1)
@@ -11270,6 +11360,113 @@ function HealBot_Options_Override_EffectsUse_Toggle()
         g:SetTextColor(1,1,1,1)
         HealBot_Options_Override_EffectsSkinLink:Hide()
         HealBot_Options_Skin_EffectsOverrideLink:Show()
+    end
+    if HealBot_Globals.OverrideEffects["USEBARS"] == 1 then
+        HealBot_Options_ObjectsEnableDisable("HealBot_Options_OverrideBarUpdateFreq",false)
+        HealBot_Options_ObjectsEnableDisable("HealBot_Options_OverrideUseFluidBars",false)
+        HealBot_Options_ObjectsEnableDisable("HealBot_Options_OverrideGroupHealthMinUnits",false)
+        HealBot_Options_ObjectsEnableDisable("HealBot_Options_OverrideGroupHealthThres",false)
+        HealBot_Options_ObjectsEnableDisable("HealBot_Options_OverrideGroupHealthDimming",false)
+        HealBot_Options_ObjectsEnableDisable("HealBot_Options_OverrideHotBarHealthThres",false)
+        for x=1,8 do
+            HealBot_Options_ObjectsEnableDisable("HealBot_Options_OverrideEFGroup"..x,false)
+        end
+        for x=1,8 do
+            HealBot_Options_ObjectsEnableDisable("HealBot_Options_EFGroup"..x,true)
+        end
+        HealBot_Options_ObjectsEnableDisable("HealBot_Options_OverrideFocusGroupDimming",false)
+        HealBot_Options_ObjectsEnableDisable("HealBot_Options_OverrideHotBarDimming",false)
+        HealBot_Options_ObjectsEnableDisable("HealBot_Options_UseFluidBars",true)
+        HealBot_Options_UseOverrideFocusGroups:SetAlpha(0.4)
+        HealBot_Options_OverrideHotBarDebuffPrio:SetAlpha(0.4)
+        HealBot_Options_OverrideGroupHealthRange:SetAlpha(0.4)
+        HealBot_Options_UseFocusGroups:SetAlpha(1)
+        HealBot_Options_HotBarDebuffPrio:SetAlpha(1)
+        HealBot_Options_GroupHealthRange:SetAlpha(1)
+        HealBot_Options_ObjectsEnableDisable("HealBot_Options_BarUpdateFreq",true)
+        HealBot_Options_ObjectsEnableDisable("HealBot_Options_FocusGroupDimming",true)
+        HealBot_Options_ObjectsEnableDisable("HealBot_Options_GroupHealthMinUnits",true)
+        HealBot_Options_ObjectsEnableDisable("HealBot_Options_GroupHealthThres",true)
+        HealBot_Options_ObjectsEnableDisable("HealBot_Options_GroupHealthDimming",true)
+        HealBot_Options_ObjectsEnableDisable("HealBot_Options_HotBarDimming",true)
+        HealBot_Options_ObjectsEnableDisable("HealBot_Options_HotBarHealthThres",true)
+        g=_G["HealBot_OverrideEffectsFluid_FontStr"]
+        g:SetTextColor(1,1,1,0.4)
+        g=_G["HealBot_OverrideHotBars_FontStr"]
+        g:SetTextColor(1,1,1,0.4)
+        g=_G["HealBot_SkinsOverrideFocusGroupsText"]
+        g:SetTextColor(1,1,1,0.4)
+        g=_G["HealBot_SkinsOverrideFocusGroupsIncText"]
+        g:SetTextColor(OptionThemes[HealBot_Globals.OptionsTheme]["R"],
+                       OptionThemes[HealBot_Globals.OptionsTheme]["G"],
+                       OptionThemes[HealBot_Globals.OptionsTheme]["B"],
+                       0.4)
+        g=_G["HealBot_OverrideGroupBars_FontStr"]
+        g:SetTextColor(1,1,1,0.4)
+        g=_G["HealBot_SkinsFocusGroupsText"]
+        g:SetTextColor(1,1,1,1)
+        HealBot_Options_SetLabel("HealBot_SkinsFocusGroupsIncText",HEALBOT_OPTIONS_EMERGFILTERGROUPS)
+        g=_G["HealBot_HotBars_FontStr"]
+        g:SetTextColor(1,1,1,1)
+        g=_G["HealBot_EffectsFluid_FontStr"]
+        g:SetTextColor(1,1,1,1)
+        g=_G["HealBot_GroupBars_FontStr"]
+        g:SetTextColor(1,1,1,1)
+        HealBot_Options_Override_EffectsSkinBarsLink:Show()
+        HealBot_Options_Skin_EffectsOverrideBarsLink:Hide()
+    else
+        HealBot_Options_ObjectsEnableDisable("HealBot_Options_OverrideUseFluidBars",true)
+        for x=1,8 do
+            HealBot_Options_ObjectsEnableDisable("HealBot_Options_OverrideEFGroup"..x,true)
+        end
+        for x=1,8 do
+            HealBot_Options_ObjectsEnableDisable("HealBot_Options_EFGroup"..x,false)
+        end
+        HealBot_Options_ObjectsEnableDisable("HealBot_Options_OverrideFocusGroupDimming",true)
+        HealBot_Options_ObjectsEnableDisable("HealBot_Options_OverrideGroupHealthMinUnits",true)
+        HealBot_Options_ObjectsEnableDisable("HealBot_Options_OverrideGroupHealthThres",true)
+        HealBot_Options_ObjectsEnableDisable("HealBot_Options_OverrideGroupHealthDimming",true)
+        HealBot_Options_ObjectsEnableDisable("HealBot_Options_OverrideHotBarDimming",true)
+        HealBot_Options_ObjectsEnableDisable("HealBot_Options_OverrideHotBarHealthThres",true)
+        HealBot_Options_ObjectsEnableDisable("HealBot_Options_UseFluidBars",false)
+        HealBot_Options_ObjectsEnableDisable("HealBot_Options_OverrideBarUpdateFreq",true)
+        HealBot_Options_UseOverrideFocusGroups:SetAlpha(1)
+        HealBot_Options_OverrideHotBarDebuffPrio:SetAlpha(1)
+        HealBot_Options_OverrideGroupHealthRange:SetAlpha(1)
+        HealBot_Options_UseFocusGroups:SetAlpha(0.4)
+        HealBot_Options_HotBarDebuffPrio:SetAlpha(0.4)
+        HealBot_Options_GroupHealthRange:SetAlpha(0.4)
+        HealBot_Options_ObjectsEnableDisable("HealBot_Options_BarUpdateFreq",false)
+        HealBot_Options_ObjectsEnableDisable("HealBot_Options_FocusGroupDimming",false)
+        HealBot_Options_ObjectsEnableDisable("HealBot_Options_GroupHealthMinUnits",false)
+        HealBot_Options_ObjectsEnableDisable("HealBot_Options_GroupHealthThres",false)
+        HealBot_Options_ObjectsEnableDisable("HealBot_Options_GroupHealthDimming",false)
+        HealBot_Options_ObjectsEnableDisable("HealBot_Options_HotBarDimming",false)
+        HealBot_Options_ObjectsEnableDisable("HealBot_Options_HotBarHealthThres",false)
+        g=_G["HealBot_EffectsFluid_FontStr"]
+        g:SetTextColor(1,1,1,0.4)
+        g=_G["HealBot_HotBars_FontStr"]
+        g:SetTextColor(1,1,1,0.4)
+        g=_G["HealBot_SkinsFocusGroupsText"]  
+        g:SetTextColor(1,1,1,0.4)
+        g=_G["HealBot_SkinsFocusGroupsIncText"]
+        g:SetTextColor(OptionThemes[HealBot_Globals.OptionsTheme]["R"],
+                       OptionThemes[HealBot_Globals.OptionsTheme]["G"],
+                       OptionThemes[HealBot_Globals.OptionsTheme]["B"],
+                       0.4)
+        g=_G["HealBot_GroupBars_FontStr"]
+        g:SetTextColor(1,1,1,0.4)
+        g=_G["HealBot_OverrideHotBars_FontStr"]
+        g:SetTextColor(1,1,1,1)
+        g=_G["HealBot_SkinsOverrideFocusGroupsText"]
+        HealBot_Options_SetLabel("HealBot_SkinsOverrideFocusGroupsIncText",HEALBOT_OPTIONS_EMERGFILTERGROUPS)
+        g:SetTextColor(1,1,1,1)
+        g=_G["HealBot_OverrideEffectsFluid_FontStr"]
+        g:SetTextColor(1,1,1,1)
+        g=_G["HealBot_OverrideGroupBars_FontStr"]
+        g:SetTextColor(1,1,1,1)
+        HealBot_Options_Override_EffectsSkinBarsLink:Hide()
+        HealBot_Options_Skin_EffectsOverrideBarsLink:Show()
     end
     HealBot_Timers_Set("AUX","BarFlashAlphaMinMax")
     HealBot_Timers_Set("LAST","BarFreqVars")
@@ -13723,9 +13920,9 @@ function HealBot_Options_CopyTab2Frames(frame, tab)
         hbv_Skins_SetFrameVar(hbv_Skins_GetFrameVar("BarTextCol", "SSCR", f), "BarTextCol", "SSCR", frame)
         hbv_Skins_SetFrameVar(hbv_Skins_GetFrameVar("BarTextCol", "SSCG", f), "BarTextCol", "SSCG", frame)
         hbv_Skins_SetFrameVar(hbv_Skins_GetFrameVar("BarTextCol", "SSCB", f), "BarTextCol", "SSCB", frame)
-        hbv_Skins_SetFrameVar(hbv_Skins_GetFrameVar("BarTextCol", "SRIP", f), "BarTextCol", "SRIP", frame)
-        hbv_Skins_SetFrameVar(hbv_Skins_GetFrameVar("BarTextCol", "SRES", f), "BarTextCol", "SRES", frame)
-        hbv_Skins_SetFrameVar(hbv_Skins_GetFrameVar("BarTextCol", "SSUM", f), "BarTextCol", "SSUM", frame)
+        hbv_Skins_SetFrameVar(hbv_Skins_GetFrameBoolean("BarTextCol", "SRIP", f), "BarTextCol", "SRIP", frame)
+        hbv_Skins_SetFrameVar(hbv_Skins_GetFrameBoolean("BarTextCol", "SRES", f), "BarTextCol", "SRES", frame)
+        hbv_Skins_SetFrameVar(hbv_Skins_GetFrameBoolean("BarTextCol", "SSUM", f), "BarTextCol", "SSUM", frame)
         hbv_Skins_SetFrameVar(hbv_Skins_GetFrameVar("BarTextCol", "STATE", f), "BarTextCol", "STATE", frame)
         hbv_Skins_SetFrameVar(hbv_Skins_GetFrameBoolean("BarText", "TAGSTATEONLYTIP", f), "BarText", "TAGSTATEONLYTIP", frame)
         hbv_Skins_SetFrameVar(hbv_Skins_GetFrameVar("BarText", "TAGDC", f), "BarText", "TAGDC", frame)
@@ -13754,12 +13951,12 @@ function HealBot_Options_CopyTab2Frames(frame, tab)
         hbv_Skins_SetFrameVar(hbv_Skins_GetFrameVar("BarTextCol", "NCCB", f), "BarTextCol", "NCCB", frame)
         hbv_Skins_SetFrameVar(hbv_Skins_GetFrameVar("BarTextCol", "NIT", f), "BarTextCol", "NIT", frame)
         hbv_Skins_SetFrameVar(hbv_Skins_GetFrameVar("BarTextCol", "NCT", f), "BarTextCol", "NCT", frame)
-        hbv_Skins_SetFrameVar(hbv_Skins_GetFrameVar("BarTextCol", "RIP", f), "BarTextCol", "RIP", frame)
-        hbv_Skins_SetFrameVar(hbv_Skins_GetFrameVar("BarTextCol", "RES", f), "BarTextCol", "RES", frame)
-        hbv_Skins_SetFrameVar(hbv_Skins_GetFrameVar("BarTextCol", "SUM", f), "BarTextCol", "SUM", frame)
+        hbv_Skins_SetFrameVar(hbv_Skins_GetFrameBoolean("BarTextCol", "RIP", f), "BarTextCol", "RIP", frame)
+        hbv_Skins_SetFrameVar(hbv_Skins_GetFrameBoolean("BarTextCol", "RES", f), "BarTextCol", "RES", frame)
+        hbv_Skins_SetFrameVar(hbv_Skins_GetFrameBoolean("BarTextCol", "SUM", f), "BarTextCol", "SUM", frame)
         hbv_Skins_SetFrameVar(hbv_Skins_GetFrameVar("BarTextCol", "NCDA", f), "BarTextCol", "NCDA", frame)
         hbv_Skins_SetFrameVar(hbv_Skins_GetFrameVar("BarTextCol", "NAME", f), "BarTextCol", "NAME", frame)
-        hbv_Skins_SetFrameVar(hbv_Skins_GetFrameVar("BarTextCol", "NDEBUFF", f), "BarTextCol", "NDEBUFF", frame)
+        hbv_Skins_SetFrameVar(hbv_Skins_GetFrameBoolean("BarTextCol", "NDEBUFF", f), "BarTextCol", "NDEBUFF", frame)
         hbv_Skins_SetFrameVar(hbv_Skins_GetFrameBoolean("BarText", "NAMEONBAR", f), "BarText", "NAMEONBAR", frame)
         hbv_Skins_SetFrameVar(hbv_Skins_GetFrameBoolean("BarText", "CLASSONBAR", f), "BarText", "CLASSONBAR", frame)
         hbv_Skins_SetFrameVar(hbv_Skins_GetFrameBoolean("BarText", "SHOWROLE", f), "BarText", "SHOWROLE", frame)
@@ -13798,7 +13995,7 @@ function HealBot_Options_CopyTab2Frames(frame, tab)
         hbv_Skins_SetFrameVar(hbv_Skins_GetFrameVar("BarTextCol", "ICB", f), "BarTextCol", "ICB", frame)
         hbv_Skins_SetFrameVar(hbv_Skins_GetFrameVar("BarTextCol", "HCDA", f), "BarTextCol", "HCDA", frame)
         hbv_Skins_SetFrameVar(hbv_Skins_GetFrameVar("BarTextCol", "HLTH", f), "BarTextCol", "HLTH", frame)
-        hbv_Skins_SetFrameVar(hbv_Skins_GetFrameVar("BarTextCol", "HDEBUFF", f), "BarTextCol", "HDEBUFF", frame)
+        hbv_Skins_SetFrameVar(hbv_Skins_GetFrameBoolean("BarTextCol", "HDEBUFF", f), "BarTextCol", "HDEBUFF", frame)
         hbv_Skins_SetFrameVar(hbv_Skins_GetFrameBoolean("BarText", "HLTHONBAR", f), "BarText", "HLTHONBAR", frame)
         hbv_Skins_SetFrameVar(hbv_Skins_GetFrameVar("BarText", "INCHEALS", f), "BarText", "INCHEALS", frame)
         hbv_Skins_SetFrameVar(hbv_Skins_GetFrameVar("BarText", "INCABSORBS", f), "BarText", "INCABSORBS", frame)
@@ -16477,17 +16674,23 @@ function HealBot_Options_DoEffects_DropDowns()
     HealBot_Options_UseFocusGroups.initialize=HealBot_Options_UseFocusGroups_DropDown
     HealBot_Options_UseOverrideFocusGroups.initialize=HealBot_Options_UseOverrideFocusGroups_DropDown
     HealBot_Options_HotBarDebuffPrio.initialize=HealBot_Options_HotBarDebuffPrio_DropDown
+    HealBot_Options_GroupHealthRange.initialize=HealBot_Options_GroupHealthRange_DropDown
     HealBot_Options_OverrideHotBarDebuffPrio.initialize=HealBot_Options_OverrideHotBarDebuffPrio_DropDown
-    if HealBot_Globals.OverrideEffects["USE"] == 2 then
+    HealBot_Options_OverrideGroupHealthRange.initialize=HealBot_Options_OverrideGroupHealthRange_DropDown
+    if HealBot_Globals.OverrideEffects["USEBARS"] == 2 then
         UIDropDownMenu_SetText(HealBot_Options_UseOverrideFocusGroups, HealBot_Options_UseOverrideFocusGroups_List[HealBot_Globals.OverrideEffects["FOCUSGROUPS"]])
         UIDropDownMenu_SetText(HealBot_Options_OverrideHotBarDebuffPrio, HealBot_Options_Lists["HotBarsDebuffPrio"][HealBot_Globals.OverrideEffects["HOTBARDEBUFF"]])
+        UIDropDownMenu_SetText(HealBot_Options_OverrideGroupHealthRange, HealBot_Options_Lists["GroupHealthRange"][HealBot_Globals.OverrideEffects["GHRANGE"]])
         UIDropDownMenu_SetText(HealBot_Options_UseFocusGroups," ")
         UIDropDownMenu_SetText(HealBot_Options_HotBarDebuffPrio," ")
+        UIDropDownMenu_SetText(HealBot_Options_GroupHealthRange," ")
     else
         UIDropDownMenu_SetText(HealBot_Options_UseFocusGroups, HealBot_Options_UseOverrideFocusGroups_List[hbv_Skins_GetVar("General", "FOCUSGROUPS")])
         UIDropDownMenu_SetText(HealBot_Options_HotBarDebuffPrio, HealBot_Options_Lists["HotBarsDebuffPrio"][hbv_Skins_GetVar("General", "HOTBARDEBUFF")])
+        UIDropDownMenu_SetText(HealBot_Options_GroupHealthRange, HealBot_Options_Lists["GroupHealthRange"][hbv_Skins_GetVar("General", "GHRANGE")])
         UIDropDownMenu_SetText(HealBot_Options_UseOverrideFocusGroups," ")
         UIDropDownMenu_SetText(HealBot_Options_OverrideHotBarDebuffPrio," ")
+        UIDropDownMenu_SetText(HealBot_Options_OverrideGroupHealthRange," ")
     end
 end
 
@@ -16675,7 +16878,7 @@ function HealBot_Options_ExtraSkins_DropDown(self, level, menuList)
             info.menuList=HealBot_Options_ExtraSkinsCat_List[j], true, HealBot_Options_ExtraSkinsCat_List[j]
             UIDropDownMenu_AddButton(info)
         end
-    elseif menuList == HEALBOT_EXTRASKINS_CAT_GROUP then
+    elseif menuList == HEALBOT_SORTBY_GROUP then
         local skinlist=HealBot_ExtraSkins_retNamesForCat("GROUP")
         for j=1, getn(skinlist), 1 do
             info.text=skinlist[j];
@@ -22556,10 +22759,10 @@ function HealBot_Options_SetDefaults(global)
         HealBot_Config.CurrentSpec=1
         Healbot_Config_Skins.Current_Skin=HEALBOT_SKINS_STD
         Healbot_Config_Skins.Author[HEALBOT_SKINS_STD]=nil
-        Healbot_Config_Skins.Author[HEALBOT_OPTIONS_GROUPHEALS]=nil
+        Healbot_Config_Skins.Author[HEALBOT_SORTBY_GROUP]=nil
         Healbot_Config_Skins.Author[HEALBOT_OPTIONS_RAID25]=nil
         Healbot_Config_Skins.Author[HEALBOT_OPTIONS_RAID40]=nil
-        HealBot_Include_Skin(HEALBOT_OPTIONS_GROUPHEALS, true)
+        HealBot_Include_Skin(HEALBOT_SORTBY_GROUP, true)
         HealBot_Include_Skin(HEALBOT_OPTIONS_RAID25, true)
         HealBot_Include_Skin(HEALBOT_OPTIONS_RAID40, true)
         HealBot_Include_Skin(HEALBOT_SKINS_STD, false)
@@ -22727,12 +22930,15 @@ function HealBot_Options_OnLoad(self, caller)
     HealBot_Options_Content_InnerPanel(_G["HealBot_Options_EmergLFrame"], 0.7)
     HealBot_Options_Content_InnerPanel(_G["HealBot_Options_Override_EffectsFrame"], 0.7)
     HealBot_Options_Content_InnerPanel(_G["HealBot_Options_OverrideHotBarsPanel"], 0.7)
+    HealBot_Options_Content_InnerPanel(_G["HealBot_Options_OverrideGroupBarsPanel"], 0.7)
     HealBot_Options_Content_InnerPanel(_G["HealBot_Options_OverrideHealthDropPanel"], 0.7)
     HealBot_Options_Content_InnerPanel(_G["HealBot_Options_OverrideFluidBarsPanel"], 0.7)
     HealBot_Options_Content_InnerPanel(_G["HealBot_Options_EffectsOverrideFocusGroups"], 0.7)
     HealBot_Options_Content_InnerPanel(_G["HealBot_Options_EffectsOverrideGlowSize"], 0.7)
     HealBot_Options_Content_InnerPanel(_G["HealBot_Options_EffectsOverrideBorderHazard"], 0.7)
     HealBot_Options_Content_InnerPanel(_G["HealBot_Options_OverrideFlashEffectPanel"], 0.7)
+    HealBot_Options_Content_InnerPanel(_G["HealBot_Options_OverrideEffectBorder"], 0.5)
+    HealBot_Options_Content_InnerPanel(_G["HealBot_Options_OverrideEffectBars"], 0.5)
     HealBot_Options_Content_InnerPanel(_G["HealBot_Options_Override_ColourFrame"], 0.7)
     HealBot_Options_Content_InnerPanel(_G["HealBot_Options_OverrideColoursClass"], 0.5)
     HealBot_Options_Content_InnerPanel(_G["HealBot_Options_OverrideColoursRole"], 0.5)
@@ -22752,6 +22958,8 @@ function HealBot_Options_OnLoad(self, caller)
     HealBot_Options_Content_InnerPanel(_G["HealBot_Options_ActionIconsAlertFilterButtons"], 0.4)
     HealBot_Options_Content_InnerPanel(_G["HealBot_Options_HealGroupsSkinsFrame"], 0.7)
     HealBot_Options_Content_InnerPanel(_G["HealBot_Options_EffectsSkinsFrame"], 0.7)
+    HealBot_Options_Content_InnerPanel(_G["HealBot_Options_EffectBorder"], 0.5)
+    HealBot_Options_Content_InnerPanel(_G["HealBot_Options_EffectBars"], 0.5)
     HealBot_Options_Content_InnerPanel(_G["HealBot_Options_EnemySkinsFrame"], 0.7)
     HealBot_Options_Content_InnerPanel(_G["HealBot_Options_ColourSkinsFrame"], 0.7)
     HealBot_Options_Content_InnerPanel(_G["HealBot_Options_SkinsColoursClass"], 0.5)
@@ -22770,6 +22978,7 @@ function HealBot_Options_OnLoad(self, caller)
     HealBot_Options_Content_InnerPanel(_G["HealBot_Options_HealthDropPanel"], 0.5)
     HealBot_Options_Content_InnerPanel(_G["HealBot_Options_HotBarsPanel"], 0.5)
     HealBot_Options_Content_InnerPanel(_G["HealBot_Options_FlashEffectFocusGroups"], 0.5)
+    HealBot_Options_Content_InnerPanel(_G["HealBot_Options_GroupBarsPanel"], 0.5)
     HealBot_Options_Content_InnerPanel(_G["HealBot_Options_FlashEffectPanel"], 0.5)
     HealBot_Options_Content_InnerPanel(_G["HealBot_Options_EffectsBorderHazard"], 0.5)
     HealBot_Options_Content_InnerPanel(_G["HealBot_Options_EffectsGlowSize"], 0.5)
@@ -22892,8 +23101,14 @@ function HealBot_Options_OnLoad(self, caller)
     HealBot_Options_InnerContent_Colour(_G["HealBot_Options_TipsSpellsb"],_G["HealBot_Options_TipsSpellsbTxt"],false)
     HealBot_Options_InnerContent_Colour(_G[hb_lVars["CurrentTipsPanelButton"]],
                                    _G[hb_lVars["CurrentTipsPanelButton"].."Txt"],true)
-
-
+    HealBot_Options_InnerContent_Colour(_G["HealBot_Options_OverrideEffectBorderb"],_G["HealBot_Options_OverrideEffectBorderbTxt"],false)
+    HealBot_Options_InnerContent_Colour(_G["HealBot_Options_OverrideEffectBarsb"],_G["HealBot_Options_OverrideEffectBarsbTxt"],false)
+    HealBot_Options_InnerContent_Colour(_G[hb_lVars["CurrentOverrideEffectsPanelButton"]],
+                                        _G[hb_lVars["CurrentOverrideEffectsPanelButton"].."Txt"],true)
+    HealBot_Options_InnerContent_Colour(_G["HealBot_Options_EffectBorderb"],_G["HealBot_Options_EffectBorderbTxt"],false)
+    HealBot_Options_InnerContent_Colour(_G["HealBot_Options_EffectBarsb"],_G["HealBot_Options_EffectBarsbTxt"],false)
+    HealBot_Options_InnerContent_Colour(_G[hb_lVars["CurrentEffectsPanelButton"]],
+                                        _G[hb_lVars["CurrentEffectsPanelButton"].."Txt"],true)
     HealBot_Options_InnerContent_Colour(_G["HealBot_Options_OverrideColoursClassb"],_G["HealBot_Options_OverrideColoursClassbTxt"],false)
     HealBot_Options_InnerContent_Colour(_G["HealBot_Options_OverrideColoursRoleb"],_G["HealBot_Options_OverrideColoursRolebTxt"],false)
     HealBot_Options_InnerContent_Colour(_G["HealBot_Options_OverrideColoursPowerb"],_G["HealBot_Options_OverrideColoursPowerbTxt"],false)
@@ -23125,7 +23340,7 @@ function HealBot_Options_Lang(region, msgchat)
         HealBot_HealGroupsTrans={ [HEALBOT_OPTIONS_SELFHEALS_en]=HEALBOT_OPTIONS_SELFHEALS,
                                   [HEALBOT_OPTIONS_TANKHEALS_en]=HEALBOT_OPTIONS_TANKHEALS,
                                   [HEALBOT_CLASSES_HEALERS_en]=HEALBOT_CLASSES_HEALERS,
-                                  [HEALBOT_OPTIONS_GROUPHEALS_en]=HEALBOT_OPTIONS_GROUPHEALS,
+                                  [HEALBOT_OPTIONS_GROUPHEALS_en]=HEALBOT_SORTBY_GROUP,
                                   [HEALBOT_OPTIONS_MYTARGET_en]=HEALBOT_OPTIONS_MYTARGET,
                                   [HEALBOT_FOCUS_en]=HEALBOT_WORD_FOCUS,
                                   [HEALBOT_OPTIONS_EMERGENCYHEALS_en]=HEALBOT_OPTIONS_EMERGENCYHEALS,
@@ -23468,9 +23683,6 @@ function HealBot_Options_Lang(region, msgchat)
         g=_G["HealBot_EnemySkinEnemyToT_FontStr"]
         g:SetText(HEALBOT_OPTIONS_TAB_TARGETOFTARGET)
         g:SetTextColor(1,1,1,1)
-        g=_G["HealBot_EffectsSkin_FontStr"]
-        g:SetText(HEALBOT_OPTIONS_TAB_EFFECTS)
-        g:SetTextColor(1,1,1,1)
         g=_G["HealBot_Options_Skins_DebuffTxt"]
         g:SetText(HEALBOT_OPTIONS_ICONDEBUFFOPTTEXT)
         g:SetTextColor(1,1,1,1)
@@ -23709,16 +23921,24 @@ function HealBot_Options_ShowTab(tab, subtab)
     elseif tab == "Overrides" then
         HealBot_Options_UpdateTab(10, nil, "Overrides", true)
         if subtab then
-            if subtab == "Effects" then
-                HealBot_Options_ShowOverridePanel("HealBot_Options_Override_EffectsFrame", "HealBot_Options_OverrideEffectb", "OverridesEffects")
+            if subtab == "EffectsBorder" then
+                HealBot_Options_ShowOverridePanel("HealBot_Options_Override_EffectsFrame", "HealBot_Options_OverrideEffectb", "OverridesEffectsBorder")
+                HealBot_Options_ShowOverrideEffectsPanel("HealBot_Options_OverrideEffectBorder", "HealBot_Options_OverrideEffectBorderb", "OverridesEffectsBorder")
+            elseif subtab == "EffectsBars" then
+                HealBot_Options_ShowOverridePanel("HealBot_Options_Override_EffectsFrame", "HealBot_Options_OverrideEffectb", "OverridesEffectsBars")
+                HealBot_Options_ShowOverrideEffectsPanel("HealBot_Options_OverrideEffectBars", "HealBot_Options_OverrideEffectBarsb", "OverridesEffectsBars")
             elseif subtab == "ColsClass" then
-                HealBot_Options_ShowOverridePanel("HealBot_Options_Override_ColourFrame", "HealBot_Options_OverrideColourb", "OverridesColourClass");HealBot_Options_ShowOverrideColourPanel("HealBot_Options_OverrideColoursClass", "HealBot_Options_OverrideColoursClassb", "SkinsColourClass")
+                HealBot_Options_ShowOverridePanel("HealBot_Options_Override_ColourFrame", "HealBot_Options_OverrideColourb", "OverridesColourClass")
+                HealBot_Options_ShowOverrideColourPanel("HealBot_Options_OverrideColoursClass", "HealBot_Options_OverrideColoursClassb", "SkinsColourClass")
             elseif subtab == "ColsRole" then
-                HealBot_Options_ShowOverridePanel("HealBot_Options_Override_ColourFrame", "HealBot_Options_OverrideColourb", "OverridesColourClass");HealBot_Options_ShowOverrideColourPanel("HealBot_Options_OverrideColoursRole", "HealBot_Options_OverrideColoursRoleb", "OverridesColourRole")
+                HealBot_Options_ShowOverridePanel("HealBot_Options_Override_ColourFrame", "HealBot_Options_OverrideColourb", "OverridesColourRole")
+                HealBot_Options_ShowOverrideColourPanel("HealBot_Options_OverrideColoursRole", "HealBot_Options_OverrideColoursRoleb", "OverridesColourRole")
             elseif subtab == "ColsPower" then
-                HealBot_Options_ShowOverridePanel("HealBot_Options_Override_ColourFrame", "HealBot_Options_OverrideColourb", "OverridesColourClass");HealBot_Options_ShowOverrideColourPanel("HealBot_Options_OverrideColoursPower", "HealBot_Options_OverrideColoursPowerb", "OverridesColourPower")
+                HealBot_Options_ShowOverridePanel("HealBot_Options_Override_ColourFrame", "HealBot_Options_OverrideColourb", "OverridesColourPower")
+                HealBot_Options_ShowOverrideColourPanel("HealBot_Options_OverrideColoursPower", "HealBot_Options_OverrideColoursPowerb", "OverridesColourPower")
             elseif subtab == "ColsAdaptive" then
-                HealBot_Options_ShowOverridePanel("HealBot_Options_Override_ColourFrame", "HealBot_Options_OverrideColourb", "OverridesColourClass");HealBot_Options_ShowOverrideColourPanel("HealBot_Options_OverrideColoursAdaptive", "HealBot_Options_OverrideColoursAdaptiveb", "OverridesColourAdaptive")
+                HealBot_Options_ShowOverridePanel("HealBot_Options_Override_ColourFrame", "HealBot_Options_OverrideColourb", "OverridesColourAdaptive")
+                HealBot_Options_ShowOverrideColourPanel("HealBot_Options_OverrideColoursAdaptive", "HealBot_Options_OverrideColoursAdaptiveb", "OverridesColourAdaptive")
             elseif subtab == "Chat" then
                 HealBot_Options_ShowOverridePanel("HealBot_Options_Override_ChatFrame", "HealBot_Options_OverrideChatb", "OverrideChat")
             elseif subtab == "Frames" then
@@ -23730,7 +23950,14 @@ function HealBot_Options_ShowTab(tab, subtab)
     elseif tab == "SkinsGeneral" then
         HealBot_Options_UpdateTab(3, 301, "SkinsGeneral"); HealBot_Options_ShowSkinsPanel("HealBot_Options_GeneralSkinsFrame", 1001)
     elseif tab == "SkinsEffects" then
-        HealBot_Options_UpdateTab(3, 303, "SkinsEffects"); HealBot_Options_ShowSkinsPanel("HealBot_Options_EffectsSkinsFrame", 1003)
+        HealBot_Options_UpdateTab(3, 303, "SkinsEffects", true); HealBot_Options_ShowSkinsPanel("HealBot_Options_EffectsSkinsFrame", 1003)
+        if subtab then
+            if subtab == "Border" then
+                HealBot_Options_ShowEffectsPanel("HealBot_Options_EffectBorder", "HealBot_Options_EffectBorderb", "SkinsEffectsBorder")
+            elseif subtab == "Bars" then
+                HealBot_Options_ShowEffectsPanel("HealBot_Options_EffectBars", "HealBot_Options_EffectBarsb", "SkinsEffectsBars")
+            end
+        end
     elseif tab == "SkinsColour" then
         HealBot_Options_UpdateTab(3, 304, "SkinsColour", true); HealBot_Options_ShowSkinsPanel("HealBot_Options_ColourSkinsFrame", 1004)
         if subtab then
@@ -23945,18 +24172,12 @@ function HealBot_Options_GeneralTab(tab)
     end
 end
 
-function HealBot_Options_OverridesEffectsTab(tab)
-      --HealBot_setCall("HealBot_Options_OverridesEffectsTab")
+function HealBot_Options_OverridesEffectsTabBorder(tab)
+      --HealBot_setCall("HealBot_Options_OverridesEffectsTabBorder")
     if not HealBot_Options_TabRunOnce[tab] then
-        HealBot_Options_sliderlabels_Init(HealBot_Options_OverrideBarUpdateFreq,HEALBOT_OPTION_BARUPDFREQ,1,19,1,2,HEALBOT_OPTIONS_WORD_SLOWER,HEALBOT_OPTIONS_WORD_FASTER)
-        HealBot_Options_OverrideBarUpdateFreq:SetValue(HealBot_Globals.OverrideEffects["FLUIDFREQ"] or 10)
-        HealBot_Options_SetText(HealBot_Options_OverrideBarUpdateFreq, HEALBOT_OPTION_BARUPDFREQ)
         HealBot_Options_sliderlabels_Init(HealBot_Options_OverrideHealthDropPct,HEALBOT_OPTION_HEALTHDROPPCT,250,750,10,5,"25%","75%")
         HealBot_Options_OverrideHealthDropPct:SetValue(HealBot_Globals.OverrideEffects["HEALTHDROPPCT"] or 500)
         HealBot_Options_SetText(HealBot_Options_OverrideHealthDropPct, HEALBOT_OPTION_HEALTHDROPPCT..floor(HealBot_Globals.OverrideEffects["HEALTHDROPPCT"]/10).."%")
-        HealBot_Options_sliderlabels_Init(HealBot_Options_OverrideHotBarHealthThres,HEALBOT_OPTION_HOTBARHEALTHPCT,0,50,1,5,"0%","50%")
-        HealBot_Options_OverrideHotBarHealthThres:SetValue(HealBot_Globals.OverrideEffects["HOTBARHLTH"] or 10)
-        HealBot_Options_SetText(HealBot_Options_OverrideHotBarHealthThres, HEALBOT_OPTION_HOTBARHEALTHPCT..HealBot_Globals.OverrideEffects["HOTBARHLTH"].."%")
         HealBot_Options_sliderlabels_Init(HealBot_Options_OverrideHealthDropSpeed,HEALBOT_OPTION_HEALTHDROPSPEED,1,30,1,2,1,30)
         HealBot_Options_OverrideHealthDropSpeed:SetValue(HealBot_Globals.OverrideEffects["HEALTHDROPTIME"])
         HealBot_Options_SetText(HealBot_Options_OverrideHealthDropSpeed, HEALBOT_OPTION_HEALTHDROPSPEED..": "..HealBot_Globals.OverrideEffects["HEALTHDROPTIME"].." "..HEALBOT_WORDS_SEC)
@@ -23972,13 +24193,6 @@ function HealBot_Options_OverridesEffectsTab(tab)
         HealBot_Options_Pct_OnLoad_MinMax(HealBot_Options_OverrideAuxBarFlashAlphaMin,HEALBOT_OPTIONS_MINALPHA,0,0.8,0.05,2)
         HealBot_Options_OverrideAuxBarFlashAlphaMin:SetValue(HealBot_Globals.OverrideEffects["OMIN"])
         HealBot_Options_Pct_OnValueChanged(HealBot_Options_OverrideAuxBarFlashAlphaMin)
-        HealBot_Options_sliderlabels_Init(HealBot_Options_OverrideFocusGroupDimming,HEALBOT_OPTION_FOCUSGROUPDIMMING,12,44,1,4,HEALBOT_WORD_LOW,HEALBOT_WORD_HIGH)
-        HealBot_Options_OverrideFocusGroupDimming:SetValue((HealBot_Globals.OverrideEffects["FGDIMMING"] or 2.8)*10)
-        HealBot_Options_SetText(HealBot_Options_OverrideFocusGroupDimming, HEALBOT_OPTION_FOCUSGROUPDIMMING)
-        HealBot_Options_sliderlabels_Init(HealBot_Options_OverrideHotBarDimming,HEALBOT_OPTION_NONHOTBARSDIMMING,12,44,1,4,HEALBOT_WORD_LOW,HEALBOT_WORD_HIGH)
-        HealBot_Options_OverrideHotBarDimming:SetValue((HealBot_Globals.OverrideEffects["HBDIMMING"] or 2.2)*10)
-        HealBot_Options_SetText(HealBot_Options_OverrideHotBarDimming, HEALBOT_OPTION_NONHOTBARSDIMMING)
-        HealBot_Options_SetLabel("HealBot_Options_OverrideHotBarDebuffPrio_FontStr",HEALBOT_OPTION_HOTBARSDEBUFFPRIO)
         HealBot_Options_Override_EffectsUse.initialize=HealBot_Options_Override_EffectsUse_DropDown
         UIDropDownMenu_SetText(HealBot_Options_Override_EffectsUse, HealBot_Options_UseOverrides_List[HealBot_Globals.OverrideEffects["USE"]])
         HealBot_Options_sliderlabels_Init(HealBot_Options_OverrideBorderHazardFreq,HEALBOT_OPTIONS_AGGROFLASHFREQ,5,85,5,2,HEALBOT_OPTIONS_WORD_SLOWER,HEALBOT_OPTIONS_WORD_FASTER)
@@ -23987,44 +24201,68 @@ function HealBot_Options_OverridesEffectsTab(tab)
         HealBot_Options_Pct_OnLoad_MinMax(HealBot_Options_OverrideBorderHazardMinAlpha,HEALBOT_OPTIONS_MINALPHA,0,0.75,0.05,2)
         HealBot_Options_OverrideBorderHazardMinAlpha:SetValue(HealBot_Globals.OverrideEffects["HAZARDMINALPHA"] or 0.25)
         HealBot_Options_Pct_OnValueChanged(HealBot_Options_OverrideBorderHazardMinAlpha)
-
-
         HealBot_Options_sliderlabels_Init(HealBot_Options_OverrideGlowSizeBar,HEALBOT_OPTIONS_ONBARS,1,5,1,1,HEALBOT_WORDS_SMALLER,HEALBOT_WORDS_LARGER)
         HealBot_Options_OverrideGlowSizeBar:SetValue(HealBot_Globals.OverrideEffects["GLOW"])
         HealBot_Options_SetText(HealBot_Options_OverrideGlowSizeBar, HEALBOT_OPTIONS_ONBARS..": "..HealBot_Options_Lists["GlowSize"][HealBot_Globals.OverrideEffects["GLOW"]])
         HealBot_Options_sliderlabels_Init(HealBot_Options_OverrideGlowSizeIcon,HEALBOT_OPTIONS_ONICONS,1,5,1,1,HEALBOT_WORDS_SMALLER,HEALBOT_WORDS_LARGER)
         HealBot_Options_OverrideGlowSizeIcon:SetValue(HealBot_Globals.OverrideEffects["ICONGLOW"])
         HealBot_Options_SetText(HealBot_Options_OverrideGlowSizeIcon, HEALBOT_OPTIONS_ONICONS..": "..HealBot_Options_Lists["GlowSize"][HealBot_Globals.OverrideEffects["ICONGLOW"]])
-
-
-
         g=_G["HealBot_OverrideEffects_FontStr"]
+        g:SetText(HEALBOT_SKIN_BORDERTEXT.." "..HEALBOT_OPTIONS_TAB_EFFECTS)
         g:SetTextColor(1,1,1,1)
-        g:SetText(HEALBOT_OPTIONS_TAB_EFFECTS)
         g=_G["HealBot_OverrideAuxBarsAssign_FontStr"]
-        g:SetTextColor(1,1,1,1)
         g:SetText(HEALBOT_OPTIONS_AUXFLASH)
-        g=_G["HealBot_OverrideEffectsFluid_FontStr"]
-        g:SetTextColor(1,1,1,1)
-        g:SetText(HEALBOT_OPTION_FLUIDBARS)
         g=_G["HealBot_OverrideHealthDrop_FontStr"]
-        g:SetTextColor(1,1,1,1)
         g:SetText(HEALBOT_OPTION_HEALTHDROPALERT)
-        g=_G["HealBot_OverrideHotBars_FontStr"]
-        g:SetTextColor(1,1,1,1)
-        g:SetText(HEALBOT_OPTION_HOTBARS)
-        g=_G["HealBot_HealthDrop_FontStr"]
-        g:SetTextColor(1,1,1,1)
-        g:SetText(HEALBOT_OPTION_HEALTHDROPALERT)
-        g=_G["HealBot_HotBars_FontStr"]
-        g:SetTextColor(1,1,1,1)
-        g:SetText(HEALBOT_OPTION_HOTBARS)
         HealBot_Options_SetLabel("healbotOverride_Effectsfontstr",HEALBOT_OPTIONS_OVERRIDE_EFFECTS)
-        HealBot_Options_Override_EffectsUse_Toggle()
-        HealBot_Options_OverrideUseFluidBars:SetChecked(HealBot_Globals.OverrideEffects["FLUIDBARS"])
-        HealBot_Options_SetText(HealBot_Options_OverrideUseFluidBars,HEALBOT_OPTION_USE)
         HealBot_Options_OverrideUseHealthDrop:SetChecked(HealBot_Globals.OverrideEffects["HEALTHDROP"])
         HealBot_Options_SetText(HealBot_Options_OverrideUseHealthDrop,HEALBOT_OPTION_USE)
+        HealBot_Options_TabRunOnce[tab]=true
+    end
+end
+
+function HealBot_Options_OverridesEffectsTabBars(tab)
+      --HealBot_setCall("HealBot_Options_OverridesEffectsTabBorder")
+    if not HealBot_Options_TabRunOnce[tab] then
+        g=_G["HealBot_OverrideEffectsBars_FontStr"]
+        g:SetText(HEALBOT_OPTIONS_TAB_BARS.." "..HEALBOT_OPTIONS_TAB_EFFECTS)
+        g:SetTextColor(1,1,1,1)
+        g=_G["HealBot_OverrideHotBars_FontStr"]
+        g:SetText(HEALBOT_OPTION_HOTBARS)
+        g=_G["HealBot_OverrideEffectsFluid_FontStr"]
+        g:SetText(HEALBOT_OPTION_FLUIDBARS)
+        g=_G["HealBot_OverrideGroupBars_FontStr"]
+        g:SetText(HEALBOT_OPTIONS_GROUPHEALS)
+        HealBot_Options_SetLabel("HealBot_SkinsOverrideFocusGroupsIncText",HEALBOT_OPTIONS_EMERGFILTERGROUPS)
+        HealBot_Options_OverrideUseFluidBars:SetChecked(HealBot_Globals.OverrideEffects["FLUIDBARS"])
+        HealBot_Options_SetText(HealBot_Options_OverrideUseFluidBars,HEALBOT_OPTION_USE)
+        HealBot_Options_Override_EffectsBarsUse.initialize=HealBot_Options_Override_EffectsBarsUse_DropDown
+        UIDropDownMenu_SetText(HealBot_Options_Override_EffectsBarsUse, HealBot_Options_UseOverrides_List[HealBot_Globals.OverrideEffects["USEBARS"]])
+        HealBot_Options_SetLabel("healbotOverride_EffectsBarsfontstr",HEALBOT_OPTIONS_OVERRIDE_EFFECTS)
+        HealBot_Options_sliderlabels_Init(HealBot_Options_OverrideHotBarHealthThres,HEALBOT_OPTION_HOTBARHEALTHPCT,0,50,1,5,"0%","50%")
+        HealBot_Options_OverrideHotBarHealthThres:SetValue(HealBot_Globals.OverrideEffects["HOTBARHLTH"] or 10)
+        HealBot_Options_SetText(HealBot_Options_OverrideHotBarHealthThres, HEALBOT_OPTION_HOTBARHEALTHPCT..HealBot_Globals.OverrideEffects["HOTBARHLTH"].."%")
+        HealBot_Options_sliderlabels_Init(HealBot_Options_OverrideFocusGroupDimming,HEALBOT_OPTION_FOCUSGROUPDIMMING,12,44,1,4,HEALBOT_WORD_LOW,HEALBOT_WORD_HIGH)
+        HealBot_Options_OverrideFocusGroupDimming:SetValue((HealBot_Globals.OverrideEffects["FGDIMMING"] or 2.8)*10)
+        HealBot_Options_SetText(HealBot_Options_OverrideFocusGroupDimming, HEALBOT_OPTION_FOCUSGROUPDIMMING)
+        HealBot_Options_sliderlabels_Init(HealBot_Options_OverrideBarUpdateFreq,HEALBOT_OPTION_BARUPDFREQ,1,19,1,2,HEALBOT_OPTIONS_WORD_SLOWER,HEALBOT_OPTIONS_WORD_FASTER)
+        HealBot_Options_OverrideBarUpdateFreq:SetValue(HealBot_Globals.OverrideEffects["FLUIDFREQ"] or 10)
+        HealBot_Options_SetText(HealBot_Options_OverrideBarUpdateFreq, HEALBOT_OPTION_BARUPDFREQ)
+        HealBot_Options_sliderlabels_Init(HealBot_Options_OverrideHotBarDimming,HEALBOT_OPTION_NONHOTBARSDIMMING,12,44,1,4,HEALBOT_WORD_LOW,HEALBOT_WORD_HIGH)
+        HealBot_Options_OverrideHotBarDimming:SetValue((HealBot_Globals.OverrideEffects["HBDIMMING"] or 2.2)*10)
+        HealBot_Options_SetText(HealBot_Options_OverrideHotBarDimming, HEALBOT_OPTION_NONHOTBARSDIMMING)
+        HealBot_Options_sliderlabels_Init(HealBot_Options_OverrideGroupHealthMinUnits,HEALBOT_OPTIONS_MINUNITS,3,25,1,3,3,25)
+        HealBot_Options_OverrideGroupHealthMinUnits:SetValue(HealBot_Globals.OverrideEffects["GHMINUNITS"])
+        HealBot_Options_SetText(HealBot_Options_OverrideGroupHealthMinUnits, HEALBOT_OPTIONS_MINUNITS.." "..HealBot_Globals.OverrideEffects["GHMINUNITS"])
+        HealBot_Options_sliderlabels_Init(HealBot_Options_OverrideGroupHealthThres,HEALBOT_PLUGIN_AURAWATCHHEALTHBELOW,20,80,1,5,"20%","80%")
+        HealBot_Options_OverrideGroupHealthThres:SetValue(HealBot_Globals.OverrideEffects["GHTHRESHOLD"])
+        HealBot_Options_SetText(HealBot_Options_OverrideGroupHealthThres, HEALBOT_PLUGIN_AURAWATCHHEALTHBELOW.." "..HealBot_Globals.OverrideEffects["GHTHRESHOLD"].."%")
+        HealBot_Options_sliderlabels_Init(HealBot_Options_OverrideGroupHealthDimming,HEALBOT_OPTION_NONGHDIMMING,0,44,1,4,HEALBOT_WORDS_NONE,HEALBOT_WORD_HIGH)
+        HealBot_Options_OverrideGroupHealthDimming:SetValue((HealBot_Globals.OverrideEffects["GHDIMMING"])*10)
+        HealBot_Options_SetText(HealBot_Options_OverrideGroupHealthDimming, HEALBOT_OPTION_NONGHDIMMING)
+        HealBot_Options_SetLabel("HealBot_Options_OverrideHotBarDebuffPrio_FontStr",HEALBOT_OPTION_HOTBARSDEBUFFPRIO)
+        HealBot_Options_SetLabel("HealBot_Options_OverrideGroupHealthRange_FontStr",HEALBOT_PLUGIN_ALERTRANGE)
+        HealBot_Options_Override_EffectsUse_Toggle()
         HealBot_Options_DoEffects_DropDowns()
         HealBot_Options_SetEFGroups()
         HealBot_Options_TabRunOnce[tab]=true
@@ -24481,31 +24719,19 @@ function HealBot_Options_SkinsGeneralTab(tab)
     end
 end
 
-function HealBot_Options_SkinsEffectsTab(tab)
-      --HealBot_setCall("HealBot_Options_SkinsEffectsTab")
+function HealBot_Options_SkinsEffectsBorderTab(tab)
+      --HealBot_setCall("HealBot_Options_SkinsEffectsBorderTab")
     if not HealBot_Options_TabRunOnce[tab] then
-        HealBot_Options_SetLabel("HealBot_Options_HotBarDebuffPrio_FontStr",HEALBOT_OPTION_HOTBARSDEBUFFPRIO)
         g=_G["HealBot_AuxBarsAssign_FontStr"]
         g:SetText(HEALBOT_OPTIONS_AUXFLASH)
         g=_G["HealBot_SkinsBorderHazardText"]
         g:SetText(HEALBOT_SKIN_BORDER_HAZARDU)
         g=_G["HealBot_SkinsGlowSizeText"]
         g:SetText(HEALBOT_SKIN_GLOWSIZE)
-        g=_G["HealBot_SkinsFocusGroupsText"]
-        g:SetText(HEALBOT_OPTIONS_FOCUSGROUPS)
-        g=_G["HealBot_EffectsFluid_FontStr"]
-        g:SetText(HEALBOT_OPTION_FLUIDBARS)
+        g=_G["HealBot_HealthDrop_FontStr"]
+        g:SetText(HEALBOT_OPTION_HEALTHDROPALERT)
         HealBot_Options_UseHealthDrop:SetChecked(hbv_Skins_GetBoolean("General", "FLUIDBARS"))
         HealBot_Options_SetText(HealBot_Options_UseHealthDrop,HEALBOT_OPTION_USE)
-        HealBot_Options_UseFluidBars:SetChecked(hbv_Skins_GetBoolean("General", "FLUIDBARS"))
-        HealBot_Options_SetText(HealBot_Options_UseFluidBars,HEALBOT_OPTION_USE)
-        HealBot_Options_DoEffects_DropDowns()
-        HealBot_Options_sliderlabels_Init(HealBot_Options_BarUpdateFreq,HEALBOT_OPTION_BARUPDFREQ,1,19,1,2,HEALBOT_OPTIONS_WORD_SLOWER,HEALBOT_OPTIONS_WORD_FASTER)
-        HealBot_Options_BarUpdateFreq:SetValue(hbv_Skins_GetVar("General", "FLUIDFREQ"))
-        HealBot_Options_SetText(HealBot_Options_BarUpdateFreq,HEALBOT_OPTION_BARUPDFREQ)
-        HealBot_Options_sliderlabels_Init(HealBot_Options_HotBarHealthThres,HEALBOT_OPTION_HOTBARHEALTHPCT,0,50,1,5,"0%","50%")
-        HealBot_Options_HotBarHealthThres:SetValue(hbv_Skins_GetVar("General", "HOTBARHLTH"))
-        HealBot_Options_SetText(HealBot_Options_HotBarHealthThres, HEALBOT_OPTION_HOTBARHEALTHPCT..hbv_Skins_GetVar("General", "HOTBARHLTH").."%")
         HealBot_Options_sliderlabels_Init(HealBot_Options_HealthDropPct,HEALBOT_OPTION_HEALTHDROPPCT,250,750,10,5,"25%","75%")
         HealBot_Options_HealthDropPct:SetValue(hbv_Skins_GetVar("General", "HEALTHDROPPCT"))
         HealBot_Options_SetText(HealBot_Options_HealthDropPct, HEALBOT_OPTION_HEALTHDROPPCT..floor(hbv_Skins_GetVar("General", "HEALTHDROPPCT")/10).."%")
@@ -24522,12 +24748,6 @@ function HealBot_Options_SkinsEffectsTab(tab)
         HealBot_Options_Pct_OnLoad_MinMax(HealBot_Options_AuxBarFlashAlphaMin,HEALBOT_OPTIONS_MINALPHA,0,0.8,0.05,2)
         HealBot_Options_AuxBarFlashAlphaMin:SetValue(hbv_Skins_GetVar("General", "OMIN"))
         HealBot_Options_Pct_OnValueChanged(HealBot_Options_AuxBarFlashAlphaMin)
-        HealBot_Options_sliderlabels_Init(HealBot_Options_HotBarDimming,HEALBOT_OPTION_NONHOTBARSDIMMING,12,44,1,4,HEALBOT_WORD_LOW,HEALBOT_WORD_HIGH)
-        HealBot_Options_HotBarDimming:SetValue(hbv_Skins_GetVar("General", "HBDIMMING")*10)
-        HealBot_Options_SetText(HealBot_Options_HotBarDimming, HEALBOT_OPTION_NONHOTBARSDIMMING)
-        HealBot_Options_sliderlabels_Init(HealBot_Options_FocusGroupDimming,HEALBOT_OPTION_FOCUSGROUPDIMMING,12,44,1,4,HEALBOT_WORD_LOW,HEALBOT_WORD_HIGH)
-        HealBot_Options_FocusGroupDimming:SetValue(hbv_Skins_GetVar("General", "FGDIMMING")*10)
-        HealBot_Options_SetText(HealBot_Options_FocusGroupDimming,HEALBOT_OPTION_FOCUSGROUPDIMMING)
         HealBot_Options_AuxBarFlashFreq:SetValue(hbv_Skins_GetVar("General", "OFREQ")*100)
         HealBot_Options_SetText(HealBot_Options_AuxBarFlashFreq,HEALBOT_OPTIONS_AGGROFLASHFREQ)
         HealBot_Options_sliderlabels_Init(HealBot_Options_BorderHazardFreq,HEALBOT_OPTIONS_AGGROFLASHFREQ,10,90,5,2,HEALBOT_OPTIONS_WORD_SLOWER,HEALBOT_OPTIONS_WORD_FASTER)
@@ -24543,7 +24763,58 @@ function HealBot_Options_SkinsEffectsTab(tab)
         HealBot_Options_GlowSizeIcon:SetValue(hbv_Skins_GetFrameVar("Frame", "ICONGLOW", hb_lVars["Frame"]))
         HealBot_Options_SetText(HealBot_Options_GlowSizeIcon, HEALBOT_OPTIONS_ONICONS..": "..HealBot_Options_Lists["GlowSize"][hbv_Skins_GetFrameVar("Frame", "ICONGLOW", hb_lVars["Frame"])])
 
+        g=_G["HealBot_Effects_FontStr"]
+        g:SetTextColor(1,1,1,1)
+        g:SetText(HEALBOT_SKIN_BORDERTEXT.." "..HEALBOT_OPTIONS_TAB_EFFECTS)
+        
+        HealBot_Options_Override_EffectsUse_Toggle()
+        HealBot_Options_TabRunOnce[tab]=true
+    end
+end
+
+function HealBot_Options_SkinsEffectsBarsTab(tab)
+      --HealBot_setCall("HealBot_Options_SkinsEffectsBorderTab")
+    if not HealBot_Options_TabRunOnce[tab] then
+        g=_G["HealBot_SkinsFocusGroupsText"]
+        g:SetText(HEALBOT_OPTIONS_FOCUSGROUPS)
+        g=_G["HealBot_EffectsFluid_FontStr"]
+        g:SetText(HEALBOT_OPTION_FLUIDBARS)
+        g=_G["HealBot_HotBars_FontStr"]
+        g:SetText(HEALBOT_OPTION_HOTBARS)
+        g=_G["HealBot_GroupBars_FontStr"]
+        g:SetText(HEALBOT_OPTIONS_GROUPHEALS)
+        HealBot_Options_UseFluidBars:SetChecked(hbv_Skins_GetBoolean("General", "FLUIDBARS"))
+        HealBot_Options_SetText(HealBot_Options_UseFluidBars,HEALBOT_OPTION_USE)
+        HealBot_Options_sliderlabels_Init(HealBot_Options_BarUpdateFreq,HEALBOT_OPTION_BARUPDFREQ,1,19,1,2,HEALBOT_OPTIONS_WORD_SLOWER,HEALBOT_OPTIONS_WORD_FASTER)
+        HealBot_Options_BarUpdateFreq:SetValue(hbv_Skins_GetVar("General", "FLUIDFREQ"))
+        HealBot_Options_SetText(HealBot_Options_BarUpdateFreq,HEALBOT_OPTION_BARUPDFREQ)
+        HealBot_Options_sliderlabels_Init(HealBot_Options_HotBarHealthThres,HEALBOT_OPTION_HOTBARHEALTHPCT,0,50,1,5,"0%","50%")
+        HealBot_Options_HotBarHealthThres:SetValue(hbv_Skins_GetVar("General", "HOTBARHLTH"))
+        HealBot_Options_SetText(HealBot_Options_HotBarHealthThres, HEALBOT_OPTION_HOTBARHEALTHPCT..hbv_Skins_GetVar("General", "HOTBARHLTH").."%")
+        HealBot_Options_sliderlabels_Init(HealBot_Options_HotBarDimming,HEALBOT_OPTION_NONHOTBARSDIMMING,12,44,1,4,HEALBOT_WORD_LOW,HEALBOT_WORD_HIGH)
+        HealBot_Options_HotBarDimming:SetValue(hbv_Skins_GetVar("General", "HBDIMMING")*10)
+        HealBot_Options_SetText(HealBot_Options_HotBarDimming, HEALBOT_OPTION_NONHOTBARSDIMMING)
+        HealBot_Options_sliderlabels_Init(HealBot_Options_FocusGroupDimming,HEALBOT_OPTION_FOCUSGROUPDIMMING,12,44,1,4,HEALBOT_WORD_LOW,HEALBOT_WORD_HIGH)
+        HealBot_Options_FocusGroupDimming:SetValue(hbv_Skins_GetVar("General", "FGDIMMING")*10)
+        
+        HealBot_Options_sliderlabels_Init(HealBot_Options_GroupHealthMinUnits,HEALBOT_OPTIONS_MINUNITS,3,25,1,3,3,25)
+        HealBot_Options_GroupHealthMinUnits:SetValue(hbv_Skins_GetVar("General", "GHMINUNITS"))
+        HealBot_Options_SetText(HealBot_Options_GroupHealthMinUnits, HEALBOT_OPTIONS_MINUNITS.." "..hbv_Skins_GetVar("General", "GHMINUNITS"))
+        HealBot_Options_sliderlabels_Init(HealBot_Options_GroupHealthThres,HEALBOT_PLUGIN_AURAWATCHHEALTHBELOW,20,80,1,5,"20%","80%")
+        HealBot_Options_GroupHealthThres:SetValue(hbv_Skins_GetVar("General", "GHTHRESHOLD"))
+        HealBot_Options_SetText(HealBot_Options_GroupHealthThres, HEALBOT_PLUGIN_AURAWATCHHEALTHBELOW.." "..hbv_Skins_GetVar("General", "GHTHRESHOLD").."%")
+        HealBot_Options_sliderlabels_Init(HealBot_Options_GroupHealthDimming,HEALBOT_OPTION_NONGHDIMMING,0,44,1,4,HEALBOT_WORDS_NONE,HEALBOT_WORD_HIGH)
+        HealBot_Options_GroupHealthDimming:SetValue(hbv_Skins_GetVar("General", "GHDIMMING")*10)
+        HealBot_Options_SetText(HealBot_Options_GroupHealthDimming, HEALBOT_OPTION_NONGHDIMMING)
+        HealBot_Options_SetText(HealBot_Options_FocusGroupDimming,HEALBOT_OPTION_FOCUSGROUPDIMMING)
+        HealBot_Options_SetLabel("HealBot_SkinsFocusGroupsIncText",HEALBOT_OPTIONS_EMERGFILTERGROUPS)
+        HealBot_Options_SetLabel("HealBot_Options_HotBarDebuffPrio_FontStr",HEALBOT_OPTION_HOTBARSDEBUFFPRIO)
+        HealBot_Options_SetLabel("HealBot_Options_GroupHealthRange_FontStr",HEALBOT_PLUGIN_ALERTRANGE)
+        HealBot_Options_DoEffects_DropDowns()
         HealBot_Options_SetEFGroups()
+        g=_G["HealBot_EffectsBars_FontStr"]
+        g:SetTextColor(1,1,1,1)
+        g:SetText(HEALBOT_OPTIONS_TAB_BARS.." "..HEALBOT_OPTIONS_TAB_EFFECTS)
         HealBot_Options_Override_EffectsUse_Toggle()
         HealBot_Options_TabRunOnce[tab]=true
     end
@@ -24975,22 +25246,22 @@ function HealBot_Options_SkinsFramesHealGroupsTab(tab)
         UIDropDownMenu_SetText(HealBot_Options_HealGroups15Frame, HealBot_Options_HealGroupsFrame_List[Healbot_Config_Skins.HealGroups[Healbot_Config_Skins.Current_Skin][15]["FRAME"]])
         HealBot_Options_SetLabel("HealBot_HealButtonsFrames1_Text",HEALBOT_OPTIONS_FRAME)
         HealBot_Options_SetLabel("HealBot_HealButtonsFrames8_Text",HEALBOT_OPTIONS_FRAME)
-        HealBot_Options_SetLabel("HealBot_HealButtonsGroups1_Text",HEALBOT_OPTIONS_GROUPHEALS)
-        HealBot_Options_SetLabel("HealBot_HealButtonsGroups8_Text",HEALBOT_OPTIONS_GROUPHEALS)
+        HealBot_Options_SetLabel("HealBot_HealButtonsGroups1_Text",HEALBOT_SORTBY_GROUP)
+        HealBot_Options_SetLabel("HealBot_HealButtonsGroups8_Text",HEALBOT_SORTBY_GROUP)
         HealBot_Options_HealGroupsAllowDups:SetChecked(Healbot_Config_Skins.DuplicateBars[Healbot_Config_Skins.Current_Skin])
         HealBot_Options_SetText(HealBot_Options_HealGroupsAllowDups,HEALBOT_ALLOW_DUPLICATES)
         if HEALBOT_GAME_VERSION<3 then
             HealBot_Options_HealGroups9:Hide()
             HealBot_Options_HealGroups9Frame:Hide()
             HealBot_Options_HealGroups10:ClearAllPoints()
-            HealBot_Options_HealGroups10:SetPoint("TOPLEFT",HealBot_Options_HealGroups8,"TOPLEFT",0,-40)
+            HealBot_Options_HealGroups10:SetPoint("TOPLEFT",HealBot_Options_HealGroups8,"TOPLEFT",0,-50)
             if HEALBOT_GAME_VERSION<2 then
                 HealBot_Options_HealGroups13:Hide()
                 HealBot_Options_HealGroups13Frame:Hide()
                 HealBot_Options_HealGroups14:Hide()
                 HealBot_Options_HealGroups14Frame:Hide()
                 HealBot_Options_HealGroups15:ClearAllPoints()
-                HealBot_Options_HealGroups15:SetPoint("TOPLEFT",HealBot_Options_HealGroups12,"TOPLEFT",0,-40)
+                HealBot_Options_HealGroups15:SetPoint("TOPLEFT",HealBot_Options_HealGroups12,"TOPLEFT",0,-50)
             end
         end
         HealBot_Options_TabRunOnce[tab]=true
@@ -25409,7 +25680,7 @@ function HealBot_Options_SkinsFramesTextNameColoursTab(tab)
     if not HealBot_Options_TabRunOnce[tab] then
         HealBot_Options_NameTextColour.initialize=HealBot_Options_NameTextColour_DropDown
         UIDropDownMenu_SetText(HealBot_Options_NameTextColour, HealBot_Options_BarHealthColour_List[hbv_Skins_GetFrameVar("BarTextCol", "NAME", hb_lVars["Frame"])])
-        HealBot_Options_NameTextColourDebuff:SetChecked(hbv_Skins_GetFrameVar("BarTextCol", "NDEBUFF", hb_lVars["Frame"]))
+        HealBot_Options_NameTextColourDebuff:SetChecked(hbv_Skins_GetFrameBoolean("BarTextCol", "NDEBUFF", hb_lVars["Frame"]))
         HealBot_Options_SetText(HealBot_Options_NameTextColourDebuff,HEALBOT_OPTIONS_TEXTCOL_DEBUFF)
         HealBot_Options_Pct_OnLoad_MinMax(HealBot_Options_NameTextAlpha,HEALBOT_OPTIONS_BARALPHA,0,1,0.01,5)
         HealBot_Options_NameTextAlpha:SetValue(hbv_Skins_GetFrameVar("BarTextCol", "NCA", hb_lVars["Frame"]));
@@ -27137,7 +27408,9 @@ end
 local HealBot_Options_TabFuncs={
                                 ["About"]=HealBot_Options_AboutTab,
                                 ["General"]=HealBot_Options_GeneralTab,
-                                ["OverridesEffects"]=HealBot_Options_OverridesEffectsTab,
+                                ["Overrides"]=HealBot_Options_OverridesEffectsTabBorder,
+                                ["OverridesEffectsBorder"]=HealBot_Options_OverridesEffectsTabBorder,
+                                ["OverridesEffectsBars"]=HealBot_Options_OverridesEffectsTabBars,
                                 ["OverridesColourClass"]=HealBot_Options_OverridesColourClassTab,
                                 ["OverridesColourRole"]=HealBot_Options_OverridesColourRoleTab,
                                 ["OverridesColourPower"]=HealBot_Options_OverridesColourPowerTab,
@@ -27146,7 +27419,8 @@ local HealBot_Options_TabFuncs={
                                 ["OverrideFrames"]=HealBot_Options_OverrideFramesTab,
                                 ["Spells"]=HealBot_Options_SpellsTab,
                                 ["SkinsGeneral"]=HealBot_Options_SkinsGeneralTab,
-                                ["SkinsEffects"]=HealBot_Options_SkinsEffectsTab,
+                                ["SkinsEffectsBorder"]=HealBot_Options_SkinsEffectsBorderTab,
+                                ["SkinsEffectsBars"]=HealBot_Options_SkinsEffectsBarsTab,
                                 ["SkinsColourClass"]=HealBot_Options_SkinsColourClassTab,
                                 ["SkinsColourRole"]=HealBot_Options_SkinsColourRoleTab,
                                 ["SkinsColourPower"]=HealBot_Options_SkinsColourPowerTab,
@@ -27217,7 +27491,8 @@ local HealBot_Options_TabFuncs={
                                 ["Plugins"]=HealBot_Options_PluginsTab,
                                }
 local HealBot_Options_SubTabs={
-                               ["Overrides"]="OverridesEffects",
+                               ["Overrides"]="OverridesEffectsBorder",
+                               ["SkinsEffects"]="SkinsEffectsBorder",
                                ["SkinsColour"]="SkinsColourClass",
                                ["SkinsFramesEnemy"]="SkinsFramesEnemyAura",
                                ["SkinsFramesHeaders"]="SkinsFramesHeadersBars",
@@ -28365,11 +28640,41 @@ function HealBot_Options_ShowBuffPanel(frameName)
     hb_lVars["CurrentBuffPanel"]=frameName
 end
 
+hb_lVars["CurrentOverrideEffectsPanel"]="HealBot_Options_OverrideEffectBorder"
+hb_lVars["CurrentOverrideEffectsPanelButton"]="HealBot_Options_OverrideEffectBorderb"
+function HealBot_Options_ShowOverrideEffectsPanel(frameName, buttonName, tab)
+      --HealBot_setCall("HealBot_Options_ShowOverrideEffectsPanel")
+    HealBot_Options_UpdateTab(nil, nil, "Overrides", true, tab)
+    HealBot_Options_ObjectsShowHide(hb_lVars["CurrentOverrideEffectsPanel"],false)
+    HealBot_Options_ObjectsShowHide(frameName,true)
+    HealBot_Options_InnerContent_Colour(_G[hb_lVars["CurrentOverrideEffectsPanelButton"]],
+                                        _G[hb_lVars["CurrentOverrideEffectsPanelButton"].."Txt"],false)
+    hb_lVars["CurrentOverrideEffectsPanel"]=frameName
+    hb_lVars["CurrentOverrideEffectsPanelButton"]=buttonName
+    HealBot_Options_InnerContent_Colour(_G[hb_lVars["CurrentOverrideEffectsPanelButton"]],
+                                        _G[hb_lVars["CurrentOverrideEffectsPanelButton"].."Txt"],true)
+end
+
+hb_lVars["CurrentEffectsPanel"]="HealBot_Options_EffectBorder"
+hb_lVars["CurrentEffectsPanelButton"]="HealBot_Options_EffectBorderb"
+function HealBot_Options_ShowEffectsPanel(frameName, buttonName, tab)
+      --HealBot_setCall("HealBot_Options_ShowEffectsPanel")
+    HealBot_Options_UpdateTab(nil, nil, "SkinsEffects", true, tab)
+    HealBot_Options_ObjectsShowHide(hb_lVars["CurrentEffectsPanel"],false)
+    HealBot_Options_ObjectsShowHide(frameName,true)
+    HealBot_Options_InnerContent_Colour(_G[hb_lVars["CurrentEffectsPanelButton"]],
+                                        _G[hb_lVars["CurrentEffectsPanelButton"].."Txt"],false)
+    hb_lVars["CurrentEffectsPanel"]=frameName
+    hb_lVars["CurrentEffectsPanelButton"]=buttonName
+    HealBot_Options_InnerContent_Colour(_G[hb_lVars["CurrentEffectsPanelButton"]],
+                                        _G[hb_lVars["CurrentEffectsPanelButton"].."Txt"],true)
+end
+
 hb_lVars["CurrentOverrideColourPanel"]="HealBot_Options_OverrideColoursClass"
 hb_lVars["CurrentOverrideColourPanelButton"]="HealBot_Options_OverrideColoursClassb"
 function HealBot_Options_ShowOverrideColourPanel(frameName, buttonName, tab)
       --HealBot_setCall("HealBot_Options_ShowOverrideColourPanel")
-    HealBot_Options_UpdateTab(nil, nil, "SkinsColour", true, tab)
+    HealBot_Options_UpdateTab(nil, nil, "Overrides", true, tab)
     HealBot_Options_ObjectsShowHide(hb_lVars["CurrentOverrideColourPanel"],false)
     HealBot_Options_ObjectsShowHide(frameName,true)
     HealBot_Options_InnerContent_Colour(_G[hb_lVars["CurrentOverrideColourPanelButton"]],
@@ -29085,11 +29390,11 @@ function HealBot_Options_UpdateMediaSound(object, name)
     g:SetText(object.text .. " ".. HealBot_Media_SoundIndex(name)..": " ..name);
 end
 
-function HealBot_Options_Show_Help(index,show)
+function HealBot_Options_Show_Help(index,show,top)
       --HealBot_setCall("HealBot_Options_Show_Help")
     if hb_lVars["TIPLOADED"] then
         if show then
-            HealBot_Tooltip_OptionsHelp(HEALBOT_OPTIONS_HELP_TITLES[index],HEALBOT_OPTIONS_HELP_TEXT[index])
+            HealBot_Tooltip_OptionsHelp(HEALBOT_OPTIONS_HELP_TITLES[index],HEALBOT_OPTIONS_HELP_TEXT[index],top)
             hb_lVars["OPTIONSTIPVISIBLE"]=true
         else
             HealBot_Tooltip_Hide()

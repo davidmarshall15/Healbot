@@ -140,6 +140,7 @@ function HealBot_Lang_enALL()
     HEALBOT_OPTIONS_ALPHA                  ="Opacity";
     HEALBOT_OPTIONS_MINALPHA               ="Min opacity";
     HEALBOT_OPTIONS_MAXALPHA               ="Max opacity";
+    HEALBOT_OPTIONS_MINUNITS               ="Min number of Players";
     HEALBOT_OPTIONS_BARALPHA               ="Enabled opacity";
     HEALBOT_OPTIONS_BARALPHAINHEAL         ="Incoming heals opacity";
     HEALBOT_OPTIONS_BARALPHABACK           ="Background bar opacity";
@@ -271,7 +272,7 @@ function HealBot_Lang_enALL()
     HEALBOT_OPTIONS_SELFHEALS              ="Self"
     HEALBOT_OPTIONS_PETHEALS               ="Pets"
     HEALBOT_WORD_PET                       ="Pet"
-    HEALBOT_OPTIONS_GROUPHEALS             ="Group";
+    HEALBOT_OPTIONS_GROUPHEALS             ="Group Heals";
     HEALBOT_OPTIONS_TANKHEALS              ="Main tanks";
     HEALBOT_OPTIONS_SINGLE                 ="Single ";
     HEALBOT_OPTIONS_SINGLETANK             ="Single tank";
@@ -668,8 +669,10 @@ function HealBot_Lang_enALL()
     HEALBOT_OPTION_USEFOCUSGROUPS          ="Use focus groups"
     HEALBOT_OPTION_FOCUSGROUPDIMMING       ="Unfocused groups - Opacity reduction"
     HEALBOT_OPTION_NONHOTBARSDIMMING       ="Non Hot Bars - Opacity reduction"
+    HEALBOT_OPTION_NONGHDIMMING            ="Heal not needed - Opacity reduction"
     HEALBOT_OPTION_GLOBALDIMMING           ="Mouse not over frames - Opacity reduction"
     HEALBOT_OPTION_FLUIDBARS               ="Fluid Bars"
+    HEALBOT_OPTION_GROUPBARS               ="Group Bars"
     HEALBOT_OPTION_HEALTHDROPALERT         ="Health Drop Alert"
     HEALBOT_OPTION_HOTBARS                 ="Hot Bars"
     HEALBOT_OPTION_HOTBARSDEBUFFPRIO       ="Debuff Priority threshold"
@@ -1200,7 +1203,6 @@ function HealBot_Lang_enALL()
     HEALBOT_RANDOMPET                      ="Random Pet"
     HEALBOT_RANDOMFAVMOUNT                 ="Random Favourite Mount"
     HEALBOT_RANDOMFAVPET                   ="Random Favourite Pet"
-    HEALBOT_EXTRASKINS_CAT_GROUP           ="Group"
     HEALBOT_EXTRASKINS_CAT_SRAID           ="Small Raid"
     HEALBOT_EXTRASKINS_CAT_LRAID           ="Large Raid"
     HEALBOT_MACRO                          ="Macro"
@@ -1494,6 +1496,7 @@ function HealBot_Lang_enALL()
 
     HEALBOT_OPTION_ISFALLING               ="Is Falling"
     HEALBOT_OPTION_ISSWIMMING              ="Is Swimming"
+    HEALBOT_OPTION_GOURPHEALSEFFECT        ="Group Heals Effect Active"
 
     HEALBOT_CUSTOM_CAT_CUSTOM_AUTOMATIC    ="Automatic Debuffs"
     HEALBOT_CUSTOM_CAT_CUSTOM_AUTOBUFFS    ="Automatic Buffs"

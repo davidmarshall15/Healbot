@@ -845,7 +845,7 @@ function HealBot_Text_DoSetHealthText(button, IgnoreInHeals, force)
             tHealthConcat[4]=hbNumFormats["SurroundRight"][button.framecol]
             vHealthTextConcatIndex=4
         end
-        if hbv_Skins_GetFrameVar("BarText", "HLTHINCPTC", button.framecol) and 
+        if hbv_Skins_GetFrameBoolean("BarText", "HLTHINCPTC", button.framecol) and 
            hbv_Skins_GetFrameVar("BarText", "HLTHTYPE", button.framecol)<3 then
             tHealthConcat[vHealthTextConcatIndex+1]="  "
             tHealthConcat[vHealthTextConcatIndex+2]=hbNumFormats["SurroundLeft"][button.framecol]

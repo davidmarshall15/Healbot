@@ -595,6 +595,7 @@ local hbSkinDefaults={["Enemy"]={["INCSELF"]=true, ["INCTANKS"]=true, ["INCFOCUS
                                  ["FGDIMMING"]=2.5, ["HAZARDFREQ"]=0.3, ["HAZARDMINALPHA"]=0.25,
                                  ["GLOBALDIMMING"]=1, ["OFREQ"]=0.2, ["OMIN"]=0.1, ["OMAX"]=0.95,
                                  ["HAZARDFREQ"]=0.3, ["HAZARDMINALPHA"]=0.25, ["VC"]=0,
+                                 ["GHDIMMING"]=0, ["GHTHRESHOLD"]=50, ["GHMINUNITS"]=5, ["GHRANGE"]=1,
                                 },
                     ["Healing"]={["GROUPPETS"]=true, ["SELFPET"]=false, ["TARGETINCOMBAT"]=2, ["FOCUSINCOMBAT"]=2,
                                  ["PRIVFOCUSINCOMBAT"]=2, ["TOTINCOMBAT"]=3, ["TOFINCOMBAT"]=3,

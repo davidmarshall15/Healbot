@@ -276,7 +276,8 @@ function HealBot_Range_UpdateUnit(button)
                         HealBot_Timers_Set("OOC","RefreshPartyNextRecalcPets")
                     end
                 end
-                HealBot_Action_UpdateHealthHotBar(button)
+                HealBot_Action_UpdateHotBar(button)
+                HealBot_Action_UpdateGroupHealth(button)
                 if button.frame<10 then
                     if button.aura.buff.name then
                         HealBot_Aura_BuffWarnings(button, button.aura.buff.name, true)

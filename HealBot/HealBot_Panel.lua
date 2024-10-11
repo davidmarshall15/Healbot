@@ -1880,7 +1880,7 @@ function HealBot_Panel_testAddButton(gName,bName,minBar,maxBar,tRole,bClass)
     if i[hbCurrentFrame]>k and not tHeader[gName] then
         HeaderPos[hbCurrentFrame][k+1]=gName
         tHeader[gName]=true
-        if not bClass and (bName == HEALBOT_OPTIONS_EMERGENCYHEALS or bName == HEALBOT_OPTIONS_GROUPHEALS) then
+        if not bClass and (bName == HEALBOT_OPTIONS_EMERGENCYHEALS or bName == HEALBOT_SORTBY_GROUP) then
             grpNo=grpNo+1
         end
     end
@@ -1960,7 +1960,7 @@ function HealBot_Panel_TestBarsOn()
         elseif healGroups[gl]["NAME"] == HEALBOT_OPTIONS_GROUPHEALS_en then
             if gNo>xRaidBars then gNo=xRaidBars end
             if healGroups[gl]["STATE"] and gNo>0 then
-                HealBot_Panel_testAddButton(HEALBOT_OPTIONS_GROUPHEALS.." "..grpNo,HEALBOT_OPTIONS_GROUPHEALS,1,gNo)
+                HealBot_Panel_testAddButton(HEALBOT_SORTBY_GROUP.." "..grpNo,HEALBOT_SORTBY_GROUP,1,gNo)
                 xRaidBars=xRaidBars-gNo
             end
         elseif healGroups[gl]["NAME"] == HEALBOT_OPTIONS_MYTARGET_en then
@@ -1995,9 +1995,9 @@ function HealBot_Panel_TestBarsOn()
                         for x=1,8 do
                             if xRaidBars>(5*(x-1)) then
                                 if xRaidBars<(5*x) then
-                                    HealBot_Panel_testAddButton(HEALBOT_OPTIONS_EMERGENCYHEALS.." "..HEALBOT_OPTIONS_GROUPHEALS.." "..grpNo,HEALBOT_OPTIONS_EMERGENCYHEALS,(5*x)-4,xRaidBars)
+                                    HealBot_Panel_testAddButton(HEALBOT_OPTIONS_EMERGENCYHEALS.." "..HEALBOT_SORTBY_GROUP.." "..grpNo,HEALBOT_OPTIONS_EMERGENCYHEALS,(5*x)-4,xRaidBars)
                                 else
-                                    HealBot_Panel_testAddButton(HEALBOT_OPTIONS_EMERGENCYHEALS.." "..HEALBOT_OPTIONS_GROUPHEALS.." "..grpNo,HEALBOT_OPTIONS_EMERGENCYHEALS,(5*x)-4,(5*x))
+                                    HealBot_Panel_testAddButton(HEALBOT_OPTIONS_EMERGENCYHEALS.." "..HEALBOT_SORTBY_GROUP.." "..grpNo,HEALBOT_OPTIONS_EMERGENCYHEALS,(5*x)-4,(5*x))
                                 end
                             end
                         end
@@ -2011,10 +2011,10 @@ function HealBot_Panel_TestBarsOn()
                             end
                         end
                     else
-                        HealBot_Panel_testAddButton(HEALBOT_OPTIONS_EMERGENCYHEALS.." "..HEALBOT_OPTIONS_GROUPHEALS.." "..grpNo,HEALBOT_OPTIONS_EMERGENCYHEALS,1,xRaidBars)
+                        HealBot_Panel_testAddButton(HEALBOT_OPTIONS_EMERGENCYHEALS.." "..HEALBOT_SORTBY_GROUP.." "..grpNo,HEALBOT_OPTIONS_EMERGENCYHEALS,1,xRaidBars)
                     end
                 else
-                    HealBot_Panel_testAddButton(HEALBOT_OPTIONS_GROUPHEALS.." "..grpNo,HEALBOT_OPTIONS_GROUPHEALS,1,xRaidBars)
+                    HealBot_Panel_testAddButton(HEALBOT_SORTBY_GROUP.." "..grpNo,HEALBOT_SORTBY_GROUP,1,xRaidBars)
                 end
                 xRaidBars=0
             end
@@ -2524,7 +2524,7 @@ end
 
 function HealBot_Panel_SetFocusGroups()
       --HealBot_setCall("HealBot_Panel_SetFocusGroups")
-    if HealBot_Globals.OverrideEffects["USE"] == 2 then
+    if HealBot_Globals.OverrideEffects["USEBARS"] == 2 then
         HealBot_Panel_luVars["FocusGroups"]=HealBot_Globals.OverrideEffects["FOCUSGROUPS"]
         HealBot_Panel_luVars["FGroups"]=HealBot_Globals.OverrideFocusGroups
     else
@@ -2943,7 +2943,7 @@ function HealBot_Panel_raidHeals(preCombat)
                 HealBot_Data["PUNIT"]=vRaidUnit
                 if MyGroup["GROUP"]>0 then
                     local _, _, subgroup=GetRaidRosterInfo(j);
-                    HeaderPos[MyGroup["FRAME"]][MyGroup["GROUP"]]=HEALBOT_OPTIONS_GROUPHEALS.." "..subgroup
+                    HeaderPos[MyGroup["FRAME"]][MyGroup["GROUP"]]=HEALBOT_SORTBY_GROUP.." "..subgroup
                 end
             end
             if hbPanel_dataUnits[vRaidUnit] then
@@ -2990,7 +2990,7 @@ function HealBot_Panel_raidHeals(preCombat)
                     if hbv_Skins_GetFrameVar("BarSort", "RAIDORDER", hbCurrentFrame) == 2 then
                         vRaidHeadSort=UnitClass(vRaidUnit) or HEALBOT_WARRIOR
                     elseif hbv_Skins_GetFrameVar("BarSort", "RAIDORDER", hbCurrentFrame) == 3 then
-                        vRaidHeadSort=HEALBOT_OPTIONS_GROUPHEALS.." "..order[vRaidUnit]
+                        vRaidHeadSort=HEALBOT_SORTBY_GROUP.." "..order[vRaidUnit]
                     elseif hbv_Skins_GetFrameVar("BarSort", "RAIDORDER", hbCurrentFrame) == 5 then
                         vRaidHeadSort=HealBot_unitRole[vRaidUnit] or hbRole[HEALBOT_WORD_DPS]
                     end
@@ -3153,7 +3153,7 @@ function HealBot_Panel_groupHeals(preCombat)
         end
     end
     if i[hbCurrentFrame]>vGroupIndex then
-        HealBot_Panel_addUnits(true, hbv_GetUnitType(HEALBOT_GROUP), HEALBOT_OPTIONS_GROUPHEALS,vGroupIndex, preCombat)
+        HealBot_Panel_addUnits(true, hbv_GetUnitType(HEALBOT_GROUP), HEALBOT_SORTBY_GROUP,vGroupIndex, preCombat)
         MyGroup["GROUP"]=vGroupIndex+1
         MyGroup["FRAME"]=hbCurrentFrame
     else

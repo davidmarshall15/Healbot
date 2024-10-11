@@ -198,9 +198,9 @@ end
 
 function HealBot_Events_UnitTarget(button)
           --HealBot_setCall("HealBot_Events_UnitTarget", button)
-    if UnitAffectingCombat(button.unit) then
-        if button.status.current<HealBot_Unit_Status["DC"] then
-            if button.isplayer then
+    if button.isplayer or button.isgroupraid then
+        if UnitAffectingCombat(button.unit) then
+            if button.status.current<HealBot_Unit_Status["DC"] then
                 if not HealBot_Data["UILOCK"] then
                     if HealBot_Panel_IsTargetingEnemy(button.unit) then
                         HealBot_nextRecalcParty(5,0.05)
@@ -208,12 +208,12 @@ function HealBot_Events_UnitTarget(button)
                 else
                     HealBot_Events_CalcThreat(button)
                 end
+            else
+                HealBot_Events_UnitStatus(button)
             end
-        else
-            HealBot_Events_UnitStatus(button)
+        elseif button.status.unittype<20 then
+            HealBot_Panel_EnemyTargetsWithPlayersUpdate(button.unit, button.guid)
         end
-    elseif button.isplayer and button.status.unittype<20 then
-        HealBot_Panel_EnemyTargetsWithPlayersUpdate(button.unit, button.guid)
     end
 end
 
@@ -511,7 +511,7 @@ function HealBot_Events_UnitSpellCastSent(caster,unitName,castGUID,spellID)
             if HealBot_Events_luVars["ChatRESONLY"] then
                 if HealBot_Events_ResSpells[uscSpellName] then
                     if HealBot_Events_ResSpells[uscSpellName] == 2 then
-                        HealBot_Events_CastNotify(HEALBOT_OPTIONS_GROUPHEALS,uscSpellName,(uscUnit or ""))
+                        HealBot_Events_CastNotify(HEALBOT_SORTBY_GROUP,uscSpellName,(uscUnit or ""))
                     elseif uscUnit and uscUnitName then
                         HealBot_Events_CastNotify(uscUnitName,uscSpellName,uscUnit)
                     end

@@ -352,9 +352,8 @@ function HealBot_UnitZone(button)
       --HealBot_setCall("HealBot_UnitZone", button)
     if button.player or UnitIsVisible(button.unit) then
         uzText=GetRealZoneText();
-    elseif IsInRaid() and button.isplayer and UnitInRaid(button.unit) then
-        local raidID=UnitInRaid(button.unit)
-        _, _, _, _, _, _, uzText, _, _=GetRaidRosterInfo(raidID);
+    elseif button.raidid>0 then
+        _, _, _, _, _, _, uzText, _, _=GetRaidRosterInfo(button.raidid)
     else
         HealBot_ScanTooltip:SetUnit(button.unit)
         uzText=HealBot_ScanTooltipTextLeft3:GetText()
@@ -989,11 +988,25 @@ function HealBot_SlashCmd(cmd)
             end
         elseif (HBcmd == "zzz") then
             aButton=HealBot_Panel_RaidButton(HealBot_Data["PGUID"])
+            if HealBot_luVars["tGH"] then
+                HealBot_luVars["tGH"]=false
+            else
+                HealBot_luVars["tGH"]=true
+            end
+            HealBot_ActionIcons_UpdateGroupHealth(aButton.guid, HealBot_luVars["tGH"])
             HealBot_Skins_Check_Aux("Standard")
             HealBot_AddDebug("#: UpdateNumUnits="..HealBot_luVars["UpdateNumUnits"].." nProcs="..HealBot_Timers_retLuVars("nProcs"))
 
             local s=HealBot_Util_Deserialize(HealBot_Class_Spells["PRIE"],true)
-            HealBot_Options_ShareExternalEditBox:SetText(s)
+            if s then
+                if type(s) == "string" then
+                    HealBot_Options_ShareExternalEditBox:SetText(s)
+                else
+                    HealBot_Options_ShareExternalEditBox:SetText("s is type "..type(s))
+                end
+            else
+                HealBot_Options_ShareExternalEditBox:SetText("s is nil")
+            end
             --local z=(UnitGetTotalAbsorbs(aButton.unit) or 0)
             local z=0
             --if HEALBOT_GAME_VERSION>1 then
@@ -2039,7 +2052,7 @@ function HealBot_AbsorbsUpdate(button)
         if button.health.absorbs~=abuAbsorbAmount then
             button.health.absorbs=abuAbsorbAmount
             button.health.absorbspctc=floor((button.health.absorbs/button.health.max)*1000)
-            HealBot_Action_UpdateHealthHotBar(button)
+            HealBot_Action_UpdateHotBar(button)
             HealBot_Action_UpdateAbsorbsButton(button)
             HealBot_Text_setInHealAbsorbsText(button)
             HealBot_Action_AdaptiveAbsorbsUpdate(button)
@@ -2078,7 +2091,7 @@ end
 
 function HealBot_ResetSkins()
       --HealBot_setCall("HealBot_ResetSkins")
-    HealBot_Share_SkinLoad(HealBot_Config_SkinsData[HEALBOT_OPTIONS_GROUPHEALS], true)
+    HealBot_Share_SkinLoad(HealBot_Config_SkinsData[HEALBOT_SORTBY_GROUP], true)
     HealBot_Share_SkinLoad(HealBot_Config_SkinsData[HEALBOT_OPTIONS_RAID25], true)
     HealBot_Share_SkinLoad(HealBot_Config_SkinsData[HEALBOT_OPTIONS_RAID40], true)
     HealBot_Share_SkinLoad(HealBot_Config_SkinsData[HEALBOT_SKINS_STD], true)
@@ -2483,7 +2496,7 @@ function HealBot_VariablesLoaded()
     HealBot_Timers_Set("INIT","SetPlayerData")
     HealBot_Include_Skin(HEALBOT_SKINS_STD, true)
     if HealBot_Globals.FirstLoad then
-        HealBot_Include_Skin(HEALBOT_OPTIONS_GROUPHEALS, true)
+        HealBot_Include_Skin(HEALBOT_SORTBY_GROUP, true)
         HealBot_Include_Skin(HEALBOT_OPTIONS_RAID25, true)
         HealBot_Include_Skin(HEALBOT_OPTIONS_RAID40, true)
     end
@@ -2769,7 +2782,7 @@ end
 local hbCombatState=false
 function HealBot_UnitAffectingCombat(button)
       --HealBot_setCall("HealBot_UnitAffectingCombat", button)
-    if button.isplayer and hbv_Skins_GetFrameBoolean("Icons", "SHOWCOMBAT", button.frame) then
+    if (button.isplayer or button.isgroupraid) and hbv_Skins_GetFrameBoolean("Icons", "SHOWCOMBAT", button.frame) then
         hbCombatState=UnitAffectingCombat(button.unit)
     else
         hbCombatState=false
@@ -3593,7 +3606,7 @@ function HealBot_UnitSlowUpdate(button)
                         button.aura.buff.nextcheck=false
                         HealBot_Events_UnitBuff(button)
                     end
-                elseif button.isplayer then
+                elseif button.isplayer or button.isgroupraid then
                     if button.status.summons and C_IncomingSummon.IncomingSummonStatus(button.unit)~=1 then
                         HealBot_UnitSummonsUpdate(button, false)
                     elseif button.status.nextcheck<HealBot_TimeNow then
@@ -3936,6 +3949,8 @@ function HealBot_UnitUpdateButton(button, updSlow)
                     HealBot_Events_AbsorbsUpdate(button)
                     HealBot_Events_UnitMana(button)
                 end
+            else
+                HealBot_luVars["UpdateMoreUnits"]=HealBot_luVars["UpdateMoreUnits"]+1
             end
             if hbActionFallWatch[button.guid] and button.status.falling~=IsFalling(button.unit) then
                 button.status.falling=IsFalling(button.unit)
@@ -3982,8 +3997,15 @@ end
 
 function HealBot_UpdateUnit_Buttons()
       --HealBot_setCall("HealBot_UpdateUnit_Buttons", nil, nil, nil, true)
+    HealBot_luVars["UpdateMoreUnits"]=0
     for u=1,HealBot_luVars["UpdateNumUnits"] do
         HealBot_UpdateUnit_Button(false)
+    end
+    if HealBot_luVars["UpdateMoreUnits"]>0 then
+        HealBot_luVars["UpdateMore"]=HealBot_luVars["UpdateMoreUnits"]
+        for u=1,HealBot_luVars["UpdateMore"] do
+            HealBot_UpdateUnit_Button(false)
+        end
     end
 end
 
@@ -4208,9 +4230,9 @@ function HealBot_Update_ResetRefreshLists()
     if HealBot_luVars["NumUnitsInQueue"]~=#HealBot_UpdateQueue then
         HealBot_luVars["NumUnitsInQueue"]=#HealBot_UpdateQueue
         if HealBot_luVars["CPUProfilerOn"] then
-            HealBot_luVars["UpdateNumUnits"]=ceil(HealBot_luVars["NumUnitsInQueue"]*0.05)
+            HealBot_luVars["UpdateNumUnits"]=ceil(HealBot_luVars["NumUnitsInQueue"]*0.1)
         else
-            HealBot_luVars["UpdateNumUnits"]=ceil(HealBot_luVars["NumUnitsInQueue"]*0.125)
+            HealBot_luVars["UpdateNumUnits"]=ceil(HealBot_luVars["NumUnitsInQueue"]*0.25)
         end
         HealBot_Debug_PerfUpdate("UpdateNumUnits", HealBot_luVars["UpdateNumUnits"].." ("..HealBot_luVars["NumUnitsInQueue"]..")")
     end

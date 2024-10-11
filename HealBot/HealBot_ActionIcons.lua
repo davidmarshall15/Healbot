@@ -26,6 +26,7 @@ local hbManaBelowGUID={}
 local hbAggroGUID={}
 local hbFallGUID={}
 local hbSwimGUID={}
+local hbGroupHealthGUID={}
 local hbIconKey={}
 local activeFrames={}
 local activeFramesIdx={}
@@ -921,6 +922,8 @@ function HealBot_ActionIcons_ConditionAdd(frame, id, cond, cNo)
             HealBot_ActionIcons_AddFalling(frame, id)
         elseif cond == 16 then
             HealBot_ActionIcons_AddSwimming(frame, id)
+        elseif cond == 17 then
+            HealBot_ActionIcons_AddGroupHealth(frame, id)
         end
     end
 end
@@ -958,6 +961,8 @@ function HealBot_ActionIcons_ConditionDel(frame, id, cond, cNo)
             HealBot_ActionIcons_DelFalling(frame, id)
         elseif cond == 16 then
             HealBot_ActionIcons_DelSwimming(frame, id)
+        elseif cond == 17 then
+            HealBot_ActionIcons_DelGroupHealth(frame, id)
         end
     end
 end
@@ -1190,6 +1195,35 @@ function HealBot_ActionIcons_DelSwimming(frame, id)
     if actionIcons[frame][id].guid then
         HealBot_ActionWatchSwimming(actionIcons[frame][id].guid, false)
         if hbSwimGUID[actionIcons[frame][id].guid] then hbSwimGUID[actionIcons[frame][id].guid][actionIcons[frame][id].uid]=nil end
+    end
+end
+
+function HealBot_ActionIcons_AddGroupHealth(frame, id)
+        --HealBot_setCall("HealBot_ActionIcons_AddSwimming")
+    if actionIcons[frame][id].guid then
+        if not hbGroupHealthGUID[actionIcons[frame][id].guid] then hbGroupHealthGUID[actionIcons[frame][id].guid]={} end
+        hbGroupHealthGUID[actionIcons[frame][id].guid][actionIcons[frame][id].uid]=true
+        HealBot_Action_GroupHealthActionIcons(actionIcons[frame][id].guid, true)
+    end
+end
+
+function HealBot_ActionIcons_UpdateGroupHealth(guid, enabled)
+        --HealBot_setCall("HealBot_ActionIcons_UpdateSwimming", nil, guid)
+    if hbGroupHealthGUID[guid] then
+        for uid,_ in pairs(hbGroupHealthGUID[guid]) do
+            actionIcons[hbIconUID[uid]["Frame"]][hbIconUID[uid]["ID"]].grouphealth=enabled
+            HealBot_ActionIcons_CheckHighlightIconAbility(hbIconUID[uid]["Frame"], hbIconUID[uid]["ID"])
+        end
+    else
+        HealBot_ActionWatchSwimming(guid, false)
+    end
+end
+
+function HealBot_ActionIcons_DelGroupHealth(frame, id)
+        --HealBot_setCall("HealBot_ActionIcons_DelSwimming")
+    if actionIcons[frame][id].guid then
+        HealBot_Action_GroupHealthActionIcons(actionIcons[frame][id].guid, false)
+        if hbGroupHealthGUID[actionIcons[frame][id].guid] then hbGroupHealthGUID[actionIcons[frame][id].guid][actionIcons[frame][id].uid]=nil end
     end
 end
 
@@ -2131,6 +2165,15 @@ function HealBot_ActionIcons_AlertIsSwimming(frame, id, cNo)
     end
 end
 
+function HealBot_ActionIcons_AlertGroupHealth(frame, id, cNo)
+        --HealBot_setCall("HealBot_ActionIcons_AlertGroupHealth")
+    if actionIcons[frame][id].guid and actionIcons[frame][id].grouphealth then
+        HealBot_ActionIcons_CheckAlertFuncs(frame, id, cNo+1)
+    else
+        HealBot_ActionIcons_FadeIcon(frame, id)
+    end
+end
+
 function HealBot_ActionIcons_AlertIsNone(frame, id, cNo)
         --HealBot_setCall("HealBot_ActionIcons_AlertIsNone")
     HealBot_ActionIcons_CheckAlertFuncs(frame, id, cNo+1)
@@ -2152,6 +2195,7 @@ local HealBot_ActionIcons_AlertFuncs={[1]=HealBot_ActionIcons_AlertIsNone,
                                      [14]=HealBot_ActionIcons_AlertAggroLevel,
                                      [15]=HealBot_ActionIcons_AlertIsFalling,
                                      [16]=HealBot_ActionIcons_AlertIsSwimming,
+                                     [17]=HealBot_ActionIcons_AlertGroupHealth,
                                      }
 function HealBot_ActionIcons_CheckAlertFuncs(frame, id, cNo)
         --HealBot_setCall("HealBot_ActionIcons_CheckAlertFuncs")
@@ -2164,14 +2208,25 @@ end
 
 function HealBot_ActionIcons_DebugAlertState(frame, id)
         --HealBot_setCall("HealBot_ActionIcons_DebugAlertState")
-    if HealBot_Data["PALIVE"] and
-       (not hbv_ActionIcons_GetBooleanData("inGroup", frame, id) or hb_lVars["inGroup"]) and
-       (not hbv_ActionIcons_GetBooleanData("inInst", frame, id) or hb_lVars["inInst"]) and
-       (not hbv_ActionIcons_GetBooleanData("inCombat", frame, id) or hb_lVars["inCombat"]) then
-        return true
-    else
-        return false
+    local valid=true
+    local r1,r2,r3,r4
+    if not HealBot_Data["PALIVE"] then
+        valid=false
+        r1="Unit is dead"
     end
+    if hbv_ActionIcons_GetBooleanData("inGroup", frame, id) and not hb_lVars["inGroup"] then
+        valid=false
+        r2="Not in Group or Raid"
+    end
+    if hbv_ActionIcons_GetBooleanData("inInst", frame, id) and not hb_lVars["inInst"] then
+        valid=false
+        r3="Not in Instance"
+    end
+    if hbv_ActionIcons_GetBooleanData("inCombat", frame, id) and not hb_lVars["inCombat"] then
+        valid=false
+        r4="Not in Combat"
+    end
+    return valid, r1, r2, r3, r4
 end
 
 function HealBot_ActionIcons_CheckAlertState(frame, id)

@@ -2558,7 +2558,7 @@ function HealBot_Aura_DebuffWarnings(button, debuffName, force, debuffIconIndex)
         if button.mouseover and HealBot_Data["TIPBUTTON"] then 
             HealBot_setTooltipUpdateNow()
         end
-        if button.status.range>0 and button.isplayer and button.frame<10 and button.aura.debuff.priority<=HealBot_Aura_retLuVars("HotBarDebuff") then
+        if button.status.range>0 and (button.isplayer or button.isgroupraid) and button.frame<10 and button.aura.debuff.priority<=HealBot_Aura_retLuVars("HotBarDebuff") then
             HealBot_Action_BarHotEnable(button, "DEBUFF")
         elseif button.hotbars.debuff then
             HealBot_Action_BarHotDisable(button, "DEBUFF")
@@ -3378,7 +3378,7 @@ function HealBot_Aura_CheckUnitBuffs(button, selfOnly)
             if button.player then
                 onlyPlayers=true
             elseif HEALBOT_GAME_VERSION>3 then
-                onlyPlayers=button.isplayer
+                onlyPlayers=button.isplayer or button.isgroupraid
             else
                 onlyPlayers=UnitIsFriend("player",button.unit)
             end

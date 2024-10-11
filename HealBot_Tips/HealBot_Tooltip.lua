@@ -439,6 +439,8 @@ function HealBot_ToolTip_ShowDebug(button)
     HealBot_Tooltip_SetLine("Debug On - Turn off in Tip with /hb debugtip",1,1,1,1)
     hbTipDebugText["player"]="False"
     hbTipDebugText["isPlayer"]="False"
+    hbTipDebugText["isSpecial"]="False"
+    hbTipDebugText["isGroupRaid"]="False"
     hbTipDebugText["debugtrack"]="False"
     hbTipDebugText["range40"]=-99
     hbTipDebugText["status"]="Unknown"
@@ -465,6 +467,8 @@ function HealBot_ToolTip_ShowDebug(button)
         hbTipDebugText["status"]=hbStates[button.status.current] or ("Unknown ("..button.status.current..")")
         if button.player then hbTipDebugText["player"]="True" end
         if button.isplayer then hbTipDebugText["isPlayer"]="True" end
+        if button.special.unit then hbTipDebugText["isSpecial"]="True" end
+        if button.isgroupraid then hbTipDebugText["isGroupRaid"]="True" end
         if button.debug.track then
             hbTipDebugText["debugtrack"]="True"
             hbTipDebugText["debugtime"]=button.debug.updtime or "Unset"
@@ -473,6 +477,7 @@ function HealBot_ToolTip_ShowDebug(button)
         HealBot_Tooltip_SetLine("No button found for unit",1,0.25,0.25,1)
     end
     HealBot_Tooltip_SetLine("Button Player is "..hbTipDebugText["player"],0.4,1,1,1,"Button isPlayer is "..hbTipDebugText["isPlayer"])
+    HealBot_Tooltip_SetLine("Button special unit is "..hbTipDebugText["isSpecial"],0.4,1,1,1,"Button isGroupRaid is "..hbTipDebugText["isGroupRaid"])
     HealBot_Tooltip_SetLine("Debug track is "..hbTipDebugText["debugtrack"],0.4,1,1,1,"Debug time is "..hbTipDebugText["debugtime"])
     HealBot_Tooltip_SetLine("Range state is "..hbTipDebugText["range40"],0.4,1,1,1,"Current status="..hbTipDebugText["status"])
     if button then
@@ -834,7 +839,7 @@ function HealBot_Action_DoRefreshTooltip()
                                         local threatvalue=HealBot_Text_readNumber(xButton.aggro.threatvalue)
                                         HealBot_Tooltip_SetLine(xButton.aggro.mobname.." ("..threatvalue..")",1,0.1,0.1,1,UnitTag,xButton.text.sr,xButton.text.sg,xButton.text.sb,1)
                                     elseif HealBot_Tooltip_luVars["uGroup"]>0 then
-                                        HealBot_Tooltip_SetLine(HEALBOT_OPTIONS_GROUPHEALS.." "..HealBot_Tooltip_luVars["uGroup"],1,1,1,1,UnitTag,xButton.text.sr,xButton.text.sg,xButton.text.sb,1)
+                                        HealBot_Tooltip_SetLine(HEALBOT_SORTBY_GROUP.." "..HealBot_Tooltip_luVars["uGroup"],1,1,1,1,UnitTag,xButton.text.sr,xButton.text.sg,xButton.text.sb,1)
                                     elseif string.len(UnitTag)>0 then
                                         HealBot_Tooltip_SetLine(UnitTag,xButton.text.sr,xButton.text.sg,xButton.text.sb,1," ",0,0,0,0)
                                     end
@@ -844,7 +849,7 @@ function HealBot_Action_DoRefreshTooltip()
                                     maxmana=HealBot_Text_readNumber(maxmana)
                                     if xButton.aggro.threatpct<1 then
                                         if HealBot_Tooltip_luVars["uGroup"]>0 then
-                                            HealBot_Tooltip_SetLine(HEALBOT_OPTIONS_GROUPHEALS.." "..HealBot_Tooltip_luVars["uGroup"],1,1,1,1,mana.."/"..maxmana.." ("..mPct.."%)",powerCols.r,powerCols.g,powerCols.b,1)
+                                            HealBot_Tooltip_SetLine(HEALBOT_SORTBY_GROUP.." "..HealBot_Tooltip_luVars["uGroup"],1,1,1,1,mana.."/"..maxmana.." ("..mPct.."%)",powerCols.r,powerCols.g,powerCols.b,1)
                                         elseif string.len(UnitTag)>0 then
                                             HealBot_Tooltip_SetLine(UnitTag,xButton.text.sr,xButton.text.sg,xButton.text.sb,1,mana.."/"..maxmana.." ("..mPct.."%)",powerCols.r,powerCols.g,powerCols.b,1)
                                         else
@@ -1146,6 +1151,13 @@ function HealBot_Tooltip_DebugActionIconCondition(icon, index, cond)
             else
                 HealBot_Tooltip_SetLine("icon.swimming is ",0.4,1,1,1,"FALSE",1,0.25,0.25,1)
             end
+        elseif cond == 17 then
+            HealBot_Tooltip_SetLine("Condition "..index.." is "..HealBot_Options_RetActionIconsAlertFilter(cond),1,1,1,1)
+            if icon.grouphealth then
+                HealBot_Tooltip_SetLine("icon.grouphealth is ",0.4,1,1,1,"TRUE",0.25,1,0.25,1)
+            else
+                HealBot_Tooltip_SetLine("icon.grouphealth is ",0.4,1,1,1,"FALSE",1,0.25,0.25,1)
+            end
         end
     else
         HealBot_Tooltip_SetLine("Condition "..index.." is "..HealBot_Options_RetActionIconsAlertFilter(cond),1,1,1,1,"PASS",0.25,1,0.25,1)
@@ -1233,12 +1245,17 @@ function HealBot_Tooltip_DisplayActionIconTooltip(icon, target)
                 HealBot_Tooltip_SetLine("target valid is ",0.4,1,1,1,"FALSE",1,0.25,0.25,1)
             end
             HealBot_Tooltip_SetLine("  ",0,0,0,0)
-            if not HealBot_ActionIcons_DebugAlertState(icon.frame, icon.id) then
+            local gCond, r1, r2, r3, r4 = HealBot_ActionIcons_DebugAlertState(icon.frame, icon.id)
+            if not gCond then
                 HealBot_Tooltip_SetLine("Global conditions not met",1,0.25,0.25,1)
-            else
-                for x=1,3 do
-                    HealBot_Tooltip_DebugActionIconCondition(icon, x)
-                end
+                if r1 then HealBot_Tooltip_SetLine(r1,1,0.25,0.25,1) end
+                if r2 then HealBot_Tooltip_SetLine(r2,1,0.25,0.25,1) end
+                if r3 then HealBot_Tooltip_SetLine(r3,1,0.25,0.25,1) end
+                if r4 then HealBot_Tooltip_SetLine(r4,1,0.25,0.25,1) end
+                HealBot_Tooltip_SetLine(" ")
+            end
+            for x=1,3 do
+                HealBot_Tooltip_DebugActionIconCondition(icon, x)
             end
         end
     end
@@ -1517,7 +1534,7 @@ function HealBot_Tooltip_UpdateIconTooltip()
 end
 
 local tLine={}
-function HealBot_Tooltip_OptionsHelp(title,text)
+function HealBot_Tooltip_OptionsHelp(title,text,top)
       --HealBot_setCall("HealBot_Tooltip_OptionsHelp")
     if title and text then
         if HealBot_Tooltip_luVars["doInit"] then
@@ -1545,13 +1562,17 @@ function HealBot_Tooltip_OptionsHelp(title,text)
         end
         local g=_G["HealBot_Options"]
         hbTip:SetOwner(g, "ANCHOR_NONE")
-        hbTip:SetPoint("TOPLEFT","WorldFrame","BOTTOMLEFT",x,y-30);
         hbTip:AddLine(title,1,1,1)
         hbTip:AddLine("    ",1,1,1)
         for l=1,#tLine do
             hbTip:AddLine(tLine[l],0.8,0.8,0.8)
         end
         HealBot_Tooltip_Show()
+        if top then
+            hbTip:SetPoint("TOPLEFT","WorldFrame","BOTTOMLEFT",x,y+20+hbTip:GetHeight())
+        else
+            hbTip:SetPoint("TOPLEFT","WorldFrame","BOTTOMLEFT",x,y-30)
+        end
     end
 end
 
