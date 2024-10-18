@@ -159,8 +159,12 @@ function HealBot_Events_setLag()
       --HealBot_setCall("HealBot_Events_setLag")
     if HealBot_Globals.LAG<0.05 then
         HealBot_Events_luVars["DelayCD"]=HealBot_Globals.LAG*2.5
+    elseif HealBot_Globals.LAG<0.1 then
+        HealBot_Events_luVars["DelayCD"]=HealBot_Globals.LAG*2.25
+    elseif HealBot_Globals.LAG<0.25 then
+        HealBot_Events_luVars["DelayCD"]=HealBot_Globals.LAG*2
     else
-        HealBot_Events_luVars["DelayCD"]=HealBot_Globals.LAG+0.075
+        HealBot_Events_luVars["DelayCD"]=HealBot_Globals.LAG*1.25
     end
     HealBot_Debug_PerfUpdate("lag", HealBot_Globals.LAG)
     HealBot_Debug_PerfUpdate("CDdelay", HealBot_Events_luVars["DelayCD"])

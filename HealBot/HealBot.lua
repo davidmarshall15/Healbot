@@ -988,34 +988,20 @@ function HealBot_SlashCmd(cmd)
             end
         elseif (HBcmd == "zzz") then
             aButton=HealBot_Panel_RaidButton(HealBot_Data["PGUID"])
-            if HealBot_luVars["tGH"] then
-                HealBot_luVars["tGH"]=false
-            else
-                HealBot_luVars["tGH"]=true
-            end
-            HealBot_ActionIcons_UpdateGroupHealth(aButton.guid, HealBot_luVars["tGH"])
-            HealBot_Skins_Check_Aux("Standard")
+
+            --HealBot_Skins_Check_Aux("Standard")
             HealBot_AddDebug("#: UpdateNumUnits="..HealBot_luVars["UpdateNumUnits"].." nProcs="..HealBot_Timers_retLuVars("nProcs"))
 
-            local s=HealBot_Util_Deserialize(HealBot_Class_Spells["PRIE"],true)
-            if s then
-                if type(s) == "string" then
-                    HealBot_Options_ShareExternalEditBox:SetText(s)
-                else
-                    HealBot_Options_ShareExternalEditBox:SetText("s is type "..type(s))
-                end
-            else
-                HealBot_Options_ShareExternalEditBox:SetText("s is nil")
-            end
             --local z=(UnitGetTotalAbsorbs(aButton.unit) or 0)
-            local z=0
+            --local z=0
             --if HEALBOT_GAME_VERSION>1 then
             --    z=GetMastery()
             --    HealBot_AddDebug("Mastery="..z)
             --end
             --z=GetSpellBonusHealing()
             --HealBot_AddDebug("BonusHealing="..z)
-            local hbSpell=HealBot_WoWAPI_SpellName(139)
+            --local hbSpell=HealBot_WoWAPI_SpellName(139)
+           
            -- HealBot_Action_EnableButtonGlowType(aButton, 1,0,0, "PLUGIN", "AW1", 6)
            -- HealBot_Action_setAdaptive()
             --HealBot_Aura_Counts(aButton)
@@ -1600,42 +1586,53 @@ local function HealBot_ItemIdsInBag(bag, slot, firstScan)
                 end
             end
         end
-        C_Timer.After(0.01, function() HealBot_ItemIdsInBag(bag, slot+1, firstScan) end)
+        --C_Timer.After(0.01, function() HealBot_ItemIdsInBag(bag, slot+1, firstScan) end)
+        HealBot_ItemIdsInBag(bag, slot+1, firstScan)
     elseif bag<NUM_BAG_SLOTS then
         HealBot_luVars["MaxBagSlots"]=HealBot_GetContainerNumSlots(bag+1)
         C_Timer.After(0.01, function() HealBot_ItemIdsInBag(bag+1, 1, firstScan) end)
-    elseif firstScan then
-        if not HealBot_luVars["InvFirstRunDone"] then
-            HealBot_luVars["InvFirstRunDone"]=true
-            HealBot_Timers_Set("PLAYER","InvReady")
-        else
-            HealBot_luVars["InvReady"]=true
-            HealBot_Timers_Set("PLAYER","InvChange")
-        end
+        --HealBot_ItemIdsInBag(bag+1, 1, firstScan)
     else
-        HealBot_Options_SetBuffExtraItemText()
-        HealBot_luVars["BagsScanned"]=true
-        HealBot_Timers_Set("LAST","InitItemsData")
-        HealBot_Timers_Set("OOC","ActionIconsValidateItems")
+        HealBot_luVars["BagsBeingScanned"]=false
+        if firstScan then
+            if not HealBot_luVars["InvFirstRunDone"] then
+                HealBot_luVars["InvFirstRunDone"]=true
+                HealBot_Timers_Set("PLAYER","InvReady",HealBot_Globals.LAG)
+            else
+                HealBot_luVars["InvReady"]=true
+                HealBot_Timers_Set("PLAYER","InvChange",HealBot_Globals.LAG)
+            end
+        else
+            HealBot_Options_SetBuffExtraItemText()
+            HealBot_luVars["BagsScanned"]=true
+            HealBot_Timers_Set("LAST","InitItemsData")
+            HealBot_Timers_Set("OOC","ActionIconsValidateItems")
+        end
     end
 end
 
 function HealBot_ItemIdsInBags(firstScan)
+    if not HealBot_luVars["BagsBeingScanned"] then
+        HealBot_luVars["BagsScanned"]=false
+        HealBot_luVars["BagsBeingScanned"]=true
       --HealBot_setCall("HealBot_retItemIdsInBag")
-    for x,_ in pairs(HealBot_ItemsInBags) do
-        HealBot_ItemsInBags[x]=nil;
+        for x,_ in pairs(HealBot_ItemsInBags) do
+            HealBot_ItemsInBags[x]=nil;
+        end
+        for x,_ in pairs(HealBot_WellFedItems) do
+            HealBot_WellFedItems[x]=nil
+        end
+        for x,_ in pairs(HealBot_ManaDrinkItems) do
+            HealBot_ManaDrinkItems[x]=nil
+        end
+        for x,_ in pairs(HealBot_BuffExtraItems) do
+            HealBot_BuffExtraItems[x]=nil
+        end
+        HealBot_luVars["MaxBagSlots"]=HealBot_GetContainerNumSlots(0)
+        HealBot_ItemIdsInBag(0, 1, firstScan)
+    else
+        C_Timer.After(0.1, function() HealBot_ItemIdsInBags(firstScan) end)
     end
-    for x,_ in pairs(HealBot_WellFedItems) do
-        HealBot_WellFedItems[x]=nil
-    end
-    for x,_ in pairs(HealBot_ManaDrinkItems) do
-        HealBot_ManaDrinkItems[x]=nil
-    end
-    for x,_ in pairs(HealBot_BuffExtraItems) do
-        HealBot_BuffExtraItems[x]=nil
-    end
-    HealBot_luVars["MaxBagSlots"]=HealBot_GetContainerNumSlots(0)
-    C_Timer.After(0.01, function() HealBot_ItemIdsInBag(0, 1, firstScan) end)
 end
 
 function HealBot_Register_Events()
@@ -3571,6 +3568,13 @@ function HealBot_UnitSlowUpdate(button)
                     button.status.emergupd=false
                     HealBot_Action_EmergBarCheck(button, true)
                 end
+                if button.text.updatealpha then
+                    button.text.tagupdate=true
+                    button.text.aggroupdate=true
+                    button.text.nameupdate=true
+                    button.text.healthupdate=true
+                    HealBot_Text_UpdateText(button)
+                end
                 button.status.slowupdate=false
             end
         elseif not HealBot_Data["UILOCK"] and button.specupdate>0 and button.specupdate<HealBot_TimeNow and HealBot_luVars["TalentQueryEnd"]<HealBot_TimeNow then
@@ -4418,20 +4422,10 @@ function HealBot_GetInfo()
     return HealBot_Vers
 end
 
-function HealBot_Player_InvCheck()
-      --HealBot_setCall("HealBot_Player_InvCheck")
-    HealBot_luVars["invCheck"]=false
-    HealBot_luVars["BagsScanned"]=false
-    HealBot_ItemIdsInBags(false)
-end
-
 function HealBot_Player_InvChange()
       --HealBot_setCall("HealBot_Player_InvChange")
     if HealBot_luVars["InvReady"] then
-        if not HealBot_luVars["invCheck"] then
-            HealBot_luVars["invCheck"]=true
-            C_Timer.After(0.05, HealBot_Player_InvCheck)
-        end
+        HealBot_ItemIdsInBags(false)
     else
         HealBot_Timers_Set("PLAYER","InvChange",1) -- All recall require a delay
     end
@@ -5016,7 +5010,7 @@ end
 function HealBot_resetLuVars()
       --HealBot_setCall("HealBot_resetLuVars")
     HealBot_luVars["ProcessRefresh"]=false
-    HealBot_luVars["invCheck"]=false
+    HealBot_luVars["BagsBeingScanned"]=false
     HealBot_Text_setLuVars("FluidTextAlphaInUse", false)
     HealBot_Aux_setLuVars("AuxFluidBarAlphaInUse", false)
     HealBot_Aux_setLuVars("AuxCastBarInUse", false)

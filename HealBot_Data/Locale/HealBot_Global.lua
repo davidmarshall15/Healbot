@@ -117,6 +117,7 @@ function HealBot_globalVars()
     HEALBOT_SUPERIOR_WIZARD_OIL_ENCHANT    =28019
     HEALBOT_BLESSED_WIZARD_OIL_SPELL       =23123
     HEALBOT_BLESSED_WIZARD_OIL_ENCHANT     =2685
+    HEALBOT_WIZARD_OIL_SPELL               =20750
     --Harmful Spells
     --Death Knight
     HEALBOT_DEATH_COIL                     =47541 --HealBot_WoWAPI_SpellName(47541) or "--Death Coil"

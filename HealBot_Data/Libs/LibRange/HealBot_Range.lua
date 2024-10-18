@@ -132,7 +132,9 @@ function HealBot_Range_WarnInRange(button, spellName, warnRange)
         else
             return false
         end
-    elseif button.status.range>(warnRange-3) then
+    elseif warnRange == 1 then
+        return true
+    elseif button.status.range>-1 then
         return true
     else
         return false

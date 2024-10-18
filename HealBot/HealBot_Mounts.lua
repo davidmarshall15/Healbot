@@ -26,6 +26,7 @@ local hbMountTypes={[230]="G",
                     [424]="F",
                     [428]="F",
                     [436]="F",
+                    [444]="F",
                     }
 
 local function HealBot_MountsPets_CanMount()

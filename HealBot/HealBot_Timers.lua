@@ -636,6 +636,7 @@ local hbTimerFuncs={["INIT"]={
                         ["TextUpdateEnemyNames"]=HealBot_Update_TextNames_EnemyOnly,
                         ["TextUpdateHealth"]=HealBot_Update_TextHealth,
                         ["TextUpdateState"]=HealBot_Update_TextState,
+                        ["TextPlayersAlpha"]=HealBot_Update_TextPlayersAlpha,
                         ["TextSetTagInUse"]=HealBot_Text_SetTagInUse,
                         ["TextUpdateAggro"]=HealBot_Update_TextAggro,
                         ["ClearSeparateInHealsAbsorbs"]=HealBot_Text_ClearSeparateInHealsAbsorbs,

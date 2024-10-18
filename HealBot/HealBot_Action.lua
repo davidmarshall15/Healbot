@@ -81,7 +81,7 @@ HealBot_Action_luVars["IconGlowSize"]=2
 HealBot_Action_luVars["buttonFrameLevel"]=20
 HealBot_Action_luVars["GroupBarsDimming"]=0
 HealBot_Action_luVars["GroupBarsHealth"]=500
-HealBot_Action_luVars["GroupBarsNumUnits"]=2
+HealBot_Action_luVars["GroupBarsNumUnits"]=3
 HealBot_Action_luVars["GroupBarsRange"]=-1
 HealBot_Action_luVars["GroupBarsEnabled"]=false
 
@@ -2186,7 +2186,7 @@ function HealBot_Action_UpdateDebuffButton(button)
             if HealBot_Range_WarnInRange(button, button.aura.debuff.curespell, HealBot_Config_Cures.WarnRange_Bar) then
                 button.status.r,button.status.g,button.status.b=button.aura.debuff.r,button.aura.debuff.g,button.aura.debuff.b
                 HealBot_Action_setState(button, HealBot_Unit_Status["DEBUFFBARCOL"])
-                if button.status.range>0 then  
+                if button.status.range>0 then
                     curAlpha=HealBot_Action_BarColourAlpha(button, hbv_Skins_GetFrameVar("BarCol", "HA", button.framecol),1)
                 else
                     curAlpha=HealBot_Action_BarColourAlpha(button, hbv_Skins_GetFrameVar("BarCol", "ORA", button.framecol),1)
@@ -2502,8 +2502,6 @@ end
 
 local HealBot_Action_GroupHealth={}
 function HealBot_Action_SetGroupHealthVars(dimming, minHealth, numUnits, unitRange)
-numUnits=numUnits-1
-minHealth=minHealth+150
     if HealBot_Action_luVars["GroupBarsHealth"] ~= minHealth or HealBot_Action_luVars["GroupBarsNumUnits"] ~= numUnits or HealBot_Action_luVars["GroupBarsRange"] ~= unitRange then
         HealBot_Action_luVars["GroupBarsHealth"]=minHealth
         HealBot_Action_luVars["GroupBarsNumUnits"]=numUnits
@@ -2516,6 +2514,7 @@ minHealth=minHealth+150
         HealBot_Action_luVars["GroupBarsDimming"]=dimming
         HealBot_Action_BarColourAlphaSetFunc()
         HealBot_Timers_Set("LAST","ResetUnitStatus",0.1)
+        HealBot_Timers_Set("SKINS","TextPlayersAlpha",0.2)
     end
 end
 
@@ -2543,8 +2542,11 @@ function HealBot_Action_RemoveGroupHealth(button)
         if HealBot_Action_luVars["GroupBarsDimming"]>0 then
             HealBot_Action_BarColourAlphaSetFunc()
             HealBot_Timers_Set("LAST","ResetUnitStatus")
+            HealBot_Timers_Set("SKINS","TextPlayersAlpha")
         end
         HealBot_Action_GroupHealthUpdateExtras()
+    else
+        HealBot_Update_TextPlayersAlphaButton(button)
     end
     if hbGroupHealthAuraWatch[button.guid] then
         HealBot_Plugin_AuraWatch_GroupHealthUpdate(button)
@@ -2561,10 +2563,12 @@ function HealBot_Action_AddGroupHealth(button)
         if HealBot_Action_luVars["GroupBarsDimming"]>0 then
             HealBot_Action_BarColourAlphaSetFunc()
             HealBot_Timers_Set("LAST","ResetUnitStatus")
+            HealBot_Timers_Set("SKINS","TextPlayersAlpha")
         end
         HealBot_Action_GroupHealthUpdateExtras()
     elseif hbGroupHealthAuraWatch[button.guid] then
         HealBot_Plugin_AuraWatch_GroupHealthUpdate(button)
+        HealBot_Update_TextPlayersAlphaButton(button)
     end
 end
 
@@ -2588,8 +2592,10 @@ function HealBot_Action_UpdateHotBars(button)
     if (button.isplayer or button.isgroupraid) and button.frame<10 then
         if button.status.range>0 and button.health.hpct>0 and (button.health.hpct+button.health.absorbspctc)<HealBot_Action_luVars["HotBarsHealth"] then
             HealBot_Action_BarHotEnable(button, "HEALTH")
+            HealBot_Update_TextPlayersAlphaButton(button)
         elseif button.hotbars.health then
             HealBot_Action_BarHotDisable(button, "HEALTH")
+            HealBot_Update_TextPlayersAlphaButton(button)
         end
     elseif button.hotbars.health then 
         HealBot_Action_BarHotDisable(button, "HEALTH")

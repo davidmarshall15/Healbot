@@ -2071,7 +2071,13 @@ function HealBot_Aura_CheckGeneralBuff(button)
         for x=1,2 do
             if HealBot_Weapon_Enchant[x] then
                 if weaponEnchantState[x]["Active"] then
-                    if not weaponEnchantState[x]["Expire"] then weaponEnchantState[x]["Expire"]=30*60*1000 end
+                    if not weaponEnchantState[x]["Expire"] then 
+                        if HEALBOT_GAME_VERSION<4 then
+                            weaponEnchantState[x]["Expire"]=30*60*1000
+                        else
+                            weaponEnchantState[x]["Expire"]=60*60*1000
+                        end
+                    end
                     if (weaponEnchantState[x]["Expire"]/1000)<HealBot_Config_Buffs.LongBuffTimer then
                         HealBot_Aura_SetGeneralBuff(button, HealBot_Weapon_Enchant[x])
                     else
@@ -2081,6 +2087,7 @@ function HealBot_Aura_CheckGeneralBuff(button)
                         end
                     end
                 else
+                    weaponEnchantState[x]["Expire"]=nil
                     HealBot_Aura_SetGeneralBuff(button, HealBot_Weapon_Enchant[x])
                     button.aura.buff.recheck[HealBot_Weapon_Enchant[x]]=nil
                     HealBot_Aura_MarkCheckBuffsTime(button)
@@ -3685,7 +3692,7 @@ function HealBot_Aura_SetAuraCheckFlags(debuffMounted, buffMounted, onTaxi, rest
         buffCheck=false
         HealBot_Action_setLuVars("CheckManaDrink", false)
     end
-    
+
     if resting or onTaxi or debuffMounted or tmpDGroup or inVehicle or not HealBot_Config_Cures.DebuffWatch then 
         debuffCheck=false 
     elseif (HealBot_Config_Cures.DebuffWatchInCombat or not HealBot_Data["UILOCK"]) then
@@ -4491,46 +4498,64 @@ function HealBot_Aura_UpdateItemData(iName, id)
     return false
 end
 
-local InitItemsDataPrev={["MANADRINK"]=false, ["WELLFED"]=false, ["Vanilla1"]=false, ["Vanilla2"]=false, ["Vanilla3"]=false, ["Vanilla4"]=false, ["Vanilla5"]=false}
-local InitItemsDataUpdate=false
+local InitItemsDataPrev={["MANADRINK"]=false, ["WELLFED"]=false, ["Vanilla1"]=false, ["Vanilla2"]=false, ["Vanilla3"]=false, ["Vanilla4"]=false, ["Vanilla5"]=false, ["Vanilla6"]=false}
+local InitItemsDataUpdate=true
 function HealBot_Aura_InitItemsDataReady()
       --HealBot_setCall("HealBot_Aura_InitItemsDataReady")
     local hbCustomItemID,hbCustomSpellID=0,0
-    InitItemsDataUpdate=false
     
     if HEALBOT_GAME_VERSION<4 then
-        if HealBot_Aura_UpdateItemData(HealBot_WoWAPI_ItemInfo(HEALBOT_BRILLIANT_MANA_OIL_SPELL), HEALBOT_BRILLIANT_MANA_OIL_SPELL) and not InitItemsDataPrev["Vanilla1"] then
-            InitItemsDataPrev["Vanilla1"]=true
-            InitItemsDataUpdate=true
+        if HealBot_Aura_UpdateItemData(HealBot_WoWAPI_ItemInfo(HEALBOT_BRILLIANT_MANA_OIL_SPELL), HEALBOT_BRILLIANT_MANA_OIL_SPELL) then
+            if not InitItemsDataPrev["Vanilla1"] then
+                InitItemsDataPrev["Vanilla1"]=true
+                InitItemsDataUpdate=true
+            end
         elseif InitItemsDataPrev["Vanilla1"] then
             InitItemsDataPrev["Vanilla1"]=false
             InitItemsDataUpdate=true
         end
-        if HealBot_Aura_UpdateItemData(HealBot_WoWAPI_ItemInfo(HEALBOT_BRILLIANT_WIZARD_OIL_SPELL), HEALBOT_BRILLIANT_WIZARD_OIL_SPELL) and not InitItemsDataPrev["Vanilla2"] then
-            InitItemsDataPrev["Vanilla2"]=true
-            InitItemsDataUpdate=true
+        if HealBot_Aura_UpdateItemData(HealBot_WoWAPI_ItemInfo(HEALBOT_BRILLIANT_WIZARD_OIL_SPELL), HEALBOT_BRILLIANT_WIZARD_OIL_SPELL) then
+            if not InitItemsDataPrev["Vanilla2"] then
+                InitItemsDataPrev["Vanilla2"]=true
+                InitItemsDataUpdate=true
+            end
         elseif InitItemsDataPrev["Vanilla2"] then
             InitItemsDataPrev["Vanilla2"]=false
             InitItemsDataUpdate=true
         end
-        if HealBot_Aura_UpdateItemData(HealBot_WoWAPI_ItemInfo(HEALBOT_BLESSED_WIZARD_OIL_SPELL), HEALBOT_BLESSED_WIZARD_OIL_SPELL) and not InitItemsDataPrev["Vanilla3"] then
-            InitItemsDataPrev["Vanilla3"]=true
-            InitItemsDataUpdate=true
+        if HealBot_Aura_UpdateItemData(HealBot_WoWAPI_ItemInfo(HEALBOT_BLESSED_WIZARD_OIL_SPELL), HEALBOT_BLESSED_WIZARD_OIL_SPELL) then
+            if not InitItemsDataPrev["Vanilla3"] then
+                InitItemsDataPrev["Vanilla3"]=true
+                InitItemsDataUpdate=true
+            end
         elseif InitItemsDataPrev["Vanilla3"] then
             InitItemsDataPrev["Vanilla3"]=false
             InitItemsDataUpdate=true
         end
-        if HEALBOT_GAME_VERSION>1 then
-            if HealBot_Aura_UpdateItemData(HealBot_WoWAPI_ItemInfo(HEALBOT_SUPERIOR_WIZARD_OIL_SPELL), HEALBOT_SUPERIOR_WIZARD_OIL_SPELL) and not InitItemsDataPrev["Vanilla4"] then
-                InitItemsDataPrev["Vanilla4"]=true
+        if HealBot_Aura_UpdateItemData(HealBot_WoWAPI_ItemInfo(HEALBOT_WIZARD_OIL_SPELL), HEALBOT_WIZARD_OIL_SPELL) then
+            if not InitItemsDataPrev["Vanilla6"] then
+                InitItemsDataPrev["Vanilla6"]=true
                 InitItemsDataUpdate=true
+            end
+        elseif InitItemsDataPrev["Vanilla6"] then
+            InitItemsDataPrev["Vanilla6"]=false
+            InitItemsDataUpdate=true
+        end
+        if HEALBOT_GAME_VERSION>1 then
+            if HealBot_Aura_UpdateItemData(HealBot_WoWAPI_ItemInfo(HEALBOT_SUPERIOR_WIZARD_OIL_SPELL), HEALBOT_SUPERIOR_WIZARD_OIL_SPELL) then
+                if not InitItemsDataPrev["Vanilla4"] then
+                    InitItemsDataPrev["Vanilla4"]=true
+                    InitItemsDataUpdate=true
+                end
             elseif InitItemsDataPrev["Vanilla4"] then
                 InitItemsDataPrev["Vanilla4"]=false
                 InitItemsDataUpdate=true
             end
-            if HealBot_Aura_UpdateItemData(HealBot_WoWAPI_ItemInfo(HEALBOT_SUPERIOR_MANA_OIL_SPELL), HEALBOT_SUPERIOR_MANA_OIL_SPELL) and not InitItemsDataPrev["Vanilla5"] then
-                InitItemsDataPrev["Vanilla5"]=true
-                InitItemsDataUpdate=true
+            if HealBot_Aura_UpdateItemData(HealBot_WoWAPI_ItemInfo(HEALBOT_SUPERIOR_MANA_OIL_SPELL), HEALBOT_SUPERIOR_MANA_OIL_SPELL) then
+                if not InitItemsDataPrev["Vanilla5"] then
+                    InitItemsDataPrev["Vanilla5"]=true
+                    InitItemsDataUpdate=true
+                end
             elseif InitItemsDataPrev["Vanilla5"] then
                 InitItemsDataPrev["Vanilla5"]=false
                 InitItemsDataUpdate=true
@@ -4654,6 +4679,9 @@ function HealBot_Aura_InitItemsDataReady()
         HealBot_Options_BuffWeaponEnchantSetAura(2)
         HealBot_Timers_Set("AURA","ExtraBuffReset")
         HealBot_Timers_Set("AURA","ResetBuffCache")
+        HealBot_Timers_Set("AURA","CheckPlayer")
+        InitItemsDataUpdate=false
+    elseif HealBot_Weapon_Enchant[1] or HealBot_Weapon_Enchant[2] then
         HealBot_Timers_Set("AURA","CheckPlayer")
     end
 end

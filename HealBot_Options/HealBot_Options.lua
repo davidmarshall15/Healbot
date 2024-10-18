@@ -1802,6 +1802,8 @@ function HealBot_Options_UpdateBuffSpellsWeaponEnchantList()
         if sName then HealBot_Options_InsertBuffSpellsWeaponEnchantList(sName, 1) end
         sName=HealBot_WoWAPI_ItemInfo(HEALBOT_BLESSED_WIZARD_OIL_SPELL)
         if sName then HealBot_Options_InsertBuffSpellsWeaponEnchantList(sName, 1) end
+        sName=HealBot_WoWAPI_ItemInfo(HEALBOT_WIZARD_OIL_SPELL)
+        if sName then HealBot_Options_InsertBuffSpellsWeaponEnchantList(sName, 1) end
         if HEALBOT_GAME_VERSION>1 then
             sName=HealBot_WoWAPI_ItemInfo(HEALBOT_SUPERIOR_MANA_OIL_SPELL)
             if sName then HealBot_Options_InsertBuffSpellsWeaponEnchantList(sName, 1) end
@@ -8957,6 +8959,14 @@ function HealBot_Options_AggroTextIndicator_DropDown()
 end
 
 --------------------------------------------------------------------------------
+function HealBot_Options_HealGroupsFrame_Changed()
+    if hb_lVars["TestBarsOn"] then
+        HealBot_Options_framesChanged(true, true, true, true, true)
+    else
+        HealBot_Options_framesChanged(false)
+    end
+end
+
 function HealBot_Options_HealGroupsFrame_DropDown(info, object, id)
       --HealBot_setCall("HealBot_Options_HealGroupsFrame_DropDown")
     for j=1, 5, 1 do
@@ -8965,7 +8975,7 @@ function HealBot_Options_HealGroupsFrame_DropDown(info, object, id)
                         if Healbot_Config_Skins.HealGroups[Healbot_Config_Skins.Current_Skin][id]["FRAME"]~=self:GetID() then
                             Healbot_Config_Skins.HealGroups[Healbot_Config_Skins.Current_Skin][id]["FRAME"]=self:GetID()
                             UIDropDownMenu_SetText(object,HealBot_Options_HealGroupsFrame_List[Healbot_Config_Skins.HealGroups[Healbot_Config_Skins.Current_Skin][id]["FRAME"]])
-                            HealBot_Options_framesChanged(false)
+                            HealBot_Options_HealGroupsFrame_Changed()
                         end
                     end
         info.checked=false;
@@ -9030,7 +9040,7 @@ function HealBot_Options_HealGroups9Frame_DropDown()
     info.func=function(self)
                     Healbot_Config_Skins.HealGroups[Healbot_Config_Skins.Current_Skin][9]["FRAME"]=6
                     UIDropDownMenu_SetText(HealBot_Options_HealGroups9Frame,HEALBOT_VEHICLE_en)
-                    HealBot_Options_framesChanged(false)
+                    HealBot_Options_HealGroupsFrame_Changed()
                 end
     info.checked=false;
     if Healbot_Config_Skins.HealGroups[Healbot_Config_Skins.Current_Skin][9]["FRAME"] == 6 then info.checked=true end
@@ -9045,7 +9055,7 @@ function HealBot_Options_HealGroups10Frame_DropDown()
     info.func=function(self)
                     Healbot_Config_Skins.HealGroups[Healbot_Config_Skins.Current_Skin][10]["FRAME"]=7
                     UIDropDownMenu_SetText(HealBot_Options_HealGroups10Frame,HEALBOT_OPTIONS_PETHEALS_en)
-                    HealBot_Options_framesChanged(false)
+                    HealBot_Options_HealGroupsFrame_Changed()
                 end
     info.checked=false;
     if Healbot_Config_Skins.HealGroups[Healbot_Config_Skins.Current_Skin][10]["FRAME"] == 7 then info.checked=true end
@@ -9060,7 +9070,7 @@ function HealBot_Options_HealGroups11Frame_DropDown()
     info.func=function(self)
                     Healbot_Config_Skins.HealGroups[Healbot_Config_Skins.Current_Skin][11]["FRAME"]=8
                     UIDropDownMenu_SetText(HealBot_Options_HealGroups11Frame,HEALBOT_OPTIONS_TARGETHEALS_en)
-                    HealBot_Options_framesChanged(false)
+                    HealBot_Options_HealGroupsFrame_Changed()
                 end
     info.checked=false;
     if Healbot_Config_Skins.HealGroups[Healbot_Config_Skins.Current_Skin][11]["FRAME"] == 8 then info.checked=true end
@@ -9075,7 +9085,7 @@ function HealBot_Options_HealGroups12Frame_DropDown()
     info.func=function(self)
                     Healbot_Config_Skins.HealGroups[Healbot_Config_Skins.Current_Skin][12]["FRAME"]=8
                     UIDropDownMenu_SetText(HealBot_Options_HealGroups12Frame,HEALBOT_OPTIONS_TARGETHEALS_en)
-                    HealBot_Options_framesChanged(false)
+                    HealBot_Options_HealGroupsFrame_Changed()
                 end
     info.checked=false;
     if Healbot_Config_Skins.HealGroups[Healbot_Config_Skins.Current_Skin][12]["FRAME"] == 8 then info.checked=true end
@@ -9090,7 +9100,7 @@ function HealBot_Options_HealGroups13Frame_DropDown()
     info.func=function(self)
                     Healbot_Config_Skins.HealGroups[Healbot_Config_Skins.Current_Skin][13]["FRAME"]=9
                     UIDropDownMenu_SetText(HealBot_Options_HealGroups13Frame,HEALBOT_FOCUS_en)
-                    HealBot_Options_framesChanged(false)
+                    HealBot_Options_HealGroupsFrame_Changed()
                 end
     info.checked=false;
     if Healbot_Config_Skins.HealGroups[Healbot_Config_Skins.Current_Skin][13]["FRAME"] == 9 then info.checked=true end
@@ -9105,7 +9115,7 @@ function HealBot_Options_HealGroups14Frame_DropDown()
     info.func=function(self)
                     Healbot_Config_Skins.HealGroups[Healbot_Config_Skins.Current_Skin][14]["FRAME"]=9
                     UIDropDownMenu_SetText(HealBot_Options_HealGroups14Frame,HEALBOT_FOCUS_en)
-                    HealBot_Options_framesChanged(false)
+                    HealBot_Options_HealGroupsFrame_Changed()
                 end
     info.checked=false;
     if Healbot_Config_Skins.HealGroups[Healbot_Config_Skins.Current_Skin][14]["FRAME"] == 9 then info.checked=true end
@@ -14740,6 +14750,7 @@ function HealBot_Options_ActionIconsAlertFilter_DropDown()
                             if HealBot_Options_ActionIconsAlertFilterValid(self:GetID()) then
                                 if hbv_ActionIcons_DataExists("AlertFilter", hb_lVars["Frame"], hb_lVars["ActionIconsID"], hb_lVars["ActionIconsCondNo"]) then
                                     HealBot_ActionIcons_ConditionChange(hb_lVars["Frame"], hb_lVars["ActionIconsID"], hbv_ActionIcons_GetData("AlertFilter", hb_lVars["Frame"], hb_lVars["ActionIconsID"], hb_lVars["ActionIconsCondNo"]), self:GetID(), hb_lVars["ActionIconsCondNo"])
+                                    HealBot_AddDebug("ConditionChange")
                                 end
                                 hbv_ActionIcons_SetData(self:GetID(), "AlertFilter", hb_lVars["Frame"], hb_lVars["ActionIconsID"], hb_lVars["ActionIconsCondNo"])
                                 UIDropDownMenu_SetText(HealBot_Options_ActionIconsAlertFilter, HealBot_Options_Lists["ActionIconsAlertFilter"][hbv_ActionIcons_GetData("AlertFilter", hb_lVars["Frame"], hb_lVars["ActionIconsID"], hb_lVars["ActionIconsCondNo"])])
@@ -22448,7 +22459,7 @@ function HealBot_Options_ActionIconsAlertDebuffnameChanged(self)
     spellText=strtrim(self:GetText())
     if hbv_ActionIcons_GetData("AlertDebuff", hb_lVars["Frame"], hb_lVars["ActionIconsID"], hb_lVars["ActionIconsCondNo"])~=spellText then
         if string.len(hbv_ActionIcons_GetData("AlertDebuff", hb_lVars["Frame"], hb_lVars["ActionIconsID"], hb_lVars["ActionIconsCondNo"]))>0 then
-            HealBot_ActionIcons_DeleteDebuff(hb_lVars["Frame"], hb_lVars["ActionIconsID"], hbv_ActionIcons_GetData("AlertDebuff", hb_lVars["Frame"], hb_lVars["ActionIconsID"], hb_lVars["ActionIconsCondNo"]))
+            HealBot_ActionIcons_DeleteDebuff(hb_lVars["Frame"], hb_lVars["ActionIconsID"], hbv_ActionIcons_GetData("AlertDebuff", hb_lVars["Frame"], hb_lVars["ActionIconsID"], hb_lVars["ActionIconsCondNo"]), hb_lVars["ActionIconsCondNo"])
         end
         hbv_ActionIcons_SetData(spellText, "AlertDebuff", hb_lVars["Frame"], hb_lVars["ActionIconsID"], hb_lVars["ActionIconsCondNo"])
         HealBot_ActionIcons_AddDebuff(hb_lVars["Frame"], hb_lVars["ActionIconsID"], spellText, hb_lVars["ActionIconsCondNo"])

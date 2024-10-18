@@ -1589,6 +1589,22 @@ function HealBot_Update_TextNames_EnemyOnly()
     HealBot_Update_TextNames(true)
 end
 
+function HealBot_Update_TextPlayersAlphaButton(button)
+    button.text.updatealpha=true
+    button.status.slowupdate=true
+end
+
+function HealBot_Update_TextPlayersAlpha()
+      --HealBot_setCall("HealBot_Update_TextPlayersAlpha")
+    for _,xButton in pairs(HealBot_Unit_Button) do
+        HealBot_Update_TextPlayersAlphaButton(xButton)
+    end
+    for _,xButton in pairs(HealBot_Private_Button) do
+        HealBot_Update_TextPlayersAlphaButton(xButton)
+    end
+   -- HealBot_Timers_Set("LAST","ResetUnitStatus")
+end
+
 function HealBot_Update_TextHealth()
       --HealBot_setCall("HealBot_Update_TextHealth")
     for _,xButton in pairs(HealBot_Unit_Button) do

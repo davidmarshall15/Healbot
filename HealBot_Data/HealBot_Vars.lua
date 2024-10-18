@@ -1034,11 +1034,13 @@ local hbDataDefaults={["Ability"]="", ["Target"]=HEALBOT_WORDS_UNSET, ["bKey"]="
 function hbv_ActionIcons_DataExists(key, frame, id, cNo)
     if HealBot_Skins_ActionIconsData[Healbot_Config_Skins.Current_Skin][frame] and HealBot_Skins_ActionIconsData[Healbot_Config_Skins.Current_Skin][frame][id] then
         if HealBot_Skins_ActionIconsData[Healbot_Config_Skins.Current_Skin][frame][id][key] then
-            if cNo then
-                return HealBot_Skins_ActionIconsData[Healbot_Config_Skins.Current_Skin][frame][id][key][cNo]
-            else
-                return HealBot_Skins_ActionIconsData[Healbot_Config_Skins.Current_Skin][frame][id][key]
-            end
+            --if cNo then
+            --    if HealBot_Skins_ActionIconsData[Healbot_Config_Skins.Current_Skin][frame][id][key][cNo] then
+            --        return true
+            --    end
+            --else
+                return true
+            --end
         end
     end
     return false

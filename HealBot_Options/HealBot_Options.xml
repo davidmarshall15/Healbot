@@ -478,9 +478,6 @@
                       <OnMouseDown>HealBot_Options_ShowTab("SkinsColour")</OnMouseDown>
                     </Scripts>
                   </Button>
-                  
-                  
-
                   <Button name="HealBot_Contents_Button305">
                     <Size>
                       <AbsDimension x="168" y="20"/>
@@ -509,14 +506,6 @@
                       <OnMouseDown>HealBot_Options_ShowTab("SkinsEnemy")</OnMouseDown>
                     </Scripts>
                   </Button>
-                  
-                  
-                  
-                  
-                  
-                  
-                  
-                  
                   <Button name="HealBot_Contents_Button307">
                     <Size>
                       <AbsDimension x="168" y="20"/>
