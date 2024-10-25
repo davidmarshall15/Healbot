@@ -201,7 +201,7 @@ function HealBot_Comms_CheckVer(userName, version)
         local tNewVer=nil
         hbVersionChecked[userName]=true
         local tMajor, tMinor, tPatch, tHealbot=string.split(".", version)
-        if tonumber(tMajor) == HEALBOT_GAME_VERSION then
+        if tonumber(tMajor) == HEALBOT_GAME_VERSION and tMinor ~= "x" then
             if tonumber(tMajor)>tonumber(hbMajor) then 
                 tNewVer=true
             elseif tonumber(tMajor) == tonumber(hbMajor) and tonumber(tMinor)>tonumber(hbMinor) then 

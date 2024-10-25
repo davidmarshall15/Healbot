@@ -23,6 +23,8 @@ function HealBot_Spells_KnownByName(spellName)
             else
                 return HealBot_Spell_Names[spellName] or HealBot_Init_knownClassicHealSpell(spellName) or ksID
             end
+        elseif HealBot_Config.CurrentSpec == 4 and HealBot_Data["PCLASSTRIM"] == "DRUI" and spellName == HEALBOT_REMOVE_CORRUPTION then
+            return nil
         else
             return HealBot_Spell_Names[spellName] or HealBot_WoWAPI_SpellId(spellName)
         end

@@ -571,8 +571,8 @@ function hbv_Skins_SetColArray(value, skin, cat, key, c, override)
     end
 end
 
-local hbSkinDefaults={["Enemy"]={["INCSELF"]=true, ["INCTANKS"]=true, ["INCFOCUS"]=false,
-                                 ["INCMYTAR"]=false, ["INCARENA"]=false, ["INCARENAPETS"]=false,
+local hbSkinDefaults={["Enemy"]={["INCSELF"]=true, ["INCTANKS"]=true, ["INCFOCUS"]=false, ["INCGROUP"]=false,
+                                 ["INCMYTAR"]=false, ["INCARENA"]=false, ["INCARENAPETS"]=false, ["INCRAID"]=false,
                                  ["SHOWDEBUFFS"]=false, ["SHOWDEBUFFSPLAYERFRAMES"]=false,
                                  ["NUMBOSS"]=8, ["SELFDEBUFFS"]=false, ["SELFDEBUFFSPLAYERFRAMES"]=false,
                                  ["SHOWBUFFS"]=false, ["SHOWBUFFSPLAYERFRAMES"]=false, 

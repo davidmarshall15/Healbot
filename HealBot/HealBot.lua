@@ -1455,9 +1455,7 @@ end
 
 local HealBot_GetContainerNumSlots=GetContainerNumSlots
 local HealBot_GetContainerItemID=GetContainerItemID
-HealBot_GetItemCooldown=GetItemCooldown
 if C_Container then
-    HealBot_GetItemCooldown=C_Container.GetItemCooldown
     HealBot_GetContainerNumSlots=C_Container.GetContainerNumSlots or GetContainerNumSlots
     HealBot_GetContainerItemID=C_Container.GetContainerItemID or GetContainerItemID
 end
@@ -2526,7 +2524,7 @@ function HealBot_ResetOnSpecChange()
         HealBot_Config.CurrentLoadout=HealBot_Config.LastLoadout
         HealBot_Timers_Set("PLAYER","LoadProfile")
         HealBot_Timers_Set("PLAYER","CheckSpellsValid",0.5)
-        HealBot_Timers_Set("SKINS","PartyUpdateCheckSkin",1)
+        HealBot_Timers_Set("OOC","PartyUpdateCheckSkin",1)
         HealBot_ActionIcons_LoadSpec(true)
     end
     HealBot_Data["PLEVEL"]=UnitLevel("player")
@@ -2617,7 +2615,7 @@ function HealBot_Timer_FramesRefresh()
         HealBot_luVars["checkEnemyPlayerTargets"]=true
         HealBot_ProcessRefreshTypes()
     elseif HealBot_Data["UILOCK"] then
-        HealBot_Timers_Set("OOC","FramesRefresh")
+        HealBot_Timers_Set("OOC","FramesRefresh",0.25)
     end
 end
 
@@ -2761,7 +2759,7 @@ function HealBot_Timer_ZoneUpdate()
         HealBot_Options_setLuVars("mapName", mapName)
         HealBot_Options_SetEnableDisableCDBtn()
         HealBot_Options_SetEnableDisableBuffBtn()
-        HealBot_Timers_Set("SKINS","PartyUpdateCheckSkin")
+        HealBot_Timers_Set("OOC","PartyUpdateCheckSkin")
     end
     HealBot_Panel_setLuVars("MAPID", mapAreaID)
     HealBot_Timers_Set("PLAYER","PlayerCheck")
@@ -3180,7 +3178,7 @@ function HealBot_getDefaultSkin(preCombat)
         local numMembers=GetNumGroupMembers()
         local inRaid=IsInRaid()
         local inGroup=IsInGroup()
-        if preCombat and HealBot_Globals.UseCrashProt then
+        if preCombat and HealBot_Globals.UseCrashProt and not HealBot_luVars["Loaded"] then
             local mName=HealBot_Panel_retLuVars("cpMacro")
             if mName then
                 local mbody=GetMacroBody(mName) or "Solo:0"
@@ -5010,7 +5008,6 @@ end
 function HealBot_resetLuVars()
       --HealBot_setCall("HealBot_resetLuVars")
     HealBot_luVars["ProcessRefresh"]=false
-    HealBot_luVars["BagsBeingScanned"]=false
     HealBot_Text_setLuVars("FluidTextAlphaInUse", false)
     HealBot_Aux_setLuVars("AuxFluidBarAlphaInUse", false)
     HealBot_Aux_setLuVars("AuxCastBarInUse", false)

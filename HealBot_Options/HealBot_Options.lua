@@ -6918,7 +6918,7 @@ function HealBot_Options_SkinDefaultSpec_OnClick(self)
     elseif HealBot_Config.SkinSpecEnabled[HealBot_Config.Spec] and HealBot_Config.SkinSpecEnabled[HealBot_Config.Spec] == Healbot_Config_Skins.Current_Skin then
         HealBot_Config.SkinSpecEnabled[HealBot_Config.Spec]=nil
         HealBot_Options_SkinDefaultSpec_SetText()
-        HealBot_Timers_Set("SKINS","PartyUpdateCheckSkin")
+        HealBot_Timers_Set("OOC","PartyUpdateCheckSkin")
     end
 end
 
@@ -6942,7 +6942,7 @@ function HealBot_Options_SkinDefaultZone_OnClick(self)
     elseif HealBot_Config.SkinZoneEnabled[hb_lVars["mapName"]] and HealBot_Config.SkinZoneEnabled[hb_lVars["mapName"]] == Healbot_Config_Skins.Current_Skin then
         HealBot_Config.SkinZoneEnabled[hb_lVars["mapName"]]=nil
         HealBot_Options_SkinDefaultZone_SetText()
-        HealBot_Timers_Set("SKINS","PartyUpdateCheckSkin")
+        HealBot_Timers_Set("OOC","PartyUpdateCheckSkin")
     end
 end
 
@@ -16826,8 +16826,9 @@ function HealBot_Options_Set_Current_Skin(newSkin, ddRefresh, noCallback, optSet
         if HealBot_Options_DoSet_Current_Skin(newSkin, ddRefresh, noCallback, optSetSkins) then
             HealBot_Options_SetSkins(true)
         end
-    else
-        C_Timer.After(2, function() HealBot_Options_Set_Current_Skin(newSkin, ddRefresh, noCallback, optSetSkins) end)
+    elseif not hb_lVars["SetSkinDelayed"] then
+        hb_lVars["SetSkinDelayed"]=true
+        C_Timer.After(2, function() hb_lVars["SetSkinDelayed"]=false; HealBot_Options_Set_Current_Skin(newSkin, ddRefresh, noCallback, optSetSkins) end)
     end
 end
 

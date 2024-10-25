@@ -1663,8 +1663,7 @@ function HealBot_Skins_Clear_UnusedFramesVars()
                         HealBot_Util_EmptyTable(Healbot_Config_Skins.IconSets[uFvSkin], f)
                     end
                 end
-            elseif Healbot_Config_Skins[defaultFrameVars[uFVid]] and Healbot_Config_Skins[defaultFrameVars[uFVid]][uFvSkin] and 
-                   Healbot_Config_Skins[defaultFrameVars[uFVid]][uFvSkin][f] then
+            elseif Healbot_Config_Skins[defaultFrameVars[uFVid]] and Healbot_Config_Skins[defaultFrameVars[uFVid]][uFvSkin] and Healbot_Config_Skins[defaultFrameVars[uFVid]][uFvSkin][f] then
                 table.foreach(Healbot_Config_Skins[defaultFrameVars[uFVid]][uFvSkin][f], function (key,val)
                     if not hbv_Skins_FrameHasDefault(defaultFrameVars[uFVid], key) then
                         Healbot_Config_Skins[defaultFrameVars[uFVid]][uFvSkin][f][key]=nil

@@ -1998,6 +1998,11 @@ function HealBot_Aura_SetGeneralBuff(button, bName)
     --button.aura.buff.priority=21
 end
 
+local HealBot_Aura_GetItemCooldown=GetItemCooldown
+if C_Container then
+    HealBot_Aura_GetItemCooldown=C_Container.GetItemCooldown or GetItemCooldown
+end
+
 local buffWatchName=""
 local PlayerBuffsList={}
 function HealBot_Aura_CheckGeneralBuff(button)
@@ -2021,7 +2026,7 @@ function HealBot_Aura_CheckGeneralBuff(button)
         if not PlayerBuffs[buffWatchName] and not HealBot_Aura_HasBuffTypes(buffWatchName, PlayerBuffTypes) then
             buffSpellStart, buffSpellDur=HealBot_WoWAPI_SpellCooldown(buffWatchName)
             if HealBot_Buff_ItemIDs[buffWatchName] and (not buffSpellStart or not buffSpellDur) then
-                buffSpellStart, buffSpellDur=HealBot_GetItemCooldown(HealBot_Buff_ItemIDs[buffWatchName])
+                buffSpellStart, buffSpellDur=HealBot_Aura_GetItemCooldown(HealBot_Buff_ItemIDs[buffWatchName])
             end
             buffSpellStart=buffSpellStart or 0
             buffSpellDur=buffSpellDur or 0
@@ -2151,11 +2156,15 @@ function HealBot_Aura_ShowCustomBuff(button)
                 end
             elseif buffCustomType == "C" then
                 _, scbUnitClassEN=UnitClass(uaBuffData[button.id][uaBuffSlot].sourceUnit)
-                if scbUnitClassEN and HealBot_Data["PCLASSTRIM"] == strsub(scbUnitClassEN,1,4) then
-                    HealBot_AuraBuffCache[uaBuffData[button.id][uaBuffSlot].spellId].always=true
-                    return true, true, false
+                if scbUnitClassEN then
+                    if HealBot_Data["PCLASSTRIM"] == strsub(scbUnitClassEN,1,4) then
+                        HealBot_AuraBuffCache[uaBuffData[button.id][uaBuffSlot].spellId].always=true
+                        return true, true, false
+                    else
+                        return false, true, true
+                    end
                 else
-                    return false, true, true
+                    return false, true, false
                 end
             elseif buffCustomType == "A" then
                 HealBot_AuraBuffCache[uaBuffData[button.id][uaBuffSlot].spellId].always=true
@@ -2177,12 +2186,16 @@ function HealBot_Aura_ShowCustomBuff(button)
                         return true, true, false
                     else
                         _, scbUnitClassEN=UnitClass(uaBuffData[button.id][uaBuffSlot].sourceUnit)
-                        if scbUnitClassEN and HealBot_Data["PCLASSTRIM"] == strsub(scbUnitClassEN,1,4) then
-                            HealBot_AuraBuffCache[uaBuffData[button.id][uaBuffSlot].spellId].always=true
-                            HealBot_AuraBuffCache[uaBuffData[button.id][uaBuffSlot].spellId].isAuto=true
-                            return true, true, false
+                        if scbUnitClassEN then
+                            if HealBot_Data["PCLASSTRIM"] == strsub(scbUnitClassEN,1,4) then
+                                HealBot_AuraBuffCache[uaBuffData[button.id][uaBuffSlot].spellId].always=true
+                                HealBot_AuraBuffCache[uaBuffData[button.id][uaBuffSlot].spellId].isAuto=true
+                                return true, true, false
+                            else
+                                return false, true, true
+                            end
                         else
-                            return false, true, true
+                            return false, true, false
                         end
                     end
                 end

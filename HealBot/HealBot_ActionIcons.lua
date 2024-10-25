@@ -1591,7 +1591,7 @@ function HealBot_ActionIcons_SetTarget(frame, id, unit)
             if actionIcons[frame][id].filter == 2 then
                 if hbv_ActionIcons_DataExists("AlertFilter", frame, id) then
                     for c=1,3 do
-                        HealBot_ActionIcons_ConditionDel(frame, id, hbv_ActionIcons_DataExists("AlertFilter", frame, id, c), c)
+                        HealBot_ActionIcons_ConditionDel(frame, id, hbv_ActionIcons_GetData("AlertFilter", frame, id, c), c)
                     end
                 end
                 actionIcons[frame][id].filter=1

@@ -68,13 +68,13 @@ function HealBot_Timers_SetnProcs(cpuProfilerOn)
         HealBot_Timers_luVars["nProcsOn"]=2
         HealBot_Timers_luVars["nProcsOff"]=1
     else
-        HealBot_Timers_luVars["nProcsOn"]=HealBot_Util_PerfVal1(550)
-        if HealBot_Timers_luVars["nProcsOn"]<5 then
-            HealBot_Timers_luVars["nProcsOn"]=5
+        HealBot_Timers_luVars["nProcsOn"]=HealBot_Util_PerfVal1(400)
+        if HealBot_Timers_luVars["nProcsOn"]<4 then
+            HealBot_Timers_luVars["nProcsOn"]=4
         end
-        HealBot_Timers_luVars["nProcsOff"]=HealBot_Util_PerfVal1(275)
-        if HealBot_Timers_luVars["nProcsOff"]<3 then
-            HealBot_Timers_luVars["nProcsOff"]=3
+        HealBot_Timers_luVars["nProcsOff"]=HealBot_Util_PerfVal1(200)
+        if HealBot_Timers_luVars["nProcsOff"]<2 then
+            HealBot_Timers_luVars["nProcsOff"]=2
         end
     end
     HealBot_Debug_PerfUpdate("TimersOn", HealBot_Timers_luVars["nProcsOn"])
@@ -335,7 +335,7 @@ function HealBot_Timers_EnableHealBot()
     HealBot_Timers_Set("INIT","RegEvents")
     HealBot_Timers_Set("PLAYER","TalentsChanged")
     HealBot_Timers_Set("OOC","RefreshPartyNextRecalcAll")
-    HealBot_Timers_Set("SKINS","PartyUpdateCheckSkin")
+    HealBot_Timers_Set("OOC","PartyUpdateCheckSkin")
     HealBot_Timers_Set("AURA","PlayerCheckExtended")
     HealBot_Timers_ToggleBlizzardFrames()
     HealBot_AddChat(HEALBOT_CHAT_ENABLED)
@@ -465,7 +465,7 @@ function HealBot_Timers_LastLoad()
     HealBot_Globals.LAG=HealBot_Globals.LAG+0.1
     HealBot_Timers_Set("LAST","MountsPetsUse",0.025)
     HealBot_Timers_Set("PLAYER","InvReady",0.05)
-    HealBot_Timers_Set("SKINS","PartyUpdateCheckSkin",0.075)
+    HealBot_Timers_Set("OOC","PartyUpdateCheckSkin",0.075)
     HealBot_Timers_Set("LAST","InitLoadSpells",0.1)
     HealBot_Timers_Set("SKINS","EmergHealthCol",0.125)
     HealBot_Timers_Set("AURA","ConfigClassHoT",0.15)
@@ -628,7 +628,6 @@ local hbTimerFuncs={["INIT"]={
                         ["CheckSpellsValid"]=HealBot_Options_SpellsCheckTextValid,
                     },
                     ["SKINS"]={
-                        ["PartyUpdateCheckSkin"]=HealBot_PartyUpdate_CheckSkin,
                         ["SkinsFormat"]=HealBot_Timers_SkinsFormat,
                         ["TextExtraCustomCols"]=HealBot_Text_setExtraCustomCols,
                         ["SetBarsTextColour"]=HealBot_Options_SetBarsTextColour,
@@ -831,6 +830,7 @@ local hbTimerFuncs={["INIT"]={
                         ["ResetSpells"]=HealBot_Reset_Spells,
                         ["ResetBuffs"]=HealBot_Reset_Buffs,
                         ["ResetCures"]=HealBot_Reset_Cures,
+                        ["UpdateAllPartyGUIDs"]=HealBot_Update_AllPartyGUIDs,
                     },
                     ["OOC"]={
                         ["FullReload"]=HealBot_FullReload,
@@ -884,6 +884,7 @@ local hbTimerFuncs={["INIT"]={
                         ["UnusedFramesVarsCheck"]=HealBot_Skins_Clear_UnusedFramesVars,
                         ["UnusedVarsCheck"]=HealBot_Skins_Clear_UnusedVars,
                         ["EventsSetFrameUnits"]=HealBot_Events_SetFrameUnits,
+                        ["PartyUpdateCheckSkin"]=HealBot_PartyUpdate_CheckSkin,
                     },
                    }
 

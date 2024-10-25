@@ -234,15 +234,15 @@ end
 
 function HealBot_Events_PartyMembersChanged()
       --HealBot_setCall("HealBot_Events_PartyMembersChanged")
-    HealBot_Timers_Set("OOC","RefreshPartyNextRecalcPlayers")
+    HealBot_Timers_Set("OOC","RefreshPartyNextRecalcPlayers",0.05)
     if HealBot_Data["UILOCK"] then
-        HealBot_Update_AllPartyGUIDs()
+        HealBot_Timers_Set("LAST","UpdateAllPartyGUIDs")
     end
 end
 
 function HealBot_Events_RosterUpdate()
       --HealBot_setCall("HealBot_Events_RosterUpdate")
-    HealBot_Timers_Set("SKINS","PartyUpdateCheckSkin",0.05)
+    HealBot_Timers_Set("OOC","PartyUpdateCheckSkin",0.1)
     HealBot_Events_PartyMembersChanged();
 end
 
@@ -1094,11 +1094,11 @@ end
 function HealBot_Events_PetBattleStart()
       --HealBot_setCall("HealBot_Events_PetBattleStart")
     HealBot_setLuVars("lastPetBattleEvent", "PET_BATTLE_OPENING_START")
-    HealBot_Timers_Set("SKINS","PartyUpdateCheckSkin")
+    HealBot_Timers_Set("OOC","PartyUpdateCheckSkin")
 end
 
 function HealBot_Events_PetBattleOver()
       --HealBot_setCall("HealBot_Events_PetBattleOver")
     HealBot_setLuVars("lastPetBattleEvent", "PET_BATTLE_OVER")
-    HealBot_Timers_Set("SKINS","PartyUpdateCheckSkin")
+    HealBot_Timers_Set("OOC","PartyUpdateCheckSkin")
 end
