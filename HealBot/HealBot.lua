@@ -1758,6 +1758,7 @@ function HealBot_Load()
         HealBot_Timers_Set("LAST","PerfRangeFreq",2)
         HealBot_luVars["UpdateSlowNext"]=HealBot_TimeNow+1
         HealBot_Debug_PerfUpdate("PerfLevel", HealBot_Globals.CPUUsage)
+        HealBot:SetScript("OnUpdate", HealBot_OnUpdate)
         HealBot_Globals.FirstLoad=false
     end
 end
@@ -2140,7 +2141,6 @@ function HealBot_OnLoad()
     HealBot:RegisterEvent("ADDON_LOADED");
     HealBot:RegisterEvent("PLAYER_REGEN_DISABLED");
     HealBot:RegisterEvent("PLAYER_REGEN_ENABLED");
-    HealBot:RegisterEvent("PLAYER_LOGIN");
     SLASH_HEALBOT1="/healbot";
     SLASH_HEALBOT2="/hb";
     SlashCmdList["HEALBOT"]=function(msg)
@@ -2410,6 +2410,18 @@ end
 
 function HealBot_LoadAddOn()
   --HealBot_setCall("HealBot_LoadAddOn")
+    HealBot_Debug_PerfUpdate("UpdateNumEnemy", "0 (0)")
+    HealBot_Options_ObjectsEnableDisable("HealBot_FrameStickyOffsetHorizontal",false)
+    HealBot_Options_ObjectsEnableDisable("HealBot_FrameStickyOffsetVertical",false)
+    HealBot_Options_ObjectsEnableDisable("HealBot_Options_GroupPetsByFive",false)
+    HealBot_Options_ObjectsEnableDisable("HealBot_Options_SelfPet",false)
+end
+
+function HealBot_VariablesLoaded()
+      --HealBot_setCall("HealBot_VariablesLoaded")
+    C_ChatInfo.RegisterAddonMessagePrefix(HEALBOT_HEALBOT)
+    HealBot_Global_MetaVersion()
+    HealBot_WoWAPI_SetAll()
     HealBot_globalVars()
     HealBot_Data_InitVars()
     table.foreach(HealBot_ConfigDefaults, function (key,val)
@@ -2463,28 +2475,7 @@ function HealBot_LoadAddOn()
             HealBot_luVars["FPS"][x][z]=HealBot_Globals.FPS
         end
     end
-    HealBot_Debug_PerfUpdate("UpdateNumEnemy", "0 (0)")
     HealBot_luVars["FPS"][0]=HealBot_Globals.FPS
-    C_ChatInfo.RegisterAddonMessagePrefix(HEALBOT_HEALBOT)
-    HealBot_Options_ObjectsEnableDisable("HealBot_FrameStickyOffsetHorizontal",false)
-    HealBot_Options_ObjectsEnableDisable("HealBot_FrameStickyOffsetVertical",false)
-    HealBot_Options_ObjectsEnableDisable("HealBot_Options_GroupPetsByFive",false)
-    HealBot_Options_ObjectsEnableDisable("HealBot_Options_SelfPet",false)
-    HealBot_SetToolTip(HealBot_ScanTooltip)
-    local g
-    for x=1,8 do
-        HealBot_ScanTooltip:AddDoubleLine(" "," ",1,1,1,1,1,1)
-        g=_G["HealBot_ScanTooltipTextLeft"..x]
-        g:SetFont(HealBot_Supplied_Fonts[15].file, 12)
-        g=_G["HealBot_ScanTooltipTextRight"..x]
-        g:SetFont(HealBot_Supplied_Fonts[15].file, 12)
-    end
-    HealBot_Config.LastAutoSkinChangeTime=0
-    HealBot:SetScript("OnUpdate", HealBot_OnUpdate)
-end
-
-function HealBot_VariablesLoaded()
-      --HealBot_setCall("HealBot_VariablesLoaded")
     if HealBot_Config.LastLoadout == 0 then HealBot_Action_UpdateLoadoutId() end
     HealBot_Media_Register()
     HealBot_Action_InitFrames()
@@ -2513,6 +2504,16 @@ function HealBot_VariablesLoaded()
     HealBot_Text_sethbAggroNumberFormat()
     HealBot_Options_SetFrames()
     HealBot_Init_ClassicSpecs()
+    HealBot_SetToolTip(HealBot_ScanTooltip)
+    local g
+    for x=1,8 do
+        HealBot_ScanTooltip:AddDoubleLine(" "," ",1,1,1,1,1,1)
+        g=_G["HealBot_ScanTooltipTextLeft"..x]
+        g:SetFont(HealBot_Supplied_Fonts[15].file, 12)
+        g=_G["HealBot_ScanTooltipTextRight"..x]
+        g:SetFont(HealBot_Supplied_Fonts[15].file, 12)
+    end
+    HealBot_Config.LastAutoSkinChangeTime=0
     HealBot_Load()
     HealBot_luVars["VarsLoaded"]=true
 end
@@ -3213,7 +3214,23 @@ function HealBot_getDefaultSkin(preCombat)
                         break
                     end
                 end
-            elseif numMembers>11 or y == HEALBOT_ZONE_SA or y == HEALBOT_ZONE_ES or y == HEALBOT_ZONE_AB then
+            elseif numMembers>20 then
+                for x in pairs (Healbot_Config_Skins.Skins) do
+                    if hbv_SkinDefault_GetData(Healbot_Config_Skins.Skins[x],HEALBOT_WORD_BG25) then
+                        LastAutoSkinChangeType="BG25"
+                        newSkinName=Healbot_Config_Skins.Skins[x]
+                        break
+                    end
+                end
+            elseif numMembers>15 then
+                for x in pairs (Healbot_Config_Skins.Skins) do
+                    if hbv_SkinDefault_GetData(Healbot_Config_Skins.Skins[x],HEALBOT_WORD_BG20) then
+                        LastAutoSkinChangeType="BG20"
+                        newSkinName=Healbot_Config_Skins.Skins[x]
+                        break
+                    end
+                end
+            elseif numMembers>10 or y == HEALBOT_ZONE_SA or y == HEALBOT_ZONE_ES or y == HEALBOT_ZONE_AB then
                 for x in pairs (Healbot_Config_Skins.Skins) do
                     if hbv_SkinDefault_GetData(Healbot_Config_Skins.Skins[x],HEALBOT_WORD_BG15) then
                         LastAutoSkinChangeType="BG15"
@@ -3239,10 +3256,26 @@ function HealBot_getDefaultSkin(preCombat)
                         break
                     end
                 end
-            elseif numMembers>14 then
+            elseif numMembers>20 then
                 for x in pairs (Healbot_Config_Skins.Skins) do
                     if hbv_SkinDefault_GetData(Healbot_Config_Skins.Skins[x],HEALBOT_OPTIONS_RAID25) then
                         LastAutoSkinChangeType="Raid25"
+                        newSkinName=Healbot_Config_Skins.Skins[x]
+                        break
+                    end
+                end
+            elseif numMembers>15 then
+                for x in pairs (Healbot_Config_Skins.Skins) do
+                    if hbv_SkinDefault_GetData(Healbot_Config_Skins.Skins[x],HEALBOT_OPTIONS_RAID20) then
+                        LastAutoSkinChangeType="Raid20"
+                        newSkinName=Healbot_Config_Skins.Skins[x]
+                        break
+                    end
+                end
+            elseif numMembers>10 then
+                for x in pairs (Healbot_Config_Skins.Skins) do
+                    if hbv_SkinDefault_GetData(Healbot_Config_Skins.Skins[x],HEALBOT_OPTIONS_RAID15) then
+                        LastAutoSkinChangeType="Raid15"
                         newSkinName=Healbot_Config_Skins.Skins[x]
                         break
                     end
@@ -4246,7 +4279,6 @@ function HealBot_RefreshLists()
       --HealBot_setCall("HealBot_RefreshLists")
     hbFastCur=HealBot_Update_ResetRefreshLists
 end
-
 
 function HealBot_TestBarsState(state)
       --HealBot_setCall("HealBot_TestBarsState")
@@ -5439,7 +5471,6 @@ local hbEventFuncs={["UNIT_SPELLCAST_SENT"]=HealBot_Events_UnitSpellCastSent,
                     ["NEW_MOUNT_ADDED"]=HealBot_Events_CheckMount,
                     ["VARIABLES_LOADED"]=HealBot_Events_VariablesLoaded,
                     ["ADDON_LOADED"]=HealBot_Events_AddOnLoaded,
-                    ["PLAYER_LOGIN"]=HealBot_SetPlayerData,
                     ["GET_ITEM_INFO_RECEIVED"]=HealBot_Events_ItemInfoReceived,
                     ["DISPLAY_SIZE_CHANGED"]=HealBot_Events_UIDisplayChange,
                     ["UI_SCALE_CHANGED"]=HealBot_Events_UIDisplayChange,

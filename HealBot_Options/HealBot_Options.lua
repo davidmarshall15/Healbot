@@ -8474,8 +8474,8 @@ end
 
 function HealBot_IconRCAlwaysEnabled_OnClick(self)
       --HealBot_setCall("HealBot_IconRCAlwaysEnabled_OnClick")
-    if hbv_Skins_GetFrameBoolean("Icons", "OORVOFFSET", hb_lVars["Frame"])~=self:GetChecked() then
-        hbv_Skins_SetFrameVar(self:GetChecked(), "Icons", "OORVOFFSET", hb_lVars["Frame"])
+    if hbv_Skins_GetFrameBoolean("Icons", "RCEN", hb_lVars["Frame"])~=self:GetChecked() then
+        hbv_Skins_SetFrameVar(self:GetChecked(), "Icons", "RCEN", hb_lVars["Frame"])
         HealBot_Options_framesChanged(false)
         HealBot_Update_AllExtraIcons(nil, 93)
     end
@@ -10956,7 +10956,11 @@ function HealBot_Options_LoadProfile()
                 end
             end
         end
-        HealBot_Options_LoadProfileCheckSpec(HealBot_Action_GetSpecID())
+        if HealBot_Spell_Loadouts[HealBot_Action_GetSpecID()] then
+            HealBot_Options_LoadProfileCheckSpec(HealBot_Action_GetSpecID())
+        else 
+            HealBot_Options_LoadProfileCheckSpec(HealBot_Action_GetSpecID_OLD())
+        end
         HealBot_Update_Skins()
         HealBot_Timers_InitExtraOptions()
         HealBot_Timers_Set("INIT","PrepSetAllAttribs",0.2)
@@ -11002,7 +11006,7 @@ end
 function HealBot_Options_SaveSpellsProfile(cType)
       --HealBot_setCall("HealBot_Options_SaveSpellsProfile")
     if HealBot_Data["PCLASSTRIM"] then
-        if HealBot_Config.SpecProfAtSave == HealBot_Action_GetSpecProf() then
+        if HealBot_Config.SpecProfAtSave == HealBot_Action_GetSpecProf() or HealBot_Config.SpecProfAtSave == HealBot_Action_GetSpecProf_OLD() then
             if HealBot_Config.Profile>1 then
                 local sType=cType or "ALL"
                 local dat
@@ -24660,15 +24664,18 @@ function HealBot_Options_SkinsGeneralTab(tab)
         HealBot_Options_SetText(HealBot_Options_SkinDefaultParty,HEALBOT_WORD_PARTY)
         HealBot_Options_SkinDefaultRaid10:SetChecked(hbv_SkinDefault_GetData(Healbot_Config_Skins.Current_Skin,HEALBOT_OPTIONS_RAID10))
         HealBot_Options_SetText(HealBot_Options_SkinDefaultRaid10,HEALBOT_OPTIONS_RAID10)
+        HealBot_Options_SkinDefaultRaid15:SetChecked(hbv_SkinDefault_GetData(Healbot_Config_Skins.Current_Skin,HEALBOT_OPTIONS_RAID15))
+        HealBot_Options_SetText(HealBot_Options_SkinDefaultRaid15,HEALBOT_OPTIONS_RAID15)
+        HealBot_Options_SkinDefaultRaid20:SetChecked(hbv_SkinDefault_GetData(Healbot_Config_Skins.Current_Skin,HEALBOT_OPTIONS_RAID20))
+        HealBot_Options_SetText(HealBot_Options_SkinDefaultRaid20,HEALBOT_OPTIONS_RAID20)
         HealBot_Options_SkinDefaultRaid25:SetChecked(hbv_SkinDefault_GetData(Healbot_Config_Skins.Current_Skin,HEALBOT_OPTIONS_RAID25))
+        HealBot_Options_SetText(HealBot_Options_SkinDefaultRaid25,HEALBOT_OPTIONS_RAID25)
         if HEALBOT_GAME_VERSION<2 then
-            HealBot_Options_SetText(HealBot_Options_SkinDefaultRaid25,HEALBOT_OPTIONS_RAID20)
             HealBot_Options_FocusFrame:Hide()
             HealBot_Options_MiniBossFrames:Hide()
             HealBot_Options_PartyFrames:SetPoint("TOPLEFT",50,-62)
             HealBot_Options_RaidFrames:SetPoint("TOPLEFT",HealBot_Options_PartyFrames,"TOPRIGHT",240,0)
         else
-            HealBot_Options_SetText(HealBot_Options_SkinDefaultRaid25,HEALBOT_OPTIONS_RAID25)
             HealBot_Options_MiniBossFrames:SetChecked(hbv_Skins_GetBoolean("General", "HIDEBOSSF"))
             HealBot_Options_SetText(HealBot_Options_MiniBossFrames,HEALBOT_OPTIONS_HIDEMINIBOSSFRAMES)
             HealBot_Options_FocusFrame:SetChecked(hbv_Skins_GetBoolean("General", "HIDEFOCUSF"))
@@ -24689,6 +24696,10 @@ function HealBot_Options_SkinsGeneralTab(tab)
         HealBot_Options_SetText(HealBot_Options_SkinDefaultBG10,HEALBOT_WORD_BG10)
         HealBot_Options_SkinDefaultBG15:SetChecked(hbv_SkinDefault_GetData(Healbot_Config_Skins.Current_Skin,HEALBOT_WORD_BG15))
         HealBot_Options_SetText(HealBot_Options_SkinDefaultBG15,HEALBOT_WORD_BG15)
+        HealBot_Options_SkinDefaultBG20:SetChecked(hbv_SkinDefault_GetData(Healbot_Config_Skins.Current_Skin,HEALBOT_WORD_BG20))
+        HealBot_Options_SetText(HealBot_Options_SkinDefaultBG20,HEALBOT_WORD_BG20)
+        HealBot_Options_SkinDefaultBG25:SetChecked(hbv_SkinDefault_GetData(Healbot_Config_Skins.Current_Skin,HEALBOT_WORD_BG25))
+        HealBot_Options_SetText(HealBot_Options_SkinDefaultBG25,HEALBOT_WORD_BG25)
         HealBot_Options_SkinDefaultBG40:SetChecked(hbv_SkinDefault_GetData(Healbot_Config_Skins.Current_Skin,HEALBOT_WORD_BG40))
         HealBot_Options_SetText(HealBot_Options_SkinDefaultBG40,HEALBOT_WORD_BG40)
         HealBot_Options_UseStickyFrames:SetChecked(hbv_Skins_GetBoolean("General", "STICKYFRAME"))

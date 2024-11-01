@@ -292,6 +292,7 @@ function HealBot_Lang_enALL()
     HEALBOT_OPTIONS_HIGHLIGHTSTATE         ="Highlight State";
     HEALBOT_OPTIONS_CONFIG                 ="Configure"
     HEALBOT_OPTIONS_RAID10                 =HEALBOT_OPTIONS_EMERGENCYHEALS.." 10";
+    HEALBOT_OPTIONS_RAID15                 =HEALBOT_OPTIONS_EMERGENCYHEALS.." 15";
     HEALBOT_OPTIONS_RAID20                 =HEALBOT_OPTIONS_EMERGENCYHEALS.." 20";
     HEALBOT_OPTIONS_RAID25                 =HEALBOT_OPTIONS_EMERGENCYHEALS.." 25";
     HEALBOT_OPTIONS_RAID40                 =HEALBOT_OPTIONS_EMERGENCYHEALS.." 40";
@@ -882,6 +883,8 @@ function HealBot_Lang_enALL()
     HEALBOT_WORD_BATTLEGROUND              ="Battle Ground"
     HEALBOT_WORD_BG10                      ="BG 10";
     HEALBOT_WORD_BG15                      ="BG 15";
+    HEALBOT_WORD_BG20                      ="BG 20";
+    HEALBOT_WORD_BG25                      ="BG 25";
     HEALBOT_WORD_BG40                      ="BG 40";
     HEALBOT_OPTIONS_TEXTOPTIONS            ="Bar Text"
     HEALBOT_WORD_PARTY                     ="Party"

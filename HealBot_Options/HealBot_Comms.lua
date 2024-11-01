@@ -195,6 +195,9 @@ end
 local HealBot_MsgUpdateAvail=nil
 local hbMajor, hbMinor, hbPatch, hbHealbot=string.split(".", HEALBOT_VERSION)
 local hbVersionChecked={}
+function HealBot_Comms_SetVersion()
+    hbMajor, hbMinor, hbPatch, hbHealbot=string.split(".", HEALBOT_VERSION)
+end
 function HealBot_Comms_CheckVer(userName, version)
       --HealBot_setCall("HealBot_Comms_CheckVer")
     if not hbVersionChecked[userName] then

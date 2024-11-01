@@ -1057,6 +1057,7 @@ function HealBot_Events_PlayerEnteringWorld()
     HealBot_setLuVars("CheckAuraFlags", true)
     HealBot_setLuVars("DropCombat", 1)
     HealBot_Timers_Set("INIT","EnteringWorld")
+    HealBot_Timers_Set("OOC","SaveSpellsProfile")
     HealBot_setLuVars("qaFRNext", HealBot_TimeNow+5)
 end
 

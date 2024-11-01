@@ -4803,9 +4803,21 @@ end
 
 function HealBot_Action_RemoveInvalidLoadouts()
     if HEALBOT_GAME_VERSION>9 then
-        for l,_ in pairs(HealBot_Spell_Loadouts) do
-            if l>9 and not C_Traits.GetConfigInfo(l) then
-                HealBot_Spell_Loadouts[l]=nil
+        for x,_ in pairs(HealBot_Spell_Loadouts) do
+            local s,l=string.split(":",x)
+            if l then
+                s=tonumber(s)
+                if s == HealBot_Config.CurrentSpec then
+                    l=tonumber(l)
+                    if l>9 and not C_Traits.GetConfigInfo(l) then
+                        HealBot_Spell_Loadouts[x]=nil
+                    end
+                end
+            elseif s then
+                s=tonumber(s)
+                if HealBot_Spell_Loadouts[s] and (HealBot_Spell_Loadouts[HealBot_Config.CurrentSpec..":"..s] or not C_Traits.GetConfigInfo(s)) then
+                    HealBot_Spell_Loadouts[s]=nil
+                end
             end
         end
         for x,_ in pairs(HealBot_ActionIcons_Loadouts) do
@@ -4834,6 +4846,17 @@ end
 
 function HealBot_Action_GetSpecID()
     if HEALBOT_GAME_VERSION>9 then
+        sConcat[1]=HealBot_Config.CurrentSpec
+        sConcat[2]=":"
+        sConcat[3]=HealBot_Config.CurrentLoadout
+        return HealBot_Action_Concat(3)
+    else
+        return HealBot_Config.CurrentSpec
+    end
+end
+
+function HealBot_Action_GetSpecID_OLD()
+    if HEALBOT_GAME_VERSION>9 then
         return HealBot_Config.CurrentLoadout
     else
         return HealBot_Config.CurrentSpec
@@ -4841,9 +4864,9 @@ function HealBot_Action_GetSpecID()
 end
 
 function HealBot_Action_GetSpecProf()
+    sConcat[3]=HealBot_Action_GetSpecID()
     sConcat[1]=HealBot_Config.Profile
     sConcat[2]=":"
-    sConcat[3]=HealBot_Action_GetSpecID()
     return HealBot_Action_Concat(3)
 end
 
@@ -4863,9 +4886,9 @@ end
 
 function HealBot_Action_GetActionIconSpecWithSkin(skinname)
       --HealBot_setCall("HealBot_Action_GetActionIconSpecWithSkin")
+    sConcat[3]=HealBot_Action_GetSpecID()
     sConcat[1]=skinname
     sConcat[2]=":"
-    sConcat[3]=HealBot_Action_GetSpecID()
     return HealBot_Action_Concat(3)
 end
 
@@ -6518,6 +6541,7 @@ function HealBot_Action_SetTestButton(frame, unitText, unitRole, unitClass)
             tButton:ClearAllPoints()
             tButton:SetParent(grpFrame[frame])
             tButton.frame=frame
+            tButton.framecol=frame
             tButton.reset=true
             HealBot_Panel_resetTestColsButton(tButton.id)
         elseif tButton.skin~=Healbot_Config_Skins.Current_Skin then

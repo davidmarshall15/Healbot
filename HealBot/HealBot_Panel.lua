@@ -1247,6 +1247,7 @@ function HealBot_Panel_ToggleTestBars(preCombat)
         HealBot_Panel_luVars["TestBarsDelAll"]=true
         HealBot_Options_TestBarsButton:SetText(HEALBOT_OPTIONS_TURNTESTBARSOFF)
     end
+    --HealBot_Options_framesChanged(true, true, true, true, true)
     HealBot_Timers_Set("AUX","UpdateAllAuxByType")
 end
 

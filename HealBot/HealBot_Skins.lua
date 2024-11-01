@@ -1122,6 +1122,10 @@ function HealBot_Skins_ResetSkin(barType,button,numcols)
             HealBot_Skins_setIconAnchors(hbv_Skins_GetFrameVar("Icons", "OORONBAR", b.frame),
                                          hbv_Skins_GetFrameVar("Icons", "OORANCHOR", b.frame), true)
             b.gref.icon[94]:ClearAllPoints()
+-- Patch can be removed after 11.0.7.0
+if type(hbv_Skins_GetFrameVar("Icons", "OORVOFFSET", b.frame)) ~= "number" then
+    hbv_Skins_SetFrameVar(0, "Icons", "OORVOFFSET", b.frame)
+end
             b.gref.icon[94]:SetPoint(iAnchors["ICON"],b,iAnchors["BUTTON"],
                                      ceil(hbv_Skins_GetFrameVar("Icons", "OORHOFFSET", b.frame)*frameScale),
                                      ceil(hbv_Skins_GetFrameVar("Icons", "OORVOFFSET", b.frame)*frameScale))

@@ -1,4 +1,4 @@
-## Interface: 110002
+## Interface: 110005
 ## Title: HealBot Options
 ## Author: Strife
 ## Notes: HealBot options and player settings
@@ -6,4 +6,5 @@
 ## OptionalDeps: LibSharedMedia-3.0
 ## IconTexture: Interface\AddOns\HealBot\Images\HealBot.tga
 
+HealBot_Options_tww.xml
 HealBot_Options.xml

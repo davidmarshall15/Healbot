@@ -1,8 +1,14 @@
-﻿local GetAddOnMetadata=GetAddOnMetadata or (C_AddOns and C_AddOns.GetAddOnMetadata)
-if GetAddOnMetadata then
-    HEALBOT_VERSION=GetAddOnMetadata("HealBot", "Version")
-else
-    HEALBOT_VERSION="11.x"
+﻿local GetAddOnMetadata=GetAddOnMetadata
+HEALBOT_VERSION="11.x"
+
+function HealBot_Global_MetaVersion()
+    GetAddOnMetadata=GetAddOnMetadata or (C_AddOns and C_AddOns.GetAddOnMetadata)
+    if GetAddOnMetadata then
+        HEALBOT_VERSION=GetAddOnMetadata("HealBot", "Version")
+    else
+        HEALBOT_VERSION="11.x"
+    end
+    HealBot_Comms_SetVersion()
 end
 
 HEALBOT_ABOUT_URL="healbot.dpm15.net"
@@ -800,7 +806,6 @@ function HealBot_globalVars()
    -- HEALBOT_ZAMAELS_PRAYER                 =88663 --HealBot_WoWAPI_SpellName(88663) or "--Zamael's Prayer";
     HEALBOT_FLESHCRAFT                     =324631
 end
-HealBot_globalVars()
  
 HEALBOT_TANK=1
 HEALBOT_HEALER=2

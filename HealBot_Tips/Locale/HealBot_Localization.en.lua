@@ -815,6 +815,7 @@ function HealBot_Lang_Options_enALL()
                                  ["UNUSEDDEFAULT"]=HEALBOT_OPTIONS_UNUSEDDEFAULTS,
                                  ["LOCALDEFAULT"]=HEALBOT_OPTIONS_LOCALDEFAULTS,
                                  ["RESET"]=HEALBOT_OPTIONS_SOFTRESET,
+                                 ["RELOADUI"]=HEALBOT_OPTIONS_HARDRESET,
                               }
     HEALBOT_OPTIONS_HELP_TEXT={
                         -- Reset Colours
@@ -1605,10 +1606,11 @@ function HealBot_Lang_Options_enALL()
                         -- Plugin Tab
                                ["SELECTPLUGIN"]="Select plugin.\n--\nInformation on plugins can be found at "..HEALBOT_ABOUT_URL.."\n--\n".._G["GREEN_FONT_COLOR_CODE"].."- HealBot Threat: ".._G["FONT_COLOR_CODE_CLOSE"].."See threat for all players on multiple mobs.\n".._G["GREEN_FONT_COLOR_CODE"].."- HealBot TimeToDie: ".._G["FONT_COLOR_CODE_CLOSE"].."Player damage tracker showing how soon players will die.\n".._G["GREEN_FONT_COLOR_CODE"].."- HealBot TimeToLive: ".._G["FONT_COLOR_CODE_CLOSE"].."Resurrection monitor tracking incoming and pending resurrections.\n".._G["GREEN_FONT_COLOR_CODE"].."- HealBot ExtraButtons: ".._G["FONT_COLOR_CODE_CLOSE"].."Set spells for use with an MMO mouse on buttons 6 - 20\n".._G["GREEN_FONT_COLOR_CODE"].."- HealBot CombatProt: ".._G["FONT_COLOR_CODE_CLOSE"].."Reserve bars for missing players, protects against missing bars in combat.\n".._G["GREEN_FONT_COLOR_CODE"].."- HealBot Performance: ".._G["FONT_COLOR_CODE_CLOSE"].."Tweak internal timers and effects.\n".._G["GREEN_FONT_COLOR_CODE"].."- HealBot MyCooldowns: ".._G["FONT_COLOR_CODE_CLOSE"].."Track cooldowns for your spells and abilities.\n".._G["GREEN_FONT_COLOR_CODE"].."- HealBot Tweaks: ".._G["FONT_COLOR_CODE_CLOSE"].."Tweak internal settings.\n".._G["GREEN_FONT_COLOR_CODE"].."- HealBot Requests: ".._G["FONT_COLOR_CODE_CLOSE"].."Players can whisper you to request a buff or ability.\n".._G["GREEN_FONT_COLOR_CODE"].."- HealBot AuraWatch: ".._G["FONT_COLOR_CODE_CLOSE"].."Monitor your cooldowns and optionally other player conditions to run alerts.\n".._G["GREEN_FONT_COLOR_CODE"].."- HealBot HealthWatch: ".._G["FONT_COLOR_CODE_CLOSE"].."Monitor players and alert on low health.\n".._G["GREEN_FONT_COLOR_CODE"].."- HealBot ManaWatch: ".._G["FONT_COLOR_CODE_CLOSE"].."Monitor players and alert on low mana.\n".._G["GREEN_FONT_COLOR_CODE"].."- HealBot Media: ".._G["FONT_COLOR_CODE_CLOSE"].."Exclude unwanted textures, fonts and sounds from HealBot options.",
                         -- Buttons
-                               ["GLOBALDEFAULT"]="Reset all settings for all characters to default values",
+                               ["GLOBALDEFAULT"]="Reset all settings for all characters to default values\n--\n".._G["ORANGE_FONT_COLOR_CODE"].."WARNING: All existing settings for all characters on all realms will be lost.",
                                ["UNUSEDDEFAULT"]="Reset all settings for unused frames in the current skin to default values\n--\n".._G["GREEN_FONT_COLOR_CODE"].."To save memory, this is highly recommended.",
-                               ["LOCALDEFAULT"]="Reset spells, general buffs and general debuffs on your current character to default values",
+                               ["LOCALDEFAULT"]="Reset spells, general buffs and general debuffs on your current character to default values\n--\n".._G["ORANGE_FONT_COLOR_CODE"].."WARNING: Your existing spells, buffs and debuffs on this character will be lost.",
                                ["RESET"]="Reset HealBot frames.\n--\n".._G["GREEN_FONT_COLOR_CODE"].."This does not affect your settings.",
+                               ["RELOADUI"]="Reload the entire UI.",
                               }                               
 
 end
