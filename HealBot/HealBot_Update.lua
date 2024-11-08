@@ -1877,6 +1877,18 @@ function HealBot_Update_GlobalVars()
     HealBot_Config.EnableHealthy=nil
 end
 
+function HealBot_Update_SkinDefault(skinName, id)
+    if HealBot_Config.SkinDefault[skinName][id]~=nil then 
+        if HealBot_Config.SkinDefault[skinName][id] == 1 then
+            HealBot_Config.SkinDefault[skinName][id]=true
+        elseif type(HealBot_Config.SkinDefault[skinName][id]) == "boolean" then
+            hbv_SkinDefault_SetData(HealBot_Config.SkinDefault[skinName][id], skinName, id)
+        else
+            HealBot_Config.SkinDefault[skinName][id]=nil
+        end
+    end
+end
+
 local skinName=""
 function HealBot_Update_Skins()
       --HealBot_setCall("HealBot_Update_Skins")
@@ -1913,16 +1925,16 @@ function HealBot_Update_Skins()
             for x in pairs (Healbot_Config_Skins.Skins) do
                 skinName=Healbot_Config_Skins.Skins[x]
                 if HealBot_Config.SkinDefault[skinName] then
-                    if HealBot_Config.SkinDefault[skinName][HEALBOT_WORD_SOLO]~=nil then hbv_SkinDefault_SetData(HealBot_Config.SkinDefault[skinName][HEALBOT_WORD_SOLO], skinName, HEALBOT_WORD_SOLO) end
-                    if HealBot_Config.SkinDefault[skinName][HEALBOT_WORD_PARTY]~=nil then hbv_SkinDefault_SetData(HealBot_Config.SkinDefault[skinName][HEALBOT_WORD_PARTY], skinName, HEALBOT_WORD_PARTY) end
-                    if HealBot_Config.SkinDefault[skinName][HEALBOT_OPTIONS_RAID10]~=nil then hbv_SkinDefault_SetData(HealBot_Config.SkinDefault[skinName][HEALBOT_OPTIONS_RAID10], skinName, HEALBOT_OPTIONS_RAID10) end
-                    if HealBot_Config.SkinDefault[skinName][HEALBOT_OPTIONS_RAID25]~=nil then hbv_SkinDefault_SetData(HealBot_Config.SkinDefault[skinName][HEALBOT_OPTIONS_RAID25], skinName, HEALBOT_OPTIONS_RAID25) end
-                    if HealBot_Config.SkinDefault[skinName][HEALBOT_OPTIONS_RAID40]~=nil then hbv_SkinDefault_SetData(HealBot_Config.SkinDefault[skinName][HEALBOT_OPTIONS_RAID40], skinName, HEALBOT_OPTIONS_RAID40) end
-                    if HealBot_Config.SkinDefault[skinName][HEALBOT_WORD_ARENA]~=nil then hbv_SkinDefault_SetData(HealBot_Config.SkinDefault[skinName][HEALBOT_WORD_ARENA], skinName, HEALBOT_WORD_ARENA) end
-                    if HealBot_Config.SkinDefault[skinName][HEALBOT_WORD_BG10]~=nil then hbv_SkinDefault_SetData(HealBot_Config.SkinDefault[skinName][HEALBOT_WORD_BG10], skinName, HEALBOT_WORD_BG10) end
-                    if HealBot_Config.SkinDefault[skinName][HEALBOT_WORD_BG15]~=nil then hbv_SkinDefault_SetData(HealBot_Config.SkinDefault[skinName][HEALBOT_WORD_BG15], skinName, HEALBOT_WORD_BG15) end
-                    if HealBot_Config.SkinDefault[skinName][HEALBOT_WORD_BG40]~=nil then hbv_SkinDefault_SetData(HealBot_Config.SkinDefault[skinName][HEALBOT_WORD_BG40], skinName, HEALBOT_WORD_BG40) end
-                    if HealBot_Config.SkinDefault[skinName][HEALBOT_WORD_PETBATTLE]~=nil then hbv_SkinDefault_SetData(HealBot_Config.SkinDefault[skinName][HEALBOT_WORD_PETBATTLE], skinName, HEALBOT_WORD_PETBATTLE) end
+                    HealBot_Update_SkinDefault(skinName, HEALBOT_WORD_SOLO)
+                    HealBot_Update_SkinDefault(skinName, HEALBOT_WORD_PARTY)
+                    HealBot_Update_SkinDefault(skinName, HEALBOT_OPTIONS_RAID10)
+                    HealBot_Update_SkinDefault(skinName, HEALBOT_OPTIONS_RAID25)
+                    HealBot_Update_SkinDefault(skinName, HEALBOT_OPTIONS_RAID40)
+                    HealBot_Update_SkinDefault(skinName, HEALBOT_WORD_ARENA)
+                    HealBot_Update_SkinDefault(skinName, HEALBOT_WORD_BG10)
+                    HealBot_Update_SkinDefault(skinName, HEALBOT_WORD_BG15)
+                    HealBot_Update_SkinDefault(skinName, HEALBOT_WORD_BG40)
+                    HealBot_Update_SkinDefault(skinName, HEALBOT_WORD_PETBATTLE)
                 end
             end
             if HealBot_Class_Spells[""] then HealBot_Class_Spells[""]=nil end
@@ -1980,6 +1992,17 @@ function HealBot_Update_Skins()
                 end
             end
             if not HealBot_Globals.Custom_Debuff_Categories[HEALBOT_CUSTOM_CAT_CUSTOM_AUTOMATIC] then HealBot_Globals.Custom_Debuff_Categories[HEALBOT_CUSTOM_CAT_CUSTOM_AUTOMATIC]=1 end
+            for x in pairs (HealBot_Config.SkinDefault) do
+                local skinExists=false
+                for j=1, getn(Healbot_Config_Skins.Skins), 1 do
+                    if x==Healbot_Config_Skins.Skins[j] then
+                        skinExists=true
+                    end
+                end
+                if not skinExists then
+                    HealBot_Config.SkinDefault[x]=nil
+                end
+            end
             HealBot_Config.KnownLoadouts=nil
         end
         if not HealBot_Update_luVars["UpdateMsg"] then

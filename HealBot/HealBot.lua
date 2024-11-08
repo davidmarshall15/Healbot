@@ -2419,7 +2419,6 @@ end
 
 function HealBot_VariablesLoaded()
       --HealBot_setCall("HealBot_VariablesLoaded")
-    C_ChatInfo.RegisterAddonMessagePrefix(HEALBOT_HEALBOT)
     HealBot_Global_MetaVersion()
     HealBot_WoWAPI_SetAll()
     HealBot_globalVars()
@@ -2459,11 +2458,14 @@ function HealBot_VariablesLoaded()
             HealBot_Config_Cures[key]=val;
         end
     end);
+    
+    if not Healbot_Config_Skins.Current_Skin then Healbot_Config_Skins.Current_Skin=HEALBOT_SKINS_STD end
+    if type(Healbot_Config_Skins.Current_Skin) == "number" then Healbot_Config_Skins.Current_Skin="s"..Healbot_Config_Skins.Current_Skin end
+    C_ChatInfo.RegisterAddonMessagePrefix(HEALBOT_HEALBOT)
     if HealBot_Config.MyFriend then
         HealBot_Config.PrivFocus=HealBot_Config.MyFriend
         HealBot_Config.MyFriend=nil
     end
-    if not Healbot_Config_Skins.Current_Skin then Healbot_Config_Skins.Current_Skin=HEALBOT_SKINS_STD end
     HealBot_Update_Skins()
     HealBot_Action_SetCustomClassCols(2)
     HealBot_Lang_InitVars()

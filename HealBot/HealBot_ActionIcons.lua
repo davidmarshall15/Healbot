@@ -69,12 +69,12 @@ function HealBot_ActionIcons_LoadSpec(updateAll)
         --HealBot_setCall("HealBot_ActionIcons_LoadSpec")
     local spec=HealBot_Action_GetActionIconSpec()
     if HealBot_ActionIconsData_Loadouts[spec] then
-        HealBot_Skins_ActionIconsData[Healbot_Config_Skins.Current_Skin]=HealBot_Options_copyTable(HealBot_ActionIconsData_Loadouts[spec])
+        HealBot_Skins_ActionIconsData[Healbot_Config_Skins.Current_Skin]=HealBot_Util_Deserialize(HealBot_ActionIconsData_Loadouts[spec])
     else
         HealBot_Timers_Set("OOC","SaveActionIconsProfile",1)
     end
     if HealBot_ActionIcons_Loadouts[spec] then
-        HealBot_Skins_ActionIcons[Healbot_Config_Skins.Current_Skin]=HealBot_Options_copyTable(HealBot_ActionIcons_Loadouts[spec])
+        HealBot_Skins_ActionIcons[Healbot_Config_Skins.Current_Skin]=HealBot_Util_Deserialize(HealBot_ActionIcons_Loadouts[spec])
     end
     if updateAll then
         HealBot_Timers_Set("OOC","ActionIconsNumbers",0.2)

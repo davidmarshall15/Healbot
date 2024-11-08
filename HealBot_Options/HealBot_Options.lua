@@ -2613,6 +2613,7 @@ function HealBot_Options_DeleteSkin_OnClick(self)
             Healbot_Config_Skins.Adaptive[hbDelSkinName]=nil
             Healbot_Config_Skins.AdaptiveOrder[hbDelSkinName]=nil
             Healbot_Config_Skins.AdaptiveCol[hbDelSkinName]=nil
+            HealBot_Config.SkinDefault[hbDelSkinName]=nil
             Healbot_Config_Aux.Bar[hbDelSkinName]=nil
             Healbot_Config_Aux.BarText[hbDelSkinName]=nil
             Healbot_Config_Aux.Overlay[hbDelSkinName]=nil
@@ -6891,7 +6892,7 @@ function HealBot_Options_SkinDefault_OnClick(self, gType)
         if self:GetChecked() then
             for x in pairs (Healbot_Config_Skins.Skins) do
                 if Healbot_Config_Skins.Skins[x]~=Healbot_Config_Skins.Current_Skin and hbv_SkinDefault_GetData(Healbot_Config_Skins.Skins[x],gType) then
-                    --hbv_SkinDefault_SetData(false, Healbot_Config_Skins.Skins[x], gType)
+                    hbv_SkinDefault_SetData(false, Healbot_Config_Skins.Skins[x], gType)
                 end
             end
         end
@@ -10898,7 +10899,8 @@ end
 
 function HealBot_Options_LoadProfileCheckSpec(id)
     if HealBot_Spell_Loadouts[id] then
-        HealBot_Options_LoadProfileSpec(HealBot_Config_Spells, HealBot_Spell_Loadouts[id])
+        local dat=HealBot_Util_Deserialize(HealBot_Spell_Loadouts[id])
+        HealBot_Options_LoadProfileSpec(HealBot_Config_Spells, dat)
     end
 end
 
@@ -11050,7 +11052,7 @@ function HealBot_Options_SaveSpellsProfile(cType)
                     HealBot_Class_Cures[HealBot_Data["PCLASSTRIM"]]=dat
                 end
             end
-            HealBot_Spell_Loadouts[HealBot_Action_GetSpecID()]=HealBot_Options_copyTable(HealBot_Config_Spells)
+            HealBot_Spell_Loadouts[HealBot_Action_GetSpecID()]=HealBot_Util_Serialize(HealBot_Config_Spells, true)--HealBot_Options_copyTable(HealBot_Config_Spells)
         else
             HealBot_Timers_Set("PLAYER","LoadProfile")
             HealBot_Timers_Set("OOC","SaveSpellsProfile",2)
@@ -11065,8 +11067,8 @@ function HealBot_Options_SaveActionIconsProfile()
       --HealBot_setCall("HealBot_Options_SaveActionIconsProfile")
     if HealBot_Data["PGUID"] then
         local spec=HealBot_Action_GetActionIconSpec()
-        HealBot_ActionIconsData_Loadouts[spec]=HealBot_Options_copyTable(HealBot_Skins_ActionIconsData[Healbot_Config_Skins.Current_Skin])
-        HealBot_ActionIcons_Loadouts[spec]=HealBot_Options_copyTable(HealBot_Skins_ActionIcons[Healbot_Config_Skins.Current_Skin])
+        HealBot_ActionIconsData_Loadouts[spec]=HealBot_Util_Serialize(HealBot_Skins_ActionIconsData[Healbot_Config_Skins.Current_Skin], true)
+        HealBot_ActionIcons_Loadouts[spec]=HealBot_Util_Serialize(HealBot_Skins_ActionIcons[Healbot_Config_Skins.Current_Skin], true)
     end
 end
 
@@ -11075,10 +11077,10 @@ function HealBot_Options_CopyActionIconsProfile(skinname)
     if HealBot_Data["PGUID"] then
         local spec=HealBot_Action_GetActionIconSpecWithSkin(skinname)
         if HealBot_ActionIconsData_Loadouts[spec] then
-            HealBot_Skins_ActionIconsData[Healbot_Config_Skins.Current_Skin]=HealBot_Options_copyTable(HealBot_ActionIconsData_Loadouts[spec])
+            HealBot_Skins_ActionIconsData[Healbot_Config_Skins.Current_Skin]=HealBot_Util_Deserialize(HealBot_ActionIconsData_Loadouts[spec])
         end
         if HealBot_ActionIcons_Loadouts[spec] then
-            HealBot_Skins_ActionIcons[Healbot_Config_Skins.Current_Skin]=HealBot_Options_copyTable(HealBot_ActionIcons_Loadouts[spec])
+            HealBot_Skins_ActionIcons[Healbot_Config_Skins.Current_Skin]=HealBot_Util_Deserialize(HealBot_ActionIcons_Loadouts[spec])
         end
         HealBot_Timers_TurboOn(1)
         HealBot_Skins_ResetSkin("init")
@@ -22765,6 +22767,7 @@ end
 function HealBot_Options_SetDefaults(global)
       --HealBot_setCall("HealBot_Options_SetDefaults")
     HealBot_Globals.LastVersionSkinUpdate=HealBot_Global_InitVersion()
+    HealBot_Config.SkinDefault={}
     if global then
         HealBot_Config=HealBot_Options_copyTable(HealBot_ConfigDefaults)
         HealBot_Globals=HealBot_Options_copyTable(HealBot_GlobalsDefaults)

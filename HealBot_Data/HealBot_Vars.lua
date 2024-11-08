@@ -24,16 +24,15 @@ function hbv_Default_FontName()
 end
 
 -- Skin Default
-local hbSkinDefault=false
 function hbv_SkinDefault_GetData(skin, id)
     if HealBot_Config.SkinDefault[skin] then
-        return HealBot_Config.SkinDefault[skin][id] or hbSkinDefault
+        return HealBot_Config.SkinDefault[skin][id] or false
     end
     return false
 end
 
 function hbv_SkinDefault_SetData(value, skin, id)
-    if hbSkinDefault == value then
+    if value == false then
         hbv_SkinDefault_NilData(skin, id)
     else
         if not HealBot_Config.SkinDefault[skin] then HealBot_Config.SkinDefault[skin]={} end

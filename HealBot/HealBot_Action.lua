@@ -4801,6 +4801,26 @@ function HealBot_Action_UpdateLoadoutId()
     end
 end
 
+function HealBot_Action_RemoveInvalidActionIconLoadouts(t, key)
+    local k,s,l=string.split(":",key)
+    if l then
+        s=tonumber(s)
+        if s == HealBot_Config.CurrentSpec then
+            l=tonumber(l)
+            if l>9 and not C_Traits.GetConfigInfo(l) then
+                t[key]=nil
+            end
+        end
+    elseif s then
+        s=tonumber(s)
+        if t[k..":"..HealBot_Config.CurrentSpec..":"..s] or not C_Traits.GetConfigInfo(s) then
+            t[key]=nil
+        end
+    else
+        t[key]=nil
+    end
+end
+
 function HealBot_Action_RemoveInvalidLoadouts()
     if HEALBOT_GAME_VERSION>9 then
         for x,_ in pairs(HealBot_Spell_Loadouts) do
@@ -4821,18 +4841,10 @@ function HealBot_Action_RemoveInvalidLoadouts()
             end
         end
         for x,_ in pairs(HealBot_ActionIcons_Loadouts) do
-            local s,l=string.split(":",x)
-            l=tonumber(l)
-            if l and l>9 and not C_Traits.GetConfigInfo(l) then
-                HealBot_ActionIcons_Loadouts[x]=nil
-            end
+            HealBot_Action_RemoveInvalidActionIconLoadouts(HealBot_ActionIcons_Loadouts, x)
         end
         for x,_ in pairs(HealBot_ActionIconsData_Loadouts) do
-            local s,l=string.split(":",x)
-            l=tonumber(l)
-            if l and l>9 and not C_Traits.GetConfigInfo(l) then
-                HealBot_ActionIconsData_Loadouts[x]=nil
-            end
+            HealBot_Action_RemoveInvalidActionIconLoadouts(HealBot_ActionIconsData_Loadouts, x)
         end
     end
 end
