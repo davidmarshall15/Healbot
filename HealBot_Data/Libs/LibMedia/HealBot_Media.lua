@@ -125,13 +125,14 @@ end
 local hbSounds={}
 hbSounds["TimeNextPlay"]=0
 hbSounds["TimeCallback"]=0
+local hbSoundChan={[1]="Master",[2]="SFX",[3]="Ambience",[4]="Dialog"}
 function HealBot_Media_PlaySound(name, channel)
     if not hbSounds[name] then hbSounds[name]=0 end
     if hbSounds[name]<HealBot_TimeNow then
         if hbSounds["TimeNextPlay"]<HealBot_TimeNow then
             hbSounds[name]=HealBot_TimeNow+1
             hbSounds["TimeNextPlay"]=HealBot_TimeNow+0.25
-            PlaySoundFile(LSM:Fetch('sound',name), channel or "SFX")
+            PlaySoundFile(LSM:Fetch('sound',name), hbSoundChan[channel])
         elseif hbSounds["TimeCallback"]<HealBot_TimeNow then
             hbSounds["TimeCallback"]=0.02+(hbSounds["TimeNextPlay"]-HealBot_TimeNow)
             C_Timer.After(hbSounds["TimeCallback"], function() HealBot_Media_PlaySound(name, channel) end)
@@ -139,7 +140,13 @@ function HealBot_Media_PlaySound(name, channel)
     end
 end
 
-function HealBot_Media_UpdateIndexes()
+function HealBot_Media_UpdateIndexes(callback)
+    if not LSM then
+        HealBot_VariablesLoaded()
+        if not callback then
+            HealBot_Media_UpdateIndexes(true)
+        end
+    end
     HealBot_Media_luVars["Indexed"]=true
     for x,_ in pairs(HealBot_TexturesIndex) do
         HealBot_TexturesIndex[x]=nil

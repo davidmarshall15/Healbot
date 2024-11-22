@@ -282,16 +282,16 @@ function HealBot_Panel_updDataStore(button)
         else
             hbPanel_buttonGUIDs[button.guid]=button
         end
-        HealBot_Timers_Set("OOC","RefreshPartyNextRecalcPlayers",1)
+        HealBot_Timers_Set("OOC","RefreshPartyNextRecalcPlayers",true,true)
     elseif hbPanel_dataPetUnits[button.unit] then
         hbPanel_dataPetNames[button.name]=button.unit
         hbPanel_dataPetGUIDs[button.guid]=button.unit
         hbPanel_dataPetUnits[button.unit]=button.guid
         hbPanel_buttonPetGUIDs[button.guid]=button
         if hbv_IsUnitType(button.status.unittype, HEALBOT_VEHICLE) then
-            HealBot_Timers_Set("OOC","RefreshPartyNextRecalcVehicle",1)
+            HealBot_Timers_Set("OOC","RefreshPartyNextRecalcVehicle",true,true)
         else
-            HealBot_Timers_Set("OOC","RefreshPartyNextRecalcPets",1)
+            HealBot_Timers_Set("OOC","RefreshPartyNextRecalcPets",true,true)
         end
     elseif button.status.unittype>30 then
         hbPanel_buttonExtraGUIDs[button.guid]=button
@@ -969,7 +969,7 @@ function HealBot_Panel_AnchorButton(button, backFrame, relButton, newColumn, chi
         end
     else
         HealBot_Panel_Anchor2ParentFrame(button, backFrame)
-        HealBot_Timers_Set("OOC","RefreshPartyNextRecalcAll",1)
+        HealBot_Timers_Set("OOC","RefreshPartyNextRecalcAll",true,true)
     end
 end
 
@@ -1232,7 +1232,7 @@ function HealBot_Panel_ToggleTestBars(preCombat)
         HealBot_Skins_isTestBars(false)
         HealBot_Timers_Set("AURA","ClearAllBuffs")
         HealBot_Timers_Set("AURA","ClearAllDebuffs")
-        HealBot_Timers_Set("LAST","CheckAutoClose",0.2)
+        HealBot_Timers_Set("LAST","CheckAutoClose",true)
         --HealBot_setTestCols={}
     else
         HealBot_Action_setLuVars("TestBarsOn", true)
@@ -1402,7 +1402,7 @@ function HealBot_Panel_PositionBars(preCombat)
                 end
             end
         elseif vPosButton.id and hbAnchoredButtons[vPosButton.id] then
-            HealBot_Timers_Set("OOC","RefreshPartyNextRecalcAll", 0.2)
+            HealBot_Timers_Set("OOC","RefreshPartyNextRecalcAll",true)
             HealBot_AddDebug("AnchorButton button and relButton as the same - unit="..(xUnit or "nil"), "Panel", true)
         end
     end)
@@ -2233,7 +2233,7 @@ end
 function HealBot_Panel_PlayersTargetsQueueResetSkins(delay)
     if not HealBot_Panel_luVars["PlayersTargetsQueue"] then
         HealBot_Panel_luVars["PlayersTargetsQueue"]=true
-        HealBot_Timers_Set("OOC","PlayersTargetsResetSkins",delay)
+        HealBot_Timers_Set("OOC","PlayersTargetsResetSkins",true)
     end
 end
 
@@ -2247,7 +2247,7 @@ function HealBot_Panel_PlayersTargetsDelFrames(unit)
         HealBot_UnitTargets[unit.."target"]=nil
         HealBot_Panel_PlayersTargetsDelToTFrames(unit.."targettarget")
     else
-        HealBot_Timers_Set("OOC","CheckPlayersTargets",1)
+        HealBot_Timers_Set("OOC","CheckPlayersTargets",true,true)
     end
 end
 
@@ -2290,9 +2290,9 @@ function HealBot_Panel_validateEnemyPlayerFrames()
     for _,xButton in pairs(HealBot_Extra_Button) do
         HealBot_Panel_validateEnemyPlayerFramesUnit(xButton.unit, xButton.guid)
     end
-    HealBot_Panel_PlayersTargetsQueueResetSkins(0.1)
+    HealBot_Panel_PlayersTargetsQueueResetSkins()
     HealBot_Timers_setLuVars("ResetSkins", true)
-    HealBot_Timers_Set("OOC","UpdateEnemyFrames",0.2)
+    HealBot_Timers_Set("OOC","UpdateEnemyFrames",true)
 end
 
 function HealBot_Panel_EnemyTargetsWithPlayersSelfUpdate()
@@ -2310,35 +2310,35 @@ function HealBot_Panel_EnemyTargetsWithPlayersUpdate(unit, guid)
     if not HealBot_Data["UILOCK"] and not HealBot_Panel_luVars["PlayersTargetsQueue"] then
         if unit == "player" and hbv_Skins_GetBoolean("Enemy", "INCSELF") and hbv_Skins_GetVar("Enemy", "EXISTSHOWPTAR")<3 and hbv_Skins_GetVar("Enemy", "SELFUSEFRAME") == 2 then
             if HealBot_Panel_EnemyTargetsWithPlayersSelfUpdate() then
-                HealBot_Panel_PlayersTargetsQueueResetSkins(0.05)
+                HealBot_Panel_PlayersTargetsQueueResetSkins()
             end
         elseif HealBot_MyHealTargets[guid] and hbv_Skins_GetBoolean("Enemy", "INCMYTAR") and hbv_Skins_GetVar("Enemy", "EXISTSHOWMYTAR")<3 and hbv_Skins_GetVar("Enemy", "PRIVATELISTUSEFRAME") == 2 then
             if HealBot_Panel_checkEnemyBar(unit.."target", unit, false,
                                            hbv_Skins_GetVar("Enemy", "EXISTSHOWMYTAR"),
                                            hbv_Skins_GetVar("Enemy", "INCOMBATSHOWLIST"),
                                            2, false, "EnemyTargetsWithPlayersUpdate - list") then
-                HealBot_Panel_PlayersTargetsQueueResetSkins(0.05)
+                HealBot_Panel_PlayersTargetsQueueResetSkins()
             end
         elseif HealBot_MainTanks[guid] and hbv_Skins_GetBoolean("Enemy", "INCTANKS") and hbv_Skins_GetVar("Enemy", "EXISTSHOWTANK")<3 and hbv_Skins_GetVar("Enemy", "TANKUSEFRAME") == 2 then
             if HealBot_Panel_checkEnemyBar(unit.."target", unit, false,
                                            hbv_Skins_GetVar("Enemy", "EXISTSHOWTANK"),
                                            hbv_Skins_GetVar("Enemy", "INCOMBATSHOWTANK"),
                                            2, false, "EnemyTargetsWithPlayersUpdate - tanks") then
-                HealBot_Panel_PlayersTargetsQueueResetSkins(0.05)
+                HealBot_Panel_PlayersTargetsQueueResetSkins()
             end
         elseif HealBot_Action_HealGroup[unit] and hbv_Skins_GetVar("Enemy", "INCGROUP") and hbv_Skins_GetVar("Enemy", "EXISTSHOWGROUP")<3 and hbv_Skins_GetVar("Enemy", "GROUPUSEFRAME") == 2 then
             if HealBot_Panel_checkEnemyBar(unit.."target", unit, false,
                                            hbv_Skins_GetVar("Enemy", "EXISTSHOWGROUP"),
                                            hbv_Skins_GetVar("Enemy", "INCOMBATSHOWGROUP"),
                                            2, false, "EnemyTargetsWithPlayersUpdate - group") then
-                HealBot_Panel_PlayersTargetsQueueResetSkins(0.05)
+                HealBot_Panel_PlayersTargetsQueueResetSkins()
             end
         elseif hbv_Skins_GetVar("Enemy", "INCRAID") and IsInRaid() and hbValidRaidIds[unit] and hbv_Skins_GetVar("Enemy", "EXISTSHOWRAID")<3 and hbv_Skins_GetVar("Enemy", "RAIDUSEFRAME") == 2 then
             if HealBot_Panel_checkEnemyBar(unit.."target", unit, false,
                                            hbv_Skins_GetVar("Enemy", "EXISTSHOWRAID"),
                                            hbv_Skins_GetVar("Enemy", "INCOMBATSHOWRAID"),
                                            2, false, "EnemyTargetsWithPlayersUpdate - raid") then
-                HealBot_Panel_PlayersTargetsQueueResetSkins(0.05)
+                HealBot_Panel_PlayersTargetsQueueResetSkins()
             end
         end
     end
@@ -2450,7 +2450,7 @@ function HealBot_Panel_SubSort(doSubSort, unitType, preCombat)
                 end
             end
         else
-            HealBot_Timers_Set("LAST","ResetAllButtonsRecalcAll",1)
+            HealBot_Timers_Set("LAST","ResetAllButtonsRecalcAll",true,true)
         end
     end
     for x,_ in pairs(suborder) do

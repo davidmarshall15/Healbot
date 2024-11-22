@@ -50,7 +50,7 @@ function HealBot_Aux_setInHealAbsorbMax()
         HealBot_Timers_Set("AUX","UpdateAllAuxAbsorbBars")
         HealBot_Timers_Set("AUX","UpdateAllAuxTotalHealAbsorbBars")
     else
-        HealBot_Timers_Set("LAST", "SetInHealAbsorbMax", 5) -- All recall require a delay
+        HealBot_Timers_Set("LAST", "SetInHealAbsorbMax",true,true) -- All recall require a delay
     end
 end
 
@@ -308,14 +308,14 @@ function HealBot_Aux_resetBars()
       --HealBot_setCall("HealBot_Aux_resetBars")
     if HealBot_retLuVars("Loaded") then
         if HealBot_Aux_luVars["WaitOnFullClear"] then
-            HealBot_Timers_Set("AUX","ResetBars",0.25) -- All recall require a delay
+            HealBot_Timers_Set("AUX","ResetBars",true) -- All recall require a delay
         else
             HealBot_Aux_luVars["WaitOnFullClear"]=true
             HealBot_Options_clearAuxBars()
             HealBot_Timers_Set("AUX","doResetBars")
         end
     else
-        HealBot_Timers_Set("AUX","ResetBars",1) -- All recall require a delay
+        HealBot_Timers_Set("AUX","ResetBars",true,true) -- All recall require a delay
     end
 end
 
@@ -2173,7 +2173,7 @@ function HealBot_Aux_ResetByTypeById(button)
 end
 
 local auxTestText, auxTestCol, auxTestNonTextBarSize, auxTestNonTextTxtSize="", false, 0, 0
-local customDebuffPriority=hbv_Default("cDebuff")
+local customDebuffPriority=hbv_GetStatic("cDebuff")
 local function HealBot_Aux_SetTestButton(button)
       --HealBot_setCall("HealBot_Aux_SetTestButton", button)
     for x=1,9 do

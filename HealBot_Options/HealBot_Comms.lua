@@ -44,7 +44,7 @@ function HealBot_Comms_SendTo(inInst,inType)
         hbCommsTo=0
     end
     if lastCommsTo~=hbCommsTo then
-        HealBot_Timers_Set("LAST","CheckVersions",5)
+        HealBot_Timers_Set("LAST","CheckVersions",true,true)
     end
     HealBot_AddDebug("INFO: Comms is "..hbCommsTo,"Comms",true)
 end

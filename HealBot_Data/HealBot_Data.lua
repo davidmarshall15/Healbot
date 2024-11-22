@@ -143,6 +143,7 @@ HealBot_Config_BuffsDefaults={
   ShowBuffWarning=false,
   SoundBuffWarning=false,
   SoundBuffPlay=hbv_Default_SoundName(),
+  SoundBuffChan=2,
   WarnRange_Bar=2,
   WarnRange_Screen=2,
   WarnRange_Sound=3,
@@ -165,6 +166,7 @@ HealBot_Config_CuresDefaults={
   IgnoreFriendDebuffs=false,
   IgnoreCannotDispell=false,
   SoundDebuffPlay=hbv_Default_SoundName(),
+  SoundDebuffChan=2,
   DebuffWatchInCombat=true,
   DebuffWatchWhenGrouped=false,
   DebuffWatchWhenMounted=false,
@@ -408,7 +410,7 @@ function HealBot_Data_InitVars()
             [HEALBOT_MONK]    =true,   [HEALBOT_DEATHKNIGHT]=false,  [HEALBOT_MONK]    =false, [HEALBOT_DEMONHUNTER]=false,
         },
         CDCBarColour={
-            [hbv_Default("cDebuff")]={ R=0.45, G=0, B=0.28, },
+            [hbv_GetStatic("cDebuff")]={ R=0.45, G=0, B=0.28, },
         },
         CustomDebuffsShowBarCol={  
             [HEALBOT_CUSTOM_CAT_CUSTOM_AUTOMATIC]=4,
@@ -434,7 +436,7 @@ function HealBot_Data_InitVars()
         CustomBuffs={},
         CustomBuffsIconSet={},
         CustomBuffBarColour={
-            [hbv_Default("cBuff")]={ R=0.25, G=0.58, B=0.8, },
+            [hbv_GetStatic("cBuff")]={ R=0.25, G=0.58, B=0.8, },
         },
         CustomBuffsShowBarCol={["DEFAULT"]=4},
         CustomBuffsIconGlow={},
@@ -761,11 +763,6 @@ HealBot_Unit_Status={   ["DISABLED"]=0,
                         ["RES"]=19,
                         ["DC"]=50,
                         ["RESERVED"]=99,
-}
-
-HealBot_ReadyCheckStatus={   ["WAITING"]=0,
-                             ["READY"]=1,
-                             ["NOTREADY"]=2,
 }
 
 HealBot_Unit_Button={};

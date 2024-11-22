@@ -1579,7 +1579,7 @@ function HealBot_Skins_Clear_Orphaned()
                 Healbot_Config_Skins[OrphanedCheckVars[hbCurOrphanedCheck]][skin]=nil
             end
         end
-        HealBot_Timers_Set("OOC","OrphanedCheck",0.2)
+        HealBot_Timers_Set("OOC","OrphanedCheck",true)
     end
 end
 
@@ -1622,7 +1622,7 @@ function HealBot_Skins_Clear_UnusedSkin(skinName)
         uFvSkin=skinName
         uVid=0
         uFVid=0
-        HealBot_Timers_Set("OOC","UnusedFramesVarsCheck",0.2)
+        HealBot_Timers_Set("OOC","UnusedFramesVarsCheck",true)
     elseif not uFvSkinQueueList[skinName] then
         uFvSkinQueueList[skinName]=true
         table.insert(uFvSkinQueue, skinName)
@@ -1678,9 +1678,9 @@ function HealBot_Skins_Clear_UnusedFramesVars()
                 HealBot_Util_EmptyTable(Healbot_Config_Skins[defaultFrameVars[uFVid]][uFvSkin], f)
             end
         end
-        HealBot_Timers_Set("OOC","UnusedFramesVarsCheck",0.2)
+        HealBot_Timers_Set("OOC","UnusedFramesVarsCheck",true)
     else
-        HealBot_Timers_Set("OOC","UnusedVarsCheck",1)
+        HealBot_Timers_Set("OOC","UnusedVarsCheck",true,true)
     end
 end
 
@@ -1694,7 +1694,7 @@ function HealBot_Skins_Clear_UnusedVars()
                 hbv_Skins_SetVarSkin(val, uFvSkin, defaultVars[uVid], key)
             end
         end);
-        HealBot_Timers_Set("OOC","UnusedVarsCheck",0.2)
+        HealBot_Timers_Set("OOC","UnusedVarsCheck",true)
     else
         HealBot_Skins_Check_Aux(uFvSkin)
         uFvSkinProcess=false
@@ -1760,6 +1760,7 @@ function HealBot_Skins_Check_Skin(SkinName)
             Healbot_Config_Skins.HealGroups[SkinName][7]["FRAME"]=1
             Healbot_Config_Skins.HealGroups[SkinName][7]["STATE"]=false
             Healbot_Config_Skins.HealGroups[SkinName][8]["FRAME"]=5
+            Healbot_Config_Skins.HealGroups[SkinName][8]["STATE"]=false
             Healbot_Config_Skins.HealGroups[SkinName][12]["FRAME"]=8
             Healbot_Config_Skins.HealGroups[SkinName][14]["FRAME"]=9
             Healbot_Config_Skins.HealGroups[SkinName][15]["FRAME"]=10

@@ -657,6 +657,7 @@ function HealBot_Lang_Options_enALL()
                                  ["DEBUFFSWARNINGSOUNDDISPELONLY"]=HEALBOT_OPTIONS_WARNINGDISPELLONLY,
                                  ["DEBUFFSWARNINGSHOWDISPELONLY"]=HEALBOT_OPTIONS_WARNINGDISPELLONLY,
                                  ["DEBUFFSWARNINGSOUNDRANGE"]="Range",
+                                 ["DEBUFFSWARNINGSOUNDCHAN"]=HEALBOT_OPTIONS_SOUNDCHAN,
                                  ["DEBUFFSWARNINGSOUNDSELECT"]=HEALBOT_OPTIONS_SOUND,
                                  ["DEBUFFSWARNINGSOUNDPREVIEW"]=HEALBOT_OPTIONS_SOUND,
                         -- Buffs General tab
@@ -1452,6 +1453,7 @@ function HealBot_Lang_Options_enALL()
                                ["DEBUFFSWARNINGSOUND"]="Play a sound.\nThis applies to all General and Custom debuffs.",
                                ["DEBUFFSWARNINGSOUNDDISPELONLY"]="Only play sound for dispellable debuffs.\nThis applies to all General and Custom debuffs.",
                                ["DEBUFFSWARNINGSOUNDRANGE"]="Set the range when the sound is played.",
+                               ["DEBUFFSWARNINGSOUNDCHAN"]="Set the channel the sound is played through.",
                                ["DEBUFFSWARNINGSOUNDSELECT"]="Select the sound to play.",
                                ["DEBUFFSWARNINGSOUNDPREVIEW"]="Test playing the sound.",
                         -- Buffs General tab

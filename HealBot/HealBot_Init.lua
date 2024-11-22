@@ -120,10 +120,10 @@ function HealBot_Init_TalentLookupImproved(callback)
                         end
                     end
                 elseif not callback then
-                    HealBot_Timers_Set("LAST","TalentsLookupImprovedCallback",15)
+                    HealBot_Timers_Set("LAST","TalentsLookupImprovedCallback",true,true)
                 end
             elseif not callback then
-                HealBot_Timers_Set("LAST","TalentsLookupImprovedCallback",15)
+                HealBot_Timers_Set("LAST","TalentsLookupImprovedCallback",true,true)
             end
         end
     elseif HEALBOT_GAME_VERSION>3 then
@@ -319,7 +319,7 @@ function HealBot_Init_FindSpellRangeCast(id, spellName, spellBookId)
             if spellBookId and EnumerateTooltipLines_helper(HEALBOT_DISEASE, HealBot_ScanTooltip:GetRegions()) then
                 HealBot_Options_setLuVars("PriestImprovedPurify", true)
             else
-                HealBot_Timers_Set("LAST","TalentsLookupImproved",1)
+                HealBot_Timers_Set("LAST","TalentsLookupImproved",true)
             end
         end
     elseif HealBot_Data["PCLASSTRIM"] == "PALA" then
@@ -328,13 +328,13 @@ function HealBot_Init_FindSpellRangeCast(id, spellName, spellBookId)
                 if spellBookId and EnumerateTooltipLines_helper(HEALBOT_DISEASE, HealBot_ScanTooltip:GetRegions()) or EnumerateTooltipLines_helper(HEALBOT_POISON, HealBot_ScanTooltip:GetRegions()) then
                     HealBot_Options_setLuVars("PaladinImprovedCleanse", true)
                 else
-                    HealBot_Timers_Set("LAST","TalentsLookupImproved",1)
+                    HealBot_Timers_Set("LAST","TalentsLookupImproved",true)
                 end
             else
                 if spellBookId and HealBot_Config.CurrentSpec == 1 and EnumerateTooltipLines_helper(HEALBOT_MAGIC, HealBot_ScanTooltip:GetRegions()) then
                     HealBot_Options_setLuVars("PaladinImprovedCleanse", true)
                 else
-                    HealBot_Timers_Set("LAST","TalentsLookupImproved",1)
+                    HealBot_Timers_Set("LAST","TalentsLookupImproved",true)
                 end
             end
         end
@@ -343,13 +343,13 @@ function HealBot_Init_FindSpellRangeCast(id, spellName, spellBookId)
             if spellBookId and EnumerateTooltipLines_helper(HEALBOT_CURSE, HealBot_ScanTooltip:GetRegions()) then
                 HealBot_Options_setLuVars("ShamanImprovedPurifySpirit", true)
             else
-                HealBot_Timers_Set("LAST","TalentsLookupImproved",1)
+                HealBot_Timers_Set("LAST","TalentsLookupImproved",true)
             end
         elseif spellName == HEALBOT_CLEANSE_SPIRIT then
             if spellBookId and HealBot_Config.CurrentSpec == 3 and EnumerateTooltipLines_helper(HEALBOT_MAGIC, HealBot_ScanTooltip:GetRegions()) then
                 HealBot_Options_setLuVars("ShamanImprovedCleanseSpirit", true)
             else
-                HealBot_Timers_Set("LAST","TalentsLookupImproved",1)
+                HealBot_Timers_Set("LAST","TalentsLookupImproved",true)
             end
         end
     elseif HealBot_Data["PCLASSTRIM"] == "DRUI" then
@@ -357,17 +357,17 @@ function HealBot_Init_FindSpellRangeCast(id, spellName, spellBookId)
             if spellBookId and EnumerateTooltipLines_helper(HEALBOT_POISON, HealBot_ScanTooltip:GetRegions()) then
                 HealBot_Options_setLuVars("DruidImprovedNaturesCure", true)
             else
-                HealBot_Timers_Set("LAST","TalentsLookupImproved",1)
+                HealBot_Timers_Set("LAST","TalentsLookupImproved",true)
             end
         elseif spellName == HBC_DRUID_REMOVE_CURSE then
             if spellBookId and HealBot_Config.CurrentSpec == 3 and EnumerateTooltipLines_helper(HEALBOT_MAGIC, HealBot_ScanTooltip:GetRegions()) then
                 HealBot_Options_setLuVars("DruidImprovedNaturesCure", true)
             else
-                HealBot_Timers_Set("LAST","TalentsLookupImproved",1)
+                HealBot_Timers_Set("LAST","TalentsLookupImproved",true)
             end
         end
     elseif HealBot_Data["PCLASSTRIM"] == "MONK" then
-        --HealBot_Timers_Set("LAST","TalentsLookupImproved",1)
+        --HealBot_Timers_Set("LAST","TalentsLookupImproved",true)
     end
 
     if hbRange == 0 then
@@ -635,7 +635,7 @@ function HealBot_Init_Spells_Defaults()
         end
     else
         HealBot_SetPlayerData()
-        HealBot_Timers_Set("INIT","InitSpellsDefaults",0.1)
+        HealBot_Timers_Set("INIT","InitSpellsDefaults",true)
     end
 end
 
@@ -739,7 +739,7 @@ function HealBot_Init_Spells()
         HealBot_Spells_ResetBuffs(HealBot_Data["PCLASSTRIM"])
     else
         HealBot_SetPlayerData()
-        HealBot_Timers_Set("LAST","NewCharInitSpells",0.2)
+        HealBot_Timers_Set("LAST","NewCharInitSpells",true)
     end
 end
 

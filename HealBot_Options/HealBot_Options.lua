@@ -13,8 +13,8 @@ local hbCurSkinSubFrameID=1001
 local _,g
 local HealBot_DebuffSpell={};
 local HealBot_DebuffType={};
-local customDebuffPriority=hbv_Default("cDebuff")
-local customBuffPriority=hbv_Default("cBuff")
+local customDebuffPriority=hbv_GetStatic("cDebuff")
+local customBuffPriority=hbv_GetStatic("cBuff")
 
 local HealBot_Options_TabRunOnce={}
 local HealBot_CDebuffCasyBy_List={}
@@ -1403,6 +1403,13 @@ function HealBot_Options_setLists()
         HEALBOT_SPELL_RANGE,
     }
 
+    HealBot_Options_Lists["SoundChannels"]={
+        HEALBOT_OPTIONS_SOUNDCHAN1,
+        HEALBOT_OPTIONS_SOUNDCHAN2,
+        HEALBOT_OPTIONS_SOUNDCHAN3,
+        HEALBOT_OPTIONS_SOUNDCHAN4,
+    }
+
     HealBot_Options_Lists["CDebuffCat"]={
         HEALBOT_CUSTOM_CAT_CUSTOM,
         HEALBOT_CUSTOM_CAT_02,
@@ -1669,7 +1676,6 @@ end
 function HealBot_Options_framesChanged(skinUpdate, iconUpdate, indUpdate, textUpdate, auxUpdate)
       --HealBot_setCall("HealBot_Options_framesChanged")
     if skinUpdate or iconUpdate or indUpdate or textUpdate or auxUpdate then
-        HealBot_Timers_TurboOn(3)
         if iconUpdate then HealBot_Action_setLuVars("resetIcon", true) end
         if skinUpdate then HealBot_Action_setLuVars("resetSkin", true) end
         if indUpdate then HealBot_Action_setLuVars("resetIndicator", true) end
@@ -1677,9 +1683,10 @@ function HealBot_Options_framesChanged(skinUpdate, iconUpdate, indUpdate, textUp
         if auxUpdate then HealBot_Action_setLuVars("resetAux", true) end
         --HealBot_Timers_Set("SKINS","ResetSkinAllButtons")
         HealBot_Action_ResetSkinAllButtons()
+        HealBot_Timers_TurboOn()
     end
 --    HealBot_Timers_Set("OOC","RefreshPartyNextRecalcAll")
-    HealBot_nextRecalcParty(0, 0.02)
+    HealBot_nextRecalcParty(0)
 end
 
 function HealBot_Options_ToggleCustomCuresCastBy()
@@ -2179,7 +2186,7 @@ function HealBot_Options_setDebuffTypes()
             end
         else
             HealBot_SetPlayerData()
-            HealBot_Timers_Set("LAST","SetDebuffTypes",1)
+            HealBot_Timers_Set("LAST","SetDebuffTypes",true,true)
         end
     end
 end
@@ -2458,13 +2465,13 @@ end
 function HealBot_Options_OverrideNotifyOtherMsg_OnTextChanged(self)
       --HealBot_setCall("HealBot_Options_OverrideNotifyOtherMsg_OnTextChanged")
     HealBot_Globals.OverrideChat["MSG"]=self:GetText()
-    HealBot_Timers_Set("CHAT","SetChat",0.1)
+    HealBot_Timers_Set("CHAT","SetChat",true)
 end
 
 function HealBot_Options_NotifyOtherMsg_OnTextChanged(self)
       --HealBot_setCall("HealBot_Options_NotifyOtherMsg_OnTextChanged")
     hbv_Skins_SetVar(self:GetText(), "Chat", "MSG")
-    HealBot_Timers_Set("CHAT","SetChat",0.1)
+    HealBot_Timers_Set("CHAT","SetChat",true)
 end
 
 function HealBot_Options_SetNoColsText()
@@ -2556,7 +2563,7 @@ function HealBot_Options_setNewSkin(newSkinName)
     end
     HealBot_Options_Set_Current_Skin(newSkinName, nil, nil, true)
     HealBot_Options_NewSkin:SetText("")
-    HealBot_Timers_Set("OOC","SaveActionIconsProfile",1)
+    HealBot_Timers_Set("OOC","SaveActionIconsProfile",true,true)
 end
 
 function HealBot_Options_copyTable(t)
@@ -3301,12 +3308,12 @@ end
 
 function HealBot_Options_PlayBuffSound_OnClick(self)
       --HealBot_setCall("HealBot_Options_PlayBuffSound_OnClick")
-    HealBot_Media_PlaySound(HealBot_Media_SoundName(HealBot_Options_BuffWarningSound:GetValue()))
+    HealBot_Media_PlaySound(HealBot_Config_Buffs.SoundBuffPlay, HealBot_Config_Buffs.SoundBuffChan)
 end
 
 function HealBot_Options_PlaySound_OnClick(self)
       --HealBot_setCall("HealBot_Options_PlaySound_OnClick")
-    HealBot_Media_PlaySound(HealBot_Media_SoundName(HealBot_Options_WarningSound:GetValue()))
+    HealBot_Media_PlaySound(HealBot_Config_Cures.SoundDebuffPlay, HealBot_Config_Cures.SoundDebuffChan)
 end
 
 function HealBot_Options_WarningSound_OnValueChanged(self)
@@ -4115,7 +4122,7 @@ function HealBot_Options_AliasFontName_OnValueChanged(self)
         g:SetText(self.text .. " ".. val..": " ..HealBot_Media_FontName(val));
         HealBot_Action_SetAliasFontSize(hb_lVars["Frame"])
         --HealBot_Timers_Set("SKINS","FrameAliases")
-        --HealBot_Timers_Set("SKINS","SetSkinText",0.1)
+        --HealBot_Timers_Set("SKINS","SetSkinText",true)
     end
 end
 
@@ -4220,7 +4227,7 @@ function HealBot_Options_BarHeightS_OnValueChanged(self)
         local g=_G[self:GetName().."Text"]
         g:SetText(self.text .. ": " .. val);
         HealBot_Options_framesChanged(true, true)
-        HealBot_Timers_Set("LAST","UpdateButtonGlow",0.2)
+        HealBot_Timers_Set("LAST","UpdateButtonGlow",true)
     end
 end
 
@@ -4238,7 +4245,7 @@ function HealBot_Options_BarWidthS_OnValueChanged(self)
         HealBot_Text_setTextLen(hb_lVars["Frame"])
         HealBot_Timers_Set("SKINS","TextUpdateNames")
         HealBot_Timers_Set("SKINS","TextUpdateHealth")
-        HealBot_Timers_Set("LAST","UpdateButtonGlow",0.2)
+        HealBot_Timers_Set("LAST","UpdateButtonGlow",true)
     end
 end
 
@@ -6488,7 +6495,7 @@ function HealBot_Options_NotInUseOpacity_OnValueChanged(self)
     val=val/10;
     if hbv_Skins_GetVar("General", "GLOBALDIMMING")~=val then
         hbv_Skins_SetVar(val, "General", "GLOBALDIMMING")
-        HealBot_Action_ResetGlobalDimming()
+        HealBot_Timers_Set("SKINS","ResetGlobalDimming")
     end
 end
 
@@ -6863,8 +6870,8 @@ function HealBot_Options_MonitorExtraBuffsOnlyInInstance_OnClick(self)
     if HealBot_Config_Buffs.ExtraBuffsOnlyInInstance~=self:GetChecked() then
         HealBot_Config_Buffs.ExtraBuffsOnlyInInstance=self:GetChecked()
         HealBot_Timers_Set("LAST","InitItemsData")
-        HealBot_Timers_Set("AURA","BuffReset",0.25)
-        HealBot_Timers_Set("AURA","PlayerCheckExtended",0.25)
+        HealBot_Timers_Set("AURA","BuffReset",true)
+        HealBot_Timers_Set("AURA","PlayerCheckExtended",true)
     end
 end
 
@@ -7296,7 +7303,7 @@ function HealBot_Options_HealGroups_OnClick(self, id)
         HealBot_Timers_setLuVars("ResetSkins", true)
         HealBot_Timers_Set("OOC","RefreshPartyNextRecalcAll")
         if id == 8 or id == 12 or id == 14 then
-            HealBot_Timers_Set("OOC","EventsSetFrameUnits",0.1)
+            HealBot_Timers_Set("OOC","EventsSetFrameUnits",true)
         end
     end
 end
@@ -8102,7 +8109,7 @@ function HealBot_Options_BuffManaDrinkThreshold_OnValueChanged(self)
         HealBot_Config_Buffs.ManaDrinkThreshold=val;
         local g=_G[self:GetName().."Text"]
         g:SetText(self.text .. ": " .. val .. "%");
-        HealBot_Timers_Set("AURA","CheckPlayer",0.5)
+        HealBot_Timers_Set("AURA","CheckPlayer",true)
     end
 end
 
@@ -9142,7 +9149,7 @@ function HealBot_Options_AliasFontOutline_DropDown()
                         hbv_Skins_SetFrameVar(self:GetID(), "FrameAlias", "OUTLINE", hb_lVars["Frame"])
                         UIDropDownMenu_SetText(HealBot_Options_AliasFontOutline,HealBot_Options_FontOutline_List[hbv_Skins_GetFrameVar("FrameAlias", "OUTLINE", hb_lVars["Frame"])])
                         HealBot_Timers_Set("SKINS","FrameAliases")
-                        HealBot_Timers_Set("SKINS","SetSkinText",0.1)
+                        HealBot_Timers_Set("SKINS","SetSkinText",true)
                     end
         info.checked=false;
         if hbv_Skins_GetFrameVar("FrameAlias", "OUTLINE", hb_lVars["Frame"]) == j then info.checked=true end
@@ -9648,9 +9655,9 @@ local function HealBot_Options_BarHealthTextPosition_DropDown()
                             HealBot_Options_framesChanged(false, false, false, true)
                             HealBot_Timers_Set("SKINS","SetSkinText")
                             if hbv_Skins_GetFrameVar("BarText", "HLTHTXTANCHOR", hb_lVars["Frame"]) == 4 or self:GetID() == 4 then
-                                HealBot_Timers_Set("SKINS","TextUpdateNames",0.25)
+                                HealBot_Timers_Set("SKINS","TextUpdateNames",true)
                             end
-                            HealBot_Timers_Set("SKINS","TextUpdateHealth",0.25)
+                            HealBot_Timers_Set("SKINS","TextUpdateHealth",true)
                             HealBot_Options_HealthAnchor_Options()
                         end
                     end
@@ -9670,7 +9677,7 @@ local function HealBot_Options_BarAggroTextPosition_DropDown()
                             hbv_Skins_SetFrameVar(self:GetID(), "BarText", "AGGROTXTANCHOR", hb_lVars["Frame"])
                             UIDropDownMenu_SetText(HealBot_Options_BarAggroTextPosition, HealBot_Options_Lists["BarAggroTextAnchor"][hbv_Skins_GetFrameVar("BarText", "AGGROTXTANCHOR", hb_lVars["Frame"])])
                             HealBot_Options_framesChanged(false, false, false, true)
-                            HealBot_Timers_Set("SKINS","TextUpdateAggro",0.25)
+                            HealBot_Timers_Set("SKINS","TextUpdateAggro",true)
                         end
                     end
         info.checked=false;
@@ -9693,9 +9700,9 @@ local function HealBot_Options_BarNameTextPosition_DropDown()
                             if hb_lVars["TestBarsOn"] then
                                 HealBot_Timers_Set("SKINS","UpdateTextButtons")
                             else
-                                HealBot_Timers_Set("SKINS","TextUpdateNames",0.25)
+                                HealBot_Timers_Set("SKINS","TextUpdateNames",true)
                                 if hbv_Skins_GetFrameVar("BarText", "HLTHTXTANCHOR", hb_lVars["Frame"])>4 then
-                                    HealBot_Timers_Set("SKINS","TextUpdateHealth",0.25)
+                                    HealBot_Timers_Set("SKINS","TextUpdateHealth",true)
                                 end
                             end
                         end
@@ -9735,7 +9742,7 @@ function HealBot_Options_BarStateTextPosition_DropDown()
                             hbv_Skins_SetFrameVar(self:GetID(), "BarText", "STATETXTANCHOR", hb_lVars["Frame"])
                             UIDropDownMenu_SetText(HealBot_Options_BarStateTextPosition, HealBot_Options_Lists["BarStateTextAnchor"][hbv_Skins_GetFrameVar("BarText", "STATETXTANCHOR", hb_lVars["Frame"])])
                             HealBot_Options_framesChanged(false, false, false, true)
-                            HealBot_Timers_Set("SKINS","TextUpdateState",0.25)
+                            HealBot_Timers_Set("SKINS","TextUpdateState",true)
                             HealBot_Options_StateUseNameFontString_Options()
                         end
                     end
@@ -10648,7 +10655,7 @@ function HealBot_Options_ToggleTalentQuery()
         HealBot_AddChat(HEALBOT_ALLOWTALENTQUERYOFF)
     end
     if HEALBOT_GAME_VERSION<8 then
-        HealBot_Timers_Set("OOC","RefreshPartyNextRecalcAll",1)
+        HealBot_Timers_Set("OOC","RefreshPartyNextRecalcAll",true)
     end
 end
 
@@ -10683,7 +10690,7 @@ function HealBot_Options_ToggleSuppressSetting(settingType)
         end
         HealBot_Comms_MacroSuppressError()
     end
-    HealBot_Timers_Set("INIT","PrepSetAllAttribs",0.1)
+    HealBot_Timers_Set("INIT","PrepSetAllAttribs",true)
 end
 
 function HealBot_Options_CommandsButton_OnClick(self)
@@ -10965,10 +10972,10 @@ function HealBot_Options_LoadProfile()
         end
         HealBot_Update_Skins()
         HealBot_Timers_InitExtraOptions()
-        HealBot_Timers_Set("INIT","PrepSetAllAttribs",0.2)
+        HealBot_Timers_Set("INIT","PrepSetAllAttribs",true)
     else
         HealBot_SetPlayerData()
-        HealBot_Timers_Set("PLAYER","LoadProfile",1) -- All recall require a delay
+        HealBot_Timers_Set("PLAYER","LoadProfile",true,true) -- All recall require a delay
     end
 end
 
@@ -11055,11 +11062,11 @@ function HealBot_Options_SaveSpellsProfile(cType)
             HealBot_Spell_Loadouts[HealBot_Action_GetSpecID()]=HealBot_Util_Serialize(HealBot_Config_Spells, true)--HealBot_Options_copyTable(HealBot_Config_Spells)
         else
             HealBot_Timers_Set("PLAYER","LoadProfile")
-            HealBot_Timers_Set("OOC","SaveSpellsProfile",2)
+            HealBot_Timers_Set("OOC","SaveSpellsProfile",true)
         end
     else
         HealBot_SetPlayerData()
-        HealBot_Timers_Set("OOC","SaveSpellsProfile",2)
+        HealBot_Timers_Set("OOC","SaveSpellsProfile",true,true)
     end
 end
 
@@ -11082,12 +11089,12 @@ function HealBot_Options_CopyActionIconsProfile(skinname)
         if HealBot_ActionIcons_Loadouts[spec] then
             HealBot_Skins_ActionIcons[Healbot_Config_Skins.Current_Skin]=HealBot_Util_Deserialize(HealBot_ActionIcons_Loadouts[spec])
         end
-        HealBot_Timers_TurboOn(1)
         HealBot_Skins_ResetSkin("init")
-        HealBot_Timers_Set("OOC","SaveActionIconsProfile",0.1)
-        HealBot_Timers_Set("OOC","ActionIconsNumbers",0.2)
+        HealBot_Timers_Set("OOC","SaveActionIconsProfile",true)
+        HealBot_Timers_Set("OOC","ActionIconsNumbers",true)
         HealBot_Options_TabRunOnce["CopyActionIconsProfile"]=nil
         HealBot_Options_SkinsFramesActionIconsGeneralTab("CopyActionIconsProfile")
+        HealBot_Timers_TurboOn()
     end
 end
 
@@ -11102,8 +11109,8 @@ end
 
 function HealBot_Options_SaveProfile()
       --HealBot_setCall("HealBot_Options_SaveProfile")
-    HealBot_Timers_Set("OOC","SaveSpellsProfile",0.2)
-    HealBot_Timers_Set("OOC","SaveActionIconsProfile",0.4)
+    HealBot_Timers_Set("OOC","SaveSpellsProfile",true)
+    HealBot_Timers_Set("OOC","SaveActionIconsProfile",true)
 end
 --------------------------------------------------------------------------------
 
@@ -13309,7 +13316,7 @@ function HealBot_Options_SpellsSelect_OnClick(self, sType)
             elseif hb_lVars["HealBot_Options_sLoc"] == 5 then
                 HealBot_Options_Button5:SetText(hbTmpText1)
             end
-            HealBot_Timers_Set("OOC","SaveSpellsProfile")
+            HealBot_Timers_Set("OOC","SaveSpellsProfile",true)
         end
     end
     HealBot_Options_SelectSpellsFrame:Hide()
@@ -13530,7 +13537,7 @@ function HealBot_Options_ActionAnchor_DropDown()
                         --local g=_G["f"..hb_lVars["Frame"].."_HealBot_Action"]
                         HealBot_Action_setPoint(hb_lVars["Frame"], true)
                         --HealBot_Timers_Set("OOC","RefreshPartyNextRecalcAll")
-                        HealBot_nextRecalcParty(0, 0.05)
+                        HealBot_nextRecalcParty(0)
                     end
         info.checked=false;
         if hbv_Skins_GetFrameVar("Anchors", "FRAME", hb_lVars["Frame"]) == j then info.checked=true end
@@ -13567,7 +13574,7 @@ function HealBot_Options_ActionBarsAnchor_DropDown()
                         --local g=_G["f"..hb_lVars["Frame"].."_HealBot_Action"]
                         HealBot_Action_setPoint(hb_lVars["Frame"], true)
                         --HealBot_Timers_Set("OOC","RefreshPartyNextRecalcAll")
-                        HealBot_nextRecalcParty(0, 0.05)
+                        HealBot_nextRecalcParty(0)
                     end
         info.checked=false;
         if hbv_Skins_GetFrameVar("Anchors", "BARS", hb_lVars["Frame"]) == j then info.checked=true end
@@ -13635,7 +13642,7 @@ function HealBot_Options_ActionIconsLock_DropDown()
                         if hbv_ActionIcons_GetVars("LOCK", hb_lVars["Frame"]) ~= self:GetID() then
                             hbv_ActionIcons_SetVars(self:GetID(), "LOCK", hb_lVars["Frame"])
                             UIDropDownMenu_SetText(HealBot_Options_ActionIconsLock,HealBot_Options_Lists["Lock"][hbv_ActionIcons_GetVars("LOCK", hb_lVars["Frame"])])
-                            HealBot_Timers_Set("OOC","SaveActionIconsProfile",1)
+                            HealBot_Timers_Set("OOC","SaveActionIconsProfile",true,true)
                         end
                     end
         info.checked=false;
@@ -14267,7 +14274,7 @@ function HealBot_Options_CopyOptionsCopy()
         HealBot_Update_RemoveExtraIcons(94)
         HealBot_Timers_Set("SKINS","SetSkinBars")
         HealBot_Timers_Set("SKINS","SetSkinText")
-        HealBot_Timers_Set("AURA","RaidTargetUpdateAll",0.2)
+        HealBot_Timers_Set("AURA","RaidTargetUpdateAll",true)
     end
     HealBot_Options_framesChanged(true, true, true, true, true)
     HealBot_Options_ShowSkinsPanel("BACK", 0)
@@ -16748,10 +16755,9 @@ function HealBot_Options_DoSet_Current_Skin(newSkin, ddRefresh, noCallback, optS
                     HealBot_Skins_Check(Healbot_Config_Skins.Current_Skin)
                     HealBot_Options_CopyActionIconsProfile(Healbot_Config_Skins.Current_Skin)
                     HealBot_Action_setAutoClose(true)
-                    HealBot_Timers_Set("LAST","SetAutoClose", 1)
+                    HealBot_Timers_Set("LAST","SetAutoClose",true)
                     HealBot_Timers_Set("LAST","DisableAllButtonGlow")
                     HealBot_Timers_Set("LAST","DisableAllIconGlow")
-                    HealBot_Timers_TurboOn(2)
                     HealBot_Config.LastAutoSkinChangeTime=GetTime()+300
                     optSetSkins=true
                     HealBot_setLuVars("showReloadMsg", true)
@@ -16767,17 +16773,17 @@ function HealBot_Options_DoSet_Current_Skin(newSkin, ddRefresh, noCallback, optS
                     HealBot_Timers_Set("SKINS","SkinChangePluginUpdate")
                     HealBot_Timers_Set("INIT","SeparateInHealsAbsorbs")
                     HealBot_Timers_Set("LAST","CheckFramesOnCombat")
-                    HealBot_Timers_Set("OOC","EventsSetFrameUnits",0.5)
-                    HealBot_Timers_Set("OOC","ActionIconsNumbers",1)
+                    HealBot_Timers_Set("OOC","EventsSetFrameUnits")
+                    HealBot_Timers_Set("OOC","ActionIconsNumbers")
                     --HealBot_Timers_Set("LAST","UpdateFramesOpacity",0.15)
                     if HealBot_Globals.OverrideColours["USECLASS"] == 1 then
-                        HealBot_Timers_Set("LAST","ClassColourUpdate",0.1)
+                        HealBot_Timers_Set("LAST","ClassColourUpdate")
                     end
                     if HealBot_Globals.OverrideColours["USEROLE"] == 1 then
-                        HealBot_Timers_Set("LAST","RoleColourUpdate",0.1)
+                        HealBot_Timers_Set("LAST","RoleColourUpdate")
                     end
                     if HealBot_Globals.OverrideColours["USEPOWER"] == 1 then
-                        HealBot_Timers_Set("LAST","PowerColourUpdate",0.1)
+                        HealBot_Timers_Set("LAST","PowerColourUpdate")
                     end
                     HealBot_Skins_ResetSkin("init")
                     --if not ddRefresh then
@@ -16787,11 +16793,13 @@ function HealBot_Options_DoSet_Current_Skin(newSkin, ddRefresh, noCallback, optS
                     HealBot_setLuVars("FocusNeedReset", true)
                     HealBot_setLuVars("newSkin", true)
                     if HealBot_Panel_enemyPlayerTargets(true, 2) then
-                        HealBot_Panel_PlayersTargetsQueueResetSkins(0.25)
+                        HealBot_Panel_PlayersTargetsQueueResetSkins()
                     end
                     if HealBot_Data["TIPUSE"] then HealBot_Tooltip_CustomAnchor_Hide() end
                     HealBot_Timers_InitExtraOptions()
+                    HealBot_Timers_Set("SKINS","ResetGlobalDimming",true)
                    -- HealBot_AddDebug("Update Skins","Frame",true)
+                    HealBot_Timers_TurboOn()
                     hb_lVars["SetNewSkin"]=true
                 end
             end
@@ -18076,7 +18084,33 @@ function HealBot_Options_CDCWarnRange4_DropDown()
     HealBot_Options_CDCWarnRange_DropDown(4, HealBot_Config_Cures.WarnRange_Sound)
 end
 
-hb_lVars["CDebuffCatID"]=2
+function HealBot_Options_CDCSoundChan_DropDown()
+    local info=UIDropDownMenu_CreateInfo()
+    for j=1, getn(HealBot_Options_Lists["SoundChannels"]), 1 do
+        info.text=HealBot_Options_Lists["SoundChannels"][j];
+        info.func=function(self)
+                      HealBot_Config_Cures.SoundDebuffChan=self:GetID()
+                      UIDropDownMenu_SetText(HealBot_Options_CDCSoundChan, HealBot_Options_Lists["SoundChannels"][HealBot_Config_Cures.SoundDebuffChan])
+                  end
+        info.checked=false;
+        if HealBot_Config_Cures.SoundDebuffChan == j then info.checked=true end
+        UIDropDownMenu_AddButton(info);
+    end
+end
+
+function HealBot_Options_BuffSoundChan_DropDown()
+    local info=UIDropDownMenu_CreateInfo()
+    for j=1, getn(HealBot_Options_Lists["SoundChannels"]), 1 do
+        info.text=HealBot_Options_Lists["SoundChannels"][j];
+        info.func=function(self)
+                      HealBot_Config_Buffs.SoundBuffChan=self:GetID()
+                      UIDropDownMenu_SetText(HealBot_Options_BuffSoundChan, HealBot_Options_Lists["SoundChannels"][HealBot_Config_Buffs.SoundBuffChan])
+                  end
+        info.checked=false;
+        if HealBot_Config_Buffs.SoundBuffChan == j then info.checked=true end
+        UIDropDownMenu_AddButton(info);
+    end
+end
 
 function HealBot_Options_CDebuffTextID(dName)
       --HealBot_setCall("HealBot_Options_CDebuffTextID")
@@ -18090,6 +18124,7 @@ function HealBot_Options_CDebuffTextID(dName)
     end
 end
 
+hb_lVars["CDebuffCatID"]=2
 function HealBot_Options_CDebuffCat_genList()
       --HealBot_setCall("HealBot_Options_CDebuffCat_genList")
     local tmpCDebuffCat_List={}
@@ -18383,7 +18418,7 @@ function HealBot_Options_CDebuffTag_OnTextChanged(self)
         HealBot_Globals.CDCTag[hb_lVars["CDebuffcustomSpellID"]]=nil
     end
     HealBot_Timers_Set("AURA","CustomDebuffListPrep")
-    HealBot_Timers_Set("AURA","DebuffTagNames",0.5)
+    HealBot_Timers_Set("AURA","DebuffTagNames",true)
 end
 
 function HealBot_Options_HoTBuffTag_OnTextChanged(self)
@@ -18398,7 +18433,7 @@ function HealBot_Options_HoTBuffTag_OnTextChanged(self)
         end
     end
     HealBot_Timers_Set("AURA","CustomBuffListPrep")
-    HealBot_Timers_Set("AURA","BuffTagNames",0.5)
+    HealBot_Timers_Set("AURA","BuffTagNames",true)
 end
 
 function HealBot_Options_BuffResetList()
@@ -19878,7 +19913,7 @@ function HealBot_Options_Buff_Reset()
         end
     end
     if not HealBot_retLuVars("BagsScanned") then
-        HealBot_Timers_Set("AURA","BuffReset", 5) -- All recall require a delay
+        HealBot_Timers_Set("AURA","BuffReset",true,true) -- All recall require a delay
     else
         HealBot_Timers_Set("AURA","ExtraBuffReset")
     end
@@ -20069,12 +20104,12 @@ function HealBot_Options_CheckAuxInUse()
             end
         end
     end
-	if aux then HealBot_Timers_Set("AUX","ResetBars",0.1) end
+	if aux then HealBot_Timers_Set("AUX","ResetBars",true) end
 end
 
 function HealBot_Options_RoleColourUpdate()
       --HealBot_setCall("HealBot_Options_RoleColourUpdate")
-    HealBot_Timers_Set("AUX","CheckInUse",0.1)
+    HealBot_Timers_Set("AUX","CheckInUse",true)
     HealBot_Timers_Set("LAST","ResetUnitStatus")
     local a=1
     if HealBot_Globals.OverrideColours["USEROLE"] == 1 then a=0.2 end
@@ -20168,7 +20203,7 @@ function HealBot_Options_PowerColourUpdate()
     r,g,b=hbv_Skins_GetPowerCol("RAGE", 1); HealBot_ColPowerRagepick:SetStatusBarColor(r,g,b,a)
     r,g,b=hbv_Skins_GetPowerCol("RUNIC_POWER", 1); HealBot_ColPowerRunicpick:SetStatusBarColor(r,g,b,a)
     HealBot_Action_SetCustomPowerCols()
-    HealBot_Timers_Set("AUX","CheckInUse",0.1)
+    HealBot_Timers_Set("AUX","CheckInUse",true)
 end
 
 function HealBot_Options_PresetColourClick(self)
@@ -20923,8 +20958,8 @@ local function HealBot_Returned_Colours(R, G, B, A, preset)
                             HealBot_Globals.PresetColours[hb_lVars["PresetColoursID"]].A)
     end
     if setskincols then
-        HealBot_Timers_Set("SKINS","SkinsFormat",0.5)
-        HealBot_Timers_Set("SKINS","SkinColours",0.5)
+        HealBot_Timers_Set("SKINS","SkinsFormat",true)
+        HealBot_Timers_Set("SKINS","SkinColours",true)
     end
 end
 
@@ -22035,14 +22070,14 @@ function HealBot_Options_CheckBindsOnChange(newBind, index)
             if x~=index and HealBot_SpellBinds_GetData(x) == newBind then
                 HealBot_SpellBinds_SetData(1, x)
                 if x>5 then
-                    HealBot_Timers_Set("LAST","PluginInitBinds",0.1)
+                    HealBot_Timers_Set("LAST","PluginInitBinds",true)
                 else
-                    HealBot_Timers_Set("LAST","InitBinds",0.1)
+                    HealBot_Timers_Set("LAST","InitBinds",true)
                 end
             end
         end
     end
-    HealBot_Timers_Set("INIT","PrepSetAllAttribs",0.1)
+    HealBot_Timers_Set("INIT","PrepSetAllAttribs",true)
 end
 
 function HealBot_Options_DoSpellsOnTextChanged(self, cType, bNo, key, spellText)
@@ -22478,11 +22513,11 @@ function HealBot_Options_SpellsOnTextChanged(self, bNo)
       --HealBot_setCall("HealBot_Options_SpellsOnTextChanged")
     local cType=HealBot_Options_GetComboType()
     if hb_lVars["ActionBarsCombo"] == 1 then
-        HealBot_Timers_Set("INIT","PrepSetEnabledAttribs",0.5)
+        HealBot_Timers_Set("INIT","PrepSetEnabledAttribs",true)
     elseif hb_lVars["ActionBarsCombo"] == 2 then
-        HealBot_Timers_Set("INIT","PrepSetEnemyAttribs",0.5)
+        HealBot_Timers_Set("INIT","PrepSetEnemyAttribs",true)
     elseif hb_lVars["ActionBarsCombo"] == 3 then
-        HealBot_Timers_Set("INIT","PrepSetEmergAttribs",0.5)
+        HealBot_Timers_Set("INIT","PrepSetEmergAttribs",true)
     else
         HealBot_Action_ClearSpellCache("ICON")
     end
@@ -22615,74 +22650,74 @@ end
 function HealBot_Options_RoleTankTag_OnTextChanged(self)
       --HealBot_setCall("HealBot_Options_RoleTankTag_OnTextChanged")
     hbv_Skins_SetFrameVar(self:GetText(), "BarText", "ROLETANK", hb_lVars["Frame"])
-    HealBot_Timers_Set("SKINS","TextUpdateNames",0.05)
+    HealBot_Timers_Set("SKINS","TextUpdateNames",true)
 end
 
 function HealBot_Options_RoleHealerTag_OnTextChanged(self)
       --HealBot_setCall("HealBot_Options_RoleHealerTag_OnTextChanged")
     hbv_Skins_SetFrameVar(self:GetText(), "BarText", "ROLEHEAL", hb_lVars["Frame"])
-    HealBot_Timers_Set("SKINS","TextUpdateNames",0.05)
+    HealBot_Timers_Set("SKINS","TextUpdateNames",true)
 end
 
 
 function HealBot_Options_RoleDamagerTag_OnTextChanged(self)
       --HealBot_setCall("HealBot_Options_RoleDamagerTag_OnTextChanged")
     hbv_Skins_SetFrameVar(self:GetText(), "BarText", "ROLEDPS", hb_lVars["Frame"])
-    HealBot_Timers_Set("SKINS","TextUpdateNames",0.05)
+    HealBot_Timers_Set("SKINS","TextUpdateNames",true)
 end
 
 function HealBot_Options_DisconnectedTag_OnTextChanged(self)
       --HealBot_setCall("HealBot_Options_DisconnectedTag_OnTextChanged")
     hbv_Skins_SetFrameVar(self:GetText(), "BarText", "TAGDC", hb_lVars["Frame"])
-    HealBot_Timers_Set("SKINS","TextSetTagInUse",0.05)
+    HealBot_Timers_Set("SKINS","TextSetTagInUse",true)
 end
 
 function HealBot_Options_UnitDeadTag_OnTextChanged(self)
       --HealBot_setCall("HealBot_Options_UnitDeadTag_OnTextChanged")
     hbv_Skins_SetFrameVar(self:GetText(), "BarText", "TAGRIP", hb_lVars["Frame"])
-    HealBot_Timers_Set("SKINS","TextSetTagInUse",0.05)
+    HealBot_Timers_Set("SKINS","TextSetTagInUse",true)
 end
 
 function HealBot_Options_ResTag_OnTextChanged(self)
       --HealBot_setCall("HealBot_Options_ResTag_OnTextChanged")
     hbv_Skins_SetFrameVar(self:GetText(), "BarText", "TAGRES", hb_lVars["Frame"])
-    HealBot_Timers_Set("SKINS","TextSetTagInUse",0.05)
+    HealBot_Timers_Set("SKINS","TextSetTagInUse",true)
 end
 
 function HealBot_Options_SummonsTag_OnTextChanged(self)
       --HealBot_setCall("HealBot_Options_SummonsTag_OnTextChanged")
     hbv_Skins_SetFrameVar(self:GetText(), "BarText", "TAGSUM", hb_lVars["Frame"])
-    HealBot_Timers_Set("SKINS","TextSetTagInUse",0.05)
+    HealBot_Timers_Set("SKINS","TextSetTagInUse",true)
 end
 
 function HealBot_Options_GroupTag_OnTextChanged(self)
       --HealBot_setCall("HealBot_Options_GroupTag_OnTextChanged")
     hbv_Skins_SetFrameVar(self:GetText(), "BarText", "TAGGROUP", hb_lVars["Frame"])
-    HealBot_Timers_Set("SKINS","TextSetTagInUse",0.05)
+    HealBot_Timers_Set("SKINS","TextSetTagInUse",true)
 end
 
 function HealBot_Options_DebuffTag_OnTextChanged(self)
       --HealBot_setCall("HealBot_Options_DebuffTag_OnTextChanged")
     hbv_Skins_SetFrameVar(self:GetText(), "BarText", "TAGDEBUFF", hb_lVars["Frame"])
-    HealBot_Timers_Set("SKINS","TextSetTagInUse",0.05)
+    HealBot_Timers_Set("SKINS","TextSetTagInUse",true)
 end
 
 function HealBot_Options_BuffTag_OnTextChanged(self)
       --HealBot_setCall("HealBot_Options_DebuffTag_OnTextChanged")
     hbv_Skins_SetFrameVar(self:GetText(), "BarText", "TAGBUFF", hb_lVars["Frame"])
-    HealBot_Timers_Set("SKINS","TextSetTagInUse",0.05)
+    HealBot_Timers_Set("SKINS","TextSetTagInUse",true)
 end
 
 function HealBot_Options_OutOfRangeTag_OnTextChanged(self)
       --HealBot_setCall("HealBot_Options_OutOfRangeTag_OnTextChanged")
     hbv_Skins_SetFrameVar(self:GetText(), "BarText", "TAGOOR", hb_lVars["Frame"])
-    HealBot_Timers_Set("SKINS","TextSetTagInUse",0.05)
+    HealBot_Timers_Set("SKINS","TextSetTagInUse",true)
 end
 
 function HealBot_Options_ReserverTag_OnTextChanged(self)
       --HealBot_setCall("HealBot_Options_ReserverTag_OnTextChanged")
     hbv_Skins_SetFrameVar(self:GetText(), "BarText", "TAGR", hb_lVars["Frame"])
-    HealBot_Timers_Set("SKINS","TextSetTagInUse",0.05)
+    HealBot_Timers_Set("SKINS","TextSetTagInUse",true)
 end
 
 function HealBot_Options_EnableSmartCast_OnClick(self)
@@ -23257,7 +23292,7 @@ end
 hb_lVars["TabNo"]=0;
 hb_lVars["CurrentTab"]="About"
 function HealBot_Options_OnShow(self)
-      --HealBot_setCall("HealBot_Options_OnShow")
+      --HealBot_setCall("HealBot_Options_OnShow")    
     if not hb_lVars["MediaIndexedOnOptions"] then
         hb_lVars["MediaIndexedOnOptions"]=true
         HealBot_Media_UpdateIndexes()
@@ -26385,7 +26420,7 @@ function HealBot_Options_FramesActionIconsLists()
       --HealBot_setCall("HealBot_Options_FramesActionIconsLists")
     if hb_lVars["SetActionIconsList"] then
         hb_lVars["SetActionIconsList"]=false
-        HealBot_Timers_Set("SKINS","SetActionIconsList",0.25)
+        HealBot_Timers_Set("SKINS","SetActionIconsList",true)
     end
 end
 
@@ -26396,10 +26431,10 @@ function HealBot_Options_FramesActionIconsSetLists(saveProfile)
         if hb_lVars["CurrentTab"] == "SkinsFramesActionIconsIcons" then
             HealBot_Options_FramesActionIconsLists()
         else
-            HealBot_Timers_Set("SKINS","FramesActionIconsLists",1)
+            HealBot_Timers_Set("SKINS","FramesActionIconsLists",true,true)
         end
     end
-    if saveProfile then HealBot_Timers_Set("OOC","SaveActionIconsProfile",5) end
+    if saveProfile then HealBot_Timers_Set("OOC","SaveActionIconsProfile",true,true) end
 end
 
 function HealBot_Options_SkinsFramesActionIconsIconsTab(tab)
@@ -26955,7 +26990,10 @@ function HealBot_Options_DebuffsWarningTab(tab)
         HealBot_Options_SetText(HealBot_Options_SoundDebuffWarningDispelOnly,HEALBOT_OPTIONS_WARNINGDISPELLONLY)
         HealBot_Options_CDCWarnRange4.initialize=HealBot_Options_CDCWarnRange4_DropDown
         UIDropDownMenu_SetText(HealBot_Options_CDCWarnRange4, HealBot_Options_Lists["RangeWarning"][HealBot_Config_Cures.WarnRange_Sound])
+        HealBot_Options_CDCSoundChan.initialize=HealBot_Options_CDCSoundChan_DropDown
+        UIDropDownMenu_SetText(HealBot_Options_CDCSoundChan, HealBot_Options_Lists["SoundChannels"][HealBot_Config_Cures.SoundDebuffChan])
         HealBot_Options_UpdateMediaSound(HealBot_Options_WarningSound,HealBot_Config_Cures.SoundDebuffPlay)
+        HealBot_Options_SetLabel("HealBot_Options_CDCSoundChanTxt", HEALBOT_OPTIONS_SOUNDCHAN)
         HealBot_Options_TabRunOnce[tab]=true
     end
 end
@@ -27214,6 +27252,9 @@ function HealBot_Options_BuffsWarningTab(tab)
         HealBot_Options_SetText(HealBot_Options_SoundBuffWarningMissingOnly,HEALBOT_OPTIONS_WARNINGMISSINGONLY)
         HealBot_Options_BuffWarnRange4.initialize=HealBot_Options_BuffWarnRange4_DropDown
         UIDropDownMenu_SetText(HealBot_Options_BuffWarnRange4, HealBot_Options_Lists["RangeWarning"][HealBot_Config_Buffs.WarnRange_Sound])
+        HealBot_Options_BuffSoundChan.initialize=HealBot_Options_BuffSoundChan_DropDown
+        UIDropDownMenu_SetText(HealBot_Options_BuffSoundChan, HealBot_Options_Lists["SoundChannels"][HealBot_Config_Buffs.SoundBuffChan])
+        HealBot_Options_SetLabel("HealBot_Options_BuffSoundChanTxt", HEALBOT_OPTIONS_SOUNDCHAN)
         HealBot_Options_UpdateMediaSound(HealBot_Options_BuffWarningSound,HealBot_Config_Buffs.SoundBuffPlay)
         HealBot_Options_TabRunOnce[tab]=true
     end
@@ -27862,7 +27903,7 @@ function HealBot_Options_InitExtras()
             hb_lVars["RunInitExtras"]=true
             HealBot_Options_DoInitExtras(1)
         else
-            HealBot_Timers_Set("LAST","OptionsInitExtraTabs",1) -- All recall require a delay
+            HealBot_Timers_Set("LAST","OptionsInitExtraTabs",true,true) -- All recall require a delay
         end
     end
 end

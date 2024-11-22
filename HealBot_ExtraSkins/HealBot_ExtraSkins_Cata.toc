@@ -1,4 +1,4 @@
-## Interface: 40400
+## Interface: 40401
 ## Title: HealBot Extra Skins
 ## Author: Strife
 ## Notes: Large store of extra skins for HealBot.

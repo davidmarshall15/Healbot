@@ -31988,6 +31988,33 @@
                     <HighlightTexture file="Interface\Common\VoiceChat-On"/>
                     <PushedTexture file="Interface\Common\VoiceChat-On"/>
                   </Button>
+                  <Frame name="HealBot_Options_CDCSoundChan" inherits="UIDropDownMenuTemplate">
+                    <Anchors>
+                      <Anchor point="BOTTOM">
+                        <Offset>
+                          <AbsDimension x="0" y="30" />
+                        </Offset>
+                      </Anchor>
+                    </Anchors>
+                    <Layers>
+                      <Layer level="BACKGROUND">
+                        <FontString name="HealBot_Options_CDCSoundChanTxt" text="HEALBOT_OPTIONS_SOUNDCHAN" inherits="GameFontNormal">
+                          <Anchors>
+                            <Anchor point="TOP">
+                              <Offset>
+                                <AbsDimension x="0" y="14" />
+                              </Offset>
+                            </Anchor>
+                          </Anchors>
+                        </FontString>
+                      </Layer>
+                    </Layers>
+                    <Scripts>
+                      <OnLoad>HealBot_Options_UIDropDownMenu_OnLoad(self, 150)</OnLoad>
+                      <OnEnter>HealBot_Options_Show_Help("DEBUFFSWARNINGSOUNDCHAN",true)</OnEnter>
+                      <OnLeave>HealBot_Options_Show_Help("DEBUFFSWARNINGSOUNDCHAN",false)</OnLeave>
+                    </Scripts>
+                  </Frame>
                 </Frames>
               </Frame>
             </Frames>
@@ -35267,6 +35294,33 @@
                     <HighlightTexture file="Interface\Common\VoiceChat-On"/>
                     <PushedTexture file="Interface\Common\VoiceChat-On"/>
                   </Button>
+                  <Frame name="HealBot_Options_BuffSoundChan" inherits="UIDropDownMenuTemplate">
+                    <Anchors>
+                      <Anchor point="BOTTOM">
+                        <Offset>
+                          <AbsDimension x="0" y="30" />
+                        </Offset>
+                      </Anchor>
+                    </Anchors>
+                    <Layers>
+                      <Layer level="BACKGROUND">
+                        <FontString name="HealBot_Options_BuffSoundChanTxt" text="HEALBOT_OPTIONS_SOUNDCHAN" inherits="GameFontNormal">
+                          <Anchors>
+                            <Anchor point="TOP">
+                              <Offset>
+                                <AbsDimension x="0" y="14" />
+                              </Offset>
+                            </Anchor>
+                          </Anchors>
+                        </FontString>
+                      </Layer>
+                    </Layers>
+                    <Scripts>
+                      <OnLoad>HealBot_Options_UIDropDownMenu_OnLoad(self, 150)</OnLoad>
+                      <OnEnter>HealBot_Options_Show_Help("DEBUFFSWARNINGSOUNDCHAN",true)</OnEnter>
+                      <OnLeave>HealBot_Options_Show_Help("DEBUFFSWARNINGSOUNDCHAN",false)</OnLeave>
+                    </Scripts>
+                  </Frame>
                 </Frames>
               </Frame>
             </Frames>

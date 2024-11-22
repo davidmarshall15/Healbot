@@ -1119,7 +1119,7 @@ function HealBot_Update_AllAuras()
 end
 
 function HealBot_Update_AllBuffs()
-      --HealBot_setCall(HealBot_Update_AllBuffs)
+      --HealBot_setCall("HealBot_Update_AllBuffs")
     for _,xButton in pairs(HealBot_Unit_Button) do
         HealBot_BuffSlowUpdate(xButton)
     end
@@ -1766,8 +1766,8 @@ function HealBot_Update_NilOnVal(t, key, v)
 end
 
 function HealBot_Update_GlobalVars()
-    local customDebuffPriority=hbv_Default("cDebuff")
-    local customBuffPriority=hbv_Default("cBuff")
+    local customDebuffPriority=hbv_GetStatic("cDebuff")
+    local customBuffPriority=hbv_GetStatic("cBuff")
     for sid,_  in pairs(HealBot_Globals.CustomBuffBarColour) do
         if sid~=customBuffPriority then
             if HealBot_Globals.CustomBuffBarColour[sid].R == 0.25 and HealBot_Globals.CustomBuffBarColour[sid].G == 0.58 and HealBot_Globals.CustomBuffBarColour[sid].B == 0.8 then
@@ -2080,7 +2080,7 @@ function HealBot_Update_Skins()
             HealBot_Globals.OverrideAdaptiveCols=nil
         end
         HealBot_Globals.LastVersionSkinUpdate=HealBot_Global_Version()
-        HealBot_Timers_Set("OOC","OrphanedCheck",20)
+        HealBot_Timers_Set("OOC","OrphanedCheck",true,true)
     else
         HealBot_Skins_Check(Healbot_Config_Skins.Current_Skin)
     end

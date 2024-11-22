@@ -5,7 +5,7 @@ local xButton=nil
 local _
 local powerCols={["r"]=1,["g"]=1,["b"]=1}
 local playerPowerCols={["r"]=1,["g"]=1,["b"]=1}
-local customDebuffPriority=hbv_Default("cDebuff")
+local customDebuffPriority=hbv_GetStatic("cDebuff")
 local hbCommands={ [strlower(HEALBOT_DISABLED_TARGET)]=true,
                    [strlower(HEALBOT_ASSIST)]=true,
                    [strlower(HEALBOT_WORD_FOCUS)]=true,
@@ -482,6 +482,13 @@ function HealBot_ToolTip_ShowDebug(button)
     HealBot_Tooltip_SetLine("Range state is "..hbTipDebugText["range40"],0.4,1,1,1,"Current status="..hbTipDebugText["status"])
     if button then
         HealBot_Tooltip_SetLine("unitType is "..button.status.unittype,0.4,1,1,1,"Column is "..(button.Column or "nil"))
+        local GlobalDimmingFrame, GlobalDimmingFrameID=HealBot_Action_DebugFrameActive(button.frame)
+        if GlobalDimmingFrame then
+            GlobalDimmingFrame="true"
+        else
+            GlobalDimmingFrame="false"
+        end
+        HealBot_Tooltip_SetLine("GlobalDimmingFrame is "..GlobalDimmingFrame,0.4,1,1,1,"GlobalDimmingFrame ID is "..GlobalDimmingFrameID)
     end
 end
 
@@ -718,7 +725,7 @@ function HealBot_Action_DoRefreshTooltip()
                         else
                             uSpec=xButton.spec
                         end
-                        if uSpec == " " then
+                        if uSpec == " " and xButton.isplayer then
                             HealBot_SpecUpdate(xButton, HealBot_TimeNow)
                         end
                     else

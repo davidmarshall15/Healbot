@@ -130,8 +130,8 @@ local function HealBot_Share_SendLinkRequest()
     HealBot_Comms_SendShareAddonMsg(HealBot_Share_luVars["LinkRequest"], HealBot_Share_luVars["LinkRequestPlayer"])
     hbLinkFrameObjects["YesBtn"]:Disable()
     hbLinkFrameObjects["NoBtn"]:Disable()
-    HealBot_Share_luVars["LastLinkTimeOut"]=GetTime()
-    C_Timer.After(2, HealBot_Share_TimeoutRequest)
+    HealBot_Share_luVars["LastLinkTimeOut"]=HealBot_TimeNow
+    HealBot_Timers_Set("LAST","TimeoutShareRequest",true,true)
 end
 
 local function HealBot_Share_CancelLinkRequest()
@@ -165,7 +165,7 @@ function HealBot_Share_TimeoutRequest()
                 HealBot_Share_ImportFail(shareType[HealBot_Share_luVars["RequestType"]], "Lost connection")
             end
         end
-        C_Timer.After(1, HealBot_Share_TimeoutRequest)
+        HealBot_Timers_Set("LAST","TimeoutShareRequest",true,true)
     end
 end
 
@@ -533,7 +533,7 @@ function HealBot_Share_ExportBuffs_OnClick()
     HealBot_Share_ExportBuffs()
 end
 
-local customBuffPriority=hbv_Default("cBuff")
+local customBuffPriority=hbv_GetStatic("cBuff")
 function HealBot_Share_LoadBuffs(sIn)
       --HealBot_setCall("HealBot_Share_LoadBuffs")
     local scbStr=HealBot_Util_Decompress(sIn)
@@ -705,7 +705,7 @@ function HealBot_Share_ExportDebuffs_OnClick()
     HealBot_Share_ExportDebuffs()
 end
 
-local customDebuffPriority=hbv_Default("cDebuff")
+local customDebuffPriority=hbv_GetStatic("cDebuff")
 function HealBot_Share_LoadDebuffs(sIn)
       --HealBot_setCall("HealBot_Share_LoadDebuffs")
     local scdStr=HealBot_Util_Decompress(sIn)

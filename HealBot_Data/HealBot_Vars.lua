@@ -46,8 +46,11 @@ end
 
 -- Vardefaults
 local sVars={["cBuff"]=HEALBOT_CUSTOM_en.."Buff",
-             ["cDebuff"]=HEALBOT_CUSTOM_en.."15"}
-function hbv_Default(name)
+             ["cDebuff"]=HEALBOT_CUSTOM_en.."15",
+             ["rcWAITING"]=0,
+             ["rcREADY"]=1,
+             ["rcNOTREADY"]=2,}
+function hbv_GetStatic(name)
     return sVars[name]
 end
 

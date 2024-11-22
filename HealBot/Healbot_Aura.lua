@@ -1400,7 +1400,7 @@ function HealBot_Aura_DoUpdateDebuffIcon(button, iconData, index, timer, lastSpe
 end
 
 local hbGlowSpellName,hbGlowIdx="",1
-local customDebuffPriority=hbv_Default("cDebuff")
+local customDebuffPriority=hbv_GetStatic("cDebuff")
 function HealBot_Aura_UpdateDebuffIcon(button, iconData, index, timer, spellId)
       --HealBot_setCall("HealBot_Aura_UpdateDebuffIcon", button, nil, nil, true)
     HealBot_Aura_DoUpdateDebuffIcon(button, iconData, index, timer, spellId, false)
@@ -1579,7 +1579,7 @@ function HealBot_Aura_DoUpdateBuffIcon(button, iconData, index, timer, lastSpell
     end
 end
 
-local customBuffPriority=hbv_Default("cBuff")
+local customBuffPriority=hbv_GetStatic("cBuff")
 function HealBot_Aura_UpdateBuffIcon(button, iconData, index, timer, spellId)
       --HealBot_setCall("HealBot_Aura_UpdateBuffIcon", button, nil, nil, true)
     HealBot_Aura_DoUpdateBuffIcon(button, iconData, index, timer, spellId, false)
@@ -1721,9 +1721,9 @@ function HealBot_Aura_UpdateState(button)
             elseif button.status.incombat then
                 HealBot_UnitExtraIcons[button.id][93]["texture"]="Interface\\Addons\\HealBot\\Images\\incombat.tga"
             else
-                if button.icon.extra.readycheck == HealBot_ReadyCheckStatus["WAITING"] then
+                if button.icon.extra.readycheck == hbv_GetStatic("rcWAITING") then
                     HealBot_UnitExtraIcons[button.id][93]["texture"]="Interface\\RAIDFRAME\\ReadyCheck-Waiting"
-                elseif button.icon.extra.readycheck == HealBot_ReadyCheckStatus["NOTREADY"] then
+                elseif button.icon.extra.readycheck == hbv_GetStatic("rcNOTREADY") then
                     HealBot_UnitExtraIcons[button.id][93]["texture"]="Interface\\RAIDFRAME\\ReadyCheck-NotReady"
                 else
                     HealBot_UnitExtraIcons[button.id][93]["texture"]="Interface\\RAIDFRAME\\ReadyCheck-Ready"
@@ -2585,7 +2585,7 @@ function HealBot_Aura_BuffWarnings(button, buffName, force)
             end
             if HealBot_Config_Buffs.SoundBuffWarning and (button.aura.buff.missingbuff or not HealBot_Config_Buffs.SoundBuffWarningMissingOnly) and
                HealBot_Range_WarnInRange(button, button.aura.buff.name, HealBot_Config_Buffs.WarnRange_Sound) then
-                HealBot_Media_PlaySound(HealBot_Config_Buffs.SoundBuffPlay)
+                HealBot_Media_PlaySound(HealBot_Config_Buffs.SoundBuffPlay, HealBot_Config_Buffs.SoundBuffChan)
             end
         end
         HealBot_RefreshUnit(button)
@@ -2673,7 +2673,7 @@ function HealBot_Aura_DebuffWarnings(button, debuffName, force, debuffIconIndex)
             end
             if HealBot_Config_Cures.SoundDebuffWarning and (button.aura.debuff.dispellable or not HealBot_Config_Cures.SoundDebuffWarningDispelOnly) then
                 if HealBot_Range_WarnInRange(button, button.aura.debuff.curespell, HealBot_Config_Cures.WarnRange_Sound) then
-                    HealBot_Media_PlaySound(HealBot_Config_Cures.SoundDebuffPlay)
+                    HealBot_Media_PlaySound(HealBot_Config_Cures.SoundDebuffPlay, HealBot_Config_Cures.SoundDebuffChan)
                 end
             end
         end
@@ -3073,7 +3073,7 @@ local function HealBot_Aura_PostUpdateUnitBuffsData(button, spellID, spellName)
                 HealBot_SpellID_LookupData[spellName]["CHECK"]=false
                 HealBot_SpellID_LookupData[spellName]["ID"]=spellID
                 table.insert(HealBot_SpellID_LookupIdx,spellName)
-                HealBot_Timers_Set("OOC","BuffIdLookup",0.1)
+                HealBot_Timers_Set("OOC","BuffIdLookup",true)
             end
         end
         HealBot_AuraBuffCache[spellID]["priority"]=HealBot_Globals.CustomBuffs[spellName] or HealBot_Globals.CustomBuffs[spellID] or 20
@@ -3177,7 +3177,7 @@ function HealBot_Aura_EndCheckClassicAbsorbs(button)
     end
     if button.health.auraabsorbs~=hbClassicAbsorbValues then
         button.health.auraabsorbs=hbClassicAbsorbValues
-        HealBot_Events_AbsorbsUpdate(button)
+        HealBot_AbsorbsUpdate(button)
     end
 end
 
@@ -3205,7 +3205,7 @@ function HealBot_Aura_UpdateUnitBuffsV1(button, selfOnly)
     end
     if button.health.auraabsorbs~=hbClassicAbsorbTotal then
         button.health.auraabsorbs=hbClassicAbsorbTotal
-        HealBot_Events_AbsorbsUpdate(button)
+        HealBot_AbsorbsUpdate(button)
     end
 end
 
@@ -3581,7 +3581,11 @@ function HealBot_Aura_resetSpellCD()
     hbDebuffOnCD[HEALBOT_POISON_en]=0
     hbDebuffOnCD[HEALBOT_BLEED_en]=0
 end
-HealBot_Aura_resetSpellCD()
+hbDebuffOnCD[HEALBOT_DISEASE_en]=0
+hbDebuffOnCD[HEALBOT_MAGIC_en]=0
+hbDebuffOnCD[HEALBOT_CURSE_en]=0
+hbDebuffOnCD[HEALBOT_POISON_en]=0
+hbDebuffOnCD[HEALBOT_BLEED_en]=0
 
 function HealBot_Aura_setDebuffTypeCD(dType, eTime)
     hbDebuffOnCD[dType]=eTime
@@ -3700,10 +3704,8 @@ function HealBot_Aura_CheckUnitAuras(button, debuff, selfOnly)
       --HealBot_setCall("HealBot_Aura_CheckUnitAuras", button)
     if not HealBot_Aura_luVars["TestBarsOn"] then
         if debuff then
-            button.aura.debuff.updtime=HealBot_TimeNow
             HealBot_Aura_CheckUnitDebuffs(button, selfOnly)
         else
-            button.aura.buff.updtime=HealBot_TimeNow
             HealBot_Aura_CheckUnitBuffs(button, selfOnly)
         end
     end
@@ -3802,7 +3804,7 @@ function HealBot_Aura_SetAuraCheckFlags(debuffMounted, buffMounted, onTaxi, rest
                 HealBot_Plugin_AuraWatch_CheckAfterCancelBuff()
             end
             HealBot_ActionIcons_setLuVars("AllowBuffs", buffCheck)
-            HealBot_Timers_Set("SKINS","ActionIconsStateChange",0.1)
+            HealBot_Timers_Set("SKINS","ActionIconsStateChange",true)
         end
         HealBot_Timers_Set("AURA","CheckBuffs")
     end    
@@ -3815,7 +3817,7 @@ function HealBot_Aura_SetAuraCheckFlags(debuffMounted, buffMounted, onTaxi, rest
         end
         HealBot_Timers_Set("AURA","CheckDebuffs")
         HealBot_ActionIcons_setLuVars("AllowDebuffs", debuffCheck)
-        HealBot_Timers_Set("SKINS","ActionIconsStateChange",0.1)
+        HealBot_Timers_Set("SKINS","ActionIconsStateChange",true)
     end
 end
 
@@ -4550,7 +4552,7 @@ function HealBot_Aura_BuffIdLookup()
             end
             HealBot_Options_DeleteBuffHoT(class, sName, sName)
         end
-        HealBot_Timers_Set("OOC","BuffIdLookup",0.2)
+        HealBot_Timers_Set("OOC","BuffIdLookup",true)
     end
 end
 
@@ -4783,7 +4785,7 @@ function HealBot_Aura_InitItemsData()
     if HealBot_retLuVars("BagsScanned") then
         HealBot_Timers_Set("AURA","InitItemsDataReady")
     else
-        HealBot_Timers_Set("LAST","InitItemsData",1) -- All recall require a delay
+        HealBot_Timers_Set("LAST","InitItemsData",true,true) -- All recall require a delay
     end
 end
 
@@ -5031,7 +5033,7 @@ function HealBot_Aura_InitData()
         HealBot_Timers_Set("LAST","InitItemsData")
     else
         HealBot_SetPlayerData()
-        HealBot_Timers_Set("AURA","InitAuraData",1)
+        HealBot_Timers_Set("AURA","InitAuraData",true,true)
     end
 end
 

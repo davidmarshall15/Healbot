@@ -50,6 +50,7 @@ hb_lVars["TankGUID2"]="x"
 hb_lVars["HealerGUID"]="x"
 hb_lVars["DPSGUID"]="x"
 hb_lVars["DPSGUIDCaster"]="x"
+hb_lVars["Tip"]=nil
 
 function HealBot_ActionIcons_setLuVars(vName, vValue)
       --HealBot_setCall("HealBot_ActionIcons_setLuVars - "..vName)
@@ -71,14 +72,14 @@ function HealBot_ActionIcons_LoadSpec(updateAll)
     if HealBot_ActionIconsData_Loadouts[spec] then
         HealBot_Skins_ActionIconsData[Healbot_Config_Skins.Current_Skin]=HealBot_Util_Deserialize(HealBot_ActionIconsData_Loadouts[spec])
     else
-        HealBot_Timers_Set("OOC","SaveActionIconsProfile",1)
+        HealBot_Timers_Set("OOC","SaveActionIconsProfile",true,true)
     end
     if HealBot_ActionIcons_Loadouts[spec] then
         HealBot_Skins_ActionIcons[Healbot_Config_Skins.Current_Skin]=HealBot_Util_Deserialize(HealBot_ActionIcons_Loadouts[spec])
     end
     if updateAll then
-        HealBot_Timers_Set("OOC","ActionIconsNumbers",0.2)
-        HealBot_Timers_Set("OOC","SaveActionIconsProfile",1)
+        HealBot_Timers_Set("OOC","ActionIconsNumbers",true)
+        HealBot_Timers_Set("OOC","SaveActionIconsProfile",true,true)
     end
 end
 
@@ -159,7 +160,7 @@ function HealBot_ActionIcons_InitFrames()
             HealBot_Options_FramesActionIconsSetLists()
             HealBot_ActionIcons_SetGlowSize()
         else
-            HealBot_Timers_Set("OOC","ActionIconsInitFrames",1)
+            HealBot_Timers_Set("OOC","ActionIconsInitFrames",true)
         end
     end
 end
@@ -214,7 +215,7 @@ function HealBot_ActionIcons_setFontChange()
             end
         end
     end
-    HealBot_Timers_Set("OOC","SaveActionIconsProfile",0.1)
+    HealBot_Timers_Set("OOC","SaveActionIconsProfile",true,true)
 end
 
 local hb_ActionHazard_BorderHighlightCol={}
@@ -234,12 +235,19 @@ function HealBot_ActionIcons_setBorderHighlightCol()
     end
 end
 
+function HealBot_ActionIcons_DoUpdateTip()
+    if cursorIcon.OnID == hb_lVars["Tip"].id then
+        HealBot_Tooltip_DisplayActionIconTooltip(hb_lVars["Tip"],
+                                                 hbv_ActionIcons_GetData("Target", hb_lVars["Tip"].frame, hb_lVars["Tip"].id),
+                                                 hbv_ActionIcons_GetData("bKey", hb_lVars["Tip"].frame, hb_lVars["Tip"].id))
+        HealBot_Timers_Set("LAST","ActionIconsUpdateTip",true,true)
+    end
+end
+
 function HealBot_ActionIcons_UpdateTip(self)
     if cursorIcon.OnID == self.id then
-        HealBot_Tooltip_DisplayActionIconTooltip(self,
-                                                 hbv_ActionIcons_GetData("Target", self.frame, self.id),
-                                                 hbv_ActionIcons_GetData("bKey", self.frame, self.id))
-        C_Timer.After(1, function() HealBot_ActionIcons_UpdateTip(self) end)
+        hb_lVars["Tip"]=self
+        HealBot_ActionIcons_DoUpdateTip()
     end
 end
 
@@ -706,7 +714,7 @@ function HealBot_ActionIcons_UpdateNumIconsAll()
         HealBot_Options_FramesActionIconsSetLists()
         C_Timer.After(0.25, function() HealBot_ActionIcons_setLuVars("UpdateNumIcons", false) end)
     else
-        HealBot_Timers_Set("OOC","ActionIconsNumbers",0.25)
+        HealBot_Timers_Set("OOC","ActionIconsNumbers",true)
     end
 end
 
@@ -841,7 +849,7 @@ function HealBot_ActionIcons_SetAllFramePoints()
             end
             C_Timer.After(0.25, function() HealBot_Timers_Set("OOC","SaveActionIconsProfile",1); HealBot_ActionIcons_setLuVars("SetPoints", false) end)
         else
-            HealBot_Timers_Set("OOC","ActionIconsSetPoints",0.25)
+            HealBot_Timers_Set("OOC","ActionIconsSetPoints",true)
         end
     end
 end
@@ -1770,9 +1778,9 @@ function HealBot_ActionIcons_ValidateAbility(frame, id, itemsOnly)
         HealBot_ActionIcons_UpdateHighlightIcon(frame, id)
         HealBot_ActionIcons_UpdateFadeIcon(frame, id)
     elseif itemsOnly then
-        HealBot_Timers_Set("OOC","ActionIconsValidateItems",0.1)
+        HealBot_Timers_Set("OOC","ActionIconsValidateItems")
     else
-        HealBot_Timers_Set("OOC","ActionIconsValidateAbility",0.1)
+        HealBot_Timers_Set("OOC","ActionIconsValidateAbility")
     end
 end
 
@@ -1782,7 +1790,7 @@ function HealBot_ActionIcons_ValidateItemsQueue()
     if itemsQueue[1] then
         HealBot_ActionIcons_ValidateAbility(hbIconUID[itemsQueue[1]]["Frame"], hbIconUID[itemsQueue[1]]["ID"], true)
         table.remove(itemsQueue,1)
-        C_Timer.After(0.01, HealBot_ActionIcons_ValidateItemsQueue)
+        HealBot_Timers_Set("LAST","ActionIconsValidateItemsQueue")
     else
         hb_lVars["ValidateAbilityItems"]=false
     end
@@ -1797,7 +1805,7 @@ function HealBot_ActionIcons_ValidateItems()
         end
         HealBot_ActionIcons_ValidateItemsQueue()
     else
-        HealBot_Timers_Set("OOC","ActionIconsValidateItems",0.1)
+        HealBot_Timers_Set("OOC","ActionIconsValidateItems",true)
     end
 end
 
@@ -1827,7 +1835,7 @@ function HealBot_ActionIcons_ValidateAbilityAll()
             end
             C_Timer.After(0.25, function() HealBot_ActionIcons_setLuVars("ValidateAbility", false) end)
         else
-            HealBot_Timers_Set("OOC","ActionIconsValidateAbility",0.25)
+            HealBot_Timers_Set("OOC","ActionIconsValidateAbility",true)
         end
     end
 end
@@ -1859,9 +1867,9 @@ function HealBot_ActionIcons_ValidateTargets(frame, num, caller)
             end
         end
     elseif num == hb_lVars["MaxIcons"] then
-        HealBot_Timers_Set("OOC","ActionIconsValidateTargetIcons",1)
+        HealBot_Timers_Set("OOC","ActionIconsValidateTargetIcons",true)
     else
-        HealBot_Timers_Set("OOC","ActionIconsValidateTarget",1)
+        HealBot_Timers_Set("OOC","ActionIconsValidateTarget",true)
     end
 end
 
@@ -1882,7 +1890,7 @@ function HealBot_ActionIcons_ValidateTargetAll()
             end
             C_Timer.After(0.25, function() HealBot_ActionIcons_setLuVars("ValidateTarget", false) end)
         else
-            HealBot_Timers_Set("OOC","ActionIconsValidateTarget",0.25)
+            HealBot_Timers_Set("OOC","ActionIconsValidateTarget",true)
         end
     end
 end
@@ -1902,7 +1910,7 @@ function HealBot_ActionIcons_ValidateTargetAllIconFrames()
             end
             C_Timer.After(0.25, function() HealBot_ActionIcons_setLuVars("ValidateTarget", false) end)
         else
-            HealBot_Timers_Set("OOC","ActionIconsValidateTargetIcons",0.25)
+            HealBot_Timers_Set("OOC","ActionIconsValidateTargetIcons",true)
         end
     end
 end
@@ -1933,7 +1941,7 @@ function HealBot_ActionIcons_CheckAlertChangeFrameId(frame, id)
         HealBot_ActionIcons_FadeIcon(frame, id)
         HealBot_ActionIcons_CheckHighlightIconAbility(frame, id)
     end
-    HealBot_Timers_Set("OOC","SaveActionIconsProfile",1)
+    HealBot_Timers_Set("OOC","SaveActionIconsProfile",true,true)
 end
 
 function HealBot_ActionIcons_CombatState(state)
@@ -2490,7 +2498,7 @@ function HealBot_ActionIcons_SelfCountTextUpdateAll()
             end
             C_Timer.After(0.25, function() HealBot_ActionIcons_setLuVars("SelfCountTextUpdate", false) end)
         else
-            HealBot_Timers_Set("SKINS","SelfCountTextUpdate",0.25)
+            HealBot_Timers_Set("SKINS","SelfCountTextUpdate",true)
         end
     end
 end

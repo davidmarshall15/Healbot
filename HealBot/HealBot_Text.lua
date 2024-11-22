@@ -428,7 +428,6 @@ function HealBot_Text_sethbAggroNumberFormat()
 end
 
 local function HealBot_Text_RGBPercToHex(r, g, b)
-      --HealBot_setCall("HealBot_Text_RGBPercToHex")
 	r=r <= 1 and r >= 0 and r or 0
 	g=g <= 1 and g >= 0 and g or 0
 	b=b <= 1 and b >= 0 and b or 0
@@ -1596,7 +1595,7 @@ function HealBot_Text_UpdateStateButton(button)
 end
 
 function HealBot_Text_UpdateAggroButton(button)
-      --HealBot_setCall("HealBot_Text_UpdateStateButton", button)
+      --HealBot_setCall("HealBot_Text_UpdateAggroButton", button)
     if not hbv_Skins_GetFrameBoolean("BarText", "TAGAGGROONLYTIP", button.framecol) then
         cText=button.gref.txt["text4"]:GetText() or button.text.aggro or "."
         button.gref.txt["text4"]:SetText(cText.." ")
