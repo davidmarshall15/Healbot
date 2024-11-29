@@ -1709,7 +1709,6 @@ function HealBot_Load()
         HealBot_ActionIcons_InitFrames()
         HealBot_Timers_Set("INIT","CheckTalentInfo")
         HealBot_Timers_Set("INIT","SeparateInHealsAbsorbs")
-        HealBot_Timers_Set("INIT","InitPlugins")
         HealBot_Timers_Set("INIT","RegEvents")
         HealBot_Timers_Set("PLAYER","LoadProfile")
         HealBot_Timers_Set("SKINS","RaidTargetUpdate")
@@ -3545,11 +3544,7 @@ function HealBot_UnitSlowUpdate(button)
                         HealBot_Action_EmergBarCheck(button, true)
                     end
                     if button.text.updatealpha then
-                        button.text.tagupdate=true
-                        button.text.aggroupdate=true
-                        button.text.nameupdate=true
-                        button.text.healthupdate=true
-                        HealBot_Text_UpdateText(button)
+                        HealBot_Update_TextPlayersAlphaButtonNow(button)
                     end
                     button.status.slowupdate=false
                 end
@@ -4246,28 +4241,32 @@ function HealBot_OnUpdate()
     end
 end
 
-function HealBot_Register_IncHeals()
+function HealBot_Register_IncHeals(callback)
       --HealBot_setCall("HealBot_Register_IncHeals")
     if HEALBOT_GAME_VERSION<4 then
-        libCHC=libCHC or HealBot_Libs_CHC()
-        if libCHC and not HealBot_luVars["LibCHCLoaded"] then
-            libCHC.RegisterCallback(HEALBOT_HEALBOT, "HealComm_HealStarted",
-                function(event, casterGUID, spellID, healType, endTime, ...)
-                HealBotClassic_HealsInUpdate(spellID, ...) end)
+        if libCHC then 
+            if not HealBot_luVars["LibCHCLoaded"] then
+                libCHC.RegisterCallback(HEALBOT_HEALBOT, "HealComm_HealStarted",
+                    function(event, casterGUID, spellID, healType, endTime, ...)
+                    HealBotClassic_HealsInUpdate(spellID, ...) end)
 
-            libCHC.RegisterCallback(HEALBOT_HEALBOT, "HealComm_HealUpdated",
-                function(event, casterGUID, spellID, healType, endTime, ...)
-                HealBotClassic_HealsInUpdate(spellID, ...) end)
+                libCHC.RegisterCallback(HEALBOT_HEALBOT, "HealComm_HealUpdated",
+                    function(event, casterGUID, spellID, healType, endTime, ...)
+                    HealBotClassic_HealsInUpdate(spellID, ...) end)
 
-            libCHC.RegisterCallback(HEALBOT_HEALBOT, "HealComm_HealDelayed",
-                function(event, casterGUID, spellID, healType, endTime, ...)
-                HealBotClassic_HealsInUpdate(spellID, ...) end)
+                libCHC.RegisterCallback(HEALBOT_HEALBOT, "HealComm_HealDelayed",
+                    function(event, casterGUID, spellID, healType, endTime, ...)
+                    HealBotClassic_HealsInUpdate(spellID, ...) end)
 
-            libCHC.RegisterCallback(HEALBOT_HEALBOT, "HealComm_HealStopped",
-                function(event, casterGUID, spellID, healType, interrupted, ...)
-                HealBotClassic_HealsInUpdate(spellID, ...) end)
+                libCHC.RegisterCallback(HEALBOT_HEALBOT, "HealComm_HealStopped",
+                    function(event, casterGUID, spellID, healType, interrupted, ...)
+                    HealBotClassic_HealsInUpdate(spellID, ...) end)
 
-            HealBot_luVars["LibCHCLoaded"]=true
+                HealBot_luVars["LibCHCLoaded"]=true
+            end
+        elseif not callback then
+            libCHC=HealBot_Libs_CHC()
+            HealBot_Register_IncHeals(true)
         end
     end
 end
@@ -5031,53 +5030,57 @@ function HealBot_Cycle_Skins()
 end
 
 local ldb=nil
-function HealBot_MMButton_Init()
+function HealBot_MMButton_Init(callback)
       --HealBot_setCall("HealBot_MMButton_Init")
-    if LDBIcon and ldb and not LDBIcon:IsRegistered(HEALBOT_HEALBOT) then
-        LDBIcon:Register(HEALBOT_HEALBOT, ldb, HealBot_Globals.MinimapIcon)
-        HealBot_MMButton_Toggle()
-    end
-end
-
-if LDB11 then
-    ldb=LDB11:NewDataObject(HEALBOT_HEALBOT, {
-        type="data source",
-        label=HEALBOT_HEALBOT,
-        icon="Interface\\AddOns\\HealBot\\Images\\HealBot",
-    })
-
-    function ldb.OnClick(self, button)
-        if button == "LeftButton" then
-            if IsShiftKeyDown() then
-                HealBot_Cycle_Skins()
-            else
-                HealBot_Options_ShowHide()
-            end
-        elseif button == "RightButton" then
-            if IsShiftKeyDown() then
-                if HealBot_Config.DisableHealBot then
-                    HealBot_Config.DisableHealBot=false
+    if LDB11 and LDBIcon then
+        ldb=LDB11:NewDataObject(HEALBOT_HEALBOT, {
+            type="data source",
+            label=HEALBOT_HEALBOT,
+            icon="Interface\\AddOns\\HealBot\\Images\\HealBot",
+        })
+        if ldb then
+            function ldb.OnClick(self, button)
+                if button == "LeftButton" then
+                    if IsShiftKeyDown() then
+                        HealBot_Cycle_Skins()
+                    else
+                        HealBot_Options_ShowHide()
+                    end
+                elseif button == "RightButton" then
+                    if IsShiftKeyDown() then
+                        if HealBot_Config.DisableHealBot then
+                            HealBot_Config.DisableHealBot=false
+                        else
+                            HealBot_Config.DisableHealBot=true
+                        end
+                        HealBot_Options_DisableHealBotOpt:SetChecked(HealBot_Config.DisableHealBot)
+                        HealBot_Timers_Set("OOC","DisableCheck")
+                    else
+                        HealBot_SetResetFlag("SOFT")
+                    end
                 else
-                    HealBot_Config.DisableHealBot=true
+                    HealBot_Options_ShowHide()
                 end
-                HealBot_Options_DisableHealBotOpt:SetChecked(HealBot_Config.DisableHealBot)
-                HealBot_Timers_Set("OOC","DisableCheck")
-            else
-                HealBot_SetResetFlag("SOFT")
             end
-        else
-            HealBot_Options_ShowHide()
-        end
-    end
 
-    function ldb.OnTooltipShow(tt)
-        tt:AddLine(HEALBOT_ADDON)
-        tt:AddLine(" ")
-        tt:AddLine(HEALBOT_LDB_LEFT_TOOLTIP)
-        tt:AddLine(HEALBOT_LDB_SHIFTLEFT_TOOLTIP)
-        tt:AddLine(" ")
-        tt:AddLine(HEALBOT_LDB_RIGHT_TOOLTIP)
-        tt:AddLine(HEALBOT_LDB_SHIFTRIGHT_TOOLTIP)
+            function ldb.OnTooltipShow(tt)
+                tt:AddLine(HEALBOT_ADDON)
+                tt:AddLine(" ")
+                tt:AddLine(HEALBOT_LDB_LEFT_TOOLTIP)
+                tt:AddLine(HEALBOT_LDB_SHIFTLEFT_TOOLTIP)
+                tt:AddLine(" ")
+                tt:AddLine(HEALBOT_LDB_RIGHT_TOOLTIP)
+                tt:AddLine(HEALBOT_LDB_SHIFTRIGHT_TOOLTIP)
+            end
+            if not LDBIcon:IsRegistered(HEALBOT_HEALBOT) then
+                LDBIcon:Register(HEALBOT_HEALBOT, ldb, HealBot_Globals.MinimapIcon)
+                HealBot_MMButton_Toggle()
+            end
+        end
+    elseif not callback then
+        LDB11=HealBot_Libs_LDB11()
+        LDBIcon=HealBot_Libs_LDBIcon()
+        HealBot_MMButton_Init(true)
     end
 end
 

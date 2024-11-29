@@ -1589,6 +1589,15 @@ function HealBot_Update_TextNames_EnemyOnly()
     HealBot_Update_TextNames(true)
 end
 
+function HealBot_Update_TextPlayersAlphaButtonNow(button)
+    button.text.updatealpha=false
+    button.text.tagupdate=true
+    button.text.aggroupdate=true
+    button.text.nameupdate=true
+    button.text.healthupdate=true
+    HealBot_Text_UpdateText(button)
+end
+
 function HealBot_Update_TextPlayersAlphaButton(button)
     button.text.updatealpha=true
     button.status.slowupdate=true

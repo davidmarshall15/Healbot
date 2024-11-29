@@ -21300,7 +21300,7 @@
                             <Anchors>
                               <Anchor point="TOPLEFT">
                                 <Offset>
-                                  <AbsDimension x="155" y="-95" />
+                                  <AbsDimension x="155" y="-80" />
                                 </Offset>
                               </Anchor>
                             </Anchors>
@@ -21405,7 +21405,7 @@
                             <Anchors>
                               <Anchor point="BOTTOM">
                                 <Offset>
-                                  <AbsDimension x="0" y="200" />
+                                  <AbsDimension x="0" y="240" />
                                 </Offset>
                               </Anchor>
                             </Anchors>
@@ -21413,6 +21413,23 @@
                               <OnValueChanged>HealBot_Options_NameTextAlpha_OnValueChanged(self)</OnValueChanged>
                               <OnEnter>HealBot_Options_Show_Help("HEALBARSNAMETEXTCOLALPHA",true)</OnEnter>
                               <OnLeave>HealBot_Options_Show_Help("HEALBARSNAMETEXTCOLALPHA",false)</OnLeave>
+                            </Scripts>
+                          </Slider>
+                          <Slider name="HealBot_Options_NameTextOORAlpha" inherits="HealBot_Options_SliderTemplate">
+                            <Size>
+                              <AbsDimension x="525" y="16" />
+                            </Size>
+                            <Anchors>
+                              <Anchor point="BOTTOM">
+                                <Offset>
+                                  <AbsDimension x="0" y="170" />
+                                </Offset>
+                              </Anchor>
+                            </Anchors>
+                            <Scripts>
+                              <OnValueChanged>HealBot_Options_NameTextOORAlpha_OnValueChanged(self)</OnValueChanged>
+                              <OnEnter>HealBot_Options_Show_Help("HEALBARSNAMETEXTOORCOLALPHA",true)</OnEnter>
+                              <OnLeave>HealBot_Options_Show_Help("HEALBARSNAMETEXTOORCOLALPHA",false)</OnLeave>
                             </Scripts>
                           </Slider>
                           <Slider name="HealBot_Options_NameTextDisAlpha" inherits="HealBot_Options_SliderTemplate">
@@ -22091,7 +22108,7 @@
                             <Anchors>
                               <Anchor point="TOPLEFT">
                                 <Offset>
-                                  <AbsDimension x="155" y="-95" />
+                                  <AbsDimension x="155" y="-80" />
                                 </Offset>
                               </Anchor>
                             </Anchors>
@@ -22180,7 +22197,7 @@
                             <Anchors>
                               <Anchor point="BOTTOM">
                                 <Offset>
-                                  <AbsDimension x="0" y="200" />
+                                  <AbsDimension x="0" y="240" />
                                 </Offset>
                               </Anchor>
                             </Anchors>
@@ -22188,6 +22205,23 @@
                               <OnValueChanged>HealBot_Options_HealthTextAlpha_OnValueChanged(self)</OnValueChanged>
                               <OnEnter>HealBot_Options_Show_Help("HEALBARSHEALTHTEXTCOLALPHA",true)</OnEnter>
                               <OnLeave>HealBot_Options_Show_Help("HEALBARSHEALTHTEXTCOLALPHA",false)</OnLeave>
+                            </Scripts>
+                          </Slider>
+                          <Slider name="HealBot_Options_HealthTextOORAlpha" inherits="HealBot_Options_SliderTemplate">
+                            <Size>
+                              <AbsDimension x="525" y="16" />
+                            </Size>
+                            <Anchors>
+                              <Anchor point="BOTTOM">
+                                <Offset>
+                                  <AbsDimension x="0" y="170" />
+                                </Offset>
+                              </Anchor>
+                            </Anchors>
+                            <Scripts>
+                              <OnValueChanged>HealBot_Options_HealthTextOORAlpha_OnValueChanged(self)</OnValueChanged>
+                              <OnEnter>HealBot_Options_Show_Help("HEALBARSHEALTHTEXTOORCOLALPHA",true)</OnEnter>
+                              <OnLeave>HealBot_Options_Show_Help("HEALBARSHEALTHTEXTOORCOLALPHA",false)</OnLeave>
                             </Scripts>
                           </Slider>
                           <Slider name="HealBot_Options_HealthTextDisAlpha" inherits="HealBot_Options_SliderTemplate">
@@ -23148,7 +23182,7 @@
                             <Anchors>
                               <Anchor point="BOTTOM">
                                 <Offset>
-                                  <AbsDimension x="0" y="200" />
+                                  <AbsDimension x="0" y="240" />
                                 </Offset>
                               </Anchor>
                             </Anchors>
@@ -23156,6 +23190,23 @@
                               <OnValueChanged>HealBot_Options_StateTextAlpha_OnValueChanged(self)</OnValueChanged>
                               <OnEnter>HealBot_Options_Show_Help("HEALBARSSTATETEXTCOLALPHA",true)</OnEnter>
                               <OnLeave>HealBot_Options_Show_Help("HEALBARSSTATETEXTCOLALPHA",false)</OnLeave>
+                            </Scripts>
+                          </Slider>
+                          <Slider name="HealBot_Options_StateTextOORAlpha" inherits="HealBot_Options_SliderTemplate">
+                            <Size>
+                              <AbsDimension x="525" y="16" />
+                            </Size>
+                            <Anchors>
+                              <Anchor point="BOTTOM">
+                                <Offset>
+                                  <AbsDimension x="0" y="170" />
+                                </Offset>
+                              </Anchor>
+                            </Anchors>
+                            <Scripts>
+                              <OnValueChanged>HealBot_Options_StateTextOORAlpha_OnValueChanged(self)</OnValueChanged>
+                              <OnEnter>HealBot_Options_Show_Help("HEALBARSSTATETEXTOORCOLALPHA",true)</OnEnter>
+                              <OnLeave>HealBot_Options_Show_Help("HEALBARSSTATETEXTOORCOLALPHA",false)</OnLeave>
                             </Scripts>
                           </Slider>
                           <Slider name="HealBot_Options_StateTextDisAlpha" inherits="HealBot_Options_SliderTemplate">
@@ -23805,7 +23856,7 @@
                             <Anchors>
                               <Anchor point="BOTTOM">
                                 <Offset>
-                                  <AbsDimension x="0" y="200" />
+                                  <AbsDimension x="0" y="240" />
                                 </Offset>
                               </Anchor>
                             </Anchors>
@@ -23813,6 +23864,23 @@
                               <OnValueChanged>HealBot_Options_AggroTextAlpha_OnValueChanged(self)</OnValueChanged>
                               <OnEnter>HealBot_Options_Show_Help("HEALBARSAGGROTEXTCOLALPHA",true)</OnEnter>
                               <OnLeave>HealBot_Options_Show_Help("HEALBARSAGGROTEXTCOLALPHA",false)</OnLeave>
+                            </Scripts>
+                          </Slider>
+                          <Slider name="HealBot_Options_AggroTextOORAlpha" inherits="HealBot_Options_SliderTemplate">
+                            <Size>
+                              <AbsDimension x="525" y="16" />
+                            </Size>
+                            <Anchors>
+                              <Anchor point="BOTTOM">
+                                <Offset>
+                                  <AbsDimension x="0" y="170" />
+                                </Offset>
+                              </Anchor>
+                            </Anchors>
+                            <Scripts>
+                              <OnValueChanged>HealBot_Options_AggroTextOORAlpha_OnValueChanged(self)</OnValueChanged>
+                              <OnEnter>HealBot_Options_Show_Help("HEALBARSAGGROTEXTOORCOLALPHA",true)</OnEnter>
+                              <OnLeave>HealBot_Options_Show_Help("HEALBARSAGGROTEXTOORCOLALPHA",false)</OnLeave>
                             </Scripts>
                           </Slider>
                           <Slider name="HealBot_Options_AggroTextDisAlpha" inherits="HealBot_Options_SliderTemplate">
@@ -24165,7 +24233,7 @@
                                 <Anchors>
                                   <Anchor point="TOP">
                                     <Offset>
-                                      <AbsDimension x="0" y="-70" />
+                                      <AbsDimension x="0" y="-55" />
                                     </Offset>
                                   </Anchor>
                                 </Anchors>
@@ -24210,7 +24278,7 @@
                                 <Anchors>
                                   <Anchor point="TOPLEFT">
                                     <Offset>
-                                      <AbsDimension x="125" y="-180" />
+                                      <AbsDimension x="125" y="-150" />
                                     </Offset>
                                   </Anchor>
                                 </Anchors>
@@ -24304,7 +24372,7 @@
                                 <Anchors>
                                   <Anchor point="BOTTOM">
                                     <Offset>
-                                      <AbsDimension x="0" y="150" />
+                                      <AbsDimension x="0" y="190" />
                                     </Offset>
                                   </Anchor>
                                 </Anchors>
@@ -24314,6 +24382,23 @@
                                   <OnLeave>HealBot_Options_Show_Help("HEALBARSAUXTEXTCOLALPHA",false)</OnLeave>
                                 </Scripts>
                               </Slider>
+                              <Slider name="HealBot_Options_AuxTextOORAlpha" inherits="HealBot_Options_SliderTemplate">
+                                <Size>
+                                  <AbsDimension x="525" y="16" />
+                                </Size>
+                                <Anchors>
+                                  <Anchor point="BOTTOM">
+                                    <Offset>
+                                      <AbsDimension x="0" y="120" />
+                                    </Offset>
+                                  </Anchor>
+                                </Anchors>
+                                <Scripts>
+                                  <OnValueChanged>HealBot_Options_AuxTextOORAlpha_OnValueChanged(self)</OnValueChanged>
+                                  <OnEnter>HealBot_Options_Show_Help("HEALBARSAUXTEXTCOLOORALPHA",true)</OnEnter>
+                                  <OnLeave>HealBot_Options_Show_Help("HEALBARSAUXTEXTCOLOORALPHA",false)</OnLeave>
+                                </Scripts>
+                              </Slider>
                               <Slider name="HealBot_Options_AuxTextDisAlpha" inherits="HealBot_Options_SliderTemplate">
                                 <Size>
                                   <AbsDimension x="525" y="16" />
@@ -24321,7 +24406,7 @@
                                 <Anchors>
                                   <Anchor point="BOTTOM">
                                     <Offset>
-                                      <AbsDimension x="0" y="70" />
+                                      <AbsDimension x="0" y="50" />
                                     </Offset>
                                   </Anchor>
                                 </Anchors>
@@ -35673,7 +35758,7 @@
                     <Anchors>
                       <Anchor point="TOPLEFT">
                         <Offset>
-                          <AbsDimension x="75" y="-55" />
+                          <AbsDimension x="75" y="-50" />
                         </Offset>
                       </Anchor>
                     </Anchors>
@@ -35687,7 +35772,7 @@
                     <Anchors>
                       <Anchor point="TOP">
                         <Offset>
-                          <AbsDimension x="-50" y="-95"/>
+                          <AbsDimension x="-70" y="-90"/>
                         </Offset>
                       </Anchor>
                     </Anchors>
@@ -35701,7 +35786,7 @@
                     <Anchors>
                       <Anchor point="TOPLEFT" relativeTo="HealBot_Options_ShowTooltipTitle" relativePoint="BOTTOMLEFT">
                         <Offset>
-                          <AbsDimension x="0" y="-24"/>
+                          <AbsDimension x="0" y="-18"/>
                         </Offset>
                       </Anchor>
                     </Anchors>
@@ -35743,7 +35828,7 @@
                     <Anchors>
                       <Anchor point="TOPLEFT" relativeTo="HealBot_Options_ShowTooltipGuild" relativePoint="BOTTOMLEFT">
                         <Offset>
-                          <AbsDimension x="0" y="-24"/>
+                          <AbsDimension x="0" y="-32"/>
                         </Offset>
                       </Anchor>
                     </Anchors>
@@ -35757,7 +35842,7 @@
                     <Anchors>
                       <Anchor point="TOPLEFT" relativeTo="HealBot_Options_ShowTooltipMyBuffs" relativePoint="BOTTOMLEFT">
                         <Offset>
-                          <AbsDimension x="0" y="-24"/>
+                          <AbsDimension x="0" y="-18"/>
                         </Offset>
                       </Anchor>
                     </Anchors>
@@ -35767,11 +35852,25 @@
                       <OnLeave>HealBot_Options_Show_Help("TOOLTIPREQUIREDBUFFS",false)</OnLeave>
                     </Scripts>
                   </CheckButton>
-                  <CheckButton name="HealBot_Options_ShowTooltipLevel" inherits="HealBotUIPanelCheckButton">
+                  <CheckButton name="HealBot_Options_ShowTooltipDebuffs" inherits="HealBotUIPanelCheckButton">
                     <Anchors>
                       <Anchor point="TOPLEFT" relativeTo="HealBot_Options_ShowTooltipRequiredBuffs" relativePoint="BOTTOMLEFT">
                         <Offset>
-                          <AbsDimension x="0" y="-24"/>
+                          <AbsDimension x="0" y="-18"/>
+                        </Offset>
+                      </Anchor>
+                    </Anchors>
+                    <Scripts>
+                      <OnClick>HealBot_Options_ShowTooltipDebuffs_OnClick(self)</OnClick>
+                      <OnEnter>HealBot_Options_Show_Help("TOOLTIPSHOWDEBUFFS",true)</OnEnter>
+                      <OnLeave>HealBot_Options_Show_Help("TOOLTIPSHOWDEBUFFS",false)</OnLeave>
+                    </Scripts>
+                  </CheckButton>
+                  <CheckButton name="HealBot_Options_ShowTooltipLevel" inherits="HealBotUIPanelCheckButton">
+                    <Anchors>
+                      <Anchor point="TOPLEFT" relativeTo="HealBot_Options_ShowTooltipDebuffs" relativePoint="BOTTOMLEFT">
+                        <Offset>
+                          <AbsDimension x="0" y="-18"/>
                         </Offset>
                       </Anchor>
                     </Anchors>
@@ -35785,7 +35884,7 @@
                     <Anchors>
                       <Anchor point="TOPLEFT" relativeTo="HealBot_Options_ShowTooltipLevel" relativePoint="BOTTOMLEFT">
                         <Offset>
-                          <AbsDimension x="0" y="-24"/>
+                          <AbsDimension x="0" y="-18"/>
                         </Offset>
                       </Anchor>
                     </Anchors>
@@ -35799,7 +35898,7 @@
                     <Anchors>
                       <Anchor point="TOPLEFT" relativeTo="HealBot_Options_ShowTooltipSpec" relativePoint="BOTTOMLEFT">
                         <Offset>
-                          <AbsDimension x="0" y="-24"/>
+                          <AbsDimension x="0" y="-18"/>
                         </Offset>
                       </Anchor>
                     </Anchors>
@@ -35813,7 +35912,7 @@
                     <Anchors>
                       <Anchor point="TOPLEFT" relativeTo="HealBot_Options_ShowTooltipHealthLine" relativePoint="BOTTOMLEFT">
                         <Offset>
-                          <AbsDimension x="0" y="-24"/>
+                          <AbsDimension x="0" y="-18"/>
                         </Offset>
                       </Anchor>
                     </Anchors>
@@ -35827,7 +35926,7 @@
                     <Anchors>
                       <Anchor point="TOPLEFT" relativeTo="HealBot_Options_ShowTooltipManaLine" relativePoint="BOTTOMLEFT">
                         <Offset>
-                          <AbsDimension x="0" y="-24"/>
+                          <AbsDimension x="0" y="-18"/>
                         </Offset>
                       </Anchor>
                     </Anchors>
@@ -35841,7 +35940,7 @@
                     <Anchors>
                       <Anchor point="TOPLEFT" relativeTo="HealBot_Options_ShowTooltipRanks" relativePoint="BOTTOMLEFT">
                         <Offset>
-                          <AbsDimension x="0" y="-24"/>
+                          <AbsDimension x="0" y="-18"/>
                         </Offset>
                       </Anchor>
                     </Anchors>
@@ -35901,7 +36000,7 @@
                     <Anchors>
                       <Anchor point="TOPLEFT">
                         <Offset>
-                          <AbsDimension x="75" y="-55" />
+                          <AbsDimension x="75" y="-50" />
                         </Offset>
                       </Anchor>
                     </Anchors>

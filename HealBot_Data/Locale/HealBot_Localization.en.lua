@@ -740,6 +740,7 @@ function HealBot_Lang_enALL()
     HEALBOT_OPTIONS_SHOWGUILDRANK          ="Include guild rank";
     HEALBOT_OPTIONS_SHOWTITLE              ="Show title";
     HEALBOT_OPTIONS_SHOWUNITBUFFREQUIRED   ="Show required buffs";
+    HEALBOT_OPTIONS_TIPSSHOWDEBUFFS        ="Show monitored debuffs";
     HEALBOT_OPTIONS_BUFFSTEXTTIMER         ="Show buff before it expires";
     HEALBOT_OPTIONS_SHORTBUFFTIMER         ="Short buffs"
     HEALBOT_OPTIONS_LONGBUFFTIMER          ="Long buffs"

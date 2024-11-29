@@ -90,6 +90,7 @@ end
 function HealBot_ActionIcons_InitFrames()
         --HealBot_setCall("HealBot_ActionIcons_InitFrames")
     if not hb_lVars["Loaded"] then
+        if not lGlow then lGlow=HealBot_Libs_LibGlow() end
         if not HealBot_Data["UILOCK"] then
             HealBot_ActionIcons_LoadSpec()
             cursorIcon.isVisible=false

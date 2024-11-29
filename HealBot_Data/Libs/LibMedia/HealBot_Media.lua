@@ -15,7 +15,6 @@ local HealBot_SoundsIndex={}
 local HealBot_Media_luVars={}
 HealBot_Media_luVars["Indexed"]=false
 HealBot_Media_luVars["Registered"]=false
-HealBot_Media_luVars["InitFontsRerun"]=0
 HealBot_Media_luVars["DelayUpdateUsedMedia"]=false
 HealBot_Media_luVars["pluginMedia"]=false
 
@@ -70,17 +69,16 @@ end
 
 local function HealBot_Media_SetFonts(id)
       --HealBot_setCall("HealBot_Media_InitFonts")
-    if id<=#HealBot_Fonts then
-        local g=_G["UsedToInitFonts"]
-        g:SetFont(LSM:Fetch('font', HealBot_Fonts[id]), 10, HealBot_Font_Outline[1])
-        g:SetText("i"..id)
-        C_Timer.After(0.1, function() HealBot_Media_SetFonts(id+1) end)
-    elseif HealBot_Media_luVars["InitFontsRerun"]<3 then
-        HealBot_Media_luVars["InitFontsRerun"]=HealBot_Media_luVars["InitFontsRerun"]+1
-        HealBot_Media_luVars["InitFonts"]=false
-        C_Timer.After(HealBot_Media_luVars["InitFontsRerun"]*3, HealBot_Media_InitFonts)
+    if HealBot_Fonts then
+        if id<=#HealBot_Fonts then
+            local g=_G["UsedToInitFonts"]
+            g:SetFont(LSM:Fetch('font', HealBot_Fonts[id]), 10, HealBot_Font_Outline[1])
+            g:SetText("i"..id)
+            C_Timer.After(0.1, function() HealBot_Media_SetFonts(id+1) end)
+        end
     else
-        HealBot_Media_luVars["InitFonts"]=false
+        HealBot_Media_UpdateIndexes()
+        C_Timer.After(1, function() HealBot_Media_SetFonts(1) end)
     end
 end
 
@@ -88,8 +86,6 @@ function HealBot_Media_InitFonts()
     if not HealBot_Media_luVars["InitFonts"] then
         HealBot_Media_luVars["InitFonts"]=true
         C_Timer.After(1, function() HealBot_Media_SetFonts(1) end)
-    else
-        C_Timer.After(15, HealBot_Media_InitFonts)
     end
 end
 
@@ -142,40 +138,44 @@ end
 
 function HealBot_Media_UpdateIndexes(callback)
     if not LSM then
-        HealBot_VariablesLoaded()
+        HealBot_Media_Register()
         if not callback then
             HealBot_Media_UpdateIndexes(true)
         end
     end
-    HealBot_Media_luVars["Indexed"]=true
-    for x,_ in pairs(HealBot_TexturesIndex) do
-        HealBot_TexturesIndex[x]=nil
-    end 
-    for x,_ in pairs(HealBot_FontsIndex) do
-        HealBot_FontsIndex[x]=nil
-    end 
-    for x,_ in pairs(HealBot_SoundsIndex) do
-        HealBot_SoundsIndex[x]=nil
-    end 
-    
-    if HealBot_Media_luVars["pluginMedia"] then
-        HealBot_Textures=HealBot_Plugin_Media_TexturesEnabled()
-        HealBot_Fonts=HealBot_Plugin_Media_FontsEnabled()
-        HealBot_Sounds=HealBot_Plugin_Media_SoundsEnabled()
+    if LSM then
+        HealBot_Media_luVars["Indexed"]=true
+        for x,_ in pairs(HealBot_TexturesIndex) do
+            HealBot_TexturesIndex[x]=nil
+        end 
+        for x,_ in pairs(HealBot_FontsIndex) do
+            HealBot_FontsIndex[x]=nil
+        end 
+        for x,_ in pairs(HealBot_SoundsIndex) do
+            HealBot_SoundsIndex[x]=nil
+        end 
+        
+        if HealBot_Media_luVars["pluginMedia"] then
+            HealBot_Textures=HealBot_Plugin_Media_TexturesEnabled()
+            HealBot_Fonts=HealBot_Plugin_Media_FontsEnabled()
+            HealBot_Sounds=HealBot_Plugin_Media_SoundsEnabled()
+        else
+            HealBot_Textures=LSM:List('statusbar')
+            HealBot_Fonts=LSM:List('font')
+            HealBot_Sounds=LSM:List('sound')
+        end
+        
+        for i=1,#HealBot_Textures do
+            HealBot_TexturesIndex[HealBot_Textures[i]]=i
+        end
+        for i=1,#HealBot_Fonts do
+            HealBot_FontsIndex[HealBot_Fonts[i]]=i
+        end
+        for i=1,#HealBot_Sounds do
+            HealBot_SoundsIndex[HealBot_Sounds[i]]=i
+        end
     else
-        HealBot_Textures=LSM:List('statusbar')
-        HealBot_Fonts=LSM:List('font')
-        HealBot_Sounds=LSM:List('sound')
-    end
-    
-    for i=1,#HealBot_Textures do
-        HealBot_TexturesIndex[HealBot_Textures[i]]=i
-    end
-    for i=1,#HealBot_Fonts do
-        HealBot_FontsIndex[HealBot_Fonts[i]]=i
-    end
-    for i=1,#HealBot_Sounds do
-        HealBot_SoundsIndex[HealBot_Sounds[i]]=i
+        C_Timer.After(1, HealBot_Media_UpdateIndexes)
     end
 end
 

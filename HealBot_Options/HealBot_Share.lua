@@ -975,6 +975,7 @@ local function HealBot_Share_ExportSkinFrames(skinName, varName, id, xType, icon
       --HealBot_setCall("HealBot_Share_ExportSkinFrames")
     local dups=""
     local p={}
+    local pn={}
     local tabStr=""
     local tmpTab={}
     for f=1,10 do
@@ -1009,6 +1010,9 @@ local function HealBot_Share_ExportSkinFrames(skinName, varName, id, xType, icon
             local isDup=true
             local lMsg=strsub(tabStr,2,string.len(tabStr)-1)
             local d={}
+            for var,_ in pairs(pn) do
+                pn[var]=false;
+            end
             d=HealBot_Options_StringSplit(lMsg, ",")
             for j=1,getn(d) do
                 local var, dat=string.split("=", d[j])
@@ -1016,6 +1020,13 @@ local function HealBot_Share_ExportSkinFrames(skinName, varName, id, xType, icon
                 if not p[var] then p[var]="" end
                 if p[var]~=dat then
                     p[var]=dat
+                    isDup=false
+                end
+                pn[var]=true
+            end
+            for var,_ in pairs(p) do
+                if not pn[var] then
+                    p[var]=nil
                     isDup=false
                 end
             end

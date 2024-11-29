@@ -294,6 +294,7 @@ function HealBot_Data_InitVars()
         Tooltip_ShowTarget=true,
         Tooltip_ShowMyBuffs=false,
         Tooltip_ShowRequiredBuffs=true,
+        Tooltip_ShowDebuffs=true,
         Tooltip_ShowSpellInfo=true,
         Tooltip_ShowSpellExtra=true,
         Tooltip_ShowSpec=true,

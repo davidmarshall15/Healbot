@@ -872,37 +872,39 @@ function HealBot_Action_DoRefreshTooltip()
                         end
                     end
 
-                    UnitDebuffIcons=HealBot_Aura_ReturnDebuffdetails(xButton.id)
-                    if UnitDebuffIcons then
-                        HealBot_Tooltip_luVars["CrDebuffLine"]=false
-                        for i=51,hbv_Skins_GetIconVar("MAXDICONS", xButton.frame, 1)+50 do
-                            if UnitDebuffIcons[i].current then
-                                ttName=HealBot_Aura_ReturnDebuffdetailsname(UnitDebuffIcons[i].spellId)
-                                if ttName then
-                                    HealBot_Tooltip_addPlayerDebuffLine(uName, UnitDebuffIcons[i].spellId, ttName)
+                    if HealBot_Globals.Tooltip_ShowDebuffs then
+                        UnitDebuffIcons=HealBot_Aura_ReturnDebuffdetails(xButton.id)
+                        if UnitDebuffIcons then
+                            HealBot_Tooltip_luVars["CrDebuffLine"]=false
+                            for i=51,hbv_Skins_GetIconVar("MAXDICONS", xButton.frame, 1)+50 do
+                                if UnitDebuffIcons[i].current then
+                                    ttName=HealBot_Aura_ReturnDebuffdetailsname(UnitDebuffIcons[i].spellId)
+                                    if ttName then
+                                        HealBot_Tooltip_addPlayerDebuffLine(uName, UnitDebuffIcons[i].spellId, ttName)
+                                    end
+                                else
+                                    break
                                 end
-                            else
-                                break
                             end
-                        end
-                        for i=56,hbv_Skins_GetIconVar("MAXDICONS", xButton.frame, 2)+55 do
-                            if UnitDebuffIcons[i].current then
-                                ttName=HealBot_Aura_ReturnDebuffdetailsname(UnitDebuffIcons[i].spellId)
-                                if ttName then
-                                    HealBot_Tooltip_addPlayerDebuffLine(uName, UnitDebuffIcons[i].spellId, ttName)
+                            for i=56,hbv_Skins_GetIconVar("MAXDICONS", xButton.frame, 2)+55 do
+                                if UnitDebuffIcons[i].current then
+                                    ttName=HealBot_Aura_ReturnDebuffdetailsname(UnitDebuffIcons[i].spellId)
+                                    if ttName then
+                                        HealBot_Tooltip_addPlayerDebuffLine(uName, UnitDebuffIcons[i].spellId, ttName)
+                                    end
+                                else
+                                    break
                                 end
-                            else
-                                break
                             end
-                        end
-                        for i=58,hbv_Skins_GetIconVar("MAXDICONS", xButton.frame, 3)+57 do
-                            if UnitDebuffIcons[i].current then
-                                ttName=HealBot_Aura_ReturnDebuffdetailsname(UnitDebuffIcons[i].spellId)
-                                if ttName then
-                                    HealBot_Tooltip_addPlayerDebuffLine(uName, UnitDebuffIcons[i].spellId, ttName)
+                            for i=58,hbv_Skins_GetIconVar("MAXDICONS", xButton.frame, 3)+57 do
+                                if UnitDebuffIcons[i].current then
+                                    ttName=HealBot_Aura_ReturnDebuffdetailsname(UnitDebuffIcons[i].spellId)
+                                    if ttName then
+                                        HealBot_Tooltip_addPlayerDebuffLine(uName, UnitDebuffIcons[i].spellId, ttName)
+                                    end
+                                else
+                                    break
                                 end
-                            else
-                                break
                             end
                         end
                     end

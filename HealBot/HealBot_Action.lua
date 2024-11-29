@@ -3506,6 +3506,7 @@ function HealBot_Action_InitFrames()
             HealBot_Panel_ParentFrameID(x)
         end
     end
+    if not lGlow then lGlow=HealBot_Libs_LibGlow() end
     HealBot_Events_Frame()
     HealBot_Action_luVars["FrameInitDone"]=true
 end
@@ -4163,7 +4164,7 @@ function HealBot_Action_InitButton(button, prefix)
     button.status.isdead=false
     button.status.isspirit=false
     button.status.resstart=0
-    button.status.range=0
+    button.status.range=-9
     button.status.rangespell=HealBot_Range_Spell("HEAL")
     button.status.rangemodkeyupd=0
     button.status.deadnextcheck=0

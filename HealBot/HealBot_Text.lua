@@ -1405,7 +1405,11 @@ function HealBot_Text_UpdateText(button)
         if not hbv_Skins_GetFrameBoolean("BarText", "TAGSTATEONLYTIP", button.framecol) then
             button.text.sr, button.text.sg, button.text.sb=HealBot_Text_StateColours(button)
             if button.status.enabled or button.status.summons then
-                button.text.sa=HealBot_Action_BarColourAlpha(button, hbv_Skins_GetFrameVar("BarTextCol", "SCA", button.framecol), 1)
+                if button.status.range>0 then
+                    button.text.sa=HealBot_Action_BarColourAlpha(button, hbv_Skins_GetFrameVar("BarTextCol", "SCA", button.framecol), 1)
+                else
+                    button.text.sa=HealBot_Action_BarColourAlpha(button, hbv_Skins_GetFrameVar("BarTextCol", "SCOA", button.framecol), 1)
+                end
             else
                 button.text.sa=HealBot_Action_BarColourAlpha(button, hbv_Skins_GetFrameVar("BarTextCol", "SCDA", button.framecol), 1)
             end
@@ -1417,7 +1421,11 @@ function HealBot_Text_UpdateText(button)
         button.text.aggroupdate=false
         if button.status.current<HealBot_Unit_Status["DEAD"] then
             if button.status.enabled then
-                button.text.aa=HealBot_Action_BarColourAlpha(button, hbv_Skins_GetFrameVar("BarTextCol", "ACA", button.framecol), 1)
+                if button.status.range>0 then
+                    button.text.aa=HealBot_Action_BarColourAlpha(button, hbv_Skins_GetFrameVar("BarTextCol", "ACA", button.framecol), 1)
+                else
+                    button.text.aa=HealBot_Action_BarColourAlpha(button, hbv_Skins_GetFrameVar("BarTextCol", "ACOA", button.framecol), 1)
+                end
             else
                 button.text.aa=HealBot_Action_BarColourAlpha(button, hbv_Skins_GetFrameVar("BarTextCol", "ACDA", button.framecol), 1)
             end
@@ -1433,7 +1441,11 @@ function HealBot_Text_UpdateText(button)
         if button.status.current<HealBot_Unit_Status["DC"] then
             button.text.nr, button.text.ng, button.text.nb=HealBot_Text_TextNameColours(button)
             if button.status.enabled or button.status.summons then
-                button.text.na=HealBot_Action_BarColourAlpha(button, hbv_Skins_GetFrameVar("BarTextCol", "NCA", button.framecol), 1)
+                if button.status.range>0 then
+                    button.text.na=HealBot_Action_BarColourAlpha(button, hbv_Skins_GetFrameVar("BarTextCol", "NCA", button.framecol), 1)
+                else
+                    button.text.na=HealBot_Action_BarColourAlpha(button, hbv_Skins_GetFrameVar("BarTextCol", "NCOA", button.framecol), 1)
+                end
             else
                 button.text.na=HealBot_Action_BarColourAlpha(button, hbv_Skins_GetFrameVar("BarTextCol", "NCDA", button.framecol), 1)
                 --button.text.na=1
@@ -1448,7 +1460,11 @@ function HealBot_Text_UpdateText(button)
         button.text.healthupdate=false
         if button.health.current>0 then
             if button.status.enabled then
-                button.text.ha=HealBot_Action_BarColourAlpha(button, hbv_Skins_GetFrameVar("BarTextCol", "HCA", button.framecol), 1)
+                if button.status.range>0 then
+                    button.text.ha=HealBot_Action_BarColourAlpha(button, hbv_Skins_GetFrameVar("BarTextCol", "HCA", button.framecol), 1)
+                else
+                    button.text.ha=HealBot_Action_BarColourAlpha(button, hbv_Skins_GetFrameVar("BarTextCol", "HCOA", button.framecol), 1)
+                end
             else
                 button.text.ha=HealBot_Action_BarColourAlpha(button, hbv_Skins_GetFrameVar("BarTextCol", "HCDA", button.framecol), 1)
             end
@@ -1500,7 +1516,11 @@ function HealBot_Text_UpdateText(button)
     if button.text.vphealthupdate then
         button.text.vphealthupdate=false
         if button.status.enabled then
-            button.text.ha=HealBot_Action_BarColourAlpha(button, hbv_Skins_GetFrameVar("BarTextCol", "HCA", button.framecol), 1)
+            if button.status.range>0 then
+                button.text.ha=HealBot_Action_BarColourAlpha(button, hbv_Skins_GetFrameVar("BarTextCol", "HCA", button.framecol), 1)
+            else
+                button.text.ha=HealBot_Action_BarColourAlpha(button, hbv_Skins_GetFrameVar("BarTextCol", "HCOA", button.framecol), 1)
+            end
         else
             button.text.ha=HealBot_Action_BarColourAlpha(button, hbv_Skins_GetFrameVar("BarTextCol", "HCDA", button.framecol), 1)
         end

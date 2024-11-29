@@ -98,7 +98,7 @@ function HealBot_Util_EmptyTable(t, key)
     if t[key] then
         HealBot_Util_luVars["emptyTable"]=true
         for _,v in pairs(t[key]) do
-            if v then
+            if v or v == false then
                 HealBot_Util_luVars["emptyTable"]=false
                 break
             end
@@ -109,45 +109,65 @@ function HealBot_Util_EmptyTable(t, key)
     end
 end
 
-function HealBot_Util_Compress(s)
+function HealBot_Util_Compress(s, callback)
       --HealBot_setCall("HealBot_Util_Compress")
-    local compressed=LibDeflate:CompressDeflate(s, {level=9})
-    if compressed then
-        local encoded=LibDeflate:EncodeForPrint(compressed)
-        return encoded or s
-    else
-        return s
-    end
-end
-
-function HealBot_Util_Decompress(s)
-      --HealBot_setCall("HealBot_Util_Decompress")
-    local decoded=LibDeflate:DecodeForPrint(s)
-    if decoded then
-        local decompressed=LibDeflate:DecompressDeflate(decoded)
-        return decompressed or s
-    else
-        return s
-    end
-end
-
-function HealBot_Util_Serialize(s, c)
-    local serial=LibSerial:Serialize(s)
-    if c then 
-        serial=HealBot_Util_Compress(serial)
-    end
-    return serial
-end
-
-function HealBot_Util_Deserialize(s)
-    if type(s) == "string" then
-        local plain=HealBot_Util_Decompress(s)
-        local deserial, dat=LibSerial:Deserialize(plain)
-        if deserial then 
-            return dat
+    if LibDeflate then
+        local compressed=LibDeflate:CompressDeflate(s, {level=9})
+        if compressed then
+            local encoded=LibDeflate:EncodeForPrint(compressed)
+            return encoded or s
+        else
+            return s
         end
-        return plain
-    else
-        return s
+    elseif not callback then
+        LibDeflate=HealBot_Libs_LibC()
+        HealBot_Util_Compress(s, true)
+    end
+end
+
+function HealBot_Util_Decompress(s, callback)
+      --HealBot_setCall("HealBot_Util_Decompress")
+    if LibDeflate then
+        local decoded=LibDeflate:DecodeForPrint(s)
+        if decoded then
+            local decompressed=LibDeflate:DecompressDeflate(decoded)
+            return decompressed or s
+        else
+            return s
+        end
+    elseif not callback then
+        LibDeflate=HealBot_Libs_LibC()
+        HealBot_Util_Decompress(s, true)
+    end
+end
+
+function HealBot_Util_Serialize(s, c, callback)
+    if LibSerial then
+        local serial=LibSerial:Serialize(s)
+        if c then 
+            serial=HealBot_Util_Compress(serial)
+        end
+        return serial
+    elseif not callback then
+        LibSerial=HealBot_Libs_LibSerial()
+        HealBot_Util_Serialize(s, c, true)
+    end
+end
+
+function HealBot_Util_Deserialize(s, callback)
+    if LibSerial then
+        if type(s) == "string" then
+            local plain=HealBot_Util_Decompress(s)
+            local deserial, dat=LibSerial:Deserialize(plain)
+            if deserial then 
+                return dat
+            end
+            return plain
+        else
+            return s
+        end
+    elseif not callback then
+        LibSerial=HealBot_Libs_LibSerial()
+        HealBot_Util_Deserialize(s, true)
     end
 end

@@ -460,10 +460,10 @@ end
 function HealBot_Timers_LastLoad()
       --HealBot_setCall("HealBot_Timers_LastLoad")
     HealBot_Globals.LAG=HealBot_Globals.LAG+0.1
-    HealBot_Timers_Set("LAST","MountsPetsUse",true)
-    HealBot_Timers_Set("PLAYER","InvReady",true)
-    HealBot_Timers_Set("OOC","PartyUpdateCheckSkin",true)
-    HealBot_Timers_Set("LAST","InitLoadSpells",true)
+    HealBot_Timers_Set("LAST","MountsPetsUse")
+    HealBot_Timers_Set("PLAYER","InvReady")
+    HealBot_Timers_Set("OOC","PartyUpdateCheckSkin")
+    HealBot_Timers_Set("LAST","InitLoadSpells")
     HealBot_Timers_Set("SKINS","EmergHealthCol",true)
     HealBot_Timers_Set("AURA","ConfigClassHoT",true)
     HealBot_Timers_Set("AURA","ConfigDebuffs",true)
@@ -479,6 +479,7 @@ function HealBot_Timers_LastLoad()
     HealBot_Timers_Set("SKINS","TextSetTagInUse",true)
     HealBot_Timers_Set("OOC","EventsSetFrameUnits",true)
     HealBot_Timers_Set("LAST","MediaUpdateIndexes",true)
+    HealBot_Timers_Set("LAST","InitPlugins",true)
     HealBot_Timers_Set("INIT","LastUpdate",true,true)
     HealBot_Timers_Set("INIT","HealBotLoaded",true,true)
     HealBot_Timers_Set("LAST","MediaInitFonts",true,true)
@@ -593,7 +594,6 @@ local hbTimerFuncs={["INIT"]={
                         ["RegEvents"]=HealBot_Register_Events,
                         ["UnRegEvents"]=HealBot_UnRegister_Events,
                         ["ResetActiveUnitStatus"]=HealBot_Update_ResetActiveUnitStatus,
-                        ["InitPlugins"]=HealBot_Init_Plugins,
                         ["LastLoad"]=HealBot_Timers_LastLoad,
                         ["HealBotLoaded"]=HealBot_Loaded,
                         ["LastUpdate"]=HealBot_Timers_LastUpdate,
@@ -670,6 +670,7 @@ local hbTimerFuncs={["INIT"]={
                         ["ResetSkinAllElements"]=HealBot_Action_ResetSkinAllElements,
                         ["ResetSkinAllButtons"]=HealBot_Action_ResetSkinAllButtons,
                         ["ResetUpdate"]=HealBot_Options_ResetUpdate,
+                        ["ResetUpdateCurrentTab"]=HealBot_Options_ResetUpdateCurrentTab,
                         ["UpdateTestButtons"]=HealBot_Action_UpdateTestButtons,
                         ["DisableGlobalDimming"]=HealBot_Action_DisableGlobalDimming,
                         ["UpdateGlow"]=HealBot_Action_UpdateGlow,
@@ -843,6 +844,7 @@ local hbTimerFuncs={["INIT"]={
                         ["MediaInitFonts"]=HealBot_Media_InitFonts,
                         ["TimeoutShareRequest"]=HealBot_Share_TimeoutRequest,
                         ["ActionIconsUpdateTip"]=HealBot_ActionIcons_DoUpdateTip,
+                        ["InitPlugins"]=HealBot_Init_Plugins,
                     },
                     ["OOC"]={
                         ["FullReload"]=HealBot_FullReload,

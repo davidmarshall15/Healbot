@@ -2190,10 +2190,10 @@ function HealBot_Aura_setCustomBuffFilterDisabled()
     for id, _ in pairs(HealBot_Globals.IgnoreCustomBuff) do
         local name=HealBot_WoWAPI_SpellName(id)
         if (HealBot_Globals.CustomBuffIDMethod[id] or 3)<3 then
-            if HealBot_Globals.CustomBuffIDMethod[id] == 1 then
-                hbCustomBuffsDisabled[id]={}
-            elseif name then 
+            if HealBot_Globals.CustomBuffIDMethod[id] == 2 and name then
                 hbCustomBuffsDisabled[name]={}
+            else
+                hbCustomBuffsDisabled[id]={}
             end
         else
             if name then hbCustomBuffsDisabled[name]={} end
@@ -2201,10 +2201,10 @@ function HealBot_Aura_setCustomBuffFilterDisabled()
         end
         for instName, disabled in pairs(HealBot_Globals.IgnoreCustomBuff[id]) do
             if (HealBot_Globals.CustomBuffIDMethod[id] or 3)<3 then
-                if HealBot_Globals.CustomBuffIDMethod[id] == 1 then
-                    hbCustomBuffsDisabled[id][instName]=disabled
-                elseif name then 
+                if HealBot_Globals.CustomBuffIDMethod[id] == 2 and name then
                     hbCustomBuffsDisabled[name][instName]=disabled
+                else
+                    hbCustomBuffsDisabled[id][instName]=disabled
                 end
             else
                 if name then hbCustomBuffsDisabled[name][instName]=disabled end
@@ -2347,10 +2347,10 @@ function HealBot_Aura_setCustomDebuffFilterCastBy()
     for id, x in pairs(HealBot_Globals.FilterCustomDebuff) do
         local name=HealBot_WoWAPI_SpellName(id)
         if (HealBot_Globals.CustomDebuffIDMethod[id] or 3)<3 then
-            if HealBot_Globals.CustomDebuffIDMethod[id] == 1 then
-                hbCustomDebuffsCastBy[id]=x
-            elseif name then 
+            if HealBot_Globals.CustomDebuffIDMethod[id] == 2 and name then
                 hbCustomDebuffsCastBy[name]=x
+            else
+                hbCustomDebuffsCastBy[id]=x
             end
         else
             if name then hbCustomDebuffsCastBy[name]=x end
@@ -2371,10 +2371,10 @@ function HealBot_Aura_setCustomDebuffFilterDisabled()
     for id, _ in pairs(HealBot_Globals.IgnoreCustomDebuff) do
         local name=HealBot_WoWAPI_SpellName(id)
         if (HealBot_Globals.CustomDebuffIDMethod[id] or 3)<3 then
-            if HealBot_Globals.CustomDebuffIDMethod[id] == 1 then
-                hbCustomDebuffsDisabled[id]={}
-            elseif name then 
+            if HealBot_Globals.CustomDebuffIDMethod[id] == 2 and name then
                 hbCustomDebuffsDisabled[name]={}
+            else
+                hbCustomDebuffsDisabled[id]={}
             end
         else
             if name then hbCustomDebuffsDisabled[name]={} end
@@ -2383,10 +2383,10 @@ function HealBot_Aura_setCustomDebuffFilterDisabled()
         for instName, disabled in pairs(HealBot_Globals.IgnoreCustomDebuff[id]) do
             if disabled then
                 if (HealBot_Globals.CustomDebuffIDMethod[id] or 3)<3 then
-                    if HealBot_Globals.CustomDebuffIDMethod[id] == 1 then
-                        hbCustomDebuffsDisabled[id][instName]=disabled
-                    elseif name then 
+                    if HealBot_Globals.CustomDebuffIDMethod[id] == 2 and name then
                         hbCustomDebuffsDisabled[name][instName]=disabled
+                    else
+                        hbCustomDebuffsDisabled[id][instName]=disabled
                     end
                 else
                     if name then hbCustomDebuffsDisabled[name][instName]=disabled end

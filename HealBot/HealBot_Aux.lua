@@ -233,7 +233,11 @@ local function HealBot_Aux_setBar(button, id, value, isFluid, text, endTime, Cas
         end
         button.gref.auxtxt[id]:SetText(text)
         if button.status.enabled or HealBot_Aux_luVars["TestBarsOn"] then
-            button.gref.auxtxt[id]:SetTextColor(button.auxtxt[id]["R"],button.auxtxt[id]["G"],button.auxtxt[id]["B"],HealBot_Action_BarColourAlpha(button, hbv_Aux_GetBarTextVar("COLA", button.frame, id), 1))
+            if button.status.range>0 then
+                button.gref.auxtxt[id]:SetTextColor(button.auxtxt[id]["R"],button.auxtxt[id]["G"],button.auxtxt[id]["B"],HealBot_Action_BarColourAlpha(button, hbv_Aux_GetBarTextVar("COLA", button.frame, id), 1))
+            else
+                button.gref.auxtxt[id]:SetTextColor(button.auxtxt[id]["R"],button.auxtxt[id]["G"],button.auxtxt[id]["B"],HealBot_Action_BarColourAlpha(button, hbv_Aux_GetBarTextVar("COLOA", button.frame, id), 1))
+            end
         else
             button.gref.auxtxt[id]:SetTextColor(button.auxtxt[id]["R"],button.auxtxt[id]["G"],button.auxtxt[id]["B"],HealBot_Action_BarColourAlpha(button, hbv_Aux_GetBarTextVar("COLDA", button.frame, id), 1))
         end
@@ -259,7 +263,11 @@ function HealBot_Aux_UpdBar(button, noFluid)
         end
         if button.auxtxt[x]["TEXT"] then
             if button.status.enabled or HealBot_Aux_luVars["TestBarsOn"] then
-                button.gref.auxtxt[x]:SetTextColor(button.auxtxt[x]["R"],button.auxtxt[x]["G"],button.auxtxt[x]["B"],HealBot_Action_BarColourAlpha(button, hbv_Aux_GetBarTextVar("COLA", button.frame, x), 1))
+                if button.status.range>0 then
+                    button.gref.auxtxt[x]:SetTextColor(button.auxtxt[x]["R"],button.auxtxt[x]["G"],button.auxtxt[x]["B"],HealBot_Action_BarColourAlpha(button, hbv_Aux_GetBarTextVar("COLA", button.frame, x), 1))
+                else
+                    button.gref.auxtxt[x]:SetTextColor(button.auxtxt[x]["R"],button.auxtxt[x]["G"],button.auxtxt[x]["B"],HealBot_Action_BarColourAlpha(button, hbv_Aux_GetBarTextVar("COLOA", button.frame, x), 1))
+                end
             else
                 button.gref.auxtxt[x]:SetTextColor(button.auxtxt[x]["R"],button.auxtxt[x]["G"],button.auxtxt[x]["B"],HealBot_Action_BarColourAlpha(button, hbv_Aux_GetBarTextVar("COLDA", button.frame, x), 1))
             end

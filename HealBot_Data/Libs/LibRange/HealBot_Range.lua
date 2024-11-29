@@ -229,6 +229,7 @@ function HealBot_Range_UpdateUnit(button)
             if button.status.enabled or button.status.range>0 or oldRange>0 then
                 HealBot_Update_AuxRange(button)
                 HealBot_RefreshUnit(button)
+                HealBot_Update_TextPlayersAlphaButtonNow(button)
                 if button.status.range<0 or oldRange<0 then
                     HealBot_HealsInUpdate(button)
                     HealBot_AbsorbsUpdate(button)
