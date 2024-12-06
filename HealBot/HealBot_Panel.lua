@@ -80,6 +80,7 @@ local xButton, pButton, aButton
 local xUnit=""
 local xGUID=""
 local hbRole={ [HEALBOT_MAINTANK]=3,
+               [HEALBOT_OFFTANK]=4,
                [HEALBOT_WORD_HEALER]=5,
                [HEALBOT_WORD_DPS]=7,
                [HEALBOT_WORDS_UNKNOWN]=9,
@@ -184,9 +185,13 @@ function HealBot_Panel_isSpecialPlayerUnit(unit)
     return HealBot_UnitTargets[unit] or -1
 end
 
-function HealBot_Panel_TankRole(unit, guid, isPlayer)
+function HealBot_Panel_TankRole(unit, guid, isPlayer, offtank)
       --HealBot_setCall("HealBot_Panel_TankRole")
-    HealBot_unitRole[unit]=hbRole[HEALBOT_MAINTANK]
+    if offtank then
+        HealBot_unitRole[unit]=hbRole[HEALBOT_OFFTANK]
+    else
+        HealBot_unitRole[unit]=hbRole[HEALBOT_MAINTANK]
+    end
     HealBot_MainTanks[guid]=unit
     if isPlayer then
         if UnitHealthMax(unit)>hbRoleOnes[hbTANK1].health then
@@ -255,6 +260,8 @@ function HealBot_Panel_SetRole(unit, guid, isPlayer)
     aRole=HealBot_Panel_UnitRole(unit, guid, isPlayer)
     if aRole == "TANK" then
         HealBot_Panel_TankRole(unit, guid, isPlayer)
+    elseif aRole == "OFFTANK" then
+        HealBot_Panel_TankRole(unit, guid, isPlayer, true)
     elseif aRole == "HEALER" then
         HealBot_Panel_HealerRole(unit, guid, isPlayer)
     elseif aRole == "DAMAGER" then
@@ -342,8 +349,12 @@ function HealBot_Panel_addDataStore(unit, nRaidID, isPlayer, nPartyID)
                     if hbPanel_dataPlayerRoles[dsGUID] == 0 then hbPanel_dataPlayerRoles[dsGUID]=7 end
                     if hbPanel_dataRoles[dsGUID] == HEALBOT_WORDS_UNKNOWN then
                         if hbRRole and (string.lower(hbRRole) == "maintank" or (HealBot_Globals.IncMainAssist and string.lower(hbRRole) == "mainassist")) then
-                            hbFRole="TANK"
-                            if string.lower(hbRRole) == "maintank" then hbPanel_dataPlayerRoles[dsGUID]=1 end
+                            if string.lower(hbRRole) == "maintank" then 
+                                hbFRole="TANK"
+                                hbPanel_dataPlayerRoles[dsGUID]=1 
+                            else
+                                hbFRole="OFFTANK"
+                            end
                         elseif hbCombatRole and (hbCombatRole == "HEALER" or hbCombatRole == "TANK") then
                             if HEALBOT_GAME_VERSION>4 then
                                 hbFRole=hbCombatRole
@@ -368,8 +379,12 @@ function HealBot_Panel_addDataStore(unit, nRaidID, isPlayer, nPartyID)
                     hbPanel_dataRoles[dsGUID]=hbFRole
                     if hbFRole == "TANK" then
                         HealBot_Panel_TankRole(unit, dsGUID, isPlayer)
+                    elseif hbFRole == "OFFTANK" then
+                        HealBot_Panel_TankRole(unit, dsGUID, isPlayer, true)
                     elseif hbFRole == "HEALER" then
                         HealBot_Panel_HealerRole(unit, dsGUID, isPlayer)
+                    elseif hbFRole == "DAMAGER" then
+                        HealBot_Panel_DamagerRole(unit, dsGUID, isPlayer)
                     end
                 end
             else
@@ -504,14 +519,17 @@ function HealBot_Panel_SethbTopRole(Role)
     Role=strupper(strtrim(Role))
     if Role == "TANK" then
         hbRole[HEALBOT_MAINTANK]=2
+        hbRole[HEALBOT_OFFTANK]=3
         hbRole[HEALBOT_WORD_HEALER]=5
         hbRole[HEALBOT_WORD_DPS]=7
     elseif Role == "DPS" then
         hbRole[HEALBOT_MAINTANK]=3
+        hbRole[HEALBOT_OFFTANK]=4
         hbRole[HEALBOT_WORD_HEALER]=5
         hbRole[HEALBOT_WORD_DPS]=2
     elseif Role == "HEALER" then
         hbRole[HEALBOT_MAINTANK]=3
+        hbRole[HEALBOT_OFFTANK]=4
         hbRole[HEALBOT_WORD_HEALER]=2
         hbRole[HEALBOT_WORD_DPS]=7
     else

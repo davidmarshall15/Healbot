@@ -536,10 +536,10 @@ function HealBot_CheckFrame(frame)
     end
 end
 
-HealBot_luVars["ClassicInteractDistance"]=3 --4
---if HEALBOT_GAME_VERSION<3 then
---    HealBot_luVars["ClassicInteractDistance"]=3
---end
+HealBot_luVars["ClassicInteractDistance"]=1
+if HEALBOT_GAME_VERSION<3 then
+    HealBot_luVars["ClassicInteractDistance"]=3
+end
 
 function HealBot_TalentQuery(button)
       --HealBot_setCall("HealBot_TalentQuery", button)
@@ -3862,7 +3862,7 @@ end
 
 function HealBot_CheckUnitRange(button)
       --HealBot_setCall("HealBot_CheckUnitRange", button, nil, nil, true)
-    if button.status.range<2 or not HealBot_Range_InteractDistance(button.unit, 4) then
+    if button.status.range<2 or not HealBot_Range_InteractDistance(button.unit, 1) then
         return true
     else
         return false

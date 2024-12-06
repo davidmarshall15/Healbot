@@ -178,7 +178,7 @@ function HealBot_Range_Unit(unit, guid, limit)
     elseif not limit then
         if not UnitIsVisible(unit) or not HealBot_Range_UnitInPhase(unit, guid) then
             return false
-        elseif HealBot_Range_InteractDistance(unit, 4) then
+        elseif HealBot_Range_InteractDistance(unit, 1) then
             return true
         end
     end
@@ -201,7 +201,7 @@ function HealBot_Range_UnitCurrent(button, spellName)
         uRange=-1
     elseif not HealBot_Range_UnitInPhase(button.unit, button.guid) then
         uRange=-2
-    elseif HealBot_Range_InteractDistance(button.unit, 4) then
+    elseif HealBot_Range_InteractDistance(button.unit, 1) then
         uRange=2
     elseif spellName and HealBot_Spell_Names[spellName] then
         uRange=HealBot_Range_IsSpellInRange(button, spellName, true)

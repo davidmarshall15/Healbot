@@ -614,6 +614,7 @@ function HealBot_Lang_enALL()
     HEALBOT_WORD_FOCUS                     ="Focus";
     HEALBOT_MENU                           ="Menu";
     HEALBOT_MAINTANK                       ="MainTank";
+    HEALBOT_OFFTANK                        ="OffTank";
     HEALBOT_STOP                           ="Stop";
     HEALBOT_CANCELPLUGINALERT              ="Cancel Plugin Alert";
     HEALBOT_MOUSELOOK                      ="Mouselook"
