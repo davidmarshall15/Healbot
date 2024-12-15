@@ -289,16 +289,16 @@ function HealBot_Panel_updDataStore(button)
         else
             hbPanel_buttonGUIDs[button.guid]=button
         end
-        HealBot_Timers_Set("OOC","RefreshPartyNextRecalcPlayers",true,true)
+        HealBot_Timers_Set("OOC","RefreshPartyNextRecalcPlayers",true)
     elseif hbPanel_dataPetUnits[button.unit] then
         hbPanel_dataPetNames[button.name]=button.unit
         hbPanel_dataPetGUIDs[button.guid]=button.unit
         hbPanel_dataPetUnits[button.unit]=button.guid
         hbPanel_buttonPetGUIDs[button.guid]=button
         if hbv_IsUnitType(button.status.unittype, HEALBOT_VEHICLE) then
-            HealBot_Timers_Set("OOC","RefreshPartyNextRecalcVehicle",true,true)
+            HealBot_Timers_Set("OOC","RefreshPartyNextRecalcVehicle",true)
         else
-            HealBot_Timers_Set("OOC","RefreshPartyNextRecalcPets",true,true)
+            HealBot_Timers_Set("OOC","RefreshPartyNextRecalcPets",true)
         end
     elseif button.status.unittype>30 then
         hbPanel_buttonExtraGUIDs[button.guid]=button
@@ -987,7 +987,7 @@ function HealBot_Panel_AnchorButton(button, backFrame, relButton, newColumn, chi
         end
     else
         HealBot_Panel_Anchor2ParentFrame(button, backFrame)
-        HealBot_Timers_Set("OOC","RefreshPartyNextRecalcAll",true,true)
+        HealBot_Timers_Set("OOC","RefreshPartyNextRecalcAll",true)
     end
 end
 
@@ -2468,7 +2468,7 @@ function HealBot_Panel_SubSort(doSubSort, unitType, preCombat)
                 end
             end
         else
-            HealBot_Timers_Set("LAST","ResetAllButtonsRecalcAll",true,true)
+            HealBot_Timers_Set("LAST","ResetAllButtonsRecalcAll",true)
         end
     end
     for x,_ in pairs(suborder) do

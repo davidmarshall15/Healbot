@@ -550,7 +550,7 @@ function HealBot_TalentQuery(button)
     end
     if s~=" " then
         if button.spec~=s then
-            HealBot_Timers_Set("OOC","RefreshPartyNextRecalcPlayers",1)
+            HealBot_Timers_Set("OOC","RefreshPartyNextRecalcPlayers",true)
         else
             button.specupdate=0
         end
@@ -579,12 +579,12 @@ function HealBot_TalentQuery(button)
         else
             HealBot_SpecUpdate(button, HealBot_TimeNow+5)
         end
+        if hbInspect then
+            HealBot_luVars["TalentQueryEnd"]=HealBot_TimeNow+5
+            NotifyInspect(button.unit);
+            button.specupdate=0
+        end
     else
-        button.specupdate=0
-    end
-    if hbInspect then
-        HealBot_luVars["TalentQueryEnd"]=HealBot_TimeNow+5
-        NotifyInspect(button.unit);
         button.specupdate=0
     end
 end

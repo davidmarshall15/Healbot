@@ -16865,7 +16865,7 @@ function HealBot_Options_DoSet_Current_Skin(newSkin, ddRefresh, noCallback, optS
                     HealBot_Timers_Set("LAST","CheckFramesOnCombat")
                     HealBot_Timers_Set("OOC","EventsSetFrameUnits")
                     HealBot_Timers_Set("OOC","ActionIconsNumbers")
-                    --HealBot_Timers_Set("LAST","UpdateFramesOpacity",0.15)
+                    --HealBot_Timers_Set("LAST","UpdateFramesOpacity",true)
                     if HealBot_Globals.OverrideColours["USECLASS"] == 1 then
                         HealBot_Timers_Set("LAST","ClassColourUpdate")
                     end
@@ -22614,8 +22614,8 @@ function HealBot_Options_SpellsOnTextChanged(self, bNo)
     local key=HealBot_Options_ComboButton_ModifierKey(HealBot_Options_ComboButtons_Modifier)
     spellText=strtrim(self:GetText())
     HealBot_Options_DoSpellsOnTextChanged(self, cType, bNo, key, spellText)
-    if bNo == 1 then HealBot_Timers_Set("PLAYER","SetRangeSpells",1) end
-    HealBot_Timers_Set("OOC","SaveSpellsProfile",1)
+    if bNo == 1 then HealBot_Timers_Set("PLAYER","SetRangeSpells",true) end
+    HealBot_Timers_Set("OOC","SaveSpellsProfile",true,true)
 end
 
 function HealBot_Options_SpellsCheckTextValid()

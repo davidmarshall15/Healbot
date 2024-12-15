@@ -96,8 +96,8 @@ end
 
 function HealBot_Timers_AuraReset()
       --HealBot_setCall("HealBot_Timers_AuraReset")
-    HealBot_Timers_Set("AURA","ResetBuffCache",true,true)
-    HealBot_Timers_Set("AURA","ResetDebuffCache",true,true)
+    HealBot_Timers_Set("AURA","ResetBuffCache",true)
+    HealBot_Timers_Set("AURA","ResetDebuffCache",true)
 end
 
 function HealBot_Timers_SkinsFormat()
@@ -909,10 +909,6 @@ function HealBot_Timers_DoSet(cat,timer)
     HealBot_setLuVars("HealBot_RunTimers", true)
 end
 
-function HealBot_Timers_UnDelay(cat,timer)
-    HealBot_Timers_DoSet(cat,timer)
-end
-
 function HealBot_Timers_SetDelay(cat,timer)
     table.insert(HealBot_Timers_Delayed[cat],timer)
     HealBot_setLuVars("HealBot_RunDelayTimers", true)
@@ -1016,31 +1012,31 @@ end
 
 function HealBot_Timers_ProcDelayed()
     if HealBot_Timers_Delayed["INIT"][1] then
-        HealBot_Timers_UnDelay("INIT", HealBot_Timers_Delayed["INIT"][1])
+        HealBot_Timers_DoSet("INIT", HealBot_Timers_Delayed["INIT"][1])
         table.remove(HealBot_Timers_Delayed["INIT"],1)
     elseif HealBot_Timers_Delayed["RESET"][1] then
-        HealBot_Timers_UnDelay("RESET", HealBot_Timers_Delayed["RESET"][1])
+        HealBot_Timers_DoSet("RESET", HealBot_Timers_Delayed["RESET"][1])
         table.remove(HealBot_Timers_Delayed["RESET"],1)
     elseif HealBot_Timers_Delayed["PLAYER"][1] then
-        HealBot_Timers_UnDelay("PLAYER", HealBot_Timers_Delayed["PLAYER"][1])
+        HealBot_Timers_DoSet("PLAYER", HealBot_Timers_Delayed["PLAYER"][1])
         table.remove(HealBot_Timers_Delayed["PLAYER"],1)
     elseif HealBot_Timers_Delayed["SKINS"][1] then
-        HealBot_Timers_UnDelay("SKINS", HealBot_Timers_Delayed["SKINS"][1])
+        HealBot_Timers_DoSet("SKINS", HealBot_Timers_Delayed["SKINS"][1])
         table.remove(HealBot_Timers_Delayed["SKINS"],1)
     elseif HealBot_Timers_Delayed["AUX"][1] then
-        HealBot_Timers_UnDelay("AUX", HealBot_Timers_Delayed["AUX"][1])
+        HealBot_Timers_DoSet("AUX", HealBot_Timers_Delayed["AUX"][1])
         table.remove(HealBot_Timers_Delayed["AUX"],1)
     elseif HealBot_Timers_Delayed["AURA"][1] then
-        HealBot_Timers_UnDelay("AURA", HealBot_Timers_Delayed["AURA"][1])
+        HealBot_Timers_DoSet("AURA", HealBot_Timers_Delayed["AURA"][1])
         table.remove(HealBot_Timers_Delayed["AURA"],1)
     elseif HealBot_Timers_Delayed["CHAT"][1] then
-        HealBot_Timers_UnDelay("CHAT", HealBot_Timers_Delayed["CHAT"][1])
+        HealBot_Timers_DoSet("CHAT", HealBot_Timers_Delayed["CHAT"][1])
         table.remove(HealBot_Timers_Delayed["CHAT"],1)
     elseif HealBot_Timers_Delayed["LAST"][1] then
-        HealBot_Timers_UnDelay("LAST", HealBot_Timers_Delayed["LAST"][1])
+        HealBot_Timers_DoSet("LAST", HealBot_Timers_Delayed["LAST"][1])
         table.remove(HealBot_Timers_Delayed["LAST"],1)
     elseif not HealBot_Data["UILOCK"] and HealBot_Timers_Delayed["OOC"][1] then
-        HealBot_Timers_UnDelay("OOC", HealBot_Timers_Delayed["OOC"][1])
+        HealBot_Timers_DoSet("OOC", HealBot_Timers_Delayed["OOC"][1])
         table.remove(HealBot_Timers_Delayed["OOC"],1)
     else
         HealBot_setLuVars("HealBot_RunDelayTimers", false)
