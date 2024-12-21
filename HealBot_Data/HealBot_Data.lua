@@ -663,6 +663,9 @@ function HealBot_Data_InitVars()
             },
         },
     };
+    if HEALBOT_GAME_VERSION<3 then
+        HealBot_GlobalsDefaults.DenyTalentQuery=true
+    end
 end
 
 HealBot_Config_SkinsData={  

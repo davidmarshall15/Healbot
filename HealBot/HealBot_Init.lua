@@ -232,6 +232,8 @@ local function HealBot_Init_Spell_RangesPref()
         HealBot_Spell_RangesPref[HEALBOT_SMITE]=true
         HealBot_Spell_RangesPref[HEALBOT_SHADOW_WORD_PAIN]=true
         HealBot_Spell_RangesPref[HEALBOT_FLASH_HEAL]=true
+        HealBot_Spell_RangesPref[HEALBOT_HEAL]=true
+        HealBot_Spell_RangesPref[HBC_HEAL]=true
         HealBot_Spell_RangesPref[HEALBOT_RENEW]=true
     elseif HealBot_Data["PCLASSTRIM"] == "SHAM" then
         HealBot_Spell_RangesPref[HEALBOT_LIGHTNING_BOLT]=true
@@ -295,9 +297,8 @@ function HealBot_Init_SetSpellRange(id, spellName, range)
     end
 end
 
-function HealBot_Init_FindSpellRangeCast(id, spellName, spellBookId)
+function HealBot_Init_FindSpellRangeCast(id, spellName, spellBookId, cRank)
       --HealBot_setCall("HealBot_Init_FindSpellRangeCast")
-    local cRank=false
     if ( not id ) then return false; end
 
     local spell, _, texture, msCast, _, hbRange=HealBot_WoWAPI_SpellInfo(id);
@@ -384,7 +385,11 @@ function HealBot_Init_FindSpellRangeCast(id, spellName, spellBookId)
     HealBot_Spell_IDs[id].Mana=HealBot_Init_ManaCost(id, spellBookId, true)
     HealBot_Spell_IDs[id].texture=texture
     HealBot_Spell_IDs[id].cooldown=hbCooldown
-    HealBot_Init_SetSpellRange(id, spellName, hbRange)
+    if cRank and string.len(cRank)>1 then
+        HealBot_Init_SetSpellRange(id, spellName.."("..cRank..")", hbRange)
+    else
+        HealBot_Init_SetSpellRange(id, spellName, hbRange)
+    end
 end
 
 local skipSpells={}
@@ -397,7 +402,7 @@ local HealBot_Ranks={}
 function HealBot_Init_Spells_addSpell(spellId, spellName, spellBookId, cRank)
       --HealBot_setCall("HealBot_Init_Spells_addSpell")
     if not skipSpells[spellName] then
-        HealBot_Init_FindSpellRangeCast(spellId, spellName, spellBookId)
+        HealBot_Init_FindSpellRangeCast(spellId, spellName, spellBookId, cRank)
         if cRank and string.len(cRank)>1 and not HealBot_Globals.NoRanks then
             if not HealBot_Ranks[spellName] then HealBot_Ranks[spellName]=0 end
             local rank=tonumber(string.match(cRank, "%d+")) or 0

@@ -555,7 +555,7 @@ function HealBot_TalentQuery(button)
             button.specupdate=0
         end
         button.spec=s
-    elseif not HealBot_Globals.DenyTalentQuery and HealBot_Panel_AllUnitButtonCheck(button.guid) and UnitExists(button.unit) and CanInspect(button.unit) then
+    elseif not HealBot_Globals.DenyTalentQuery and UnitExists(button.unit) and CanInspect(button.unit) then
         if button.status.range<0 then
             HealBot_SpecUpdate(button, HealBot_TimeNow+15)
         elseif HEALBOT_GAME_VERSION>5 then
@@ -5003,7 +5003,7 @@ function HealBot_InitSmartCast()
       --HealBot_setCall("HealBot_InitSmartCast")
     if HealBot_Data["PCLASSTRIM"] then
         HealBot_Events_SetResSpells()
-        HealBot_Range_SetSpells()
+        HealBot_Timers_Set("PLAYER","SetRangeSpells",true)
         HealBot_Init_SmartCast();
     else
         HealBot_SetPlayerData()

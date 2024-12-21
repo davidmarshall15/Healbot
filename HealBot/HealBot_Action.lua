@@ -2183,8 +2183,8 @@ function HealBot_Action_UpdateDebuffButton(button)
     end
     if button.status.current<HealBot_Unit_Status["PLUGINBARCOL"] then
         if HealBot_Config_Cures.CDCshownHB and (button.aura.debuff.colbar == 2 or button.aura.debuff.colbar == 3) and (button.aura.debuff.dispellable or not HealBot_Config_Cures.CDCshownHBDispelOnly) then 
-            if HealBot_Aura_IsCureSpell(button) and button.status.rangespell~=button.aura.debuff.curespell then
-                HealBot_Range_ButtonSpell(button, true, button.aura.debuff.curespell)
+            if HealBot_Aura_IsCureSpell(button) then
+                HealBot_Range_ButtonSpell(button, button.aura.debuff.curespell)
             end
             if HealBot_Range_WarnInRange(button, button.aura.debuff.curespell, HealBot_Config_Cures.WarnRange_Bar) then
                 button.status.r,button.status.g,button.status.b=button.aura.debuff.r,button.aura.debuff.g,button.aura.debuff.b
@@ -2226,8 +2226,8 @@ function HealBot_Action_UpdateBuffButton(button)
     end
     if button.status.current<HealBot_Unit_Status["DEBUFFBARCOL"] then
         if HealBot_Config_Buffs.CBshownHB and (button.aura.buff.colbar == 2 or button.aura.buff.colbar == 3) and (button.aura.buff.missingbuff or not HealBot_Config_Buffs.CBshownHBMissingOnly) then 
-            if button.status.current<HealBot_Unit_Status["DEBUFFNOCOL"] and button.aura.buff.missingbuff and button.status.rangespell~=button.aura.buff.missingbuff then
-                HealBot_Range_ButtonSpell(button, true, button.aura.buff.missingbuff)
+            if button.status.current<HealBot_Unit_Status["DEBUFFNOCOL"] and button.aura.buff.missingbuff then
+                HealBot_Range_ButtonSpell(button, button.aura.buff.missingbuff)
             end
             if HealBot_Range_WarnInRange(button, button.aura.buff.name, HealBot_Config_Buffs.WarnRange_Bar) then
                 HealBot_Action_setState(button, HealBot_Unit_Status["BUFFBARCOL"])
@@ -2388,7 +2388,7 @@ function HealBot_Action_UpdateTheDeadButton(button)
                     HealBot_Plugin_TimeToLive_UnitUpdate(button, true)
                 end
                 HealBot_Action_setState(button, HealBot_Unit_Status["DEAD"])
-                HealBot_Range_ButtonSpell(button, true, HealBot_Action_retResSpell(button))
+                HealBot_Range_ButtonSpell(button, HealBot_Action_retResSpell(button))
                 if button.player then 
                     HealBot_Data["PALIVE"]=false
                     HealBot_setLuVars("pluginCDsCheckExisting", 0)
@@ -4166,7 +4166,6 @@ function HealBot_Action_InitButton(button, prefix)
     button.status.resstart=0
     button.status.range=-9
     button.status.rangespell=HealBot_Range_Spell("HEAL")
-    button.status.rangemodkeyupd=0
     button.status.deadnextcheck=0
     button.status.unittype=0
     button.status.enabled=false
