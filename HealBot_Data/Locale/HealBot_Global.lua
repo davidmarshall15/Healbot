@@ -761,6 +761,7 @@ function HealBot_globalVars()
     HEALBOT_PURIFY_DISEASE                 =HealBot_WoWAPI_SpellName(213634) or "--PURIFY_DISEASE"
     HEALBOT_MASS_DISPEL                    =HealBot_WoWAPI_SpellName(32375) or "--MASS_DISPEL"
     HEALBOT_REMOVE_CURSE                   =HealBot_WoWAPI_SpellName(475) or "--REMOVE_CURSE"
+    HEALBOT_REMOVE_GREATER_CURSE           =HealBot_WoWAPI_SpellName(412113) or "--REMOVE_GREATER_CURSE"
     HEALBOT_REMOVE_CORRUPTION              =HealBot_WoWAPI_SpellName(2782) or "--REMOVE_CORRUPTION"
     HEALBOT_SACRED_CLEANSING               =HealBot_WoWAPI_SpellName(53551) or "--SACRED_CLEANSING"
     HEALBOT_NATURALIZE                     =HealBot_WoWAPI_SpellName(360823) or "--NATURALIZE"

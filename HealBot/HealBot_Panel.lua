@@ -36,7 +36,7 @@ local HealBot_Panel_BlackList={};
 local backBarsSize={}
 for x=1,10 do
     backBarsSize[x]={["HEIGHT"]=0, ["WIDTH"]=0, ["HEADERWIDTH"]=0, ["MINWIDTH"]=0, ["MINHEADERWIDTH"]=0, ["SKINRESET"]=true,
-                     ["RMARGIN"]=0, ["CMARGIN"]=0, ["HEADHEIGHT"]=0, ["HEADWIDTH"]=0, ["S2WIDTH"]=0, ["PAD"]=0, ["FRAME"]=0}
+                     ["RMARGIN"]=0, ["CMARGIN"]=0, ["HEADHEIGHT"]=0, ["HEADWIDTH"]=0, ["S2WIDTH"]=0, ["PAD"]=0}
 end
 local HealBot_MyHealTargets={}
 local HealBot_MyPrivateTanks={}
@@ -1115,7 +1115,6 @@ end
 function HealBot_Panel_ResetBarHeightWidth(frame)
     if backBarsSize[frame]["SKINRESET"] then
         backBarsSize[frame]["SKINRESET"]=false
-        backBarsSize[frame]["FRAME"]=0
         backBarsSize[frame]["MINWIDTH"]=0
         backBarsSize[frame]["MINHEADERWIDTH"]=0
     end
@@ -1124,12 +1123,9 @@ end
 local EnemyPlayerTargetsInFrame=0
 function HealBot_Action_SetBackBarHeightWidth(frame, height, width, pad, headerWidth)
       --HealBot_setCall("HealBot_Action_SetBackBarHeightWidth")
-    if backBarsSize[frame]["FRAME"]~=frame then
-        backBarsSize[frame]["FRAME"]=frame
-        local vSetAddHWScale=hbv_Skins_GetFrameVar("Frame", "SCALE", frame)
-        backBarsSize[frame]["RMARGIN"]=ceil(hbv_Skins_GetFrameVar("HealBar", "RMARGIN", frame) * vSetAddHWScale)
-        backBarsSize[frame]["CMARGIN"]=ceil(hbv_Skins_GetFrameVar("HealBar", "CMARGIN", frame) * vSetAddHWScale)
-    end
+    local vSetAddHWScale=hbv_Skins_GetFrameVar("Frame", "SCALE", frame)
+    backBarsSize[frame]["RMARGIN"]=ceil(hbv_Skins_GetFrameVar("HealBar", "RMARGIN", frame) * vSetAddHWScale)
+    backBarsSize[frame]["CMARGIN"]=ceil(hbv_Skins_GetFrameVar("HealBar", "CMARGIN", frame) * vSetAddHWScale)
     if backBarsSize[frame]["HEIGHT"]~=height or backBarsSize[frame]["WIDTH"]~=width or backBarsSize[frame]["PAD"]~=pad or backBarsSize[frame]["HEADERWIDTH"]~=headerWidth then
         EnemyPlayerTargetsInFrame=0
         for x=1,10 do

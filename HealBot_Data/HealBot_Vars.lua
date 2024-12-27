@@ -650,16 +650,25 @@ end
 
 local hbSkinFrameDefaults={["BarCol"]={["HLTH"]=5, ["BACK"]=1, ["BORDER"]=1,
                                        ["HR"]=0.4, ["HG"]=0.7, ["HB"]=0.7, ["HA"]=1,
+                                       ["HRE"]=0.8, ["HGE"]=0.3, ["HBE"]=0.3,
                                        ["HIR"]=0.4, ["HIG"]=0.7, ["HIB"]=0.7, 
+                                       ["HIRE"]=0.8, ["HIGE"]=0.3, ["HIBE"]=0.3,
                                        ["HCR"]=0.4, ["HCG"]=0.7, ["HCB"]=0.7,
+                                       ["HCRE"]=0.8, ["HCGE"]=0.3, ["HCBE"]=0.3,
                                        ["HCT"]=0.4, ["HIT"]=0.7, ["ORA"]=0.4, ["DISA"]=0.1,
                                        ["BR"]=0.4, ["BG"]=0.7, ["BB"]=0.7, ["BA"]=0,
+                                       ["BRE"]=0.8, ["BGE"]=0.3, ["BBE"]=0.3,
                                        ["BIR"]=0.4, ["BIG"]=0.7, ["BIB"]=0.7,
+                                       ["BIRE"]=0.8, ["BIGE"]=0.3, ["BIBE"]=0.3,
                                        ["BCR"]=0.4, ["BCG"]=0.7, ["BCB"]=0.7,
+                                       ["BCRE"]=0.8, ["BCGE"]=0.3, ["BCBE"]=0.3,
                                        ["BCT"]=0.4, ["BIT"]=0.7, ["BOUT"]=1,
                                        ["BORR"]=0.1, ["BORG"]=0.1, ["BORB"]=0.3, ["BORA"]=1,
+                                       ["BORRE"]=0.8, ["BORGE"]=0.3, ["BORBE"]=0.3,
                                        ["BORIR"]=0.1, ["BORIG"]=0.1, ["BORIB"]=0.3,
+                                       ["BORIRE"]=0.8, ["BORIGE"]=0.3, ["BORIBE"]=0.3,
                                        ["BORCR"]=0.1, ["BORCG"]=0.1, ["BORCB"]=0.3,
+                                       ["BORCRE"]=0.8, ["BORCGE"]=0.3, ["BORCBE"]=0.3,
                                        ["BORCT"]=0.4, ["BORIT"]=0.7, ["BORSIZE"]=2,
                                       },
                        ["Indicators"]={["ACOL"]=1, ["AANCHOR"]=1, ["AVOFF"]=-2, ["AHOFF"]=1, 
@@ -722,9 +731,11 @@ local hbSkinFrameDefaults={["BarCol"]={["HLTH"]=5, ["BACK"]=1, ["BORDER"]=1,
                                        ["TAGBUFF"]=HEALBOT_WORD_MISSING.." #n", ["TAGGROUP"]=HEALBOT_SORTBY_GROUP.." #g", ["TAGRES"]=HEALBOT_RES_TAG, ["TAGSUM"]=HEALBOT_SUMMONS_TAG,
                                        ["ROLETANK"]=HEALBOT_WORD_TANK, ["ROLEHEAL"]=HEALBOT_WORD_HEALER, ["ROLEDPS"]=HEALBOT_WORD_DAMAGER,
                                       },
-                         ["BarIACol"]={["IC"]=3, ["IR"]=0.2, ["IG"]=1, ["IB"]=0.2, ["IIR"]=0.2, ["IIG"]=1, ["IIB"]=0.2, ["ICR"]=0.2, ["ICG"]=1,
-                                       ["ICB"]=0.2, ["IIT"]=0.7, ["ICT"]=0.4, ["IA"]=0.82, ["AC"]=3, ["AR"]=1, ["AG"]=1, ["AB"]=1, ["AIR"]=1,
-                                       ["AIG"]=1, ["AIB"]=1, ["ACR"]=1, ["ACG"]=1, ["ACB"]=1, ["AIT"]=0.7, ["ACT"]=0.4, ["AA"]=0.78,
+                         ["BarIACol"]={["IC"]=3, ["IR"]=0.2, ["IG"]=1, ["IB"]=0.2, ["IIR"]=0.2, ["IIG"]=1, ["IIB"]=0.2, ["ICR"]=0.2, ["ICG"]=1, ["ICB"]=0.2,
+                                       ["IRE"]=0.8, ["IGE"]=0.3, ["IBE"]=0.3, ["IIRE"]=0.8, ["IIGE"]=0.3, ["IIBE"]=0.3, ["ICRE"]=0.8, ["ICGE"]=0.3, ["ICBE"]=0.3,
+                                       ["IIT"]=0.7, ["ICT"]=0.4, ["IA"]=0.82, ["AC"]=3, ["AR"]=1, ["AG"]=1, ["AB"]=1, ["AIR"]=1, ["AIG"]=1, ["AIB"]=1, ["ACR"]=1, 
+                                       ["ACG"]=1, ["ACB"]=1, ["AIT"]=0.7, ["ACT"]=0.4, ["AA"]=0.78, ["ARE"]=0.8, ["AGE"]=0.3, ["ABE"]=0.3, ["AIRE"]=0.8,
+                                       ["AIGE"]=0.3, ["AIBE"]=0.3, ["ACRE"]=0.8, ["ACGE"]=0.3, ["ACBE"]=0.3,
                                       },
                             ["Emerg"]={["USE"]=false, ["TEXTURE"]=hbv_Default_TextureName(), ["ANCHOR"]=3, ["VOFFSET"]=0, ["DEBUFFBARCOL"]=false,
                                        ["A"]=1, ["OA"]=0.5, ["DA"]=0.2, ["CRITICAL"]=0.25, ["INJURED"]=0.5, ["BUFFBARCOL"]=false, ["DEBUFFBARCOL"]=false,
@@ -1001,11 +1012,11 @@ function hbv_ActionIcons_NilVars(key, frame)
 end
 
 function hbv_ActionIcons_GetColVars(key, frame)
-    if HealBot_Skins_ActionIconsData[Healbot_Config_Skins.Current_Skin][frame] and HealBot_Skins_ActionIconsData[Healbot_Config_Skins.Current_Skin][frame][key] then
-        return HealBot_Skins_ActionIconsData[Healbot_Config_Skins.Current_Skin][frame][key]["R"] or 1,
-               HealBot_Skins_ActionIconsData[Healbot_Config_Skins.Current_Skin][frame][key]["G"] or 1,
-               HealBot_Skins_ActionIconsData[Healbot_Config_Skins.Current_Skin][frame][key]["B"] or 1,
-               HealBot_Skins_ActionIconsData[Healbot_Config_Skins.Current_Skin][frame][key]["A"] or 1
+    if HealBot_Skins_ActionIcons[Healbot_Config_Skins.Current_Skin][frame] and HealBot_Skins_ActionIcons[Healbot_Config_Skins.Current_Skin][frame][key] then
+        return HealBot_Skins_ActionIcons[Healbot_Config_Skins.Current_Skin][frame][key]["R"] or 1,
+               HealBot_Skins_ActionIcons[Healbot_Config_Skins.Current_Skin][frame][key]["G"] or 1,
+               HealBot_Skins_ActionIcons[Healbot_Config_Skins.Current_Skin][frame][key]["B"] or 1,
+               HealBot_Skins_ActionIcons[Healbot_Config_Skins.Current_Skin][frame][key]["A"] or 1
     end
     return 1,1,1,1
 end
@@ -1014,12 +1025,12 @@ function hbv_ActionIcons_SetColVars(r, g, b, a, key, frame)
     if r == 1 and g == 1 and b == 1 and a == 1 then
         hbv_ActionIcons_NilVars(key, frame)
     else
-        if not HealBot_Skins_ActionIconsData[Healbot_Config_Skins.Current_Skin][frame] then HealBot_Skins_ActionIconsData[Healbot_Config_Skins.Current_Skin][frame]={} end
-        if not HealBot_Skins_ActionIconsData[Healbot_Config_Skins.Current_Skin][frame][key] then HealBot_Skins_ActionIconsData[Healbot_Config_Skins.Current_Skin][frame][key]={} end
-        HealBot_Skins_ActionIconsData[Healbot_Config_Skins.Current_Skin][frame][key]["R"]=r
-        HealBot_Skins_ActionIconsData[Healbot_Config_Skins.Current_Skin][frame][key]["G"]=g
-        HealBot_Skins_ActionIconsData[Healbot_Config_Skins.Current_Skin][frame][key]["B"]=b
-        HealBot_Skins_ActionIconsData[Healbot_Config_Skins.Current_Skin][frame][key]["A"]=a
+        if not HealBot_Skins_ActionIcons[Healbot_Config_Skins.Current_Skin][frame] then HealBot_Skins_ActionIcons[Healbot_Config_Skins.Current_Skin][frame]={} end
+        if not HealBot_Skins_ActionIcons[Healbot_Config_Skins.Current_Skin][frame][key] then HealBot_Skins_ActionIcons[Healbot_Config_Skins.Current_Skin][frame][key]={} end
+        HealBot_Skins_ActionIcons[Healbot_Config_Skins.Current_Skin][frame][key]["R"]=r
+        HealBot_Skins_ActionIcons[Healbot_Config_Skins.Current_Skin][frame][key]["G"]=g
+        HealBot_Skins_ActionIcons[Healbot_Config_Skins.Current_Skin][frame][key]["B"]=b
+        HealBot_Skins_ActionIcons[Healbot_Config_Skins.Current_Skin][frame][key]["A"]=a
     end
 end
 
@@ -1142,5 +1153,24 @@ function hbv_ActionIcons_SetColData(r, g, b, a, key, frame, id)
         HealBot_Skins_ActionIconsData[Healbot_Config_Skins.Current_Skin][frame][id][key]["G"]=g
         HealBot_Skins_ActionIconsData[Healbot_Config_Skins.Current_Skin][frame][id][key]["B"]=b
         HealBot_Skins_ActionIconsData[Healbot_Config_Skins.Current_Skin][frame][id][key]["A"]=a
+    end
+end
+
+function hbv_Skins_VarsHasSkin()
+    table.foreach(hbSkinDefaults, function (cat)
+        if not Healbot_Config_Skins[cat][Healbot_Config_Skins.Current_Skin] then
+            Healbot_Config_Skins[cat][Healbot_Config_Skins.Current_Skin]={}
+        end
+    end)
+    table.foreach(hbSkinFrameDefaults, function (cat)
+        if not Healbot_Config_Skins[cat][Healbot_Config_Skins.Current_Skin] then
+            Healbot_Config_Skins[cat][Healbot_Config_Skins.Current_Skin]={}
+        end
+    end)
+    if not Healbot_Config_Skins.IconSets[Healbot_Config_Skins.Current_Skin] then
+        Healbot_Config_Skins.IconSets[Healbot_Config_Skins.Current_Skin]={}
+    end
+    if not Healbot_Config_Skins.IconSetsText[Healbot_Config_Skins.Current_Skin] then
+        Healbot_Config_Skins.IconSetsText[Healbot_Config_Skins.Current_Skin]={}
     end
 end

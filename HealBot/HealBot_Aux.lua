@@ -2202,9 +2202,15 @@ local function HealBot_Aux_SetTestButton(button)
             if hbv_Aux_GetBarVar("USE", button.frame, x) == 2 then
                 if hbv_Aux_GetBarVar("COLOUR", button.frame, x) == 1 then
                     if hbv_Skins_GetFrameVar("BarIACol", "AC", button.frame) == 4 then
-                        button.gref.aux[x]:SetStatusBarColor(hbv_Skins_GetFrameVar("BarIACol", "AR", button.frame),
-                                                             hbv_Skins_GetFrameVar("BarIACol", "AG", button.frame),
-                                                             hbv_Skins_GetFrameVar("BarIACol", "AB", button.frame), 1)
+                        if button.status.hostile then
+                            button.gref.aux[x]:SetStatusBarColor(hbv_Skins_GetFrameVar("BarIACol", "ARE", button.frame),
+                                                                 hbv_Skins_GetFrameVar("BarIACol", "AGE", button.frame),
+                                                                 hbv_Skins_GetFrameVar("BarIACol", "ABE", button.frame), 1)
+                        else
+                            button.gref.aux[x]:SetStatusBarColor(hbv_Skins_GetFrameVar("BarIACol", "AR", button.frame),
+                                                                 hbv_Skins_GetFrameVar("BarIACol", "AG", button.frame),
+                                                                 hbv_Skins_GetFrameVar("BarIACol", "AB", button.frame), 1)
+                        end
                     elseif hbv_Skins_GetFrameVar("BarIACol", "AC", button.frame) == 5 then
                         button.gref.aux[x]:SetStatusBarColor(button.text.r,button.text.g,button.text.b, 1)
                     else
@@ -2213,9 +2219,15 @@ local function HealBot_Aux_SetTestButton(button)
                 end
                 if hbv_Aux_GetBarTextVar("COLTYPE", button.frame, x) == 1 then
                     if hbv_Skins_GetFrameVar("BarIACol", "AC", button.frame) == 4 then
-                        HealBot_Aux_AutoTextColour(button, x, hbv_Skins_GetFrameVar("BarIACol", "AR", button.frame),
-                                                              hbv_Skins_GetFrameVar("BarIACol", "AG", button.frame),
-                                                              hbv_Skins_GetFrameVar("BarIACol", "AB", button.frame), 0.25)
+                        if button.status.hostile then
+                            HealBot_Aux_AutoTextColour(button, x, hbv_Skins_GetFrameVar("BarIACol", "ARE", button.frame),
+                                                                  hbv_Skins_GetFrameVar("BarIACol", "AGE", button.frame),
+                                                                  hbv_Skins_GetFrameVar("BarIACol", "ABE", button.frame), 0.25)
+                        else
+                            HealBot_Aux_AutoTextColour(button, x, hbv_Skins_GetFrameVar("BarIACol", "AR", button.frame),
+                                                                  hbv_Skins_GetFrameVar("BarIACol", "AG", button.frame),
+                                                                  hbv_Skins_GetFrameVar("BarIACol", "AB", button.frame), 0.25)
+                        end
                         button.gref.auxtxt[x]:SetTextColor(button.auxtxt[x]["R"], button.auxtxt[x]["G"], button.auxtxt[x]["B"],1)
                     elseif hbv_Skins_GetFrameVar("BarIACol", "AC", button.frame) == 5 then
                         HealBot_Aux_AutoTextColour(button, x, button.text.r, button.text.g, button.text.b, 0.25)
@@ -2229,9 +2241,15 @@ local function HealBot_Aux_SetTestButton(button)
             elseif hbv_Aux_GetBarVar("USE", button.frame, x) == 3 then
                 if hbv_Aux_GetBarVar("COLOUR", button.frame, x) == 1 then
                     if hbv_Skins_GetFrameVar("BarIACol", "IC", button.frame) == 4 then
-                        button.gref.aux[x]:SetStatusBarColor(hbv_Skins_GetFrameVar("BarIACol", "IR", button.frame),
-                                                             hbv_Skins_GetFrameVar("BarIACol", "IG", button.frame),
-                                                             hbv_Skins_GetFrameVar("BarIACol", "IB", button.frame), 1)
+                        if button.status.hostile then
+                            button.gref.aux[x]:SetStatusBarColor(hbv_Skins_GetFrameVar("BarIACol", "IRE", button.frame),
+                                                                 hbv_Skins_GetFrameVar("BarIACol", "IGE", button.frame),
+                                                                 hbv_Skins_GetFrameVar("BarIACol", "IBE", button.frame), 1)
+                        else
+                            button.gref.aux[x]:SetStatusBarColor(hbv_Skins_GetFrameVar("BarIACol", "IR", button.frame),
+                                                                 hbv_Skins_GetFrameVar("BarIACol", "IG", button.frame),
+                                                                 hbv_Skins_GetFrameVar("BarIACol", "IB", button.frame), 1)
+                        end
                     elseif hbv_Skins_GetFrameVar("BarIACol", "IC", button.frame) == 5 then
                         button.gref.aux[x]:SetStatusBarColor(button.text.r,button.text.g,button.text.b, 1)
                     else
@@ -2240,9 +2258,15 @@ local function HealBot_Aux_SetTestButton(button)
                 end
                 if hbv_Aux_GetBarTextVar("COLTYPE", button.frame, x) == 1 then
                     if hbv_Skins_GetFrameVar("BarIACol", "IC", button.frame) == 4 then
-                        HealBot_Aux_AutoTextColour(button, x, hbv_Skins_GetFrameVar("BarIACol", "IR", button.frame),
-                                                              hbv_Skins_GetFrameVar("BarIACol", "IG", button.frame),
-                                                              hbv_Skins_GetFrameVar("BarIACol", "IB", button.frame), 0.25)
+                        if button.status.hostile then
+                            HealBot_Aux_AutoTextColour(button, x, hbv_Skins_GetFrameVar("BarIACol", "IRE", button.frame),
+                                                                  hbv_Skins_GetFrameVar("BarIACol", "IGE", button.frame),
+                                                                  hbv_Skins_GetFrameVar("BarIACol", "IBE", button.frame), 0.25)
+                        else
+                            HealBot_Aux_AutoTextColour(button, x, hbv_Skins_GetFrameVar("BarIACol", "IR", button.frame),
+                                                                  hbv_Skins_GetFrameVar("BarIACol", "IG", button.frame),
+                                                                  hbv_Skins_GetFrameVar("BarIACol", "IB", button.frame), 0.25)
+                        end
                         button.gref.auxtxt[x]:SetTextColor(button.auxtxt[x]["R"], button.auxtxt[x]["G"], button.auxtxt[x]["B"],1)
                     elseif hbv_Skins_GetFrameVar("BarIACol", "IC", button.frame) == 5 then
                         HealBot_Aux_AutoTextColour(button, x, button.text.r, button.text.g, button.text.b, 0.25)

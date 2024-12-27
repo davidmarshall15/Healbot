@@ -1356,18 +1356,34 @@ end
 
 function HealBot_Action_HealsInColourCustom(button)
       --HealBot_setCall("HealBot_Action_HealsInColourCustom", button)
-    if auhiHiPct>hbv_Skins_GetFrameVar("BarIACol", "IIT", button.frame) then
-        button.health.inhealr=hbv_Skins_GetFrameVar("BarIACol", "IR", button.frame)
-        button.health.inhealg=hbv_Skins_GetFrameVar("BarIACol", "IG", button.frame)
-        button.health.inhealb=hbv_Skins_GetFrameVar("BarIACol", "IB", button.frame)
-    elseif auhiHiPct>hbv_Skins_GetFrameVar("BarIACol", "ICT", button.frame) then
-        button.health.inhealr=hbv_Skins_GetFrameVar("BarIACol", "IIR", button.frame)
-        button.health.inhealg=hbv_Skins_GetFrameVar("BarIACol", "IIG", button.frame)
-        button.health.inhealb=hbv_Skins_GetFrameVar("BarIACol", "IIB", button.frame)
+    if button.status.hostile then
+        if auhiHiPct>hbv_Skins_GetFrameVar("BarIACol", "IIT", button.frame) then
+            button.health.inhealr=hbv_Skins_GetFrameVar("BarIACol", "IRE", button.frame)
+            button.health.inhealg=hbv_Skins_GetFrameVar("BarIACol", "IGE", button.frame)
+            button.health.inhealb=hbv_Skins_GetFrameVar("BarIACol", "IBE", button.frame)
+        elseif auhiHiPct>hbv_Skins_GetFrameVar("BarIACol", "ICT", button.frame) then
+            button.health.inhealr=hbv_Skins_GetFrameVar("BarIACol", "IIRE", button.frame)
+            button.health.inhealg=hbv_Skins_GetFrameVar("BarIACol", "IIGE", button.frame)
+            button.health.inhealb=hbv_Skins_GetFrameVar("BarIACol", "IIBE", button.frame)
+        else
+            button.health.inhealr=hbv_Skins_GetFrameVar("BarIACol", "ICRE", button.frame)
+            button.health.inhealg=hbv_Skins_GetFrameVar("BarIACol", "ICGE", button.frame)
+            button.health.inhealb=hbv_Skins_GetFrameVar("BarIACol", "ICBE", button.frame)
+        end
     else
-        button.health.inhealr=hbv_Skins_GetFrameVar("BarIACol", "ICR", button.frame)
-        button.health.inhealg=hbv_Skins_GetFrameVar("BarIACol", "ICG", button.frame)
-        button.health.inhealb=hbv_Skins_GetFrameVar("BarIACol", "ICB", button.frame)
+        if auhiHiPct>hbv_Skins_GetFrameVar("BarIACol", "IIT", button.frame) then
+            button.health.inhealr=hbv_Skins_GetFrameVar("BarIACol", "IR", button.frame)
+            button.health.inhealg=hbv_Skins_GetFrameVar("BarIACol", "IG", button.frame)
+            button.health.inhealb=hbv_Skins_GetFrameVar("BarIACol", "IB", button.frame)
+        elseif auhiHiPct>hbv_Skins_GetFrameVar("BarIACol", "ICT", button.frame) then
+            button.health.inhealr=hbv_Skins_GetFrameVar("BarIACol", "IIR", button.frame)
+            button.health.inhealg=hbv_Skins_GetFrameVar("BarIACol", "IIG", button.frame)
+            button.health.inhealb=hbv_Skins_GetFrameVar("BarIACol", "IIB", button.frame)
+        else
+            button.health.inhealr=hbv_Skins_GetFrameVar("BarIACol", "ICR", button.frame)
+            button.health.inhealg=hbv_Skins_GetFrameVar("BarIACol", "ICG", button.frame)
+            button.health.inhealb=hbv_Skins_GetFrameVar("BarIACol", "ICB", button.frame)
+        end
     end
 end
 
@@ -1452,18 +1468,34 @@ end
 
 function HealBot_Action_AbsorbsColourCustom(button)
       --HealBot_setCall("HealBot_Action_AbsorbsColourCustom", button)
-    if auaHaPct>hbv_Skins_GetFrameVar("BarIACol", "AIT", button.frame) then
-        button.health.absorbr=hbv_Skins_GetFrameVar("BarIACol", "AR", button.frame)
-        button.health.absorbg=hbv_Skins_GetFrameVar("BarIACol", "AG", button.frame)
-        button.health.absorbb=hbv_Skins_GetFrameVar("BarIACol", "AB", button.frame)
-    elseif auaHaPct>hbv_Skins_GetFrameVar("BarIACol", "ACT", button.frame) then
-        button.health.absorbr=hbv_Skins_GetFrameVar("BarIACol", "AIR", button.frame)
-        button.health.absorbg=hbv_Skins_GetFrameVar("BarIACol", "AIG", button.frame)
-        button.health.absorbb=hbv_Skins_GetFrameVar("BarIACol", "AIB", button.frame)
+    if button.status.hostile then
+        if auaHaPct>hbv_Skins_GetFrameVar("BarIACol", "AIT", button.frame) then
+            button.health.absorbr=hbv_Skins_GetFrameVar("BarIACol", "ARE", button.frame)
+            button.health.absorbg=hbv_Skins_GetFrameVar("BarIACol", "AGE", button.frame)
+            button.health.absorbb=hbv_Skins_GetFrameVar("BarIACol", "ABE", button.frame)
+        elseif auaHaPct>hbv_Skins_GetFrameVar("BarIACol", "ACT", button.frame) then
+            button.health.absorbr=hbv_Skins_GetFrameVar("BarIACol", "AIRE", button.frame)
+            button.health.absorbg=hbv_Skins_GetFrameVar("BarIACol", "AIGE", button.frame)
+            button.health.absorbb=hbv_Skins_GetFrameVar("BarIACol", "AIBE", button.frame)
+        else
+            button.health.absorbr=hbv_Skins_GetFrameVar("BarIACol", "ACRE", button.frame)
+            button.health.absorbg=hbv_Skins_GetFrameVar("BarIACol", "ACGE", button.frame)
+            button.health.absorbb=hbv_Skins_GetFrameVar("BarIACol", "ACBE", button.frame)
+        end
     else
-        button.health.absorbr=hbv_Skins_GetFrameVar("BarIACol", "ACR", button.frame)
-        button.health.absorbg=hbv_Skins_GetFrameVar("BarIACol", "ACG", button.frame)
-        button.health.absorbb=hbv_Skins_GetFrameVar("BarIACol", "ACB", button.frame)
+        if auaHaPct>hbv_Skins_GetFrameVar("BarIACol", "AIT", button.frame) then
+            button.health.absorbr=hbv_Skins_GetFrameVar("BarIACol", "AR", button.frame)
+            button.health.absorbg=hbv_Skins_GetFrameVar("BarIACol", "AG", button.frame)
+            button.health.absorbb=hbv_Skins_GetFrameVar("BarIACol", "AB", button.frame)
+        elseif auaHaPct>hbv_Skins_GetFrameVar("BarIACol", "ACT", button.frame) then
+            button.health.absorbr=hbv_Skins_GetFrameVar("BarIACol", "AIR", button.frame)
+            button.health.absorbg=hbv_Skins_GetFrameVar("BarIACol", "AIG", button.frame)
+            button.health.absorbb=hbv_Skins_GetFrameVar("BarIACol", "AIB", button.frame)
+        else
+            button.health.absorbr=hbv_Skins_GetFrameVar("BarIACol", "ACR", button.frame)
+            button.health.absorbg=hbv_Skins_GetFrameVar("BarIACol", "ACG", button.frame)
+            button.health.absorbb=hbv_Skins_GetFrameVar("BarIACol", "ACB", button.frame)
+        end
     end
 end
 
@@ -1566,21 +1598,40 @@ end
 
 function HealBot_Action_BackgroundBorderColourCustom(button)
       --HealBot_setCall("HealBot_Action_BackgroundBorderColourCustom", button)
-    if button.health.pct>hbv_Skins_GetFrameVar("BarCol", "BORIT", button.framecol) then
-        button.gref["BackBorder"]:SetBackdropBorderColor(hbv_Skins_GetFrameVar("BarCol", "BORR", button.framecol),
-                                                         hbv_Skins_GetFrameVar("BarCol", "BORG", button.framecol),
-                                                         hbv_Skins_GetFrameVar("BarCol", "BORB", button.framecol),
-                                                         HealBot_Action_BarColourAlpha(button, hbv_Skins_GetFrameVar("BarCol", "BORA", button.framecol), 1))
-    elseif button.health.pct>hbv_Skins_GetFrameVar("BarCol", "BORCT", button.framecol) then
-        button.gref["BackBorder"]:SetBackdropBorderColor(hbv_Skins_GetFrameVar("BarCol", "BORIR", button.framecol),
-                                                         hbv_Skins_GetFrameVar("BarCol", "BORIG", button.framecol),
-                                                         hbv_Skins_GetFrameVar("BarCol", "BORIB", button.framecol),
-                                                         HealBot_Action_BarColourAlpha(button, hbv_Skins_GetFrameVar("BarCol", "BORA", button.framecol), 1))
+    if button.status.hostile then
+        if button.health.pct>hbv_Skins_GetFrameVar("BarCol", "BORIT", button.framecol) then
+            button.gref["BackBorder"]:SetBackdropBorderColor(hbv_Skins_GetFrameVar("BarCol", "BORRE", button.framecol),
+                                                             hbv_Skins_GetFrameVar("BarCol", "BORGE", button.framecol),
+                                                             hbv_Skins_GetFrameVar("BarCol", "BORBE", button.framecol),
+                                                             HealBot_Action_BarColourAlpha(button, hbv_Skins_GetFrameVar("BarCol", "BORA", button.framecol), 1))
+        elseif button.health.pct>hbv_Skins_GetFrameVar("BarCol", "BORCT", button.framecol) then
+            button.gref["BackBorder"]:SetBackdropBorderColor(hbv_Skins_GetFrameVar("BarCol", "BORIRE", button.framecol),
+                                                             hbv_Skins_GetFrameVar("BarCol", "BORIGE", button.framecol),
+                                                             hbv_Skins_GetFrameVar("BarCol", "BORIBE", button.framecol),
+                                                             HealBot_Action_BarColourAlpha(button, hbv_Skins_GetFrameVar("BarCol", "BORA", button.framecol), 1))
+        else
+            button.gref["BackBorder"]:SetBackdropBorderColor(hbv_Skins_GetFrameVar("BarCol", "BORCRE", button.framecol),
+                                                             hbv_Skins_GetFrameVar("BarCol", "BORCGE", button.framecol),
+                                                             hbv_Skins_GetFrameVar("BarCol", "BORCBE", button.framecol),
+                                                             HealBot_Action_BarColourAlpha(button, hbv_Skins_GetFrameVar("BarCol", "BORA", button.framecol), 1))
+        end
     else
-        button.gref["BackBorder"]:SetBackdropBorderColor(hbv_Skins_GetFrameVar("BarCol", "BORCR", button.framecol),
-                                                         hbv_Skins_GetFrameVar("BarCol", "BORCG", button.framecol),
-                                                         hbv_Skins_GetFrameVar("BarCol", "BORCB", button.framecol),
-                                                         HealBot_Action_BarColourAlpha(button, hbv_Skins_GetFrameVar("BarCol", "BORA", button.framecol), 1))
+        if button.health.pct>hbv_Skins_GetFrameVar("BarCol", "BORIT", button.framecol) then
+            button.gref["BackBorder"]:SetBackdropBorderColor(hbv_Skins_GetFrameVar("BarCol", "BORR", button.framecol),
+                                                             hbv_Skins_GetFrameVar("BarCol", "BORG", button.framecol),
+                                                             hbv_Skins_GetFrameVar("BarCol", "BORB", button.framecol),
+                                                             HealBot_Action_BarColourAlpha(button, hbv_Skins_GetFrameVar("BarCol", "BORA", button.framecol), 1))
+        elseif button.health.pct>hbv_Skins_GetFrameVar("BarCol", "BORCT", button.framecol) then
+            button.gref["BackBorder"]:SetBackdropBorderColor(hbv_Skins_GetFrameVar("BarCol", "BORIR", button.framecol),
+                                                             hbv_Skins_GetFrameVar("BarCol", "BORIG", button.framecol),
+                                                             hbv_Skins_GetFrameVar("BarCol", "BORIB", button.framecol),
+                                                             HealBot_Action_BarColourAlpha(button, hbv_Skins_GetFrameVar("BarCol", "BORA", button.framecol), 1))
+        else
+            button.gref["BackBorder"]:SetBackdropBorderColor(hbv_Skins_GetFrameVar("BarCol", "BORCR", button.framecol),
+                                                             hbv_Skins_GetFrameVar("BarCol", "BORCG", button.framecol),
+                                                             hbv_Skins_GetFrameVar("BarCol", "BORCB", button.framecol),
+                                                             HealBot_Action_BarColourAlpha(button, hbv_Skins_GetFrameVar("BarCol", "BORA", button.framecol), 1))
+        end
     end
 end
 
@@ -1855,21 +1906,40 @@ end
 
 function HealBot_Action_BackgroundColourCustom(button)
       --HealBot_setCall("HealBot_Action_BackgroundColourCustom", button)
-    if button.health.pct>hbv_Skins_GetFrameVar("BarCol", "BIT", button.framecol) then
-        button.gref["Back"]:SetStatusBarColor(hbv_Skins_GetFrameVar("BarCol", "BR", button.framecol),
-                                              hbv_Skins_GetFrameVar("BarCol", "BG", button.framecol),
-                                              hbv_Skins_GetFrameVar("BarCol", "BB", button.framecol),
-                                              HealBot_Action_BarColourAlpha(button, hbv_Skins_GetFrameVar("BarCol", "BA", button.framecol), 1.5))
-    elseif button.health.pct>hbv_Skins_GetFrameVar("BarCol", "BCT", button.framecol) then
-        button.gref["Back"]:SetStatusBarColor(hbv_Skins_GetFrameVar("BarCol", "BIR", button.framecol),
-                                              hbv_Skins_GetFrameVar("BarCol", "BIG", button.framecol),
-                                              hbv_Skins_GetFrameVar("BarCol", "BIB", button.framecol),
-                                              HealBot_Action_BarColourAlpha(button, hbv_Skins_GetFrameVar("BarCol", "BA", button.framecol), 1.5))
+    if button.status.hostile then
+        if button.health.pct>hbv_Skins_GetFrameVar("BarCol", "BIT", button.framecol) then
+            button.gref["Back"]:SetStatusBarColor(hbv_Skins_GetFrameVar("BarCol", "BRE", button.framecol),
+                                                  hbv_Skins_GetFrameVar("BarCol", "BGE", button.framecol),
+                                                  hbv_Skins_GetFrameVar("BarCol", "BBE", button.framecol),
+                                                  HealBot_Action_BarColourAlpha(button, hbv_Skins_GetFrameVar("BarCol", "BA", button.framecol), 1.5))
+        elseif button.health.pct>hbv_Skins_GetFrameVar("BarCol", "BCT", button.framecol) then
+            button.gref["Back"]:SetStatusBarColor(hbv_Skins_GetFrameVar("BarCol", "BIRE", button.framecol),
+                                                  hbv_Skins_GetFrameVar("BarCol", "BIGE", button.framecol),
+                                                  hbv_Skins_GetFrameVar("BarCol", "BIBE", button.framecol),
+                                                  HealBot_Action_BarColourAlpha(button, hbv_Skins_GetFrameVar("BarCol", "BA", button.framecol), 1.5))
+        else
+            button.gref["Back"]:SetStatusBarColor(hbv_Skins_GetFrameVar("BarCol", "BCRE", button.framecol),
+                                                  hbv_Skins_GetFrameVar("BarCol", "BCGE", button.framecol),
+                                                  hbv_Skins_GetFrameVar("BarCol", "BCBE", button.framecol),
+                                                  HealBot_Action_BarColourAlpha(button, hbv_Skins_GetFrameVar("BarCol", "BA", button.framecol), 1.5))
+        end
     else
-        button.gref["Back"]:SetStatusBarColor(hbv_Skins_GetFrameVar("BarCol", "BCR", button.framecol),
-                                              hbv_Skins_GetFrameVar("BarCol", "BCG", button.framecol),
-                                              hbv_Skins_GetFrameVar("BarCol", "BCB", button.framecol),
-                                              HealBot_Action_BarColourAlpha(button, hbv_Skins_GetFrameVar("BarCol", "BA", button.framecol), 1.5))
+        if button.health.pct>hbv_Skins_GetFrameVar("BarCol", "BIT", button.framecol) then
+            button.gref["Back"]:SetStatusBarColor(hbv_Skins_GetFrameVar("BarCol", "BR", button.framecol),
+                                                  hbv_Skins_GetFrameVar("BarCol", "BG", button.framecol),
+                                                  hbv_Skins_GetFrameVar("BarCol", "BB", button.framecol),
+                                                  HealBot_Action_BarColourAlpha(button, hbv_Skins_GetFrameVar("BarCol", "BA", button.framecol), 1.5))
+        elseif button.health.pct>hbv_Skins_GetFrameVar("BarCol", "BCT", button.framecol) then
+            button.gref["Back"]:SetStatusBarColor(hbv_Skins_GetFrameVar("BarCol", "BIR", button.framecol),
+                                                  hbv_Skins_GetFrameVar("BarCol", "BIG", button.framecol),
+                                                  hbv_Skins_GetFrameVar("BarCol", "BIB", button.framecol),
+                                                  HealBot_Action_BarColourAlpha(button, hbv_Skins_GetFrameVar("BarCol", "BA", button.framecol), 1.5))
+        else
+            button.gref["Back"]:SetStatusBarColor(hbv_Skins_GetFrameVar("BarCol", "BCR", button.framecol),
+                                                  hbv_Skins_GetFrameVar("BarCol", "BCG", button.framecol),
+                                                  hbv_Skins_GetFrameVar("BarCol", "BCB", button.framecol),
+                                                  HealBot_Action_BarColourAlpha(button, hbv_Skins_GetFrameVar("BarCol", "BA", button.framecol), 1.5))
+        end
     end
 end
 
@@ -2047,6 +2117,9 @@ function HealBot_Action_setState(button, state)
             button.status.hlthupd=false
         else
             button.status.hlthupd=true
+            if state == HealBot_Unit_Status["CHECK"] then
+                HealBot_Range_ButtonSpell(button)
+            end
         end
     end
 end
@@ -2626,18 +2699,34 @@ end
 
 function HealBot_Action_BarColourCustom(button)
       --HealBot_setCall("HealBot_Action_BarColourCustom", button)
-    if button.health.pct>hbv_Skins_GetFrameVar("BarCol", "HIT", button.framecol) then
-        button.status.r=hbv_Skins_GetFrameVar("BarCol", "HR", button.framecol)
-        button.status.g=hbv_Skins_GetFrameVar("BarCol", "HG", button.framecol)
-        button.status.b=hbv_Skins_GetFrameVar("BarCol", "HB", button.framecol)
-    elseif button.health.pct>hbv_Skins_GetFrameVar("BarCol", "HCT", button.framecol) then
-        button.status.r=hbv_Skins_GetFrameVar("BarCol", "HIR", button.framecol)
-        button.status.g=hbv_Skins_GetFrameVar("BarCol", "HIG", button.framecol)
-        button.status.b=hbv_Skins_GetFrameVar("BarCol", "HIB", button.framecol)
+    if button.status.hostile then
+        if button.health.pct>hbv_Skins_GetFrameVar("BarCol", "HIT", button.framecol) then
+            button.status.r=hbv_Skins_GetFrameVar("BarCol", "HRE", button.framecol)
+            button.status.g=hbv_Skins_GetFrameVar("BarCol", "HGE", button.framecol)
+            button.status.b=hbv_Skins_GetFrameVar("BarCol", "HBE", button.framecol)
+        elseif button.health.pct>hbv_Skins_GetFrameVar("BarCol", "HCT", button.framecol) then
+            button.status.r=hbv_Skins_GetFrameVar("BarCol", "HIRE", button.framecol)
+            button.status.g=hbv_Skins_GetFrameVar("BarCol", "HIGE", button.framecol)
+            button.status.b=hbv_Skins_GetFrameVar("BarCol", "HIBE", button.framecol)
+        else
+            button.status.r=hbv_Skins_GetFrameVar("BarCol", "HCRE", button.framecol)
+            button.status.g=hbv_Skins_GetFrameVar("BarCol", "HCGE", button.framecol)
+            button.status.b=hbv_Skins_GetFrameVar("BarCol", "HCBE", button.framecol)
+        end
     else
-        button.status.r=hbv_Skins_GetFrameVar("BarCol", "HCR", button.framecol)
-        button.status.g=hbv_Skins_GetFrameVar("BarCol", "HCG", button.framecol)
-        button.status.b=hbv_Skins_GetFrameVar("BarCol", "HCB", button.framecol)
+        if button.health.pct>hbv_Skins_GetFrameVar("BarCol", "HIT", button.framecol) then
+            button.status.r=hbv_Skins_GetFrameVar("BarCol", "HR", button.framecol)
+            button.status.g=hbv_Skins_GetFrameVar("BarCol", "HG", button.framecol)
+            button.status.b=hbv_Skins_GetFrameVar("BarCol", "HB", button.framecol)
+        elseif button.health.pct>hbv_Skins_GetFrameVar("BarCol", "HCT", button.framecol) then
+            button.status.r=hbv_Skins_GetFrameVar("BarCol", "HIR", button.framecol)
+            button.status.g=hbv_Skins_GetFrameVar("BarCol", "HIG", button.framecol)
+            button.status.b=hbv_Skins_GetFrameVar("BarCol", "HIB", button.framecol)
+        else
+            button.status.r=hbv_Skins_GetFrameVar("BarCol", "HCR", button.framecol)
+            button.status.g=hbv_Skins_GetFrameVar("BarCol", "HCG", button.framecol)
+            button.status.b=hbv_Skins_GetFrameVar("BarCol", "HCB", button.framecol)
+        end
     end
 end
 

@@ -677,6 +677,7 @@ local hbTimerFuncs={["INIT"]={
                         ["UpdateGlobalDimming"]=HealBot_Action_ResetOpacity,
                         ["CheckHideFrames"]=HealBot_Action_CheckHideFrames,
                         ["ResetGlobalDimming"]=HealBot_Action_ResetGlobalDimming,
+                        ["VarsHasSkin"]=hbv_Skins_VarsHasSkin,
                     },
                     ["AUX"]={
                         ["ClearBars"]=HealBot_Options_clearAuxBars,

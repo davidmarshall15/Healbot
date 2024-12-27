@@ -1995,5 +1995,6 @@ function HealBot_Skins_Check_Skin(SkinName)
         end
     end
     HealBot_Skins_Clear_UnusedSkin(SkinName)
+    HealBot_Timers_Set("SKINS","VarsHasSkin")
     Healbot_Config_Skins.General[SkinName]["VC"]=HealBot_Global_Version()
 end
