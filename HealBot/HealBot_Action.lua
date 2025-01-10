@@ -272,19 +272,19 @@ function HealBot_Action_setpcClass(button)
     for j=1,5 do
         if HEALBOT_GAME_VERSION>3 and hbv_Skins_GetFrameBoolean("HealBar", "POWERCNT", j) then
             local prevHealBot_pcMax=HealBot_Action_luVars["UnitPowerMax"]
-            if HealBot_Data["PCLASSTRIM"] == HealBot_Class_En[HEALBOT_PALADIN] then
+            if HealBot_Data["PCLASSTRIM"] == hbv_GetClass("En", HEALBOT_PALADIN) then
                 HealBot_pcClass[j]=9
                 HealBot_Action_luVars["UnitPowerMax"]=UnitPowerMax("player" , 9);
-            elseif HealBot_Data["PCLASSTRIM"] == HealBot_Class_En[HEALBOT_ROGUE] or HealBot_Data["PCLASSTRIM"] == HealBot_Class_En[HEALBOT_DRUID] then
+            elseif HealBot_Data["PCLASSTRIM"] == hbv_GetClass("En", HEALBOT_ROGUE) or HealBot_Data["PCLASSTRIM"] == hbv_GetClass("En", HEALBOT_DRUID) then
                 HealBot_pcClass[j]=4
                 HealBot_Action_luVars["UnitPowerMax"]=UnitPowerMax("player" , 4);
-            elseif HealBot_Data["PCLASSTRIM"] == HealBot_Class_En[HEALBOT_WARLOCK] then
+            elseif HealBot_Data["PCLASSTRIM"] == hbv_GetClass("En", HEALBOT_WARLOCK) then
                 HealBot_pcClass[j]=7
                 HealBot_Action_luVars["UnitPowerMax"]=UnitPowerMax("player" , 7);
-            elseif HealBot_Data["PCLASSTRIM"] == HealBot_Class_En[HEALBOT_MONK] then
+            elseif HealBot_Data["PCLASSTRIM"] == hbv_GetClass("En", HEALBOT_MONK) then
                 HealBot_pcClass[j]=12
                 HealBot_Action_luVars["UnitPowerMax"]=UnitPowerMax("player" , 12);
-            elseif HealBot_Data["PCLASSTRIM"] == HealBot_Class_En[HEALBOT_EVOKER] then
+            elseif HealBot_Data["PCLASSTRIM"] == hbv_GetClass("En", HEALBOT_EVOKER) then
                 HealBot_pcClass[j]=19
                 HealBot_Action_luVars["UnitPowerMax"]=UnitPowerMax("player" , 19);
             else

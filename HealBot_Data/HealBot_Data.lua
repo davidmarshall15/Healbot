@@ -207,22 +207,6 @@ HealBot_Config_CuresDefaults={
     [HEALBOT_BLEED_en]  =false,
   },
 };
-HealBot_Class_En={ 
-                [HEALBOT_CLASSES_ALL]="ALL",
-                [HEALBOT_DRUID]="DRUI",
-                [HEALBOT_HUNTER]="HUNT",
-                [HEALBOT_MAGE]="MAGE",
-                [HEALBOT_PALADIN]="PALA",
-                [HEALBOT_PRIEST]="PRIE",
-                [HEALBOT_ROGUE]="ROGU",
-                [HEALBOT_SHAMAN]="SHAM",
-                [HEALBOT_WARLOCK]="WARL",
-                [HEALBOT_WARRIOR]="WARR",
-                [HEALBOT_EVOKER]="EVOK",
-                [HEALBOT_DEATHKNIGHT]="DEAT",
-                [HEALBOT_MONK]="MONK",
-                [HEALBOT_DEMONHUNTER]="DEMO",
-}
 
 HEALBOT_OPTIONS_SELFHEALS_en=HEALBOT_OPTIONS_SELFHEALS
 HEALBOT_OPTIONS_TANKHEALS_en=HEALBOT_OPTIONS_TANKHEALS

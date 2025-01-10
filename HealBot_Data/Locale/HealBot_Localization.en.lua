@@ -182,6 +182,8 @@ function HealBot_Lang_enALL()
     HEALBOT_SORTBY_UNITID                  ="Unit ID"
     HEALBOT_OPTIONS_NEWDEBUFFTEXT          ="New Debuff"
     HEALBOT_OPTIONS_NEWHOTBUFFTEXT         ="New Buff"
+    HEALBOT_OPTIONS_ADDNEWDEBUFFTEXT       ="Add New Debuff"
+    HEALBOT_OPTIONS_ADDNEWBUFFTEXT         ="Add New Buff"
     HEALBOT_WORD_TAG                       ="Tag"
     HEALBOT_WORD_MISSING                   ="Missing"
     HEALBOT_WORD_DISPEL                    ="Dispel"
@@ -245,7 +247,17 @@ function HealBot_Lang_enALL()
     HEALBOT_OPTIONS_EMERGDEBUFFWARNINGS    ="Glow only when dispellable";
     HEALBOT_OPTIONS_EMERGBUFFWARNINGS      ="Glow only when missing";
     HEALBOT_OPTIONS_BUFFCUSTOM             ="Custom buffs";
+    HEALBOT_OPTIONS_ADDBUFFCUSTOM          ="Add custom buffs"
+    HEALBOT_OPTIONS_ADDBUFFBYNAME          ="Add Buff by Spell Name or ID"
+    HEALBOT_OPTIONS_ADDBUFFBYSELF          ="Buffs cast by Self"
+    HEALBOT_OPTIONS_ADDBUFFBYCLASS         ="Buffs cast by My Class"
+    HEALBOT_OPTIONS_ADDBUFFBYOTHER         ="Buffs cast by Other Classes"
     HEALBOT_OPTIONS_DEBUFFCUSTOM           ="Custom debuffs"
+    HEALBOT_OPTIONS_ADDDEBUFFCUSTOM        ="Add custom debuffs"
+    HEALBOT_OPTIONS_ADDDEBUFFBYNAME        ="Add Debuff by Spell Name or ID"
+    HEALBOT_OPTIONS_ADDDEBUFFBYSELF        ="Debuffs cast by Self"
+    HEALBOT_OPTIONS_ADDDEBUFFBYFRIEND      ="Debuffs cast by Friends"
+    HEALBOT_OPTIONS_ADDDEBUFFBYENEMY       ="Debuffs cast by Enemies"
     HEALBOT_OPTIONS_BUFFMISSING            ="Missing buffs";
     HEALBOT_OPTIONS_BUFFEXTRA              ="Extra Buffs";
     HEALBOT_OPTIONS_CHECKWELLFED           ="Check well fed";
@@ -1107,6 +1119,7 @@ function HealBot_Lang_enALL()
     HEALBOT_OPTIONS_AUXCONFIG              ="Auxiliary Bar Configuration"
     HEALBOT_OPTIONS_VISSTANDARD            ="Standard Frames"
     HEALBOT_OPTIONS_ENEMYAURAS             ="Enemy Auras"
+    HEALBOT_OPTIONS_BOSSAURA               ="Boss Aura"
     HEALBOT_OPTIONS_ENEMYFRAME             ="Enemy frame"
     HEALBOT_OPTIONS_PLAYERFRAMES           ="Player frames"
     HEALBOT_OPTIONS_AUXFLASH               ="Variable Opacity"
@@ -1191,8 +1204,8 @@ function HealBot_Lang_enALL()
     HEALBOT_OPTIONS_CUSTOM_IDMETHOD        ="Identify By"
     HEALBOT_OPTIONS_CUSTOM_CASTBY          ="Cast By"
     HEALBOT_OPTIONS_CUSTOM_IDMETHODSID     ="Spell ID"
-    HEALBOT_OPTIONS_CUSTOM_IDMETHODSNAME   ="Spell Name"
-    HEALBOT_OPTIONS_CUSTOM_IDMETHODSBOTH   ="ID or Name"
+    HEALBOT_WORDS_SPELLNAME                ="Spell Name"
+    HEALBOT_OPTIONS_CUSTOM_IDMETHODSBOTH   ="ID and Name"
 
     HEALBOT_BLIZZARD_MENU                  ="Blizzard menu"
     HEALBOT_HB_MENU                        ="Healbot menu"

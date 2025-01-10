@@ -630,8 +630,6 @@ function HealBot_Action_setSpellInfo(button)
     end
 end
 
-local tipsUnitBosses={["boss1"]=true,["boss2"]=true,["boss3"]=true,["boss4"]=true,
-                      ["boss5"]=true,["boss6"]=true,["boss7"]=true,["boss8"]=true}
 function HealBot_Action_DoRefreshTooltip()
     if HealBot_Globals.ShowTooltip == false then return end
     if HealBot_Globals.DisableToolTipInCombat and HealBot_Data["UILOCK"] then return end
@@ -685,21 +683,9 @@ function HealBot_Action_DoRefreshTooltip()
                         else
                             uLvl="Level "..uLvl
                         end
-                        local uClassify=UnitClassification(xUnit) or " "
-                        if uClassify == "worldboss" or tipsUnitBosses[xUnit] then
-                            uClassify="Boss"
-                        elseif uClassify == "rareelite" then
-                            uClassify="Rare Elite"
-                        elseif uClassify == "elite" then
-                            uClassify="Elite"
-                        elseif uClassify == "rare" then
-                            uClassify="Rare"
-                        else
-                            uClassify=nil
-                        end
-                        if uClassify then
+                        if HealBot_UnitClassification(xUnit) then
                             if uLvl then
-                                uLvl=uClassify.." "..uLvl
+                                uLvl=HealBot_UnitClassification(xUnit).." "..uLvl
                             else
                                 uLvl="Boss"
                             end
@@ -1446,7 +1432,7 @@ function HealBot_Tooltip_DebuffIconTooltip(button, id)
                 hbIconTip["b"]=b
                 hbIconTip["id"]=id
                 if HealBot_Globals.Tooltip_ShowDebuffIconCompact then
-                    HealBot_ScanTooltip:SetUnitDebuff(button.unit, UnitDebuffIcons[id].slot)
+                    HealBot_ScanTooltip:SetUnitDebuff(button.unit, UnitDebuffIcons[id].gSlot)
                     HealBot_Tooltip_DisplayCompactIconTooltip(hbIconTip["frame"],
                                                               hbIconTip["details"],
                                                               hbIconTip["name"],
@@ -1507,7 +1493,7 @@ function HealBot_Tooltip_BuffIconTooltip(button, id)
                 hbIconTip["b"]=b
                 hbIconTip["id"]=id
                 if HealBot_Globals.Tooltip_ShowBuffIconCompact then
-                    HealBot_ScanTooltip:SetUnitBuff(button.unit, UnitBuffIcons[id].slot)
+                    HealBot_ScanTooltip:SetUnitBuff(button.unit, UnitBuffIcons[id].gSlot)
                     HealBot_Tooltip_DisplayCompactIconTooltip(hbIconTip["frame"],
                                                               hbIconTip["details"],
                                                               hbIconTip["name"],

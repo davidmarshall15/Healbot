@@ -601,6 +601,7 @@ local hbTimerFuncs={["INIT"]={
                         ["EnteringWorld2"]=HealBot_Timers_EnteringWorld2,
                         ["SetPlayerData"]=HealBot_SetPlayerData,
                         ["InitSpellsDefaults"]=HealBot_Init_Spells_Defaults,
+                        ["UpdateLang"]=HealBot_Options_UpdateLang,
                     },
                     ["RESET"]={
                         ["Reload"]=HealBot_Options_ReloadUIAreYouSure,

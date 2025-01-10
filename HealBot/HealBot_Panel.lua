@@ -768,7 +768,7 @@ function HealBot_Panel_classEN(unit)
     if classEN then
         return strsub(classEN,1,4)
     else
-        return HealBot_Class_En[HEALBOT_WARRIOR]
+        return hbv_GetClass("En", HEALBOT_WARRIOR)
     end
 end
 

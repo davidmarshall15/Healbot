@@ -24,6 +24,8 @@ function HealBot_Lang_Options_enALL()
     local hbSpellsTips8="\n--\n".._G["ORANGE_FONT_COLOR_CODE"].."NOTE: In case of a conflict between these settings, the following applies.\n--\n".._G["ORANGE_FONT_COLOR_CODE"].."The settings used will be the first found in the following order:.\n".._G["ORANGE_FONT_COLOR_CODE"].."1. Target\n".._G["ORANGE_FONT_COLOR_CODE"].."2. Private List targets\n".._G["ORANGE_FONT_COLOR_CODE"].."3. Tank targets\n".._G["ORANGE_FONT_COLOR_CODE"].."4. Group targets\n".._G["ORANGE_FONT_COLOR_CODE"].."4. Raid targets.\n--\n".._G["ORANGE_FONT_COLOR_CODE"].."An example of a conflict that may arise, is when a tank is part of\n".._G["ORANGE_FONT_COLOR_CODE"].."your group and both the Tank targets and Group targets are turned on.\n".._G["ORANGE_FONT_COLOR_CODE"].."In this case, Tank target settings will be used."
     local hbSpellsTips9="\n--\n".._G["YELLOW_FONT_COLOR_CODE"].."NOTE: Using Players frame is Experimental, feedback welcome."
     local hbSpellsTips10="\n--\n".._G["YELLOW_FONT_COLOR_CODE"].."NOTE: This option only works with spells."
+    local hbSpellsTips11="\n--\n".._G["YELLOW_FONT_COLOR_CODE"].."NOTE: Ensure debuff monitoring is turned on to populate this list.\n".._G["YELLOW_FONT_COLOR_CODE"].."NOTE: Existing custom debuffs are excluded from this list."
+    local hbSpellsTips12="\n--\n".._G["YELLOW_FONT_COLOR_CODE"].."NOTE: Ensure buff monitoring is turned on to populate this list.\n".._G["YELLOW_FONT_COLOR_CODE"].."NOTE: Existing custom buffs are excluded from this list."
     HEALBOT_OPTIONS_HELP_TITLES={
                         -- Reset Colours
                                  ["RESETCOLS"]="Reset Col"..HEALBOT_enWORD_COLOUR_SUFFIX,
@@ -627,12 +629,18 @@ function HealBot_Lang_Options_enALL()
                         -- Debuffs Custom tab
                                  ["DEBUFFSCUSTOMCAT"]=HEALBOT_CUSTOM_CATEGORY,
                                  ["DEBUFFSCUSTOMDEBUFF"]=HEALBOT_OPTIONS_TAB_CUSTOM_DEBUFFS,
+                                 ["DEBUFFSCUSTOMDEBUFFBYSELF"]=HEALBOT_OPTIONS_ADDDEBUFFBYSELF,
+                                 ["DEBUFFSCUSTOMDEBUFFBYFRIEND"]=HEALBOT_OPTIONS_ADDDEBUFFBYFRIEND,
+                                 ["DEBUFFSCUSTOMDEBUFFBYENEMY"]=HEALBOT_OPTIONS_ADDDEBUFFBYENEMY,
                                  ["DEBUFFSCUSTOMIDMETHOD"]=HEALBOT_OPTIONS_CUSTOM_IDMETHOD,
                                  ["DEBUFFSCUSTOMCASTBY"]=HEALBOT_OPTIONS_CUSTOM_CASTBY,
                                  ["DEBUFFSCUSTOMDELETE"]=HEALBOT_OPTIONS_DELSKIN,
                                  ["DEBUFFSCUSTOMNEWNAME"]=HEALBOT_OPTIONS_NEWDEBUFFTEXT,
                                  ["DEBUFFSCUSTOMTAG"]=HEALBOT_WORD_TAG,
                                  ["DEBUFFSCUSTOMNEWSAVE"]=HEALBOT_OPTIONS_SAVESKIN,
+                                 ["DEBUFFSCUSTOMADDNEW"]=HEALBOT_OPTIONS_ADDNEWDEBUFFTEXT,
+                                 ["BUFFSCUSTOMADDNEW"]=HEALBOT_OPTIONS_ADDNEWBUFFTEXT,
+                                 ["DEBUFFSCUSTOMNEWCANCEL"]=HEALBOT_WORD_CANCEL,
                                  ["DEBUFFSCUSTOMENDIS"]=HEALBOT_WORD_DISABLE,
                                  ["DEBUFFSCUSTOMPRIORITY"]=HEALBOT_WORD_PRIORITY,
                                  ["DEBUFFSCUSTOMBARCOLOUR"]=HEALBOT_SKIN_HEADERBARCOL,
@@ -702,6 +710,9 @@ function HealBot_Lang_Options_enALL()
                                  ["BUFFSCUSTOMCASTBY"]=HEALBOT_OPTIONS_CUSTOM_CASTBY,
                                  ["BUFFSCUSTOMDELETE"]=HEALBOT_OPTIONS_DELSKIN,
                                  ["BUFFSCUSTOMNEWNAME"]=HEALBOT_OPTIONS_NEWHOTBUFFTEXT,
+                                 ["BUFFSCUSTOMBUFFBYSELF"]=HEALBOT_OPTIONS_ADDBUFFBYSELF,
+                                 ["BUFFSCUSTOMBUFFBYCLASS"]=HEALBOT_OPTIONS_ADDBUFFBYCLASS,
+                                 ["BUFFSCUSTOMBUFFBYOTHER"]=HEALBOT_OPTIONS_ADDBUFFBYOTHER,
                                  ["BUFFSCUSTOMTAG"]=HEALBOT_WORD_TAG,
                                  ["BUFFSCUSTOMNEWSAVE"]=HEALBOT_OPTIONS_SAVESKIN,
                                  ["BUFFSCUSTOMENDIS"]=HEALBOT_WORD_DISABLE,
@@ -1428,13 +1439,18 @@ function HealBot_Lang_Options_enALL()
                                ["DEBUFFSTYPECOLOUR"]="Click to change.\n--\nBars are changed to the defined col"..HEALBOT_enWORD_COLOUR_SUFFIX.." when the player\nhas a debuff and settings on the Debuff Warning tab apply.",
                         -- Debuffs Custom tab
                                ["DEBUFFSCUSTOMCAT"]="Custom defaults and A-Z debuff categories\ncan be selected using the category dropdown.",
-                               ["DEBUFFSCUSTOMIDMETHOD"]="Check debuffs using Spell ID, Spell Name or Both.",
+                               ["DEBUFFSCUSTOMIDMETHOD"]="Check debuffs using only the Spell ID or the Spell Name and Spell ID.",
                                ["DEBUFFSCUSTOMDEBUFF"]="Lists custom default settings or individual\ndebuffs depending on the Category selected.",
+                               ["DEBUFFSCUSTOMDEBUFFBYSELF"]="Lists debuffs that have been cast by yourself in the current session."..hbSpellsTips11,
+                               ["DEBUFFSCUSTOMDEBUFFBYFRIEND"]="Lists debuffs that have been cast by friends in the current session."..hbSpellsTips11,
+                               ["DEBUFFSCUSTOMDEBUFFBYENEMY"]="Lists debuffs that have been cast by enemies in the current session."..hbSpellsTips11,
                                ["DEBUFFSCUSTOMCASTBY"]="Sets a filter on debuffs displayed\nby checking the caster of the debuff.",
                                ["DEBUFFSCUSTOMDELETE"]="Delete the selected custom debuff.",
-                               ["DEBUFFSCUSTOMNEWNAME"]="Add a new debuff to the current category.\n--\n".._G["YELLOW_FONT_COLOR_CODE"].."NOTE: The Spell Name or Spell ID can be used.\n".._G["YELLOW_FONT_COLOR_CODE"].."Using Spell ID is recommended.\n--\n".._G["YELLOW_FONT_COLOR_CODE"].."NOTE: New custom debuffs are only allowed for the categories A-Z",
+                               ["DEBUFFSCUSTOMNEWNAME"]="Add a new debuff.\n--\n".._G["YELLOW_FONT_COLOR_CODE"].."NOTE: The Spell Name or Spell ID can be used.\n".._G["YELLOW_FONT_COLOR_CODE"].."Using Spell ID is recommended.",
                                ["DEBUFFSCUSTOMTAG"]="Set a tag for the current Debuff.\n--\n".._G["GREEN_FONT_COLOR_CODE"].."NOTE: This is optional and can be updated for existing debuffs.",
                                ["DEBUFFSCUSTOMNEWSAVE"]="Save the new custom debuff.",
+                               ["DEBUFFSCUSTOMADDNEW"]="Open the add new custom debuff tab.",
+                               ["DEBUFFSCUSTOMNEWCANCEL"]="Leave the new custom debuff tab without adding a debuff.",
                                ["DEBUFFSCUSTOMENDIS"]="Disable the selected custom debuff in the current zone.",
                                ["DEBUFFSCUSTOMPRIORITY"]="Priority of the selected custom debuff.\n".._G["YELLOW_FONT_COLOR_CODE"].."NOTE: Highest priority is 1 and lowest is 20, highest priority is always displayed first.",
                                ["DEBUFFSCUSTOMBARCOLOUR"]="Set how the custom debuff col"..HEALBOT_enWORD_COLOUR_SUFFIX.." is used."..hbSpellsTips4,
@@ -1500,9 +1516,13 @@ function HealBot_Lang_Options_enALL()
                                ["BUFFSCUSTOMICONGLOW"]="Set a glow effect around the icon using the buff col"..HEALBOT_enWORD_COLOUR_SUFFIX.."\n--\n".."|cff77c8ff".."Tip: Use a light col"..HEALBOT_enWORD_COLOUR_SUFFIX.." and large icons for better glow effects.",
                                ["BUFFSCUSTOMCAT"]="Custom class categories can be selected using the class dropdown.",
                                ["BUFFSCUSTOMBUFF"]="Lists custom buffs depending on the Category selected.",
-                               ["BUFFSCUSTOMIDMETHOD"]="Check buffs using Spell ID, Spell Name or Both.",
+                               ["BUFFSCUSTOMIDMETHOD"]="Check buffs using only the Spell ID or the Spell Name and Spell ID.",
                                ["BUFFSCUSTOMCASTBY"]="Sets a filter on buffs displayed\nby checking the caster of the buff.",
+                               ["BUFFSCUSTOMBUFFBYSELF"]="Lists buffs that have been cast by yourself in the current session."..hbSpellsTips12,
+                               ["BUFFSCUSTOMBUFFBYCLASS"]="Lists buffs that have been cast by friends in your class in the current session."..hbSpellsTips12,
+                               ["BUFFSCUSTOMBUFFBYOTHER"]="Lists buffs that have been cast by friends in other classes in the current session."..hbSpellsTips12,
                                ["BUFFSCUSTOMDELETE"]="Delete the selected custom buff.",
+                               ["BUFFSCUSTOMADDNEW"]="Open the add new custom buff tab.",
                                ["BUFFSCUSTOMNEWNAME"]="Add a new buff to the current category.\n--\n".._G["YELLOW_FONT_COLOR_CODE"].."NOTE: The Spell Name or Spell ID can be used.\n".._G["YELLOW_FONT_COLOR_CODE"].."Using Spell ID is recommended.",
                                ["BUFFSCUSTOMTAG"]="Set a tag for the current Buff.\n--\n".._G["GREEN_FONT_COLOR_CODE"].."NOTE: This is optional and can be updated for existing buffs.",
                                ["BUFFSCUSTOMNEWSAVE"]="Save the new custom buff.",

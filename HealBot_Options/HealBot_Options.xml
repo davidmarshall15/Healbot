@@ -2559,7 +2559,7 @@
                     <Anchors>
                       <Anchor point="TOPLEFT" relativeTo="HealBot_Options_EmergencyFClass" relativePoint="BOTTOMLEFT">
                         <Offset>
-                          <AbsDimension x="-215" y="-10"/>
+                          <AbsDimension x="-215" y="10"/>
                         </Offset>
                       </Anchor>
                     </Anchors>
@@ -2571,9 +2571,9 @@
                   </CheckButton>
                   <CheckButton name="HealBot_Options_EFClassDemonHunter" inherits="SendMailRadioButtonTemplate" id="1">
                     <Anchors>
-                      <Anchor point="TOPLEFT" relativeTo="HealBot_Options_EFClassDeathKnight" relativePoint="TOPRIGHT">
+                      <Anchor point="TOPLEFT" relativeTo="HealBot_Options_EFClassDeathKnight" relativePoint="BOTTOMLEFT">
                         <Offset>
-                          <AbsDimension x="120" y="0"/>
+                          <AbsDimension x="0" y="-7"/>
                         </Offset>
                       </Anchor>
                     </Anchors>
@@ -2597,7 +2597,7 @@
                       <OnLeave>HealBot_Options_Show_Help("CLASSTYPES",false)</OnLeave>
                     </Scripts>
                   </CheckButton>
-                  <CheckButton name="HealBot_Options_EFClassHunter" inherits="SendMailRadioButtonTemplate" id="2">
+                  <CheckButton name="HealBot_Options_EFClassEvoker" inherits="SendMailRadioButtonTemplate" id="10">
                     <Anchors>
                       <Anchor point="TOPLEFT" relativeTo="HealBot_Options_EFClassDruid" relativePoint="TOPRIGHT">
                         <Offset>
@@ -2611,9 +2611,23 @@
                       <OnLeave>HealBot_Options_Show_Help("CLASSTYPES",false)</OnLeave>
                     </Scripts>
                   </CheckButton>
+                  <CheckButton name="HealBot_Options_EFClassHunter" inherits="SendMailRadioButtonTemplate" id="2">
+                    <Anchors>
+                      <Anchor point="TOPLEFT" relativeTo="HealBot_Options_EFClassEvoker" relativePoint="TOPRIGHT">
+                        <Offset>
+                          <AbsDimension x="120" y="0"/>
+                        </Offset>
+                      </Anchor>
+                    </Anchors>
+                    <Scripts>
+                      <OnClick>HealBot_Options_EFClass_OnClick(self)</OnClick>
+                      <OnEnter>HealBot_Options_Show_Help("CLASSTYPES",true)</OnEnter>
+                      <OnLeave>HealBot_Options_Show_Help("CLASSTYPES",false)</OnLeave>
+                    </Scripts>
+                  </CheckButton>
                   <CheckButton name="HealBot_Options_EFClassMage" inherits="SendMailRadioButtonTemplate" id="3">
                     <Anchors>
-                      <Anchor point="TOPLEFT" relativeTo="HealBot_Options_EFClassDeathKnight" relativePoint="BOTTOMLEFT">
+                      <Anchor point="TOPLEFT" relativeTo="HealBot_Options_EFClassDemonHunter" relativePoint="BOTTOMLEFT">
                         <Offset>
                           <AbsDimension x="0" y="-7"/>
                         </Offset>
@@ -2641,9 +2655,9 @@
                   </CheckButton>
                   <CheckButton name="HealBot_Options_EFClassPaladin" inherits="SendMailRadioButtonTemplate" id="4">
                     <Anchors>
-                      <Anchor point="TOPLEFT" relativeTo="HealBot_Options_EFClassDruid" relativePoint="BOTTOMLEFT">
+                      <Anchor point="TOPLEFT" relativeTo="HealBot_Options_EFClassMonk" relativePoint="TOPRIGHT">
                         <Offset>
-                          <AbsDimension x="0" y="-7"/>
+                          <AbsDimension x="120" y="0"/>
                         </Offset>
                       </Anchor>
                     </Anchors>
@@ -2683,9 +2697,9 @@
                   </CheckButton>
                   <CheckButton name="HealBot_Options_EFClassShaman" inherits="SendMailRadioButtonTemplate" id="7">
                     <Anchors>
-                      <Anchor point="TOPLEFT" relativeTo="HealBot_Options_EFClassMonk" relativePoint="BOTTOMLEFT">
+                      <Anchor point="TOPLEFT" relativeTo="HealBot_Options_EFClassRogue" relativePoint="TOPRIGHT">
                         <Offset>
-                          <AbsDimension x="0" y="-7"/>
+                          <AbsDimension x="120" y="0"/>
                         </Offset>
                       </Anchor>
                     </Anchors>
@@ -31509,6 +31523,400 @@
                   </Button>
                 </Frames>
               </Frame>
+              <Frame name="HealBot_Options_NewCustomCureFrame" hidden="true" inherits="BackdropTemplate">
+                <Size>
+                  <AbsDimension y="580"/>
+                </Size>
+                <Anchors>
+                  <Anchor point="TOPLEFT">
+                    <Offset>
+                      <AbsDimension x="20" y="-58"/>
+                    </Offset>
+                  </Anchor>
+                  <Anchor point="TOPRIGHT">
+                    <Offset>
+                      <AbsDimension x="-20" y="-58"/>
+                    </Offset>
+                  </Anchor>
+                </Anchors>
+                <Layers>
+                  <Layer level="BACKGROUND">
+                    <FontString name="HealBot_AddDebuffCustom_Text" text="HEALBOT_OPTIONS_ADDDEBUFFCUSTOM" inherits="GameFontNormal">
+                      <Anchors>
+                        <Anchor point="TOP">
+                          <Offset>
+                            <AbsDimension x="0" y="-12" />
+                          </Offset>
+                        </Anchor>
+                      </Anchors>
+                    </FontString>
+                    <FontString name="HealBot_DebuffCustomShare_Text1" text="HEALBOT_OPTIONS_CDEBUFFS_DISCORD" inherits="GameFontNormal">
+                      <Anchors>
+                        <Anchor point="BOTTOM">
+                          <Offset>
+                            <AbsDimension x="0" y="-18" />
+                          </Offset>
+                        </Anchor>
+                      </Anchors>
+                    </FontString>
+                  </Layer>
+                </Layers>
+                <Frames>
+                  <Frame name="HealBot_Options_NewCustomCureByName" inherits="BackdropTemplate">
+                    <Size>
+                      <AbsDimension y="110"/>
+                    </Size>
+                    <Anchors>
+                      <Anchor point="TOPLEFT">
+                        <Offset>
+                          <AbsDimension x="20" y="-40"/>
+                        </Offset>
+                      </Anchor>
+                      <Anchor point="TOPRIGHT">
+                        <Offset>
+                          <AbsDimension x="-20" y="-40"/>
+                        </Offset>
+                      </Anchor>
+                    </Anchors>
+                    <Layers>
+                      <Layer level="BACKGROUND">
+                        <FontString name="HealBot_AddDebuffByName_Text" text="HEALBOT_OPTIONS_ADDDEBUFFBYNAME" inherits="GameFontNormal">
+                          <Anchors>
+                            <Anchor point="TOP">
+                              <Offset>
+                                <AbsDimension x="0" y="-12" />
+                              </Offset>
+                            </Anchor>
+                          </Anchors>
+                        </FontString>
+                      </Layer>
+                    </Layers>
+                    <Frames>
+                      <EditBox name="HealBot_Options_NewCDebuff" inherits="HealBot_Options_EditBoxTemplate">
+                        <Size>
+                          <AbsDimension x="180" y="20"/>
+                        </Size>
+                        <Layers>
+                          <Layer level="BACKGROUND">
+                            <FontString name="HealBot_Options_CDebuffText2" text="HEALBOT_OPTIONS_NEWDEBUFFTEXT" inherits="GameFontNormal">
+                              <Anchors>
+                                <Anchor point="RIGHT" relativeTo="HealBot_Options_NewCDebuff" relativePoint="LEFT">
+                                  <Offset>
+                                    <AbsDimension x="-14" y="0" />
+                                  </Offset>
+                                </Anchor>
+                              </Anchors>
+                            </FontString>
+                          </Layer>
+                        </Layers>
+                        <Anchors>
+                          <Anchor point="TOP">
+                            <Offset>
+                              <AbsDimension x="-20" y="-55" />
+                            </Offset>
+                          </Anchor>
+                        </Anchors>
+                        <Scripts>
+                          <OnEnterPressed>HealBot_Options_ConfirmNewCDebuff()</OnEnterPressed>
+                          <OnTextChanged>HealBot_Options_NewCDebuff_OnTextChanged(self)</OnTextChanged>
+                          <OnEnter>HealBot_Options_Show_Help("DEBUFFSCUSTOMNEWNAME",true)</OnEnter>
+                          <OnLeave>HealBot_Options_Show_Help("DEBUFFSCUSTOMNEWNAME",false)</OnLeave>
+                        </Scripts>
+                      </EditBox>
+
+                      <Button name="HealBot_Options_NewCDebuffBtn" inherits="UIPanelButtonTemplate" text="HEALBOT_OPTIONS_SAVESKIN">
+                        <Size>
+                          <AbsDimension x="120" y="22"/>
+                        </Size>
+                        <Anchors>
+                          <Anchor point="TOP">
+                            <Offset>
+                              <AbsDimension x="150" y="-55"/>
+                            </Offset>
+                          </Anchor>
+                        </Anchors>
+                        <Scripts>
+                          <OnClick>HealBot_Options_ConfirmNewCDebuff()</OnClick>
+                          <OnEnter>HealBot_Options_Show_Help("DEBUFFSCUSTOMNEWSAVE",true)</OnEnter>
+                          <OnLeave>HealBot_Options_Show_Help("DEBUFFSCUSTOMNEWSAVE",false)</OnLeave>
+                        </Scripts>
+                      </Button>
+                    </Frames>
+                  </Frame>
+                  <Frame name="HealBot_Options_NewCustomCureBySelf" inherits="BackdropTemplate">
+                    <Size>
+                      <AbsDimension y="110"/>
+                    </Size>
+                    <Anchors>
+                      <Anchor point="TOPLEFT">
+                        <Offset>
+                          <AbsDimension x="20" y="-415"/>
+                        </Offset>
+                      </Anchor>
+                      <Anchor point="TOPRIGHT">
+                        <Offset>
+                          <AbsDimension x="-20" y="-415"/>
+                        </Offset>
+                      </Anchor>
+                    </Anchors>
+                    <Layers>
+                      <Layer level="BACKGROUND">
+                        <FontString name="HealBot_AddDebuffBySelf_Text" text="HEALBOT_OPTIONS_ADDDEBUFFBYSELF" inherits="GameFontNormal">
+                          <Anchors>
+                            <Anchor point="TOP">
+                              <Offset>
+                                <AbsDimension x="0" y="-12" />
+                              </Offset>
+                            </Anchor>
+                          </Anchors>
+                        </FontString>
+                        <Texture name="HealBot_Options_CDebuffBySelfIcon">
+                          <Size>
+                            <AbsDimension x="24" y="24"/>
+                          </Size>
+                          <Anchors>
+                            <Anchor point="TOP">
+                              <Offset>
+                                <AbsDimension x="55" y="-54" />
+                              </Offset>
+                            </Anchor>
+                          </Anchors>
+                        </Texture>
+                      </Layer>
+                    </Layers>
+                    <Frames>
+                      <Frame name="HealBot_Options_CDebuffBySelf" inherits="UIDropDownMenuTemplate" id="1">
+                        <Anchors>
+                          <Anchor point="TOP">
+                            <Offset>
+                              <AbsDimension x="-70" y="-52" />
+                            </Offset>
+                          </Anchor>
+                        </Anchors>
+                        <Layers>
+                          <Layer level="OVERLAY">
+                          </Layer>
+                        </Layers>
+                        <Scripts>
+                          <OnLoad>HealBot_Options_UIDropDownMenu_OnLoad(self, 180)</OnLoad>
+                          <OnEnter>HealBot_Options_Show_Help("DEBUFFSCUSTOMDEBUFFBYSELF",true)</OnEnter>
+                          <OnLeave>HealBot_Options_Show_Help("DEBUFFSCUSTOMDEBUFFBYSELF",false)</OnLeave>
+                        </Scripts>
+                      </Frame>
+                      <Button name="HealBot_Options_NewSelfCDebuffBtn" inherits="UIPanelButtonTemplate" text="HEALBOT_OPTIONS_SAVESKIN">
+                        <Size>
+                          <AbsDimension x="120" y="22"/>
+                        </Size>
+                        <Anchors>
+                          <Anchor point="TOP">
+                            <Offset>
+                              <AbsDimension x="150" y="-55"/>
+                            </Offset>
+                          </Anchor>
+                        </Anchors>
+                        <Scripts>
+                          <OnClick>HealBot_Options_ConfirmNewSelfCDebuff()</OnClick>
+                          <OnEnter>HealBot_Options_Show_Help("DEBUFFSCUSTOMNEWSAVE",true)</OnEnter>
+                          <OnLeave>HealBot_Options_Show_Help("DEBUFFSCUSTOMNEWSAVE",false)</OnLeave>
+                        </Scripts>
+                      </Button>
+                    </Frames>
+                  </Frame>
+                  <Frame name="HealBot_Options_NewCustomCureByFriend" inherits="BackdropTemplate">
+                    <Size>
+                      <AbsDimension y="110"/>
+                    </Size>
+                    <Anchors>
+                      <Anchor point="TOPLEFT">
+                        <Offset>
+                          <AbsDimension x="20" y="-290"/>
+                        </Offset>
+                      </Anchor>
+                      <Anchor point="TOPRIGHT">
+                        <Offset>
+                          <AbsDimension x="-20" y="-290"/>
+                        </Offset>
+                      </Anchor>
+                    </Anchors>
+                    <Layers>
+                      <Layer level="BACKGROUND">
+                        <FontString name="HealBot_AddDebuffByFriend_Text" text="HEALBOT_OPTIONS_ADDDEBUFFBYFRIEND" inherits="GameFontNormal">
+                          <Anchors>
+                            <Anchor point="TOP">
+                              <Offset>
+                                <AbsDimension x="0" y="-12" />
+                              </Offset>
+                            </Anchor>
+                          </Anchors>
+                        </FontString>
+                        <FontString name="HealBot_AddDebuffByFriend_CasterText" inherits="GameFontNormal">
+                          <Anchors>
+                            <Anchor point="BOTTOM">
+                              <Offset>
+                                <AbsDimension x="0" y="12" />
+                              </Offset>
+                            </Anchor>
+                          </Anchors>
+                        </FontString>
+                        <Texture name="HealBot_Options_CDebuffByFriendIcon">
+                          <Size>
+                            <AbsDimension x="24" y="24"/>
+                          </Size>
+                          <Anchors>
+                            <Anchor point="TOP">
+                              <Offset>
+                                <AbsDimension x="55" y="-54" />
+                              </Offset>
+                            </Anchor>
+                          </Anchors>
+                        </Texture>
+                      </Layer>
+                    </Layers>
+                    <Frames>
+                      <Frame name="HealBot_Options_CDebuffByFriend" inherits="UIDropDownMenuTemplate" id="1">
+                        <Anchors>
+                          <Anchor point="TOP">
+                            <Offset>
+                              <AbsDimension x="-70" y="-52" />
+                            </Offset>
+                          </Anchor>
+                        </Anchors>
+                        <Layers>
+                          <Layer level="OVERLAY">
+                          </Layer>
+                        </Layers>
+                        <Scripts>
+                          <OnLoad>HealBot_Options_UIDropDownMenu_OnLoad(self, 180)</OnLoad>
+                          <OnEnter>HealBot_Options_Show_Help("DEBUFFSCUSTOMDEBUFFBYFRIEND",true)</OnEnter>
+                          <OnLeave>HealBot_Options_Show_Help("DEBUFFSCUSTOMDEBUFFBYFRIEND",false)</OnLeave>
+                        </Scripts>
+                      </Frame>
+                      <Button name="HealBot_Options_NewFriendCDebuffBtn" inherits="UIPanelButtonTemplate" text="HEALBOT_OPTIONS_SAVESKIN">
+                        <Size>
+                          <AbsDimension x="120" y="22"/>
+                        </Size>
+                        <Anchors>
+                          <Anchor point="TOP">
+                            <Offset>
+                              <AbsDimension x="150" y="-55"/>
+                            </Offset>
+                          </Anchor>
+                        </Anchors>
+                        <Scripts>
+                          <OnClick>HealBot_Options_ConfirmNewFriendCDebuff()</OnClick>
+                          <OnEnter>HealBot_Options_Show_Help("DEBUFFSCUSTOMNEWSAVE",true)</OnEnter>
+                          <OnLeave>HealBot_Options_Show_Help("DEBUFFSCUSTOMNEWSAVE",false)</OnLeave>
+                        </Scripts>
+                      </Button>
+                    </Frames>
+                  </Frame>
+                  <Frame name="HealBot_Options_NewCustomCureByEnemy" inherits="BackdropTemplate">
+                    <Size>
+                      <AbsDimension y="110"/>
+                    </Size>
+                    <Anchors>
+                      <Anchor point="TOPLEFT">
+                        <Offset>
+                          <AbsDimension x="20" y="-165"/>
+                        </Offset>
+                      </Anchor>
+                      <Anchor point="TOPRIGHT">
+                        <Offset>
+                          <AbsDimension x="-20" y="-165"/>
+                        </Offset>
+                      </Anchor>
+                    </Anchors>
+                    <Layers>
+                      <Layer level="BACKGROUND">
+                        <FontString name="HealBot_AddDebuffByEnemy_Text" text="HEALBOT_OPTIONS_ADDDEBUFFBYENEMY" inherits="GameFontNormal">
+                          <Anchors>
+                            <Anchor point="TOP">
+                              <Offset>
+                                <AbsDimension x="0" y="-12" />
+                              </Offset>
+                            </Anchor>
+                          </Anchors>
+                        </FontString>
+                        <FontString name="HealBot_AddDebuffByEnemy_CasterText" inherits="GameFontNormal">
+                          <Anchors>
+                            <Anchor point="BOTTOM">
+                              <Offset>
+                                <AbsDimension x="0" y="12" />
+                              </Offset>
+                            </Anchor>
+                          </Anchors>
+                        </FontString>
+                        <Texture name="HealBot_Options_CDebuffByEnemyIcon">
+                          <Size>
+                            <AbsDimension x="24" y="24"/>
+                          </Size>
+                          <Anchors>
+                            <Anchor point="TOP">
+                              <Offset>
+                                <AbsDimension x="55" y="-54" />
+                              </Offset>
+                            </Anchor>
+                          </Anchors>
+                        </Texture>
+                      </Layer>
+                    </Layers>
+                    <Frames>
+                      <Frame name="HealBot_Options_CDebuffByEnemy" inherits="UIDropDownMenuTemplate" id="1">
+                        <Anchors>
+                          <Anchor point="TOP">
+                            <Offset>
+                              <AbsDimension x="-70" y="-52" />
+                            </Offset>
+                          </Anchor>
+                        </Anchors>
+                        <Layers>
+                          <Layer level="OVERLAY">
+                          </Layer>
+                        </Layers>
+                        <Scripts>
+                          <OnLoad>HealBot_Options_UIDropDownMenu_OnLoad(self, 180)</OnLoad>
+                          <OnEnter>HealBot_Options_Show_Help("DEBUFFSCUSTOMDEBUFFBYENEMY",true)</OnEnter>
+                          <OnLeave>HealBot_Options_Show_Help("DEBUFFSCUSTOMDEBUFFBYENEMY",false)</OnLeave>
+                        </Scripts>
+                      </Frame>
+                      <Button name="HealBot_Options_NewEnemyCDebuffBtn" inherits="UIPanelButtonTemplate" text="HEALBOT_OPTIONS_SAVESKIN">
+                        <Size>
+                          <AbsDimension x="120" y="22"/>
+                        </Size>
+                        <Anchors>
+                          <Anchor point="TOP">
+                            <Offset>
+                              <AbsDimension x="150" y="-55"/>
+                            </Offset>
+                          </Anchor>
+                        </Anchors>
+                        <Scripts>
+                          <OnClick>HealBot_Options_ConfirmNewEnemyCDebuff()</OnClick>
+                          <OnEnter>HealBot_Options_Show_Help("DEBUFFSCUSTOMNEWSAVE",true)</OnEnter>
+                          <OnLeave>HealBot_Options_Show_Help("DEBUFFSCUSTOMNEWSAVE",false)</OnLeave>
+                        </Scripts>
+                      </Button>
+                    </Frames>
+                  </Frame>
+                  <Button name="HealBot_Options_NewCDebuffCancelBtn" inherits="UIPanelButtonTemplate" text="HEALBOT_WORD_CANCEL">
+                    <Size>
+                      <AbsDimension x="120" y="22"/>
+                    </Size>
+                    <Anchors>
+                      <Anchor point="BOTTOM">
+                        <Offset>
+                          <AbsDimension x="0" y="18"/>
+                        </Offset>
+                      </Anchor>
+                    </Anchors>
+                    <Scripts>
+                      <OnClick>HealBot_Options_CloseAddNewCDebuff()</OnClick>
+                      <OnEnter>HealBot_Options_Show_Help("DEBUFFSCUSTOMNEWCANCEL",true)</OnEnter>
+                      <OnLeave>HealBot_Options_Show_Help("DEBUFFSCUSTOMNEWCANCEL",false)</OnLeave>
+                    </Scripts>
+                  </Button>
+                </Frames>
+              </Frame>
               <Frame name="HealBot_Options_CustomCureFrame" hidden="true" inherits="BackdropTemplate">
                 <Size>
                   <AbsDimension y="580"/>
@@ -31554,6 +31962,18 @@
                         </Anchor>
                       </Anchors>
                     </FontString>
+                    <Texture name="HealBot_Options_CDebuffIcon">
+                      <Size>
+                        <AbsDimension x="32" y="32"/>
+                      </Size>
+                      <Anchors>
+                        <Anchor point="TOPLEFT">
+                          <Offset>
+                            <AbsDimension x="30" y="-90" />
+                          </Offset>
+                        </Anchor>
+                      </Anchors>
+                    </Texture>
                   </Layer>
                 </Layers>
                 <Frames>
@@ -31574,7 +31994,7 @@
                     <Anchors>
                       <Anchor point="TOP">
                         <Offset>
-                          <AbsDimension x="0" y="-30" />
+                          <AbsDimension x="-55" y="-50" />
                         </Offset>
                       </Anchor>
                     </Anchors>
@@ -31762,53 +32182,21 @@
                       <OnLeave>HealBot_Options_Show_Help("DEBUFFSCUSTOMRESET",false)</OnLeave>
                     </Scripts>
                   </Button>
-                  <EditBox name="HealBot_Options_NewCDebuff" inherits="HealBot_Options_EditBoxTemplate">
+                  <Button name="HealBot_Options_AddNewCDebuff" inherits="UIPanelButtonTemplate" text="HEALBOT_OPTIONS_ADDNEWDEBUFFTEXT">
                     <Size>
-                      <AbsDimension x="180" y="20"/>
+                      <AbsDimension x="155" y="25"/>
                     </Size>
-                    <Layers>
-                      <Layer level="BACKGROUND">
-                        <FontString name="HealBot_Options_CDebuffText2" text="HEALBOT_OPTIONS_NEWDEBUFFTEXT" inherits="GameFontNormal">
-                          <Anchors>
-                            <Anchor point="RIGHT" relativeTo="HealBot_Options_NewCDebuff" relativePoint="LEFT">
-                              <Offset>
-                                <AbsDimension x="-14" y="0" />
-                              </Offset>
-                            </Anchor>
-                          </Anchors>
-                        </FontString>
-                      </Layer>
-                    </Layers>
                     <Anchors>
-                      <Anchor point="TOP" relativeTo="HealBot_Options_CDebuffCat" relativePoint="TOP">
+                      <Anchor point="TOPLEFT" relativeTo="HealBot_Options_CDebuffCat" relativePoint="TOPRIGHT">
                         <Offset>
-                          <AbsDimension x="0" y="-35" />
+                          <AbsDimension x="20" y="-1"/>
                         </Offset>
                       </Anchor>
                     </Anchors>
                     <Scripts>
-                      <OnEnterPressed>HealBot_Options_ConfirmNewCDebuff()</OnEnterPressed>
-                      <OnTextChanged>HealBot_Options_NewCDebuff_OnTextChanged(self)</OnTextChanged>
-                      <OnEnter>HealBot_Options_Show_Help("DEBUFFSCUSTOMNEWNAME",true)</OnEnter>
-                      <OnLeave>HealBot_Options_Show_Help("DEBUFFSCUSTOMNEWNAME",false)</OnLeave>
-                    </Scripts>
-                  </EditBox>
-
-                  <Button name="HealBot_Options_NewCDebuffBtn" inherits="UIPanelButtonTemplate" text="HEALBOT_OPTIONS_SAVESKIN">
-                    <Size>
-                      <AbsDimension x="120" y="22"/>
-                    </Size>
-                    <Anchors>
-                      <Anchor point="TOPLEFT" relativeTo="HealBot_Options_NewCDebuff" relativePoint="TOPRIGHT">
-                        <Offset>
-                          <AbsDimension x="20" y="1"/>
-                        </Offset>
-                      </Anchor>
-                    </Anchors>
-                    <Scripts>
-                      <OnClick>HealBot_Options_ConfirmNewCDebuff()</OnClick>
-                      <OnEnter>HealBot_Options_Show_Help("DEBUFFSCUSTOMNEWSAVE",true)</OnEnter>
-                      <OnLeave>HealBot_Options_Show_Help("DEBUFFSCUSTOMNEWSAVE",false)</OnLeave>
+                      <OnClick>HealBot_Options_AddNewCDebuff_OnClick()</OnClick>
+                      <OnEnter>HealBot_Options_Show_Help("DEBUFFSCUSTOMADDNEW",true)</OnEnter>
+                      <OnLeave>HealBot_Options_Show_Help("DEBUFFSCUSTOMADDNEW",false)</OnLeave>
                     </Scripts>
                   </Button>
                   <Button name="HealBot_Options_EnableDisableCDBtn" inherits="UIPanelButtonTemplate" text="HEALBOT_WORD_ENABLE">
@@ -34869,22 +35257,417 @@
                 </Frames>
               </Frame>
 
-              <Frame name="HealBot_Options_BuffIconFrame" hidden="true" inherits="BackdropTemplate">
+              <Frame name="HealBot_Options_NewCustomBuffsFrame" hidden="true" inherits="BackdropTemplate">
+                <Size>
+                  <AbsDimension y="580"/>
+                </Size>
+                <Anchors>
+                  <Anchor point="TOPLEFT">
+                    <Offset>
+                      <AbsDimension x="20" y="-58"/>
+                    </Offset>
+                  </Anchor>
+                  <Anchor point="TOPRIGHT">
+                    <Offset>
+                      <AbsDimension x="-20" y="-58"/>
+                    </Offset>
+                  </Anchor>
+                </Anchors>
+                <Layers>
+                  <Layer level="BACKGROUND">
+                    <FontString name="HealBot_AddBuffCustom_Text" text="HEALBOT_OPTIONS_ADDBUFFCUSTOM" inherits="GameFontNormal">
+                      <Anchors>
+                        <Anchor point="TOP">
+                          <Offset>
+                            <AbsDimension x="0" y="-12" />
+                          </Offset>
+                        </Anchor>
+                      </Anchors>
+                    </FontString>
+                    <FontString name="HealBot_BuffCustomShare_Text1" text="HEALBOT_OPTIONS_CBUFFS_DISCORD" inherits="GameFontNormal">
+                      <Anchors>
+                        <Anchor point="BOTTOM">
+                          <Offset>
+                            <AbsDimension x="0" y="-18" />
+                          </Offset>
+                        </Anchor>
+                      </Anchors>
+                    </FontString>
+                  </Layer>
+                </Layers>
+                <Frames>
+                  <Frame name="HealBot_Options_NewCustomBuffByName" inherits="BackdropTemplate">
                     <Size>
-                      <AbsDimension y="580"/>
+                      <AbsDimension y="110"/>
                     </Size>
                     <Anchors>
                       <Anchor point="TOPLEFT">
                         <Offset>
-                          <AbsDimension x="20" y="-58"/>
+                          <AbsDimension x="20" y="-40"/>
                         </Offset>
                       </Anchor>
                       <Anchor point="TOPRIGHT">
                         <Offset>
-                          <AbsDimension x="-20" y="-58"/>
+                          <AbsDimension x="-20" y="-40"/>
                         </Offset>
                       </Anchor>
                     </Anchors>
+                    <Layers>
+                      <Layer level="BACKGROUND">
+                        <FontString name="HealBot_AddBuffByName_Text" text="HEALBOT_OPTIONS_ADDBUFFBYNAME" inherits="GameFontNormal">
+                          <Anchors>
+                            <Anchor point="TOP">
+                              <Offset>
+                                <AbsDimension x="0" y="-12" />
+                              </Offset>
+                            </Anchor>
+                          </Anchors>
+                        </FontString>
+                      </Layer>
+                    </Layers>
+                    <Frames>
+                      <EditBox name="HealBot_Options_NewBuffHoT" inherits="HealBot_Options_EditBoxTemplate">
+                        <Size>
+                          <AbsDimension x="180" y="20"/>
+                        </Size>
+                        <Layers>
+                          <Layer level="BACKGROUND">
+                            <FontString name="HealBot_Options_BuffText2" text="HEALBOT_OPTIONS_NEWHOTBUFFTEXT" inherits="GameFontNormal">
+                              <Anchors>
+                                <Anchor point="RIGHT" relativeTo="HealBot_Options_NewBuffHoT" relativePoint="LEFT">
+                                  <Offset>
+                                    <AbsDimension x="-14" y="0" />
+                                  </Offset>
+                                </Anchor>
+                              </Anchors>
+                            </FontString>
+                          </Layer>
+                        </Layers>
+                        <Anchors>
+                          <Anchor point="TOP">
+                            <Offset>
+                              <AbsDimension x="-20" y="-55" />
+                            </Offset>
+                          </Anchor>
+                        </Anchors>
+                        <Scripts>
+                          <OnEnterPressed>HealBot_Options_ConfirmNewHoTBuff()</OnEnterPressed>
+                          <OnTextChanged>HealBot_Options_NewHoTBuff_OnTextChanged(self)</OnTextChanged>
+                          <OnEnter>HealBot_Options_Show_Help("BUFFSCUSTOMNEWNAME",true)</OnEnter>
+                          <OnLeave>HealBot_Options_Show_Help("BUFFSCUSTOMNEWNAME",false)</OnLeave>
+                        </Scripts>
+                      </EditBox>
+                      <Button name="HealBot_Options_NewBuffHoTBtn" inherits="UIPanelButtonTemplate" text="HEALBOT_OPTIONS_SAVESKIN">
+                        <Size>
+                          <AbsDimension x="120" y="22"/>
+                        </Size>
+                        <Anchors>
+                          <Anchor point="TOP">
+                            <Offset>
+                              <AbsDimension x="150" y="-55"/>
+                            </Offset>
+                          </Anchor>
+                        </Anchors>
+                        <Scripts>
+                          <OnClick>HealBot_Options_ConfirmNewHoTBuff()</OnClick>
+                          <OnEnter>HealBot_Options_Show_Help("BUFFSCUSTOMNEWSAVE",true)</OnEnter>
+                          <OnLeave>HealBot_Options_Show_Help("BUFFSCUSTOMNEWSAVE",false)</OnLeave>
+                        </Scripts>
+                      </Button>
+                    </Frames>
+                  </Frame>
+
+                  <Frame name="HealBot_Options_NewCustomBuffBySelf" inherits="BackdropTemplate">
+                    <Size>
+                      <AbsDimension y="110"/>
+                    </Size>
+                    <Anchors>
+                      <Anchor point="TOPLEFT">
+                        <Offset>
+                          <AbsDimension x="20" y="-415"/>
+                        </Offset>
+                      </Anchor>
+                      <Anchor point="TOPRIGHT">
+                        <Offset>
+                          <AbsDimension x="-20" y="-415"/>
+                        </Offset>
+                      </Anchor>
+                    </Anchors>
+                    <Layers>
+                      <Layer level="BACKGROUND">
+                        <FontString name="HealBot_AddBuffBySelf_Text" text="HEALBOT_OPTIONS_ADDBUFFBYSELF" inherits="GameFontNormal">
+                          <Anchors>
+                            <Anchor point="TOP">
+                              <Offset>
+                                <AbsDimension x="0" y="-12" />
+                              </Offset>
+                            </Anchor>
+                          </Anchors>
+                        </FontString>
+                        <Texture name="HealBot_Options_BuffBySelfIcon">
+                          <Size>
+                            <AbsDimension x="24" y="24"/>
+                          </Size>
+                          <Anchors>
+                            <Anchor point="TOP">
+                              <Offset>
+                                <AbsDimension x="55" y="-54" />
+                              </Offset>
+                            </Anchor>
+                          </Anchors>
+                        </Texture>
+                      </Layer>
+                    </Layers>
+                    <Frames>
+                      <Frame name="HealBot_Options_BuffBySelf" inherits="UIDropDownMenuTemplate" id="1">
+                        <Anchors>
+                          <Anchor point="TOP">
+                            <Offset>
+                              <AbsDimension x="-70" y="-52" />
+                            </Offset>
+                          </Anchor>
+                        </Anchors>
+                        <Layers>
+                          <Layer level="OVERLAY">
+                          </Layer>
+                        </Layers>
+                        <Scripts>
+                          <OnLoad>HealBot_Options_UIDropDownMenu_OnLoad(self, 180)</OnLoad>
+                          <OnEnter>HealBot_Options_Show_Help("BUFFSCUSTOMBUFFBYSELF",true)</OnEnter>
+                          <OnLeave>HealBot_Options_Show_Help("BUFFSCUSTOMBUFFBYSELF",false)</OnLeave>
+                        </Scripts>
+                      </Frame>
+                      <Button name="HealBot_Options_NewSelfBuffBtn" inherits="UIPanelButtonTemplate" text="HEALBOT_OPTIONS_SAVESKIN">
+                        <Size>
+                          <AbsDimension x="120" y="22"/>
+                        </Size>
+                        <Anchors>
+                          <Anchor point="TOP">
+                            <Offset>
+                              <AbsDimension x="150" y="-55"/>
+                            </Offset>
+                          </Anchor>
+                        </Anchors>
+                        <Scripts>
+                          <OnClick>HealBot_Options_ConfirmNewSelfBuff()</OnClick>
+                          <OnEnter>HealBot_Options_Show_Help("BUFFSCUSTOMNEWSAVE",true)</OnEnter>
+                          <OnLeave>HealBot_Options_Show_Help("BUFFSCUSTOMNEWSAVE",false)</OnLeave>
+                        </Scripts>
+                      </Button>
+                    </Frames>
+                  </Frame>
+                  <Frame name="HealBot_Options_NewCustomBuffByClass" inherits="BackdropTemplate">
+                    <Size>
+                      <AbsDimension y="110"/>
+                    </Size>
+                    <Anchors>
+                      <Anchor point="TOPLEFT">
+                        <Offset>
+                          <AbsDimension x="20" y="-290"/>
+                        </Offset>
+                      </Anchor>
+                      <Anchor point="TOPRIGHT">
+                        <Offset>
+                          <AbsDimension x="-20" y="-290"/>
+                        </Offset>
+                      </Anchor>
+                    </Anchors>
+                    <Layers>
+                      <Layer level="BACKGROUND">
+                        <FontString name="HealBot_AddBuffByClass_Text" text="HEALBOT_OPTIONS_ADDBUFFBYCLASS" inherits="GameFontNormal">
+                          <Anchors>
+                            <Anchor point="TOP">
+                              <Offset>
+                                <AbsDimension x="0" y="-12" />
+                              </Offset>
+                            </Anchor>
+                          </Anchors>
+                        </FontString>
+                        <FontString name="HealBot_AddBuffByClass_CasterText" inherits="GameFontNormal">
+                          <Anchors>
+                            <Anchor point="BOTTOM">
+                              <Offset>
+                                <AbsDimension x="0" y="12" />
+                              </Offset>
+                            </Anchor>
+                          </Anchors>
+                        </FontString>
+                        <Texture name="HealBot_Options_BuffByClassIcon">
+                          <Size>
+                            <AbsDimension x="24" y="24"/>
+                          </Size>
+                          <Anchors>
+                            <Anchor point="TOP">
+                              <Offset>
+                                <AbsDimension x="55" y="-54" />
+                              </Offset>
+                            </Anchor>
+                          </Anchors>
+                        </Texture>
+                      </Layer>
+                    </Layers>
+                    <Frames>
+                      <Frame name="HealBot_Options_BuffByClass" inherits="UIDropDownMenuTemplate" id="1">
+                        <Anchors>
+                          <Anchor point="TOP">
+                            <Offset>
+                              <AbsDimension x="-70" y="-52" />
+                            </Offset>
+                          </Anchor>
+                        </Anchors>
+                        <Layers>
+                          <Layer level="OVERLAY">
+                          </Layer>
+                        </Layers>
+                        <Scripts>
+                          <OnLoad>HealBot_Options_UIDropDownMenu_OnLoad(self, 180)</OnLoad>
+                          <OnEnter>HealBot_Options_Show_Help("BUFFSCUSTOMBUFFBYCLASS",true)</OnEnter>
+                          <OnLeave>HealBot_Options_Show_Help("BUFFSCUSTOMBUFFBYCLASS",false)</OnLeave>
+                        </Scripts>
+                      </Frame>
+                      <Button name="HealBot_Options_NewClassBuffBtn" inherits="UIPanelButtonTemplate" text="HEALBOT_OPTIONS_SAVESKIN">
+                        <Size>
+                          <AbsDimension x="120" y="22"/>
+                        </Size>
+                        <Anchors>
+                          <Anchor point="TOP">
+                            <Offset>
+                              <AbsDimension x="150" y="-55"/>
+                            </Offset>
+                          </Anchor>
+                        </Anchors>
+                        <Scripts>
+                          <OnClick>HealBot_Options_ConfirmNewClassBuff()</OnClick>
+                          <OnEnter>HealBot_Options_Show_Help("BUFFSCUSTOMNEWSAVE",true)</OnEnter>
+                          <OnLeave>HealBot_Options_Show_Help("BUFFSCUSTOMNEWSAVE",false)</OnLeave>
+                        </Scripts>
+                      </Button>
+                    </Frames>
+                  </Frame>
+                  <Frame name="HealBot_Options_NewCustomBuffByOther" inherits="BackdropTemplate">
+                    <Size>
+                      <AbsDimension y="110"/>
+                    </Size>
+                    <Anchors>
+                      <Anchor point="TOPLEFT">
+                        <Offset>
+                          <AbsDimension x="20" y="-165"/>
+                        </Offset>
+                      </Anchor>
+                      <Anchor point="TOPRIGHT">
+                        <Offset>
+                          <AbsDimension x="-20" y="-165"/>
+                        </Offset>
+                      </Anchor>
+                    </Anchors>
+                    <Layers>
+                      <Layer level="BACKGROUND">
+                        <FontString name="HealBot_AddBuffByOther_Text" text="HEALBOT_OPTIONS_ADDBUFFBYOTHER" inherits="GameFontNormal">
+                          <Anchors>
+                            <Anchor point="TOP">
+                              <Offset>
+                                <AbsDimension x="0" y="-12" />
+                              </Offset>
+                            </Anchor>
+                          </Anchors>
+                        </FontString>
+                        <FontString name="HealBot_AddBuffByOther_CasterText" inherits="GameFontNormal">
+                          <Anchors>
+                            <Anchor point="BOTTOM">
+                              <Offset>
+                                <AbsDimension x="0" y="12" />
+                              </Offset>
+                            </Anchor>
+                          </Anchors>
+                        </FontString>
+                        <Texture name="HealBot_Options_BuffByOtherIcon">
+                          <Size>
+                            <AbsDimension x="24" y="24"/>
+                          </Size>
+                          <Anchors>
+                            <Anchor point="TOP">
+                              <Offset>
+                                <AbsDimension x="55" y="-54" />
+                              </Offset>
+                            </Anchor>
+                          </Anchors>
+                        </Texture>
+                      </Layer>
+                    </Layers>
+                    <Frames>
+                      <Frame name="HealBot_Options_BuffByOther" inherits="UIDropDownMenuTemplate" id="1">
+                        <Anchors>
+                          <Anchor point="TOP">
+                            <Offset>
+                              <AbsDimension x="-70" y="-52" />
+                            </Offset>
+                          </Anchor>
+                        </Anchors>
+                        <Layers>
+                          <Layer level="OVERLAY">
+                          </Layer>
+                        </Layers>
+                        <Scripts>
+                          <OnLoad>HealBot_Options_UIDropDownMenu_OnLoad(self, 180)</OnLoad>
+                          <OnEnter>HealBot_Options_Show_Help("BUFFSCUSTOMBUFFBYOTHER",true)</OnEnter>
+                          <OnLeave>HealBot_Options_Show_Help("BUFFSCUSTOMBUFFBYOTHER",false)</OnLeave>
+                        </Scripts>
+                      </Frame>
+                      <Button name="HealBot_Options_NewOtherBuffBtn" inherits="UIPanelButtonTemplate" text="HEALBOT_OPTIONS_SAVESKIN">
+                        <Size>
+                          <AbsDimension x="120" y="22"/>
+                        </Size>
+                        <Anchors>
+                          <Anchor point="TOP">
+                            <Offset>
+                              <AbsDimension x="150" y="-55"/>
+                            </Offset>
+                          </Anchor>
+                        </Anchors>
+                        <Scripts>
+                          <OnClick>HealBot_Options_ConfirmNewOtherBuff()</OnClick>
+                          <OnEnter>HealBot_Options_Show_Help("BUFFSCUSTOMNEWSAVE",true)</OnEnter>
+                          <OnLeave>HealBot_Options_Show_Help("BUFFSCUSTOMNEWSAVE",false)</OnLeave>
+                        </Scripts>
+                      </Button>
+                    </Frames>
+                  </Frame>
+                  <Button name="HealBot_Options_NewBuffCancelBtn" inherits="UIPanelButtonTemplate" text="HEALBOT_WORD_CANCEL">
+                    <Size>
+                      <AbsDimension x="120" y="22"/>
+                    </Size>
+                    <Anchors>
+                      <Anchor point="BOTTOM">
+                        <Offset>
+                          <AbsDimension x="0" y="18"/>
+                        </Offset>
+                      </Anchor>
+                    </Anchors>
+                    <Scripts>
+                      <OnClick>HealBot_Options_CloseAddNewBuff()</OnClick>
+                      <OnEnter>HealBot_Options_Show_Help("BUFFSCUSTOMNEWCANCEL",true)</OnEnter>
+                      <OnLeave>HealBot_Options_Show_Help("BUFFSCUSTOMNEWCANCEL",false)</OnLeave>
+                    </Scripts>
+                  </Button>
+                </Frames>
+              </Frame>
+
+              <Frame name="HealBot_Options_BuffIconFrame" hidden="true" inherits="BackdropTemplate">
+                <Size>
+                  <AbsDimension y="580"/>
+                </Size>
+                <Anchors>
+                  <Anchor point="TOPLEFT">
+                    <Offset>
+                      <AbsDimension x="20" y="-58"/>
+                    </Offset>
+                  </Anchor>
+                  <Anchor point="TOPRIGHT">
+                    <Offset>
+                      <AbsDimension x="-20" y="-58"/>
+                    </Offset>
+                  </Anchor>
+                </Anchors>
                 <Layers>
                   <Layer level="BACKGROUND">
                     <FontString name="HealBot_BuffCustom_Text" text="HEALBOT_OPTIONS_BUFFCUSTOM" inherits="GameFontNormal">
@@ -34905,6 +35688,18 @@
                         </Anchor>
                       </Anchors>
                     </FontString>
+                    <Texture name="HealBot_Options_BuffShowIcon">
+                      <Size>
+                        <AbsDimension x="32" y="32"/>
+                      </Size>
+                      <Anchors>
+                        <Anchor point="TOPLEFT">
+                          <Offset>
+                            <AbsDimension x="30" y="-90" />
+                          </Offset>
+                        </Anchor>
+                      </Anchors>
+                    </Texture>
                   </Layer>
                 </Layers>
                 <Frames>
@@ -34925,7 +35720,7 @@
                     <Anchors>
                       <Anchor point="TOP">
                         <Offset>
-                          <AbsDimension x="0" y="-30" />
+                          <AbsDimension x="-55" y="-50" />
                         </Offset>
                       </Anchor>
                     </Anchors>
@@ -34935,52 +35730,21 @@
                       <OnLeave>HealBot_Options_Show_Help("BUFFSCUSTOMCAT",false)</OnLeave>
                     </Scripts>
                   </Frame>
-                  <EditBox name="HealBot_Options_NewBuffHoT" inherits="HealBot_Options_EditBoxTemplate">
+                  <Button name="HealBot_Options_AddNewBuff" inherits="UIPanelButtonTemplate" text="HEALBOT_OPTIONS_ADDNEWBUFFTEXT">
                     <Size>
-                      <AbsDimension x="180" y="20"/>
+                      <AbsDimension x="155" y="25"/>
                     </Size>
-                    <Layers>
-                      <Layer level="BACKGROUND">
-                        <FontString name="HealBot_Options_BuffText2" text="HEALBOT_OPTIONS_NEWHOTBUFFTEXT" inherits="GameFontNormal">
-                          <Anchors>
-                            <Anchor point="RIGHT" relativeTo="HealBot_Options_NewBuffHoT" relativePoint="LEFT">
-                              <Offset>
-                                <AbsDimension x="-14" y="0" />
-                              </Offset>
-                            </Anchor>
-                          </Anchors>
-                        </FontString>
-                      </Layer>
-                    </Layers>
                     <Anchors>
-                      <Anchor point="TOP" relativeTo="HealBot_Options_FilterHoTctl" relativePoint="TOP">
+                      <Anchor point="TOPLEFT" relativeTo="HealBot_Options_FilterHoTctl" relativePoint="TOPRIGHT">
                         <Offset>
-                          <AbsDimension x="0" y="-35" />
+                          <AbsDimension x="20" y="-1"/>
                         </Offset>
                       </Anchor>
                     </Anchors>
                     <Scripts>
-                      <OnEnterPressed>HealBot_Options_ConfirmNewHoTBuff()</OnEnterPressed>
-                      <OnTextChanged>HealBot_Options_NewHoTBuff_OnTextChanged(self)</OnTextChanged>
-                      <OnEnter>HealBot_Options_Show_Help("BUFFSCUSTOMNEWNAME",true)</OnEnter>
-                      <OnLeave>HealBot_Options_Show_Help("BUFFSCUSTOMNEWNAME",false)</OnLeave>
-                    </Scripts>
-                  </EditBox>
-                  <Button name="HealBot_Options_NewBuffHoTBtn" inherits="UIPanelButtonTemplate" text="HEALBOT_OPTIONS_SAVESKIN">
-                    <Size>
-                      <AbsDimension x="120" y="22"/>
-                    </Size>
-                    <Anchors>
-                      <Anchor point="TOPLEFT" relativeTo="HealBot_Options_NewBuffHoT" relativePoint="TOPRIGHT">
-                        <Offset>
-                          <AbsDimension x="20" y="1"/>
-                        </Offset>
-                      </Anchor>
-                    </Anchors>
-                    <Scripts>
-                      <OnClick>HealBot_Options_ConfirmNewHoTBuff()</OnClick>
-                      <OnEnter>HealBot_Options_Show_Help("BUFFSCUSTOMNEWSAVE",true)</OnEnter>
-                      <OnLeave>HealBot_Options_Show_Help("BUFFSCUSTOMNEWSAVE",false)</OnLeave>
+                      <OnClick>HealBot_Options_AddNewBuff_OnClick()</OnClick>
+                      <OnEnter>HealBot_Options_Show_Help("BUFFSCUSTOMADDNEW",true)</OnEnter>
+                      <OnLeave>HealBot_Options_Show_Help("BUFFSCUSTOMADDNEW",false)</OnLeave>
                     </Scripts>
                   </Button>
                   <Frame name="HealBot_Options_Class_HoTctlName" inherits="UIDropDownMenuTemplate">

@@ -338,6 +338,24 @@ function HealBot_UnitZone(button)
     return uzText
 end
 
+local hbUnitBosses={["boss1"]=true,["boss2"]=true,["boss3"]=true,["boss4"]=true,
+                    ["boss5"]=true,["boss6"]=true,["boss7"]=true,["boss8"]=true}
+function HealBot_UnitClassification(unit)
+    local uClassify=UnitClassification(unit)
+    if uClassify == "worldboss" or hbUnitBosses[unit] then
+        uClassify="Boss"
+    elseif uClassify == "rareelite" then
+        uClassify="Rare Elite"
+    elseif uClassify == "elite" then
+        uClassify="Elite"
+    elseif uClassify == "rare" then
+        uClassify="Rare"
+    else
+        uClassify=nil
+    end
+    return uClassify
+end
+
 function HealBot_AddChat(HBmsg)
       --HealBot_setCall("HealBot_AddChat")
     DEFAULT_CHAT_FRAME:AddMessage(HEALBOT_CHAT_ADDONID..HBmsg, 0.7, 0.7, 1.0);
@@ -2274,11 +2292,7 @@ end
 function HealBot_IsUnitDead(button)
       --HealBot_setCall("HealBot_IsUnitDead", button)
     button.status.hasspirit=HealBot_Aura_CurrentBuff(button.guid, HEALBOT_SPIRIT_OF_REDEMPTION_NAME)
---    if button.text.classtrim == "PRIE" and (not button.status.isdead or button.status.hasspirit) then
---        button.status.hasspirit=HealBot_Aura_CheckUnitBuffCurrent(button,HEALBOT_SPIRIT_OF_REDEMPTION_NAME)
---    else
---        button.status.hasspirit=false
---    end
+
     if button.status.current<HealBot_Unit_Status["DC"] and HealBot_IsUnitReallyDead(button) then
         if not button.status.isdead then
             button.status.isdead=true
@@ -2436,7 +2450,7 @@ function HealBot_VariablesLoaded()
     HealBot_Options_SetOverrideGlowSize()
     HealBot_Action_SetCustomClassCols(HealBot_Globals.OverrideColours["USECLASS"])
     HealBot_Data["PGUID"]=UnitGUID("player") or "x"
-    HealBot_Options_setClassEn()
+    hbv_SetClass()
     HealBot_Options_setLists()
     HealBot_customTempUserName=HealBot_Options_copyTable(HealBot_Globals.PermUserName)
     HealBot_setTooltipUpdateInterval()
@@ -3930,7 +3944,6 @@ function HealBot_UnitUpdateButton(button)
                     HealBot_Events_TimedUnitBuff(button)
                 end
                 if button.event.debuff then
-                    button.event.debuff=false
                     HealBot_Events_TimedUnitDebuff(button)
                 end
             end

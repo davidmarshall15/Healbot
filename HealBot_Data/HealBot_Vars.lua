@@ -91,6 +91,47 @@ function hbv_IsNotUnitType(uType, tType)
     return false
 end
 
+-- Class
+local hbClass={}
+function hbv_SetClass()
+    hbClass["En"]={
+                    [HEALBOT_CLASSES_ALL]="ALL",
+                    [HEALBOT_DRUID]="DRUI",
+                    [HEALBOT_HUNTER]="HUNT",
+                    [HEALBOT_MAGE]="MAGE",
+                    [HEALBOT_PALADIN]="PALA",
+                    [HEALBOT_PRIEST]="PRIE",
+                    [HEALBOT_ROGUE]="ROGU",
+                    [HEALBOT_SHAMAN]="SHAM",
+                    [HEALBOT_WARLOCK]="WARL",
+                    [HEALBOT_WARRIOR]="WARR",
+                    [HEALBOT_EVOKER]="EVOK",
+                    [HEALBOT_DEATHKNIGHT]="DEAT",
+                    [HEALBOT_MONK]="MONK",
+                    [HEALBOT_DEMONHUNTER]="DEMO",
+    }
+    hbClass["Disc"]={
+                    ["ALL"]=HEALBOT_CLASSES_ALL,
+                    ["DRUI"]=HEALBOT_DRUID,
+                    ["HUNT"]=HEALBOT_HUNTER,
+                    ["MAGE"]=HEALBOT_MAGE,
+                    ["PALA"]=HEALBOT_PALADIN,
+                    ["PRIE"]=HEALBOT_PRIEST,
+                    ["ROGU"]=HEALBOT_ROGUE,
+                    ["SHAM"]=HEALBOT_SHAMAN,
+                    ["WARL"]=HEALBOT_WARLOCK,
+                    ["WARR"]=HEALBOT_WARRIOR,
+                    ["EVOK"]=HEALBOT_EVOKER,
+                    ["DEAT"]=HEALBOT_DEATHKNIGHT,
+                    ["MONK"]=HEALBOT_MONK,
+                    ["DEMO"]=HEALBOT_DEMONHUNTER,
+    }
+end
+hbv_SetClass()
+function hbv_GetClass(ctype, key)
+    return hbClass[ctype][key]
+end
+
 -- Aux
 
 local hbAuxBarDefaults={["COLOUR"]=1, ["ANCHOR"]=1, ["OFFSET"]=1, 

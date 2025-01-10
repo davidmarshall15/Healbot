@@ -501,7 +501,7 @@ function HealBot_Share_ExportBuffs(lData)
             else
                 ssStr=ssStr..",,,"
             end
-            ssStr=ssStr..(HealBot_Globals.CustomBuffIDMethod[bId] or 3)..","
+            ssStr=ssStr..(HealBot_Globals.CustomBuffIDMethod[bId] or 2)..","
             if HealBot_Globals.CustomBuffTag[bId] and string.len(HealBot_Globals.CustomBuffTag[bId])>2 then
                 ssStr=ssStr..HealBot_Globals.CustomBuffTag[bId]..","
             else
@@ -609,7 +609,7 @@ function HealBot_Share_LoadBuffs(sIn)
                 elseif HealBot_Globals.CustomBuffBarColour[bId] then
                     HealBot_Globals.CustomBuffBarColour[bId]=nil
                 end
-                if idMethod>0 and idMethod<3 then
+                if idMethod == 1 then
                     HealBot_Globals.CustomBuffIDMethod[bId]=idMethod
                 end
                 if string.len(tag or "")>2 then
@@ -673,7 +673,7 @@ function HealBot_Share_ExportDebuffs(lData)
             else
                 ssStr=ssStr..",,,"
             end
-            ssStr=ssStr..(HealBot_Globals.CustomDebuffIDMethod[dId] or 3)..","
+            ssStr=ssStr..(HealBot_Globals.CustomDebuffIDMethod[dId] or 2)..","
             if HealBot_Globals.CDCTag[dId] and string.len(HealBot_Globals.CDCTag[dId])>2 then
                 ssStr=ssStr..HealBot_Globals.CDCTag[dId]..","
             else
@@ -768,7 +768,7 @@ function HealBot_Share_LoadDebuffs(sIn)
                 elseif HealBot_Globals.CDCBarColour[dId] then
                     HealBot_Globals.CDCBarColour[dId]=nil
                 end
-                if idMethod>0 and idMethod<3 then
+                if idMethod == 1 then
                     HealBot_Globals.CustomDebuffIDMethod[dId]=idMethod
                 end
                 if iconSet>1 then
