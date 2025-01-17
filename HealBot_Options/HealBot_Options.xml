@@ -24270,65 +24270,70 @@
                               </Layer>
                             </Layers>
                           </Frame>
-                          <Button name="HealBot_AggroTextCustomColour" inherits="UIPanelButtonTemplate" text="HEALBOT_CUSTOM_CAT_CUSTOM">
+                          <Button name="HealBot_Options_AggroTextColourb">
                             <Size>
-                              <AbsDimension x="101" y="22"/>
+                              <AbsDimension x="140" y="20"/>
                             </Size>
                             <Anchors>
                               <Anchor point="TOPLEFT" relativeTo="HealBot_Options_AggroTextColour"  relativePoint="TOPRIGHT">
                                 <Offset>
-                                  <AbsDimension x="-5" y="0"/>
+                                  <AbsDimension x="-5" y="-4"/>
                                 </Offset>
                               </Anchor>
                             </Anchors>
                             <Scripts>
-                              <OnClick>HealBot_TextCustomColours_OnClick("Aggro")</OnClick>
-                              <OnEnter>HealBot_Options_Show_Help("HEALBARSCOLHEALTH",true)</OnEnter>
-                              <OnLeave>HealBot_Options_Show_Help("HEALBARSCOLHEALTH",false)</OnLeave>
+                              <OnClick>HealBot_SkinColorpick_OnClick("CustomAggroText")</OnClick>
+                              <OnEnter>HealBot_Options_Show_Help("HEALBARSCOLCUSTOMTEXTAUX",true)</OnEnter>
+                              <OnLeave>HealBot_Options_Show_Help("HEALBARSCOLCUSTOMTEXTAUX",false)</OnLeave>
                             </Scripts>
                           </Button>
-                          <StatusBar name="HealBot_AggroTextCustomColourCritical" inherits="TextStatusBar">
+                          <StatusBar name="HealBot_AggroTextCustomColour" inherits="TextStatusBar">
                             <Size>
-                              <AbsDimension x="33" y="4"/>
+                              <AbsDimension x="140" y="20"/>
                             </Size>
                             <Anchors>
-                              <Anchor point="TOPLEFT" relativeTo="HealBot_AggroTextCustomColour"  relativePoint="BOTTOMLEFT">
+                              <Anchor point="TOPLEFT" relativeTo="HealBot_Options_AggroTextColour"  relativePoint="TOPRIGHT">
                                 <Offset>
-                                  <AbsDimension x="0" y="-1"/>
+                                  <AbsDimension x="-5" y="-4"/>
                                 </Offset>
                               </Anchor>
                             </Anchors>
+                            <Layers>
+                              <Layer level="OVERLAY">
+                                <FontString name="HealBot_AggroTextCustomColourt" inherits="GameFontNormalSmall" text="HEALBOT_CUSTOM_CAT_CUSTOM">
+                                  <Anchors>
+                                    <Anchor point="CENTER" relativeTo="HealBot_AggroTextCustomColour" relativePoint="CENTER">
+                                      <Offset>
+                                        <AbsDimension x="0" y="1"/>
+                                      </Offset>
+                                    </Anchor>
+                                  </Anchors>
+                                </FontString>
+                              </Layer>
+                            </Layers>
+                            <Scripts>
+                              <OnLoad>self:SetMinMaxValues(0,100); self:SetValue(100);</OnLoad>
+                            </Scripts>
                             <BarTexture file="Interface\AddOns\HealBot\Images\Smoothv2.tga"/>
-                            <BarColor r="1" g="0" b="0"/>
+                            <BarColor r="0" g="0" b="0"/>
                           </StatusBar>
-                          <StatusBar name="HealBot_AggroTextCustomColourInjured" inherits="TextStatusBar">
+                          <Button name="HealBot_Options_SkinBarAggroTextPresetColour" inherits="UIPanelButtonTemplate" text="HEALBOT_OPTIONS_PRESETCOLOURBTN">
                             <Size>
-                              <AbsDimension x="33" y="4"/>
+                              <AbsDimension x="22" y="22"/>
                             </Size>
                             <Anchors>
-                              <Anchor point="TOP" relativeTo="HealBot_AggroTextCustomColour"  relativePoint="BOTTOM">
+                              <Anchor point="LEFT" relativeTo="HealBot_AggroTextCustomColour" relativePoint="RIGHT">
                                 <Offset>
-                                  <AbsDimension x="0" y="-1"/>
+                                  <AbsDimension x="2" y="1"/>
                                 </Offset>
                               </Anchor>
                             </Anchors>
-                            <BarTexture file="Interface\AddOns\HealBot\Images\Smoothv2.tga"/>
-                            <BarColor r="1" g="1" b="0"/>
-                          </StatusBar>
-                          <StatusBar name="HealBot_AggroTextCustomColourHealthy" inherits="TextStatusBar">
-                            <Size>
-                              <AbsDimension x="33" y="4"/>
-                            </Size>
-                            <Anchors>
-                              <Anchor point="TOPRIGHT" relativeTo="HealBot_AggroTextCustomColour"  relativePoint="BOTTOMRIGHT">
-                                <Offset>
-                                  <AbsDimension x="0" y="-1"/>
-                                </Offset>
-                              </Anchor>
-                            </Anchors>
-                            <BarTexture file="Interface\AddOns\HealBot\Images\Smoothv2.tga"/>
-                            <BarColor r="0" g="1" b="0"/>
-                          </StatusBar>
+                            <Scripts>
+                              <OnClick>HealBot_Options_PresetColourClick(self)</OnClick>
+                              <OnEnter>HealBot_Options_Show_Help("PRESETCOLS",true)</OnEnter>
+                              <OnLeave>HealBot_Options_Show_Help("PRESETCOLS",false)</OnLeave>
+                            </Scripts>
+                          </Button>
                           <Slider name="HealBot_Options_AggroTextAlpha" inherits="HealBot_Options_SliderTemplate">
                             <Size>
                               <AbsDimension x="525" y="16" />

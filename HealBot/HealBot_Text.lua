@@ -579,19 +579,9 @@ function HealBot_Text_ColoursCustom(button, cType)
             tb=hbv_Skins_GetFrameVar("BarTextCol", "SCCB", button.framecol)
         end
     else
-        if button.health.pct>hbv_Skins_GetFrameVar("BarTextCol", "SIT", button.framecol) then
-            tr=hbv_Skins_GetFrameVar("BarTextCol", "ACR", button.framecol)
-            tg=hbv_Skins_GetFrameVar("BarTextCol", "ACG", button.framecol)
-            tb=hbv_Skins_GetFrameVar("BarTextCol", "ACB", button.framecol)
-        elseif button.health.pct>hbv_Skins_GetFrameVar("BarTextCol", "SCT", button.framecol) then
-            tr=hbv_Skins_GetFrameVar("BarTextCol", "AICR", button.framecol)
-            tg=hbv_Skins_GetFrameVar("BarTextCol", "AICG", button.framecol)
-            tb=hbv_Skins_GetFrameVar("BarTextCol", "AICB", button.framecol)
-        else
-            tr=hbv_Skins_GetFrameVar("BarTextCol", "ACCR", button.framecol)
-            tg=hbv_Skins_GetFrameVar("BarTextCol", "ACCG", button.framecol)
-            tb=hbv_Skins_GetFrameVar("BarTextCol", "ACCB", button.framecol)
-        end
+        tr=hbv_Skins_GetFrameVar("BarTextCol", "ACR", button.framecol)
+        tg=hbv_Skins_GetFrameVar("BarTextCol", "ACG", button.framecol)
+        tb=hbv_Skins_GetFrameVar("BarTextCol", "ACB", button.framecol)
     end
 end
 
