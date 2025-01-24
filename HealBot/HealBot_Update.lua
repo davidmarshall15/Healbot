@@ -569,34 +569,39 @@ function HealBot_Update_AllStateIconNotInCombat()
     end
 end
 
+function HealBot_Update_ButtonStateIconHostile(button)
+    button.icon.extra.hostile=false
+    HealBot_Events_ClassificationChanged(button)
+end
+
 function HealBot_Update_AllStateIconHostile()
       --HealBot_setCall("HealBot_Update_AllStateIconHostile")
     for _,xButton in pairs(HealBot_Unit_Button) do
-       HealBot_Events_ClassificationChanged(xButton)
+        HealBot_Update_ButtonStateIconHostile(xButton)
     end
     for _,xButton in pairs(HealBot_Private_Button) do
-       HealBot_Events_ClassificationChanged(xButton)
+        HealBot_Update_ButtonStateIconHostile(xButton)
     end
     for _,xButton in pairs(HealBot_Pet_Button) do
-       HealBot_Events_ClassificationChanged(xButton)
+        HealBot_Update_ButtonStateIconHostile(xButton)
     end
     for _,xButton in pairs(HealBot_Vehicle_Button) do
-       HealBot_Events_ClassificationChanged(xButton)
+        HealBot_Update_ButtonStateIconHostile(xButton)
     end
     for _,xButton in pairs(HealBot_Extra_Button) do
-       HealBot_Events_ClassificationChanged(xButton)
+        HealBot_Update_ButtonStateIconHostile(xButton)
     end
     for _,xButton in pairs(HealBot_Extra_Button) do
-       HealBot_Events_ClassificationChanged(xButton)
+        HealBot_Update_ButtonStateIconHostile(xButton)
     end
     for _,xButton in pairs(HealBot_Enemy_Button) do
-        HealBot_Events_ClassificationChanged(xButton)
+        HealBot_Update_ButtonStateIconHostile(xButton)
     end
     for xUnit,xButton in pairs(HealBot_UnitTarget_Button) do
-        HealBot_Events_ClassificationChanged(xButton)
+        HealBot_Update_ButtonStateIconHostile(xButton)
     end
     for xUnit,xButton in pairs(HealBot_PrivateTarget_Button) do
-        HealBot_Events_ClassificationChanged(xButton)
+        HealBot_Update_ButtonStateIconHostile(xButton)
     end
 end
 

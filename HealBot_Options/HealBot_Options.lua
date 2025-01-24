@@ -5239,6 +5239,18 @@ function HealBot_SkinColorpick_OnClick(SkinType)
         HealBot_UseColourPick(hbv_Skins_GetFrameVar("BarTextCol", "NCCR", hb_lVars["Frame"]),
                               hbv_Skins_GetFrameVar("BarTextCol", "NCCG", hb_lVars["Frame"]),
                               hbv_Skins_GetFrameVar("BarTextCol", "NCCB", hb_lVars["Frame"]))
+    elseif SkinType == "CustomNameEnemyText" then
+        HealBot_UseColourPick(hbv_Skins_GetFrameVar("BarTextCol", "NCRE", hb_lVars["Frame"]),
+                              hbv_Skins_GetFrameVar("BarTextCol", "NCGE", hb_lVars["Frame"]),
+                              hbv_Skins_GetFrameVar("BarTextCol", "NCBE", hb_lVars["Frame"]))
+    elseif SkinType == "CustomNameInjuredEnemyText" then
+        HealBot_UseColourPick(hbv_Skins_GetFrameVar("BarTextCol", "NICRE", hb_lVars["Frame"]),
+                              hbv_Skins_GetFrameVar("BarTextCol", "NICGE", hb_lVars["Frame"]),
+                              hbv_Skins_GetFrameVar("BarTextCol", "NICBE", hb_lVars["Frame"]))
+    elseif SkinType == "CustomNameCriticalEnemyText" then
+        HealBot_UseColourPick(hbv_Skins_GetFrameVar("BarTextCol", "NCCRE", hb_lVars["Frame"]),
+                              hbv_Skins_GetFrameVar("BarTextCol", "NCCGE", hb_lVars["Frame"]),
+                              hbv_Skins_GetFrameVar("BarTextCol", "NCCBE", hb_lVars["Frame"]))
     elseif SkinType == "CustomStateText" then
         HealBot_UseColourPick(hbv_Skins_GetFrameVar("BarTextCol", "SCR", hb_lVars["Frame"]),
                               hbv_Skins_GetFrameVar("BarTextCol", "SCG", hb_lVars["Frame"]),
@@ -5251,6 +5263,18 @@ function HealBot_SkinColorpick_OnClick(SkinType)
         HealBot_UseColourPick(hbv_Skins_GetFrameVar("BarTextCol", "SCCR", hb_lVars["Frame"]),
                               hbv_Skins_GetFrameVar("BarTextCol", "SCCG", hb_lVars["Frame"]),
                               hbv_Skins_GetFrameVar("BarTextCol", "SCCB", hb_lVars["Frame"]))
+    elseif SkinType == "CustomStateEnemyText" then
+        HealBot_UseColourPick(hbv_Skins_GetFrameVar("BarTextCol", "SCRE", hb_lVars["Frame"]),
+                              hbv_Skins_GetFrameVar("BarTextCol", "SCGE", hb_lVars["Frame"]),
+                              hbv_Skins_GetFrameVar("BarTextCol", "SCBE", hb_lVars["Frame"]))
+    elseif SkinType == "CustomStateInjuredEnemyText" then
+        HealBot_UseColourPick(hbv_Skins_GetFrameVar("BarTextCol", "SICRE", hb_lVars["Frame"]),
+                              hbv_Skins_GetFrameVar("BarTextCol", "SICGE", hb_lVars["Frame"]),
+                              hbv_Skins_GetFrameVar("BarTextCol", "SICBE", hb_lVars["Frame"]))
+    elseif SkinType == "CustomStateCriticalEnemyText" then
+        HealBot_UseColourPick(hbv_Skins_GetFrameVar("BarTextCol", "SCCRE", hb_lVars["Frame"]),
+                              hbv_Skins_GetFrameVar("BarTextCol", "SCCGE", hb_lVars["Frame"]),
+                              hbv_Skins_GetFrameVar("BarTextCol", "SCCBE", hb_lVars["Frame"]))
     elseif SkinType == "DeadStateText" then
         HealBot_UseColourPick(hbv_Skins_GetFrameVar("BarTextCol", "SDCR", hb_lVars["Frame"]),
                               hbv_Skins_GetFrameVar("BarTextCol", "SDCG", hb_lVars["Frame"]),
@@ -5319,6 +5343,18 @@ function HealBot_SkinColorpick_OnClick(SkinType)
         HealBot_UseColourPick(hbv_Skins_GetFrameVar("BarTextCol", "HCCR", hb_lVars["Frame"]),
                               hbv_Skins_GetFrameVar("BarTextCol", "HCCG", hb_lVars["Frame"]),
                               hbv_Skins_GetFrameVar("BarTextCol", "HCCB", hb_lVars["Frame"]))
+    elseif SkinType == "CustomHealthEnemyText" then
+        HealBot_UseColourPick(hbv_Skins_GetFrameVar("BarTextCol", "HCRE", hb_lVars["Frame"]),
+                              hbv_Skins_GetFrameVar("BarTextCol", "HCGE", hb_lVars["Frame"]),
+                              hbv_Skins_GetFrameVar("BarTextCol", "HCBE", hb_lVars["Frame"]))
+    elseif SkinType == "CustomHealthInjuredEnemyText" then
+        HealBot_UseColourPick(hbv_Skins_GetFrameVar("BarTextCol", "HICRE", hb_lVars["Frame"]),
+                              hbv_Skins_GetFrameVar("BarTextCol", "HICGE", hb_lVars["Frame"]),
+                              hbv_Skins_GetFrameVar("BarTextCol", "HICBE", hb_lVars["Frame"]))
+    elseif SkinType == "CustomHealthCriticalEnemyText" then
+        HealBot_UseColourPick(hbv_Skins_GetFrameVar("BarTextCol", "HCCRE", hb_lVars["Frame"]),
+                              hbv_Skins_GetFrameVar("BarTextCol", "HCCGE", hb_lVars["Frame"]),
+                              hbv_Skins_GetFrameVar("BarTextCol", "HCCBE", hb_lVars["Frame"]))
     elseif SkinType == "CustomBackBar" then
         HealBot_UseColourPick(hbv_Skins_GetFrameVar("BarCol", "BR", hb_lVars["Frame"]),
                               hbv_Skins_GetFrameVar("BarCol", "BG", hb_lVars["Frame"]),
@@ -5606,6 +5642,18 @@ function HealBot_SetSkinColours()
         hbv_Skins_GetFrameVar("BarTextCol", "NCCR", hb_lVars["Frame"]),
         hbv_Skins_GetFrameVar("BarTextCol", "NCCG", hb_lVars["Frame"]),
         hbv_Skins_GetFrameVar("BarTextCol", "NCCB", hb_lVars["Frame"]))
+    HealBot_NameTextCustomColourHealthyEnemy:SetStatusBarColor(
+        hbv_Skins_GetFrameVar("BarTextCol", "NCRE", hb_lVars["Frame"]),
+        hbv_Skins_GetFrameVar("BarTextCol", "NCGE", hb_lVars["Frame"]),
+        hbv_Skins_GetFrameVar("BarTextCol", "NCBE", hb_lVars["Frame"]))
+    HealBot_NameTextCustomColourInjuredEnemy:SetStatusBarColor(
+        hbv_Skins_GetFrameVar("BarTextCol", "NICRE", hb_lVars["Frame"]),
+        hbv_Skins_GetFrameVar("BarTextCol", "NICGE", hb_lVars["Frame"]),
+        hbv_Skins_GetFrameVar("BarTextCol", "NICBE", hb_lVars["Frame"]))
+    HealBot_NameTextCustomColourCriticalEnemy:SetStatusBarColor(
+        hbv_Skins_GetFrameVar("BarTextCol", "NCCRE", hb_lVars["Frame"]),
+        hbv_Skins_GetFrameVar("BarTextCol", "NCCGE", hb_lVars["Frame"]),
+        hbv_Skins_GetFrameVar("BarTextCol", "NCCBE", hb_lVars["Frame"]))
     HealBot_HealthTextCustomColourHealthy:SetStatusBarColor(
         hbv_Skins_GetFrameVar("BarTextCol", "HCR", hb_lVars["Frame"]),
         hbv_Skins_GetFrameVar("BarTextCol", "HCG", hb_lVars["Frame"]),
@@ -5618,6 +5666,18 @@ function HealBot_SetSkinColours()
         hbv_Skins_GetFrameVar("BarTextCol", "HCCR", hb_lVars["Frame"]),
         hbv_Skins_GetFrameVar("BarTextCol", "HCCG", hb_lVars["Frame"]),
         hbv_Skins_GetFrameVar("BarTextCol", "HCCB", hb_lVars["Frame"]))
+    HealBot_HealthTextCustomColourHealthyEnemy:SetStatusBarColor(
+        hbv_Skins_GetFrameVar("BarTextCol", "HCRE", hb_lVars["Frame"]),
+        hbv_Skins_GetFrameVar("BarTextCol", "HCGE", hb_lVars["Frame"]),
+        hbv_Skins_GetFrameVar("BarTextCol", "HCBE", hb_lVars["Frame"]))
+    HealBot_HealthTextCustomColourInjuredEnemy:SetStatusBarColor(
+        hbv_Skins_GetFrameVar("BarTextCol", "HICRE", hb_lVars["Frame"]),
+        hbv_Skins_GetFrameVar("BarTextCol", "HICGE", hb_lVars["Frame"]),
+        hbv_Skins_GetFrameVar("BarTextCol", "HICBE", hb_lVars["Frame"]))
+    HealBot_HealthTextCustomColourCriticalEnemy:SetStatusBarColor(
+        hbv_Skins_GetFrameVar("BarTextCol", "HCCRE", hb_lVars["Frame"]),
+        hbv_Skins_GetFrameVar("BarTextCol", "HCCGE", hb_lVars["Frame"]),
+        hbv_Skins_GetFrameVar("BarTextCol", "HCCBE", hb_lVars["Frame"]))
     HealBot_AggroTextCustomColour:SetStatusBarColor(
         hbv_Skins_GetFrameVar("BarTextCol", "ACR", hb_lVars["Frame"]),
         hbv_Skins_GetFrameVar("BarTextCol", "ACG", hb_lVars["Frame"]),
@@ -5660,6 +5720,18 @@ function HealBot_Options_SetBarsStateTextColour()
         hbv_Skins_GetFrameVar("BarTextCol", "SCCR", hb_lVars["Frame"]),
         hbv_Skins_GetFrameVar("BarTextCol", "SCCG", hb_lVars["Frame"]),
         hbv_Skins_GetFrameVar("BarTextCol", "SCCB", hb_lVars["Frame"]), 1)
+    HealBot_StateTextCustomColourHealthyEnemy:SetStatusBarColor(
+        hbv_Skins_GetFrameVar("BarTextCol", "SCRE", hb_lVars["Frame"]),
+        hbv_Skins_GetFrameVar("BarTextCol", "SCGE", hb_lVars["Frame"]),
+        hbv_Skins_GetFrameVar("BarTextCol", "SCBE", hb_lVars["Frame"]), 1)
+    HealBot_StateTextCustomColourInjuredEnemy:SetStatusBarColor(
+        hbv_Skins_GetFrameVar("BarTextCol", "SICRE", hb_lVars["Frame"]),
+        hbv_Skins_GetFrameVar("BarTextCol", "SICGE", hb_lVars["Frame"]),
+        hbv_Skins_GetFrameVar("BarTextCol", "SICBE", hb_lVars["Frame"]), 1)
+    HealBot_StateTextCustomColourCriticalEnemy:SetStatusBarColor(
+        hbv_Skins_GetFrameVar("BarTextCol", "SCCRE", hb_lVars["Frame"]),
+        hbv_Skins_GetFrameVar("BarTextCol", "SCCGE", hb_lVars["Frame"]),
+        hbv_Skins_GetFrameVar("BarTextCol", "SCCBE", hb_lVars["Frame"]), 1)
     HealBot_StateTextSummonColourt:SetTextColor(
         hbv_Skins_GetFrameVar("BarTextCol", "SSCR", hb_lVars["Frame"]),
         hbv_Skins_GetFrameVar("BarTextCol", "SSCG", hb_lVars["Frame"]),
@@ -5734,6 +5806,9 @@ function HealBot_Options_SetBarsTextColour()
         HealBot_TextHealthyCustomColour:SetStatusBarColor(0, 1, 0);
         HealBot_TextInjuredCustomColour:SetStatusBarColor(0, 1, 0);
         HealBot_TextCriticalCustomColour:SetStatusBarColor(0, 1, 0);
+        HealBot_TextHealthyCustomColourEnemy:SetStatusBarColor(0, 1, 0);
+        HealBot_TextInjuredCustomColourEnemy:SetStatusBarColor(0, 1, 0);
+        HealBot_TextCriticalCustomColourEnemy:SetStatusBarColor(0, 1, 0);
     elseif hbv_Skins_GetFrameVar("BarCol", "HLTH", hb_lVars["Frame"]) == 3 then
         HealBot_TextHealthyCustomColour:SetStatusBarColor(
             hbv_Skins_GetFrameVar("BarCol", "HR", hb_lVars["Frame"]),
@@ -5747,6 +5822,18 @@ function HealBot_Options_SetBarsTextColour()
             hbv_Skins_GetFrameVar("BarCol", "HR", hb_lVars["Frame"]),
             hbv_Skins_GetFrameVar("BarCol", "HG", hb_lVars["Frame"]),
             hbv_Skins_GetFrameVar("BarCol", "HB", hb_lVars["Frame"]))
+        HealBot_TextHealthyCustomColourEnemy:SetStatusBarColor(
+            hbv_Skins_GetFrameVar("BarCol", "HRE", hb_lVars["Frame"]),
+            hbv_Skins_GetFrameVar("BarCol", "HGE", hb_lVars["Frame"]),
+            hbv_Skins_GetFrameVar("BarCol", "HBE", hb_lVars["Frame"]))
+        HealBot_TextInjuredCustomColourEnemy:SetStatusBarColor(
+            hbv_Skins_GetFrameVar("BarCol", "HRE", hb_lVars["Frame"]),
+            hbv_Skins_GetFrameVar("BarCol", "HGE", hb_lVars["Frame"]),
+            hbv_Skins_GetFrameVar("BarCol", "HBE", hb_lVars["Frame"]))
+        HealBot_TextCriticalCustomColourEnemy:SetStatusBarColor(
+            hbv_Skins_GetFrameVar("BarCol", "HRE", hb_lVars["Frame"]),
+            hbv_Skins_GetFrameVar("BarCol", "HGE", hb_lVars["Frame"]),
+            hbv_Skins_GetFrameVar("BarCol", "HBE", hb_lVars["Frame"]))
         HealBot_StateTextSummonCol:SetStatusBarColor(
             hbv_Skins_GetFrameVar("BarCol", "HR", hb_lVars["Frame"]),
             hbv_Skins_GetFrameVar("BarCol", "HG", hb_lVars["Frame"]),
@@ -5777,6 +5864,9 @@ function HealBot_Options_SetBarsTextColour()
         HealBot_TextHealthyCustomColour:SetStatusBarColor(sbR, sbG, sbB);
         HealBot_TextInjuredCustomColour:SetStatusBarColor(sbR, sbG, sbB);
         HealBot_TextCriticalCustomColour:SetStatusBarColor(sbR, sbG, sbB);
+        HealBot_TextHealthyCustomColourEnemy:SetStatusBarColor(sbR, sbG, sbB);
+        HealBot_TextInjuredCustomColourEnemy:SetStatusBarColor(sbR, sbG, sbB);
+        HealBot_TextCriticalCustomColourEnemy:SetStatusBarColor(sbR, sbG, sbB);
     end
     HealBot_NameTextDeadCol:SetStatusBarColor(0.4, 0.4, 0.4, 0.2)
     HealBot_NameTextResCol:SetStatusBarColor(0.4, 0.4, 0.4, 0.2)
@@ -6509,6 +6599,9 @@ function HealBot_Options_HealthAnchor_Options()
         HealBot_HealthTextCustomColourHealthy:Hide()
         HealBot_HealthTextCustomColourInjured:Hide()
         HealBot_HealthTextCustomColourCritical:Hide()
+        HealBot_HealthTextCustomColourHealthyEnemy:Hide()
+        HealBot_HealthTextCustomColourInjuredEnemy:Hide()
+        HealBot_HealthTextCustomColourCriticalEnemy:Hide()
         HealBot_HealthTextCustomColour:Hide()
         HealBot_Options_HealthTextColour:Hide()
         HealBot_Options_BarHealthCustomColour:Show()
@@ -6527,6 +6620,9 @@ function HealBot_Options_HealthAnchor_Options()
         HealBot_HealthTextCustomColourHealthy:Show()
         HealBot_HealthTextCustomColourInjured:Show()
         HealBot_HealthTextCustomColourCritical:Show()
+        HealBot_HealthTextCustomColourHealthyEnemy:Show()
+        HealBot_HealthTextCustomColourInjuredEnemy:Show()
+        HealBot_HealthTextCustomColourCriticalEnemy:Show()
         HealBot_HealthTextCustomColour:Show()
         HealBot_Options_HealthTextColour:Show()
         HealBot_Options_BarHealthCustomColour:Hide()
@@ -6562,6 +6658,9 @@ function HealBot_Options_StateUseNameFontString_Options()
         HealBot_StateTextCustomColourHealthy:Hide()
         HealBot_StateTextCustomColourInjured:Hide()
         HealBot_StateTextCustomColourCritical:Hide()
+        HealBot_StateTextCustomColourHealthyEnemy:Hide()
+        HealBot_StateTextCustomColourInjuredEnemy:Hide()
+        HealBot_StateTextCustomColourCriticalEnemy:Hide()
         HealBot_Options_StateTextColour:Hide()
         HealBot_Options_Skins_StateTextColNotAvail:Show()
     else
@@ -6588,6 +6687,9 @@ function HealBot_Options_StateUseNameFontString_Options()
         HealBot_StateTextCustomColourHealthy:Show()
         HealBot_StateTextCustomColourInjured:Show()
         HealBot_StateTextCustomColourCritical:Show()
+        HealBot_StateTextCustomColourHealthyEnemy:Show()
+        HealBot_StateTextCustomColourInjuredEnemy:Show()
+        HealBot_StateTextCustomColourCriticalEnemy:Show()
         HealBot_Options_StateTextColour:Show()
         HealBot_Options_Skins_StateTextColNotAvail:Hide()
     end
@@ -8442,7 +8544,7 @@ end
 
 function HealBot_Options_ShowHostile_OnClick(self)
       --HealBot_setCall("HealBot_Options_ShowHostile_OnClick")
-    if hbv_Skins_GetFrameBoolean("Icons", "SHOWRESTING", hb_lVars["Frame"])~=self:GetChecked() then
+    if hbv_Skins_GetFrameBoolean("Icons", "SHOWHOSTILE", hb_lVars["Frame"])~=self:GetChecked() then
         hbv_Skins_SetFrameVar(self:GetChecked(), "Icons", "SHOWHOSTILE", hb_lVars["Frame"])
         if HealBot_Action_FrameIsVisible(hb_lVars["Frame"]) then 
             if hb_lVars["TestBarsOn"] then
@@ -15774,13 +15876,15 @@ function HealBot_Options_Class_HoTctlAction_DropDown()
                 info.text=HealBot_Options_Class_HoTctlAction_List[j]
                 info.func=function(self)
                                 local sId=HealBot_Options_CDebuffGetId(hb_lVars["HoTname"])
-                                if sId then
+                                if not hb_lVars["FilterHoTctlNameTrim"] then hb_lVars["FilterHoTctlNameTrim"]=hbv_GetClass("En", hb_lVars["FilterHoTctlName"]) end
+                                if hb_lVars["FilterHoTctlNameTrim"] and HealBot_Globals.WatchHoT[hb_lVars["FilterHoTctlNameTrim"]] and sId then
                                     HealBot_Globals.WatchHoT[hb_lVars["FilterHoTctlNameTrim"]][sId]=self:GetID()
                                     UIDropDownMenu_SetText(HealBot_Options_Class_HoTctlAction,HealBot_Options_Class_HoTctlAction_List[j])
                                     HealBot_Timers_Set("AURA","ConfigClassHoT")
                                 end
                             end
                 info.checked=false;
+                if not hb_lVars["FilterHoTctlNameTrim"] then hb_lVars["FilterHoTctlNameTrim"]=hbv_GetClass("En", hb_lVars["FilterHoTctlName"]) end
                 if hb_lVars["FilterHoTctlNameTrim"] and HealBot_Globals.WatchHoT[hb_lVars["FilterHoTctlNameTrim"]] then
                     local sId=HealBot_Options_CDebuffGetId(hb_lVars["HoTname"])
                     if sId then
@@ -19047,7 +19151,7 @@ function HealBot_Options_NewHoTBuffBtn_OnClick(NewHoTBuffTxt, class)
     NewHoTBuffTxt=HealBot_Options_UpperFirstChar(NewHoTBuffTxt)
     local name, _, _, _, _, _, spellId=HealBot_WoWAPI_SpellInfo(NewHoTBuffTxt)
     local useId=NewHoTBuffTxt
-    local cClass=class or hb_lVars["FilterHoTctlNameTrim"]
+    local cClass=class or hb_lVars["FilterHoTctlNameTrim"] or "ALL"
     if spellId then useId=spellId end
     if not name then name=NewHoTBuffTxt end
     local unique=true;
@@ -21393,6 +21497,24 @@ local function HealBot_Returned_Colours(R, G, B, A, preset)
         hbv_Skins_SetFrameVar(B, "BarTextCol", "NCCB", hb_lVars["Frame"])
         if not hb_lVars["TestBarsOn"] then HealBot_Timers_Set("SKINS","SkinBarTextColours") end
         HealBot_TextCustomColours_SetStatusBars()
+    elseif HealBot_ColourObjWaiting == "CustomNameEnemyText" then
+        hbv_Skins_SetFrameVar(R, "BarTextCol", "NCRE", hb_lVars["Frame"])
+        hbv_Skins_SetFrameVar(G, "BarTextCol", "NCGE", hb_lVars["Frame"])
+        hbv_Skins_SetFrameVar(B, "BarTextCol", "NCBE", hb_lVars["Frame"])
+        if not hb_lVars["TestBarsOn"] then HealBot_Timers_Set("SKINS","SkinBarTextColours") end
+        HealBot_TextCustomColours_SetStatusBars()
+    elseif HealBot_ColourObjWaiting == "CustomNameInjuredEnemyText" then
+        hbv_Skins_SetFrameVar(R, "BarTextCol", "NICRE", hb_lVars["Frame"])
+        hbv_Skins_SetFrameVar(G, "BarTextCol", "NICGE", hb_lVars["Frame"])
+        hbv_Skins_SetFrameVar(B, "BarTextCol", "NICBE", hb_lVars["Frame"])
+        if not hb_lVars["TestBarsOn"] then HealBot_Timers_Set("SKINS","SkinBarTextColours") end
+        HealBot_TextCustomColours_SetStatusBars()
+    elseif HealBot_ColourObjWaiting == "CustomNameCriticalEnemyText" then
+        hbv_Skins_SetFrameVar(R, "BarTextCol", "NCCRE", hb_lVars["Frame"])
+        hbv_Skins_SetFrameVar(G, "BarTextCol", "NCCGE", hb_lVars["Frame"])
+        hbv_Skins_SetFrameVar(B, "BarTextCol", "NCCBE", hb_lVars["Frame"])
+        if not hb_lVars["TestBarsOn"] then HealBot_Timers_Set("SKINS","SkinBarTextColours") end
+        HealBot_TextCustomColours_SetStatusBars()
     elseif HealBot_ColourObjWaiting == "CustomStateText" then
         hbv_Skins_SetFrameVar(R, "BarTextCol", "SCR", hb_lVars["Frame"])
         hbv_Skins_SetFrameVar(G, "BarTextCol", "SCG", hb_lVars["Frame"])
@@ -21409,6 +21531,24 @@ local function HealBot_Returned_Colours(R, G, B, A, preset)
         hbv_Skins_SetFrameVar(R, "BarTextCol", "SCCR", hb_lVars["Frame"])
         hbv_Skins_SetFrameVar(G, "BarTextCol", "SCCG", hb_lVars["Frame"])
         hbv_Skins_SetFrameVar(B, "BarTextCol", "SCCB", hb_lVars["Frame"])
+        if not hb_lVars["TestBarsOn"] then HealBot_Timers_Set("SKINS","SkinBarTextColours") end
+        HealBot_TextCustomColours_SetStatusBars()
+    elseif HealBot_ColourObjWaiting == "CustomStateEnemyText" then
+        hbv_Skins_SetFrameVar(R, "BarTextCol", "SCRE", hb_lVars["Frame"])
+        hbv_Skins_SetFrameVar(G, "BarTextCol", "SCGE", hb_lVars["Frame"])
+        hbv_Skins_SetFrameVar(B, "BarTextCol", "SCBE", hb_lVars["Frame"])
+        if not hb_lVars["TestBarsOn"] then HealBot_Timers_Set("SKINS","SkinBarTextColours") end
+        HealBot_TextCustomColours_SetStatusBars()
+    elseif HealBot_ColourObjWaiting == "CustomStateInjuredEnemyText" then
+        hbv_Skins_SetFrameVar(R, "BarTextCol", "SICRE", hb_lVars["Frame"])
+        hbv_Skins_SetFrameVar(G, "BarTextCol", "SICGE", hb_lVars["Frame"])
+        hbv_Skins_SetFrameVar(B, "BarTextCol", "SICBE", hb_lVars["Frame"])
+        if not hb_lVars["TestBarsOn"] then HealBot_Timers_Set("SKINS","SkinBarTextColours") end
+        HealBot_TextCustomColours_SetStatusBars()
+    elseif HealBot_ColourObjWaiting == "CustomStateCriticalEnemyText" then
+        hbv_Skins_SetFrameVar(R, "BarTextCol", "SCCRE", hb_lVars["Frame"])
+        hbv_Skins_SetFrameVar(G, "BarTextCol", "SCCGE", hb_lVars["Frame"])
+        hbv_Skins_SetFrameVar(B, "BarTextCol", "SCCBE", hb_lVars["Frame"])
         if not hb_lVars["TestBarsOn"] then HealBot_Timers_Set("SKINS","SkinBarTextColours") end
         HealBot_TextCustomColours_SetStatusBars()
     elseif HealBot_ColourObjWaiting == "DeadStateText" then
@@ -21499,6 +21639,25 @@ local function HealBot_Returned_Colours(R, G, B, A, preset)
         hbv_Skins_SetFrameVar(R, "BarTextCol", "HCCR", hb_lVars["Frame"])
         hbv_Skins_SetFrameVar(G, "BarTextCol", "HCCG", hb_lVars["Frame"])
         hbv_Skins_SetFrameVar(B, "BarTextCol", "HCCB", hb_lVars["Frame"])
+        if not hb_lVars["TestBarsOn"] then HealBot_Timers_Set("SKINS","SkinBarTextColours") end
+        HealBot_TextCustomColours_SetStatusBars()
+    elseif HealBot_ColourObjWaiting == "CustomHealthEnemyText" then
+        hbv_Skins_SetFrameVar(R, "BarTextCol", "HCRE", hb_lVars["Frame"])
+        hbv_Skins_SetFrameVar(G, "BarTextCol", "HCGE", hb_lVars["Frame"])
+        hbv_Skins_SetFrameVar(B, "BarTextCol", "HCBE", hb_lVars["Frame"])
+        if not hb_lVars["TestBarsOn"] then HealBot_Timers_Set("SKINS","SkinBarTextColours") end
+        HealBot_Timers_Set("SKINS","TextExtraCustomCols")
+        HealBot_TextCustomColours_SetStatusBars()
+    elseif HealBot_ColourObjWaiting == "CustomHealthInjuredEnemyText" then
+        hbv_Skins_SetFrameVar(R, "BarTextCol", "HICRE", hb_lVars["Frame"])
+        hbv_Skins_SetFrameVar(G, "BarTextCol", "HICGE", hb_lVars["Frame"])
+        hbv_Skins_SetFrameVar(B, "BarTextCol", "HICBE", hb_lVars["Frame"])
+        if not hb_lVars["TestBarsOn"] then HealBot_Timers_Set("SKINS","SkinBarTextColours") end
+        HealBot_TextCustomColours_SetStatusBars()
+    elseif HealBot_ColourObjWaiting == "CustomHealthCriticalEnemyText" then
+        hbv_Skins_SetFrameVar(R, "BarTextCol", "HCCRE", hb_lVars["Frame"])
+        hbv_Skins_SetFrameVar(G, "BarTextCol", "HCCGE", hb_lVars["Frame"])
+        hbv_Skins_SetFrameVar(B, "BarTextCol", "HCCBE", hb_lVars["Frame"])
         if not hb_lVars["TestBarsOn"] then HealBot_Timers_Set("SKINS","SkinBarTextColours") end
         HealBot_TextCustomColours_SetStatusBars()
     elseif HealBot_ColourObjWaiting == "CustomBackBar" then
@@ -22055,11 +22214,14 @@ end
 
 function HealBot_TextCustomColours_SetStatusBars()
       --HealBot_setCall("HealBot_TextCustomColours_SetStatusBars")
-    local r,g,b,fn,fh,fo
+    local r,g,b,fn,fh,fo,er,eg,eb
     if hb_lVars["TextCustomColoursCaller"] == "Name" then
         r,g,b=hbv_Skins_GetFrameVar("BarTextCol", "NCR", hb_lVars["Frame"]),
               hbv_Skins_GetFrameVar("BarTextCol", "NCG", hb_lVars["Frame"]),
               hbv_Skins_GetFrameVar("BarTextCol", "NCB", hb_lVars["Frame"])
+        er,eg,eb=hbv_Skins_GetFrameVar("BarTextCol", "NCRE", hb_lVars["Frame"]),
+                 hbv_Skins_GetFrameVar("BarTextCol", "NCGE", hb_lVars["Frame"]),
+                 hbv_Skins_GetFrameVar("BarTextCol", "NCBE", hb_lVars["Frame"])
         fn=hbv_Skins_GetFrameVar("BarText", "FONT", hb_lVars["Frame"])
         fh=hbv_Skins_GetFrameVar("BarText", "HEIGHT", hb_lVars["Frame"])
         fo=hbv_Skins_GetFrameVar("BarText", "OUTLINE", hb_lVars["Frame"])
@@ -22074,6 +22236,9 @@ function HealBot_TextCustomColours_SetStatusBars()
         r,g,b=hbv_Skins_GetFrameVar("BarTextCol", "HCR", hb_lVars["Frame"]),
               hbv_Skins_GetFrameVar("BarTextCol", "HCG", hb_lVars["Frame"]),
               hbv_Skins_GetFrameVar("BarTextCol", "HCB", hb_lVars["Frame"])
+        er,eg,eb=hbv_Skins_GetFrameVar("BarTextCol", "HCRE", hb_lVars["Frame"]),
+                 hbv_Skins_GetFrameVar("BarTextCol", "HCGE", hb_lVars["Frame"]),
+                 hbv_Skins_GetFrameVar("BarTextCol", "HCBE", hb_lVars["Frame"])
         fn=hbv_Skins_GetFrameVar("BarText", "HFONT", hb_lVars["Frame"])
         fh=hbv_Skins_GetFrameVar("BarText", "HHEIGHT", hb_lVars["Frame"])
         fo=hbv_Skins_GetFrameVar("BarText", "HOUTLINE", hb_lVars["Frame"])
@@ -22088,6 +22253,9 @@ function HealBot_TextCustomColours_SetStatusBars()
         r,g,b=hbv_Skins_GetFrameVar("BarTextCol", "SCR", hb_lVars["Frame"]),
               hbv_Skins_GetFrameVar("BarTextCol", "SCG", hb_lVars["Frame"]),
               hbv_Skins_GetFrameVar("BarTextCol", "SCB", hb_lVars["Frame"])
+        er,eg,eb=hbv_Skins_GetFrameVar("BarTextCol", "SCRE", hb_lVars["Frame"]),
+                 hbv_Skins_GetFrameVar("BarTextCol", "SCGE", hb_lVars["Frame"]),
+                 hbv_Skins_GetFrameVar("BarTextCol", "SCBE", hb_lVars["Frame"])
         fn=hbv_Skins_GetFrameVar("BarText", "SFONT", hb_lVars["Frame"])
         fh=hbv_Skins_GetFrameVar("BarText", "SHEIGHT", hb_lVars["Frame"])
         fo=hbv_Skins_GetFrameVar("BarText", "SOUTLINE", hb_lVars["Frame"])
@@ -22100,39 +22268,63 @@ function HealBot_TextCustomColours_SetStatusBars()
         HealBot_SkinsFramesTextColoursCustom_Text:SetText(HEALBOT_OPTIONS_CUSTOMTEXTCOLSTATE)
     end
     HealBot_TextHealthyCustomColourt:SetTextColor(r,g,b,1)
+    HealBot_TextHealthyCustomColourEnemyt:SetTextColor(er,eg,eb,1)
     HealBot_Media_UpdateFont(HealBot_TextHealthyCustomColourt, fn, fh, fo, "Options_TextCustomColours_SetStatusBars - BarText")
     HealBot_Media_UpdateFont(HealBot_TextInjuredCustomColourt, fn, fh, fo, "Options_TextCustomColours_SetStatusBars - BarText")
     HealBot_Media_UpdateFont(HealBot_TextCriticalCustomColourt, fn, fh, fo, "Options_TextCustomColours_SetStatusBars - BarText")
+    HealBot_Media_UpdateFont(HealBot_TextHealthyCustomColourEnemyt, fn, fh, fo, "Options_TextCustomColours_SetStatusBars - BarText")
+    HealBot_Media_UpdateFont(HealBot_TextInjuredCustomColourEnemyt, fn, fh, fo, "Options_TextCustomColours_SetStatusBars - BarText")
+    HealBot_Media_UpdateFont(HealBot_TextCriticalCustomColourEnemyt, fn, fh, fo, "Options_TextCustomColours_SetStatusBars - BarText")
 
     if hb_lVars["TextCustomColoursCaller"] == "Name" then
         r,g,b=hbv_Skins_GetFrameVar("BarTextCol", "NICR", hb_lVars["Frame"]),
               hbv_Skins_GetFrameVar("BarTextCol", "NICG", hb_lVars["Frame"]),
               hbv_Skins_GetFrameVar("BarTextCol", "NICB", hb_lVars["Frame"])
+        er,eg,eb=hbv_Skins_GetFrameVar("BarTextCol", "NICRE", hb_lVars["Frame"]),
+                 hbv_Skins_GetFrameVar("BarTextCol", "NICGE", hb_lVars["Frame"]),
+                 hbv_Skins_GetFrameVar("BarTextCol", "NICBE", hb_lVars["Frame"])
     elseif hb_lVars["TextCustomColoursCaller"] == "Health" then
         r,g,b=hbv_Skins_GetFrameVar("BarTextCol", "HICR", hb_lVars["Frame"]),
               hbv_Skins_GetFrameVar("BarTextCol", "HICG", hb_lVars["Frame"]),
               hbv_Skins_GetFrameVar("BarTextCol", "HICB", hb_lVars["Frame"])
+        er,eg,eb=hbv_Skins_GetFrameVar("BarTextCol", "HICRE", hb_lVars["Frame"]),
+                 hbv_Skins_GetFrameVar("BarTextCol", "HICGE", hb_lVars["Frame"]),
+                 hbv_Skins_GetFrameVar("BarTextCol", "HICBE", hb_lVars["Frame"])
     elseif hb_lVars["TextCustomColoursCaller"] == "State" then
         r,g,b=hbv_Skins_GetFrameVar("BarTextCol", "SICR", hb_lVars["Frame"]),
               hbv_Skins_GetFrameVar("BarTextCol", "SICG", hb_lVars["Frame"]),
               hbv_Skins_GetFrameVar("BarTextCol", "SICB", hb_lVars["Frame"])
+        er,eg,eb=hbv_Skins_GetFrameVar("BarTextCol", "SICRE", hb_lVars["Frame"]),
+                 hbv_Skins_GetFrameVar("BarTextCol", "SICGE", hb_lVars["Frame"]),
+                 hbv_Skins_GetFrameVar("BarTextCol", "SICBE", hb_lVars["Frame"])
     end
     HealBot_TextInjuredCustomColourt:SetTextColor(r,g,b,1)
+    HealBot_TextInjuredCustomColourEnemyt:SetTextColor(er,eg,eb,1)
 
     if hb_lVars["TextCustomColoursCaller"] == "Name" then
         r,g,b=hbv_Skins_GetFrameVar("BarTextCol", "NCCR", hb_lVars["Frame"]),
               hbv_Skins_GetFrameVar("BarTextCol", "NCCG", hb_lVars["Frame"]),
               hbv_Skins_GetFrameVar("BarTextCol", "NCCB", hb_lVars["Frame"])
+        er,eg,eb=hbv_Skins_GetFrameVar("BarTextCol", "NCCRE", hb_lVars["Frame"]),
+                 hbv_Skins_GetFrameVar("BarTextCol", "NCCGE", hb_lVars["Frame"]),
+                 hbv_Skins_GetFrameVar("BarTextCol", "NCCBE", hb_lVars["Frame"])
     elseif hb_lVars["TextCustomColoursCaller"] == "Health" then
         r,g,b=hbv_Skins_GetFrameVar("BarTextCol", "HCCR", hb_lVars["Frame"]),
               hbv_Skins_GetFrameVar("BarTextCol", "HCCG", hb_lVars["Frame"]),
               hbv_Skins_GetFrameVar("BarTextCol", "HCCB", hb_lVars["Frame"])
+        er,eg,eb=hbv_Skins_GetFrameVar("BarTextCol", "HCCRE", hb_lVars["Frame"]),
+                 hbv_Skins_GetFrameVar("BarTextCol", "HCCGE", hb_lVars["Frame"]),
+                 hbv_Skins_GetFrameVar("BarTextCol", "HCCBE", hb_lVars["Frame"])
     elseif hb_lVars["TextCustomColoursCaller"] == "State" then
         r,g,b=hbv_Skins_GetFrameVar("BarTextCol", "SCCR", hb_lVars["Frame"]),
               hbv_Skins_GetFrameVar("BarTextCol", "SCCG", hb_lVars["Frame"]),
               hbv_Skins_GetFrameVar("BarTextCol", "SCCB", hb_lVars["Frame"])
+        er,eg,eb=hbv_Skins_GetFrameVar("BarTextCol", "SCCRE", hb_lVars["Frame"]),
+                 hbv_Skins_GetFrameVar("BarTextCol", "SCCGE", hb_lVars["Frame"]),
+                 hbv_Skins_GetFrameVar("BarTextCol", "SCCBE", hb_lVars["Frame"])
     end
     HealBot_TextCriticalCustomColourt:SetTextColor(r,g,b,1)
+    HealBot_TextCriticalCustomColourEnemyt:SetTextColor(er,eg,eb,1)
 end
 
 function HealBot_BarCustomColours_OnClick(caller)
@@ -22241,24 +22433,42 @@ function HealBot_SkinTextCustomColoursColorpick_OnClick(caller)
             HealBot_SkinColorpick_OnClick("CustomNameCriticalText")
         elseif caller == "Injured" then
             HealBot_SkinColorpick_OnClick("CustomNameInjuredText")
-        else
+        elseif caller == "Healthy" then
             HealBot_SkinColorpick_OnClick("CustomNameText")
+        elseif caller == "CriticalEnemy" then
+            HealBot_SkinColorpick_OnClick("CustomNameCriticalEnemyText")
+        elseif caller == "InjuredEnemy" then
+            HealBot_SkinColorpick_OnClick("CustomNameInjuredEnemyText")
+        else
+            HealBot_SkinColorpick_OnClick("CustomNameEnemyText")
         end
     elseif hb_lVars["TextCustomColoursCaller"] == "Health" then
         if caller == "Critical" then
             HealBot_SkinColorpick_OnClick("CustomHealthCriticalText")
         elseif caller == "Injured" then
             HealBot_SkinColorpick_OnClick("CustomHealthInjuredText")
-        else
+        elseif caller == "Healthy" then
             HealBot_SkinColorpick_OnClick("CustomHealthText")
+        elseif caller == "CriticalEnemy" then
+            HealBot_SkinColorpick_OnClick("CustomHealthCriticalEnemyText")
+        elseif caller == "InjuredEnemy" then
+            HealBot_SkinColorpick_OnClick("CustomHealthInjuredEnemyText")
+        else
+            HealBot_SkinColorpick_OnClick("CustomHealthEnemyText")
         end
     elseif hb_lVars["TextCustomColoursCaller"] == "State" then
         if caller == "Critical" then
             HealBot_SkinColorpick_OnClick("CustomStateCriticalText")
         elseif caller == "Injured" then
             HealBot_SkinColorpick_OnClick("CustomStateInjuredText")
-        else
+        elseif caller == "Healthy" then
             HealBot_SkinColorpick_OnClick("CustomStateText")
+        elseif caller == "CriticalEnemy" then
+            HealBot_SkinColorpick_OnClick("CustomStateCriticalEnemyText")
+        elseif caller == "InjuredEnemy" then
+            HealBot_SkinColorpick_OnClick("CustomStateInjuredEnemyText")
+        else
+            HealBot_SkinColorpick_OnClick("CustomStateEnemyText")
         end
     end
     if caller~="Critical" and caller~="Injured" then
@@ -22499,6 +22709,30 @@ function HealBot_Options_PresetColourSelect_OnClick(id,cancel)
                 HealBot_ColourObjWaiting="CustomHealthCriticalText"
             elseif hb_lVars["TextCustomColoursCaller"] == "State" then
                 HealBot_ColourObjWaiting="CustomStateCriticalText"
+            end
+        elseif hb_lVars["PresetColourCaller"] == "HealBot_Options_SkinTextHealthyPresetColourEnemy" then
+            if hb_lVars["TextCustomColoursCaller"] == "Name" then
+                HealBot_ColourObjWaiting="CustomNameEnemyText"
+            elseif hb_lVars["TextCustomColoursCaller"] == "Health" then
+                HealBot_ColourObjWaiting="CustomHealthEnemyText"
+            elseif hb_lVars["TextCustomColoursCaller"] == "State" then
+                HealBot_ColourObjWaiting="CustomStateEnemyText"
+            end
+        elseif hb_lVars["PresetColourCaller"] == "HealBot_Options_SkinTextInjuredPresetColourEnemy" then
+            if hb_lVars["TextCustomColoursCaller"] == "Name" then
+                HealBot_ColourObjWaiting="CustomNameInjuredEnemyText"
+            elseif hb_lVars["TextCustomColoursCaller"] == "Health" then
+                HealBot_ColourObjWaiting="CustomHealthInjuredEnemyText"
+            elseif hb_lVars["TextCustomColoursCaller"] == "State" then
+                HealBot_ColourObjWaiting="CustomStateInjuredEnemyText"
+            end
+        elseif hb_lVars["PresetColourCaller"] == "HealBot_Options_SkinTextCriticalPresetColourEnemy" then
+            if hb_lVars["TextCustomColoursCaller"] == "Name" then
+                HealBot_ColourObjWaiting="CustomNameCriticalEnemyText"
+            elseif hb_lVars["TextCustomColoursCaller"] == "Health" then
+                HealBot_ColourObjWaiting="CustomHealthCriticalEnemyText"
+            elseif hb_lVars["TextCustomColoursCaller"] == "State" then
+                HealBot_ColourObjWaiting="CustomStateCriticalEnemyText"
             end
         elseif hb_lVars["PresetColourCaller"] == "HealBot_Options_SkinStateDeadColPresetColour" then
             HealBot_ColourObjWaiting="DeadStateText"
@@ -23889,6 +24123,8 @@ function HealBot_Options_OnLoad(self, caller)
     HealBot_Options_Content_InnerPanel(_G["HealBot_Options_SkinsFramesBarsColoursCustomFriend"], 0.5)
     HealBot_Options_Content_InnerPanel(_G["HealBot_Options_SkinsFramesBarsColoursCustomEnemy"], 0.5)
     HealBot_Options_Content_InnerPanel(_G["HealBot_Options_SkinsFramesTextColoursCustom"], 0.5)
+    HealBot_Options_Content_InnerPanel(_G["HealBot_Options_SkinsFramesBarTextColoursCustomFriend"], 0.5)
+    HealBot_Options_Content_InnerPanel(_G["HealBot_Options_SkinsFramesBarTextColoursCustomEnemy"], 0.5)
     HealBot_Options_Content_InnerPanel(_G["HealBot_Options_SkinsFramesEmergencyTabNotAvail"], 0.5)
     HealBot_Options_Content_InnerPanel(_G["HealBot_Options_SkinsFramesIndicatorsTabNotAvail"], 0.5)
     HealBot_Options_Content_InnerPanel(_G["HealBot_Options_SkinsFramesBarsVisibility"], 0.5)
@@ -24514,7 +24750,13 @@ function HealBot_Options_UpdateLang()
     g=_G["hbSkinsFramesBarsColCustomFriendTxt"]
     g:SetText(HEALBOT_CUSTOM_CASTBY_FRIEND)
     g:SetTextColor(1,1,1,1)
+    g=_G["hbSkinsFramesBarTextColCustomFriendTxt"]
+    g:SetText(HEALBOT_CUSTOM_CASTBY_FRIEND)
+    g:SetTextColor(1,1,1,1)
     g=_G["hbSkinsFramesBarsColCustomEnemyTxt"]
+    g:SetText(HEALBOT_CUSTOM_CASTBY_ENEMY)
+    g:SetTextColor(1,1,1,1)
+    g=_G["hbSkinsFramesBarTextColCustomEnemyTxt"]
     g:SetText(HEALBOT_CUSTOM_CASTBY_ENEMY)
     g:SetTextColor(1,1,1,1)
     g=_G["HealBot_Options_SkinsFramesBarsGeneralTxt"]
@@ -26683,6 +26925,9 @@ function HealBot_Options_SkinsFramesTextNameColoursTab(tab)
         HealBot_Media_UpdateDefaultTexture(HealBot_NameTextCustomColourCritical, "Options_SkinsFramesTextNameColoursTab")
         HealBot_Media_UpdateDefaultTexture(HealBot_NameTextCustomColourInjured, "Options_SkinsFramesTextNameColoursTab")
         HealBot_Media_UpdateDefaultTexture(HealBot_NameTextCustomColourHealthy, "Options_SkinsFramesTextNameColoursTab")
+        HealBot_Media_UpdateDefaultTexture(HealBot_NameTextCustomColourCriticalEnemy, "Options_SkinsFramesTextNameColoursTab")
+        HealBot_Media_UpdateDefaultTexture(HealBot_NameTextCustomColourInjuredEnemy, "Options_SkinsFramesTextNameColoursTab")
+        HealBot_Media_UpdateDefaultTexture(HealBot_NameTextCustomColourHealthyEnemy, "Options_SkinsFramesTextNameColoursTab")
         if HEALBOT_GAME_VERSION<4 then
             HealBot_NameTextDeadColb:ClearAllPoints()
             HealBot_NameTextDeadColb:SetPoint("BOTTOM",-120,25)
@@ -26770,6 +27015,9 @@ function HealBot_Options_SkinsFramesTextHealthColoursTab(tab)
         HealBot_Media_UpdateDefaultTexture(HealBot_HealthTextCustomColourCritical, "Options_SkinsFramesTextHealthColoursTab")
         HealBot_Media_UpdateDefaultTexture(HealBot_HealthTextCustomColourInjured, "Options_SkinsFramesTextHealthColoursTab")
         HealBot_Media_UpdateDefaultTexture(HealBot_HealthTextCustomColourHealthy, "Options_SkinsFramesTextHealthColoursTab")
+        HealBot_Media_UpdateDefaultTexture(HealBot_HealthTextCustomColourCriticalEnemy, "Options_SkinsFramesTextHealthColoursTab")
+        HealBot_Media_UpdateDefaultTexture(HealBot_HealthTextCustomColourInjuredEnemy, "Options_SkinsFramesTextHealthColoursTab")
+        HealBot_Media_UpdateDefaultTexture(HealBot_HealthTextCustomColourHealthyEnemy, "Options_SkinsFramesTextHealthColoursTab")
         hb_lVars["OnLoadSkinsFramesTextHealthColours"]=false
     end
 end
@@ -26892,6 +27140,9 @@ function HealBot_Options_SkinsFramesTextStateColoursTab(tab)
         HealBot_Media_UpdateDefaultTexture(HealBot_StateTextCustomColourCritical, "Options_SkinsFramesTextStateColoursTab")
         HealBot_Media_UpdateDefaultTexture(HealBot_StateTextCustomColourInjured, "Options_SkinsFramesTextStateColoursTab")
         HealBot_Media_UpdateDefaultTexture(HealBot_StateTextCustomColourHealthy, "Options_SkinsFramesTextStateColoursTab")
+        HealBot_Media_UpdateDefaultTexture(HealBot_StateTextCustomColourCriticalEnemy, "Options_SkinsFramesTextStateColoursTab")
+        HealBot_Media_UpdateDefaultTexture(HealBot_StateTextCustomColourInjuredEnemy, "Options_SkinsFramesTextStateColoursTab")
+        HealBot_Media_UpdateDefaultTexture(HealBot_StateTextCustomColourHealthyEnemy, "Options_SkinsFramesTextStateColoursTab")
         if HEALBOT_GAME_VERSION<4 then
             HealBot_StateTextDeadColb:ClearAllPoints()
             HealBot_StateTextDeadColb:SetPoint("BOTTOM",-120,25)
@@ -28083,7 +28334,11 @@ function HealBot_Options_BuffsCustomTab(tab)
     HealBot_Options_Class_HoTctlIDMethod.initialize=HealBot_Options_Class_HoTctlIDMethod_DropDown
     HealBot_Options_SetEnableDisableBuffBtn()
     hb_lVars["numCustomBuffs"]=#HoTctlName_List
-    local x=HealBot_Globals.WatchHoT[hb_lVars["FilterHoTctlNameTrim"]][sId] or 1
+    local x=1
+    if not hb_lVars["FilterHoTctlNameTrim"] then hb_lVars["FilterHoTctlNameTrim"]=hbv_GetClass("En", hb_lVars["FilterHoTctlName"]) end
+    if hb_lVars["FilterHoTctlNameTrim"] and HealBot_Globals.WatchHoT[hb_lVars["FilterHoTctlNameTrim"]] and sId then
+        x=HealBot_Globals.WatchHoT[hb_lVars["FilterHoTctlNameTrim"]][sId] or 1
+    end
     HealBot_Options_Class_HoTctlAction:SetAlpha(1)
     UIDropDownMenu_SetText(HealBot_Options_Class_HoTctlAction, HealBot_Options_Class_HoTctlAction_List[x])
     HealBot_Options_Class_HoTctlIDMethod:SetAlpha(1)
@@ -29122,6 +29377,9 @@ function HealBot_Options_SetSkinBars()
     HealBot_Media_UpdateTextureRef("HealBot_TextHealthyCustomColour", hbv_Skins_GetFrameVar("HealBar", "TEXTURE", hb_lVars["Frame"]), "Options_SetSkinBars - HealBar")
     HealBot_Media_UpdateTextureRef("HealBot_TextInjuredCustomColour", hbv_Skins_GetFrameVar("HealBar", "TEXTURE", hb_lVars["Frame"]), "Options_SetSkinBars - HealBar")
     HealBot_Media_UpdateTextureRef("HealBot_TextCriticalCustomColour", hbv_Skins_GetFrameVar("HealBar", "TEXTURE", hb_lVars["Frame"]), "Options_SetSkinBars - HealBar")
+    HealBot_Media_UpdateTextureRef("HealBot_TextHealthyCustomColourEnemy", hbv_Skins_GetFrameVar("HealBar", "TEXTURE", hb_lVars["Frame"]), "Options_SetSkinBars - HealBar")
+    HealBot_Media_UpdateTextureRef("HealBot_TextInjuredCustomColourEnemy", hbv_Skins_GetFrameVar("HealBar", "TEXTURE", hb_lVars["Frame"]), "Options_SetSkinBars - HealBar")
+    HealBot_Media_UpdateTextureRef("HealBot_TextCriticalCustomColourEnemy", hbv_Skins_GetFrameVar("HealBar", "TEXTURE", hb_lVars["Frame"]), "Options_SetSkinBars - HealBar")
     HealBot_Media_UpdateTextureRef("HealBot_EmergCustomColCrit", hbv_Skins_GetFrameVar("Emerg", "TEXTURE", hb_lVars["Frame"]), "Options_SetSkinBars - Emerg")
     HealBot_Media_UpdateTextureRef("HealBot_EmergCustomColInj", hbv_Skins_GetFrameVar("Emerg", "TEXTURE", hb_lVars["Frame"]), "Options_SetSkinBars - Emerg")
     HealBot_Media_UpdateTextureRef("HealBot_EmergCustomColHealthy", hbv_Skins_GetFrameVar("Emerg", "TEXTURE", hb_lVars["Frame"]), "Options_SetSkinBars - Emerg")
@@ -29179,9 +29437,15 @@ function HealBot_Options_SetSkinBars()
     HealBot_NameTextCustomColourCritical:GetStatusBarTexture():SetHorizTile(false)
     HealBot_NameTextCustomColourInjured:GetStatusBarTexture():SetHorizTile(false)
     HealBot_NameTextCustomColourHealthy:GetStatusBarTexture():SetHorizTile(false)
+    HealBot_NameTextCustomColourCriticalEnemy:GetStatusBarTexture():SetHorizTile(false)
+    HealBot_NameTextCustomColourInjuredEnemy:GetStatusBarTexture():SetHorizTile(false)
+    HealBot_NameTextCustomColourHealthyEnemy:GetStatusBarTexture():SetHorizTile(false)
     HealBot_StateTextCustomColourHealthy:GetStatusBarTexture():SetHorizTile(false)
     HealBot_StateTextCustomColourInjured:GetStatusBarTexture():SetHorizTile(false)
     HealBot_StateTextCustomColourCritical:GetStatusBarTexture():SetHorizTile(false)
+    HealBot_StateTextCustomColourHealthyEnemy:GetStatusBarTexture():SetHorizTile(false)
+    HealBot_StateTextCustomColourInjuredEnemy:GetStatusBarTexture():SetHorizTile(false)
+    HealBot_StateTextCustomColourCriticalEnemy:GetStatusBarTexture():SetHorizTile(false)
     HealBot_NameTextDeadCol:GetStatusBarTexture():SetHorizTile(false)
     HealBot_StateTextDeadCol:GetStatusBarTexture():SetHorizTile(false)
     HealBot_NameTextResCol:GetStatusBarTexture():SetHorizTile(false)
@@ -29199,6 +29463,9 @@ function HealBot_Options_SetSkinBars()
     HealBot_HealthTextCustomColourHealthy:GetStatusBarTexture():SetHorizTile(false)
     HealBot_HealthTextCustomColourInjured:GetStatusBarTexture():SetHorizTile(false)
     HealBot_HealthTextCustomColourCritical:GetStatusBarTexture():SetHorizTile(false)
+    HealBot_HealthTextCustomColourHealthyEnemy:GetStatusBarTexture():SetHorizTile(false)
+    HealBot_HealthTextCustomColourInjuredEnemy:GetStatusBarTexture():SetHorizTile(false)
+    HealBot_HealthTextCustomColourCriticalEnemy:GetStatusBarTexture():SetHorizTile(false)
     HealBot_AggroTextCustomColour:GetStatusBarTexture():SetHorizTile(false)
     HealBot_BarCustomHealthBackColourHealthy:GetStatusBarTexture():SetHorizTile(false)
     HealBot_BarCustomHealthBackColourInjured:GetStatusBarTexture():SetHorizTile(false)
@@ -29255,12 +29522,24 @@ function HealBot_Options_SetSkinBars()
     HealBot_NameTextCustomColourInjured:SetScale(barScale)
     HealBot_NameTextCustomColourCritical:SetScale(barScale + 0.01)
     HealBot_NameTextCustomColourCritical:SetScale(barScale)
+    HealBot_NameTextCustomColourHealthyEnemy:SetScale(barScale + 0.01)
+    HealBot_NameTextCustomColourHealthyEnemy:SetScale(barScale)
+    HealBot_NameTextCustomColourInjuredEnemy:SetScale(barScale + 0.01)
+    HealBot_NameTextCustomColourInjuredEnemy:SetScale(barScale)
+    HealBot_NameTextCustomColourCriticalEnemy:SetScale(barScale + 0.01)
+    HealBot_NameTextCustomColourCriticalEnemy:SetScale(barScale)
     HealBot_StateTextCustomColourHealthy:SetScale(barScale + 0.01)
     HealBot_StateTextCustomColourHealthy:SetScale(barScale)
     HealBot_StateTextCustomColourInjured:SetScale(barScale + 0.01)
     HealBot_StateTextCustomColourInjured:SetScale(barScale)
     HealBot_StateTextCustomColourCritical:SetScale(barScale + 0.01)
     HealBot_StateTextCustomColourCritical:SetScale(barScale)
+    HealBot_StateTextCustomColourHealthyEnemy:SetScale(barScale + 0.01)
+    HealBot_StateTextCustomColourHealthyEnemy:SetScale(barScale)
+    HealBot_StateTextCustomColourInjuredEnemy:SetScale(barScale + 0.01)
+    HealBot_StateTextCustomColourInjuredEnemy:SetScale(barScale)
+    HealBot_StateTextCustomColourCriticalEnemy:SetScale(barScale + 0.01)
+    HealBot_StateTextCustomColourCriticalEnemy:SetScale(barScale)
     HealBot_NameTextDeadCol:SetScale(barScale + 0.01)
     HealBot_NameTextDeadCol:SetScale(barScale)
     HealBot_StateTextDeadCol:SetScale(barScale + 0.01)
@@ -29295,6 +29574,12 @@ function HealBot_Options_SetSkinBars()
     HealBot_HealthTextCustomColourInjured:SetScale(barScale)
     HealBot_HealthTextCustomColourCritical:SetScale(barScale + 0.01)
     HealBot_HealthTextCustomColourCritical:SetScale(barScale)
+    HealBot_HealthTextCustomColourHealthyEnemy:SetScale(barScale + 0.01)
+    HealBot_HealthTextCustomColourHealthyEnemy:SetScale(barScale)
+    HealBot_HealthTextCustomColourInjuredEnemy:SetScale(barScale + 0.01)
+    HealBot_HealthTextCustomColourInjuredEnemy:SetScale(barScale)
+    HealBot_HealthTextCustomColourCriticalEnemy:SetScale(barScale + 0.01)
+    HealBot_HealthTextCustomColourCriticalEnemy:SetScale(barScale)
     HealBot_AggroTextCustomColour:SetScale(barScale + 0.01)
     HealBot_AggroTextCustomColour:SetScale(barScale)
     HealBot_BarCustomHealthBackColourHealthy:SetScale(barScale + 0.01);

@@ -4467,12 +4467,14 @@ function HealBot_Aura_ConfigClassHoT()
         local HealBot_configClassHoTClass=HealBot_Globals.WatchHoT[xClass]
         for id,x  in pairs(HealBot_configClassHoTClass) do
             local sName=false
-            if type(id)~="number" and not HealBot_SpellID_LookupData[id] then
-                HealBot_SpellID_LookupData[id]={}
-                HealBot_SpellID_LookupData[id]["CHECK"]=true
-                HealBot_SpellID_LookupData[id]["CLASS"]=xClass
+            if type(id)~="number" then
+                if not HealBot_SpellID_LookupData[id] then
+                    HealBot_SpellID_LookupData[id]={}
+                    HealBot_SpellID_LookupData[id]["CHECK"]=true
+                    HealBot_SpellID_LookupData[id]["CLASS"]=xClass
+                end
                 sName=id
-            elseif HealBot_WoWAPI_SpellName(id) then
+            else
                 sName=HealBot_WoWAPI_SpellName(id)
             end
             if x == 1 then

@@ -129,7 +129,7 @@ function hbv_SetClass()
 end
 hbv_SetClass()
 function hbv_GetClass(ctype, key)
-    return hbClass[ctype][key]
+    return hbClass[ctype][key] or "ALL"
 end
 
 -- Aux
@@ -742,12 +742,12 @@ local hbSkinFrameDefaults={["BarCol"]={["HLTH"]=5, ["BACK"]=1, ["BORDER"]=1,
                                        ["BACKR"]=0.2, ["BACKG"]=0.2, ["BACKB"]=0.7, ["BACKA"]=0.1,
                                        ["BORDERR"]=0.2, ["BORDERG"]=0.2, ["BORDERB"]=0.2, ["BORDERA"]=0.4,
                                       },
-                       ["BarTextCol"]={["NCR"]=0, ["NCG"]=1, ["NCB"]=0, ["NICR"]=0, ["NICG"]=1, ["NICB"]=0, ["NCCR"]=0, ["NCCG"]=1, ["NCCB"]=0,
+                       ["BarTextCol"]={["NCR"]=0, ["NCG"]=1, ["NCB"]=0, ["NICR"]=0, ["NICG"]=1, ["NICB"]=0, ["NCCR"]=0, ["NCCG"]=1, ["NCCB"]=0, ["NCRE"]=0, ["NCGE"]=1, ["NCBE"]=0, ["NICRE"]=0, ["NICGE"]=1, ["NICBE"]=0, ["NCCRE"]=0, ["NCCGE"]=1, ["NCCBE"]=0,
                                        ["NIT"]=70, ["NCT"]=40, ["NCA"]=0.95, ["NCOA"]=0.75, ["NCDA"]=0.5, ["NDCR"]=1, ["NDCG"]=0.2, ["NDCB"]=0.2, ["NRCR"]=0.2, ["NRCG"]=1, ["NRCB"]=0.2,
-                                       ["NSCR"]=0.4, ["NSCG"]=0.02, ["NSCB"]=0.4, ["SCR"]=1, ["SCG"]=1, ["SCB"]=0, ["SCA"]=0.95, ["SICR"]=1, ["SICG"]=1, ["SICB"]=0,
-                                       ["SCCR"]=1, ["SCCG"]=1, ["SCCB"]=0, ["SIT"]=70, ["SCT"]=40, ["SCOA"]=0.75, ["SCDA"]=0.5, ["SDCR"]=1, ["SDCG"]=0.2, ["SDCB"]=0.2, ["SRCR"]=0.2, ["SRCG"]=1, ["SRCB"]=0.2,
-                                       ["SSCR"]=0.4, ["SSCG"]=0.02, ["SSCB"]=0.4, ["NAME"]=2, ["STATE"]=2, ["HECR"]=0, ["HECG"]=1, ["HECB"]=0, ["HCR"]=0, ["HCG"]=1, ["HCB"]=0, ["HCA"]=0.95,
-                                       ["HICR"]=0, ["HICG"]=1, ["HICB"]=0, ["HCCR"]=0, ["HCCG"]=1, ["HCCB"]=0, ["HIT"]=70, ["HCT"]=40, ["HCOA"]=0.75, ["HCDA"]=0.5, ["OCR"]=0.1, ["OCG"]=1, ["OCB"]=0.1,
+                                       ["NSCR"]=0.4, ["NSCG"]=0.02, ["NSCB"]=0.4, ["SCR"]=1, ["SCG"]=1, ["SCB"]=0, ["SCA"]=0.95, ["SICR"]=1, ["SICG"]=1, ["SICB"]=0, ["SCRE"]=1, ["SCGE"]=1, ["SCBE"]=0, ["SICRE"]=1, ["SICGE"]=1, ["SICBE"]=0,
+                                       ["SCCR"]=1, ["SCCG"]=1, ["SCCB"]=0, ["SIT"]=70, ["SCT"]=40, ["SCOA"]=0.75, ["SCDA"]=0.5, ["SDCR"]=1, ["SDCG"]=0.2, ["SDCB"]=0.2, ["SRCR"]=0.2, ["SRCG"]=1, ["SRCB"]=0.2, ["SCCRE"]=1, ["SCCGE"]=1, ["SCCBE"]=0,
+                                       ["SSCR"]=0.4, ["SSCG"]=0.02, ["SSCB"]=0.4, ["NAME"]=2, ["STATE"]=2, ["HECR"]=0, ["HECG"]=1, ["HECB"]=0, ["HCR"]=0, ["HCG"]=1, ["HCB"]=0, ["HCA"]=0.95, ["HCRE"]=0, ["HCGE"]=1, ["HCBE"]=0,
+                                       ["HICR"]=0, ["HICG"]=1, ["HICB"]=0, ["HCCR"]=0, ["HCCG"]=1, ["HCCB"]=0, ["HIT"]=70, ["HCT"]=40, ["HCOA"]=0.75, ["HCDA"]=0.5, ["OCR"]=0.1, ["OCG"]=1, ["OCB"]=0.1, ["HICRE"]=0, ["HICGE"]=1, ["HICBE"]=0, ["HCCRE"]=0, ["HCCGE"]=1, ["HCCBE"]=0,
                                        ["ICR"]=0.1, ["ICG"]=1, ["ICB"]=0.1, ["ACR"]=1, ["ACG"]=0.1, ["ACB"]=0.1, ["ACA"]=0.95,
                                        ["AIT"]=70, ["ACT"]=40, ["ACOA"]=0.75, ["ACDA"]=0.5, ["HLTH"]=2, ["AGGRO"]=2,
                                        ["NDEBUFF"]=false, ["HDEBUFF"]=false, ["RIP"]=true, ["RES"]=true, ["SUM"]=false, ["SRIP"]=true, ["SRES"]=true, ["SSUM"]=false,

@@ -688,10 +688,12 @@ function HealBot_Events_ClassificationChanged(button)
         HealBot_Range_ButtonSpell(button)
     end
     if button.status.hostile~=button.icon.extra.hostile then
-        if not button.status.hostile or hbv_Skins_GetFrameBoolean("Icons", "SHOWHOSTILE", button.frame) then
+        if hbv_Skins_GetFrameBoolean("Icons", "SHOWHOSTILE", button.frame) then
             button.icon.extra.hostile=button.status.hostile
-            HealBot_Aura_UpdateState(button)
+        else
+            button.icon.extra.hostile=false
         end
+        HealBot_Aura_UpdateState(button)
     end
 end
 

@@ -537,46 +537,94 @@ end
 function HealBot_Text_ColoursCustom(button, cType)
       --HealBot_setCall("HealBot_Text_ColoursCustom", button)
     if cType == "NAME" then
-        if button.health.pct>hbv_Skins_GetFrameVar("BarTextCol", "SIT", button.framecol) then
-            tr=hbv_Skins_GetFrameVar("BarTextCol", "NCR", button.framecol)
-            tg=hbv_Skins_GetFrameVar("BarTextCol", "NCG", button.framecol)
-            tb=hbv_Skins_GetFrameVar("BarTextCol", "NCB", button.framecol)
-        elseif button.health.pct>hbv_Skins_GetFrameVar("BarTextCol", "SCT", button.framecol) then
-            tr=hbv_Skins_GetFrameVar("BarTextCol", "NICR", button.framecol)
-            tg=hbv_Skins_GetFrameVar("BarTextCol", "NICG", button.framecol)
-            tb=hbv_Skins_GetFrameVar("BarTextCol", "NICB", button.framecol)
+        if button.status.hostile then
+            if button.health.pct>hbv_Skins_GetFrameVar("BarTextCol", "SIT", button.framecol) then
+                tr=hbv_Skins_GetFrameVar("BarTextCol", "NCRE", button.framecol)
+                tg=hbv_Skins_GetFrameVar("BarTextCol", "NCGE", button.framecol)
+                tb=hbv_Skins_GetFrameVar("BarTextCol", "NCBE", button.framecol)
+            elseif button.health.pct>hbv_Skins_GetFrameVar("BarTextCol", "SCT", button.framecol) then
+                tr=hbv_Skins_GetFrameVar("BarTextCol", "NICRE", button.framecol)
+                tg=hbv_Skins_GetFrameVar("BarTextCol", "NICGE", button.framecol)
+                tb=hbv_Skins_GetFrameVar("BarTextCol", "NICBE", button.framecol)
+            else
+                tr=hbv_Skins_GetFrameVar("BarTextCol", "NCCRE", button.framecol)
+                tg=hbv_Skins_GetFrameVar("BarTextCol", "NCCGE", button.framecol)
+                tb=hbv_Skins_GetFrameVar("BarTextCol", "NCCBE", button.framecol)
+            end
         else
-            tr=hbv_Skins_GetFrameVar("BarTextCol", "NCCR", button.framecol)
-            tg=hbv_Skins_GetFrameVar("BarTextCol", "NCCG", button.framecol)
-            tb=hbv_Skins_GetFrameVar("BarTextCol", "NCCB", button.framecol)
+            if button.health.pct>hbv_Skins_GetFrameVar("BarTextCol", "SIT", button.framecol) then
+                tr=hbv_Skins_GetFrameVar("BarTextCol", "NCR", button.framecol)
+                tg=hbv_Skins_GetFrameVar("BarTextCol", "NCG", button.framecol)
+                tb=hbv_Skins_GetFrameVar("BarTextCol", "NCB", button.framecol)
+            elseif button.health.pct>hbv_Skins_GetFrameVar("BarTextCol", "SCT", button.framecol) then
+                tr=hbv_Skins_GetFrameVar("BarTextCol", "NICR", button.framecol)
+                tg=hbv_Skins_GetFrameVar("BarTextCol", "NICG", button.framecol)
+                tb=hbv_Skins_GetFrameVar("BarTextCol", "NICB", button.framecol)
+            else
+                tr=hbv_Skins_GetFrameVar("BarTextCol", "NCCR", button.framecol)
+                tg=hbv_Skins_GetFrameVar("BarTextCol", "NCCG", button.framecol)
+                tb=hbv_Skins_GetFrameVar("BarTextCol", "NCCB", button.framecol)
+            end
         end
     elseif cType == "HEALTH" then
-        if button.health.pct>hbv_Skins_GetFrameVar("BarTextCol", "SIT", button.framecol) then
-            tr=hbv_Skins_GetFrameVar("BarTextCol", "HCR", button.framecol)
-            tg=hbv_Skins_GetFrameVar("BarTextCol", "HCG", button.framecol)
-            tb=hbv_Skins_GetFrameVar("BarTextCol", "HCB", button.framecol)
-        elseif button.health.pct>hbv_Skins_GetFrameVar("BarTextCol", "SCT", button.framecol) then
-            tr=hbv_Skins_GetFrameVar("BarTextCol", "HICR", button.framecol)
-            tg=hbv_Skins_GetFrameVar("BarTextCol", "HICG", button.framecol)
-            tb=hbv_Skins_GetFrameVar("BarTextCol", "HICB", button.framecol)
+        if button.status.hostile then
+            if button.health.pct>hbv_Skins_GetFrameVar("BarTextCol", "SIT", button.framecol) then
+                tr=hbv_Skins_GetFrameVar("BarTextCol", "HCRE", button.framecol)
+                tg=hbv_Skins_GetFrameVar("BarTextCol", "HCGE", button.framecol)
+                tb=hbv_Skins_GetFrameVar("BarTextCol", "HCBE", button.framecol)
+            elseif button.health.pct>hbv_Skins_GetFrameVar("BarTextCol", "SCT", button.framecol) then
+                tr=hbv_Skins_GetFrameVar("BarTextCol", "HICRE", button.framecol)
+                tg=hbv_Skins_GetFrameVar("BarTextCol", "HICGE", button.framecol)
+                tb=hbv_Skins_GetFrameVar("BarTextCol", "HICBE", button.framecol)
+            else
+                tr=hbv_Skins_GetFrameVar("BarTextCol", "HCCRE", button.framecol)
+                tg=hbv_Skins_GetFrameVar("BarTextCol", "HCCGE", button.framecol)
+                tb=hbv_Skins_GetFrameVar("BarTextCol", "HCCBE", button.framecol)
+            end
         else
-            tr=hbv_Skins_GetFrameVar("BarTextCol", "HCCR", button.framecol)
-            tg=hbv_Skins_GetFrameVar("BarTextCol", "HCCG", button.framecol)
-            tb=hbv_Skins_GetFrameVar("BarTextCol", "HCCB", button.framecol)
+            if button.health.pct>hbv_Skins_GetFrameVar("BarTextCol", "SIT", button.framecol) then
+                tr=hbv_Skins_GetFrameVar("BarTextCol", "HCR", button.framecol)
+                tg=hbv_Skins_GetFrameVar("BarTextCol", "HCG", button.framecol)
+                tb=hbv_Skins_GetFrameVar("BarTextCol", "HCB", button.framecol)
+            elseif button.health.pct>hbv_Skins_GetFrameVar("BarTextCol", "SCT", button.framecol) then
+                tr=hbv_Skins_GetFrameVar("BarTextCol", "HICR", button.framecol)
+                tg=hbv_Skins_GetFrameVar("BarTextCol", "HICG", button.framecol)
+                tb=hbv_Skins_GetFrameVar("BarTextCol", "HICB", button.framecol)
+            else
+                tr=hbv_Skins_GetFrameVar("BarTextCol", "HCCR", button.framecol)
+                tg=hbv_Skins_GetFrameVar("BarTextCol", "HCCG", button.framecol)
+                tb=hbv_Skins_GetFrameVar("BarTextCol", "HCCB", button.framecol)
+            end
         end
     elseif cType == "STATE" then
-        if button.health.pct>hbv_Skins_GetFrameVar("BarTextCol", "SIT", button.framecol) then
-            tr=hbv_Skins_GetFrameVar("BarTextCol", "SCR", button.framecol)
-            tg=hbv_Skins_GetFrameVar("BarTextCol", "SCG", button.framecol)
-            tb=hbv_Skins_GetFrameVar("BarTextCol", "SCB", button.framecol)
-        elseif button.health.pct>hbv_Skins_GetFrameVar("BarTextCol", "SCT", button.framecol) then
-            tr=hbv_Skins_GetFrameVar("BarTextCol", "SICR", button.framecol)
-            tg=hbv_Skins_GetFrameVar("BarTextCol", "SICG", button.framecol)
-            tb=hbv_Skins_GetFrameVar("BarTextCol", "SICB", button.framecol)
+        if button.status.hostile then
+            if button.health.pct>hbv_Skins_GetFrameVar("BarTextCol", "SIT", button.framecol) then
+                tr=hbv_Skins_GetFrameVar("BarTextCol", "SCRE", button.framecol)
+                tg=hbv_Skins_GetFrameVar("BarTextCol", "SCGE", button.framecol)
+                tb=hbv_Skins_GetFrameVar("BarTextCol", "SCBE", button.framecol)
+            elseif button.health.pct>hbv_Skins_GetFrameVar("BarTextCol", "SCT", button.framecol) then
+                tr=hbv_Skins_GetFrameVar("BarTextCol", "SICRE", button.framecol)
+                tg=hbv_Skins_GetFrameVar("BarTextCol", "SICGE", button.framecol)
+                tb=hbv_Skins_GetFrameVar("BarTextCol", "SICBE", button.framecol)
+            else
+                tr=hbv_Skins_GetFrameVar("BarTextCol", "SCCRE", button.framecol)
+                tg=hbv_Skins_GetFrameVar("BarTextCol", "SCCGE", button.framecol)
+                tb=hbv_Skins_GetFrameVar("BarTextCol", "SCCBE", button.framecol)
+            end
         else
-            tr=hbv_Skins_GetFrameVar("BarTextCol", "SCCR", button.framecol)
-            tg=hbv_Skins_GetFrameVar("BarTextCol", "SCCG", button.framecol)
-            tb=hbv_Skins_GetFrameVar("BarTextCol", "SCCB", button.framecol)
+            if button.health.pct>hbv_Skins_GetFrameVar("BarTextCol", "SIT", button.framecol) then
+                tr=hbv_Skins_GetFrameVar("BarTextCol", "SCR", button.framecol)
+                tg=hbv_Skins_GetFrameVar("BarTextCol", "SCG", button.framecol)
+                tb=hbv_Skins_GetFrameVar("BarTextCol", "SCB", button.framecol)
+            elseif button.health.pct>hbv_Skins_GetFrameVar("BarTextCol", "SCT", button.framecol) then
+                tr=hbv_Skins_GetFrameVar("BarTextCol", "SICR", button.framecol)
+                tg=hbv_Skins_GetFrameVar("BarTextCol", "SICG", button.framecol)
+                tb=hbv_Skins_GetFrameVar("BarTextCol", "SICB", button.framecol)
+            else
+                tr=hbv_Skins_GetFrameVar("BarTextCol", "SCCR", button.framecol)
+                tg=hbv_Skins_GetFrameVar("BarTextCol", "SCCG", button.framecol)
+                tb=hbv_Skins_GetFrameVar("BarTextCol", "SCCB", button.framecol)
+            end
         end
     else
         tr=hbv_Skins_GetFrameVar("BarTextCol", "ACR", button.framecol)
