@@ -2541,7 +2541,8 @@ function HealBot_GetTalentInfo(button)
                 HealBot_luVars["CurrentSpec"]=i
                 HealBot_Timers_Set("PLAYER","SpecUpdate",true)
             end
-            if s then
+            if s and HealBot_Config.Spec ~= s then
+                HealBot_Config.LastAutoSkinChangeTime=0
                 HealBot_Config.Spec=s
             end
         end

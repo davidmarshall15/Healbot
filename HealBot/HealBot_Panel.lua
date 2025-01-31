@@ -1992,7 +1992,7 @@ function HealBot_Panel_TestBarsOn()
     if gID>0 and gNo>0 then
         if Healbot_Config_Skins.HealGroups[Healbot_Config_Skins.Current_Skin][gID]["FRAME"] == rFrame then xRaidBars=xRaidBars-gNo end
     end
-    if gNo>xRaidBars then gNo=xRaidBars end
+    --if gNo>xRaidBars then gNo=xRaidBars end
     for gl=1,15 do
         HealBot_Panel_InitFrame(healGroups[gl]["FRAME"],gl)
         if HealBot_Action_hasPowerCounter(gl)>0 then
