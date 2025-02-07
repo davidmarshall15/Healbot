@@ -7510,8 +7510,16 @@ function HealBot_Options_DisableHealBotSolo_OnClick(self)
     end
 end
 
+function HealBot_Options_DisableHealBotSpec_OnClick(self)
+      --HealBot_setCall("HealBot_Options_DisableHealBotSpec_OnClick")
+    if HealBot_Config.DisableOnSpec[HealBot_Config.Spec]~=self:GetChecked() then
+        HealBot_Config.DisableOnSpec[HealBot_Config.Spec]=self:GetChecked()
+        HealBot_Timers_Set("OOC","DisableCheck")
+    end
+end
+
 function HealBot_Options_TalentInspect_OnClick(self)
-      --HealBot_setCall("HealBot_Options_DisableHealBotSolo_OnClick")
+      --HealBot_setCall("HealBot_Options_TalentInspect_OnClick")
     HealBot_Globals.TalentInspect=self:GetChecked()
 end
 
@@ -7523,6 +7531,9 @@ function HealBot_Options_DisableCheck()
     elseif not HealBot_Config.DisableSolo then
         z=1
     elseif not IsInRaid() and not IsInGroup() then
+        z=1
+    end
+    if HealBot_Config.DisableOnSpec[HealBot_Config.Spec] then
         z=1
     end
     if HealBot_Config.DisabledNow~=z then
@@ -25305,6 +25316,7 @@ function HealBot_Options_GeneralTab(tab)
         HealBot_Options_SetText(HealBot_Options_OptionsOpacityAdj,HEALBOT_OPTIONS_OPTIONSOPACITY)
         HealBot_Options_SetText(HealBot_Options_DisableHealBotOpt,HEALBOT_OPTIONS_DISABLEHEALBOT)
         HealBot_Options_SetText(HealBot_Options_DisableHealBotSolo,HEALBOT_OPTIONS_DISABLEHEALBOTSOLO)
+        HealBot_Options_SetText(HealBot_Options_DisableHealBotSpec,HEALBOT_OPTIONS_DISABLEHEALBOTSPEC..HealBot_Config.Spec)
         HealBot_Options_SetLabel("healbotcmdfontstr",HEALBOT_OPTIONS_COMMANDS)
         HealBot_Options_SetText(HealBot_Options_EFClassDruid,HEALBOT_DRUID)
         HealBot_Options_SetText(HealBot_Options_EFClassHunter,HEALBOT_HUNTER)
@@ -28826,6 +28838,7 @@ function HealBot_Options_SkinsFramesInit()
     HealBot_Comms_About()
     HealBot_Options_DisableHealBotOpt:SetChecked(HealBot_Config.DisableHealBot)
     HealBot_Options_DisableHealBotSolo:SetChecked(HealBot_Config.DisableSolo)
+    HealBot_Options_DisableHealBotSpec:SetChecked(HealBot_Config.DisableOnSpec[HealBot_Config.Spec])
     HealBot_Options_SelectSpellsFrame:Hide()
     HealBot_Options_NewSkinb:Disable()
     HealBot_Options_SetLabel("HealBot_Options_ScaleFrameText",HEALBOT_OPTIONS_SKINTEXT)

@@ -2544,6 +2544,7 @@ function HealBot_GetTalentInfo(button)
             if s and HealBot_Config.Spec ~= s then
                 HealBot_Config.LastAutoSkinChangeTime=0
                 HealBot_Config.Spec=s
+                HealBot_Timers_Set("OOC","DisableCheck")
             end
         end
     else

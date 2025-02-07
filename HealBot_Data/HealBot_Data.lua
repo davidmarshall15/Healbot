@@ -75,6 +75,7 @@ HealBot_ConfigDefaults={
   MacroUse10=false,
   DisableHealBot=false,
   DisableSolo=false,
+  DisableOnSpec={},
   DisabledNow=0,
   LastAutoSkinChangeType="-",
   LastAutoSkinChangeTime=0,

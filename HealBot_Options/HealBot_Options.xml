@@ -2278,9 +2278,9 @@
                   </CheckButton>
                   <CheckButton name="HealBot_Options_DisableHealBotSolo" inherits="SendMailRadioButtonTemplate">
                     <Anchors>
-                      <Anchor point="TOP" relativeTo="HealBot_Options_DisableHealBotOpt" relativePoint="BOTTOM">>
+                      <Anchor point="LEFT" relativeTo="HealBot_Options_DisableHealBotOpt" relativePoint="RIGHT">>
                         <Offset>
-                          <AbsDimension x="25" y="-2" />
+                          <AbsDimension x="115" y="1" />
                         </Offset>
                       </Anchor>
                     </Anchors>
@@ -2290,11 +2290,25 @@
                       <OnLeave>HealBot_Options_Show_Help("DISABLEHEALBOTSOLO",false)</OnLeave>
                     </Scripts>
                   </CheckButton>
-                  <CheckButton name="HealBot_Options_TalentInspect" inherits="HealBotUIPanelCheckButton">
+                  <CheckButton name="HealBot_Options_DisableHealBotSpec" inherits="HealBotUIPanelCheckButton">
                     <Anchors>
                       <Anchor point="TOP" relativeTo="HealBot_Options_DisableHealBotOpt" relativePoint="BOTTOM">>
                         <Offset>
-                          <AbsDimension x="0" y="-40" />
+                          <AbsDimension x="0" y="-5" />
+                        </Offset>
+                      </Anchor>
+                    </Anchors>
+                    <Scripts>
+                      <OnClick>HealBot_Options_DisableHealBotSpec_OnClick(self)</OnClick>
+                      <OnEnter>HealBot_Options_Show_Help("DISABLEHEALBOTSPEC",true)</OnEnter>
+                      <OnLeave>HealBot_Options_Show_Help("DISABLEHEALBOTSPEC",false)</OnLeave>
+                    </Scripts>
+                  </CheckButton>
+                  <CheckButton name="HealBot_Options_TalentInspect" inherits="HealBotUIPanelCheckButton">
+                    <Anchors>
+                      <Anchor point="TOP" relativeTo="HealBot_Options_DisableHealBotSpec" relativePoint="BOTTOM">>
+                        <Offset>
+                          <AbsDimension x="0" y="-15" />
                         </Offset>
                       </Anchor>
                     </Anchors>
@@ -2308,7 +2322,7 @@
                     <Anchors>
                       <Anchor point="TOPLEFT" relativeTo="HealBot_Options_ShowMinimapButton" relativePoint="BOTTOMLEFT">
                         <Offset>
-                          <AbsDimension x="-15" y="-48" />
+                          <AbsDimension x="-15" y="-42" />
                         </Offset>
                       </Anchor>
                     </Anchors>
