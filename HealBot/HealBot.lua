@@ -2504,24 +2504,24 @@ function HealBot_GetTalentInfo(button)
                 if i then
                     _, s=GetSpecializationInfo(i,false,false)
                 end
-            elseif button.isplayer and UnitIsVisible(button.unit) then
+            elseif button.isplayer and button.status.range>-1 then
                 i=GetInspectSpecialization(button.unit)
                 if i then
                     _, s=GetSpecializationInfoByID(i)
                 end
             end
         else
-            local tCount, mCount, isNotPlayer, canInspect= 0, 0, true, false
+            local tCount, mCount, isInspect, canInspect= 0, 0, false, false
             if button.player then
-                isNotPlayer=false
                 canInspect=true
             elseif button.isplayer and HealBot_Range_InteractDistance(button.unit, HealBot_luVars["ClassicInteractDistance"]) then
                 canInspect=true
+                isInspect=true
             end
             if canInspect then
-                local group=GetActiveTalentGroup(isNotPlayer)
-                for tab=1, 3 do
-                    tCount=select(5, GetTalentTabInfo(tab,isNotPlayer,nil,group))
+                local group=GetActiveTalentGroup(isInspect)
+                for tab=1, GetNumTalentTabs(isInspect) do
+                    tCount=select(5, GetTalentTabInfo(tab,isInspect,nil,group))
                     if type(tCount)~="number" then tCount=0 end
                     if tCount > mCount then
                         i=tab
