@@ -156,6 +156,11 @@ HealBot_Options_BindsKeyListRead[70]="="
 HealBot_Options_BindsKeyListRead[71]="`"
 HealBot_Options_BindsKeyListRead[72]="Left Windows"
 HealBot_Options_BindsKeyListRead[73]="Right Windows"
+for x=1,12 do
+    HealBot_Options_BindsKeyList[x+73]="F"..x
+    HealBot_Options_BindsKeyListRead[x+73]="F"..x
+end
+
 function HealBot_Options_retBindKey(id)
       --HealBot_setCall("HealBot_Options_retBindKey")
     return HealBot_Options_BindsKeyList[id]
@@ -7472,7 +7477,6 @@ function HealBot_Options_BuffIconSet_DropDown()
                         if cbBarCol~=self:GetID() then
                             HealBot_Globals.CustomBuffsIconSet[sId]=self:GetID()
                             UIDropDownMenu_SetText(HealBot_Options_BuffIconSet,HealBot_Options_Lists["IconSets"][self:GetID()])
-                            HealBot_Timers_Set("AURA","ResetBuffCache")
                             HealBot_Timers_Set("AURA","ConfigClassHoT")
                         end
                     end
@@ -10693,6 +10697,9 @@ function HealBot_OptionBinds_Level1Info(object, info, index)
     info.text="     Extra Keys"
     info.menuList=6
     UIDropDownMenu_AddButton(info)
+    info.text="     Function Keys"
+    info.menuList=7
+    UIDropDownMenu_AddButton(info)
 end
 
 function HealBot_OptionBinds_09_Info(object, info, level, index)
@@ -10797,6 +10804,23 @@ function HealBot_OptionBinds_extra_Info(object, info, level, index)
     end
 end
 
+function HealBot_OptionBinds_fkeys_Info(object, info, level, index)
+      --HealBot_setCall("HealBot_OptionBinds_fkeys_Info")
+    for j=74, 85, 1 do
+        info.text=HealBot_Options_BindsKeyListRead[j];
+        info.func=function(self)
+                        if HealBot_SpellBinds_GetData(index)~=self:GetID()+73 then
+                            HealBot_SpellBinds_SetData(self:GetID()+73, index)
+                            UIDropDownMenu_SetText(object,HealBot_Options_BindsKeyListRead[HealBot_SpellBinds_GetData(index)])
+                            HealBot_Options_CheckBindsOnChange(HealBot_SpellBinds_GetData(index), index)
+                        end
+                    end
+        info.checked=false;
+        if HealBot_SpellBinds_GetData(index) == j then info.checked=true end
+        UIDropDownMenu_AddButton(info, level);
+    end
+end
+
 function HealBot_OptionBinds_DropDown(self, level, menuList, index, object)
       --HealBot_setCall("HealBot_OptionBinds_DropDown")
     local info=UIDropDownMenu_CreateInfo()
@@ -10815,6 +10839,8 @@ function HealBot_OptionBinds_DropDown(self, level, menuList, index, object)
         HealBot_OptionBinds_nav_Info(object, info, level, index)
     elseif menuList == 6 then
         HealBot_OptionBinds_extra_Info(object, info, level, index)
+    elseif menuList == 7 then
+        HealBot_OptionBinds_fkeys_Info(object, info, level, index)
     end
 end
 
@@ -19653,7 +19679,7 @@ end
 
 function HealBot_Options_BuffIconUpdate()
       --HealBot_setCall("HealBot_Options_BuffIconUpdate")
-    HealBot_Timers_Set("AURA","ResetBuffCache")
+    HealBot_Timers_Set("AURA","ConfigClassHoT")
     HealBot_Options_SetEnableDisableBuffBtn()
 end
 
@@ -19714,8 +19740,7 @@ function HealBot_Options_BuffIconSetUpdate(spellId, set)
         HealBot_Globals.CustomBuffsIconSet[spellId]=set
     else
         HealBot_Globals.CustomBuffsIconSet[spellId]=nil
-        end
-    HealBot_Timers_Set("AURA","ResetBuffCache")
+    end
     HealBot_Timers_Set("AURA","ConfigClassHoT")
     HealBot_Timers_Set("SKINS","ResetUpdateCurrentTab")
 end
@@ -23147,9 +23172,9 @@ function HealBot_Options_CheckBindsOnChange(newBind, index)
             if x~=index and HealBot_SpellBinds_GetData(x) == newBind then
                 HealBot_SpellBinds_SetData(1, x)
                 if x>5 then
-                    HealBot_Timers_Set("LAST","PluginInitBinds",true)
+                    HealBot_Timers_Set("LAST","PluginInitBinds")
                 else
-                    HealBot_Timers_Set("LAST","InitBinds",true)
+                    HealBot_Timers_Set("LAST","InitBinds")
                 end
             end
         end

@@ -839,7 +839,7 @@ local hbTimerFuncs={["INIT"]={
                         ["ResetCures"]=HealBot_Reset_Cures,
                         ["UpdateAllPartyGUIDs"]=HealBot_Update_AllPartyGUIDs,
                         ["UpdateRefreshListFreq"]=HealBot_Update_RefreshListFreq,
-                        ["PluginClearDown"]=HealBot_ProcessPluginClearDown,
+                        ["PluginClearDown"]=HealBot_PluginClearDown,
                         ["ProcMarkedCacheButtons"]=HealBot_Action_ProcMarkedCacheButtons,
                         ["ActionIconsValidateItemsQueue"]=HealBot_ActionIcons_ValidateItemsQueue,
                         ["MediaUpdateIndexes"]=HealBot_Media_UpdateIndexes,

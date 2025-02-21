@@ -1,3 +1,32 @@
+local xButton={}
+local pButton={}
+
+function HealBot_Plugin_ThreatUpdate(guid)
+      --HealBot_setCall("HealBot_Plugin_ThreatUpdate", nil, guid)
+    xButton,pButton=HealBot_Panel_RaidPetUnitButton(guid)
+    if xButton and xButton.status.plugin then
+        HealBot_CalcThreat(xButton)
+        HealBot_Plugin_Threat_UnitUpdate(xButton)
+    elseif pButton and pButton.status.plugin then
+        HealBot_CalcThreat(pButton)
+        HealBot_Plugin_Threat_UnitUpdate(pButton)
+    else
+        HealBot_Plugin_ThreatRemoveUnit(guid)
+    end
+end
+
+function HealBot_Plugin_TTDUpdate(guid)
+      --HealBot_setCall("HealBot_Plugin_TTDUpdate", nil, guid)
+    xButton,pButton=HealBot_Panel_RaidPetUnitButton(guid)
+    if xButton and xButton.status.plugin then
+        HealBot_Plugin_TimeToDie_UnitUpdate(xButton, xButton.health.current)
+    elseif pButton and pButton.status.plugin then
+        HealBot_Plugin_TimeToDie_UnitUpdate(pButton, pButton.health.current)
+    else
+        HealBot_Plugin_TTDRemoveUnit(guid)
+    end
+end
+
 function HealBot_Plugin_Options_SetupFrame(frame, hide, tall)
 	frame:SetBackdrop({
 		bgFile="Interface\\Tooltips\\UI-Tooltip-Background",

@@ -1574,7 +1574,7 @@ function HealBot_Lang_Options_enALL()
                                ["TOOLTIPRANKS"]="Show ranks such as Raid Leader or Master Looter.",
                                ["TOOLTIPROLES"]="Show roles in groups and raids.",
                                ["TOOLTIPHIDEROLEWHENRANK"]="Only show roles when the palyer has no rank such as Raid Leader.",
-                               ["TOOLTIPMAXBUTTONS"]="Maximum number of buttons to show\n--\n".._G["YELLOW_FONT_COLOR_CODE"].."NOTE: Includes unassigned buttons.\n".._G["YELLOW_FONT_COLOR_CODE"].."Example: When set to 3 only Left, Middle and Right\n".._G["YELLOW_FONT_COLOR_CODE"].."will show when assigned, Button 4 will never show.",
+                               ["TOOLTIPMAXBUTTONS"]="Maximum number of buttons to show\n--\n".._G["YELLOW_FONT_COLOR_CODE"].."NOTE: Excludes unassigned buttons.\n--\n".._G["YELLOW_FONT_COLOR_CODE"].."Example: With Max buttons set to 5, when\n".._G["YELLOW_FONT_COLOR_CODE"].."only Left, Middle and Right are assigned\n".._G["YELLOW_FONT_COLOR_CODE"].."button 4 and button 5 will not show.",
                                ["TOOLTIPSHOWSPELLCLICK"]="Show spells assigned to button clicks.",
                                ["TOOLTIPSPELLEXTRA"]="Show additional spell information on the right side.",
                                ["TOOLTIPSPELLCD"]="Show the cooldown remaining on the spell.",
@@ -1594,7 +1594,7 @@ function HealBot_Lang_Options_enALL()
                                ["TOOLTIPSCALE"]="Scale the tooltip.\n--\n".._G["YELLOW_FONT_COLOR_CODE"].."NOTE: Scale is not available when using the game tooltip.\n--\n".._G["YELLOW_FONT_COLOR_CODE"].."NOTE: Reset the custom anchor after changing the scale.",
                                ["TOOLTIPALPHA"]="Scale the tooltip.\n--\n".._G["YELLOW_FONT_COLOR_CODE"].."NOTE: Opacity is not available when using the game tooltip.",
                         -- Binds tab
-                               ["BINDTOCLICK"]="Select a key to bind to a button click.\n--\n".._G["YELLOW_FONT_COLOR_CODE"].."NOTE: Depending on OS/WoW config, some\n".._G["YELLOW_FONT_COLOR_CODE"].."binds will not work with specific modifier keys.\n--\n".._G["YELLOW_FONT_COLOR_CODE"].."If intending to use key modifiers with\n".._G["YELLOW_FONT_COLOR_CODE"].."key binds, test the key modifiers work.\n--\n".."|cff77c8ff".."Tip: If a bind does not work, bind and unbind\n".."|cff77c8ff".."the modifier + key in the WoW UI Key Binding settings.",
+                               ["BINDTOCLICK"]="Select a key to bind to a button click.\n--\n".._G["YELLOW_FONT_COLOR_CODE"].."NOTE: Depending on OS/WoW config, some\n".._G["YELLOW_FONT_COLOR_CODE"].."binds will not work with specific modifier keys.\n--\n".._G["YELLOW_FONT_COLOR_CODE"].."If intending to use key modifiers with\n".._G["YELLOW_FONT_COLOR_CODE"].."key binds, test the key modifiers work.\n--\n".."|cff77c8ff".."Tip: If a bind does not work, bind and unbind\n".."|cff77c8ff".."the modifier + key in the WoW UI Key Binding settings.\n--\n".._G["ORANGE_FONT_COLOR_CODE"].."WARNING: Do not use ALT-F4, ALT-F4 exits the game.",
                         -- Test tab
                                ["TESTUSE"]="Click to Turn On/Turn Off the test bars.\n--\n".."|cff77c8ff".."Tip: Turn on the test bars to easily move frames.",
                                ["TESTPROFILE"]="Profile limits the total number of bars for Groups or Raids.",
