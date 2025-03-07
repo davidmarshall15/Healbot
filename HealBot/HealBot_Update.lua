@@ -670,21 +670,9 @@ end
 function HealBot_Update_AllIcons()
       --HealBot_setCall("HealBot_Update_AllIcons")
     if not HealBot_Update_luVars["TestBarsOn"] then
-        for _,xButton in pairs(HealBot_Unit_Button) do
-            HealBot_Aura_Update_AllIcons(xButton)
-        end
-        for _,xButton in pairs(HealBot_Private_Button) do
-            HealBot_Aura_Update_AllIcons(xButton)
-        end
-        for _,xButton in pairs(HealBot_Pet_Button) do
-            HealBot_Aura_Update_AllIcons(xButton)
-        end
-        for _,xButton in pairs(HealBot_Vehicle_Button) do
-            HealBot_Aura_Update_AllIcons(xButton)
-        end
-        for _,xButton in pairs(HealBot_Extra_Button) do
-            HealBot_Aura_Update_AllIcons(xButton)
-        end
+        HealBot_Timers_Set("AURA","UpdateAllDebuffIcons")
+        HealBot_Timers_Set("AURA","UpdateAllBuffIcons")
+        HealBot_Timers_Set("AURA","UpdateAllExtraIcons")
     end
 end
 

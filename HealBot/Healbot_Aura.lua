@@ -1318,7 +1318,7 @@ function HealBot_Aura_DebuffIconAlphaValue(button, iconData, secsLeft)
         end
     else
         dbRetAlpha=0
-        HealBot_DebuffSlowUpdate(button)
+        HealBot_DebuffThrottleUpdateButton(button)
     end
     return dbRetAlpha, dbNextAuraUpdate
 end
@@ -1492,6 +1492,7 @@ function HealBot_Aura_BuffIconAlphaValue(button, iconData, secsLeft)
     else
         bRetAlpha=0
         HealBot_BuffSlowUpdate(button)
+--        HealBot_BuffThrottleUpdateButton(button)
     end
     return bRetAlpha, bNextAuraUpdate
 end
@@ -4368,6 +4369,12 @@ function HealBot_Update_AllExtraIcons(button, index)
                 HealBot_Aura_UpdateExtraIcon(xButton, HealBot_UnitExtraIcons[xButton.id][index], index)
             end
         end
+    end
+end
+
+function HealBot_Aura_UpdateAllExtraIcons()
+    for i=91,94 do
+        HealBot_Update_AllExtraIcons(nil, i)
     end
 end
 

@@ -3653,7 +3653,7 @@ function HealBot_BarButtonIconScale_OnValueChanged(self)
         local g=_G[self:GetName().."Text"]
         g:SetText(self.text .. ": " .. val);
         HealBot_Options_framesChanged(true, true)
-        HealBot_Timers_Set("AURA","UpdateAllIcons")
+        HealBot_Timers_Set("AURA","UpdateAllBuffIcons")
     end
 end
 
@@ -3667,6 +3667,7 @@ function HealBot_BarDebuffButtonIconScale_OnValueChanged(self)
         local g=_G[self:GetName().."Text"]
         g:SetText(self.text .. ": " .. val);
         HealBot_Options_framesChanged(true, true)
+        HealBot_Timers_Set("AURA","UpdateAllDebuffIcons")
     end
 end
 
@@ -3680,7 +3681,7 @@ function HealBot_BarButtonIconZoom_OnValueChanged(self)
         local g=_G[self:GetName().."Text"]
         g:SetText(self.text .. ": " .. (val*200).."%");
         HealBot_Options_framesChanged(true, true)
-        HealBot_Timers_Set("AURA","UpdateAllIcons")
+        HealBot_Timers_Set("AURA","UpdateAllBuffIcons")
     end
 end
 
@@ -3694,7 +3695,7 @@ function HealBot_BarButtonDebuffIconZoom_OnValueChanged(self)
         local g=_G[self:GetName().."Text"]
         g:SetText(self.text .. ": " .. (val*200).."%");
         HealBot_Options_framesChanged(true, true)
-        HealBot_Timers_Set("AURA","UpdateAllIcons")
+        HealBot_Timers_Set("AURA","UpdateAllDebuffIcons")
     end
 end
 
@@ -3708,7 +3709,7 @@ function HealBot_IconClassZoom_OnValueChanged(self)
         local g=_G[self:GetName().."Text"]
         g:SetText(self.text .. ": " .. (val*200).."%");
         HealBot_Options_framesChanged(true, true)
-        HealBot_Timers_Set("AURA","UpdateAllIcons")
+        HealBot_Timers_Set("AURA","UpdateAllExtraIcons")
     end
 end
 
@@ -3722,7 +3723,7 @@ function HealBot_IconTargetZoom_OnValueChanged(self)
         local g=_G[self:GetName().."Text"]
         g:SetText(self.text .. ": " .. (val*200).."%");
         HealBot_Options_framesChanged(true, true)
-        HealBot_Timers_Set("AURA","UpdateAllIcons")
+        HealBot_Timers_Set("AURA","UpdateAllExtraIcons")
     end
 end
 
@@ -3736,7 +3737,7 @@ function HealBot_IconRCZoom_OnValueChanged(self)
         local g=_G[self:GetName().."Text"]
         g:SetText(self.text .. ": " .. (val*200).."%");
         HealBot_Options_framesChanged(true, true)
-        HealBot_Timers_Set("AURA","UpdateAllIcons")
+        HealBot_Timers_Set("AURA","UpdateAllExtraIcons")
     end
 end
 
@@ -3750,7 +3751,7 @@ function HealBot_IconOORZoom_OnValueChanged(self)
         local g=_G[self:GetName().."Text"]
         g:SetText(self.text .. ": " .. (val*200).."%");
         HealBot_Options_framesChanged(true, true)
-        HealBot_Timers_Set("AURA","UpdateAllIcons")
+        HealBot_Timers_Set("AURA","UpdateAllExtraIcons")
     end
 end
 
@@ -7310,7 +7311,7 @@ function HealBot_Options_CDCCol_DropDown()
                             HealBot_Aura_setLuVars("updateAll", true)
                             HealBot_Update_ClearAllDebuffs()
                             HealBot_Timers_Set("AURA","CheckDebuffs")
-                            HealBot_Timers_Set("AURA","UpdateAllIcons")
+                            HealBot_Timers_Set("AURA","UpdateAllDebuffIcons")
                         end
                     end
         info.checked=false;
@@ -7361,7 +7362,7 @@ function HealBot_Options_BuffUpdateAll()
     HealBot_setLuVars("UpdateAllAura", 5)
     HealBot_Aura_setLuVars("updateAll", true)
     HealBot_Timers_Set("AURA","CheckBuffs")
-    HealBot_Timers_Set("AURA","UpdateAllIcons")
+    HealBot_Timers_Set("AURA","UpdateAllBuffIcons")
 end
 
 function HealBot_Options_BuffDefaultBarColour_DropDown()
@@ -7389,7 +7390,7 @@ function HealBot_Options_CDCUpdateAll()
     HealBot_Aura_setLuVars("updateAll", true)
     HealBot_Update_ClearAllDebuffs()
     HealBot_Timers_Set("AURA","CheckDebuffs")
-    HealBot_Timers_Set("AURA","UpdateAllIcons")
+    HealBot_Timers_Set("AURA","UpdateAllDebuffIcons")
 end
 
 function HealBot_Options_CDCDefaultBarColour_DropDown()
@@ -8997,7 +8998,7 @@ function HealBot_Debuffx2Bar_OnClick(self)
     if hbv_Skins_GetIconBoolean("DEBUFFDOUBLE", hb_lVars["Frame"], hb_lVars["DebuffIconSet"])~=self:GetChecked() then
         hbv_Skins_SetIconVar(self:GetChecked(), "DEBUFFDOUBLE", hb_lVars["Frame"], hb_lVars["DebuffIconSet"])
         HealBot_Options_framesChanged(true, true)
-        HealBot_Timers_Set("AURA","UpdateAllIcons")
+        HealBot_Timers_Set("AURA","UpdateAllDebuffIcons")
     end
 end
 
@@ -9006,7 +9007,7 @@ function HealBot_Buffx2Bar_OnClick(self)
     if hbv_Skins_GetIconBoolean("BUFFDOUBLE", hb_lVars["Frame"], hb_lVars["BuffIconSet"])~=self:GetChecked() then
         hbv_Skins_SetIconVar(self:GetChecked(), "BUFFDOUBLE", hb_lVars["Frame"], hb_lVars["BuffIconSet"])
         HealBot_Options_framesChanged(true, true)
-        HealBot_Timers_Set("AURA","UpdateAllIcons")
+        HealBot_Timers_Set("AURA","UpdateAllBuffIcons")
     end
 end
 

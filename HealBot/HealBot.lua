@@ -15,6 +15,10 @@ local HealBot_RefreshList={}
 local HealBot_UpdateQueue={}
 local HealBot_CDQueue={}
 local HealBot_RecalcQueue={}
+local HealBot_BuffUpdate={}
+local HealBot_BuffUpdateList={}
+local HealBot_DebuffUpdate={}
+local HealBot_DebuffUpdateList={}
 local HealBot_notVisible={}
 local hbManaPlayers={}
 local HealBot_customTempUserName={}
@@ -91,6 +95,7 @@ HealBot_luVars["GetVersions"]=false
 HealBot_luVars["CheckFramesOnCombat"]=true
 HealBot_luVars["UpdateSlowNext"]=HealBot_TimeNow+3
 HealBot_luVars["cpuAdj"]=0
+HealBot_luVars["updUnitsAdj"]=0.25
 HealBot_luVars["HealthDropPct"]=999
 HealBot_luVars["HealthDropCancelPct"]=100
 HealBot_luVars["InInstance"]=false
@@ -2201,7 +2206,14 @@ end
 function HealBot_PerfPlugin_adj(adj)
       --HealBot_setCall("HealBot_PerfPlugin_adj")
     HealBot_luVars["cpuAdj"]=adj
+    HealBot_luVars["updUnitsAdj"]=(adj/100)+0.25
+    if HealBot_luVars["updUnitsAdj"]>0.5 then
+        HealBot_luVars["updUnitsAdj"]=0.5
+    elseif HealBot_luVars["updUnitsAdj"]<0.1 then
+        HealBot_luVars["updUnitsAdj"]=0.1
+    end
     HealBot_Update_CPUUsage()
+    HealBot_Timers_Set("LAST","UpdateRefreshListFreq",true)
 end
 
 local fpsRow,fpsCol,fpsCurRate=1,1,1
@@ -2355,10 +2367,6 @@ end
 
 function HealBot_LoadAddOn()
   --HealBot_setCall("HealBot_LoadAddOn")
-    HealBot_Options_ObjectsEnableDisable("HealBot_FrameStickyOffsetHorizontal",false)
-    HealBot_Options_ObjectsEnableDisable("HealBot_FrameStickyOffsetVertical",false)
-    HealBot_Options_ObjectsEnableDisable("HealBot_Options_GroupPetsByFive",false)
-    HealBot_Options_ObjectsEnableDisable("HealBot_Options_SelfPet",false)
 end
 
 function HealBot_VariablesLoaded()
@@ -3900,6 +3908,9 @@ function HealBot_UnitUpdateButton(button)
             end
         elseif button.status.isdead and button.status.deadnextcheck<HealBot_TimeNow then
             HealBot_Action_UpdateTheDeadButton(button)
+        elseif button.status.refresh then
+            button.status.refresh=false
+            HealBot_Action_UpdateDebuffButton(button)
         else
             if button.special.unit then
                 if button.awtarget then
@@ -3970,7 +3981,7 @@ end
 
 function HealBot_SlowUpdateUnit_Buttons()
     --HealBot_setCall("HealBot_SlowUpdateUnit_Buttons", nil, nil, nil, true)
-    --HealBot_UpdateUnit_Buttons()
+    HealBot_UpdateUnit_Buttons()
     HealBot_luVars["slowUpdateID"]=HealBot_luVars["slowUpdateID"]+1
     if HealBot_Buttons[HealBot_UpdateQueue[HealBot_luVars["slowUpdateID"]]] then
         HealBot_UnitSlowUpdate(HealBot_Buttons[HealBot_UpdateQueue[HealBot_luVars["slowUpdateID"]]])
@@ -4145,11 +4156,12 @@ end
 
 function HealBot_Update_RefreshListFreq()
     if HealBot_luVars["CPUProfilerOn"] then
-        HealBot_luVars["UpdateNumUnits"]=ceil(#HealBot_UpdateQueue*0.1)
+        HealBot_luVars["UpdateNumUnits"]=ceil(#HealBot_UpdateQueue*0.05)
     else
-        HealBot_luVars["UpdateNumUnits"]=ceil(#HealBot_UpdateQueue*0.2)
+        HealBot_luVars["UpdateNumUnits"]=ceil(#HealBot_UpdateQueue*HealBot_luVars["updUnitsAdj"])
     end
     HealBot_Debug_PerfUpdate("UpdateNumUnits", HealBot_luVars["UpdateNumUnits"].." ("..#HealBot_UpdateQueue..")")
+    HealBot_Debug_PerfUpdate("updUnitsAdj", HealBot_luVars["updUnitsAdj"])
 end
 
 function HealBot_Update_RefreshList(button)
@@ -4377,7 +4389,8 @@ end
 
 function HealBot_RefreshUnit(button)
       --HealBot_setCall("HealBot_RefreshUnit", button)
-    HealBot_Action_UpdateDebuffButton(button)
+    button.status.refresh=true
+--    HealBot_Action_UpdateDebuffButton(button)
 end
 
 function HealBot_SpecChange(button)
@@ -4780,10 +4793,48 @@ function HealBot_BuffSlowUpdate(button)
     button.aura.buff.slowupd=true
 end
 
+function HealBot_BuffThrottleUpdateButton(button)
+    if not HealBot_BuffUpdateList[button.id] then
+        table.insert(HealBot_BuffUpdate, button.id)
+        HealBot_BuffUpdateList[button.id]=true
+        HealBot_Timers_Set("AURA","BuffThrottledUpdate",true)
+    end
+end
+
+function HealBot_BuffThrottleUpdate()
+    if HealBot_BuffUpdate[1] then
+        if HealBot_Buttons[HealBot_BuffUpdate[1]] then
+            HealBot_BuffSlowUpdate(HealBot_Buttons[HealBot_BuffUpdate[1]])
+        end
+        HealBot_BuffUpdateList[HealBot_BuffUpdate[1]]=false
+        table.remove(HealBot_BuffUpdate, 1)
+        HealBot_Timers_Set("AURA","BuffThrottledUpdate",true)
+    end
+end
+
 function HealBot_DebuffSlowUpdate(button)
       --HealBot_setCall("HealBot_DebuffSlowUpdate", button)
     button.status.slowupdate=true
     button.aura.debuff.slowupd=true
+end
+
+function HealBot_DebuffThrottleUpdateButton(button)
+    if not HealBot_DebuffUpdateList[button.id] then
+        table.insert(HealBot_DebuffUpdate, button.id)
+        HealBot_DebuffUpdateList[button.id]=true
+        HealBot_Timers_Set("AURA","DebuffThrottledUpdate",true)
+    end
+end
+
+function HealBot_DebuffThrottleUpdate()
+    if HealBot_DebuffUpdate[1] then
+        if HealBot_Buttons[HealBot_DebuffUpdate[1]] then
+            HealBot_DebuffSlowUpdate(HealBot_Buttons[HealBot_DebuffUpdate[1]])
+        end
+        HealBot_DebuffUpdateList[HealBot_DebuffUpdate[1]]=false
+        table.remove(HealBot_DebuffUpdate, 1)
+        HealBot_Timers_Set("AURA","DebuffThrottledUpdate",true)
+    end
 end
 
 function HealBot_GetUnitName(button)

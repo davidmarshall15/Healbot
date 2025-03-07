@@ -159,7 +159,7 @@ function HealBot_Range_SpellInRange(button, spellName)
 end
 
 function HealBot_Range_InteractDistance(unit, range)
-    if (UnitIsEnemy(unit,"player") or not HealBot_Data["UILOCK"]) and CheckInteractDistance(unit, range) then
+    if (not HealBot_Data["UILOCK"] or UnitIsEnemy(unit,"player")) and CheckInteractDistance(unit, range) then
         return true
     else
         return false
@@ -193,10 +193,10 @@ end
 local uRange=0
 function HealBot_Range_UnitCurrent(button, spellName)
       --HealBot_setCall("HealBot_Range_UnitCurrent", button)
-    if not UnitIsVisible(button.unit) then
-        uRange=-1
-    elseif not HealBot_Range_UnitInPhase(button.unit, button.guid) then
+    if not HealBot_Range_UnitInPhase(button.unit, button.guid) then
         uRange=-2
+    elseif not UnitIsVisible(button.unit) then
+        uRange=-1
     elseif HealBot_Range_InteractDistance(button.unit, 1) then
         uRange=2
     elseif spellName and HealBot_Spell_Names[spellName] then

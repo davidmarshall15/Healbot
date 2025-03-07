@@ -71,9 +71,9 @@ function HealBot_Timers_SetnProcs(cpuProfilerOn)
         HealBot_Timers_luVars["nProcsOn"]=2
         HealBot_Timers_luVars["nProcsOff"]=1
     else
-        HealBot_Timers_luVars["nProcsOn"]=HealBot_Util_PerfVal1(400)
-        if HealBot_Timers_luVars["nProcsOn"]<3 then
-            HealBot_Timers_luVars["nProcsOn"]=3
+        HealBot_Timers_luVars["nProcsOn"]=HealBot_Util_PerfVal1(250)
+        if HealBot_Timers_luVars["nProcsOn"]<2 then
+            HealBot_Timers_luVars["nProcsOn"]=2
         end
         HealBot_Timers_luVars["nProcsOff"]=HealBot_Util_PerfVal1(50)
         if HealBot_Timers_luVars["nProcsOff"]<1 then
@@ -457,6 +457,13 @@ function HealBot_Timers_InitSpells()
     HealBot_Timers_Set("INIT","SpellsLoaded")
 end
 
+function HealBot_Timers_LastLoadCalls()
+    HealBot_Options_ObjectsEnableDisable("HealBot_FrameStickyOffsetHorizontal",false)
+    HealBot_Options_ObjectsEnableDisable("HealBot_FrameStickyOffsetVertical",false)
+    HealBot_Options_ObjectsEnableDisable("HealBot_Options_GroupPetsByFive",false)
+    HealBot_Options_ObjectsEnableDisable("HealBot_Options_SelfPet",false)
+end
+
 function HealBot_Timers_LastLoad()
       --HealBot_setCall("HealBot_Timers_LastLoad")
     HealBot_Globals.LAG=HealBot_Globals.LAG+0.1
@@ -464,6 +471,7 @@ function HealBot_Timers_LastLoad()
     HealBot_Timers_Set("PLAYER","InvReady")
     HealBot_Timers_Set("OOC","PartyUpdateCheckSkin")
     HealBot_Timers_Set("LAST","InitLoadSpells")
+    HealBot_Timers_Set("LAST","LastLoadCalls")
     HealBot_Timers_Set("SKINS","EmergHealthCol",true)
     HealBot_Timers_Set("AURA","ConfigClassHoT",true)
     HealBot_Timers_Set("AURA","ConfigDebuffs",true)
@@ -711,6 +719,8 @@ local hbTimerFuncs={["INIT"]={
                         ["CheckUnits"]=HealBot_Update_AllAuras,
                         ["CheckBuffs"]=HealBot_Update_AllBuffs,
                         ["CheckDebuffs"]=HealBot_Update_AllDebuffs,
+                        ["BuffThrottledUpdate"]=HealBot_BuffThrottleUpdate,
+                        ["DebuffThrottledUpdate"]=HealBot_DebuffThrottleUpdate,
                         ["BuffReset"]=HealBot_Options_Buff_Reset,
                         ["ExtraBuffReset"]=HealBot_Options_ExtraBuff_Reset,
                         ["DebuffReset"]=HealBot_Options_Debuff_Reset,
@@ -741,6 +751,7 @@ local hbTimerFuncs={["INIT"]={
                         ["UpdateAllBuffIcons"]=HealBot_Aura_UpdateAllBuffIcons,
                         ["UpdateAllDebuffIcons"]=HealBot_Aura_UpdateAllDebuffIcons,
                         ["UpdateActiveDebuffs"]=HealBot_Aura_UpdateActiveDebuffs,
+                        ["UpdateAllExtraIcons"]=HealBot_Aura_UpdateAllExtraIcons,
                         ["InitAuraData"]=HealBot_Aura_InitData,
                         ["UpdateAllHotBars"]=HealBot_Update_AllHotBars,
                         ["CustomDebuffList"]=HealBot_Options_setCustomDebuffList,
@@ -847,6 +858,7 @@ local hbTimerFuncs={["INIT"]={
                         ["TimeoutShareRequest"]=HealBot_Share_TimeoutRequest,
                         ["ActionIconsUpdateTip"]=HealBot_ActionIcons_DoUpdateTip,
                         ["InitPlugins"]=HealBot_Init_Plugins,
+                        ["LastLoadCalls"]=HealBot_Timers_LastLoadCalls,
                     },
                     ["OOC"]={
                         ["FullReload"]=HealBot_FullReload,
@@ -940,21 +952,23 @@ end
 function HealBot_Timers_PluginsSet(tId)
       --HealBot_setCall("HealBot_Timers_PluginsSet")
     if tId == 1 then
-        HealBot_Timers_Set("OOC","RefreshPartyNextRecalcPlayers",0.5)
+        HealBot_Timers_Set("OOC","RefreshPartyNextRecalcPlayers",true)
     elseif tId == 2 then
-        HealBot_Timers_Set("AURA","CheckUnits",0.5)
+        HealBot_Timers_Set("AURA","CheckUnits",true)
     elseif tId == 3 then
-        HealBot_Timers_Set("INIT","PrepSetAllAttribs",1)
+        HealBot_Timers_Set("INIT","PrepSetAllAttribs",true,true)
     elseif tId == 4 then
-        HealBot_Timers_Set("LAST","InitBinds",0.1)
+        HealBot_Timers_Set("LAST","InitBinds",true)
     elseif tId == 5 then
-        HealBot_Timers_Set("AURA","ResetBuffCache",0.1)
+        HealBot_Timers_Set("AURA","ResetBuffCache",true)
     elseif tId == 6 then
-        HealBot_Timers_Set("AURA","ResetDebuffCache",0.1)
+        HealBot_Timers_Set("AURA","ResetDebuffCache",true)
     elseif tId == 7 then
-        HealBot_Timers_Set("LAST","SetInHealAbsorbMax",0.1)
+        HealBot_Timers_Set("LAST","SetInHealAbsorbMax",true)
     elseif tId == 8 then
-        HealBot_Timers_Set("LAST","MediaPluginChange",0.1)
+        HealBot_Timers_Set("LAST","MediaPluginChange",true)
+    elseif tId == 9 then
+        HealBot_Timers_Set("LAST","InitPlugins",true)
     end
 end
 

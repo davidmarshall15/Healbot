@@ -3430,7 +3430,7 @@ function HealBot_Action_CheckUnitLowMana(button)
         button.gref.indicator.mana[3]:SetAlpha(0)
     end
     if button.player and HealBot_Action_luVars["CheckManaDrink"] then
-        HealBot_BuffSlowUpdate(button)
+        HealBot_BuffThrottleUpdateButton(button)
     end
 end
 
