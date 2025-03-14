@@ -6865,6 +6865,20 @@ function HealBot_Options_AggroHazard_OnClick(self)
     end
 end
 
+function HealBot_Options_AggroTargeted_OnClick(self)
+      --HealBot_setCall("HealBot_Options_AggroTargeted_OnClick")
+    if self:GetChecked()~=hbv_Skins_GetFrameBoolean("BarAggro", "TARGETED", hb_lVars["Frame"]) then
+        hbv_Skins_SetFrameVar(self:GetChecked(), "BarAggro", "TARGETED", hb_lVars["Frame"])
+    end
+end
+
+function HealBot_Options_AggroTargetedBossOnly_OnClick(self)
+      --HealBot_setCall("HealBot_Options_AggroTargetedBossOnly_OnClick")
+    if self:GetChecked()~=hbv_Skins_GetFrameBoolean("BarAggro", "TARBOSSONLY", hb_lVars["Frame"]) then
+        hbv_Skins_SetFrameVar(self:GetChecked(), "BarAggro", "TARBOSSONLY", hb_lVars["Frame"])
+    end
+end
+
 function HealBot_Options_FluidFlashInUse()
       --HealBot_setCall("HealBot_Options_FluidFlashInUse")
     if HealBot_Globals.CPUUsage>7 then
@@ -10336,7 +10350,7 @@ function HealBot_Options_Theme_DropDown()
                             HealBot_Globals.OptionsTheme=self:GetID()
                             UIDropDownMenu_SetText(HealBot_Options_Theme,HealBot_Options_Lists["Themes"][HealBot_Globals.OptionsTheme])
                             HealBot_Action_StickyFrameIndCols()
-                            HealBot_Options_OnLoad(nil, "Theme")
+                            HealBot_Options_SetTheme("Theme")
                             HealBot_Timers_InitExtraOptions()
                         end
                     end
@@ -11070,7 +11084,8 @@ function HealBot_Options_FrameStrata_DropDown()
                         if HealBot_Globals.FrameStrata~=HealBot_Options_Lists["FrameStrata"][self:GetID()] then
                             HealBot_Globals.FrameStrata=HealBot_Options_Lists["FrameStrata"][self:GetID()]
                             UIDropDownMenu_SetText(HealBot_Options_FrameStrata, HealBot_Globals.FrameStrata)
-                            HealBot_Options_ReloadUI()
+                            --HealBot_Options_ReloadUI()
+                            HealBot_Timers_Set("OOC","FrameStrata",true)
                         end
                     end
         info.checked=false;
@@ -23982,7 +23997,7 @@ function HealBot_Options_SetDefaults(global)
     DoneInitTab={}
     HealBot_Timers_InitExtraOptions()
     HealBot_Timers_Set("AURA","CheckPlayer")
-    HealBot_Options_OnLoad(nil, "Defaults")
+    HealBot_Options_SetTheme("Defaults")
     HealBot_Timers_Set("PLAYER","SaveProfile")
     HealBot_Timers_Set("SKINS","ResetUpdate")
 end
@@ -24080,10 +24095,10 @@ function HealBot_Options_MainPanel()
     panel:SetTexture(OptionThemes[HealBot_Globals.OptionsTheme]["TitleBox"])
 end
 
-function HealBot_Options_OnLoad(self, caller)
+function HealBot_Options_SetTheme(caller)
     DoneInitTab={}
     HealBot_Options_MainPanel()
-    if self then
+    if caller == "OnLoad" then
         HealBot_Options_Content_Colour(_G["HealBot_Contents_ButtonT0"], _G["HealBot_Contents_ButtonT0Txt"], true)
         HealBot_Options_Content_Colour(_G["HealBot_Contents_ButtonT1"], _G["HealBot_Contents_ButtonT1Txt"])
     elseif caller == "Theme" then
@@ -24456,7 +24471,11 @@ end
 hb_lVars["TabNo"]=0;
 hb_lVars["CurrentTab"]="About"
 function HealBot_Options_OnShow(self)
-      --HealBot_setCall("HealBot_Options_OnShow")    
+      --HealBot_setCall("HealBot_Options_OnShow")
+    if not hb_lVars["OptionsLoaded"] then
+        hb_lVars["OptionsLoaded"]=true
+        HealBot_Options_SetTheme("OnLoad")
+    end
     if not hb_lVars["MediaIndexedOnOptions"] then
         hb_lVars["MediaIndexedOnOptions"]=true
         HealBot_Media_UpdateIndexes()
@@ -26826,6 +26845,10 @@ function HealBot_Options_SkinsFramesBarsAggroTab(tab)
         HealBot_Options_SetText(HealBot_Options_AggroTrack,HEALBOT_OPTION_AGGROTRACK)
         HealBot_Options_AggroHazard:SetChecked(hbv_Skins_GetFrameBoolean("BarAggro", "HAZARD", hb_lVars["Frame"]))
         HealBot_Options_SetText(HealBot_Options_AggroHazard,HEALBOT_OPTION_AGGROHAZARD)
+        HealBot_Options_AggroTargeted:SetChecked(hbv_Skins_GetFrameBoolean("BarAggro", "TARGETED", hb_lVars["Frame"]))
+        HealBot_Options_SetText(HealBot_Options_AggroTargeted,HEALBOT_OPTION_AGGROTARGETED)
+        HealBot_Options_AggroTargetedBossOnly:SetChecked(hbv_Skins_GetFrameBoolean("BarAggro", "TARBOSSONLY", hb_lVars["Frame"]))
+        HealBot_Options_SetText(HealBot_Options_AggroTargetedBossOnly,HEALBOT_OPTION_BOSSONLY)
         HealBot_Options_AggroIndAlertLevel.initialize=HealBot_Options_AggroIndAlertLevel_DropDown
         UIDropDownMenu_SetText(HealBot_Options_AggroIndAlertLevel, HealBot_Options_Lists["AggroIndAlertLevel"][hbv_Skins_GetFrameVar("BarAggro", "ALERTIND", hb_lVars["Frame"])])
         HealBot_Options_SetLabel("healbotaggroindalertfontstr",HEALBOT_OPTIONS_AGGROINDALERT)

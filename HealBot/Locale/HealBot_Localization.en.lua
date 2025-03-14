@@ -669,6 +669,8 @@ function HealBot_Lang_enALL()
 
     HEALBOT_OPTION_AGGROTRACK              ="Monitor Aggro"
     HEALBOT_OPTION_AGGROHAZARD             ="Show border hazard on tanking"
+    HEALBOT_OPTION_AGGROTARGETED           ="Set highest alert level when targeted by an enemy."
+    HEALBOT_OPTION_BOSSONLY                ="Only on bosses."
     HEALBOT_OPTION_AGGROBAR                ="Bar"
     HEALBOT_OPTION_AGGROTXT                =">> Text <<"
     HEALBOT_OPTION_AGGROIND                ="Show indicator"

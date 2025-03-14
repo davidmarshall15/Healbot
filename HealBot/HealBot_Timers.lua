@@ -462,15 +462,16 @@ function HealBot_Timers_LastLoadCalls()
     HealBot_Options_ObjectsEnableDisable("HealBot_FrameStickyOffsetVertical",false)
     HealBot_Options_ObjectsEnableDisable("HealBot_Options_GroupPetsByFive",false)
     HealBot_Options_ObjectsEnableDisable("HealBot_Options_SelfPet",false)
+    HealBot_Timers_Set("LAST","InitLoadSpells")
+    HealBot_Timers_Set("LAST","InitPlugins")
+    HealBot_Timers_Set("LAST","MountsPetsUse")
+    HealBot_Timers_Set("PLAYER","InvReady")
+    HealBot_Timers_Set("OOC","PartyUpdateCheckSkin")
 end
 
 function HealBot_Timers_LastLoad()
       --HealBot_setCall("HealBot_Timers_LastLoad")
     HealBot_Globals.LAG=HealBot_Globals.LAG+0.1
-    HealBot_Timers_Set("LAST","MountsPetsUse")
-    HealBot_Timers_Set("PLAYER","InvReady")
-    HealBot_Timers_Set("OOC","PartyUpdateCheckSkin")
-    HealBot_Timers_Set("LAST","InitLoadSpells")
     HealBot_Timers_Set("LAST","LastLoadCalls")
     HealBot_Timers_Set("SKINS","EmergHealthCol",true)
     HealBot_Timers_Set("AURA","ConfigClassHoT",true)
@@ -487,7 +488,6 @@ function HealBot_Timers_LastLoad()
     HealBot_Timers_Set("SKINS","TextSetTagInUse",true)
     HealBot_Timers_Set("OOC","EventsSetFrameUnits",true)
     HealBot_Timers_Set("LAST","MediaUpdateIndexes",true)
-    HealBot_Timers_Set("LAST","InitPlugins",true)
     HealBot_Timers_Set("INIT","LastUpdate",true,true)
     HealBot_Timers_Set("INIT","HealBotLoaded",true,true)
     HealBot_Timers_Set("LAST","MediaInitFonts",true,true)
@@ -914,6 +914,7 @@ local hbTimerFuncs={["INIT"]={
                         ["PartyUpdateCheckSkin"]=HealBot_PartyUpdate_CheckSkin,
                         ["MarkedAttribsButtons"]=HealBot_Action_MarkedAttribsButtons,
                         ["ProcMarkedAttribsButtons"]=HealBot_Action_ProcMarkedAttribsButtons,
+                        ["FrameStrata"]=HealBot_Action_SetStrata,
                     },
                    }
 

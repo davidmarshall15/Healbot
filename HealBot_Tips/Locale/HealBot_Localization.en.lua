@@ -362,6 +362,8 @@ function HealBot_Lang_Options_enALL()
                                  ["HEALBARSAGGROBARALERT"]=HEALBOT_OPTIONS_AGGROALERT,
                                  ["HEALBARSAGGROINDLINK"]=HEALBOT_OPTIONS_TAB_AGGROINDICATORS,
                                  ["HEALBARSAGGROHAZARD"]=HEALBOT_OPTION_AGGROHAZARD,
+                                 ["HEALBARSAGGROTARGETED"]=HEALBOT_OPTION_AGGROTARGETED,
+                                 ["HEALBARSAGGROTARBOSSONLY"]=HEALBOT_OPTION_BOSSONLY,
                         -- Skins Frames Bars Aux tab
                                  ["BARSAUX"]="Bars Aux",
                                  ["BARSAUXASSIGN"]=HEALBOT_OPTIONS_AUXASSIGN,
@@ -1172,7 +1174,9 @@ function HealBot_Lang_Options_enALL()
                                ["HEALBARSAGGROINDALERT"]="When using indicator.\nDisplay when the treat reaches the level selected in the dropdown.",
                                ["HEALBARSAGGROBARALERT"]="When using aux aggro bars.\nDisplay when the treat reaches the level selected in the dropdown.",
                                ["HEALBARSAGGROINDLINK"]="Links to the Indicators Aggro tab\nallowing for aggro indicators to be set on bars.",
-                               ["HEALBARSAGGROHAZARD"]="Use the Border Hazard when aggro level is 3 (Tanking).",
+                               ["HEALBARSAGGROHAZARD"]="Use the Border Hazard when aggro level is 3 (Tanking).\n--\n".._G["GREEN_FONT_COLOR_CODE"].."The Border Hazard flashes.\n".._G["GREEN_FONT_COLOR_CODE"].."If a solid border is preferred use an adaptive border.\n--\n".."|cff77c8ff".."To show Aggro using an Adaptive border:\n".."|cff77c8ff".."1. Turn on Aggro on the Col"..HEALBOT_enWORD_COLOUR_SUFFIX.."s>Adaptive tab.\n".."|cff77c8ff".."2. Set the Background Border to Adaptive on the Bars>Col"..HEALBOT_enWORD_COLOUR_SUFFIX.." tab.",
+                               ["HEALBARSAGGROTARGETED"]="When a friendly player or pet is targeted by an enemy,\nThe alert level will be set to 3 with threat percent set to 100.\n--\n".._G["YELLOW_FONT_COLOR_CODE"].."Note: This lasts for at least 1 second unless the enemy is known to have changed targets.",
+                               ["HEALBARSAGGROTARBOSSONLY"]="Only set highest alert level when the enemy is a boss",
                         -- Skins Frames Bars Aux tab
                                ["BARSAUX"]="Show the Skins Frames Aux tab.",
                                ["BARSAUXASSIGN"]="Assign a bar type to the auxiliary bar.",

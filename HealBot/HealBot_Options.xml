@@ -2755,7 +2755,6 @@
               </Frame>
             </Frames>
           </Frame>
-
           <Frame name="HealBot_Options_Panel10" hidden="true" setAllPoints="true">
             <Frames>
               <StatusBar name="HealBot_Options_OverrideEffectb">
@@ -7424,7 +7423,6 @@
               </Frame>
             </Frames>
           </Frame>
-            
           <Frame name="HealBot_Options_Panel2" hidden="true" setAllPoints="true">
             <Frames>
               <Frame name="HealBot_Options_KeysFrame" inherits="BackdropTemplate">
@@ -8803,7 +8801,6 @@
               </Frame>
             </Frames>
           </Frame>
-          
           <Frame name="HealBot_Options_Panel3" hidden="true" setAllPoints="true">
             <Layers>
               <Layer level="BACKGROUND">
@@ -9034,7 +9031,6 @@
                   </Button>
                 </Frames>
               </Frame>
-
               <Frame name="HealBot_Options_GeneralSkinsFrame" inherits="BackdropTemplate">
                 <Size>
                   <AbsDimension y="540"/>
@@ -9492,7 +9488,6 @@
                   </Frame>
                 </Frames>
               </Frame>
-
               <Frame name="HealBot_Options_HealGroupsSkinsFrame" hidden="true" inherits="BackdropTemplate">
                 <Size>
                   <AbsDimension y="540"/>
@@ -10239,7 +10234,6 @@
                   </CheckButton>
                 </Frames>
               </Frame>
-
               <Frame name="HealBot_Options_EffectsSkinsFrame" hidden="true" inherits="BackdropTemplate">
                 <Size>
                   <AbsDimension y="540"/>
@@ -11204,7 +11198,6 @@
                   </Frame>
                 </Frames>
               </Frame>
-
               <Frame name="HealBot_Options_ColourSkinsFrame" hidden="true" inherits="BackdropTemplate">
                 <Size>
                   <AbsDimension y="540"/>
@@ -14158,7 +14151,6 @@
                   </Frame>
                 </Frames>
               </Frame>
-              
               <Frame name="HealBot_Options_EnemySkinsFrame" hidden="true" inherits="BackdropTemplate">
                 <Size>
                   <AbsDimension y="540"/>
@@ -15426,7 +15418,6 @@
                   </Frame>
                 </Frames>
               </Frame>
-              
               <Frame name="HealBot_Options_ChatSkinsFrame" hidden="true" inherits="BackdropTemplate">
                 <Size>
                   <AbsDimension y="540"/>
@@ -15678,7 +15669,6 @@
                   </Frame>
                 </Frames>
               </Frame>
-
               <Frame name="HealBot_Options_FramesCopyOptions" hidden="true" inherits="BackdropTemplate">
                 <Size>
                   <AbsDimension y="540"/>
@@ -16445,7 +16435,6 @@
                   </Frame>
                 </Frames>
               </Frame>
-
               <Frame name="HealBot_Options_FramesSkinsFrame" hidden="true" inherits="BackdropTemplate">
                 <Size>
                   <AbsDimension y="540"/>
@@ -16972,7 +16961,6 @@
                   </Button>
                 </Frames>
               </Frame>
-
               <Frame name="HealBot_Options_HeadersSkinsFrame" hidden="true" inherits="BackdropTemplate">
                 <Size>
                   <AbsDimension y="540"/>
@@ -17677,7 +17665,6 @@
                   </Frame>
                 </Frames>
               </Frame>
-
               <Frame name="HealBot_Options_BarsSkinsFrame" hidden="true" inherits="BackdropTemplate">
                 <Size>
                   <AbsDimension y="540"/>
@@ -19940,38 +19927,39 @@
                           <OnLeave>HealBot_Options_Show_Help("HEALBARSAGGROHAZARD",false)</OnLeave>
                         </Scripts>
                       </CheckButton>
-                      <Frame name="HealBot_Options_AggroIndAlertLevel" inherits="UIDropDownMenuTemplate" id="1">
+                      <CheckButton name="HealBot_Options_AggroTargeted" inherits="HealBotUIPanelCheckButton">
                         <Anchors>
-                          <Anchor point="TOP">
+                          <Anchor point="TOP">>
                             <Offset>
-                              <AbsDimension x="0" y="-190"/>
+                              <AbsDimension x="-150" y="-150" />
                             </Offset>
                           </Anchor>
                         </Anchors>
-                        <Layers>
-                          <Layer level="OVERLAY">
-                            <FontString name="healbotaggroindalertfontstr" inherits="GameFontNormalSmall" text="HEALBOT_OPTIONS_AGGROINDALERT">
-                              <Anchors>
-                                <Anchor point="TOP">
-                                  <Offset>
-                                    <AbsDimension x="0" y="14"/>
-                                  </Offset>
-                                </Anchor>
-                              </Anchors>
-                            </FontString>
-                          </Layer>
-                        </Layers>
                         <Scripts>
-                          <OnLoad>HealBot_Options_UIDropDownMenu_OnLoad(self, 170)</OnLoad>
-                          <OnEnter>HealBot_Options_Show_Help("HEALBARSAGGROINDALERT",true)</OnEnter>
-                          <OnLeave>HealBot_Options_Show_Help("HEALBARSAGGROINDALERT",false)</OnLeave>
+                          <OnClick>HealBot_Options_AggroTargeted_OnClick(self)</OnClick>
+                          <OnEnter>HealBot_Options_Show_Help("HEALBARSAGGROTARGETED",true)</OnEnter>
+                          <OnLeave>HealBot_Options_Show_Help("HEALBARSAGGROTARGETED",false)</OnLeave>
                         </Scripts>
-                      </Frame>
+                      </CheckButton>
+                      <CheckButton name="HealBot_Options_AggroTargetedBossOnly" inherits="SendMailRadioButtonTemplate">
+                        <Anchors>
+                          <Anchor point="TOP" relativeTo="HealBot_Options_AggroTargeted" relativePoint="BOTTOM">
+                            <Offset>
+                              <AbsDimension x="15" y="0"/>
+                            </Offset>
+                          </Anchor>
+                        </Anchors>
+                        <Scripts>
+                          <OnClick>HealBot_Options_AggroTargetedBossOnly_OnClick(self)</OnClick>
+                          <OnEnter>HealBot_Options_Show_Help("HEALBARSAGGROTARBOSSONLY",true)</OnEnter>
+                          <OnLeave>HealBot_Options_Show_Help("HEALBARSAGGROTARBOSSONLY",false)</OnLeave>
+                        </Scripts>
+                      </CheckButton>
                       <Frame name="HealBot_Options_AggroAlertLevel" inherits="UIDropDownMenuTemplate" id="1">
                         <Anchors>
                           <Anchor point="TOP">
                             <Offset>
-                              <AbsDimension x="0" y="-300"/>
+                              <AbsDimension x="0" y="-250"/>
                             </Offset>
                           </Anchor>
                         </Anchors>
@@ -19994,7 +19982,33 @@
                           <OnLeave>HealBot_Options_Show_Help("HEALBARSAGGROBARALERT",false)</OnLeave>
                         </Scripts>
                       </Frame>
-
+                      <Frame name="HealBot_Options_AggroIndAlertLevel" inherits="UIDropDownMenuTemplate" id="1">
+                        <Anchors>
+                          <Anchor point="TOP">
+                            <Offset>
+                              <AbsDimension x="0" y="-340"/>
+                            </Offset>
+                          </Anchor>
+                        </Anchors>
+                        <Layers>
+                          <Layer level="OVERLAY">
+                            <FontString name="healbotaggroindalertfontstr" inherits="GameFontNormalSmall" text="HEALBOT_OPTIONS_AGGROINDALERT">
+                              <Anchors>
+                                <Anchor point="TOP">
+                                  <Offset>
+                                    <AbsDimension x="0" y="14"/>
+                                  </Offset>
+                                </Anchor>
+                              </Anchors>
+                            </FontString>
+                          </Layer>
+                        </Layers>
+                        <Scripts>
+                          <OnLoad>HealBot_Options_UIDropDownMenu_OnLoad(self, 170)</OnLoad>
+                          <OnEnter>HealBot_Options_Show_Help("HEALBARSAGGROINDALERT",true)</OnEnter>
+                          <OnLeave>HealBot_Options_Show_Help("HEALBARSAGGROINDALERT",false)</OnLeave>
+                        </Scripts>
+                      </Frame>
                       <Button name="HealBot_Options_AggroIndicatorsLink" inherits="UIPanelButtonTemplate" text="HEALBOT_OPTIONS_TAB_AGGROINDICATORS">
                         <Size>
                           <AbsDimension x="220" y="22"/>
@@ -20943,7 +20957,6 @@
                   </Frame>
                 </Frames>
               </Frame>
-
               <Frame name="HealBot_Options_TextSkinsFrame" hidden="true" inherits="BackdropTemplate">
                 <Size>
                   <AbsDimension y="540"/>
@@ -25309,7 +25322,6 @@
                  </Frame>
                 </Frames>
               </Frame>
-
               <Frame name="HealBot_Options_IconsSkinsFrame" hidden="true" inherits="BackdropTemplate">
                 <Size>
                   <AbsDimension y="540"/>
@@ -27556,7 +27568,6 @@
                    </Frame>
                  </Frames>
               </Frame>
-
               <Frame name="HealBot_Options_ActionIconsSkinsFrame" hidden="true" inherits="BackdropTemplate">
                 <Size>
                   <AbsDimension y="540"/>
@@ -29560,7 +29571,6 @@
                   </Frame>
                 </Frames>
               </Frame>
-
               <Frame name="HealBot_Options_IndicatorsSkinsFrame" hidden="true" inherits="BackdropTemplate">
                 <Size>
                   <AbsDimension y="540"/>
@@ -31095,7 +31105,6 @@
               </Frame>
             </Frames>
           </Frame>
-          
           <Frame name="HealBot_Options_Panel4" hidden="true" setAllPoints="true">
             <Frames>
               <CheckButton name="HealBot_Options_MonitorDebuffs" inherits="HealBotUIPanelCheckButton">
@@ -33365,7 +33374,6 @@
               </Frame>
             </Frames>
           </Frame>
-          
           <Frame name="HealBot_Options_Panel5" hidden="true" setAllPoints="true">
             <Frames>
               <Frame name="HealBot_Options_BuffsGeneral">
@@ -37047,7 +37055,6 @@
               </Frame>
             </Frames>
           </Frame>
-
           <Frame name="HealBot_Options_Panel6" hidden="true" setAllPoints="true">
             <Frames>
               <StatusBar name="HealBot_Options_TipsGeneralb">
@@ -37780,7 +37787,6 @@
               </Frame>
             </Frames>
           </Frame>
-          
           <Frame name="HealBot_Options_Panel8" hidden="true" setAllPoints="true">
             <Frames>
               <Button name="HealBot_Options_TestBarsButton" inherits="UIPanelButtonTemplate" text="HEALBOT_OPTIONS_TESTBARS">
@@ -37956,7 +37962,6 @@
               </CheckButton>
             </Frames>
           </Frame>
-
           <Frame name="HealBot_Options_Panel9" hidden="true" setAllPoints="true">
             <Frames>
               <CheckButton name="HealBot_Options_InOutCompressExport" inherits="HealBotUIPanelCheckButton">
@@ -39295,7 +39300,6 @@
       </Button>
     </Frames>
     <Scripts>
-      <OnLoad>HealBot_Options_OnLoad(self);</OnLoad>
       <OnShow>HealBot_Options_OnShow(self);</OnShow>
       <OnMouseDown>HealBot_Options_OnMouseDown(self);</OnMouseDown>
       <OnMouseUp>HealBot_Options_OnMouseUp(self);</OnMouseUp>

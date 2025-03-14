@@ -198,6 +198,8 @@ function HealBot_Events_UnitTarget(button)
         elseif button.status.unittype<20 then
             HealBot_Panel_EnemyTargetsWithPlayersUpdate(button.unit, button.guid)
         end
+    elseif button.special.unit and HealBot_ValidLivingEnemy("player", button.unit) then
+        HealBot_UnitEnemyTargetUpdate(button.unit, button.guid)
     end
 end
 

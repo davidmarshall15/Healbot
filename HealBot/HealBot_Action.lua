@@ -3528,6 +3528,13 @@ local hbEnemyEventFuncs={["UNIT_PHASE"]=HealBot_Events_UnitPhase,
                          ["UNIT_CLASSIFICATION_CHANGED"]=HealBot_Events_ClassificationChanged,
                    }
 
+function HealBot_Action_SetStrata()
+    for x=1,10 do
+        grpFrame[x]:SetFrameStrata(HealBot_Globals.FrameStrata)
+    end
+    HealBot_ActionIcons_SetStrata()
+end
+
 function HealBot_Action_InitFrames()
       --HealBot_setCall("HealBot_Action_InitFrames")
     local StickIndPoints={[1]="BOTTOMLEFT",[2]="BOTTOM",[3]="BOTTOMRIGHT",[4]="TOPLEFT",[5]="LEFT",[6]="BOTTOMLEFT",[7]="TOPRIGHT",[8]="TOP",[9]="TOPLEFT",[10]="BOTTOMRIGHT",[11]="RIGHT",[12]="TOPRIGHT"}
@@ -4212,6 +4219,7 @@ function HealBot_Action_InitButton(button, prefix)
     button.aggro.status=-1
     button.aggro.threatpct=0
     button.aggro.threatvalue=0
+    button.aggro.targeted=0
     button.aggro.nextcheck=0
     button.hotbars.state=false
     button.hotbars.debuff=false

@@ -1,4 +1,5 @@
 local HealBot_Aggro_rCalls={}
+local xButton, pButton, aButton=nil, nil, nil
 local HealBot_Aggro_AuxAssigns={}
 HealBot_Aggro_AuxAssigns["NameOverlayAggro"]={[0]=false,[1]=false,[2]=false,[3]=false,[4]=false,[5]=false,[6]=false,[7]=false,[8]=false,[9]=false,[10]=false}
 HealBot_Aggro_AuxAssigns["HealthOverlayAggro"]={[0]=false,[1]=false,[2]=false,[3]=false,[4]=false,[5]=false,[6]=false,[7]=false,[8]=false,[9]=false,[10]=false}
@@ -131,6 +132,37 @@ end
 function HealBot_Aggro_AuraWatchClear()
       --HealBot_setCall("HealBot_Aggro_AuraWatchClear")
     hbAuraWatchAggro={}
+end
+
+local hbPTTData={}
+hbPTTData["threatpct"]=100
+hbPTTData["status"]=3
+hbPTTData["threatvalue"]=100
+function HealBot_Aggro_PlayerTargetedUpdate(button)
+    button.aggro.targeted=HealBot_TimeNow+1
+    button.aggro.nextcheck=HealBot_TimeNow+2
+end
+
+function HealBot_Aggro_PlayerTargeted(button, targeted, name)
+    if targeted then
+        hbPTTData["threatname"]=name
+        if button.aggro.threatvalue>100 then
+            hbPTTData["threatvalue"]=button.aggro.threatvalue
+        else
+            hbPTTData["threatvalue"]=100
+        end
+        HealBot_Aggro_PlayerTargetedUpdate(button)
+        HealBot_Aggro_UpdateUnit(button,true,hbPTTData)
+    else
+        button.aggro.nextcheck=1
+        button.aggro.targeted=0
+    end
+end
+
+function HealBot_Aggro_PlayerNotTargeted(guid)
+    xButton, pButton=HealBot_Panel_AllUnitButton(guid)
+    if xButton then HealBot_Aggro_PlayerTargeted(xButton, false) end
+    if pButton then HealBot_Aggro_PlayerTargeted(pButton, false) end
 end
 
 function HealBot_Aggro_UpdateUnit(button,status,threatData)

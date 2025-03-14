@@ -87,6 +87,12 @@ function HealBot_ActionIcons_FrameNumIconsUpdate(frame, num)
     iconFrame[frame].numIcons=num
 end
 
+function HealBot_ActionIcons_SetStrata()
+    for x=1,10 do
+        iconFrame[x]:SetFrameStrata(HealBot_Globals.FrameStrata)
+    end
+end
+
 function HealBot_ActionIcons_InitFrames()
         --HealBot_setCall("HealBot_ActionIcons_InitFrames")
     if not hb_lVars["Loaded"] then
