@@ -17,7 +17,7 @@
 ## Category-zhCN: 用户界面
 ## Category-zhTW: 使用者介面
 ## IconTexture: Interface\AddOns\HealBot\Images\HealBot.tga
-## Version: 1.15.6.4
+## Version: 1.15.6.5
 
 Libs\LibStub\LibStub.lua
 Libs\CallbackHandler-1.0\CallbackHandler-1.0.xml

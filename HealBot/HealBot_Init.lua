@@ -859,9 +859,11 @@ function HealBot_Init_Plugins()
     HealBot_Init_luVars["pluginTweaksLoaded"]=loaded
     if loaded and HealBot_Globals.PluginTweaks then
         HealBot_Timers_setLuVars("pluginTweaks", true)
+        HealBot_Panel_setLuVars("pluginTweaks", true)
         HealBot_Plugin_Tweaks_Init()
     else
         HealBot_Timers_setLuVars("pluginTweaks", false)
+        HealBot_Panel_setLuVars("pluginTweaks", true)
     end
 
     loaded, reason=HealBot_WoWAPI_LoadAddOn("HealBot_Plugin_Requests")

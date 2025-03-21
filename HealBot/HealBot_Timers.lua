@@ -491,6 +491,7 @@ function HealBot_Timers_LastLoad()
     HealBot_Timers_Set("INIT","LastUpdate",true,true)
     HealBot_Timers_Set("INIT","HealBotLoaded",true,true)
     HealBot_Timers_Set("LAST","MediaInitFonts",true,true)
+    HealBot_Timers_Set("LAST","CleanPermPrivateData",true,true)
     HealBot_Timers_Set("OOC","RemoveInvalidLoadouts",true,true)
     if not HealBot_Timers_luVars["HelpNotice"] then
         HealBot_Timers_Set("LAST","HealBotLoadedChat")
@@ -858,6 +859,8 @@ local hbTimerFuncs={["INIT"]={
                         ["TimeoutShareRequest"]=HealBot_Share_TimeoutRequest,
                         ["ActionIconsUpdateTip"]=HealBot_ActionIcons_DoUpdateTip,
                         ["InitPlugins"]=HealBot_Init_Plugins,
+                        ["CleanPermPrivateData"]=HealBot_Panel_CleanPermPrivateData,
+                        ["PrivateListUpdate"]=HealBot_Panel_PrivateListUpdate,
                         ["LastLoadCalls"]=HealBot_Timers_LastLoadCalls,
                     },
                     ["OOC"]={
@@ -970,6 +973,8 @@ function HealBot_Timers_PluginsSet(tId)
         HealBot_Timers_Set("LAST","MediaPluginChange",true)
     elseif tId == 9 then
         HealBot_Timers_Set("LAST","InitPlugins",true)
+    elseif tId == 10 then
+        HealBot_Timers_Set("LAST","PrivateListUpdate",true)
     end
 end
 

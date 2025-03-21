@@ -509,6 +509,7 @@ function HealBot_Share_ExportBuffs(lData)
             end
             ssStr=ssStr..(HealBot_Globals.CustomBuffsIconSet[bId] or 1)..","
             ssStr=ssStr..(HealBot_Globals.CustomBuffsIconGlow[bId] or 1)..","
+            ssStr=ssStr..(HealBot_Globals.CustomBuffsFilter[bId] or 1)..","
             if HealBot_Globals.IgnoreCustomBuff[bId] then
                 for instName, _ in pairs(HealBot_Globals.IgnoreCustomBuff[bId]) do
                     ssStr=ssStr..(instName)..","
@@ -564,12 +565,13 @@ function HealBot_Share_LoadBuffs(sIn)
     end
     for e=2,#ssTab do
         local _,c,d=string.split("~", ssTab[e])
-        local bId,prio,filter,show,r,g,b,idMethod,tag,iconSet,iconGlow,i1,i2,i3,i4=string.split(",", d)
-        if not c or not bId or not prio or not filter or not show or not r or not g or not b then
+        local bId,prio,castby,show,r,g,b,idMethod,tag,iconSet,iconGlow,filter,i1,i2,i3,i4=string.split(",", d)
+        if not c or not bId or not prio or not castby or not show or not r or not g or not b then
             HealBot_Options_ImportFail("Buffs", "Data corruption - ensure it is exactly as the original file")
         else
             bId=tonumber(bId) or bId
             prio=tonumber(prio)
+            castby=tonumber(castby)
             filter=tonumber(filter)
             r=tonumber(r)
             g=tonumber(g)
@@ -579,7 +581,7 @@ function HealBot_Share_LoadBuffs(sIn)
             iconGlow=tonumber(iconGlow) or 1
             if not HealBot_Globals.WatchHoT[c][bId] or HealBot_Share_luVars["InMethodBuff"]<3 then
                 local bName=HealBot_WoWAPI_SpellName(bId) or bId
-                HealBot_Globals.WatchHoT[c][bId]=filter
+                HealBot_Globals.WatchHoT[c][bId]=castby
                 if prio>0 and prio<20 then
                     HealBot_Globals.CustomBuffs[bId]=prio
                     if bName then HealBot_Globals.CustomBuffs[bName]=prio end
@@ -619,9 +621,18 @@ function HealBot_Share_LoadBuffs(sIn)
                 end
                 if iconSet>1 then
                     HealBot_Globals.CustomBuffsIconSet[bId]=iconSet
+                else
+                    HealBot_Globals.CustomBuffsIconSet[bId]=nil
                 end
                 if iconGlow>1 then
                     HealBot_Globals.CustomBuffsIconGlow[bId]=iconGlow
+                else
+                    HealBot_Globals.CustomBuffsIconGlow[bId]=nil
+                end
+                if filter>1 then
+                    HealBot_Globals.CustomBuffsFilter[bId]=filter
+                else
+                    HealBot_Globals.CustomBuffsFilter[bId]=nil
                 end
                 if string.len(i1 or "")>0 then
                     if not HealBot_Globals.IgnoreCustomBuff[bId] then HealBot_Globals.IgnoreCustomBuff[bId]={} end
@@ -681,6 +692,7 @@ function HealBot_Share_ExportDebuffs(lData)
             end
             ssStr=ssStr..(HealBot_Globals.CustomDebuffsIconSet[dId] or 1)..","
             ssStr=ssStr..(HealBot_Globals.CustomDebuffsIconGlow[dId] or 1)..","
+            ssStr=ssStr..(HealBot_Globals.CustomDebuffsFilter[dId] or 1)..","
             if HealBot_Globals.IgnoreCustomDebuff[dId] then
                 for instName, _ in pairs(HealBot_Globals.IgnoreCustomDebuff[dId]) do
                     ssStr=ssStr..(instName)..","
@@ -734,13 +746,14 @@ function HealBot_Share_LoadDebuffs(sIn)
     end
     for e=2,#ssTab do
         local _,c,d=string.split("~", ssTab[e])
-        local dId,prio,filter,show,r,g,b,idMethod,tag,iconSet,iconGlow,i1,i2,i3,i4=string.split(",", d)
-        if not c or not dId or not prio or not filter or not show or not r or not g or not b then
+        local dId,prio,castby,show,r,g,b,idMethod,tag,iconSet,iconGlow,filter,i1,i2,i3,i4=string.split(",", d)
+        if not c or not dId or not prio or not castby or not show or not r or not g or not b then
             HealBot_Options_ImportFail("Debuffs", "Data corruption - ensure it is exactly as the original file")
         else
             c=tonumber(c)
             dId=tonumber(dId) or dId
             prio=tonumber(prio)
+            castby=tonumber(castby)
             filter=tonumber(filter)
             r=tonumber(r)
             g=tonumber(g)
@@ -752,7 +765,7 @@ function HealBot_Share_LoadDebuffs(sIn)
                 local dName=HealBot_WoWAPI_SpellName(dId) or dId
                 HealBot_Globals.Custom_Debuff_Categories[dId]=c
                 HealBot_Globals.CustomDebuffs[dId]=prio
-                if filter then HealBot_Globals.FilterCustomDebuff[dId]=filter end
+                if castby then HealBot_Globals.FilterCustomDebuff[dId]=castby end
                 if show == "true" then
                     HealBot_Globals.CustomDebuffsShowBarCol[dId]=3
                 elseif tonumber(show) and tonumber(show) ~= 4 then
@@ -773,9 +786,18 @@ function HealBot_Share_LoadDebuffs(sIn)
                 end
                 if iconSet>1 then
                     HealBot_Globals.CustomDebuffsIconSet[dId]=iconSet
+                else
+                    HealBot_Globals.CustomDebuffsIconSet[dId]=nil
                 end
                 if iconGlow>1 then
                     HealBot_Globals.CustomDebuffsIconGlow[dId]=iconGlow
+                else
+                    HealBot_Globals.CustomDebuffsIconGlow[dId]=nil
+                end
+                if filter>1 then
+                    HealBot_Globals.CustomDebuffsFilter[dId]=filter
+                else
+                    HealBot_Globals.CustomDebuffsFilter[dId]=nil
                 end
                 if string.len(tag or "")>2 then
                     HealBot_Globals.CDCTag[dId]=tag

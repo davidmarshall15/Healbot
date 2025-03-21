@@ -87,9 +87,15 @@ function HealBot_ActionIcons_FrameNumIconsUpdate(frame, num)
     iconFrame[frame].numIcons=num
 end
 
-function HealBot_ActionIcons_SetStrata()
-    for x=1,10 do
-        iconFrame[x]:SetFrameStrata(HealBot_Globals.FrameStrata)
+function HealBot_ActionIcons_SetStrata(preCombat)
+    if preCombat then
+        for x=1,10 do
+            iconFrame[x]:SetFrameStrata(HealBot_Globals.FrameStrataIC)
+        end
+    else
+        for x=1,10 do
+            iconFrame[x]:SetFrameStrata(HealBot_Globals.FrameStrata)
+        end
     end
 end
 

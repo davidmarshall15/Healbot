@@ -67,6 +67,7 @@ HealBot_Supplied_Fonts={
 
 HealBot_ConfigDefaults={
   PrivFocus="x",
+  PrivData={},
   CurrentSpec=9,
   Spec="",
   CurrentLoadout=0,
@@ -261,6 +262,7 @@ function HealBot_Data_InitVars()
         PluginManaWatch=true,
         PluginMedia=true,
         FrameStrata="LOW",
+        FrameStrataIC="LOW",
         CompressExport=true,
         VehicleFontSizeReduction=4,
         UseCrashProt=false,
@@ -371,6 +373,7 @@ function HealBot_Data_InitVars()
         PermPrivateTanks={},
         PermPrivateHealers={},
         PermPrivateDamagers={},
+        PermPrivateData={},
         EmergIncRange={
             [HEALBOT_DRUID]   =false,  [HEALBOT_HUNTER]     =true,   [HEALBOT_MAGE]    =true,
             [HEALBOT_PALADIN] =false,  [HEALBOT_PRIEST]     =false,  [HEALBOT_ROGUE]   =false,
@@ -406,6 +409,10 @@ function HealBot_Data_InitVars()
             [HEALBOT_CUSTOM_CAT_CUSTOM_AUTOMATIC]=1,
             ["DEFAULT"]=1,
         },
+        CustomDebuffsFilter={  
+            [HEALBOT_CUSTOM_CAT_CUSTOM_AUTOMATIC]=1,
+            ["DEFAULT"]=1,
+        },
         CDCTag={},
         IgnoreCustomDebuff={},
         FilterCustomDebuff={
@@ -427,6 +434,7 @@ function HealBot_Data_InitVars()
         CustomBuffsShowBarCol={["DEFAULT"]=4},
         CustomBuffsIconGlow={},
         CustomBuffIDMethod={},
+        CustomBuffsFilter={},
         IconKeyCombo={},
         UseIconCommands=false,
         WatchHoT={
@@ -649,7 +657,7 @@ function HealBot_Data_InitVars()
         },
     };
     if HEALBOT_GAME_VERSION<3 then
-        HealBot_GlobalsDefaults.DenyTalentQuery=true
+        HealBot_GlobalsDefaults.TalentInspect=false
     end
 end
 

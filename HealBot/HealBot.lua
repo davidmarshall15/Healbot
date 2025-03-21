@@ -579,7 +579,7 @@ function HealBot_TalentQuery(button)
             button.specupdate=0
         end
         button.spec=s
-    elseif not HealBot_Globals.DenyTalentQuery and UnitExists(button.unit) and CanInspect(button.unit) then
+    elseif UnitExists(button.unit) and CanInspect(button.unit) then
         if button.status.range<0 then
             HealBot_SpecUpdate(button, HealBot_TimeNow+15)
         elseif HEALBOT_GAME_VERSION>5 then
@@ -773,8 +773,6 @@ function HealBot_SlashCmd(cmd)
             HealBot_TestBars()
         elseif (HBcmd == "tr" and x) then
             HealBot_Panel_SethbTopRole(x)
-        elseif (HBcmd == "ttq") then
-            HealBot_Options_ToggleTalentQuery()
         elseif (HBcmd == "tci") then
             HealBot_Options_ToggleClearInspect()
         elseif (HBcmd == "spt") then
@@ -1692,6 +1690,7 @@ end
 function HealBot_Load()
       --HealBot_setCall("HealBot_Load")
     if not HealBot_luVars["Loaded"] then
+        HealBot_Data["PGROUP"]=1
         HealBot_Media_Register()
         HealBot_FastFuncs()
         HealBot_Init_Spells_Defaults()
@@ -2411,6 +2410,7 @@ function HealBot_VariablesLoaded()
         end
     end);
     
+    if not HealBot_Globals.PrivLastSeenDate then HealBot_Globals.PrivLastSeenDate=GetServerTime() end
     if not Healbot_Config_Skins.Current_Skin then Healbot_Config_Skins.Current_Skin=HEALBOT_SKINS_STD end
     if type(Healbot_Config_Skins.Current_Skin) == "number" then Healbot_Config_Skins.Current_Skin="s"..Healbot_Config_Skins.Current_Skin end
     C_ChatInfo.RegisterAddonMessagePrefix(HEALBOT_HEALBOT)
@@ -3349,6 +3349,9 @@ function HealBot_Not_Fighting()
             if HealBot_Globals.DisableToolTipInCombat and HealBot_Data["TIPBUTTON"] then
                 HealBot_setTooltipUpdateNow()
             end
+            if HealBot_Globals.FrameStrataIC ~= HealBot_Globals.FrameStrata then
+                HealBot_Action_SetStrata()
+            end
             if HealBot_luVars["EOCOOM"] and HealBot_Data["POWERTYPE"] == 0 then
                 aButton=HealBot_Panel_RaidButton(HealBot_Data["PGUID"])
                 if aButton and aButton.status.current<HealBot_Unit_Status["DEAD"] then
@@ -3519,6 +3522,12 @@ function HealBot_UnitSlowUpdate(button)
                         HealBot_Events_UnitDebuff(button)
                         HealBot_GetUnitGuild(button)
                         HealBot_RefreshUnit(button)
+                        if HealBot_Globals.PermPrivateData[button.guid] then
+                            HealBot_Globals.PermPrivateData[button.guid]["CLASSTRIM"]=button.text.classtrim
+                        end
+                        if HealBot_Config.PrivFocus == button.guid then
+                            HealBot_Config.PrivData["CLASSTRIM"]=button.text.classtrim
+                        end
                     end
                 else
                     if button.specchange then
@@ -4362,7 +4371,7 @@ function HealBot_CalcThreat(button)
                 HealBot_MobTarget[UnitThreatData["mobGUID"]]=""
             end
             HealBot_UnitEnemyTargetUpdate(ctEnemyUnit, UnitThreatData["mobGUID"])
-            UnitThreatData["threatname"]=HealBot_MobGUID[UnitThreatData["mobGUID"]] or ""
+            UnitThreatData["threatname"]=HealBot_MobGUID[UnitThreatData["mobGUID"]]
             if HealBot_luVars["pluginThreat"] and button.status.plugin then
                 HealBot_Plugin_Threat_UpdateMobRT(UnitThreatData["threatname"], (GetRaidTargetIndex(ctEnemyUnit) or 0))
             end
@@ -4609,6 +4618,9 @@ function HealBot_PlayerRegenDisabled()
     HealBot_luVars["RegenDisabled"]=true
     HealBot_luVars["CheckAuraFlags"]=true
     HealBot_PlayerCheck()
+    if HealBot_Globals.FrameStrataIC ~= HealBot_Globals.FrameStrata then
+        HealBot_Action_SetStrata(true)
+    end
     if HealBot_Panel_enemyPlayerTargets(true, 2) then
         HealBot_ResetOnEnemyChange()
     end

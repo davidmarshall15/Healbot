@@ -3528,11 +3528,17 @@ local hbEnemyEventFuncs={["UNIT_PHASE"]=HealBot_Events_UnitPhase,
                          ["UNIT_CLASSIFICATION_CHANGED"]=HealBot_Events_ClassificationChanged,
                    }
 
-function HealBot_Action_SetStrata()
-    for x=1,10 do
-        grpFrame[x]:SetFrameStrata(HealBot_Globals.FrameStrata)
+function HealBot_Action_SetStrata(preCombat)
+    if preCombat then
+        for x=1,10 do
+            grpFrame[x]:SetFrameStrata(HealBot_Globals.FrameStrataIC)
+        end
+    else
+        for x=1,10 do
+            grpFrame[x]:SetFrameStrata(HealBot_Globals.FrameStrata)
+        end
     end
-    HealBot_ActionIcons_SetStrata()
+    HealBot_ActionIcons_SetStrata(preCombat)
 end
 
 function HealBot_Action_InitFrames()
@@ -5427,7 +5433,7 @@ function HealBot_Action_hbmenuFrame_DropDown_Initialize(self,level,menuList)
             else
                 info.text=HEALBOT_WORDS_ADDTO.." "..HEALBOT_OPTIONS_MYTARGET
             end
-            info.func=function() HealBot_Panel_ToggelHealTarget(self.unit, true); end;
+            info.func=function() HealBot_Panel_ToggelHealTarget(self.unit, false); end;
             UIDropDownMenu_AddButton(info, 1);
 
             info=UIDropDownMenu_CreateInfo();

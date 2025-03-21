@@ -347,6 +347,7 @@ function HealBot_globalVars()
     HEALBOT_LEADER_OF_THE_PACK             =17007 --HealBot_WoWAPI_SpellName(17007) or "--Leader of the Pack";
     --HEALBOT_LIVING_SEED                    =48500 --HealBot_WoWAPI_SpellName(48500) or "--Living Seed";
     HEALBOT_MARK_OF_THE_WILD               =1126 --HealBot_WoWAPI_SpellName(1126) or "--Mark of the Wild";
+    HEALBOT_SYMBIOTIC_RELATIONSHIP         =474750 -- "--Symbiotic Relationship"
     HEALBOT_MOONKIN_AURA                   =24907 --HealBot_WoWAPI_SpellName(24907) or "--Moonkin Aura";
     HBC_NATURE_GRASP                       =16689
     HEALBOT_NATURE_MOMENT_OF_CLARITY       =236068 --HealBot_WoWAPI_SpellName(236068) or "--Moment of Clarity";

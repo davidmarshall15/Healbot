@@ -180,6 +180,8 @@ function HealBot_Lang_enALL()
     HEALBOT_SORTBY_GROUP                   ="Group"
     HEALBOT_SORTBY_MAXHEALTH               ="Max health"
     HEALBOT_SORTBY_UNITID                  ="Unit ID"
+    HEALBOT_OPTION_INGROUP                 ="In group"
+    HEALBOT_OPTION_INRAID                  ="In raid"
     HEALBOT_OPTIONS_NEWDEBUFFTEXT          ="New Debuff"
     HEALBOT_OPTIONS_NEWHOTBUFFTEXT         ="New Buff"
     HEALBOT_OPTIONS_ADDNEWDEBUFFTEXT       ="Add New Debuff"
@@ -228,6 +230,9 @@ function HealBot_Lang_enALL()
     HEALBOT_OPTIONS_FADESTARTTIME          ="Fade start time";
     HEALBOT_OPTIONS_SPELLSTARGETLASTTARGET ="Auto Target: After cast, target last target"
 
+
+    HEALBOT_OPTIONS_PC                     ="Player"
+    HEALBOT_OPTIONS_NPC                    ="Non player"
     HEALBOT_OPTIONS_CASTNOTIFY1            ="No messages";
     HEALBOT_OPTIONS_CASTNOTIFY2            ="Notify self";
     HEALBOT_OPTIONS_CASTNOTIFY3            ="Notify target";
@@ -545,6 +550,9 @@ function HealBot_Lang_enALL()
     HEALBOT_MANA                           ="Mana"
     HEALBOT_RAGE                           ="Rage"
     HEALBOT_RUNICPOWER                     ="Runic Power"
+    
+    HEALBOT_MANAUSER                       ="Mana user"
+    HEALBOT_NONMANAUSER                    ="Non mana user"
 
     HEALBOT_OPTIONS_HLTHTXTANCHORINDL      ="Independent Left"
     HEALBOT_OPTIONS_HLTHTXTANCHORINDC      ="Independent Center"
@@ -734,6 +742,7 @@ function HealBot_Lang_enALL()
     HEALBOT_OPTIONS_TTMAXBUTTONS           ="Max buttons"
     HEALBOT_TOOLTIP_TARGETBAR              ="Target Bar"
     HEALBOT_OPTIONS_MYTARGET               ="Private List"
+    HEALBOT_WORD_LISTS                     ="Lists"
 
     HEALBOT_DISCONNECTED_LABEL             ="Disconnected"
     HEALBOT_DISCONNECTED_TAG               ="DC "
@@ -858,7 +867,7 @@ function HealBot_Lang_enALL()
     HEALBOT_OPTIONS_TURNTESTBARSOFF        ="Turn Off"
     HEALBOT_OPTION_NUMBARS                 ="Number of Bars"
     HEALBOT_OPTION_NUMTANKS                ="Number of Tanks"
-    HEALBOT_OPTION_NUMMYTARGETS            ="Number of MyTargets"
+    HEALBOT_OPTION_NUMMYTARGETS            ="Number on Private List"
     HEALBOT_OPTION_NUMHEALERS              ="Number of Healers"
     HEALBOT_OPTION_NUMPETS                 ="Number of Pets"
     HEALBOT_OPTION_DEBUFFICONS             ="Show debuff icons"
@@ -1188,7 +1197,7 @@ function HealBot_Lang_enALL()
     HEALBOT_SKIN_INCHEALBARCOL_TEXT        ="Incoming heals";
     HEALBOT_OPTIONS_GROUP_PETS_BY_FIVE     ="Pets: Groups of five"
     HEALBOT_OPTIONS_OWN_PET_WITH_SELF      ="Own pet: with self"
-    HEALBOT_OPTIONS_USEGAMETOOLTIP         ="Use game tooltip"
+    HEALBOT_OPTIONS_USEGAMETOOLTIP         ="Use game tooltip fonts and col"..HEALBOT_enWORD_COLOUR_SUFFIX.."s"
     HEALBOT_OPTIONS_SHOWWOWTOOLTIP         ="Show game tooltip information"
     HEALBOT_OPTIONS_SHOWPOWERCOUNTER       ="Show power counter"
     HEALBOT_OPTIONS_SHOWPOWERCOUNTER_PALA  ="Show holy power"
@@ -1407,6 +1416,8 @@ function HealBot_Lang_enALL()
     HEALBOT_PLUGIN_BARDIR                  ="Bars shrink from right to left"
     HEALBOT_PLUGIN_SHOWNAME                ="Show spell name"
     HEALBOT_PLUGIN_SHOWTIME                ="Show remaining time"
+    HEALBOT_PLUGIN_NAMECLASS               ="Name (Class)"
+    HEALBOT_PLUGIN_LASTSEEN                ="Last seen"
     HEALBOT_PLUGIN_BLACKLISTSESSION        ="Add for session"
     HEALBOT_PLUGIN_BLACKLISTPERM           ="Add permanently"
     HEALBOT_PLUGIN_BLACKLISTREMOVE         ="Remove"
@@ -1511,6 +1522,7 @@ function HealBot_Lang_enALL()
     HEALBOT_PLUGIN_QUEUEVENTABSORBS        ="Queue absorb events"
     HEALBOT_PLUGIN_MEDIAEXAMPLEBAR         ="Example Status Bar 321"
     HEALBOT_PLUGIN_TWEAKSCUSTOMCOL         ="Set all col"..HEALBOT_enWORD_COLOUR_SUFFIX.."s to this"
+    HEALBOT_PLUGIN_TWEAKSLISTHELP          ="Private Focus is per Character.  All other lists are Global."
 
     HEALBOT_CUSTOM_CASTBY_EVERYONE         ="Everyone"
     HEALBOT_CUSTOM_CASTBY_ENEMY            ="Enemy"
@@ -1787,7 +1799,6 @@ function HealBot_Lang_enALL()
     HEALBOT_OPTION_EXCLUDEMOUNT_ON         ="Now Excluding Mount"
     HEALBOT_OPTION_EXCLUDEMOUNT_OFF        ="No longer Excluding Mount"
     HEALBOT_CMD_TOGGLEEXCLUDEMOUNT         ="Toggle Exclude Mount"
-    HEALBOT_CMD_TOGGLETALENTQUERY          ="Toggle Talent Query"
     HEALBOT_CMD_TOGGLECLEARINSPECT         ="Toggle execute Clear Inspect after Talent Query"
     HEALBOT_OPTIONS_HIDEMINIBOSSFRAMES     ="Hide mini boss frames";
     HEALBOT_OPTIONS_HIDERAIDFRAMES         ="Hide raid frames";
