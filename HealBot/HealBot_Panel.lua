@@ -318,9 +318,15 @@ function HealBot_Panel_SetPermPrivateData(unit, guid, focus)
             HealBot_Globals.PermPrivateData[guid]={}
             HealBot_Globals.PermPrivateData[guid]["NAME"]=UnitName(unit) or HEALBOT_WORDS_UNKNOWN
             HealBot_Globals.PermPrivateData[guid]["CLASS"]=UnitClass(unit) or HEALBOT_WORDS_UNKNOWN
-            HealBot_Globals.PermPrivateData[guid]["CLASSTRIM"]=""
+            HealBot_Globals.PermPrivateData[guid]["TIME"]=GetServerTime()
+            aButton=HealBot_Panel_AllButton(guid)
+            if aButton then 
+                HealBot_Globals.PermPrivateData[guid]["CLASSTRIM"]=aButton.text.classtrim
+            else
+                HealBot_Globals.PermPrivateData[guid]["CLASSTRIM"]=""
+            end
+            HealBot_Globals.PermPrivateData[guid]["PFACTION"]=HealBot_Data["PFACTION"]
         end
-        HealBot_Globals.PermPrivateData[guid]["TIME"]=GetServerTime()
     end
 end
 
@@ -619,6 +625,7 @@ function HealBot_Panel_ToggelPrivFocus(unit, recall)
             HealBot_Panel_luVars["PrivFocusUnit"]=false
         else
             HealBot_Config.PrivFocus=xGUID
+            HealBot_Panel_SetPermPrivateData(unit, xGUID, true)
             HealBot_Panel_SetPrivFocus(unit)
             aButton=HealBot_Panel_AllButton(xGUID)
             if aButton then
@@ -647,9 +654,7 @@ function HealBot_Panel_PrivateListUpdate()
     HealBot_Timers_Set("OOC","RefreshPartyNextRecalcPlayers")
     HealBot_Timers_Set("OOC","RefreshPartyNextRecalcPets")
     HealBot_Timers_Set("AURA","CheckUnits",true)
-    if HealBot_Panel_luVars["pluginTweaks"] then
-        HealBot_Plugin_Options_Tweaks_RefreshLists()
-    end
+    HealBot_Timers_Set("LAST","PluginTweaksRefresh",true)
 end
 
 function HealBot_Panel_ToggelHealTarget(unit, perm)
@@ -660,6 +665,7 @@ function HealBot_Panel_ToggelHealTarget(unit, perm)
             HealBot_Globals.PermMyTargets[xGUID]=nil
         else
             HealBot_Globals.PermMyTargets[xGUID]=UnitName(unit) or "unKnown"
+            HealBot_Panel_SetPermPrivateData(unit, xGUID)
         end
     else
         if HealBot_MyHealTargets[xGUID] then
@@ -680,6 +686,7 @@ function HealBot_Panel_ToggelPrivateTanks(unit, perm)
             HealBot_Globals.PermPrivateTanks[xGUID]=nil
         else
             HealBot_Globals.PermPrivateTanks[xGUID]=UnitName(unit) or "unKnown"
+            HealBot_Panel_SetPermPrivateData(unit, xGUID)
         end
     else
         if HealBot_MyPrivateTanks[xGUID] then
@@ -700,6 +707,7 @@ function HealBot_Panel_ToggelPrivateHealers(unit, perm)
             HealBot_Globals.PermPrivateHealers[xGUID]=nil
         else
             HealBot_Globals.PermPrivateHealers[xGUID]=UnitName(unit) or "unKnown"
+            HealBot_Panel_SetPermPrivateData(unit, xGUID)
         end
     else
         if HealBot_MyPrivateHealers[xGUID] then
@@ -720,6 +728,7 @@ function HealBot_Panel_ToggelPrivateDamagers(unit, perm)
             HealBot_Globals.PermPrivateDamagers[xGUID]=nil
         else
             HealBot_Globals.PermPrivateDamagers[xGUID]=UnitName(unit) or "unKnown"
+            HealBot_Panel_SetPermPrivateData(unit, xGUID)
         end
     else
         if HealBot_MyPrivateDamagers[xGUID] then

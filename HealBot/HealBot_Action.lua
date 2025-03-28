@@ -2540,7 +2540,7 @@ function HealBot_Action_IsUnitDead(button, guid)
     if button then
         return button.status.isdead
     else
-        aButton=HealBot_Panel_RaidPetButton(guid)
+        aButton=HealBot_Panel_AllButton(guid)
         if aButton and aButton.status.isdead then
             return true
         end

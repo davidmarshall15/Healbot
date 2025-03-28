@@ -1894,7 +1894,7 @@ end
 local skinName=""
 function HealBot_Update_Skins()
       --HealBot_setCall("HealBot_Update_Skins")
-    local oldVersion=9
+    local oldVersion=10
     if HealBot_Config.LastVersionSkinUpdate then HealBot_Config.LastVersionSkinUpdate=nil end
 
     local foundSkin=false
@@ -1919,11 +1919,7 @@ function HealBot_Update_Skins()
         HealBot_Options_SetDefaults(true)
     elseif HealBot_Globals.LastVersionSkinUpdate~=HealBot_Global_Version() then
         HealBot_Update_GlobalVars()
-        
         if tonumber(tMajor)<12 then
-            for x=1,20 do  -- This can be remove when 9.2.x check is replace with defaults due to old version
-                if HealBot_Config_Spells.Binds and HealBot_Config_Spells.Binds[x] and HealBot_Config_Spells.Binds[x] == 1 then HealBot_Config_Spells.Binds[x]=nil end
-            end
             for x in pairs (Healbot_Config_Skins.Skins) do
                 skinName=Healbot_Config_Skins.Skins[x]
                 if HealBot_Config.SkinDefault[skinName] then

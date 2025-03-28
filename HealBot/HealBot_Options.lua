@@ -9566,7 +9566,7 @@ function HealBot_Options_IconDebuffPosition_DropDown()
         info.func=function(self)
                         if hbv_Skins_GetIconVar("DEBUFFONBAR", hb_lVars["Frame"], hb_lVars["DebuffIconSet"]) ~= self:GetID() then
                             hbv_Skins_SetIconVar(self:GetID(), "DEBUFFONBAR", hb_lVars["Frame"], hb_lVars["DebuffIconSet"])
-                            UIDropDownMenu_SetText(HealBot_Options_IconDebuffPosition,HealBot_Options_Lists["IconPosition"][hbv_Skins_GetIconVar("DEBUFFANCHOR", hb_lVars["Frame"], hb_lVars["DebuffIconSet"])])
+                            UIDropDownMenu_SetText(HealBot_Options_IconDebuffPosition,HealBot_Options_Lists["IconPosition"][hbv_Skins_GetIconVar("DEBUFFONBAR", hb_lVars["Frame"], hb_lVars["DebuffIconSet"])])
                             local list=HealBot_Options_AnchorList(hbv_Skins_GetIconVar("DEBUFFONBAR", hb_lVars["Frame"], hb_lVars["DebuffIconSet"]), false)
                             if hbv_Skins_GetIconVar("DEBUFFONBAR", hb_lVars["Frame"], hb_lVars["DebuffIconSet"]) == 1 then
                                 UIDropDownMenu_SetText(HealBot_Options_IconDebuffAnchor,list[hbv_Skins_GetIconVar("DEBUFFANCHOR", hb_lVars["Frame"], hb_lVars["DebuffIconSet"])])
@@ -25003,6 +25003,12 @@ function HealBot_Options_UpdateLang()
     g:SetTextColor(1,1,1,1)
     g=_G["HealBot_HealGroups_Text"]
     g:SetText(HEALBOT_OPTIONS_HEALGROUPS)
+    g:SetTextColor(1,1,1,1)
+    g=_G["HealBot_PrivLists_Text1"]
+    g:SetText(HEALBOT_OPTIONS_PRIVLISTS1)
+    g:SetTextColor(1,1,1,1)
+    g=_G["HealBot_PrivLists_Text2"]
+    g:SetText(HEALBOT_OPTIONS_PRIVLISTS2)
     g:SetTextColor(1,1,1,1)
     g=_G["HealBot_EnemyAuraEnemyFrame_FontStr"]
     g:SetText(HEALBOT_OPTIONS_ENEMYFRAME)

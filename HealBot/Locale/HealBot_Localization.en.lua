@@ -129,8 +129,8 @@ function HealBot_Lang_enALL()
     HEALBOT_OPTIONS_TAB_OVERRIDES          ="Overrides"
     HEALBOT_OPTIONS_TAB_EXTRAS             ="Extras"
 
-    HEALBOT_STRING_MATCH_WELLFED           ="become well fed"
-    HEALBOT_STRING_MATCH_RESTOREMANA       ="(%d+)(%%*) (%u*)(%l*)ana over (%d+) sec"
+    HEALBOT_STRING_MATCH_WELLFED           ="[w|W]ell [f|F]ed"
+    HEALBOT_STRING_MATCH_RESTOREMANA       ="[m|M]ana over (%d+) sec"
     HEALBOT_STRING_MATCH_EXTRABUFFS        ={"Flask", "Elixir", "Scroll", "Potion", "Rune$"}
     HEALBOT_WELL_FED                       ="Well Fed"
     HEALBOT_MANA_DRINK                     ="Mana Drink"
@@ -1523,6 +1523,7 @@ function HealBot_Lang_enALL()
     HEALBOT_PLUGIN_MEDIAEXAMPLEBAR         ="Example Status Bar 321"
     HEALBOT_PLUGIN_TWEAKSCUSTOMCOL         ="Set all col"..HEALBOT_enWORD_COLOUR_SUFFIX.."s to this"
     HEALBOT_PLUGIN_TWEAKSLISTHELP          ="Private Focus is per Character.  All other lists are Global."
+    HEALBOT_PLUGIN_GROWUP                  ="Grow bottom to top";
 
     HEALBOT_CUSTOM_CASTBY_EVERYONE         ="Everyone"
     HEALBOT_CUSTOM_CASTBY_ENEMY            ="Enemy"
@@ -1805,6 +1806,8 @@ function HealBot_Lang_enALL()
     HEALBOT_OPTIONS_HIDEFOCUSFRAME         ="Hide focus frame";
     HEALBOT_OPTIONS_FRAME_ALIAS            ="Alias"
     HEALBOT_OPTIONS_HEALGROUPS             ="Heal Groups"
+    HEALBOT_OPTIONS_PRIVLISTS1             ="Private tanks are included with Main tanks.\nPrivate healers are included with Healers."
+    HEALBOT_OPTIONS_PRIVLISTS2             ="Private Lists can be managed using\nthe HealBot Tweaks plugin."
     HEALBOT_OPTIONS_CONTENT_SKINS_HEALGROUP="        " .. HEALBOT_OPTIONS_HEALGROUPS
     HEALBOT_OPTIONS_CONTENT_SKINS_BARCOLOUR="        " .. "Bar Col"..HEALBOT_enWORD_COLOUR_SUFFIX.."s"
     HEALBOT_OPTIONS_SET_ALL_FRAMES         ="Copy current frame and tabs to other frames"

@@ -223,6 +223,12 @@ function HealBot_Timers_SkinChangePluginUpdate()
     if HealBot_Timers_luVars["pluginMyCooldowns"] and HealBot_Plugin_MyCooldowns_Profile then HealBot_Plugin_MyCooldowns_Profile() end
 end
 
+function HealBot_Timers_PluginTweaks_Refresh()
+    if HealBot_Timers_luVars["pluginTweaks"] then
+        HealBot_Plugin_Options_Tweaks_RefreshLists()
+    end
+end
+
 function HealBot_Timers_SkinBarTextColours()
       --HealBot_setCall("HealBot_Timers_SkinBarTextColours")
     HealBot_Panel_resetTestCols(true)
@@ -417,13 +423,15 @@ function HealBot_Timers_LastUpdate()
     HealBot_Timers_Set("AURA","PlayerCheckExtended",true)
     HealBot_Timers_Set("AUX","UpdateAllAuxByType",true)
     HealBot_Timers_Set("OOC","DisableCheck",true)
-    HealBot_Timers_Set("LAST","MarkedCacheButtons",true)
     HealBot_Timers_Set("LAST","UpdateAllHealth",true)
     HealBot_Timers_Set("PLAYER","InvChange",true)
 	HealBot_Timers_Set("LAST","UpdateAllUnitBars",true)
-    HealBot_Timers_Set("LAST","CheckVersions",true)
     HealBot_Timers_Set("LAST","LoadComplete",true)
     HealBot_Timers_Set("LAST","UpdateCheckInterval",true)
+    HealBot_Timers_Set("LAST","MarkedCacheButtons",true,true)
+    HealBot_Timers_Set("LAST","CheckVersions",true,true)
+    HealBot_Timers_Set("AURA","ConfigClassHoT",true,true)
+    HealBot_Timers_Set("AURA","ConfigDebuffs",true,true)
     HealBot_Timers_Set("OOC","RefreshPartyNextRecalcAll",true,true)
 end
 
@@ -457,6 +465,24 @@ function HealBot_Timers_InitSpells()
     HealBot_Timers_Set("INIT","SpellsLoaded")
 end
 
+function HealBot_Timers_OnLoadMessages()
+    if HealBot_Timers_luVars["oldOptionsExists"] then
+        if GetServerTime() > 1745600000 then
+            HealBot_AddChat("=== Please Note ===")
+            HealBot_AddChat("The HealBot_Options folder in AddOns can be deleted.")
+        end
+        HealBot_AddDebug("The HealBot_Options folder in AddOns can be deleted.")
+    end
+    if HealBot_Timers_luVars["oldDataExists"] then
+        if GetServerTime() > 1746810000 then
+            HealBot_AddChat("=== Please Note ===")
+            HealBot_AddChat("The HealBot_Data folder in AddOns can be deleted.")
+            HealBot_AddChat("IMPORTANT: Before deleting HealBot_Data, logon all characters that use HealBot to allow copying saves variables.")
+        end
+        HealBot_AddDebug("The HealBot_Data folder in AddOns can be deleted.")
+    end
+end
+
 function HealBot_Timers_LastLoadCalls()
     HealBot_Options_ObjectsEnableDisable("HealBot_FrameStickyOffsetHorizontal",false)
     HealBot_Options_ObjectsEnableDisable("HealBot_FrameStickyOffsetVertical",false)
@@ -488,6 +514,7 @@ function HealBot_Timers_LastLoad()
     HealBot_Timers_Set("SKINS","TextSetTagInUse",true)
     HealBot_Timers_Set("OOC","EventsSetFrameUnits",true)
     HealBot_Timers_Set("LAST","MediaUpdateIndexes",true)
+    HealBot_Timers_Set("LAST","OnLoadMessages",true)
     HealBot_Timers_Set("INIT","LastUpdate",true,true)
     HealBot_Timers_Set("INIT","HealBotLoaded",true,true)
     HealBot_Timers_Set("LAST","MediaInitFonts",true,true)
@@ -862,6 +889,8 @@ local hbTimerFuncs={["INIT"]={
                         ["CleanPermPrivateData"]=HealBot_Panel_CleanPermPrivateData,
                         ["PrivateListUpdate"]=HealBot_Panel_PrivateListUpdate,
                         ["LastLoadCalls"]=HealBot_Timers_LastLoadCalls,
+                        ["OnLoadMessages"]=HealBot_Timers_OnLoadMessages,
+                        ["PluginTweaksRefresh"]=HealBot_Timers_PluginTweaks_Refresh,
                     },
                     ["OOC"]={
                         ["FullReload"]=HealBot_FullReload,
@@ -934,6 +963,7 @@ end
 
 function HealBot_Timers_SetLongDelay(cat,timer)
     table.insert(HealBot_Timers_LongDelay[cat],timer)
+    HealBot_setLuVars("HealBot_RunLongDelayTimers", true)
 end
 
 function HealBot_Timers_Set(cat,timer,delay,longDelay)
@@ -960,7 +990,7 @@ function HealBot_Timers_PluginsSet(tId)
     elseif tId == 2 then
         HealBot_Timers_Set("AURA","CheckUnits",true)
     elseif tId == 3 then
-        HealBot_Timers_Set("INIT","PrepSetAllAttribs",true,true)
+        HealBot_Timers_Set("INIT","PrepSetAllAttribs",true)
     elseif tId == 4 then
         HealBot_Timers_Set("LAST","InitBinds",true)
     elseif tId == 5 then
@@ -1026,9 +1056,11 @@ function HealBot_Timers_ProcLongDelay()
     elseif HealBot_Timers_LongDelay["LAST"][1] then
         HealBot_Timers_SetDelay("LAST", HealBot_Timers_LongDelay["LAST"][1])
         table.remove(HealBot_Timers_LongDelay["LAST"],1)
-    elseif HealBot_Timers_LongDelay["OOC"][1] then
+    elseif not HealBot_Data["UILOCK"] and HealBot_Timers_LongDelay["OOC"][1] then
         HealBot_Timers_SetDelay("OOC", HealBot_Timers_LongDelay["OOC"][1])
         table.remove(HealBot_Timers_LongDelay["OOC"],1)
+    else
+        HealBot_setLuVars("HealBot_RunLongDelayTimers", false)
     end
 end
 

@@ -9538,6 +9538,24 @@
                         </Anchor>
                       </Anchors>
                     </FontString>
+                    <FontString name="HealBot_PrivLists_Text1" inherits="GameFontNormalSmall">
+                      <Anchors>
+                        <Anchor point="BOTTOMLEFT">
+                          <Offset>
+                            <AbsDimension x="50" y="10" />
+                          </Offset>
+                        </Anchor>
+                      </Anchors>
+                    </FontString>
+                    <FontString name="HealBot_PrivLists_Text2" inherits="GameFontNormalSmall">
+                      <Anchors>
+                        <Anchor point="BOTTOMRIGHT">
+                          <Offset>
+                            <AbsDimension x="-50" y="10" />
+                          </Offset>
+                        </Anchor>
+                      </Anchors>
+                    </FontString>
                   </Layer>
                 </Layers>
                 <Anchors>
@@ -25797,7 +25815,6 @@
                           </Slider>
                         </Frames>
                       </Frame>
-
                       <Frame name="HealBot_Options_SkinsFrameIconsDebuffText" hidden="true" inherits="BackdropTemplate">
                         <Size>
                           <AbsDimension y="450"/>
@@ -25967,7 +25984,6 @@
                           </Frame>
                         </Frames>
                       </Frame>
-
                      </Frames>
                    </Frame>
                    <Frame name="HealBot_Options_SkinsFrameIconsBuff" hidden="true" inherits="BackdropTemplate">

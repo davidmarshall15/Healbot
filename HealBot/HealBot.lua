@@ -1006,6 +1006,7 @@ function HealBot_SlashCmd(cmd)
                --local Continent=HealBot_MountsPets_getContinent()
                --HealBot_AddDebug("Continent is "..Continent,"Zone",true)
             end
+            
         else
             if x then HBcmd=HBcmd.." "..x end
             if y then HBcmd=HBcmd.." "..y end
@@ -2330,6 +2331,7 @@ function HealBot_SetPlayerData()
         if HealBot_Data["POWERTYPE"]<0 or HealBot_Data["POWERTYPE"]>9 then HealBot_Data["POWERTYPE"]=0 end
         HealBot_Data["PGUID"]=UnitGUID("player")
         HealBot_Data["PNAME"]=UnitName("player")
+        HealBot_Data["PFACTION"]=UnitFactionGroup("player")
         if HealBot_Data["PGUID"] and HealBot_Data["PCLASSTRIM"] and HealBot_Data["PLEVEL"] and HealBot_Data["PRACE_EN"] and HealBot_Data["POWERTYPE"] then
             HealBot_Timers_Set("LAST", "SetInHealAbsorbMax")
             HealBot_Timers_Set("PLAYER","SaveProfile",true)
@@ -3344,6 +3346,9 @@ function HealBot_Not_Fighting()
         if HealBot_Data["UILOCK"] then
             HealBot_Data["UILOCK"]=false
             HealBot_luVars["CheckAuraFlags"]=true
+            HealBot_luVars["HealBot_RunTimers"]=true
+            HealBot_luVars["HealBot_RunDelayTimers"]=true
+            HealBot_luVars["HealBot_RunLongDelayTimers"]=true
             HealBot_PlayerCheck()
             HealBot_Action_setAlertState()
             if HealBot_Globals.DisableToolTipInCombat and HealBot_Data["TIPBUTTON"] then
@@ -3522,12 +3527,15 @@ function HealBot_UnitSlowUpdate(button)
                         HealBot_Events_UnitDebuff(button)
                         HealBot_GetUnitGuild(button)
                         HealBot_RefreshUnit(button)
-                        if HealBot_Globals.PermPrivateData[button.guid] then
-                            HealBot_Globals.PermPrivateData[button.guid]["CLASSTRIM"]=button.text.classtrim
-                        end
-                        if HealBot_Config.PrivFocus == button.guid then
-                            HealBot_Config.PrivData["CLASSTRIM"]=button.text.classtrim
-                        end
+                    end
+                    if HealBot_Globals.PermPrivateData[button.guid] then
+                        HealBot_Globals.PermPrivateData[button.guid]["CLASSTRIM"]=button.text.classtrim
+                        HealBot_Globals.PermPrivateData[button.guid]["PFACTION"]=HealBot_Data["PFACTION"]
+                        HealBot_Globals.PermPrivateData[button.guid]["TIME"]=GetServerTime()
+                        HealBot_Timers_Set("LAST","PluginTweaksRefresh",true,true)
+                    end
+                    if HealBot_Config.PrivFocus == button.guid then
+                        HealBot_Config.PrivData["CLASSTRIM"]=button.text.classtrim
                     end
                 else
                     if button.specchange then
@@ -3740,7 +3748,7 @@ end
 
 function HealBot_Update_Slow()
       --HealBot_setCall("HealBot_Update_Slow", nil, nil, nil, true)
-    if not HealBot_luVars["HealBot_RunTimers"] and not HealBot_luVars["HealBot_RunDelayTimers"] then
+    if HealBot_luVars["HealBot_RunLongDelayTimers"] and not HealBot_luVars["HealBot_RunTimers"] and not HealBot_luVars["HealBot_RunDelayTimers"] then
         HealBot_Timers_ProcLongDelay()
     end
     if not HealBot_Data["UILOCK"] then
@@ -4051,7 +4059,7 @@ function HealBot_Update_Final()
             break
         end
     end
-    if not HealBot_luVars["HealBot_RunTimers"] then
+    if HealBot_luVars["HealBot_RunDelayTimers"] and not HealBot_luVars["HealBot_RunTimers"] then
         HealBot_Timers_ProcDelayed()
     end
 end

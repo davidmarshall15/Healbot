@@ -193,10 +193,10 @@ end
 local uRange=0
 function HealBot_Range_UnitCurrent(button, spellName)
       --HealBot_setCall("HealBot_Range_UnitCurrent", button)
-    if not HealBot_Range_UnitInPhase(button.unit, button.guid) then
-        uRange=-2
-    elseif not UnitIsVisible(button.unit) then
+    if not UnitIsVisible(button.unit) then
         uRange=-1
+    elseif not HealBot_Range_UnitInPhase(button.unit, button.guid) then
+        uRange=-2
     elseif HealBot_Range_InteractDistance(button.unit, 1) then
         uRange=2
     elseif spellName and HealBot_Spell_Names[spellName] then

@@ -646,9 +646,9 @@ function HealBot_Action_DoRefreshTooltip()
     xGUID=UnitGUID(xUnit)
     local uName=""
     if HealBot_Globals.Tooltip_ShowTitle then
-        uName=UnitPVPName(xButton.unit) or xButton.text.nameonly
+        uName=UnitPVPName(xButton.unit) or xButton.text.nameonly or UnitName(xUnit)
     else
-        uName=xButton.text.nameonly
+        uName=xButton.text.nameonly or UnitName(xUnit)
     end
     if HealBot_Tooltip_luVars["doInit"] then
         HealBot_Tooltip_Init()
