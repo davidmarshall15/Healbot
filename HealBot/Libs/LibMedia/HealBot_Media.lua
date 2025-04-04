@@ -24,6 +24,44 @@ local HealBot_Font_Outline={
     [3]="THICKOUTLINE",
 }
 
+local roleTextures={
+    ["DAMAGER"]="Interface\\Addons\\HealBot\\Images\\dps.tga",
+    ["TANK"]="Interface\\Addons\\HealBot\\Images\\tank.tga",
+    ["HEALER"]="Interface\\Addons\\HealBot\\Images\\healer.tga",
+    }
+
+local classTextures={
+    ["DEAT"]="Interface\\Addons\\HealBot\\Images\\Deathknight-round",
+    ["DEMO"]="Interface\\Addons\\HealBot\\Images\\Demonhunter-round",
+    ["DRUI"]="Interface\\Addons\\HealBot\\Images\\Druid-round",
+    ["HUNT"]="Interface\\Addons\\HealBot\\Images\\Hunter-round",
+    ["MAGE"]="Interface\\Addons\\HealBot\\Images\\Mage-round",
+    ["MONK"]="Interface\\Addons\\HealBot\\Images\\Monk-round",
+    ["PALA"]="Interface\\Addons\\HealBot\\Images\\Paladin-round",
+    ["PRIE"]="Interface\\Addons\\HealBot\\Images\\Priest-round",
+    ["ROGU"]="Interface\\Addons\\HealBot\\Images\\Rogue-round",
+    ["SHAM"]="Interface\\Addons\\HealBot\\Images\\Shaman-round",
+    ["WARL"]="Interface\\Addons\\HealBot\\Images\\Warlock-round",
+    ["WARR"]="Interface\\Addons\\HealBot\\Images\\Warrior-round",
+    ["EVOK"]="Interface\\Addons\\HealBot\\Images\\Evoker-round",
+    }
+
+local rankTextures={[1]="Interface\\Addons\\HealBot\\Images\\leader.tga",
+                    [2]="Interface\\Addons\\HealBot\\Images\\assist.tga",
+                    [3]="Interface\\Addons\\HealBot\\Images\\looter.tga",
+                    [4]="Interface\\Addons\\HealBot\\Images\\leader.tga",
+                    [5]="Interface\\Addons\\HealBot\\Images\\tank.tga",
+                   }
+
+function HealBot_Media_retClassRoleIcon(id)
+      --HealBot_setCall("HealBot_Media_retClassRoleIcon")
+    return classTextures[id] or roleTextures[id] or false
+end
+
+function HealBot_Media_retRankIcon(id)
+    return rankTextures[id]
+end
+
 function HealBot_Media_PluginState(state)
 	if HealBot_Media_luVars["pluginMedia"]~=state then
         HealBot_Media_luVars["pluginMedia"]=state

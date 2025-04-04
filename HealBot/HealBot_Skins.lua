@@ -1418,34 +1418,15 @@ end
         h:Disable();
     elseif barType == "hbfocus" then
         bar=_G["hbExtra_HealUnit999"]
-        HealBot_Media_UpdateTexture(bar, hbv_Skins_GetFrameVar("HealBar", "TEXTURE", button.frame), "Skins_ResetSkin - HealBar")
-        bar:GetStatusBarTexture():SetHorizTile(false)
+        --HealBot_Media_UpdateDefaultTexture(_G["hbExtra_HealUnit999Bar"], "Skins_ResetSkin - HealBar")
+        --HealBot_Media_UpdateTexture(bar, hbv_Skins_GetFrameVar("HealBar", "TEXTURE", button.frame), "Skins_ResetSkin - HealBar")
 
-        bar:SetStatusBarColor(1,1,1,1);
-        tBarsConcat[1]=bar:GetName()
-        tBarsConcat[2]="_text"
-        bar.txt=_G[HealBot_Skins_Concat(2)];
-        tBarsConcat[2]="_text2"
-        bar.txt2=_G[HealBot_Skins_Concat(2)];
-        HealBot_Media_UpdateFont(bar.txt,
-                                 hbv_Skins_GetFrameVar("BarText", "FONT", button.frame),
-                                 btextheight,
-                                 btextoutline,
-                                 "Skins_ResetSkin - BarText")
-        bar.txt:SetTextColor(0,0,0,1);
-        HealBot_Media_UpdateFont(bar.txt2,
-                                 hbv_Skins_GetFrameVar("BarText", "HFONT", button.frame),
-                                 btextheight2,
-                                 btextoutline2,
-                                 "Skins_ResetSkin - BarText")
-        bar.txt2:SetTextColor(0,0,0,1);
         iScale=0.84
         iScale=iScale+(numcols/10)
         bar:SetWidth(bWidth*iScale)
         button:SetWidth(bWidth*iScale)
         bar:SetHeight(bheight);
         button:SetHeight(bheight);
-        bar.txt:SetText(HEALBOT_ACTION_HBFOCUS)
         barScale=bar:GetScale();
         bar:SetScale(barScale + 0.01);
         bar:SetScale(barScale);
@@ -1867,6 +1848,7 @@ function HealBot_Skins_Check_Skin(SkinName)
 
     if Healbot_Config_Skins.Author[SkinName] == nil then Healbot_Config_Skins.Author[SkinName]="Monti of Terenas" end
     if Healbot_Config_Skins.DuplicateBars[SkinName] == nil then Healbot_Config_Skins.DuplicateBars[SkinName]=false end
+    if Healbot_Config_Skins.DupBarsPrivList[SkinName] == nil then Healbot_Config_Skins.DupBarsPrivList[SkinName]=true end
 
     hbv_Skins_CheckRoleCol(SkinName, "TANK", false)
     hbv_Skins_CheckRoleCol(SkinName, "HEALER", false)

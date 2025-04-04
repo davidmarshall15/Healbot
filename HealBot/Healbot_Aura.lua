@@ -489,8 +489,8 @@ function HealBot_Aura_BuffIconAlphaValue(button, iconData, secsLeft)
         end
     else
         bRetAlpha=0
-        HealBot_BuffSlowUpdate(button)
---        HealBot_BuffThrottleUpdateButton(button)
+        --HealBot_BuffSlowUpdate(button)
+        HealBot_BuffThrottleUpdateButton(button)
     end
     return bRetAlpha, bNextAuraUpdate
 end
@@ -689,10 +689,10 @@ function HealBot_Aura_RaidTargetUpdate(button, iconID)
 end
 
 local cuPrevTexture=false
-function HealBot_Aura_ClassUpdate(button, texture)
+function HealBot_Aura_ClassUpdate(button, ClassRole)
         --HealBot_setCall("HealBot_Aura_ClassUpdate", button)
     cuPrevTexture=button.icon.extra.classtexture
-    button.icon.extra.classtexture=texture
+    button.icon.extra.classtexture=HealBot_Media_retClassRoleIcon(ClassRole)
     if button.icon.extra.classtexture~=cuPrevTexture and HealBot_UnitExtraIcons[button.id] then
         if not button.icon.extra.classtexture then 
             HealBot_Aura_RemoveIcon(button, 91)
@@ -705,11 +705,6 @@ function HealBot_Aura_ClassUpdate(button, texture)
     end
 end
 
-local hbIconRanks={[1]="Interface\\Addons\\HealBot\\Images\\leader.tga",
-                   [2]="Interface\\Addons\\HealBot\\Images\\assist.tga",
-                   [3]="Interface\\Addons\\HealBot\\Images\\looter.tga",
-                   [4]="Interface\\Addons\\HealBot\\Images\\leader.tga",
-                   }
 function HealBot_Aura_UpdateState(button)
         --HealBot_setCall("HealBot_Aura_UpdateState", button)
     if HealBot_UnitExtraIcons[button.id] then
@@ -733,7 +728,7 @@ function HealBot_Aura_UpdateState(button)
             HealBot_UnitExtraIcons[button.id][93].current=true
             HealBot_Aura_AddExtraIcon(button, 93)
         elseif button.rank>0 and hbv_Skins_GetFrameBoolean("Icons", "SHOWRANK", button.frame) then
-            HealBot_UnitExtraIcons[button.id][93]["texture"]=hbIconRanks[button.rank]
+            HealBot_UnitExtraIcons[button.id][93]["texture"]=HealBot_Media_retRankIcon(button.rank)
             HealBot_UnitExtraIcons[button.id][93].current=true
             HealBot_Aura_AddExtraIcon(button, 93)
         elseif button.player and hbv_Skins_GetFrameBoolean("Icons", "SHOWRESTING", button.frame) and IsResting() then 
@@ -3922,6 +3917,7 @@ function HealBot_Aura_InitItemsDataReady()
         if hbCustomItemID>0 and HealBot_IsItemInBag(hbCustomItemID) and (IsInInstance() or not HealBot_Config_Buffs.ExtraBuffsOnlyInInstance) then
             if HealBot_BuffWatch[HealBot_Config_Buffs.BackupWellFedItem] then HealBot_Aura_ClearBuffWatch(HealBot_Config_Buffs.BackupWellFedItem) end
             HealBot_Buff_Aura2Item[HEALBOT_WELL_FED]=hbCustomItemID
+            HealBot_Buff_Aura2Item[HEALBOT_HEARTY_WELL_FED]=hbCustomItemID
             HealBot_Aura_luVars["WellFed"]=HealBot_Config_Buffs.WellFedItem
             if not HealBot_BuffWatch[HealBot_Aura_luVars["WellFed"]] then
                 HealBot_Aura_SetBuffWatch(HealBot_Aura_luVars["WellFed"])
@@ -3935,6 +3931,7 @@ function HealBot_Aura_InitItemsDataReady()
             hbCustomItemID=HealBot_WoWAPI_ItemInfoInstant(HealBot_Config_Buffs.BackupWellFedItem or "x") or 0
             if hbCustomItemID>0 and HealBot_IsItemInBag(hbCustomItemID) and (IsInInstance() or not HealBot_Config_Buffs.ExtraBuffsOnlyInInstance) then
                 HealBot_Buff_Aura2Item[HEALBOT_WELL_FED]=hbCustomItemID
+                HealBot_Buff_Aura2Item[HEALBOT_HEARTY_WELL_FED]=hbCustomItemID
                 HealBot_Aura_luVars["WellFed"]=HealBot_Config_Buffs.BackupWellFedItem
                 if not HealBot_BuffWatch[HealBot_Aura_luVars["WellFed"]] then
                     HealBot_Aura_SetBuffWatch(HealBot_Aura_luVars["WellFed"])

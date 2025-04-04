@@ -6944,6 +6944,22 @@ function HealBot_Options_OverrideUseFluidBars_OnClick(self)
     end
 end
 
+function HealBot_Options_OverrideEFGroupRaidOnly_OnClick(self)
+      --HealBot_setCall("HealBot_Options_OverrideUseFluidBars_OnClick")
+    if self:GetChecked()~=HealBot_Globals.OverrideEffects["FGRAIDONLY"] then
+        HealBot_Globals.OverrideEffects["FGRAIDONLY"]=self:GetChecked()
+        HealBot_Timers_Set("SKINS","SetFocusGroups")
+    end
+end
+
+function HealBot_Options_EFGroupRaidOnly_OnClick(self)
+      --HealBot_setCall("HealBot_Options_OverrideUseFluidBars_OnClick")
+    if self:GetChecked()~=hbv_Skins_GetBoolean("General", "FGRAIDONLY") then
+        hbv_Skins_SetVar(self:GetChecked(), "General", "FGRAIDONLY")
+        HealBot_Timers_Set("SKINS","SetFocusGroups")
+    end
+end
+
 function HealBot_Options_UseHealthDrop_OnClick(self)
       --HealBot_setCall("HealBot_Options_UseHealthDrop_OnClick")
     if self:GetChecked()~=hbv_Skins_GetBoolean("General", "HEALTHDROP") then
@@ -7597,6 +7613,14 @@ function HealBot_Options_HealGroupsAllowDups_OnClick(self)
       --HealBot_setCall("HealBot_Options_HealGroupsAllowDups_OnClick")
     if Healbot_Config_Skins.DuplicateBars[Healbot_Config_Skins.Current_Skin]~=self:GetChecked() then
         Healbot_Config_Skins.DuplicateBars[Healbot_Config_Skins.Current_Skin]=self:GetChecked()
+        HealBot_Options_framesChanged(false)
+    end
+end
+
+function HealBot_Options_HealGroupsAllowDupsIncPrivList_OnClick(self)
+      --HealBot_setCall("HealBot_Options_HealGroupsAllowDupsIncPrivList_OnClick")
+    if Healbot_Config_Skins.DupBarsPrivList[Healbot_Config_Skins.Current_Skin]~=self:GetChecked() then
+        Healbot_Config_Skins.DupBarsPrivList[Healbot_Config_Skins.Current_Skin]=self:GetChecked()
         HealBot_Options_framesChanged(false)
     end
 end
@@ -8619,6 +8643,18 @@ function HealBot_Options_ShowLeader_OnClick(self)
             if hb_lVars["TestBarsOn"] then
                 HealBot_Options_framesChanged(true, true)
             else
+                HealBot_Timers_Set("AURA","IconUpdAllState")
+            end
+        end
+    end
+end
+
+function HealBot_Options_ShowLeaderMainTank_OnClick(self)
+      --HealBot_setCall("HealBot_Options_ShowLeader_OnClick")
+    if hbv_Skins_GetFrameBoolean("Icons", "SHOWRANKMT", hb_lVars["Frame"])~=self:GetChecked() then
+        hbv_Skins_SetFrameVar(self:GetChecked(), "Icons", "SHOWRANKMT", hb_lVars["Frame"])
+        if HealBot_Action_FrameIsVisible(hb_lVars["Frame"]) then 
+            if not hb_lVars["TestBarsOn"] then
                 HealBot_Timers_Set("AURA","IconUpdAllState")
             end
         end
@@ -11758,6 +11794,7 @@ function HealBot_Options_Override_EffectsUse_Toggle()
             HealBot_Options_ObjectsEnableDisable("HealBot_Options_EFGroup"..x,true)
         end
         HealBot_Options_ObjectsEnableDisable("HealBot_Options_OverrideFocusGroupDimming",false)
+        HealBot_Options_ObjectsEnableDisable("HealBot_Options_OverrideEFGroupRaidOnly",false)
         HealBot_Options_ObjectsEnableDisable("HealBot_Options_OverrideHotBarDimming",false)
         HealBot_Options_ObjectsEnableDisable("HealBot_Options_UseFluidBars",true)
         HealBot_Options_UseOverrideFocusGroups:SetAlpha(0.4)
@@ -11806,6 +11843,7 @@ function HealBot_Options_Override_EffectsUse_Toggle()
             HealBot_Options_ObjectsEnableDisable("HealBot_Options_EFGroup"..x,false)
         end
         HealBot_Options_ObjectsEnableDisable("HealBot_Options_OverrideFocusGroupDimming",true)
+        HealBot_Options_ObjectsEnableDisable("HealBot_Options_OverrideEFGroupRaidOnly",true)
         HealBot_Options_ObjectsEnableDisable("HealBot_Options_OverrideGroupHealthMinUnits",true)
         HealBot_Options_ObjectsEnableDisable("HealBot_Options_OverrideGroupHealthThres",true)
         HealBot_Options_ObjectsEnableDisable("HealBot_Options_OverrideGroupHealthDimming",true)
@@ -11851,14 +11889,14 @@ function HealBot_Options_Override_EffectsUse_Toggle()
         HealBot_Options_Override_EffectsSkinBarsLink:Hide()
         HealBot_Options_Skin_EffectsOverrideBarsLink:Show()
     end
-    HealBot_Timers_Set("AUX","BarFlashAlphaMinMax")
-    HealBot_Timers_Set("LAST","BarFreqVars")
-    HealBot_Timers_Set("SKINS","SetFocusGroups")
+    HealBot_Timers_Set("AUX","BarFlashAlphaMinMax",true)
+    HealBot_Timers_Set("LAST","BarFreqVars",true)
+    HealBot_Timers_Set("SKINS","SetFocusGroups",true)
     --HealBot_Options_DoEffects_DropDowns()
     --if HealBot_Globals.OverrideEffects["FLUIDBARS"]~=hbv_Skins_GetBoolean("General", "FLUIDBARS") then
     --    HealBot_Timers_Set("AUX","UpdateAllAuxByType")
     --else
-        HealBot_Timers_Set("SKINS","FluidFlashInUse")
+        HealBot_Timers_Set("SKINS","FluidFlashInUse",true)
     --end
 end
 
@@ -13423,22 +13461,14 @@ function HealBot_Options_SelectCmds_List(cType)
                 HEALBOT_CANCELPLUGINALERT,
                 HEALBOT_TARGETVEHICLE,
                 HEALBOT_MOUSELOOK,
-            }
-    elseif HEALBOT_GAME_VERSION>2 then
-        HealBot_Options_SelectCmdsCombo_List={
-                HEALBOT_DISABLED_TARGET,
-                HEALBOT_ASSIST,
-                HEALBOT_WORD_FOCUS,
-                HEALBOT_MENU,
-                HEALBOT_HBMENU,
-                HEALBOT_STOP,
-                HEALBOT_MOUNTS,
-                HEALBOT_FAVMOUNT,
-                HEALBOT_RANDOMMOUNT,
-                HEALBOT_RANDOMGOUNDMOUNT,
-                HEALBOT_CANCELPLUGINALERT,
-                HEALBOT_TARGETVEHICLE,
-                HEALBOT_MOUSELOOK,
+                HEALBOT_TOGGLE_MYTARGETS,
+                HEALBOT_TOGGLE_PRIVTANKS,
+                HEALBOT_TOGGLE_PRIVHEALS,
+                HEALBOT_TOGGLE_PRIVDPS,
+                HEALBOT_TOGGLE_PERMPRIVLISTS,
+                HEALBOT_TOGGLE_PERMPRIVTANKS,
+                HEALBOT_TOGGLE_PERMPRIVHEALS,
+                HEALBOT_TOGGLE_PERMPRIVDPS,
             }
     else
         HealBot_Options_SelectCmdsCombo_List={
@@ -13450,6 +13480,14 @@ function HealBot_Options_SelectCmds_List(cType)
                 HEALBOT_STOP,
                 HEALBOT_CANCELPLUGINALERT,
                 HEALBOT_MOUSELOOK,
+                HEALBOT_TOGGLE_MYTARGETS,
+                HEALBOT_TOGGLE_PRIVTANKS,
+                HEALBOT_TOGGLE_PRIVHEALS,
+                HEALBOT_TOGGLE_PRIVDPS,
+                HEALBOT_TOGGLE_PERMPRIVLISTS,
+                HEALBOT_TOGGLE_PERMPRIVTANKS,
+                HEALBOT_TOGGLE_PERMPRIVHEALS,
+                HEALBOT_TOGGLE_PERMPRIVDPS,
             }
     end
     return HealBot_Options_SelectCmdsCombo_List
@@ -16783,7 +16821,7 @@ local function HealBot_Options_AuxConfigBarChange()
             hb_lVars["AuxBarsFlash"]=true
         end
     end
-    HealBot_Timers_Set("SKINS","FluidFlashInUse")
+    HealBot_Timers_Set("SKINS","FluidFlashInUse",true)
 end
 
 local function HealBot_Options_AuxConfigTxtChange()
@@ -20886,9 +20924,9 @@ function HealBot_Options_Buff_Reset()
     if not HealBot_retLuVars("BagsScanned") then
         HealBot_Timers_Set("AURA","BuffReset",true,true) -- All recall require a delay
     else
-        HealBot_Timers_Set("AURA","ExtraBuffReset")
+        HealBot_Timers_Set("AURA","ExtraBuffReset",true)
     end
-    HealBot_Timers_Set("AURA","ResetBuffCache")
+    HealBot_Timers_Set("AURA","ResetBuffCache",true)
 end
 
 function HealBot_Options_RetDebuffRGB(button)
@@ -25640,7 +25678,9 @@ function HealBot_Options_OverridesEffectsTabBars(tab)
         HealBot_Options_SetText(HealBot_Options_OverrideHotBarHealthThres, HEALBOT_OPTION_HOTBARHEALTHPCT..HealBot_Globals.OverrideEffects["HOTBARHLTH"].."%")
         HealBot_Options_sliderlabels_Init(HealBot_Options_OverrideFocusGroupDimming,HEALBOT_OPTION_FOCUSGROUPDIMMING,12,44,1,4,HEALBOT_WORD_LOW,HEALBOT_WORD_HIGH)
         HealBot_Options_OverrideFocusGroupDimming:SetValue((HealBot_Globals.OverrideEffects["FGDIMMING"] or 2.8)*10)
-        HealBot_Options_SetText(HealBot_Options_OverrideFocusGroupDimming, HEALBOT_OPTION_FOCUSGROUPDIMMING)
+        HealBot_Options_SetText(HealBot_Options_OverrideFocusGroupDimming, HEALBOT_OPTIONS_EMERGFILTERGROUPSRAID)
+        HealBot_Options_OverrideEFGroupRaidOnly:SetChecked(HealBot_Globals.OverrideEffects["FGRAIDONLY"])
+        HealBot_Options_SetText(HealBot_Options_OverrideEFGroupRaidOnly,HEALBOT_OPTIONS_EMERGFILTERGROUPSRAID)
         HealBot_Options_sliderlabels_Init(HealBot_Options_OverrideBarUpdateFreq,HEALBOT_OPTION_BARUPDFREQ,1,19,1,2,HEALBOT_OPTIONS_WORD_SLOWER,HEALBOT_OPTIONS_WORD_FASTER)
         HealBot_Options_OverrideBarUpdateFreq:SetValue(HealBot_Globals.OverrideEffects["FLUIDFREQ"] or 10)
         HealBot_Options_SetText(HealBot_Options_OverrideBarUpdateFreq, HEALBOT_OPTION_BARUPDFREQ)
@@ -26197,6 +26237,8 @@ function HealBot_Options_SkinsEffectsBarsTab(tab)
         HealBot_Options_sliderlabels_Init(HealBot_Options_HotBarDimming,HEALBOT_OPTION_NONHOTBARSDIMMING,12,44,1,4,HEALBOT_WORD_LOW,HEALBOT_WORD_HIGH)
         HealBot_Options_HotBarDimming:SetValue(hbv_Skins_GetVar("General", "HBDIMMING")*10)
         HealBot_Options_SetText(HealBot_Options_HotBarDimming, HEALBOT_OPTION_NONHOTBARSDIMMING)
+        HealBot_Options_EFGroupRaidOnly:SetChecked(hbv_Skins_GetBoolean("General", "FGRAIDONLY"))
+        HealBot_Options_SetText(HealBot_Options_EFGroupRaidOnly,HEALBOT_OPTIONS_EMERGFILTERGROUPSRAID)
         HealBot_Options_sliderlabels_Init(HealBot_Options_FocusGroupDimming,HEALBOT_OPTION_FOCUSGROUPDIMMING,12,44,1,4,HEALBOT_WORD_LOW,HEALBOT_WORD_HIGH)
         HealBot_Options_FocusGroupDimming:SetValue(hbv_Skins_GetVar("General", "FGDIMMING")*10)
         
@@ -26653,6 +26695,8 @@ function HealBot_Options_SkinsFramesHealGroupsTab(tab)
         HealBot_Options_SetLabel("HealBot_HealButtonsGroups8_Text",HEALBOT_SORTBY_GROUP)
         HealBot_Options_HealGroupsAllowDups:SetChecked(Healbot_Config_Skins.DuplicateBars[Healbot_Config_Skins.Current_Skin])
         HealBot_Options_SetText(HealBot_Options_HealGroupsAllowDups,HEALBOT_ALLOW_DUPLICATES)
+        HealBot_Options_HealGroupsAllowDupsIncPrivList:SetChecked(Healbot_Config_Skins.DupBarsPrivList[Healbot_Config_Skins.Current_Skin])
+        HealBot_Options_SetText(HealBot_Options_HealGroupsAllowDupsIncPrivList,HEALBOT_ALLOW_DUPLICATESINCPRIVLISTS)
         if HEALBOT_GAME_VERSION<3 then
             HealBot_Options_HealGroups9:Hide()
             HealBot_Options_HealGroups9Frame:Hide()
@@ -27700,6 +27744,8 @@ function HealBot_Options_SkinsFramesIconsExtrasReadyCheckTab(tab)
         HealBot_Options_SetText(HealBot_Options_ShowResting,HEALBOT_OPTIONS_SHOWRESTING)
         HealBot_Options_ShowLeader:SetChecked(hbv_Skins_GetFrameBoolean("Icons", "SHOWRANK", hb_lVars["Frame"]))
         HealBot_Options_SetText(HealBot_Options_ShowLeader,HEALBOT_OPTIONS_SHOWLEADER)
+        HealBot_Options_ShowLeaderMainTank:SetChecked(hbv_Skins_GetFrameBoolean("Icons", "SHOWRANKMT", hb_lVars["Frame"]))
+        HealBot_Options_SetText(HealBot_Options_ShowLeaderMainTank,HEALBOT_OPTIONS_SHOWLEADERMT)
         HealBot_Options_ShowAFK:SetChecked(hbv_Skins_GetFrameBoolean("Icons", "SHOWAFK", hb_lVars["Frame"]))
         HealBot_Options_SetText(HealBot_Options_ShowAFK,HEALBOT_OPTIONS_SHOWAFK)
         HealBot_Options_IconRCPosition.initialize=HealBot_Options_IconRCPosition_DropDown
@@ -28461,7 +28507,7 @@ function HealBot_Options_BuffsGeneralBuffsTab(tab)
     end
 end
 
-function HealBot_Options_BuffsExtraBuffsTab(tab)
+function HealBot_Options_BuffsExtraBuffsTab(tab, invUp)
       --HealBot_setCall("HealBot_Options_BuffsExtraBuffsTab")
     if not HealBot_Options_TabRunOnce[tab] then
         HealBot_Options_MonitorExtraBuffsOnlyInInstance:SetChecked(HealBot_Config_Buffs.ExtraBuffsOnlyInInstance)
@@ -28524,7 +28570,20 @@ function HealBot_Options_BuffsExtraBuffsTab(tab)
         HealBot_Options_SetText(HealBot_Options_BuffManaDrinkThreshold,HEALBOT_MANA_LOWTHRESHOLD..": "..(HealBot_Config_Buffs.ManaDrinkThreshold).."%")
 
         HealBot_Options_TabRunOnce[tab]=true
+    elseif invUp then
+        HealBot_Options_BuffWellFedItems.initialize=HealBot_Options_BuffWellFedItems_DropDown
+        HealBot_Options_BackupBuffWellFedItems.initialize=HealBot_Options_BackupBuffWellFedItems_DropDown
+        HealBot_Options_BuffManaDrinkItems.initialize=HealBot_Options_BuffManaDrinkItems_DropDown
+        HealBot_Options_BuffBackupManaDrinkItems.initialize=HealBot_Options_BuffBackupManaDrinkItems_DropDown
+        HealBot_Options_BuffExtraItems1.initialize=HealBot_Options_BuffExtraItems1_DropDown
+        HealBot_Options_BuffExtraItems2.initialize=HealBot_Options_BuffExtraItems2_DropDown
+        HealBot_Options_BuffExtraItems3.initialize=HealBot_Options_BuffExtraItems3_DropDown
+        HealBot_Options_BuffExtraItems4.initialize=HealBot_Options_BuffExtraItems4_DropDown
     end
+end
+
+function HealBot_Options_BuffsExtraBuffsTabInvUpdate()
+    HealBot_Options_BuffsExtraBuffsTab("BuffsExtraBuffs", true)
 end
 
 function HealBot_Options_BuffsCustomTab(tab)

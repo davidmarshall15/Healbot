@@ -15,6 +15,14 @@ local hbCommands={ [strlower(HEALBOT_DISABLED_TARGET)]=true,
                    [strlower(HEALBOT_IGNOREAURAALL)]=true,
                    [strlower(HEALBOT_CANCELPLUGINALERT)]=true,
                    [strlower(HEALBOT_MOUSELOOK)]=true,
+                   [strlower(HEALBOT_TOGGLE_MYTARGETS)]=true,
+                   [strlower(HEALBOT_TOGGLE_PRIVTANKS)]=true,
+                   [strlower(HEALBOT_TOGGLE_PRIVHEALS)]=true,
+                   [strlower(HEALBOT_TOGGLE_PRIVDPS)]=true,
+                   [strlower(HEALBOT_TOGGLE_PERMPRIVLISTS)]=true,
+                   [strlower(HEALBOT_TOGGLE_PERMPRIVTANKS)]=true,
+                   [strlower(HEALBOT_TOGGLE_PERMPRIVHEALS)]=true,
+                   [strlower(HEALBOT_TOGGLE_PERMPRIVDPS)]=true,
                   }
 local hbPlayerCommands={}
 if HEALBOT_GAME_VERSION>3 then

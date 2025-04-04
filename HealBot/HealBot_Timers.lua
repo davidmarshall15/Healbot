@@ -72,10 +72,10 @@ function HealBot_Timers_SetnProcs(cpuProfilerOn)
         HealBot_Timers_luVars["nProcsOff"]=1
     else
         HealBot_Timers_luVars["nProcsOn"]=HealBot_Util_PerfVal1(250)
-        if HealBot_Timers_luVars["nProcsOn"]<2 then
-            HealBot_Timers_luVars["nProcsOn"]=2
+        if HealBot_Timers_luVars["nProcsOn"]<3 then
+            HealBot_Timers_luVars["nProcsOn"]=3
         end
-        HealBot_Timers_luVars["nProcsOff"]=HealBot_Util_PerfVal1(50)
+        HealBot_Timers_luVars["nProcsOff"]=HealBot_Util_PerfVal1(100)
         if HealBot_Timers_luVars["nProcsOff"]<1 then
             HealBot_Timers_luVars["nProcsOff"]=1
         end
@@ -111,8 +111,8 @@ end
 function HealBot_Timers_FluidFlashUpdate()
       --HealBot_setCall("HealBot_Timers_FluidFlashUpdate")
     HealBot_Options_BarFreq_setVars()
-    HealBot_Timers_Set("SKINS","FluidFlashInUse")
-    HealBot_Timers_Set("SKINS","SetFocusGroups")
+    HealBot_Timers_Set("SKINS","FluidFlashInUse",true)
+    HealBot_Timers_Set("SKINS","SetFocusGroups",true)
     HealBot_Options_AuxBarFlashAlphaMinMaxSet()
 end
 
@@ -295,7 +295,7 @@ function HealBot_Timers_CheckLowMana()
             break
         end
     end
-    if checkLowMana then HealBot_Update_LowMana() end
+    if checkLowMana then HealBot_Timers_Set("LAST","UpdateLowMana",true) end
 end
 
 function HealBot_Timers_FramesSetPoint()
@@ -491,7 +491,7 @@ function HealBot_Timers_LastLoadCalls()
     HealBot_Timers_Set("LAST","InitLoadSpells")
     HealBot_Timers_Set("LAST","InitPlugins")
     HealBot_Timers_Set("LAST","MountsPetsUse")
-    HealBot_Timers_Set("PLAYER","InvReady")
+    HealBot_Timers_Set("PLAYER","InvChange")
     HealBot_Timers_Set("OOC","PartyUpdateCheckSkin")
 end
 
@@ -653,7 +653,7 @@ local hbTimerFuncs={["INIT"]={
                         ["InitSmartCast"]=HealBot_InitSmartCast,
                         ["SetRangeSpells"]=HealBot_Range_SetSpells,
                         ["InvChange"]=HealBot_ItemIdsInBags,
-                        ["InvReady"]=HealBot_ItemIdsInBags,
+                        ["InvReady"]=HealBot_InvReady,
                         ["ScanNextBag"]=HealBot_ItemIdsInNextBag,
                         ["EmoteOOM"]=HealBot_Timer_EmoteOOM,
                         ["SpecUpdate"]=HealBot_ResetOnSpecChange,
@@ -809,6 +809,7 @@ local hbTimerFuncs={["INIT"]={
                         ["ResetAllButtonsRecalcAll"]=HealBot_Timer_ResetAllButtonsRecalcAll,
                         ["LowManaTrig"]=HealBot_Action_setLowManaTrig,
                         ["CheckLowMana"]=HealBot_Timers_CheckLowMana,
+                        ["UpdateLowMana"]=HealBot_Update_LowMana,
                         ["EndAggro"]=HealBot_Update_EndAggro,
                         ["AfterCombatCleanup"]=HealBot_AfterCombatCleanup,
                         ["TargetFocusUpdate"]=HealBot_Timers_TargetFocusUpdate,
@@ -866,7 +867,6 @@ local hbTimerFuncs={["INIT"]={
                         ["AuxBarsReset"]=HealBot_Aux_barsReset,
                         ["GuildUpdate"]=HealBot_Comms_GuildUpdate,
                         ["ActionCheckInterval"]=HealBot_Action_UpdateCheckInterval,
-                        ["AuraCheckInterval"]=HealBot_Aura_UpdateCheckInterval,
                         ["DebugCheckInterval"]=HealBot_DebugCheckInterval,
                         ["UpdateCheckInterval"]=HealBot_UpdateCheckInterval,
                         ["MediaPluginChange"]=HealBot_Media_PluginChange,
@@ -891,6 +891,7 @@ local hbTimerFuncs={["INIT"]={
                         ["LastLoadCalls"]=HealBot_Timers_LastLoadCalls,
                         ["OnLoadMessages"]=HealBot_Timers_OnLoadMessages,
                         ["PluginTweaksRefresh"]=HealBot_Timers_PluginTweaks_Refresh,
+                        ["ExtraBuffsTabInvUp"]=HealBot_Options_BuffsExtraBuffsTabInvUpdate,
                     },
                     ["OOC"]={
                         ["FullReload"]=HealBot_FullReload,

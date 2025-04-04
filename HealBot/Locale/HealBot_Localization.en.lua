@@ -132,6 +132,7 @@ function HealBot_Lang_enALL()
     HEALBOT_STRING_MATCH_WELLFED           ="[w|W]ell [f|F]ed"
     HEALBOT_STRING_MATCH_RESTOREMANA       ="[m|M]ana over (%d+) sec"
     HEALBOT_STRING_MATCH_EXTRABUFFS        ={"Flask", "Elixir", "Scroll", "Potion", "Rune$"}
+    HEALBOT_HEARTY_WELL_FED                ="Hearty Well Fed"
     HEALBOT_WELL_FED                       ="Well Fed"
     HEALBOT_MANA_DRINK                     ="Mana Drink"
     HEALBOT_MANA_LOWTHRESHOLD              ="Low mana threshold"
@@ -439,6 +440,7 @@ function HealBot_Lang_enALL()
     HEALBOT_OPTIONS_SHOWNAMEONBAR          ="Show name on bar";
     HEALBOT_OPTIONS_BARTEXTCLASSCOLOUR1    ="Col"..HEALBOT_enWORD_COLOUR_SUFFIX.." text by class";
     HEALBOT_OPTIONS_EMERGFILTERGROUPS      ="Include groups";
+    HEALBOT_OPTIONS_EMERGFILTERGROUPSRAID  ="Raid heal group only";
     HEALBOT_OPTIONS_PLAYERPET              ="Players and Pets"
 
     HEALBOT_ONE                            ="1";
@@ -1035,6 +1037,7 @@ function HealBot_Lang_enALL()
     HEALBOT_OPTIONS_SHOWCOMBATSTATE        ="Show Combat State";
     HEALBOT_OPTIONS_SHOWHOSTILE            ="Show Hostile";
     HEALBOT_OPTIONS_SHOWLEADER             ="Show Leader";
+    HEALBOT_OPTIONS_SHOWLEADERMT           ="Include Main Tanks"
     HEALBOT_OPTIONS_SHOWAFK                ="Show AFK";
     HEALBOT_OPTIONS_SHOWRESTING            ="Show Resting (Player only)";
     HEALBOT_OPTIONS_SHOWCLASSICON          ="Show Class";
@@ -1125,6 +1128,7 @@ function HealBot_Lang_enALL()
     HEALBOT_ENABLE_CUSTOM_BUFFS            ="All custom buffs have been enabled"
     HEALBOT_ENABLE_CUSTOM_DEBUFFS          ="All custom debuffs have been enabled"
     HEALBOT_ALLOW_DUPLICATES               ="Allow Duplicates"
+    HEALBOT_ALLOW_DUPLICATESINCPRIVLISTS   ="Include private lists"
     HEALBOT_OPTIONS_AUXSETTINGS            ="Auxiliary Bars Settings"
     HEALBOT_OPTIONS_AUXASSIGN              ="Auxiliary Bars Assignments"
     HEALBOT_OPTIONS_AUXCONFIG              ="Auxiliary Bar Configuration"
@@ -1224,9 +1228,16 @@ function HealBot_Lang_enALL()
     HEALBOT_TARGETVEHICLE                  ="Target Vehicle or Pet"
     HEALBOT_TOGGLE_ENABLED                 ="Toggle enabled"
     HEALBOT_TOGGLE_MYTARGETS               ="Toggle Private List"
+    HEALBOT_TOGGLE_PRIVTANKS               ="Toggle Private Tanks"
+    HEALBOT_TOGGLE_PRIVHEALS               ="Toggle Private Healers"
+    HEALBOT_TOGGLE_PRIVDPS                 ="Toggle Private Damagers"
     HEALBOT_WORD_PERMANENT                 ="Permanent"
-    HEALBOT_TOGGLE_PRIVATETANKS            ="Toggle private tanks"
-    HEALBOT_TOGGLE_PRIVATEHEALERS          ="Toggle private healers"
+    HEALBOT_TOGGLE_PERMPRIVLISTS           ="Toggle "..HEALBOT_WORD_PERMANENT.." Private List"
+    HEALBOT_TOGGLE_PERMPRIVTANKS           ="Toggle "..HEALBOT_WORD_PERMANENT.." Private Tanks"
+    HEALBOT_TOGGLE_PERMPRIVHEALS           ="Toggle "..HEALBOT_WORD_PERMANENT.." Private Healers"
+    HEALBOT_TOGGLE_PERMPRIVDPS             ="Toggle "..HEALBOT_WORD_PERMANENT.." Private Damagers"
+    HEALBOT_TOGGLE_PRIVATETANKS            =HEALBOT_TOGGLE_PRIVTANKS
+    HEALBOT_TOGGLE_PRIVATEHEALERS          =HEALBOT_TOGGLE_PRIVHEALS
     HEALBOT_RESET_BAR                      ="Reset bar"
     HEALBOT_HIDE_BARS                      ="Hide bars when player not visible (over 100 yards)"
     HEALBOT_MOUNTSPETS                     ="Mounts and Pets menu"

@@ -1256,6 +1256,7 @@
       <OnLeave>HealBot_Action_HealUnit_OnLeave(self);</OnLeave>
     </Scripts>
   </Button>
+  
   <Button name="HealBotFocusButtonTemplate" virtual="true" inherits="HealingButtonTemplate2">
     <Anchors>
       <Anchor point="BOTTOM" relativePoint="BOTTOM">

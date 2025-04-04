@@ -3667,7 +3667,7 @@
                               <Anchors>
                                 <Anchor point="TOP">
                                   <Offset>
-                                    <AbsDimension x="0" y="-90" />
+                                    <AbsDimension x="0" y="-72" />
                                   </Offset>
                                 </Anchor>
                               </Anchors>
@@ -3679,7 +3679,7 @@
                             <Anchors>
                               <Anchor point="TOP">
                                 <Offset>
-                                  <AbsDimension x="0" y="-45" />
+                                  <AbsDimension x="0" y="-35" />
                                 </Offset>
                               </Anchor>
                             </Anchors>
@@ -3693,7 +3693,7 @@
                             <Anchors>
                               <Anchor point="TOPLEFT">
                                 <Offset>
-                                  <AbsDimension x="75" y="-110"/>
+                                  <AbsDimension x="65" y="-90"/>
                                 </Offset>
                               </Anchor>
                             </Anchors>
@@ -3708,7 +3708,7 @@
                             <Anchors>
                               <Anchor point="TOPLEFT" relativeTo="HealBot_Options_OverrideEFGroup1" relativePoint="TOPRIGHT">
                                 <Offset>
-                                  <AbsDimension x="19" y="0"/>
+                                  <AbsDimension x="25" y="0"/>
                                 </Offset>
                               </Anchor>
                             </Anchors>
@@ -3723,7 +3723,7 @@
                             <Anchors>
                               <Anchor point="TOPLEFT" relativeTo="HealBot_Options_OverrideEFGroup2" relativePoint="TOPRIGHT">
                                 <Offset>
-                                  <AbsDimension x="19" y="0"/>
+                                  <AbsDimension x="25" y="0"/>
                                 </Offset>
                               </Anchor>
                             </Anchors>
@@ -3738,7 +3738,7 @@
                             <Anchors>
                               <Anchor point="TOPLEFT" relativeTo="HealBot_Options_OverrideEFGroup3" relativePoint="TOPRIGHT">
                                 <Offset>
-                                  <AbsDimension x="19" y="0"/>
+                                  <AbsDimension x="25" y="0"/>
                                 </Offset>
                               </Anchor>
                             </Anchors>
@@ -3753,7 +3753,7 @@
                             <Anchors>
                               <Anchor point="TOPLEFT">
                                 <Offset>
-                                  <AbsDimension x="75" y="-130"/>
+                                  <AbsDimension x="65" y="-110"/>
                                 </Offset>
                               </Anchor>
                             </Anchors>
@@ -3768,7 +3768,7 @@
                             <Anchors>
                               <Anchor point="TOPLEFT" relativeTo="HealBot_Options_OverrideEFGroup5" relativePoint="TOPRIGHT">
                                 <Offset>
-                                  <AbsDimension x="19" y="0"/>
+                                  <AbsDimension x="25" y="0"/>
                                 </Offset>
                               </Anchor>
                             </Anchors>
@@ -3783,7 +3783,7 @@
                             <Anchors>
                               <Anchor point="TOPLEFT" relativeTo="HealBot_Options_OverrideEFGroup6" relativePoint="TOPRIGHT">
                                 <Offset>
-                                  <AbsDimension x="19" y="0"/>
+                                  <AbsDimension x="25" y="0"/>
                                 </Offset>
                               </Anchor>
                             </Anchors>
@@ -3798,7 +3798,7 @@
                             <Anchors>
                               <Anchor point="TOPLEFT" relativeTo="HealBot_Options_OverrideEFGroup7" relativePoint="TOPRIGHT">
                                 <Offset>
-                                  <AbsDimension x="19" y="0"/>
+                                  <AbsDimension x="25" y="0"/>
                                 </Offset>
                               </Anchor>
                             </Anchors>
@@ -3807,6 +3807,20 @@
                               <OnClick>HealBot_Options_OverrideEFGroup_OnClick(self,self:GetID())</OnClick>
                               <OnEnter>HealBot_Options_Show_Help("HEALBARSVISFILTERGROUPS",true)</OnEnter>
                               <OnLeave>HealBot_Options_Show_Help("HEALBARSVISFILTERGROUPS",false)</OnLeave>
+                            </Scripts>
+                          </CheckButton>
+                          <CheckButton name="HealBot_Options_OverrideEFGroupRaidOnly" inherits="SendMailRadioButtonTemplate">
+                            <Anchors>
+                              <Anchor point="TOPLEFT" relativeTo="HealBot_Options_OverrideEFGroup5" relativePoint="BOTTOMLEFT">
+                                <Offset>
+                                  <AbsDimension x="10" y="-5"/>
+                                </Offset>
+                              </Anchor>
+                            </Anchors>
+                            <Scripts>
+                              <OnClick>HealBot_Options_OverrideEFGroupRaidOnly_OnClick(self)</OnClick>
+                              <OnEnter>HealBot_Options_Show_Help("HEALBARSVISFILTERGROUPSRAIDONLY",true)</OnEnter>
+                              <OnLeave>HealBot_Options_Show_Help("HEALBARSVISFILTERGROUPSRAIDONLY",false)</OnLeave>
                             </Scripts>
                           </CheckButton>
                           <Slider name="HealBot_Options_OverrideFocusGroupDimming" inherits="HealBot_Options_SliderTemplate">
@@ -10285,6 +10299,20 @@
                       <OnLeave>HealBot_Options_Show_Help("HEALGROUPSALLOWDUPS",false)</OnLeave>
                     </Scripts>
                   </CheckButton>
+                  <CheckButton name="HealBot_Options_HealGroupsAllowDupsIncPrivList" inherits="SendMailRadioButtonTemplate">
+                    <Anchors>
+                      <Anchor point="TOP" relativeTo="HealBot_Options_HealGroupsAllowDups" relativePoint="BOTTOM">
+                        <Offset>
+                          <AbsDimension x="25" y="2" />
+                        </Offset>
+                      </Anchor>
+                    </Anchors>
+                    <Scripts>
+                      <OnClick>HealBot_Options_HealGroupsAllowDupsIncPrivList_OnClick(self)</OnClick>
+                      <OnEnter>HealBot_Options_Show_Help("HEALGROUPSDUPSINCPRIVLIST",true)</OnEnter>
+                      <OnLeave>HealBot_Options_Show_Help("HEALGROUPSDUPSINCPRIVLIST",false)</OnLeave>
+                    </Scripts>
+                  </CheckButton>
                 </Frames>
               </Frame>
               <Frame name="HealBot_Options_EffectsSkinsFrame" hidden="true" inherits="BackdropTemplate">
@@ -10993,7 +11021,7 @@
                               <Anchors>
                                 <Anchor point="TOP">
                                   <Offset>
-                                    <AbsDimension x="0" y="-90" />
+                                    <AbsDimension x="0" y="-72" />
                                   </Offset>
                                 </Anchor>
                               </Anchors>
@@ -11019,7 +11047,7 @@
                             <Anchors>
                               <Anchor point="TOPLEFT">
                                 <Offset>
-                                  <AbsDimension x="65" y="-110"/>
+                                  <AbsDimension x="65" y="-90"/>
                                 </Offset>
                               </Anchor>
                             </Anchors>
@@ -11079,7 +11107,7 @@
                             <Anchors>
                               <Anchor point="TOPLEFT">
                                 <Offset>
-                                  <AbsDimension x="65" y="-130"/>
+                                  <AbsDimension x="65" y="-110"/>
                                 </Offset>
                               </Anchor>
                             </Anchors>
@@ -11133,6 +11161,20 @@
                               <OnClick>HealBot_Options_EFGroup_OnClick(self,self:GetID())</OnClick>
                               <OnEnter>HealBot_Options_Show_Help("HEALBARSVISFILTERGROUPS",true)</OnEnter>
                               <OnLeave>HealBot_Options_Show_Help("HEALBARSVISFILTERGROUPS",false)</OnLeave>
+                            </Scripts>
+                          </CheckButton>
+                          <CheckButton name="HealBot_Options_EFGroupRaidOnly" inherits="SendMailRadioButtonTemplate">
+                            <Anchors>
+                              <Anchor point="TOPLEFT" relativeTo="HealBot_Options_EFGroup5" relativePoint="BOTTOMLEFT">
+                                <Offset>
+                                  <AbsDimension x="10" y="-5"/>
+                                </Offset>
+                              </Anchor>
+                            </Anchors>
+                            <Scripts>
+                              <OnClick>HealBot_Options_EFGroupRaidOnly_OnClick(self)</OnClick>
+                              <OnEnter>HealBot_Options_Show_Help("HEALBARSVISFILTERGROUPSRAIDONLY",true)</OnEnter>
+                              <OnLeave>HealBot_Options_Show_Help("HEALBARSVISFILTERGROUPSRAIDONLY",false)</OnLeave>
                             </Scripts>
                           </CheckButton>
                           <Slider name="HealBot_Options_FocusGroupDimming" inherits="HealBot_Options_SliderTemplate">
@@ -27213,7 +27255,7 @@
                             <Anchors>
                               <Anchor point="TOPLEFT">
                                 <Offset>
-                                  <AbsDimension x="100" y="-45" />
+                                  <AbsDimension x="70" y="-45" />
                                 </Offset>
                               </Anchor>
                             </Anchors>
@@ -27223,25 +27265,11 @@
                               <OnLeave>HealBot_Options_Show_Help("ICONSHOWRC",false)</OnLeave>
                             </Scripts>
                           </CheckButton>
-                          <CheckButton name="HealBot_Options_ShowLeader" inherits="HealBotUIPanelCheckButton">
-                            <Anchors>
-                              <Anchor point="TOP">
-                                <Offset>
-                                  <AbsDimension x="0" y="-45" />
-                                </Offset>
-                              </Anchor>
-                            </Anchors>
-                            <Scripts>
-                              <OnClick>HealBot_Options_ShowLeader_OnClick(self)</OnClick>
-                              <OnEnter>HealBot_Options_Show_Help("ICONSHOWLEADER",true)</OnEnter>
-                              <OnLeave>HealBot_Options_Show_Help("ICONSHOWLEADER",false)</OnLeave>
-                            </Scripts>
-                          </CheckButton>
                           <CheckButton name="HealBot_Options_ShowAFK" inherits="HealBotUIPanelCheckButton">
                             <Anchors>
                               <Anchor point="TOP">
                                 <Offset>
-                                  <AbsDimension x="140" y="-45" />
+                                  <AbsDimension x="-25" y="-45" />
                                 </Offset>
                               </Anchor>
                             </Anchors>
@@ -27251,11 +27279,39 @@
                               <OnLeave>HealBot_Options_Show_Help("ICONSHOWAFK",false)</OnLeave>
                             </Scripts>
                           </CheckButton>
+                          <CheckButton name="HealBot_Options_ShowLeader" inherits="HealBotUIPanelCheckButton">
+                            <Anchors>
+                              <Anchor point="TOP">
+                                <Offset>
+                                  <AbsDimension x="125" y="-45" />
+                                </Offset>
+                              </Anchor>
+                            </Anchors>
+                            <Scripts>
+                              <OnClick>HealBot_Options_ShowLeader_OnClick(self)</OnClick>
+                              <OnEnter>HealBot_Options_Show_Help("ICONSHOWLEADER",true)</OnEnter>
+                              <OnLeave>HealBot_Options_Show_Help("ICONSHOWLEADER",false)</OnLeave>
+                            </Scripts>
+                          </CheckButton>
+                          <CheckButton name="HealBot_Options_ShowLeaderMainTank" inherits="SendMailRadioButtonTemplate">
+                            <Anchors>
+                              <Anchor point="TOP">
+                                <Offset>
+                                  <AbsDimension x="140" y="-70" />
+                                </Offset>
+                              </Anchor>
+                            </Anchors>
+                            <Scripts>
+                              <OnClick>HealBot_Options_ShowLeaderMainTank_OnClick(self)</OnClick>
+                              <OnEnter>HealBot_Options_Show_Help("ICONSHOWLEADERMT",true)</OnEnter>
+                              <OnLeave>HealBot_Options_Show_Help("ICONSHOWLEADERMT",false)</OnLeave>
+                            </Scripts>
+                          </CheckButton>
                           <CheckButton name="HealBot_Options_ShowCombatState" inherits="HealBotUIPanelCheckButton">
                             <Anchors>
                               <Anchor point="TOPLEFT">
                                 <Offset>
-                                  <AbsDimension x="100" y="-75" />
+                                  <AbsDimension x="70" y="-75" />
                                 </Offset>
                               </Anchor>
                             </Anchors>
@@ -27269,7 +27325,7 @@
                             <Anchors>
                               <Anchor point="TOP">
                                 <Offset>
-                                  <AbsDimension x="0" y="-75" />
+                                  <AbsDimension x="-25" y="-75" />
                                 </Offset>
                               </Anchor>
                             </Anchors>

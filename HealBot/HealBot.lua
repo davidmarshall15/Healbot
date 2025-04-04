@@ -1092,6 +1092,9 @@ function HealBot_UnitMana(button)
             if not HealBot_Data["UILOCK"] and HEALBOT_GAME_VERSION<5 and button.isplayer and not button.player and (hbManaMax>(button.mana.max*1.25) or hbManaMax<(button.mana.max*0.75)) then
                 HealBot_Events_SpecChange(button)
             end
+            if hbManaCurrent < button.mana.current then
+                button.mana.lowcheck=true
+            end
             button.mana.current=hbManaCurrent
             button.mana.max=hbManaMax
             if button.mana.max>0 then
@@ -1122,7 +1125,6 @@ function HealBot_UnitMana(button)
         HealBot_Aux_setPowerBars(button)
         HealBot_Events_PowerIndicators(button)
     end
-    button.mana.lowcheck=true
 end
 
 function HealBot_GetUnitGuild(button)
@@ -1508,7 +1510,7 @@ local function HealBot_CacheItemIdsInBag(id, bag, slot)
     end
 end
 
-local function HealBot_ItemIdsInBag(slot)
+function HealBot_ItemIdsInBag(slot)
       --HealBot_setCall("HealBot_ItemIdsInBag")
     if slot<=HealBot_luVars["MaxBagSlots"] then
         local itemId=HealBot_GetContainerItemID(HealBot_luVars["CurrentBag"],slot) or 0
@@ -1539,7 +1541,7 @@ local function HealBot_ItemIdsInBag(slot)
                         HealBot_BuffExtraItems[itemText]=true
                         HealBot_IncludeScanItem(itemId, itemText, "Extra")
                     end
-                    if not hbBagScanIncludeItems[itemId] and not HealBot_luVars["InvReady"] then
+                    if not hbBagScanIncludeItems[itemId] and HealBot_luVars["InvReady"] then
                         hbBagScanExcludeItems[itemId]=true
                     end
                 else
@@ -1560,18 +1562,14 @@ local function HealBot_ItemIdsInBag(slot)
         HealBot_Timers_Set("PLAYER","ScanNextBag",true)
     else
         HealBot_luVars["BagsBeingScanned"]=false
-        if not HealBot_luVars["InvReady"] then
-            if not HealBot_luVars["InvFirstRunDone"] then
-                HealBot_luVars["InvFirstRunDone"]=true
-                HealBot_Timers_Set("PLAYER","InvReady",true,true)
-            else
-                HealBot_luVars["InvReady"]=true
-                HealBot_Timers_Set("PLAYER","InvChange",true,true)
-            end
+        if not HealBot_luVars["InvFirstRunDone"] then
+            HealBot_luVars["InvFirstRunDone"]=true
+            HealBot_Timers_Set("PLAYER","InvChange",true)
         else
             HealBot_Options_SetBuffExtraItemText()
             HealBot_luVars["BagsScanned"]=true
             HealBot_Timers_Set("LAST","InitItemsData")
+            HealBot_Timers_Set("LAST","ExtraBuffsTabInvUp",true)
             HealBot_Timers_Set("OOC","ActionIconsValidateItems")
         end
     end
@@ -1604,8 +1602,14 @@ function HealBot_ItemIdsInBags()
         HealBot_luVars["CurrentBag"]=0
         HealBot_ItemIdsInBag(1)
     else
-        HealBot_Timers_Set("PLAYER","InvReady",true,true)
+        HealBot_Timers_Set("PLAYER","InvChange",true,true)
     end
+end
+
+function HealBot_InvReady()
+    HealBot_luVars["InvReady"]=true
+    HealBot_Timers_Set("PLAYER","InvChange",true)
+    HealBot_Timers_Set("AURA","BuffsReset",true,true)
 end
 
 function HealBot_Register_Events()
@@ -1740,6 +1744,7 @@ function HealBot_Loaded()
       --HealBot_setCall("HealBot_Loaded")
     HealBot_luVars["Loaded"]=true
     HealBot_Events_setLuVars("Loaded", true)
+    C_Timer.After(30, function() HealBot_Timers_Set("PLAYER","InvReady",true,true) end)
 end
 
 function HealBot_FullReload()
@@ -2152,9 +2157,9 @@ function HealBot_Update_CPUUsage()
         HealBot_Events_setLag()
     end
     if prevCPU~=HealBot_Globals.CPUUsage then
-        HealBot_Timers_Set("SKINS","FluidFlashInUse")
+        HealBot_Timers_Set("SKINS","FluidFlashInUse",true)
         if HealBot_Timers_retLuVars("LoadComplete") then
-            HealBot_Timers_Set("LAST","UpdateCheckInterval",true)
+            HealBot_Timers_Set("LAST","UpdateCheckInterval",true,true)
         end
         HealBot_Comms_PerfLevel()
     elseif prevFPS~=HealBot_Globals.FPS then
@@ -2191,10 +2196,9 @@ function HealBot_UpdateCheckInterval()
         elseif HealBot_luVars["healthCheckInterval"]>15 then
             HealBot_luVars["healthCheckInterval"]=15
         end
-        HealBot_Timers_Set("LAST","ActionCheckInterval")
-        HealBot_Timers_Set("LAST","AuraCheckInterval")
+        HealBot_Timers_Set("LAST","ActionCheckInterval",true,true)
     end
-    HealBot_Timers_Set("LAST","DebugCheckInterval")
+    HealBot_Timers_Set("LAST","DebugCheckInterval",true,true)
 end
 
 function HealBot_DebugCheckInterval()
@@ -4116,7 +4120,8 @@ function HealBot_FastFuncs()
             hbFastFuncs={[1]=HealBot_UpdateUnit_Buttons,  [2]=HealBot_UpdateUnit_Buttons,
                          [3]=HealBot_UpdateUnit_Buttons,  [4]=HealBot_UpdateUnit_Buttons,
                          [5]=HealBot_UpdateUnit_Buttons,  [6]=HealBot_UpdateUnit_Buttons,
-                         [7]=HealBot_UpdateUnit_Buttons,  [8]=HealBot_UpdateLast,}
+                         [7]=HealBot_UpdateUnit_Buttons,  [8]=HealBot_UpdateUnit_Buttons,
+                         [9]=HealBot_UpdateUnit_Buttons, [10]=HealBot_UpdateLast,}
         end
     else
         HealBot_Options_CmdButtonsEnableDisable(true)
@@ -4129,7 +4134,8 @@ function HealBot_FastFuncs()
             hbFastFuncs={[1]=HealBot_UpdateUnit_Buttons,   [2]=HealBot_UpdateUnit_Buttons,
                          [3]=HealBot_Update_OutOfCombat,   [4]=HealBot_UpdateUnit_Buttons,
                          [5]=HealBot_UpdateUnit_Buttons,   [6]=HealBot_UpdateUnit_Buttons,
-                         [7]=HealBot_UpdateUnit_Buttons,   [8]=HealBot_UpdateLast,}
+                         [7]=HealBot_UpdateUnit_Buttons,   [8]=HealBot_UpdateUnit_Buttons,
+                         [9]=HealBot_UpdateUnit_Buttons,  [10]=HealBot_UpdateLast,}
         end
     end
 end
@@ -4845,6 +4851,7 @@ function HealBot_BuffSlowUpdate(button)
 end
 
 function HealBot_BuffThrottleUpdateButton(button)
+      --HealBot_setCall("HealBot_BuffThrottleUpdateButton", button)
     if not HealBot_BuffUpdateList[button.id] then
         table.insert(HealBot_BuffUpdate, button.id)
         HealBot_BuffUpdateList[button.id]=true
@@ -4853,6 +4860,7 @@ function HealBot_BuffThrottleUpdateButton(button)
 end
 
 function HealBot_BuffThrottleUpdate()
+      --HealBot_setCall("HealBot_BuffThrottleUpdate")
     if HealBot_BuffUpdate[1] then
         if HealBot_Buttons[HealBot_BuffUpdate[1]] then
             HealBot_BuffSlowUpdate(HealBot_Buttons[HealBot_BuffUpdate[1]])

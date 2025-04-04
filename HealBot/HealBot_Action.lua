@@ -120,6 +120,7 @@ function HealBot_Action_UpdateCheckInterval()
     HealBot_Action_luVars["deadCheckInterval"]=HealBot_Util_PerfVal2(850)
     if HealBot_Action_luVars["deadCheckInterval"]<0.75 then HealBot_Action_luVars["deadCheckInterval"]=0.75 end
     HealBot_Debug_PerfUpdate("deadInt", HealBot_Action_luVars["deadCheckInterval"])
+    HealBot_Aura_UpdateCheckInterval()
 end
 
 function HealBot_Action_setAdaptive()
@@ -4770,6 +4771,22 @@ function HealBot_Action_SpellCmdCodes(cType, cText)
             cID="M"
         elseif cText == HEALBOT_MOUSELOOK then
             cID="N"
+        elseif cText == HEALBOT_TOGGLE_MYTARGETS then
+            cID="O"
+        elseif cText == HEALBOT_TOGGLE_PRIVTANKS then
+            cID="P"
+        elseif cText == HEALBOT_TOGGLE_PRIVHEALS then
+            cID="Q"
+        elseif cText == HEALBOT_TOGGLE_PRIVDPS then
+            cID="R"
+        elseif cText == HEALBOT_TOGGLE_PERMPRIVLISTS then
+            cID="S"
+        elseif cText == HEALBOT_TOGGLE_PERMPRIVTANKS then
+            cID="T"
+        elseif cText == HEALBOT_TOGGLE_PERMPRIVHEALS then
+            cID="U"
+        elseif cText == HEALBOT_TOGGLE_PERMPRIVDPS then
+            cID="V"
         end
     end
     return cID
@@ -4849,6 +4866,22 @@ function HealBot_Action_SpellCmdText(cType, cID)
             cText=HEALBOT_TARGETVEHICLE
         elseif cID == "N" then
             cText=HEALBOT_MOUSELOOK
+        elseif cID == "O" then
+            cText=HEALBOT_TOGGLE_MYTARGETS
+        elseif cID == "P" then
+            cText=HEALBOT_TOGGLE_PRIVTANKS
+        elseif cID == "Q" then
+            cText=HEALBOT_TOGGLE_PRIVHEALS
+        elseif cID == "R" then
+            cText=HEALBOT_TOGGLE_PRIVDPS
+        elseif cID == "S" then
+            cText=HEALBOT_TOGGLE_PERMPRIVLISTS
+        elseif cID == "T" then
+            cText=HEALBOT_TOGGLE_PERMPRIVTANKS
+        elseif cID == "U" then
+            cText=HEALBOT_TOGGLE_PERMPRIVHEALS
+        elseif cID == "V" then
+            cText=HEALBOT_TOGGLE_PERMPRIVDPS
         end
     end
     return cText
@@ -5792,6 +5825,38 @@ function HealBot_Action_DoSetButtonAttrib(button,cType,j,unit,HB_prefix,buttonTy
                 button:SetAttribute(HB_prefix.."type"..j, "macro")
                 button:SetAttribute(HB_prefix.."macrotext"..j, "/run C_PetJournal.SummonRandomPet(true)")
             end
+        elseif strlower(sName) == strlower(HEALBOT_TOGGLE_MYTARGETS) then
+            button:SetAttribute(HB_prefix..buttonType..j, nil);
+            button:SetAttribute(HB_prefix.."type"..j, "macro")
+            button:SetAttribute(HB_prefix.."macrotext"..j, '/run HealBot_Panel_ToggelHealTarget("'..unit..'", false)')
+        elseif strlower(sName) == strlower(HEALBOT_TOGGLE_PRIVTANKS) then
+            button:SetAttribute(HB_prefix..buttonType..j, nil);
+            button:SetAttribute(HB_prefix.."type"..j, "macro")
+            button:SetAttribute(HB_prefix.."macrotext"..j, '/run HealBot_Panel_ToggelPrivateTanks("'..unit..'", false)')
+        elseif strlower(sName) == strlower(HEALBOT_TOGGLE_PRIVHEALS) then
+            button:SetAttribute(HB_prefix..buttonType..j, nil);
+            button:SetAttribute(HB_prefix.."type"..j, "macro")
+            button:SetAttribute(HB_prefix.."macrotext"..j, '/run HealBot_Panel_ToggelPrivateHealers("'..unit..'", false)')
+        elseif strlower(sName) == strlower(HEALBOT_TOGGLE_PRIVDPS) then
+            button:SetAttribute(HB_prefix..buttonType..j, nil);
+            button:SetAttribute(HB_prefix.."type"..j, "macro")
+            button:SetAttribute(HB_prefix.."macrotext"..j, '/run HealBot_Panel_ToggelPrivateDamagers("'..unit..'", false)')
+        elseif strlower(sName) == strlower(HEALBOT_TOGGLE_PERMPRIVLISTS) then
+            button:SetAttribute(HB_prefix..buttonType..j, nil);
+            button:SetAttribute(HB_prefix.."type"..j, "macro")
+            button:SetAttribute(HB_prefix.."macrotext"..j, '/run HealBot_Panel_ToggelHealTarget("'..unit..'", true)')
+        elseif strlower(sName) == strlower(HEALBOT_TOGGLE_PERMPRIVTANKS) then
+            button:SetAttribute(HB_prefix..buttonType..j, nil);
+            button:SetAttribute(HB_prefix.."type"..j, "macro")
+            button:SetAttribute(HB_prefix.."macrotext"..j, '/run HealBot_Panel_ToggelPrivateTanks("'..unit..'", true)')
+        elseif strlower(sName) == strlower(HEALBOT_TOGGLE_PERMPRIVHEALS) then
+            button:SetAttribute(HB_prefix..buttonType..j, nil);
+            button:SetAttribute(HB_prefix.."type"..j, "macro")
+            button:SetAttribute(HB_prefix.."macrotext"..j, '/run HealBot_Panel_ToggelPrivateHealers("'..unit..'", true)')
+        elseif strlower(sName) == strlower(HEALBOT_TOGGLE_PERMPRIVDPS) then
+            button:SetAttribute(HB_prefix..buttonType..j, nil);
+            button:SetAttribute(HB_prefix.."type"..j, "macro")
+            button:SetAttribute(HB_prefix.."macrotext"..j, '/run HealBot_Panel_ToggelPrivateDamagers("'..unit..'", true)')
         elseif strlower(sName) == strlower(HEALBOT_CANCELPLUGINALERT) then
             button:SetAttribute(HB_prefix..buttonType..j, nil);
             button:SetAttribute(HB_prefix.."type"..j, "macro")
@@ -6262,7 +6327,7 @@ function HealBot_Action_SetHealButton(unit,guid,frame,unitType,duplicate,role,pr
                     HealBot_Text_setNameTag(hButton)
                 end
             end
-            hButton.rank=HealBot_Panel_RetUnitRank(guid)
+            hButton.rank=HealBot_Panel_RetUnitRank(guid, frame)
             hButton.roletxt=HealBot_Panel_UnitRoleDefault(guid)
             if hButton.player then
                 HealBot_Data["PLAYERGROUP"]=hButton.group
@@ -6578,9 +6643,9 @@ function HealBot_Action_UpdateTestButton(button)
             button.gref.icon[92]:SetAlpha(0)
         end
         if hbv_Skins_GetFrameBoolean("Icons", "SHOWCLASS", button.frame) then
-            local classTexture=HealBot_Panel_retClassRoleIcon(unitClass)
+            local classTexture=HealBot_Media_retClassRoleIcon(unitClass)
             if hbv_Skins_GetFrameBoolean("Icons", "SHOWROLE", button.frame) then
-                classTexture=HealBot_Panel_retClassRoleIcon(button.roletxt or "DAMAGER")
+                classTexture=HealBot_Media_retClassRoleIcon(button.roletxt or "DAMAGER")
             end
             button.gref.icon[91]:SetTexture(classTexture)
             button.gref.icon[91]:SetAlpha(1)
