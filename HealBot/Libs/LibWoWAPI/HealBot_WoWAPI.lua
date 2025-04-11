@@ -219,11 +219,16 @@ local function HealBot_WoWAPI_GetSpellBookItemInfoV1(index)
     return GetSpellBookItemInfo(index, BOOKTYPE_SPELL)
 end
 
-local SpellBookItemtypes={[1]="SPELL", [3]="FLYOUT"}
+local SpellBookItemtypes={[1]="SPELL", [3]="SPELL", [4]="FLYOUT"}
 local function HealBot_WoWAPI_GetSpellBookItemInfoV11(index)
     hbInfo=GetSpellBookItemInfo(index, Enum.SpellBookSpellBank.Player)
     if hbInfo and hbInfo.itemType then
         return SpellBookItemtypes[hbInfo.itemType], hbInfo.actionID
+    else
+        hbInfo=GetSpellBookItemInfo(index, Enum.SpellBookSpellBank.Pet)
+        if hbInfo and hbInfo.itemType then
+            return SpellBookItemtypes[hbInfo.itemType], hbInfo.actionID
+        end
     end
     return nil
 end

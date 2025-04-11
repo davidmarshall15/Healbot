@@ -2996,7 +2996,7 @@ function HealBot_Panel_petHeals(preCombat)
             vPetPlayerUnit="raid"..j;
             if UnitExists(vPetUnit) and hbPanel_dataPetUnits[vPetUnit] and not HealBot_UnitUsingVehicle(vPetPlayerUnit) then
                 HealBot_Panel_addUnit(vPetUnit, hbv_GetUnitType(HEALBOT_PET), hbPanel_dataPetUnits[vPetUnit], false)
-            elseif preCombat and hbv_Skins_GetBoolean("Healing", "PRIVLISTPETSINCOMBAT") and hbPanel_dataUnits[vPetPlayerUnit] and HealBot_Panel_IsMyTarget(hbPanel_dataUnits[vPetPlayerUnit]) then
+            elseif preCombat and hbv_Skins_GetBoolean("Healing", "MYPETINCOMBAT") and UnitIsUnit(vPetPlayerUnit, "player") then
                 HealBot_Panel_addUnit(vPetUnit, hbv_GetUnitType(HEALBOT_PET), vPetUnit, false)
             end
             if hbv_Skins_GetBoolean("Healing", "GROUPPETS") then
@@ -3020,7 +3020,7 @@ function HealBot_Panel_petHeals(preCombat)
         vPetPlayerUnit="player"
         if UnitExists(vPetUnit) and hbPanel_dataPetUnits[vPetUnit] and not HealBot_UnitUsingVehicle(vPetPlayerUnit) and not HealBot_Panel_luVars["SelfPets"] then
             HealBot_Panel_addUnit(vPetUnit, hbv_GetUnitType(HEALBOT_PET), hbPanel_dataPetUnits[vPetUnit], false)
-        elseif preCombat and hbv_Skins_GetBoolean("Healing", "PRIVLISTPETSINCOMBAT") and hbPanel_dataUnits[vPetPlayerUnit] and HealBot_Panel_IsMyTarget(hbPanel_dataUnits[vPetPlayerUnit]) then
+        elseif preCombat and hbv_Skins_GetBoolean("Healing", "MYPETINCOMBAT") then
             HealBot_Panel_addUnit(vPetUnit, hbv_GetUnitType(HEALBOT_PET), vPetUnit, false)
         end
         for j=1,4 do
@@ -3028,8 +3028,6 @@ function HealBot_Panel_petHeals(preCombat)
             vPetPlayerUnit="party"..j;
             if UnitExists(vPetUnit) and hbPanel_dataPetUnits[vPetUnit] and not HealBot_UnitUsingVehicle(vPetPlayerUnit) then
                 HealBot_Panel_addUnit(vPetUnit, hbv_GetUnitType(HEALBOT_PET), hbPanel_dataPetUnits[vPetUnit], false)
-            elseif preCombat and hbv_Skins_GetBoolean("Healing", "PRIVLISTPETSINCOMBAT") and hbPanel_dataUnits[vPetPlayerUnit] and HealBot_Panel_IsMyTarget(hbPanel_dataUnits[vPetPlayerUnit]) then
-                HealBot_Panel_addUnit(vPetUnit, hbv_GetUnitType(HEALBOT_PET), vPetUnit, false)
             end
         end
     end
@@ -3844,10 +3842,12 @@ end
 
 function HealBot_Panel_RetUnitRank(guid, frame)
       --HealBot_setCall("HealBot_Panel_RetUnitRank", nil, guid)
-    if (hbPanel_dataRanks[guid] or 0) > 4 and not hbv_Skins_GetFrameBoolean("Icons", "SHOWRANKMT", frame) then
-        return 0
-    else
+    if (hbPanel_dataRanks[guid] or 0) < 5 then
         return hbPanel_dataRanks[guid] or 0
+    elseif hbv_Skins_GetFrameBoolean("Icons", "SHOWRANKMT", frame) then
+        return hbPanel_dataRanks[guid] or 0
+    else
+        return 0
     end
 end
 

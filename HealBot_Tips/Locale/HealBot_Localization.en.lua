@@ -291,6 +291,7 @@ function HealBot_Lang_Options_enALL()
                                  ["HEALBARSALPHAOOR"]=HEALBOT_OPTIONS_BARALPHAEOR,
                                  ["HEALBARSALPHADIS"]=HEALBOT_OPTIONS_BARALPHADIS,
                                  ["BARCOLCUSTOMDONE"]=HEALBOT_WORD_DONE,
+                                 ["BARCOLOVERSHIELD"]=HEALBOT_WORD_OVERSHIELD,
                         -- Skins Frames Bars Sort tab
                                  ["BARSSORT"]="Bars Sort",
                                  ["HEALBARSSORTSELF"]=HEALBOT_OPTIONS_SUBSORTSELFFIRST,
@@ -304,7 +305,7 @@ function HealBot_Lang_Options_enALL()
                                  ["HEALBARSVISALERTIC"]=HEALBOT_OPTIONS_INCOMBATALERTLEVEL,
                                  ["HEALBARSVISALERTOC"]=HEALBOT_OPTIONS_OUTCOMBATALERTLEVEL,
                                  ["HEALBARSVISVEHICLEIC"]=HEALBOT_WORD_VEHICLE.." "..HEALBOT_OPTIONS_ENTERINGCOMBAT,
-                                 ["HEALBARSVISPLISTPETSIC"]=HEALBOT_OPTIONS_MYTARGET.." "..HEALBOT_OPTIONS_PETHEALS.." "..HEALBOT_OPTIONS_ENTERINGCOMBAT,
+                                 ["HEALBARSVISMTPETIC"]=HEALBOT_WORD_MYPET.." "..HEALBOT_OPTIONS_ENTERINGCOMBAT,
                                  ["HEALBARSVISHIDE100"]=HEALBOT_HIDE_BARS,
                                  ["HEALBARSVISTARGETIC"]=HEALBOT_DISABLED_TARGET.." "..HEALBOT_OPTIONS_ENTERINGCOMBAT,
                                  ["HEALBARSVISPFTOTIC"]=HEALBOT_OPTIONS_TARGETOFPRIVFOCUSTAR.." "..HEALBOT_OPTIONS_ENTERINGCOMBAT,
@@ -1110,6 +1111,7 @@ function HealBot_Lang_Options_enALL()
                                ["HEALBARSALPHAOOR"]="Set the transparency of the heal bars when the bar\nis in an enabled state and the player is out of range.",
                                ["HEALBARSALPHADIS"]="Set the transparency of the heal bar\nwhen the bar is in an disabled state.",
                                ["BARCOLCUSTOMDONE"]="Settings complete.\nReturn to the bars col"..HEALBOT_enWORD_COLOUR_SUFFIX.." tab.",
+                               ["BARCOLOVERSHIELD"]="Show overshield when absorb plus health is greater than full health.",
                         -- Skins Frames Bars Sort tab
                                ["BARSSORT"]="Show the Skins Frames Bars Sort tab.\n--\n".._G["YELLOW_FONT_COLOR_CODE"].."NOTE: Some options are dependant on the frame selected.\n".._G["YELLOW_FONT_COLOR_CODE"].."- Sub sort - self first is only available when one of the User frames is selected.\n".._G["YELLOW_FONT_COLOR_CODE"].."- Own pet: with self and Pets: Groups of five are only available when the Pets frame is selected.",
                                ["HEALBARSSORTSELF"]="Sub sort self to the top of the list.\n--\n".._G["YELLOW_FONT_COLOR_CODE"].."NOTE: Also applies to Main sort when sorting by Name or Max health.",
@@ -1124,7 +1126,7 @@ function HealBot_Lang_Options_enALL()
                                ["HEALBARSVISALERTOC"]="While out of combat and when health is at or\nbelow this setting, the bar will become enabled.",
                                ["HEALBARSVISHIDE100"]="Hide bars for players who are over 100 yards\ngenerally when the player is not visible.\n--\n".._G["YELLOW_FONT_COLOR_CODE"].."NOTE: No updates are possible while in combat.",
                                ["HEALBARSVISVEHICLEIC"]="Always Show the vehicle frames when entering combat.\n--\n".._G["YELLOW_FONT_COLOR_CODE"].."NOTE: Ensure vehicle is selected on the Heals Group tab.",
-                               ["HEALBARSVISPLISTPETSIC"]="Always show the pets of players on your private list when entering combat.\n--\n".._G["YELLOW_FONT_COLOR_CODE"].."NOTE: Ensure players have been added to your private lists.\n".._G["YELLOW_FONT_COLOR_CODE"].."NOTE: Ensure pets is selected on the Heals Group tab\n".._G["YELLOW_FONT_COLOR_CODE"].."NOTE: The private list Heal Group is not required.",
+                               ["HEALBARSVISMTPETIC"]="Always show your pet when entering combat.\n--\n".._G["YELLOW_FONT_COLOR_CODE"].."NOTE: Ensure pets is selected on the Heals Group tab.",
                                ["HEALBARSVISTARGETIC"]="Always Show/No Change/Always Hide\nthe target frame when entering combat.\n--\n".._G["YELLOW_FONT_COLOR_CODE"].."NOTE: ensure target is selected on the Heals Group tab.",
                                ["HEALBARSVISFOCUSIC"]="Always Show/No Change/Always Hide\nthe focus frame when entering combat.\n--\n".._G["YELLOW_FONT_COLOR_CODE"].."NOTE: ensure focus is selected on the Heals Group tab.",
                                ["HEALBARSVISFOCUSTARIC"]="Always Show/No Change/Always Hide\nthe target of focus frame when entering combat.\n--\n".._G["YELLOW_FONT_COLOR_CODE"].."NOTE: ensure target of focus is selected on the Heals Group tab.",

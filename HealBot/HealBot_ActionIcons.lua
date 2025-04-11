@@ -66,7 +66,51 @@ local function HealBot_ActionIcons_aButton(frame, id)
     return HealBot_Panel_AllButton(actionIcons[frame][id].guid)
 end
 
-function HealBot_ActionIcons_LoadSpec(updateAll)
+local function HealBot_ActionIcons_SpecChangeCheckSpell(frame, id)
+    if hbv_ActionIcons_DataExists("Ability", frame, id) then
+        local _, _, aType, aID=HealBot_ActionIcons_GetSpell(hbv_ActionIcons_GetData("Ability", frame, id))
+        if aType == "spell" and not HealBot_Spells_KnownByID(aID) then
+            HealBot_Skins_ActionIconsData[Healbot_Config_Skins.Current_Skin][frame][id]=nil
+        end
+    end
+end
+
+function HealBot_ActionIcons_SpecChange()
+    local spec=HealBot_Action_GetActionIconSpec()
+    local dat, _, aType, aID
+    if HealBot_ActionIconsData_Loadouts[spec] then
+        dat=HealBot_Util_Deserialize(HealBot_ActionIconsData_Loadouts[spec])
+        for f=1,10 do
+            if dat[f] then
+                for i=1,hb_lVars["MaxIcons"] do
+                    if dat[f][i] and dat[f][i]["Ability"] then
+                        _, _, aType, aID=HealBot_ActionIcons_GetSpell(dat[f][i]["Ability"])
+                        if aType ~= "spell" or HealBot_Spells_KnownByID(aID) then
+                            if not HealBot_Skins_ActionIconsData[Healbot_Config_Skins.Current_Skin][f] then HealBot_Skins_ActionIconsData[Healbot_Config_Skins.Current_Skin][f]={} end
+                            HealBot_Skins_ActionIconsData[Healbot_Config_Skins.Current_Skin][f][i]=HealBot_Options_copyTable(dat[f][i])
+                        else
+                            HealBot_ActionIcons_SpecChangeCheckSpell(f, i)
+                        end
+                    else
+                        HealBot_ActionIcons_SpecChangeCheckSpell(f, i)
+                    end
+                end
+            end
+        end
+    end
+    if HealBot_ActionIcons_Loadouts[spec] then
+        dat=HealBot_Util_Deserialize(HealBot_ActionIcons_Loadouts[spec])
+        for f=1,10 do
+            if dat[f] then
+                HealBot_Skins_ActionIcons[Healbot_Config_Skins.Current_Skin][f]=HealBot_Options_copyTable(dat[f])
+            end
+        end
+    end
+    HealBot_Timers_Set("OOC","ActionIconsNumbers",true)
+    HealBot_Timers_Set("OOC","SaveActionIconsProfile",true,true)
+end
+
+function HealBot_ActionIcons_LoadSpec()
         --HealBot_setCall("HealBot_ActionIcons_LoadSpec")
     local spec=HealBot_Action_GetActionIconSpec()
     if HealBot_ActionIconsData_Loadouts[spec] then
@@ -76,10 +120,6 @@ function HealBot_ActionIcons_LoadSpec(updateAll)
     end
     if HealBot_ActionIcons_Loadouts[spec] then
         HealBot_Skins_ActionIcons[Healbot_Config_Skins.Current_Skin]=HealBot_Util_Deserialize(HealBot_ActionIcons_Loadouts[spec])
-    end
-    if updateAll then
-        HealBot_Timers_Set("OOC","ActionIconsNumbers",true)
-        HealBot_Timers_Set("OOC","SaveActionIconsProfile",true,true)
     end
 end
 
@@ -685,9 +725,9 @@ function HealBot_ActionIcons_UpdateNumIcons(frame, all)
                 actionIcons[frame][y]:Hide()
                 actionIcons[frame][y].visible=false
             end
-            if HealBot_Skins_ActionIconsData[Healbot_Config_Skins.Current_Skin] and HealBot_Skins_ActionIconsData[Healbot_Config_Skins.Current_Skin][frame] then
-                HealBot_Skins_ActionIconsData[Healbot_Config_Skins.Current_Skin][frame][y]=nil
-            end
+            --if HealBot_Skins_ActionIconsData[Healbot_Config_Skins.Current_Skin] and HealBot_Skins_ActionIconsData[Healbot_Config_Skins.Current_Skin][frame] then
+            --    HealBot_Skins_ActionIconsData[Healbot_Config_Skins.Current_Skin][frame][y]=nil
+            --end
         end
     end
     if iconFrame[frame].numIcons>0 then
@@ -699,8 +739,8 @@ function HealBot_ActionIcons_UpdateNumIcons(frame, all)
             end
         end
     else
-        if HealBot_Skins_ActionIcons[Healbot_Config_Skins.Current_Skin] then HealBot_Skins_ActionIcons[Healbot_Config_Skins.Current_Skin][frame]=nil end
-        if HealBot_Skins_ActionIconsData[Healbot_Config_Skins.Current_Skin] then HealBot_Skins_ActionIconsData[Healbot_Config_Skins.Current_Skin][frame]=nil end
+        --if HealBot_Skins_ActionIcons[Healbot_Config_Skins.Current_Skin] then HealBot_Skins_ActionIcons[Healbot_Config_Skins.Current_Skin][frame]=nil end
+        --if HealBot_Skins_ActionIconsData[Healbot_Config_Skins.Current_Skin] then HealBot_Skins_ActionIconsData[Healbot_Config_Skins.Current_Skin][frame]=nil end
         HealBot_Timers_Set("SKINS","ResetUpdate")
     end
     if not all then HealBot_ActionIcons_UpdateActiveFrameIdx() end
@@ -2647,7 +2687,7 @@ function HealBot_ActionIcons_GetSpell(spellCode)
         if spellCode and HealBot_Text_Len(spellCode)>2 then
             local sName
             local sType,sID=string.split(":", spellCode)
-            sID,sName=string.split("^", sID)
+            if sID then sID,sName=string.split("^", sID) end
             if HEALBOT_GAME_VERSION == 4 then
                 if spellCode == HEALBOT_SPELL_HOLYWORDSERENITY then 
                     sType="S"

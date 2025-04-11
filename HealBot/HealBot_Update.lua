@@ -757,6 +757,25 @@ function HealBot_Update_AuraAllState()
     end
 end
 
+function HealBot_Update_AllOverShields()
+      --HealBot_setCall("HealBot_Update_AuraAllState")
+    for _,xButton in pairs(HealBot_Unit_Button) do
+       HealBot_Action_OverShield(xButton)
+    end
+    for _,xButton in pairs(HealBot_Private_Button) do
+       HealBot_Action_OverShield(xButton)
+    end
+    for _,xButton in pairs(HealBot_Pet_Button) do
+       HealBot_Action_OverShield(xButton)
+    end
+    for _,xButton in pairs(HealBot_Vehicle_Button) do
+       HealBot_Action_OverShield(xButton)
+    end
+    for _,xButton in pairs(HealBot_Extra_Button) do
+       HealBot_Action_OverShield(xButton)
+    end
+end
+
 function HealBot_Update_RemoveAllBuffIcons(enemyOnly)
     if not enemyOnly then
         --HealBot_setCall("HealBot_Update_RemoveAllBuffIcons")
@@ -1170,26 +1189,6 @@ function HealBot_Update_AllDebuffsReindexActives()
     for _,xButton in pairs(HealBot_Extra_Button) do
         HealBot_Aura_UnitDebuffsUpdateWhenActive(xButton)
         HealBot_DebuffSlowUpdate(xButton)
-    end
-end
-
-function HealBot_Update_AllPartyGUIDs()
-      --HealBot_setCall("HealBot_Update_AllPartyGUIDs")
-    for _,xButton in pairs(HealBot_Unit_Button) do
-        HealBot_Events_UnitGUIDChange(xButton)
-    end
-    for _,xButton in pairs(HealBot_Private_Button) do
-        HealBot_Events_UnitGUIDChange(xButton)
-    end
-end
-
-function HealBot_Update_AllPetGUIDs()
-      --HealBot_setCall("HealBot_Update_AllPetGUIDs")
-    for _,xButton in pairs(HealBot_Pet_Button) do
-        HealBot_Events_UnitGUIDChange(xButton)
-    end
-    for _,xButton in pairs(HealBot_Vehicle_Button) do
-        HealBot_Events_UnitGUIDChange(xButton)
     end
 end
 

@@ -715,6 +715,7 @@ local hbTimerFuncs={["INIT"]={
                         ["CheckHideFrames"]=HealBot_Action_CheckHideFrames,
                         ["ResetGlobalDimming"]=HealBot_Action_ResetGlobalDimming,
                         ["VarsHasSkin"]=hbv_Skins_VarsHasSkin,
+                        ["OverShield"]=HealBot_Update_AllOverShields,
                     },
                     ["AUX"]={
                         ["ClearBars"]=HealBot_Options_clearAuxBars,
@@ -876,7 +877,6 @@ local hbTimerFuncs={["INIT"]={
                         ["ResetSpells"]=HealBot_Reset_Spells,
                         ["ResetBuffs"]=HealBot_Reset_Buffs,
                         ["ResetCures"]=HealBot_Reset_Cures,
-                        ["UpdateAllPartyGUIDs"]=HealBot_Update_AllPartyGUIDs,
                         ["UpdateRefreshListFreq"]=HealBot_Update_RefreshListFreq,
                         ["PluginClearDown"]=HealBot_PluginClearDown,
                         ["ProcMarkedCacheButtons"]=HealBot_Action_ProcMarkedCacheButtons,
@@ -913,6 +913,7 @@ local hbTimerFuncs={["INIT"]={
                         ["ActionIconsValidateItems"]=HealBot_ActionIcons_ValidateItems,
                         ["SaveSpellsProfile"]=HealBot_Options_SaveSpellsProfile,
                         ["SaveActionIconsProfile"]=HealBot_Options_SaveActionIconsProfile,
+                        ["ActionIconsSpecChange"]=HealBot_ActionIcons_SpecChange,
                         ["ToggleOptions"]=HealBot_Options_ShowHide,
                         ["ActionIconsUnitChecks"]=HealBot_ActionIcons_UnitChecks,
                         ["ActionIconsInitFrames"]=HealBot_ActionIcons_InitFrames,

@@ -8452,7 +8452,7 @@
                   </CheckButton>
                 </Frames>
               </Frame>
-              <Frame name="HealBot_Options_SelectSpellsFrame" inherits="BackdropTemplate">
+              <Frame name="HealBot_Options_SelectSpellsFrame" hidden="true" inherits="BackdropTemplate">
                 <Size>
                   <AbsDimension y="500"/>
                 </Size>
@@ -19339,6 +19339,20 @@
                           </Layer>
                         </Layers>
                       </Frame>
+                      <CheckButton name="HealBot_Options_AbsorbShield" inherits="SendMailRadioButtonTemplate">
+                        <Anchors>
+                          <Anchor point="TOPLEFT" relativeTo="HealBot_Options_AbsorbColour" relativePoint="BOTTOMLEFT">
+                            <Offset>
+                              <AbsDimension x="28" y="0"/>
+                            </Offset>
+                          </Anchor>
+                        </Anchors>
+                        <Scripts>
+                          <OnClick>HealBot_Options_AbsorbShield_OnClick(self)</OnClick>
+                          <OnEnter>HealBot_Options_Show_Help("BARCOLOVERSHIELD",true)</OnEnter>
+                          <OnLeave>HealBot_Options_Show_Help("BARCOLOVERSHIELD",false)</OnLeave>
+                        </Scripts>
+                      </CheckButton>
 
 
                       <Button name="HealBot_BarCustomAbsorbColour" inherits="UIPanelButtonTemplate" text="HEALBOT_CUSTOM_CAT_CUSTOM">
@@ -19731,7 +19745,7 @@
                           <OnLeave>HealBot_Options_Show_Help("HEALBARSVISVEHICLEIC",false)</OnLeave>
                         </Scripts>
                       </CheckButton>
-                      <CheckButton name="HealBot_Options_PrivListPetsInCombat" inherits="HealBotUIPanelCheckButton">
+                      <CheckButton name="HealBot_Options_MyPetInCombat" inherits="HealBotUIPanelCheckButton">
                         <Anchors>
                           <Anchor point="TOP" relativeTo="HealBot_Options_VehicleInCombat" relativePoint="BOTTOM">
                             <Offset>
@@ -19740,9 +19754,9 @@
                           </Anchor>
                         </Anchors>
                         <Scripts>
-                          <OnClick>HealBot_Options_PrivListPetsInCombat_OnClick(self)</OnClick>
-                          <OnEnter>HealBot_Options_Show_Help("HEALBARSVISPLISTPETSIC",true)</OnEnter>
-                          <OnLeave>HealBot_Options_Show_Help("HEALBARSVISPLISTPETSIC",false)</OnLeave>
+                          <OnClick>HealBot_Options_MyPetInCombat_OnClick(self)</OnClick>
+                          <OnEnter>HealBot_Options_Show_Help("HEALBARSVISMTPETIC",true)</OnEnter>
+                          <OnLeave>HealBot_Options_Show_Help("HEALBARSVISMTPETIC",false)</OnLeave>
                         </Scripts>
                       </CheckButton>
                       <Frame name="HealBot_Options_TargetInCombat" inherits="UIDropDownMenuTemplate" id="1">

@@ -295,6 +295,7 @@ function HealBot_Lang_enALL()
     HEALBOT_OPTIONS_SELFHEALS              ="Self"
     HEALBOT_OPTIONS_PETHEALS               ="Pets"
     HEALBOT_WORD_PET                       ="Pet"
+    HEALBOT_WORD_MYPET                     ="My Pet"
     HEALBOT_OPTIONS_GROUPHEALS             ="Group Heals";
     HEALBOT_OPTIONS_TANKHEALS              ="Main tanks";
     HEALBOT_OPTIONS_SINGLE                 ="Single ";
@@ -731,7 +732,6 @@ function HealBot_Lang_enALL()
     HEALBOT_WORDS_ADDTO                    ="Add to";
     HEALBOT_WORDS_INCLUDE                  ="Include";
     HEALBOT_WORDS_UNSET                    ="Unset";
-    HEALBOT_WORDS_SETAS                    ="Set as";
     HEALBOT_OPTIONS_MAXSECS                ="Maximum seconds"
     HEALBOT_WORDS_REQUIRED                 ="Required";
     HEALBOT_WORDS_PENDING                  ="Pending";
@@ -910,6 +910,7 @@ function HealBot_Lang_enALL()
     HEALBOT_OPTIONS_INCABSORB              =HEALBOT_classicABSORBHOT.."s"
     HEALBOT_OPTIONS_NOOVERHEALS            ="No overheals"
     HEALBOT_WORD_OVERHEALS                 ="Overheals"
+    HEALBOT_WORD_OVERSHIELD                ="Overshield"
     HEALBOT_WORD_ABSORBS                   ="Absorbs"
     HEALBOT_WORD_ARENA                     ="Arena"
     HEALBOT_WORD_BATTLEGROUND              ="Battle Ground"
@@ -1070,7 +1071,7 @@ function HealBot_Lang_enALL()
     HEALBOT_ACTION_HBFOCUS                 ="Left click to set\nfocus on target"
     HEALBOT_WORD_CLEAR                     ="Clear"
     HEALBOT_WORD_SET                       ="Set"
-    HEALBOT_WORD_HBFOCUS                   ="HealBot Focus"
+    HEALBOT_WORD_HBFOCUS                   ="Focus on Target"
     HEALBOT_WORD_OUTSIDE                   ="Outside"
     HEALBOT_WORD_ALLZONE                   ="All zones"
     HEALBOT_WORD_ZONE                      ="Zone"

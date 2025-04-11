@@ -282,13 +282,13 @@ end
 
 function HealBot_Init_SetSpellRange(id, spellName, range)
     HealBot_Spell_IDs[id].range=range
-    if range == 30 then
+    if range > 27 and range < 33 then
         if HealBot_WoWAPI_HelpfulSpell(spellName) then
             HealBot_Init_SetRangeSpells("HEAL30", spellName, id)
         elseif IsHarmfulSpell(spellName) then
             HealBot_Init_SetRangeSpells("HARM30", spellName, id)
         end
-    elseif range == 40 then
+    elseif range > 39 and range < 71 then
         if HealBot_WoWAPI_HelpfulSpell(spellName) then
             HealBot_Init_SetRangeSpells("HEAL", spellName, id)
         elseif IsHarmfulSpell(spellName) then
@@ -543,19 +543,23 @@ end
 
 local iSpellName, iSpellRank
 local function HealBot_Init_CheckSpell(sType, s, sId, iSpellName, iSpellRank)
-    if sType == "SPELL" and not HealBot_WoWAPI_IsSpellPassive(sId) and HealBot_Spells_KnownByName(iSpellName) and not string.find(iSpellName," Rune Ability") then -- and (string.len(iSpellRank)<1 or string.find(iSpellRank,"Rank"))
-        HealBot_Init_Spells_addSpell(sId, iSpellName, s, iSpellRank)
-    elseif sType == "FLYOUT" then
-        local _, _, numFlyoutSlots, flyoutKnown=GetFlyoutInfo(sId)
-        if flyoutKnown then
-            for f=1,numFlyoutSlots do
-                local fId, _, fKnown, fName=GetFlyoutSlotInfo(sId, f)
-                if fKnown and not HealBot_WoWAPI_IsSpellPassive(fId) and HealBot_Spells_KnownByName(fName) then
-                    HealBot_Init_Spells_addSpell(fId, fName, s, iSpellRank)
+    --if sType then
+        if sType == "SPELL" then
+            if iSpellName and not HealBot_WoWAPI_IsSpellPassive(sId) and HealBot_Spells_KnownByName(iSpellName) and not string.find(iSpellName," Rune Ability") then -- and (string.len(iSpellRank)<1 or string.find(iSpellRank,"Rank"))
+                HealBot_Init_Spells_addSpell(sId, iSpellName, s, iSpellRank)
+            end
+        elseif sType == "FLYOUT" then
+            local _, _, numFlyoutSlots, flyoutKnown=GetFlyoutInfo(sId)
+            if flyoutKnown then
+                for f=1,numFlyoutSlots do
+                    local fId, _, fKnown, fName=GetFlyoutSlotInfo(sId, f)
+                    if fKnown and not HealBot_WoWAPI_IsSpellPassive(fId) and HealBot_Spells_KnownByName(fName) then
+                        HealBot_Init_Spells_addSpell(fId, fName, s, iSpellRank)
+                    end
                 end
             end
         end
-    end
+    --end
 end
 
 function HealBot_Init_Spells_Defaults()
@@ -607,6 +611,7 @@ function HealBot_Init_Spells_Defaults()
                         iSpellName, iSpellRank=HealBot_WoWAPI_SpellBookItemName(s)
                         if not iSpellRank then iSpellRank="" end
                     end
+                    if not sType then sType="SPELL" end
                     HealBot_Init_CheckSpell(sType, s, sId, iSpellName, iSpellRank)
                 end
             end

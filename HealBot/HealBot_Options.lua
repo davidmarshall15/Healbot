@@ -6515,6 +6515,13 @@ function HealBot_EmergBarColDebuffGlowDispellable_OnClick(self)
     end
 end
 
+function HealBot_Options_AbsorbShield_OnClick(self)
+    if hbv_Skins_GetFrameBoolean("BarIACol", "OSHIELD", hb_lVars["Frame"])~=self:GetChecked() then
+        hbv_Skins_SetFrameVar(self:GetChecked(), "BarIACol", "OSHIELD", hb_lVars["Frame"])
+        HealBot_Timers_Set("SKINS","OverShield")
+    end
+end
+
 function HealBot_Options_ShowClassOnBar_OnClick(self)
       --HealBot_setCall("HealBot_Options_ShowClassOnBar_OnClick")
     if hbv_Skins_GetFrameBoolean("BarText", "CLASSONBAR", hb_lVars["Frame"])~=self:GetChecked() then
@@ -7680,10 +7687,10 @@ function HealBot_Options_VehicleInCombat_OnClick(self)
     end
 end
 
-function HealBot_Options_PrivListPetsInCombat_OnClick(self)
-      --HealBot_setCall("HealBot_Options_PrivListPetsInCombat_OnClick")
-    if hbv_Skins_GetBoolean("Healing", "PRIVLISTPETSINCOMBAT")~=self:GetChecked() then
-        hbv_Skins_SetVar(self:GetChecked(), "Healing", "PRIVLISTPETSINCOMBAT")
+function HealBot_Options_MyPetInCombat_OnClick(self)
+      --HealBot_setCall("HealBot_Options_MyPetInCombat_OnClick")
+    if hbv_Skins_GetBoolean("Healing", "MYPETINCOMBAT")~=self:GetChecked() then
+        hbv_Skins_SetVar(self:GetChecked(), "Healing", "MYPETINCOMBAT")
         HealBot_Options_framesChanged(false)
     end
 end
@@ -8654,9 +8661,8 @@ function HealBot_Options_ShowLeaderMainTank_OnClick(self)
     if hbv_Skins_GetFrameBoolean("Icons", "SHOWRANKMT", hb_lVars["Frame"])~=self:GetChecked() then
         hbv_Skins_SetFrameVar(self:GetChecked(), "Icons", "SHOWRANKMT", hb_lVars["Frame"])
         if HealBot_Action_FrameIsVisible(hb_lVars["Frame"]) then 
-            if not hb_lVars["TestBarsOn"] then
-                HealBot_Timers_Set("AURA","IconUpdAllState")
-            end
+            HealBot_Options_framesChanged(false)
+            HealBot_Timers_Set("AURA","IconUpdAllState",true)
         end
     end
 end
@@ -11486,8 +11492,8 @@ function HealBot_Options_CopyActionIconsProfile(skinname)
             HealBot_Skins_ActionIcons[Healbot_Config_Skins.Current_Skin]=HealBot_Util_Deserialize(HealBot_ActionIcons_Loadouts[spec])
         end
         HealBot_Skins_ResetSkin("init")
-        HealBot_Timers_Set("OOC","SaveActionIconsProfile",true)
         HealBot_Timers_Set("OOC","ActionIconsNumbers",true)
+        HealBot_Timers_Set("OOC","SaveActionIconsProfile",true,true)
         HealBot_Options_TabRunOnce["CopyActionIconsProfile"]=nil
         HealBot_Options_SkinsFramesActionIconsGeneralTab("CopyActionIconsProfile")
         HealBot_Timers_TurboOn()
@@ -14232,6 +14238,7 @@ function HealBot_Options_CopyTab2Frames(frame, tab)
         hbv_Skins_SetFrameVar(hbv_Skins_GetFrameVar("BarCol", "HCBE", f), "BarCol", "HCBE", frame)
         hbv_Skins_SetFrameVar(hbv_Skins_GetFrameVar("BarCol", "HIT", f), "BarCol", "HIT", frame)
         hbv_Skins_SetFrameVar(hbv_Skins_GetFrameVar("BarCol", "HCT", f), "BarCol", "HCT", frame)
+        hbv_Skins_SetFrameVar(hbv_Skins_GetFrameBoolean("BarIACol", "OSHIELD", f), "BarIACol", "OSHIELD", frame)
         hbv_Skins_SetFrameVar(hbv_Skins_GetFrameVar("BarIACol", "IR", f), "BarIACol", "IR", frame)
         hbv_Skins_SetFrameVar(hbv_Skins_GetFrameVar("BarIACol", "IG", f), "BarIACol", "IG", frame)
         hbv_Skins_SetFrameVar(hbv_Skins_GetFrameVar("BarIACol", "IB", f), "BarIACol", "IB", frame)
@@ -26847,6 +26854,8 @@ function HealBot_Options_SkinsFramesBarsColourTab(tab)
         HealBot_Options_Pct_OnLoad_MinMax(HealBot_Options_BarAlphaDis,HEALBOT_OPTIONS_BARALPHADIS,0,0.75,0.01,5)
         HealBot_Options_BarAlphaDis:SetValue(hbv_Skins_GetFrameVar("BarCol", "DISA", hb_lVars["Frame"]))
         HealBot_Options_Pct_OnValueChanged(HealBot_Options_BarAlphaDis)
+        HealBot_Options_AbsorbShield:SetChecked(hbv_Skins_GetFrameBoolean("BarIACol", "OSHIELD", hb_lVars["Frame"]))
+        HealBot_Options_SetText(HealBot_Options_AbsorbShield,HEALBOT_WORD_OVERSHIELD)
         HealBot_Options_SetLabel("HealBot_BarHealthColourt",HEALBOT_SKIN_HEALTHBARCOL_TEXT)
         HealBot_Options_SetLabel("HealBot_AbsorbColourt",HEALBOT_SKIN_ABSORBCOL_TEXT)
         HealBot_Options_SetLabel("HealBot_BarIncHealColourt",HEALBOT_SKIN_INCHEALBARCOL_TEXT)
@@ -26946,8 +26955,8 @@ function HealBot_Options_SkinsFramesBarsVisibilityTab(tab)
         HealBot_Options_SetText(HealBot_Options_HideBars,HEALBOT_HIDE_BARS)
         HealBot_Options_VehicleInCombat:SetChecked(hbv_Skins_GetBoolean("Healing", "VEHICLEINCOMBAT"))
         HealBot_Options_SetText(HealBot_Options_VehicleInCombat,HEALBOT_OPTIONS_ALWAYSINCOMBAT.." "..HEALBOT_WORD_VEHICLE.." "..HEALBOT_OPTIONS_ENTERINGCOMBAT)
-        HealBot_Options_PrivListPetsInCombat:SetChecked(hbv_Skins_GetBoolean("Healing", "PRIVLISTPETSINCOMBAT"))
-        HealBot_Options_SetText(HealBot_Options_PrivListPetsInCombat,HEALBOT_OPTIONS_ALWAYSINCOMBAT.." "..HEALBOT_OPTIONS_MYTARGET.." "..HEALBOT_OPTIONS_PETHEALS.." "..HEALBOT_OPTIONS_ENTERINGCOMBAT)
+        HealBot_Options_MyPetInCombat:SetChecked(hbv_Skins_GetBoolean("Healing", "MYPETINCOMBAT"))
+        HealBot_Options_SetText(HealBot_Options_MyPetInCombat,HEALBOT_OPTIONS_ALWAYSINCOMBAT.." "..HEALBOT_WORD_MYPET.." "..HEALBOT_OPTIONS_ENTERINGCOMBAT)
         g=_G["HealBot_HealButtons_Text"]
         if hb_lVars["Frame"]<8 then
             g:SetText(HEALBOT_OPTIONS_PLAYERVISIBILITY)
@@ -29104,7 +29113,7 @@ function HealBot_Options_SkinsFramesInit()
     HealBot_Options_DisableHealBotOpt:SetChecked(HealBot_Config.DisableHealBot)
     HealBot_Options_DisableHealBotSolo:SetChecked(HealBot_Config.DisableSolo)
     HealBot_Options_DisableHealBotSpec:SetChecked(HealBot_Config.DisableOnSpec[HealBot_Config.Spec])
-    HealBot_Options_SelectSpellsFrame:Hide()
+    --HealBot_Options_SelectSpellsFrame:Hide()
     HealBot_Options_NewSkinb:Disable()
     HealBot_Options_SetLabel("HealBot_Options_ScaleFrameText",HEALBOT_OPTIONS_SKINTEXT)
     HealBot_Options_SetLabel("HealBot_Options_SelectSkinDisabledTxt",HEALBOT_OPTIONS_SKINTEXT)

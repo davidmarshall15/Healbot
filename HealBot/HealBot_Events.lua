@@ -217,9 +217,6 @@ end
 function HealBot_Events_PartyMembersChanged()
       --HealBot_setCall("HealBot_Events_PartyMembersChanged")
     HealBot_Timers_Set("OOC","RefreshPartyNextRecalcPlayers",true)
-    if HealBot_Data["UILOCK"] then
-        HealBot_Timers_Set("LAST","UpdateAllPartyGUIDs")
-    end
 end
 
 function HealBot_Events_RosterUpdate()
@@ -275,17 +272,6 @@ function HealBot_Events_InspectReady(guid)
     end
     if pButton then
         HealBot_GetTalentInfo(pButton)
-    end
-end
-
-function HealBot_Events_UnitGUIDChange(button)
-      --HealBot_setCall("HealBot_Events_UnitGUIDChange", button)
-    if button.guid~=UnitGUID(button.unit) then
-        HealBot_UpdateUnitGUIDChange(button, true)
-    else
-        button.status.slowupdate=true
-        button.status.change=true
-        button.status.update=true
     end
 end
 
@@ -737,9 +723,6 @@ function HealBot_Events_PetsChanged()
       --HealBot_setCall("HealBot_Events_PetsChanged")
     if Healbot_Config_Skins.HealGroups[Healbot_Config_Skins.Current_Skin][10]["STATE"] then
         HealBot_Timers_Set("OOC","RefreshPartyNextRecalcPets")
-    end
-    if HealBot_Data["UILOCK"] then
-        HealBot_Update_AllPetGUIDs()
     end
 end
 

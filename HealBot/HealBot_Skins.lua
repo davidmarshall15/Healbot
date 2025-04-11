@@ -544,7 +544,13 @@ function HealBot_Skins_ResetSkin(barType,button,numcols)
             b.gref["Top"]:SetWidth(bWidth)
             b.gref["IconTop"]:SetHeight(bheight)
             b.gref["IconTop"]:SetWidth(bWidth)
-
+            if bWidth > 100 then
+                button.gref["Shield"]:SetWidth(10)
+            elseif bWidth < 50 then
+                button.gref["Shield"]:SetWidth(5)
+            else
+                button.gref["Shield"]:SetWidth(ceil(bWidth/10))
+            end
             b.gref["Back"]:SetHeight(bheight+auxHeight+(bOutline*2))
             b.gref["Back"]:SetWidth(bWidth+auxWidth+(bOutline*2))
             b.gref["InHeal"]:SetHeight(bheight);
@@ -620,6 +626,14 @@ function HealBot_Skins_ResetSkin(barType,button,numcols)
             b.gref["Bar"]:GetStatusBarTexture():SetHorizTile(false)
             b.gref["Bar"]:ClearAllPoints()
             b.gref["Bar"]:SetPoint("BOTTOMLEFT",b.gref["Back"],"BOTTOMLEFT",auxOffsetLeft+bOutline,auxOffsetBelow+bOutline)
+            button.gref["Shield"]:ClearAllPoints()
+            if bheight > 35 then
+                button.gref["Shield"]:SetPoint("TOPRIGHT", button.gref["Bar"], "TOPRIGHT",0,0)
+                button.gref["Shield"]:SetPoint("BOTTOMRIGHT", button.gref["Bar"], "BOTTOMRIGHT",0,1)
+            else
+                button.gref["Shield"]:SetPoint("TOPRIGHT", button.gref["Bar"], "TOPRIGHT",0,0)
+                button.gref["Shield"]:SetPoint("BOTTOMRIGHT", button.gref["Bar"], "BOTTOMRIGHT",0,0)
+            end
             if b.gref["BackBorder"].size~=ceil(hbv_Skins_GetFrameVar("BarCol", "BORSIZE", b.frame)*frameScale) then
                 b.gref["BackBorder"].size=ceil(hbv_Skins_GetFrameVar("BarCol", "BORSIZE", b.frame)*frameScale)
                 b.gref["BackBorder"]:SetBackdrop({

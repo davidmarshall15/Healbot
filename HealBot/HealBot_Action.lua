@@ -1510,6 +1510,14 @@ function HealBot_Action_AbsorbsColourRoleHlthMix(button)
     button.health.absorbr,button.health.absorbg,button.health.absorbb=button.health.rmixcolr, button.health.rmixcolg, button.health.rmixcolb
 end
 
+function HealBot_Action_OverShield(button)
+    if button.health.absorbs>5 and hbv_Skins_GetFrameBoolean("BarIACol", "OSHIELD", button.frame) and (button.health.absorbs+button.health.current) > button.health.max then
+        button.gref["Shield"]:SetStatusBarColor(button.health.absorbr,button.health.absorbg,button.health.absorbb, 1)
+    else
+        button.gref["Shield"]:SetStatusBarColor(0,0,0,0)
+    end
+end
+
 local hbAbsorbsColourFuncs={[2]=HealBot_Action_AbsorbsColourHealth,
                             [3]=HealBot_Action_AbsorbsColourClass,
                             [4]=HealBot_Action_AbsorbsColourRole,
@@ -2790,6 +2798,7 @@ function HealBot_Action_UpdateHealthButton(button, hlthevent)
         --if button.aux[button.frame].sticky then
         --    button.aux[button.frame]:SetWidth(50)
         --end
+        HealBot_Action_OverShield(button)
     end
     HealBot_Action_EmergBarCheck(button)
 
@@ -3507,7 +3516,7 @@ local hbEventFuncs={["UNIT_AURA"]=HealBot_Events_UnitAura,
                     ["PLAYER_TARGET_SET_ATTACKING"]=HealBot_Events_UnitThreat,
                     ["UNIT_TARGET"]=HealBot_Events_UnitTarget,
                     ["UNIT_PHASE"]=HealBot_Events_UnitPhase,
-                    ["UNIT_NAME_UPDATE"]=HealBot_Events_UnitGUIDChange,
+                    ["UNIT_NAME_UPDATE"]=HealBot_UnitExists,
                     ["UNIT_DISPLAYPOWER"]=HealBot_Events_UnitManaUpdate,
                     ["UNIT_CONNECTION"]=HealBot_Events_UnitStatus,
                     ["PARTY_MEMBER_ENABLE"]=HealBot_Events_UnitStatus,
@@ -3525,7 +3534,7 @@ local hbEventFuncs={["UNIT_AURA"]=HealBot_Events_UnitAura,
                    }
 
 local hbEnemyEventFuncs={["UNIT_PHASE"]=HealBot_Events_UnitPhase,
-                         ["UNIT_NAME_UPDATE"]=HealBot_Events_UnitGUIDChange,
+                         ["UNIT_NAME_UPDATE"]=HealBot_UnitExists,
                          ["UNIT_CLASSIFICATION_CHANGED"]=HealBot_Events_ClassificationChanged,
                    }
 
@@ -4008,7 +4017,12 @@ function HealBot_Action_InitButton(button, prefix)
     button.gref["IconTop"]:SetStatusBarColor(0, 0, 0, 0)
     button.gref["Absorb"]=_G[button.bName.."Bar6"]
     button.gref["Absorb"]:SetMinMaxValues(0,1000)
-    button.gref["Absorb"]:SetValue(0)            
+    button.gref["Absorb"]:SetValue(0)           
+    button.gref["Shield"]=_G[button.bName.."Bar3"]
+    button.gref["Shield"]:SetMinMaxValues(0,1000)
+    button.gref["Shield"]:SetValue(1000)
+    button.gref["Shield"]:SetStatusBarTexture("Interface\\Addons\\HealBot\\Images\\Shield.tga");
+    button.gref["Shield"]:SetOrientation("VERTICAL")
     button:SetFrameLevel(HealBot_Action_luVars["buttonFrameLevel"]); 
     button.gref["Back"]:SetFrameLevel(button:GetFrameLevel()+ 1)
     button.gref["Back"]:UnregisterAllEvents()
@@ -4032,6 +4046,9 @@ function HealBot_Action_InitButton(button, prefix)
     button.gref["Bar"]:SetFrameLevel(button.gref["InHeal"]:GetFrameLevel()+ 1)
     button.gref["Bar"]:UnregisterAllEvents()
     button.gref["Bar"]:EnableMouse(false)
+    button.gref["Shield"]:SetFrameLevel(button.gref["Bar"]:GetFrameLevel()+ 1)
+    button.gref["Shield"]:UnregisterAllEvents()
+    button.gref["Shield"]:EnableMouse(false)
     button:Enable();
     erButton:Enable();
     for x=1,9 do
@@ -4126,6 +4143,7 @@ function HealBot_Action_InitButton(button, prefix)
     button.hazard.eg=1
     button.hazard.eb=1
     button.hazard.hpct=800
+    button.guiddataup=0
     button.plugin.colbar=0
     button.request.colbar=0
     button.aurawatch.colbar=0
@@ -4252,7 +4270,6 @@ function HealBot_Action_InitButton(button, prefix)
     button.mana.change=false
     button.mana.lowcheck=true
     
-    button.guid="init"
     button.guild=false
     button.guildtitle=""
     button.guildrank=99
@@ -5393,7 +5410,7 @@ function HealBot_Action_hbmenuFrame_DropDown_Initialize(self,level,menuList)
         if HealBot_Config.PrivFocus == UnitGUID(self.unit) then
             info.text=HEALBOT_WORDS_UNSET.." "..HEALBOT_OPTIONS_PRIVFOCUS
         else
-            info.text=HEALBOT_WORDS_SETAS.." "..HEALBOT_OPTIONS_PRIVFOCUS
+            info.text=HEALBOT_WORD_SET.." "..HEALBOT_OPTIONS_PRIVFOCUS
         end
         info.func=function() HealBot_Panel_ToggelPrivFocus(self.unit); end;
         UIDropDownMenu_AddButton(info, 1);
@@ -6327,7 +6344,10 @@ function HealBot_Action_SetHealButton(unit,guid,frame,unitType,duplicate,role,pr
                     HealBot_Text_setNameTag(hButton)
                 end
             end
-            hButton.rank=HealBot_Panel_RetUnitRank(guid, frame)
+            if hButton.rank ~= HealBot_Panel_RetUnitRank(guid, frame) then
+                hButton.rank=HealBot_Panel_RetUnitRank(guid, frame)
+                HealBot_Timers_Set("AURA","IconUpdAllState",true)
+            end
             hButton.roletxt=HealBot_Panel_UnitRoleDefault(guid)
             if hButton.player then
                 HealBot_Data["PLAYERGROUP"]=hButton.group
