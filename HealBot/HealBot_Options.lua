@@ -8709,6 +8709,18 @@ function HealBot_Options_ShowRoleIcon_OnClick(self)
     end
 end
 
+function HealBot_Options_ShowRoleTankOnly_OnClick(self)
+      --HealBot_setCall("HealBot_Options_ShowRoleIcon_OnClick")
+    if hbv_Skins_GetFrameBoolean("Icons", "SHOWMTONLY", hb_lVars["Frame"])~=self:GetChecked() then
+        hbv_Skins_SetFrameVar(self:GetChecked(), "Icons", "SHOWMTONLY", hb_lVars["Frame"])
+        if HealBot_Action_FrameIsVisible(hb_lVars["Frame"]) then 
+            if not hb_lVars["TestBarsOn"] then
+                HealBot_Timers_Set("AURA","ResetClassIconTexture")
+            end
+        end
+    end
+end
+
 function HealBot_IconClassVOffset_OnValueChanged(self)
       --HealBot_setCall("HealBot_IconClassVOffset_OnValueChanged")
     local val=floor(self:GetValue()+0.5)
@@ -17251,7 +17263,7 @@ function HealBot_Options_DoSet_Current_Skin(newSkin, ddRefresh, noCallback, optS
                     end
                     HealBot_Skins_ResetSkin("init")
                     --if not ddRefresh then
-                        HealBot_Timers_Set("AURA","ResetClassIconTexture")
+                        --HealBot_Timers_Set("AURA","ResetClassIconTexture",true)
                     --end
                     HealBot_setLuVars("TargetNeedReset", true)
                     HealBot_setLuVars("FocusNeedReset", true)
@@ -27669,6 +27681,8 @@ function HealBot_Options_SkinsFramesIconsExtrasClassTab(tab)
         HealBot_Options_SetText(HealBot_Options_ShowClassIcon,HEALBOT_OPTIONS_SHOWCLASSICON)
         HealBot_Options_ShowRoleIcon:SetChecked(hbv_Skins_GetFrameBoolean("Icons", "SHOWROLE", hb_lVars["Frame"]))
         HealBot_Options_SetText(HealBot_Options_ShowRoleIcon,HEALBOT_SHOW_ROLE)
+        HealBot_Options_ShowRoleTankOnly:SetChecked(hbv_Skins_GetFrameBoolean("Icons", "SHOWMTONLY", hb_lVars["Frame"]))
+        HealBot_Options_SetText(HealBot_Options_ShowRoleTankOnly,HEALBOT_SHOW_ROLETANKONLY)
         HealBot_Options_IconClassPosition.initialize=HealBot_Options_IconClassPosition_DropDown
         UIDropDownMenu_SetText(HealBot_Options_IconClassPosition, HealBot_Options_Lists["IconPosition"][hbv_Skins_GetFrameVar("Icons", "CLASSONBAR", hb_lVars["Frame"])])
         local list=HealBot_Options_AnchorList(hbv_Skins_GetFrameVar("Icons", "CLASSONBAR", hb_lVars["Frame"]), true)

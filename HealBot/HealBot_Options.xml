@@ -26787,6 +26787,20 @@
                               <OnLeave>HealBot_Options_Show_Help("HEALBARSTXTSHOWROLE",false)</OnLeave>
                             </Scripts>
                           </CheckButton>
+                          <CheckButton name="HealBot_Options_ShowRoleTankOnly" inherits="SendMailRadioButtonTemplate" id="1">
+                            <Anchors>
+                              <Anchor point="TOPLEFT" relativeTo="HealBot_Options_ShowRoleIcon" relativePoint="TOPLEFT">
+                                <Offset>
+                                  <AbsDimension x="0" y="-18"/>
+                                </Offset>
+                              </Anchor>
+                            </Anchors>
+                            <Scripts>
+                              <OnClick>HealBot_Options_ShowRoleTankOnly_OnClick(self,self:GetID())</OnClick>
+                              <OnEnter>HealBot_Options_Show_Help("HEALBARSTXTSHOWROLEMTONLY",true)</OnEnter>
+                              <OnLeave>HealBot_Options_Show_Help("HEALBARSTXTSHOWROLEMTONLY",false)</OnLeave>
+                            </Scripts>
+                          </CheckButton>
                           <Frame name="HealBot_Options_IconClassPosition" inherits="UIDropDownMenuTemplate">
                             <Anchors>
                               <Anchor point="TOP">

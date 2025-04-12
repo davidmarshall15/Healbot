@@ -1236,7 +1236,7 @@ local prevTag=""
 function HealBot_Text_setNameTag(button)
       --HealBot_setCall("HealBot_Text_setNameTag", button)
     prevTag=button.text.tag
-    if UnitExists(button.unit) and button.status.current<HealBot_Unit_Status["RESERVED"] then
+    if HealBot_UnitExists(button) then
         if UnitIsFriend("player",button.unit) then
             if hbTagsInUse[button.framecol]["DC"] and button.status.current == HealBot_Unit_Status["DC"] then
                 button.text.tag=hbv_Skins_GetFrameVar("BarText", "TAGDC", button.framecol)
@@ -1334,7 +1334,7 @@ end
 function HealBot_Text_setNameText(button)
       --HealBot_setCall("HealBot_Text_setNameText", button)
     button.text.nameonly=HealBot_GetUnitName(button)
-    if button.status.current<HealBot_Unit_Status["RESERVED"] then
+    if HealBot_UnitExists(button) then
         if hbv_Skins_GetFrameVar("BarText", "STATETXTANCHOR", button.framecol) == 6 and button.text.nametag~=vTextChars["Nothing"] then
             HealBot_Text_setNoNameText(button)
         else

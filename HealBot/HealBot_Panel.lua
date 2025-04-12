@@ -706,7 +706,8 @@ function HealBot_Panel_ToggelPrivateTanks(unit, perm)
             HealBot_MyPrivateTanks[xGUID]=true
         end
     end
-    HealBot_Timers_Set("LAST","PrivateListUpdate",true)
+    HealBot_Timers_Set("LAST","PrivateListUpdate")
+    HealBot_Timers_Set("AURA","ResetClassIconTexture",true)
     --HealBot_Timers_Set("OOC","RefreshPartyNextRecalcAll")
 end
 
@@ -727,7 +728,8 @@ function HealBot_Panel_ToggelPrivateHealers(unit, perm)
             HealBot_MyPrivateHealers[xGUID]=true
         end
     end
-    HealBot_Timers_Set("LAST","PrivateListUpdate",true)
+    HealBot_Timers_Set("LAST","PrivateListUpdate")
+    HealBot_Timers_Set("AURA","ResetClassIconTexture",true)
     --HealBot_Timers_Set("OOC","RefreshPartyNextRecalcAll")
 end
 
@@ -882,7 +884,11 @@ function HealBot_Action_SetClassIconTexture(button)
             unitRole=HealBot_Panel_UnitRole(button.unit, button.guid, button.isplayer)
         end
         if HealBot_Media_retClassRoleIcon(unitRole) then
-            HealBot_Aura_ClassUpdate(button, unitRole)
+            if HealBot_MainTanks[button.guid] or not hbv_Skins_GetFrameBoolean("Icons", "SHOWMTONLY", button.frame) then
+                HealBot_Aura_ClassUpdate(button, unitRole)
+            else
+                HealBot_Aura_ClassUpdate(button, false)
+            end
         else
             HealBot_Aura_ClassUpdate(button, HealBot_Panel_classEN(button.unit))
         end

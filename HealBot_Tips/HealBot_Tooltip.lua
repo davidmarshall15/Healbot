@@ -497,6 +497,7 @@ function HealBot_ToolTip_ShowDebug(button)
             GlobalDimmingFrame="false"
         end
         HealBot_Tooltip_SetLine("GlobalDimmingFrame is "..GlobalDimmingFrame,0.4,1,1,1,"GlobalDimmingFrame ID is "..GlobalDimmingFrameID)
+        HealBot_Tooltip_SetLine("Button Text Name is "..(button.text.name or "nil"),0.4,1,1,1,"Button Text Nameonly is "..(button.text.nameonly or "nil"))
     end
 end
 

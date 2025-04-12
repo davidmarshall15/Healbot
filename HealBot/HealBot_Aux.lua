@@ -1143,7 +1143,7 @@ function HealBot_Aux_setTargetAssigned(frame, id)
 end
 
 function HealBot_Aux_UpdateTargetBarById(button, id)
-    if button.status.current<HealBot_Unit_Status["RESERVED"] then
+    if HealBot_UnitExists(button) then
         if hbv_Aux_GetBarVar("COLOUR", button.frame, id) == 1 then
             button.aux[id]["R"]=1
             button.aux[id]["G"]=0.9

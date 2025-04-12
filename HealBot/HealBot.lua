@@ -1186,6 +1186,7 @@ end
 function HealBot_ClassNotKnown(button)
     button.player=false
     button.isplayer=false
+    button.guid=button.unit
     HealBot_UpdateUnitClear(button, true)
 end
 
@@ -3124,7 +3125,7 @@ end
 
 function HealBot_RaidTargetUpdate(button)
       --HealBot_setCall("HealBot_RaidTargetUpdate", button)
-    if button.status.current<HealBot_Unit_Status["RESERVED"] and hbv_Skins_GetFrameBoolean("RaidIcon", "SHOW", button.frame) then
+    if HealBot_UnitExists(button) and hbv_Skins_GetFrameBoolean("RaidIcon", "SHOW", button.frame) then
         local x=GetRaidTargetIndex(button.unit)
         if x and hbRaidTargetIconsChecked[button.frame][x] then
             HealBot_Aura_RaidTargetUpdate(button, x)
@@ -3452,7 +3453,7 @@ end
 function HealBot_SetUnitDisconnect(button)
       --HealBot_setCall("HealBot_SetUnitDisconnect", button)
     button.status.nextcheck=HealBot_TimeNow+HealBot_luVars["statusCheckInterval"]
-    if button.status.current<HealBot_Unit_Status["RESERVED"] then
+    if HealBot_UnitExists(button) then
         local offlineStart=HealBot_Action_getGuidData(button.guid, "OFFLINE")
         if button.isplayer then
             if UnitIsConnected(button.unit) then
