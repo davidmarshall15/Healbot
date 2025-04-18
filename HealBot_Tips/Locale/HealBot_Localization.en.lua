@@ -547,7 +547,7 @@ function HealBot_Lang_Options_enALL()
                                  ["ACTIONICONSSPACE"]=HEALBOT_OPTIONS_ICONSPACER,
                                  ["ACTIONICONSOFFSETX"]=HEALBOT_OPTIONS_TEXTHOROFFSET,
                                  ["ACTIONICONSOFFSETY"]=HEALBOT_OPTIONS_TEXTOFFSET,
-                                 ["ACTIONICONSHIGHLIGHT"]=HEALBOT_OPTIONS_HIGHTLIGHTEDOPACITY,
+                                 ["ACTIONICONSHIGHLIGHT"]=HEALBOT_OPTIONS_HIGHLIGHTEDOPACITY,
                                  ["ACTIONICONSFADE"]=HEALBOT_OPTIONS_FADEDOPACITY,
                                  ["ACTIONICONSGLOWSIZE"]=HEALBOT_OPTIONS_ICONGLOWSIZE,
                                  ["ACTIONICONSLOCK"]=HEALBOT_OPTIONS_ICONLOCK,
@@ -1112,7 +1112,7 @@ function HealBot_Lang_Options_enALL()
                                ["HEALBARSALPHAOOR"]="Set the transparency of the heal bars when the bar\nis in an enabled state and the player is out of range.",
                                ["HEALBARSALPHADIS"]="Set the transparency of the heal bar\nwhen the bar is in an disabled state.",
                                ["BARCOLCUSTOMDONE"]="Settings complete.\nReturn to the bars col"..HEALBOT_enWORD_COLOUR_SUFFIX.." tab.",
-                               ["BARCOLOVERSHIELD"]="Show overshield when absorb plus health is greater than full health.",
+                               ["BARCOLOVERSHIELD"]="Show overshield when absorb plus health is greater than full health.\n--\n".._G["YELLOW_FONT_COLOR_CODE"].."NOTE: This setting only applies in combat.",
                         -- Skins Frames Bars Sort tab
                                ["BARSSORT"]="Show the Skins Frames Bars Sort tab.\n--\n".._G["YELLOW_FONT_COLOR_CODE"].."NOTE: Some options are dependant on the frame selected.\n".._G["YELLOW_FONT_COLOR_CODE"].."- Sub sort - self first is only available when one of the User frames is selected.\n".._G["YELLOW_FONT_COLOR_CODE"].."- Own pet: with self and Pets: Groups of five are only available when the Pets frame is selected.",
                                ["HEALBARSSORTSELF"]="Sub sort self to the top of the list.\n--\n".._G["YELLOW_FONT_COLOR_CODE"].."NOTE: Also applies to Main sort when sorting by Name or Max health.",

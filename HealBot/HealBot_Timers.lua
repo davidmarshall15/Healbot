@@ -111,8 +111,8 @@ end
 function HealBot_Timers_FluidFlashUpdate()
       --HealBot_setCall("HealBot_Timers_FluidFlashUpdate")
     HealBot_Options_BarFreq_setVars()
-    HealBot_Timers_Set("SKINS","FluidFlashInUse",true)
     HealBot_Timers_Set("SKINS","SetFocusGroups",true)
+    HealBot_Timers_Set("SKINS","FluidFlashInUse",true)
     HealBot_Options_AuxBarFlashAlphaMinMaxSet()
 end
 
@@ -211,16 +211,16 @@ end
 
 function HealBot_Timers_SkinChangePluginUpdate()
       --HealBot_setCall("HealBot_Timers_SkinChangePluginUpdate")
-    if HealBot_Timers_luVars["pluginThreat"] and HealBot_Plugin_Threat_Profile then HealBot_Plugin_Threat_Profile() end
-    if HealBot_Timers_luVars["pluginTimeToDie"] and HealBot_Plugin_TimeToDie_Profile then HealBot_Plugin_TimeToDie_Profile() end
-    if HealBot_Timers_luVars["pluginTimeToLive"] and HealBot_Plugin_TimeToLive_Profile then HealBot_Plugin_TimeToLive_Profile() end
+    if HealBot_Timers_luVars["pluginThreat"] and HealBot_Plugin_Threat_Profile then HealBot_Plugin_Threat_Profile(); HealBot_Plugin_Threat_UpdateAll() end
+    if HealBot_Timers_luVars["pluginTimeToDie"] and HealBot_Plugin_TimeToDie_Profile then HealBot_Plugin_TimeToDie_Profile(); HealBot_Plugin_TimeToDie_UpdateAll() end
+    if HealBot_Timers_luVars["pluginTimeToLive"] and HealBot_Plugin_TimeToLive_Profile then HealBot_Plugin_TimeToLive_Profile(); HealBot_Plugin_TimeToLive_UpdateAll() end
     if HealBot_Timers_luVars["pluginCombatProt"] and HealBot_Plugin_CombatProt_Profile then HealBot_Plugin_CombatProt_Profile() end
     if HealBot_Timers_luVars["pluginPerformance"] and HealBot_Plugin_Performance_Profile then HealBot_Plugin_Performance_Profile() end
     if HealBot_Timers_luVars["pluginTweaks"] and HealBot_Plugin_Tweaks_Profile then HealBot_Plugin_Tweaks_Profile() end
     if HealBot_Timers_luVars["pluginMedia"] and HealBot_Plugin_Media_Profile then HealBot_Plugin_Media_Profile() end
     if HealBot_Timers_luVars["pluginHealthWatch"] and HealBot_Plugin_HealthWatch_Profile then HealBot_Plugin_HealthWatch_Profile() end
     if HealBot_Timers_luVars["pluginManaWatch"] and HealBot_Plugin_ManaWatch_Profile then HealBot_Plugin_ManaWatch_Profile() end
-    if HealBot_Timers_luVars["pluginMyCooldowns"] and HealBot_Plugin_MyCooldowns_Profile then HealBot_Plugin_MyCooldowns_Profile() end
+    if HealBot_Timers_luVars["pluginMyCooldowns"] and HealBot_Plugin_MyCooldowns_Profile then HealBot_Plugin_MyCooldowns_Profile(); HealBot_Plugin_MyCooldowns_UpdateAll() end
 end
 
 function HealBot_Timers_PluginTweaks_Refresh()
@@ -368,12 +368,12 @@ function HealBot_Timers_SpellsLoaded()
       --HealBot_setCall("HealBot_Timers_SpellsLoaded")
     HealBot_Timers_Set("INIT","InitBuffList")
     HealBot_Timers_Set("INIT","SpellsTabText")
-    HealBot_Timers_Set("INIT","FluidFlash")
     HealBot_Timers_Set("AURA","BuffsReset")
     HealBot_Timers_Set("LAST","ResetAllButtons")
     HealBot_Timers_Set("SKINS","PowerIndicator")
     HealBot_Timers_Set("INIT","PrepSetAllAttribs")
     HealBot_Timers_Set("AURA","InitAuraData")
+    HealBot_Timers_Set("INIT","FluidFlash",true)
 end
 
 function HealBot_Timers_SpellsResetTabs()
@@ -420,19 +420,18 @@ function HealBot_Timers_LastUpdate()
       --HealBot_setCall("HealBot_Timers_LastUpdate")
     HealBot_setLuVars("DoSendGuildVersion", true)
     HealBot_Timers_Set("CHAT","SetChat")
-    HealBot_Timers_Set("AURA","PlayerCheckExtended",true)
-    HealBot_Timers_Set("AUX","UpdateAllAuxByType",true)
+    HealBot_Timers_Set("AURA","PlayerCheckExtended")
+    HealBot_Timers_Set("AUX","UpdateAllAuxByType")
+    HealBot_Timers_Set("PLAYER","InvChange")
     HealBot_Timers_Set("OOC","DisableCheck",true)
     HealBot_Timers_Set("LAST","UpdateAllHealth",true)
-    HealBot_Timers_Set("PLAYER","InvChange",true)
 	HealBot_Timers_Set("LAST","UpdateAllUnitBars",true)
-    HealBot_Timers_Set("LAST","LoadComplete",true)
     HealBot_Timers_Set("LAST","UpdateCheckInterval",true)
-    HealBot_Timers_Set("LAST","MarkedCacheButtons",true,true)
-    HealBot_Timers_Set("LAST","CheckVersions",true,true)
-    HealBot_Timers_Set("AURA","ConfigClassHoT",true,true)
-    HealBot_Timers_Set("AURA","ConfigDebuffs",true,true)
-    HealBot_Timers_Set("OOC","RefreshPartyNextRecalcAll",true,true)
+    HealBot_Timers_Set("LAST","MarkedCacheButtons",true)
+    HealBot_Timers_Set("LAST","CheckVersions",true)
+    HealBot_Timers_Set("AURA","ConfigClassHoT",true)
+    HealBot_Timers_Set("AURA","ConfigDebuffs",true)
+    HealBot_Timers_Set("OOC","RefreshPartyNextRecalcAll",true)
 end
 
 function HealBot_Timers_Lang()
@@ -488,50 +487,52 @@ function HealBot_Timers_LastLoadCalls()
     HealBot_Options_ObjectsEnableDisable("HealBot_FrameStickyOffsetVertical",false)
     HealBot_Options_ObjectsEnableDisable("HealBot_Options_GroupPetsByFive",false)
     HealBot_Options_ObjectsEnableDisable("HealBot_Options_SelfPet",false)
-    HealBot_Timers_Set("LAST","InitLoadSpells")
-    HealBot_Timers_Set("LAST","InitPlugins")
+    HealBot_Timers_InitSpells()
+    HealBot_Init_Plugins()
     HealBot_Timers_Set("LAST","MountsPetsUse")
     HealBot_Timers_Set("PLAYER","InvChange")
     HealBot_Timers_Set("OOC","PartyUpdateCheckSkin")
+    HealBot_Timers_Set("LAST","LoadComplete")
 end
 
 function HealBot_Timers_LastLoad()
       --HealBot_setCall("HealBot_Timers_LastLoad")
     HealBot_Globals.LAG=HealBot_Globals.LAG+0.1
     HealBot_Timers_Set("LAST","LastLoadCalls")
-    HealBot_Timers_Set("SKINS","EmergHealthCol",true)
-    HealBot_Timers_Set("AURA","ConfigClassHoT",true)
-    HealBot_Timers_Set("AURA","ConfigDebuffs",true)
-    HealBot_Timers_Set("LAST","CheckZone",true)
-    HealBot_Timers_Set("LAST","UpdateButtonGlow",true)
-    HealBot_Timers_Set("LAST","UpdateIconGlow",true)
-    HealBot_Timers_Set("AURA","BuffTagNames",true)
-    HealBot_Timers_Set("AURA","DebuffTagNames",true)
-    HealBot_Timers_Set("SKINS","SetAdaptive",true)
-    HealBot_Timers_Set("INIT","SetPlayerData",true)
-    HealBot_Timers_Set("AURA","BuffsReset",true)
-    HealBot_Timers_Set("AUX","ResetTextButtons",true)
-    HealBot_Timers_Set("SKINS","TextSetTagInUse",true)
-    HealBot_Timers_Set("OOC","EventsSetFrameUnits",true)
-    HealBot_Timers_Set("LAST","MediaUpdateIndexes",true)
-    HealBot_Timers_Set("LAST","OnLoadMessages",true)
-    HealBot_Timers_Set("INIT","LastUpdate",true,true)
-    HealBot_Timers_Set("INIT","HealBotLoaded",true,true)
-    HealBot_Timers_Set("LAST","MediaInitFonts",true,true)
+    HealBot_Timers_Set("SKINS","EmergHealthCol")
+    HealBot_Timers_Set("AURA","ConfigClassHoT")
+    HealBot_Timers_Set("AURA","ConfigDebuffs")
+    HealBot_Timers_Set("LAST","CheckZone")
+    HealBot_Timers_Set("LAST","UpdateButtonGlow")
+    HealBot_Timers_Set("LAST","UpdateIconGlow")
+    HealBot_Timers_Set("AURA","BuffTagNames")
+    HealBot_Timers_Set("AURA","DebuffTagNames")
+    HealBot_Timers_Set("SKINS","SetAdaptive")
+    HealBot_Timers_Set("INIT","SetPlayerData")
+    HealBot_Timers_Set("AURA","BuffsReset")
+    HealBot_Timers_Set("AUX","ResetTextButtons")
+    HealBot_Timers_Set("SKINS","TextSetTagInUse")
+    HealBot_Timers_Set("OOC","EventsSetFrameUnits")
+    HealBot_Timers_Set("LAST","MediaUpdateIndexes")
+    HealBot_Timers_Set("LAST","OnLoadMessages")
+    HealBot_Timers_Set("LAST","LastUpdate")
+    HealBot_Timers_Set("LAST","HealBotLoaded")
+    HealBot_Timers_Set("LAST","MediaInitFonts",true)
     HealBot_Timers_Set("LAST","CleanPermPrivateData",true,true)
     HealBot_Timers_Set("OOC","RemoveInvalidLoadouts",true,true)
     if not HealBot_Timers_luVars["HelpNotice"] then
         HealBot_Timers_Set("LAST","HealBotLoadedChat")
         HealBot_Timers_luVars["HelpNotice"]=true
     end
+    HealBot_UpdateTimers()
 end
 
 function HealBot_Timers_EnteringWorld2()
       --HealBot_setCall("HealBot_Timers_EnteringWorld2")
-    HealBot_Timers_Set("OOC","RefreshPartyNextRecalcAll",true)
+    HealBot_Timers_Set("OOC","RefreshPartyNextRecalcAll")
     HealBot_Timers_Set("LAST","CheckDC",true)
     if HealBot_Timers_luVars["DoneBuffReset"] then
-        HealBot_Timers_Set("INIT","LastUpdate",true,true)
+        HealBot_Timers_Set("LAST","LastUpdate",true)
     end
 end
 
@@ -540,7 +541,14 @@ function HealBot_Timers_EnteringWorld()
     HealBot_Timers_Set("LAST","TargetFocusUpdate",true)
     HealBot_Timers_Set("LAST","ResetUnitStatus",true)
     HealBot_Timers_Set("SKINS","UpdateEmergBars",true)
-    HealBot_Timers_Set("INIT","EnteringWorld2",true,true)
+    HealBot_Timers_Set("INIT","EnteringWorld2",true)
+end
+
+function HealBot_Timers_PostSkinChange()
+    HealBot_Action_setAutoClose(true)
+    HealBot_Timers_Set("SKINS","ResetGlobalDimming",true)
+    HealBot_Timers_Set("SKINS","FluidFlashInUse",true)
+    HealBot_Timers_Set("LAST","SetAutoClose",true)
 end
 
 function HealBot_Timer_Plugin_InitBinds()
@@ -630,9 +638,6 @@ local hbTimerFuncs={["INIT"]={
                         ["RegEvents"]=HealBot_Register_Events,
                         ["UnRegEvents"]=HealBot_UnRegister_Events,
                         ["ResetActiveUnitStatus"]=HealBot_Update_ResetActiveUnitStatus,
-                        ["LastLoad"]=HealBot_Timers_LastLoad,
-                        ["HealBotLoaded"]=HealBot_Loaded,
-                        ["LastUpdate"]=HealBot_Timers_LastUpdate,
                         ["EnteringWorld"]=HealBot_Timers_EnteringWorld,
                         ["EnteringWorld2"]=HealBot_Timers_EnteringWorld2,
                         ["SetPlayerData"]=HealBot_SetPlayerData,
@@ -716,16 +721,14 @@ local hbTimerFuncs={["INIT"]={
                         ["ResetGlobalDimming"]=HealBot_Action_ResetGlobalDimming,
                         ["VarsHasSkin"]=hbv_Skins_VarsHasSkin,
                         ["OverShield"]=HealBot_Update_AllOverShields,
+                        ["PostChange"]=HealBot_Timers_PostSkinChange,
                     },
                     ["AUX"]={
-                        ["ClearBars"]=HealBot_Options_clearAuxBars,
-                        ["SetBars"]=HealBot_Options_setAuxBars,
                         ["BarFlashAlphaMinMax"]=HealBot_Options_AuxBarFlashAlphaMinMaxSet,
                         ["UpdateAllAuxBars"]=HealBot_Update_AllAuxBars,
                         ["UpdateAllAuxByType"]=HealBot_Aux_UpdateAllAuxByType,
                         ["CheckAllAuxOverLays"]=HealBot_Update_AllAuxOverLays,
                         ["ResetBars"]=HealBot_Aux_resetBars,
-                        ["doResetBars"]=HealBot_Aux_doResetBars,
                         ["ResetText"]=HealBot_Update_ResetAllAuxText,
                         ["TestUpdate"]=HealBot_Aux_TestUpdate,
                         ["ResetRange"]=HealBot_Update_AuxResetRange,
@@ -771,7 +774,6 @@ local hbTimerFuncs={["INIT"]={
                         ["ClearAllDebuffs"]=HealBot_Update_ClearAllDebuffs,
                         ["BuffBarColours"]=HealBot_SetBuffBarColours,
                         ["PlayerCheckExtended"]=HealBot_PlayerCheckExtended,
-                        ["InitItemsDataReady"]=HealBot_Aura_InitItemsDataReady,
                         ["RemoveUnusedDebuffIcons"]=HealBot_Update_RemoveUnusedDebuffIcons,
                         ["RemoveUnusedBuffIcons"]=HealBot_Update_RemoveUnusedBuffIcons,
                         ["UpdateAllIcons"]=HealBot_Update_AllIcons,
@@ -892,6 +894,9 @@ local hbTimerFuncs={["INIT"]={
                         ["OnLoadMessages"]=HealBot_Timers_OnLoadMessages,
                         ["PluginTweaksRefresh"]=HealBot_Timers_PluginTweaks_Refresh,
                         ["ExtraBuffsTabInvUp"]=HealBot_Options_BuffsExtraBuffsTabInvUpdate,
+                        ["LastLoad"]=HealBot_Timers_LastLoad,
+                        ["HealBotLoaded"]=HealBot_Loaded,
+                        ["LastUpdate"]=HealBot_Timers_LastUpdate,
                     },
                     ["OOC"]={
                         ["FullReload"]=HealBot_FullReload,

@@ -1703,11 +1703,9 @@ function HealBot_Options_framesChanged(skinUpdate, iconUpdate, indUpdate, textUp
         if indUpdate then HealBot_Action_setLuVars("resetIndicator", true) end
         if textUpdate then HealBot_Action_setLuVars("resetText", true) end
         if auxUpdate then HealBot_Action_setLuVars("resetAux", true) end
-        --HealBot_Timers_Set("SKINS","ResetSkinAllButtons")
         HealBot_Action_ResetSkinAllButtons()
         HealBot_Timers_TurboOn()
     end
---    HealBot_Timers_Set("OOC","RefreshPartyNextRecalcAll")
     HealBot_nextRecalcParty(0)
 end
 
@@ -6925,7 +6923,6 @@ function HealBot_Options_FluidFlashInUse()
     else
         HealBot_Aux_setLuVars("FluidInUse", false)
         HealBot_Action_setLuVars("FluidInUse", false)
-        HealBot_Text_setLuVars("FluidInUse", false)
         HealBot_setLuVars("UseHealthDrop", false)
     end
     if HealBot_Globals.OverrideEffects["USE"] == 1 then
@@ -10127,6 +10124,7 @@ function HealBot_Options_BarStateTextPosition_DropDown()
                         if hbv_Skins_GetFrameVar("BarText", "STATETXTANCHOR", hb_lVars["Frame"]) ~= self:GetID() then
                             hbv_Skins_SetFrameVar(self:GetID(), "BarText", "STATETXTANCHOR", hb_lVars["Frame"])
                             UIDropDownMenu_SetText(HealBot_Options_BarStateTextPosition, HealBot_Options_Lists["BarStateTextAnchor"][hbv_Skins_GetFrameVar("BarText", "STATETXTANCHOR", hb_lVars["Frame"])])
+                            HealBot_Text_tagWithName()
                             HealBot_Options_framesChanged(false, false, false, true)
                             HealBot_Timers_Set("SKINS","TextUpdateState",true)
                             HealBot_Options_StateUseNameFontString_Options()
@@ -16649,7 +16647,6 @@ function HealBot_Options_AuxAssign_DropDown(object, id)
                             HealBot_Action_InitAuxGlow(id, hb_lVars["Frame"])
                             HealBot_Options_AuxDefaultShowText(hb_lVars["Frame"], self:GetID(), id)
                             HealBot_Options_clearAuxBars(hb_lVars["Frame"],id)
-                            HealBot_Options_framesChanged(true, false, false, false, true)
                         end
                     end
         info.checked=false;
@@ -16911,7 +16908,7 @@ function HealBot_Options_clearAuxBars(frame,id)
       --HealBot_setCall("HealBot_Options_clearAuxBars")
     HealBot_Aux_clearAggroAssigned(frame,id)
     HealBot_Aux_clearAuraAssigned(frame,id)
-    HealBot_Aux_clearHightlightAssigned(frame,id)
+    HealBot_Aux_clearHighlightAssigned(frame,id)
     HealBot_Aux_clearTargetAssigned(frame,id)
     HealBot_Aux_clearOORAssigned(frame,id)
     HealBot_Aux_clearInRangeAssigned(frame,id)
@@ -16929,9 +16926,8 @@ function HealBot_Options_clearAuxBars(frame,id)
     HealBot_Aux_clearTotalHealAbsorbsAssigned(frame,id)
     if frame then
         HealBot_Options_setAuxBars(frame,id)
-        HealBot_Options_framesChanged(false, false, false, false, true)
         HealBot_Aux_UpdateAllAuxByType(frame, id)
-        HealBot_Options_framesChanged(true)
+        HealBot_Options_framesChanged(true, false, false, false, true)
     else
         HealBot_Aux_resetAllBars()
     end
@@ -16956,7 +16952,7 @@ local function HealBot_Options_setAuxBarsByID(f,x)
             elseif hbv_Aux_GetBarVar("USE", f, x) == 7 then
                 HealBot_Aux_setOverHealAssigned(f, x) -- OverHeal
             elseif hbv_Aux_GetBarVar("USE", f, x) == 8 then
-                HealBot_Aux_setHightlightAssigned(f, x)  -- Highlight
+                HealBot_Aux_setHighlightAssigned(f, x)  -- Highlight
             elseif hbv_Aux_GetBarVar("USE", f, x) == 9 then
                 HealBot_Aux_setAuraAssigned("BUFF", f, x)
             elseif hbv_Aux_GetBarVar("USE", f, x) == 10 then
@@ -17228,12 +17224,13 @@ function HealBot_Options_DoSet_Current_Skin(newSkin, ddRefresh, noCallback, optS
                     Healbot_Config_Skins.Current_Skin=Healbot_Config_Skins.Skins[j]
                     HealBot_ActionIcons_ConditionsDelAll()
                     HealBot_Panel_SkinReset()
+                    for j=1,10 do
+                        HealBot_Action_HidePanel(j, true)
+                    end
+                    HealBot_Aux_setLuVars("FluidInUse", false)
+                    HealBot_Action_setLuVars("FluidInUse", false)
                     HealBot_Skins_Check(Healbot_Config_Skins.Current_Skin)
                     HealBot_Options_CopyActionIconsProfile(Healbot_Config_Skins.Current_Skin)
-                    HealBot_Action_setAutoClose(true)
-                    HealBot_Timers_Set("LAST","SetAutoClose",true)
-                    HealBot_Timers_Set("LAST","DisableAllButtonGlow")
-                    HealBot_Timers_Set("LAST","DisableAllIconGlow")
                     HealBot_Config.LastAutoSkinChangeTime=GetTime()+300
                     optSetSkins=true
                     HealBot_setLuVars("showReloadMsg", true)
@@ -17246,11 +17243,13 @@ function HealBot_Options_DoSet_Current_Skin(newSkin, ddRefresh, noCallback, optS
                     HealBot_Timers_ToggleBlizzardFrames()
                     HealBot_Timers_Set("SKINS","EmergHealthCol")
                     HealBot_Timers_Set("SKINS","SetAdaptive")
-                    HealBot_Timers_Set("SKINS","SkinChangePluginUpdate")
+                    HealBot_Timers_Set("SKINS","SkinChangePluginUpdate",true)
                     HealBot_Timers_Set("INIT","SeparateInHealsAbsorbs")
                     HealBot_Timers_Set("LAST","CheckFramesOnCombat")
+                    HealBot_Timers_Set("LAST","DisableAllButtonGlow")
+                    HealBot_Timers_Set("LAST","DisableAllIconGlow")
                     HealBot_Timers_Set("OOC","EventsSetFrameUnits")
-                    HealBot_Timers_Set("OOC","ActionIconsNumbers")
+                    HealBot_ActionIcons_UpdateNumIconsAll()
                     --HealBot_Timers_Set("LAST","UpdateFramesOpacity",true)
                     if HealBot_Globals.OverrideColours["USECLASS"] == 1 then
                         HealBot_Timers_Set("LAST","ClassColourUpdate")
@@ -17273,8 +17272,8 @@ function HealBot_Options_DoSet_Current_Skin(newSkin, ddRefresh, noCallback, optS
                     end
                     if HealBot_Data["TIPUSE"] then HealBot_Tooltip_CustomAnchor_Hide() end
                     HealBot_Timers_InitExtraOptions()
-                    HealBot_Timers_Set("SKINS","ResetGlobalDimming",true)
                     HealBot_Timers_Set("SKINS","VarsHasSkin")
+                    HealBot_Timers_Set("SKINS","PostChange",true)
                    -- HealBot_AddDebug("Update Skins","Frame",true)
                     HealBot_Timers_TurboOn()
                     hb_lVars["SetNewSkin"]=true
@@ -27890,9 +27889,9 @@ function HealBot_Options_SkinsFramesActionIconsIconsTab(tab)
       --HealBot_setCall("HealBot_Options_SkinsFramesActionIconsIconsTab")
     if not HealBot_Options_TabRunOnce[tab] then
         HealBot_Options_TabRunOnce[tab]=true
-        HealBot_Options_Pct_OnLoad_MinMax(HealBot_Options_ActionIconsHighlight,HEALBOT_OPTIONS_HIGHTLIGHTEDOPACITY,0,1,0.01,5)
+        HealBot_Options_Pct_OnLoad_MinMax(HealBot_Options_ActionIconsHighlight,HEALBOT_OPTIONS_HIGHLIGHTEDOPACITY,0,1,0.01,5)
         HealBot_Options_ActionIconsHighlight:SetValue(hbv_ActionIcons_GetVars("HIGHLIGHT", hb_lVars["Frame"]))
-        HealBot_Options_SetText(HealBot_Options_ActionIconsHighlight,HEALBOT_OPTIONS_HIGHTLIGHTEDOPACITY..": "..hbv_ActionIcons_GetVars("HIGHLIGHT", hb_lVars["Frame"]))
+        HealBot_Options_SetText(HealBot_Options_ActionIconsHighlight,HEALBOT_OPTIONS_HIGHLIGHTEDOPACITY..": "..hbv_ActionIcons_GetVars("HIGHLIGHT", hb_lVars["Frame"]))
         HealBot_Options_Pct_OnLoad_MinMax(HealBot_Options_ActionIconsFade,HEALBOT_OPTIONS_FADEDOPACITY,0,1,0.01,5)
         HealBot_Options_ActionIconsFade:SetValue(hbv_ActionIcons_GetVars("FADE", hb_lVars["Frame"]))
         HealBot_Options_SetText(HealBot_Options_ActionIconsFade,HEALBOT_OPTIONS_FADEDOPACITY..": "..hbv_ActionIcons_GetVars("FADE", hb_lVars["Frame"]))

@@ -1834,7 +1834,7 @@ end
 local function HealBot_Share_PostFrameWhisper_DropDown()
       --HealBot_setCall("HealBot_Share_PostFrameWhisper_DropDown")
     local info=UIDropDownMenu_CreateInfo()
-    local wList=HealBot_GetInfo()
+    local wList=HealBot_Comms_KnownNames()
     local uID=""
     local uName=nil
     for x,_ in pairs(wList) do

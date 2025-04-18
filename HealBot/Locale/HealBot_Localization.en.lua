@@ -797,7 +797,7 @@ function HealBot_Lang_enALL()
     HEALBOT_OPTIONS_BUFFSAUTOTIMED         ="Timed Buffs"
     HEALBOT_OPTIONS_BUFFSAUTOALL           ="All Buffs"
     HEALBOT_OPTIONS_FADEDOPACITY           ="Faded Opacity"
-    HEALBOT_OPTIONS_HIGHTLIGHTEDOPACITY    ="Highlighted Opacity"
+    HEALBOT_OPTIONS_HIGHLIGHTEDOPACITY     ="Highlighted Opacity"
 
     HEALBOT_OPTIONS_AGGROBARSIZE           ="Aggro bar size"
     HEALBOT_OPTIONS_DOUBLETEXTLINES        ="Double text lines"
@@ -1537,6 +1537,7 @@ function HealBot_Lang_enALL()
     HEALBOT_PLUGIN_TWEAKSCUSTOMCOL         ="Set all col"..HEALBOT_enWORD_COLOUR_SUFFIX.."s to this"
     HEALBOT_PLUGIN_TWEAKSLISTHELP          ="Private Focus is per Character.  All other lists are Global."
     HEALBOT_PLUGIN_GROWUP                  ="Grow bottom to top";
+    HEALBOT_PLUGIN_HIGHLIGHTHEALBAR        ="Click to highlight health bar"
 
     HEALBOT_CUSTOM_CASTBY_EVERYONE         ="Everyone"
     HEALBOT_CUSTOM_CASTBY_ENEMY            ="Enemy"

@@ -4000,7 +4000,7 @@ end
 function HealBot_Aura_InitItemsData()
       --HealBot_setCall("HealBot_Aura_InitItemsData")
     if HealBot_retLuVars("BagsScanned") then
-        HealBot_Timers_Set("AURA","InitItemsDataReady")
+        HealBot_Aura_InitItemsDataReady()
     else
         HealBot_Timers_Set("LAST","InitItemsData",true,true) -- All recall require a delay
     end

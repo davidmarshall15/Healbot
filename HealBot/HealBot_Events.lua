@@ -738,7 +738,7 @@ function HealBot_Events_AddonMsg(addon_id,msg,distribution,sender_id)
                     if amSenderId~=UnitName("player") then
                         HealBot_AddDebug("RECV: AddonMsg="..datatype.." from "..amSenderId,"Comms",true)
                         HealBot_SendVersion()
-                        if not HealBot_Events_luVars[amSenderId] then
+                        if not HealBot_Comms_KnownNames(amSenderId) then
                             HealBot_Comms_SendAddonMsg("W", 2, amSenderId)
                         end
                     end
@@ -746,13 +746,13 @@ function HealBot_Events_AddonMsg(addon_id,msg,distribution,sender_id)
                     if amSenderId~=UnitName("player") then
                         HealBot_AddDebug("RECV: AddonMsg="..datatype.." from "..amSenderId,"Comms",true)
                         HealBot_SendGuildVersion()
-                        if not HealBot_Events_luVars[amSenderId] then
+                        if not HealBot_Comms_KnownNames(amSenderId) then
                             HealBot_Comms_SendAddonMsg("W", 2, amSenderId)
                         end
                     end
                 elseif datatype == "S" then
                     if datamsg then
-                        HealBot_Events_luVars[amSenderId]=datamsg
+                        HealBot_Comms_PlayerVersion(amSenderId, datamsg)
                         HealBot_AddDebug("RECV: AddonMsg="..datatype.." from "..amSenderId.." Version="..datamsg,"Comms",true)
                         HealBot_Comms_CheckVer(amSenderId, datamsg)
                     end
@@ -934,6 +934,7 @@ function HealBot_Events_PlayerEnteringWorld()
     HealBot_Timers_Set("INIT","EnteringWorld")
     HealBot_Timers_Set("OOC","SaveSpellsProfile")
     HealBot_setLuVars("qaFRNext", HealBot_TimeNow+5)
+    HealBot_Timers_TurboOn()
 end
 
 function HealBot_Events_PlayerLeavingWorld()

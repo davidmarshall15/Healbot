@@ -647,9 +647,9 @@ local hbIconGlowSizeStars={[1]=1, [2]=1, [3]=1, [4]=1, [5]=1, [6]=1, [7]=1, [8]=
 local hbGlowLen={[1]=12, [2]=12, [3]=12, [4]=12, [5]=12, [6]=12, [7]=12, [8]=12, [9]=12, [10]=12}
 local hbGlowSize={[1]=4, [2]=4, [3]=4, [4]=4, [5]=4, [6]=4, [7]=4, [8]=4, [9]=4, [10]=4}
 local hbGlowSizeStars={[1]=4, [2]=4, [3]=4, [4]=4, [5]=4, [6]=4, [7]=4, [8]=4, [9]=4, [10]=4}
-local hbGlowFreq={["HW"]=0.28, ["MW"]=0.28, ["DEBUFF"]=-0.22, ["BUFF"]=0.22, ["ICONDEBUFF"]=-0.22, ["ICONBUFF"]=0.22,["EB"]=0.22,["ED"]=-0.22}
-local hbGlowStyle={["HW"]=5, ["MW"]=5, ["DEBUFF"]=5, ["BUFF"]=5, ["ICONDEBUFF"]=5, ["ICONBUFF"]=5,["EB"]=2,["ED"]=2}
-local hbGlowCol={["HW"]={},["MW"]={},["DEBUFF"]={},["BUFF"]={},["ICONDEBUFF"]={},["ICONBUFF"]={},["EB"]={},["ED"]={}}
+local hbGlowFreq={["HW"]=0.28, ["MW"]=0.28, ["DEBUFF"]=-0.22, ["BUFF"]=0.22, ["ICONDEBUFF"]=-0.22, ["ICONBUFF"]=0.22,["EB"]=0.22,["ED"]=-0.22,["HL"]=0.28}
+local hbGlowStyle={["HW"]=5, ["MW"]=5, ["DEBUFF"]=5, ["BUFF"]=5, ["ICONDEBUFF"]=5, ["ICONBUFF"]=5,["EB"]=2,["ED"]=2,["HL"]=6}
+local hbGlowCol={["HW"]={},["MW"]={},["DEBUFF"]={},["BUFF"]={},["ICONDEBUFF"]={},["ICONBUFF"]={},["EB"]={},["ED"]={},["HL"]={}}
 hbGlowCol["HW"][4]=1
 hbGlowCol["MW"][4]=1
 hbGlowCol["DEBUFF"][4]=1
@@ -658,6 +658,7 @@ hbGlowCol["ICONDEBUFF"][4]=1
 hbGlowCol["ICONBUFF"][4]=1
 hbGlowCol["EB"][4]=1
 hbGlowCol["ED"][4]=1
+hbGlowCol["HL"][4]=1
 for x=1,8 do
     hbGlowFreq["AW"..x]=0.28
     hbGlowStyle["AW"..x]=0
@@ -1511,7 +1512,7 @@ function HealBot_Action_AbsorbsColourRoleHlthMix(button)
 end
 
 function HealBot_Action_OverShield(button)
-    if button.health.absorbs>5 and hbv_Skins_GetFrameBoolean("BarIACol", "OSHIELD", button.frame) and (button.health.absorbs+button.health.current) > button.health.max then
+    if HealBot_Data["UILOCK"] and button.health.absorbs>5 and hbv_Skins_GetFrameBoolean("BarIACol", "OSHIELD", button.frame) and (button.health.absorbs+button.health.current) > button.health.max then
         button.gref["Shield"]:SetStatusBarColor(button.health.absorbr,button.health.absorbg,button.health.absorbb, 1)
     else
         button.gref["Shield"]:SetStatusBarColor(0,0,0,0)
@@ -4021,7 +4022,8 @@ function HealBot_Action_InitButton(button, prefix)
     button.gref["Shield"]=_G[button.bName.."Bar3"]
     button.gref["Shield"]:SetMinMaxValues(0,1000)
     button.gref["Shield"]:SetValue(1000)
-    button.gref["Shield"]:SetStatusBarTexture("Interface\\Addons\\HealBot\\Images\\Shield.tga");
+    button.gref["Shield"]:SetStatusBarTexture("Interface\\Addons\\HealBot\\Images\\Shield.tga")
+    button.gref["Shield"]:SetStatusBarColor(0,0,0,0)
     button.gref["Shield"]:SetOrientation("VERTICAL")
     button:SetFrameLevel(HealBot_Action_luVars["buttonFrameLevel"]); 
     button.gref["Back"]:SetFrameLevel(button:GetFrameLevel()+ 1)

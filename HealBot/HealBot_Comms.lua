@@ -135,9 +135,21 @@ local function HealBot_Comms_Print_IncHealsSum(sender_id,addon_id,HealsCnt,linen
     HealBot_Options_SetLabel("HBIncH"..linenum.."Ver",addon_id)
 end
 
+local hbcommver={}
+function HealBot_Comms_PlayerVersion(name, version)
+    hbcommver[name]=version
+end
+
+function HealBot_Comms_KnownNames(name)
+    if name then
+        return hbcommver[name]
+    else
+        return hbcommver
+    end
+end
+
 function HealBot_Comms_About()
       --HealBot_setCall("HealBot_Comms_About")
-    local hbcommver=HealBot_GetInfo()
 
     local linenum=1
     for x,v in pairs(hbcommver) do

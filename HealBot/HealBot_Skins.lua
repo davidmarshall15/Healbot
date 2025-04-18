@@ -862,7 +862,7 @@ function HealBot_Skins_ResetSkin(barType,button,numcols)
                 b.gref.txt["text3"]:SetPoint("TOPRIGHT",b.gref["Bar"],"TOPRIGHT",ceil(hbv_Skins_GetFrameVar("BarText", "SOFFSET2", b.framecol)*frameScale),ceil((-2+hbv_Skins_GetFrameVar("BarText", "SOFFSET", b.framecol))*frameScale))
                     b.gref.txt["text3"]:SetJustifyH("RIGHT")
                 end
-            elseif hbv_Skins_GetFrameVar("BarText", "STATETXTANCHOR", b.framecol)>4 then
+            elseif hbv_Skins_GetFrameVar("BarText", "STATETXTANCHOR", b.framecol) == 5 then
                 b.gref.txt["text3"]:SetPoint("BOTTOM",b.gref.txt["text"],"TOP",ceil(hbv_Skins_GetFrameVar("BarText", "SOFFSET2", b.framecol)*frameScale),ceil((0+hbv_Skins_GetFrameVar("BarText", "SOFFSET", b.framecol))*frameScale))
                 b.gref.txt["text3"]:SetJustifyH(b.gref.txt["text"]:GetJustifyH())
             end

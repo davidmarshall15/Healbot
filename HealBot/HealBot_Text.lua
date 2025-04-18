@@ -22,6 +22,7 @@ local hbNameFormats={["AggroLeft"]= {[1]="(",[2]="(",[3]="(",[4]="(",[5]="(",[6]
                       }
 local aggroNumFormatSurLa={[1]="[",[2]="[",[3]="[",[4]="[",[5]="[",[6]="[",[7]="[",[8]="[",[9]="[",}
 local aggroNumFormatSurRa={[1]="]",[2]="]",[3]="]",[4]="]",[5]="]",[6]="]",[7]="]",[8]="]",[9]="]",}
+local tagWithName={[1]=false,[2]=false,[3]=false,[4]=false,[5]=false,[6]=false,[7]=false,[8]=false,[9]=false,[10]=false}
 local HealBot_Text_EnemySizeWidth={}
 HealBot_Text_EnemySizeWidth["NAME"]={}
 HealBot_Text_EnemySizeWidth["HLTH"]={}
@@ -1232,34 +1233,44 @@ function HealBot_Text_setAggroText(button)
     end
 end
 
+function HealBot_Text_tagWithName()
+    for x=1,10 do
+        if hbv_Skins_GetFrameVar("BarText", "STATETXTANCHOR", x) == 4 or hbv_Skins_GetFrameVar("BarText", "STATETXTANCHOR", x) == 6 then
+            tagWithName[x]=true
+        else
+            tagWithName[x]=false
+        end
+    end
+end
+
 local prevTag=""
 function HealBot_Text_setNameTag(button)
       --HealBot_setCall("HealBot_Text_setNameTag", button)
     prevTag=button.text.tag
-    if HealBot_UnitExists(button) then
+    if button.status.current<HealBot_Unit_Status["RESERVED"] then
         if UnitIsFriend("player",button.unit) then
-            if hbTagsInUse[button.framecol]["DC"] and button.status.current == HealBot_Unit_Status["DC"] then
-                button.text.tag=hbv_Skins_GetFrameVar("BarText", "TAGDC", button.framecol)
-            elseif hbTagsInUse[button.framecol]["SUM"] and button.status.summons then
-                button.text.tag=hbv_Skins_GetFrameVar("BarText", "TAGSUM", button.framecol)
-            elseif hbTagsInUse[button.framecol]["OOR"] and button.status.range<1 then
-                button.text.tag=hbv_Skins_GetFrameVar("BarText", "TAGOOR", button.framecol)
-            elseif hbTagsInUse[button.framecol]["DEAD"] and button.status.current == HealBot_Unit_Status["DEAD"] then
+            if hbTagsInUse[button.frame]["DC"] and button.status.current == HealBot_Unit_Status["DC"] then
+                button.text.tag=hbv_Skins_GetFrameVar("BarText", "TAGDC", button.frame)
+            elseif hbTagsInUse[button.frame]["SUM"] and button.status.summons then
+                button.text.tag=hbv_Skins_GetFrameVar("BarText", "TAGSUM", button.frame)
+            elseif hbTagsInUse[button.frame]["OOR"] and button.status.range<1 then
+                button.text.tag=hbv_Skins_GetFrameVar("BarText", "TAGOOR", button.frame)
+            elseif hbTagsInUse[button.frame]["DEAD"] and button.status.current == HealBot_Unit_Status["DEAD"] then
                 if button.status.isspirit then
                     button.text.tag=HEALBOT_DEAD_SPIRIT
                 else
-                    button.text.tag=hbv_Skins_GetFrameVar("BarText", "TAGRIP", button.framecol)
+                    button.text.tag=hbv_Skins_GetFrameVar("BarText", "TAGRIP", button.frame)
                 end
-            elseif hbTagsInUse[button.framecol]["RES"] and button.status.current == HealBot_Unit_Status["RES"] then
-                button.text.tag=hbv_Skins_GetFrameVar("BarText", "TAGRES", button.framecol)
-            elseif hbTagsInUse[button.framecol]["DEBUFF"] and button.aura.debuff.dispellable then
-                button.text.tag=gsub(hbv_Skins_GetFrameVar("BarText", "TAGDEBUFF", button.framecol),"#n",button.aura.debuff.name)
+            elseif hbTagsInUse[button.frame]["RES"] and button.status.current == HealBot_Unit_Status["RES"] then
+                button.text.tag=hbv_Skins_GetFrameVar("BarText", "TAGRES", button.frame)
+            elseif hbTagsInUse[button.frame]["DEBUFF"] and button.aura.debuff.dispellable then
+                button.text.tag=gsub(hbv_Skins_GetFrameVar("BarText", "TAGDEBUFF", button.frame),"#n",button.aura.debuff.name)
                 button.text.tagdebuff=true
-            elseif hbTagsInUse[button.framecol]["BUFF"] and button.aura.buff.missingbuff then
-                button.text.tag=gsub(hbv_Skins_GetFrameVar("BarText", "TAGBUFF", button.framecol),"#n",button.aura.buff.missingbuff)
+            elseif hbTagsInUse[button.frame]["BUFF"] and button.aura.buff.missingbuff then
+                button.text.tag=gsub(hbv_Skins_GetFrameVar("BarText", "TAGBUFF", button.frame),"#n",button.aura.buff.missingbuff)
                 button.text.tagbuff=true
-            elseif hbTagsInUse[button.framecol]["GROUP"] and IsInRaid() then
-                button.text.tag=gsub(hbv_Skins_GetFrameVar("BarText", "TAGGROUP", button.framecol),"#g",button.group)
+            elseif hbTagsInUse[button.frame]["GROUP"] and IsInRaid() then
+                button.text.tag=gsub(hbv_Skins_GetFrameVar("BarText", "TAGGROUP", button.frame),"#g",button.group)
             else
                 button.text.tag=vTextChars["Nothing"]
             end
@@ -1267,30 +1278,25 @@ function HealBot_Text_setNameTag(button)
             button.text.tag=vTextChars["Nothing"]
         end
     else
-        button.text.tag=hbv_Skins_GetFrameVar("BarText", "TAGR", button.framecol)
+        button.text.tag=hbv_Skins_GetFrameVar("BarText", "TAGR", button.frame)
     end
 
     if prevTag~=button.text.tag then
-        if hbv_Skins_GetFrameVar("BarText", "STATETXTANCHOR", button.framecol) == 4 or hbv_Skins_GetFrameVar("BarText", "STATETXTANCHOR", button.framecol) == 6 then
-            if button.gref.txt["text3"]:GetText()~=vTextChars["Nothing"] then
-                button.gref.txt["text3"]:SetText(vTextChars["Nothing"])
-            end
-            if not hbv_Skins_GetFrameBoolean("BarText", "TAGSTATEONLYTIP", button.framecol) then
+        if tagWithName[button.frame] then
+            if not hbv_Skins_GetFrameBoolean("BarText", "TAGSTATEONLYTIP", button.frame) then
                 button.text.nametag=button.text.tag
                 HealBot_Text_setNameText(button)
             elseif button.text.nametag~=vTextChars["Nothing"] then
                 button.text.nametag=vTextChars["Nothing"]
                 HealBot_Text_setNameText(button)
             end
-        else
-            if button.text.nametag~=vTextChars["Nothing"] then
-                button.text.nametag=vTextChars["Nothing"]
-                HealBot_Text_setNameText(button)
-            end
-            button.text.tagupdate=true
-            HealBot_Text_UpdateText(button)
+        elseif button.text.nametag~=vTextChars["Nothing"] then
+            button.text.nametag=vTextChars["Nothing"]
+            HealBot_Text_setNameText(button)
         end
-        if HealBot_Text_AuxAssigns["State"][button.framecol] then
+        button.text.tagupdate=true
+        HealBot_Text_UpdateText(button)
+        if HealBot_Text_AuxAssigns["State"][button.frame] then
             if string.len(button.text.tag)>0 then
                 HealBot_Aux_UpdateStateBar(button)
             else
@@ -1334,8 +1340,8 @@ end
 function HealBot_Text_setNameText(button)
       --HealBot_setCall("HealBot_Text_setNameText", button)
     button.text.nameonly=HealBot_GetUnitName(button)
-    if HealBot_UnitExists(button) then
-        if hbv_Skins_GetFrameVar("BarText", "STATETXTANCHOR", button.framecol) == 6 and button.text.nametag~=vTextChars["Nothing"] then
+    if button.status.current<HealBot_Unit_Status["RESERVED"] then
+        if hbv_Skins_GetFrameVar("BarText", "STATETXTANCHOR", button.frame) == 6 and button.text.nametag~=vTextChars["Nothing"] then
             HealBot_Text_setNoNameText(button)
         else
             if hbv_Skins_GetFrameBoolean("BarText", "CLASSONBAR", button.framecol) then
@@ -1441,18 +1447,22 @@ function HealBot_Text_UpdateText(button)
     if button.text.tagupdate then
         button.text.tagupdate=false
         if not hbv_Skins_GetFrameBoolean("BarText", "TAGSTATEONLYTIP", button.framecol) then
-            button.text.sr, button.text.sg, button.text.sb=HealBot_Text_StateColours(button)
-            if button.status.enabled or button.status.summons then
-                if button.status.range>0 then
-                    button.text.sa=HealBot_Action_BarColourAlpha(button, hbv_Skins_GetFrameVar("BarTextCol", "SCA", button.framecol), 1)
+            if tagWithName[button.frame] then
+                button.text.sr, button.text.sg, button.text.sb=HealBot_Text_StateColours(button)
+                if button.status.enabled or button.status.summons then
+                    if button.status.range>0 then
+                        button.text.sa=HealBot_Action_BarColourAlpha(button, hbv_Skins_GetFrameVar("BarTextCol", "SCA", button.framecol), 1)
+                    else
+                        button.text.sa=HealBot_Action_BarColourAlpha(button, hbv_Skins_GetFrameVar("BarTextCol", "SCOA", button.framecol), 1)
+                    end
                 else
-                    button.text.sa=HealBot_Action_BarColourAlpha(button, hbv_Skins_GetFrameVar("BarTextCol", "SCOA", button.framecol), 1)
+                    button.text.sa=HealBot_Action_BarColourAlpha(button, hbv_Skins_GetFrameVar("BarTextCol", "SCDA", button.framecol), 1)
                 end
+                HealBot_Text_UpdateStateColour(button)
+                button.gref.txt["text3"]:SetText(button.text.tag)
             else
-                button.text.sa=HealBot_Action_BarColourAlpha(button, hbv_Skins_GetFrameVar("BarTextCol", "SCDA", button.framecol), 1)
+                button.gref.txt["text3"]:SetText("")
             end
-            HealBot_Text_UpdateStateColour(button)
-            button.gref.txt["text3"]:SetText(button.text.tag)
         end
     end
     if button.text.aggroupdate then
@@ -1576,7 +1586,7 @@ function HealBot_Text_UpdateTestText(button)
     button.gref.txt["text4"]:SetText("")
     if hbv_Skins_GetFrameBoolean("BarText", "NAMEONBAR", button.framecol) or 
        hbv_Skins_GetFrameBoolean("BarText", "CLASSONBAR", button.framecol) then
-        if not hbv_Skins_GetFrameBoolean("BarText", "TAGSTATEONLYTIP", button.framecol) and hbv_Skins_GetFrameVar("BarText", "STATETXTANCHOR", button.framecol) == 4 then
+        if not hbv_Skins_GetFrameBoolean("BarText", "TAGSTATEONLYTIP", button.frame) and hbv_Skins_GetFrameVar("BarText", "STATETXTANCHOR", button.frame) == 4 then
             testNameTxt=HEALBOT_OPTIONS_TAB_STATETEXT.."  "..button.unit
         else
             testNameTxt=button.unit
@@ -1602,9 +1612,7 @@ function HealBot_Text_UpdateTestText(button)
         end
     end
     if button.framecol<10 then
-        if not hbv_Skins_GetFrameBoolean("BarText", "TAGSTATEONLYTIP", button.framecol) and 
-           hbv_Skins_GetFrameVar("BarText", "STATETXTANCHOR", button.framecol)~=4 and
-           hbv_Skins_GetFrameVar("BarText", "STATETXTANCHOR", button.framecol)~=6 then
+        if not hbv_Skins_GetFrameBoolean("BarText", "TAGSTATEONLYTIP", button.framecol) and not tagWithName[button.frame] then
             button.text.tag=HEALBOT_OPTIONS_TAB_STATETEXT
             button.gref.txt["text3"]:SetText(HEALBOT_OPTIONS_TAB_STATETEXT)
         end
@@ -1639,9 +1647,7 @@ end
 
 function HealBot_Text_UpdateStateButton(button)
       --HealBot_setCall("HealBot_Text_UpdateStateButton", button)
-    if not hbv_Skins_GetFrameBoolean("BarText", "TAGSTATEONLYTIP", button.framecol) and
-       hbv_Skins_GetFrameVar("BarText", "STATETXTANCHOR", button.framecol)~=4 and
-       hbv_Skins_GetFrameVar("BarText", "STATETXTANCHOR", button.framecol)~=6 then
+    if not hbv_Skins_GetFrameBoolean("BarText", "TAGSTATEONLYTIP", button.framecol) and not tagWithName[button.frame] then 
         cText=button.gref.txt["text3"]:GetText() or button.text.tag or "."
         button.gref.txt["text3"]:SetText(cText.." ")
         button.gref.txt["text3"]:SetText(cText)
@@ -1675,8 +1681,7 @@ end
 function HealBot_Text_UpdateButton(button)
       --HealBot_setCall("HealBot_Text_UpdateButton", button)
     button.text.nameupdate=true
-    if hbv_Skins_GetFrameVar("BarText", "STATETXTANCHOR", button.framecol)~=4 and 
-       hbv_Skins_GetFrameVar("BarText", "STATETXTANCHOR", button.framecol)~=6 then 
+    if not tagWithName[button.frame] then 
         button.text.tagupdate=true 
     end
     if hbv_Skins_GetFrameVar("BarText", "HLTHTXTANCHOR", button.framecol)~=4 then button.text.healthupdate=true end

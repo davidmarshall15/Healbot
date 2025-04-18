@@ -752,8 +752,8 @@ end
 
 function HealBot_ActionIcons_UpdateNumIconsAll()
         --HealBot_setCall("HealBot_ActionIcons_UpdateNumIconsAll")
-    if not hb_lVars["UpdateNumIcons"] then
-        hb_lVars["UpdateNumIcons"]=true
+    --if not hb_lVars["UpdateNumIcons"] then
+    --    hb_lVars["UpdateNumIcons"]=true
         for x,_ in pairs(hbSelfAbility) do
             hbSelfAbility[x]=nil
         end
@@ -762,13 +762,14 @@ function HealBot_ActionIcons_UpdateNumIconsAll()
         end
         HealBot_ActionIcons_UpdateNumIcons(1, true)
         for x=2,10 do
-            C_Timer.After(x/50, function() HealBot_ActionIcons_UpdateNumIcons(x, true) end)
+            HealBot_ActionIcons_UpdateNumIcons(x, true)
+            --C_Timer.After(x/50, function() HealBot_ActionIcons_UpdateNumIcons(x, true) end)
         end
         HealBot_Options_FramesActionIconsSetLists()
-        C_Timer.After(0.25, function() HealBot_ActionIcons_setLuVars("UpdateNumIcons", false) end)
-    else
-        HealBot_Timers_Set("OOC","ActionIconsNumbers",true)
-    end
+    --    C_Timer.After(0.01, function() HealBot_ActionIcons_setLuVars("UpdateNumIcons", false) end)
+    --else
+    --    HealBot_Timers_Set("OOC","ActionIconsNumbers",true)
+    --end
 end
 
 local vFrameAnchor,vFrameSetPointX,vFrameSetPointY=0,0
