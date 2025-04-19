@@ -681,7 +681,7 @@ function HealBot_Events_ClassificationChanged(button)
         else
             button.icon.extra.hostile=false
         end
-        HealBot_Aura_UpdateState(button)
+        HealBot_Aura_UpdateCombat(button)
     end
 end
 

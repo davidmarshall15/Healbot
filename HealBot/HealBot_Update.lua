@@ -738,22 +738,22 @@ function HealBot_Update_ClearAllDebuffs(enemyOnly)
     HealBot_Update_RemoveAllDebuffIcons(enemyOnly)
 end
 
-function HealBot_Update_AuraAllState()
-      --HealBot_setCall("HealBot_Update_AuraAllState")
+function HealBot_Update_AuraAllRank()
+      --HealBot_setCall("HealBot_Update_AuraAllRank")
     for _,xButton in pairs(HealBot_Unit_Button) do
-       HealBot_Aura_UpdateState(xButton)
+       HealBot_Aura_UpdateRank(xButton)
     end
     for _,xButton in pairs(HealBot_Private_Button) do
-       HealBot_Aura_UpdateState(xButton)
+       HealBot_Aura_UpdateRank(xButton)
     end
     for _,xButton in pairs(HealBot_Pet_Button) do
-       HealBot_Aura_UpdateState(xButton)
+       HealBot_Aura_UpdateRank(xButton)
     end
     for _,xButton in pairs(HealBot_Vehicle_Button) do
-       HealBot_Aura_UpdateState(xButton)
+       HealBot_Aura_UpdateRank(xButton)
     end
     for _,xButton in pairs(HealBot_Extra_Button) do
-       HealBot_Aura_UpdateState(xButton)
+       HealBot_Aura_UpdateRank(xButton)
     end
 end
 

@@ -1136,10 +1136,6 @@ function HealBot_Skins_ResetSkin(barType,button,numcols)
             HealBot_Skins_setIconAnchors(hbv_Skins_GetFrameVar("Icons", "OORONBAR", b.frame),
                                          hbv_Skins_GetFrameVar("Icons", "OORANCHOR", b.frame), true)
             b.gref.icon[94]:ClearAllPoints()
--- Patch can be removed after 11.0.7.0
-if type(hbv_Skins_GetFrameVar("Icons", "OORVOFFSET", b.frame)) ~= "number" then
-    hbv_Skins_SetFrameVar(0, "Icons", "OORVOFFSET", b.frame)
-end
             b.gref.icon[94]:SetPoint(iAnchors["ICON"],b,iAnchors["BUTTON"],
                                      ceil(hbv_Skins_GetFrameVar("Icons", "OORHOFFSET", b.frame)*frameScale),
                                      ceil(hbv_Skins_GetFrameVar("Icons", "OORVOFFSET", b.frame)*frameScale))
@@ -1147,6 +1143,30 @@ end
             b.gref.icon[94]:SetWidth((bheight*hbv_Skins_GetFrameVar("Icons", "OORSCALE", b.frame))-2)
             iZoom=hbv_Skins_GetFrameVar("Icons", "OORZOOM", b.frame)
             b.gref.icon[94]:SetTexCoord(iZoom,1-iZoom,iZoom,1-iZoom)
+
+            -- Rank 95
+            HealBot_Skins_setIconAnchors(hbv_Skins_GetFrameVar("Icons", "RANKONBAR", b.frame),
+                                         hbv_Skins_GetFrameVar("Icons", "RANKANCHOR", b.frame), true)
+            b.gref.icon[95]:ClearAllPoints()
+            b.gref.icon[95]:SetPoint(iAnchors["ICON"],b,iAnchors["BUTTON"],
+                                     ceil(hbv_Skins_GetFrameVar("Icons", "RANKHOFFSET", b.frame)*frameScale),
+                                     ceil(hbv_Skins_GetFrameVar("Icons", "RANKVOFFSET", b.frame)*frameScale))
+            b.gref.icon[95]:SetHeight((bheight*hbv_Skins_GetFrameVar("Icons", "RANKSCALE", b.frame))-2)
+            b.gref.icon[95]:SetWidth((bheight*hbv_Skins_GetFrameVar("Icons", "RANKSCALE", b.frame))-2)
+            iZoom=hbv_Skins_GetFrameVar("Icons", "RANKZOOM", b.frame)
+            b.gref.icon[95]:SetTexCoord(iZoom,1-iZoom,iZoom,1-iZoom)
+
+            -- Combat 96
+            HealBot_Skins_setIconAnchors(hbv_Skins_GetFrameVar("Icons", "COMBATONBAR", b.frame),
+                                         hbv_Skins_GetFrameVar("Icons", "COMBATANCHOR", b.frame), true)
+            b.gref.icon[96]:ClearAllPoints()
+            b.gref.icon[96]:SetPoint(iAnchors["ICON"],b,iAnchors["BUTTON"],
+                                     ceil(hbv_Skins_GetFrameVar("Icons", "COMBATHOFFSET", b.frame)*frameScale),
+                                     ceil(hbv_Skins_GetFrameVar("Icons", "COMBATVOFFSET", b.frame)*frameScale))
+            b.gref.icon[96]:SetHeight((bheight*hbv_Skins_GetFrameVar("Icons", "COMBATSCALE", b.frame))-2)
+            b.gref.icon[96]:SetWidth((bheight*hbv_Skins_GetFrameVar("Icons", "COMBATSCALE", b.frame))-2)
+            iZoom=hbv_Skins_GetFrameVar("Icons", "COMBATZOOM", b.frame)
+            b.gref.icon[96]:SetTexCoord(iZoom,1-iZoom,iZoom,1-iZoom)
             b.icon.reset=false
         end
 

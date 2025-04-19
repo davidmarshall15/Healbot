@@ -919,7 +919,23 @@
                 </Anchor>
               </Anchors>
             </Texture>
+            <Texture name="$parentExtraRank">
+              <Size> <AbsDimension x="16" y="16"/> </Size>
+              <Anchors>
+                <Anchor point="RIGHT" relativePoint="RIGHT">
+                  <Offset> <AbsDimension x="-35" y="0"/> </Offset>
+                </Anchor>
+              </Anchors>
+            </Texture>
             <Texture name="$parentExtraTarget">
+              <Size> <AbsDimension x="16" y="16"/> </Size>
+              <Anchors>
+                <Anchor point="RIGHT" relativePoint="RIGHT">
+                  <Offset> <AbsDimension x="-35" y="0"/> </Offset>
+                </Anchor>
+              </Anchors>
+            </Texture>
+            <Texture name="$parentExtraCombat">
               <Size> <AbsDimension x="16" y="16"/> </Size>
               <Anchors>
                 <Anchor point="RIGHT" relativePoint="RIGHT">

@@ -4090,6 +4090,8 @@ function HealBot_Action_InitButton(button, prefix)
     button.gref.icon[92]=_G[button.bName.."Bar8ExtraTarget"]
     button.gref.icon[93]=_G[button.bName.."Bar8ExtraRC"]
     button.gref.icon[94]=_G[button.bName.."Bar8ExtraOOR"]
+    button.gref.icon[95]=_G[button.bName.."Bar8ExtraRank"]
+    button.gref.icon[96]=_G[button.bName.."Bar8ExtraCombat"]
     for x=1,12 do
         button.gref.txt.expire[x]=_G[button.bName.."Bar8Expire"..x]
         button.gref.txt.count[x]=_G[button.bName.."Bar8Count"..x]
@@ -4145,7 +4147,6 @@ function HealBot_Action_InitButton(button, prefix)
     button.hazard.eg=1
     button.hazard.eb=1
     button.hazard.hpct=800
-    button.guiddataup=0
     button.plugin.colbar=0
     button.request.colbar=0
     button.aurawatch.colbar=0
@@ -6348,7 +6349,7 @@ function HealBot_Action_SetHealButton(unit,guid,frame,unitType,duplicate,role,pr
             end
             if hButton.rank ~= HealBot_Panel_RetUnitRank(guid, frame) then
                 hButton.rank=HealBot_Panel_RetUnitRank(guid, frame)
-                HealBot_Timers_Set("AURA","IconUpdAllState",true)
+                HealBot_Timers_Set("AURA","IconUpdAllRank",true)
             end
             hButton.roletxt=HealBot_Panel_UnitRoleDefault(guid)
             if hButton.player then
@@ -6678,14 +6679,22 @@ function HealBot_Action_UpdateTestButton(button)
         button.icon.extra.hostile=false
         button.status.incombat=false
         button.icon.extra.readycheck=false
+        button.status.afk=false
+        button.rank=0
         if button.frame<6 then
             if (testBarsDat["cnt"] % 5 == 0) and hbv_Skins_GetFrameBoolean("Icons", "SHOWHOSTILE", button.frame) then
                 button.status.hostile=true
                 button.icon.extra.hostile=true
             elseif (testBarsDat["cnt"] % 2 == 0) and hbv_Skins_GetFrameBoolean("Icons", "SHOWCOMBAT", button.frame) then
                 button.status.incombat=true
-            elseif hbv_Skins_GetFrameBoolean("Icons", "SHOWRC", button.frame) then
+            end
+            if hbv_Skins_GetFrameBoolean("Icons", "SHOWRC", button.frame) then
                 button.icon.extra.readycheck=hbv_GetStatic("rcWAITING")
+            elseif hbv_Skins_GetFrameBoolean("Icons", "SHOWAFK", button.frame) then
+                button.status.afk=true
+            end
+            if (testBarsDat["cnt"] % 7 == 0) and hbv_Skins_GetFrameBoolean("Icons", "SHOWRANK", button.frame) then
+                button.rank=1
             end
         elseif button.frame<8 then
             if (testBarsDat["cnt"] % 5 == 0) and hbv_Skins_GetFrameBoolean("Icons", "SHOWHOSTILE", button.frame) then
@@ -6696,9 +6705,11 @@ function HealBot_Action_UpdateTestButton(button)
             button.status.hostile=true
             button.icon.extra.hostile=true
         end
+        HealBot_Aura_UpdateRank(button)
+        HealBot_Aura_UpdateCombat(button)
         HealBot_Aura_UpdateState(button)
     else
-        for x=91,94 do
+        for x=91,96 do
             HealBot_Aura_RemoveIcon(button, x)
         end
     end

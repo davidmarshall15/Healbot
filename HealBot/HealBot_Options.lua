@@ -3728,6 +3728,20 @@ function HealBot_IconClassZoom_OnValueChanged(self)
     end
 end
 
+function HealBot_IconRankZoom_OnValueChanged(self)
+      --HealBot_setCall("HealBot_BarButtonIconScale_OnValueChanged")
+--    local val=floor(self:GetValue()+0.5)
+    local val=HealBot_Util_Round(self:GetValue(), 1)
+    val=val/100;
+    if hbv_Skins_GetFrameVar("Icons", "RANKZOOM", hb_lVars["Frame"])~=val then
+        hbv_Skins_SetFrameVar(val, "Icons", "RANKZOOM", hb_lVars["Frame"])
+        local g=_G[self:GetName().."Text"]
+        g:SetText(self.text .. ": " .. (val*200).."%");
+        HealBot_Options_framesChanged(true, true)
+        HealBot_Timers_Set("AURA","UpdateAllExtraIcons")
+    end
+end
+
 function HealBot_IconTargetZoom_OnValueChanged(self)
       --HealBot_setCall("HealBot_BarButtonIconScale_OnValueChanged")
 --    local val=floor(self:GetValue()+0.5)
@@ -3735,6 +3749,20 @@ function HealBot_IconTargetZoom_OnValueChanged(self)
     val=val/100;
     if hbv_Skins_GetFrameVar("Icons", "TARGETZOOM", hb_lVars["Frame"])~=val then
         hbv_Skins_SetFrameVar(val, "Icons", "TARGETZOOM", hb_lVars["Frame"])
+        local g=_G[self:GetName().."Text"]
+        g:SetText(self.text .. ": " .. (val*200).."%");
+        HealBot_Options_framesChanged(true, true)
+        HealBot_Timers_Set("AURA","UpdateAllExtraIcons")
+    end
+end
+
+function HealBot_IconCombatZoom_OnValueChanged(self)
+      --HealBot_setCall("HealBot_BarButtonIconScale_OnValueChanged")
+--    local val=floor(self:GetValue()+0.5)
+    local val=HealBot_Util_Round(self:GetValue(), 1)
+    val=val/100;
+    if hbv_Skins_GetFrameVar("Icons", "COMBATZOOM", hb_lVars["Frame"])~=val then
+        hbv_Skins_SetFrameVar(val, "Icons", "COMBATZOOM", hb_lVars["Frame"])
         local g=_G[self:GetName().."Text"]
         g:SetText(self.text .. ": " .. (val*200).."%");
         HealBot_Options_framesChanged(true, true)
@@ -8647,7 +8675,7 @@ function HealBot_Options_ShowLeader_OnClick(self)
             if hb_lVars["TestBarsOn"] then
                 HealBot_Options_framesChanged(true, true)
             else
-                HealBot_Timers_Set("AURA","IconUpdAllState")
+                HealBot_Timers_Set("AURA","IconUpdAllRank")
             end
         end
     end
@@ -8659,7 +8687,7 @@ function HealBot_Options_ShowLeaderMainTank_OnClick(self)
         hbv_Skins_SetFrameVar(self:GetChecked(), "Icons", "SHOWRANKMT", hb_lVars["Frame"])
         if HealBot_Action_FrameIsVisible(hb_lVars["Frame"]) then 
             HealBot_Options_framesChanged(false)
-            HealBot_Timers_Set("AURA","IconUpdAllState",true)
+            HealBot_Timers_Set("AURA","IconUpdAllRank",true)
         end
     end
 end
@@ -8814,6 +8842,58 @@ function HealBot_IconTargetAlwaysEnabled_OnClick(self)
     end
 end
 
+function HealBot_IconRankVOffset_OnValueChanged(self)
+      --HealBot_setCall("HealBot_IconRankVOffset_OnValueChanged")
+    local val=floor(self:GetValue()+0.5)
+    if val~=self:GetValue() then
+        self:SetValue(val)
+    elseif hbv_Skins_GetFrameVar("Icons", "RANKVOFFSET", hb_lVars["Frame"])~=val then
+        hbv_Skins_SetFrameVar(val, "Icons", "RANKVOFFSET", hb_lVars["Frame"])
+        local g=_G[self:GetName().."Text"]
+        g:SetText(self.text .. ": " .. val);
+        HealBot_Options_framesChanged(true, true)
+    end
+end
+
+function HealBot_IconRankHOffset_OnValueChanged(self)
+      --HealBot_setCall("HealBot_IconRankHOffset_OnValueChanged")
+    local val=floor(self:GetValue()+0.5)
+    if val~=self:GetValue() then
+        self:SetValue(val)
+    elseif hbv_Skins_GetFrameVar("Icons", "RANKHOFFSET", hb_lVars["Frame"])~=val then
+        hbv_Skins_SetFrameVar(val, "Icons", "RANKHOFFSET", hb_lVars["Frame"])
+        local g=_G[self:GetName().."Text"]
+        g:SetText(self.text .. ": " .. val);
+        HealBot_Options_framesChanged(true, true)
+    end
+end
+
+function HealBot_IconCombatVOffset_OnValueChanged(self)
+      --HealBot_setCall("HealBot_IconCombatVOffset_OnValueChanged")
+    local val=floor(self:GetValue()+0.5)
+    if val~=self:GetValue() then
+        self:SetValue(val)
+    elseif hbv_Skins_GetFrameVar("Icons", "COMBATVOFFSET", hb_lVars["Frame"])~=val then
+        hbv_Skins_SetFrameVar(val, "Icons", "COMBATVOFFSET", hb_lVars["Frame"])
+        local g=_G[self:GetName().."Text"]
+        g:SetText(self.text .. ": " .. val);
+        HealBot_Options_framesChanged(true, true)
+    end
+end
+
+function HealBot_IconCombatHOffset_OnValueChanged(self)
+      --HealBot_setCall("HealBot_IconCombatHOffset_OnValueChanged")
+    local val=floor(self:GetValue()+0.5)
+    if val~=self:GetValue() then
+        self:SetValue(val)
+    elseif hbv_Skins_GetFrameVar("Icons", "COMBATHOFFSET", hb_lVars["Frame"])~=val then
+        hbv_Skins_SetFrameVar(val, "Icons", "COMBATHOFFSET", hb_lVars["Frame"])
+        local g=_G[self:GetName().."Text"]
+        g:SetText(self.text .. ": " .. val);
+        HealBot_Options_framesChanged(true, true)
+    end
+end
+
 function HealBot_IconRCVOffset_OnValueChanged(self)
       --HealBot_setCall("HealBot_IconRCVOffset_OnValueChanged")
     local val=floor(self:GetValue()+0.5)
@@ -8840,6 +8920,32 @@ function HealBot_IconRCHOffset_OnValueChanged(self)
     end
 end
 
+function HealBot_IconRankScale_OnValueChanged(self)
+      --HealBot_setCall("HealBot_IconRankScale_OnValueChanged")
+--    local val=floor(self:GetValue()+0.5)
+    local val=HealBot_Util_Round(self:GetValue(), 1)
+    val=val/10;
+    if hbv_Skins_GetFrameVar("Icons", "RANKSCALE", hb_lVars["Frame"])~=val then
+        hbv_Skins_SetFrameVar(val, "Icons", "RANKSCALE", hb_lVars["Frame"])
+        local g=_G[self:GetName().."Text"]
+        g:SetText(self.text .. ": " .. val);
+        HealBot_Options_framesChanged(true, true)
+    end
+end
+
+function HealBot_IconCombatScale_OnValueChanged(self)
+      --HealBot_setCall("HealBot_IconCombatScale_OnValueChanged")
+--    local val=floor(self:GetValue()+0.5)
+    local val=HealBot_Util_Round(self:GetValue(), 1)
+    val=val/10;
+    if hbv_Skins_GetFrameVar("Icons", "COMBATSCALE", hb_lVars["Frame"])~=val then
+        hbv_Skins_SetFrameVar(val, "Icons", "COMBATSCALE", hb_lVars["Frame"])
+        local g=_G[self:GetName().."Text"]
+        g:SetText(self.text .. ": " .. val);
+        HealBot_Options_framesChanged(true, true)
+    end
+end
+
 function HealBot_IconRCScale_OnValueChanged(self)
       --HealBot_setCall("HealBot_IconRCScale_OnValueChanged")
 --    local val=floor(self:GetValue()+0.5)
@@ -8850,6 +8956,24 @@ function HealBot_IconRCScale_OnValueChanged(self)
         local g=_G[self:GetName().."Text"]
         g:SetText(self.text .. ": " .. val);
         HealBot_Options_framesChanged(true, true)
+    end
+end
+
+function HealBot_IconRankAlwaysEnabled_OnClick(self)
+      --HealBot_setCall("HealBot_IconRankAlwaysEnabled_OnClick")
+    if hbv_Skins_GetFrameBoolean("Icons", "RANKEN", hb_lVars["Frame"])~=self:GetChecked() then
+        hbv_Skins_SetFrameVar(self:GetChecked(), "Icons", "RANKEN", hb_lVars["Frame"])
+        HealBot_Options_framesChanged(false)
+        HealBot_Update_AllExtraIcons(nil, 93)
+    end
+end
+
+function HealBot_IconCombatAlwaysEnabled_OnClick(self)
+      --HealBot_setCall("HealBot_IconCombatAlwaysEnabled_OnClick")
+    if hbv_Skins_GetFrameBoolean("Icons", "COMBATEN", hb_lVars["Frame"])~=self:GetChecked() then
+        hbv_Skins_SetFrameVar(self:GetChecked(), "Icons", "COMBATEN", hb_lVars["Frame"])
+        HealBot_Options_framesChanged(false)
+        HealBot_Update_AllExtraIcons(nil, 93)
     end
 end
 
@@ -9746,9 +9870,19 @@ function HealBot_Options_IconClassPosition_DropDown()
     HealBot_Options_IconExtraPosition_DropDown(HealBot_Options_IconClassPosition, "CLASSONBAR", 91)
 end
 
+function HealBot_Options_IconRankPosition_DropDown()
+      --HealBot_setCall("HealBot_Options_IconRankPosition_DropDown")
+    HealBot_Options_IconExtraPosition_DropDown(HealBot_Options_IconRankPosition, "RANKONBAR", 95)
+end
+
 function HealBot_Options_IconTargetPosition_DropDown()
       --HealBot_setCall("HealBot_Options_IconTargetPosition_DropDown")
     HealBot_Options_IconExtraPosition_DropDown(HealBot_Options_IconTargetAnchor, "TARGETONBAR", 92)
+end
+
+function HealBot_Options_IconCombatPosition_DropDown()
+      --HealBot_setCall("HealBot_Options_IconCombatPosition_DropDown")
+    HealBot_Options_IconExtraPosition_DropDown(HealBot_Options_IconCombatPosition, "COMBATONBAR", 96)
 end
 
 function HealBot_Options_IconRCPosition_DropDown()
@@ -9877,9 +10011,19 @@ function HealBot_Options_IconClassAnchor_DropDown()
     HealBot_Options_IconAnchor_DropDown(HealBot_Options_IconClassAnchor, "CLASSANCHOR", "CLASSONBAR", true)
 end
 
+function HealBot_Options_IconRankAnchor_DropDown()
+      --HealBot_setCall("HealBot_Options_IconRankAnchor_DropDown")
+    HealBot_Options_IconAnchor_DropDown(HealBot_Options_IconRankAnchor, "RCANCHOR", "RCONBAR", true)
+end
+
 function HealBot_Options_IconTargetAnchor_DropDown()
       --HealBot_setCall("HealBot_Options_IconTargetAnchor_DropDown")
     HealBot_Options_IconAnchor_DropDown(HealBot_Options_IconTargetAnchor, "TARGETANCHOR", "TARGETONBAR", true)
+end
+
+function HealBot_Options_IconCombatAnchor_DropDown()
+      --HealBot_setCall("HealBot_Options_IconCombatAnchor_DropDown")
+    HealBot_Options_IconAnchor_DropDown(HealBot_Options_IconCombatAnchor, "RCANCHOR", "RCONBAR", true)
 end
 
 function HealBot_Options_IconRCAnchor_DropDown()
@@ -24403,7 +24547,9 @@ function HealBot_Options_SetTheme(caller)
     HealBot_Options_Content_InnerPanel(_G["HealBot_Options_SkinsFrameIconsBuffGeneral"], 0.5)
     HealBot_Options_Content_InnerPanel(_G["HealBot_Options_SkinsFrameIconsBuffText"], 0.5)
     HealBot_Options_Content_InnerPanel(_G["HealBot_Options_SkinsFrameIconsExtraClass"], 0.5)
+    HealBot_Options_Content_InnerPanel(_G["HealBot_Options_SkinsFrameIconsExtraRank"], 0.5)
     HealBot_Options_Content_InnerPanel(_G["HealBot_Options_SkinsFrameIconsExtraTarget"], 0.5)
+    HealBot_Options_Content_InnerPanel(_G["HealBot_Options_SkinsFrameIconsExtraCombat"], 0.5)
     HealBot_Options_Content_InnerPanel(_G["HealBot_Options_SkinsFrameIconsExtraReadyCheck"], 0.5)
     HealBot_Options_Content_InnerPanel(_G["HealBot_Options_SkinsFrameIconsExtraOORArrow"], 0.5)
     HealBot_Options_Content_InnerPanel(_G["HealBot_Options_ActionIconsSkinsFrame"], 0.7)
@@ -24564,7 +24710,9 @@ function HealBot_Options_SetTheme(caller)
     HealBot_Options_InnerContent_Colour(_G[hb_lVars["CurrentSkinsIconsBuffPanelButton"]],
                                         _G[hb_lVars["CurrentSkinsIconsBuffPanelButton"].."Txt"],true)
     HealBot_Options_InnerContent_Colour(_G["HealBot_Options_SkinsFrameIconsExtraClassb"],_G["HealBot_Options_SkinsFrameIconsExtraClassbTxt"],false)
+    HealBot_Options_InnerContent_Colour(_G["HealBot_Options_SkinsFrameIconsExtraRankb"],_G["HealBot_Options_SkinsFrameIconsExtraRankbTxt"],false)
     HealBot_Options_InnerContent_Colour(_G["HealBot_Options_SkinsFrameIconsExtraTargetb"],_G["HealBot_Options_SkinsFrameIconsExtraTargetbTxt"],false)
+    HealBot_Options_InnerContent_Colour(_G["HealBot_Options_SkinsFrameIconsExtraCombatb"],_G["HealBot_Options_SkinsFrameIconsExtraCombatbTxt"],false)
     HealBot_Options_InnerContent_Colour(_G["HealBot_Options_SkinsFrameIconsExtraReadyCheckb"],_G["HealBot_Options_SkinsFrameIconsExtraReadyCheckbTxt"],false)
     HealBot_Options_InnerContent_Colour(_G["HealBot_Options_SkinsFrameIconsExtraOORArrowb"],_G["HealBot_Options_SkinsFrameIconsExtraOORArrowbTxt"],false)
     HealBot_Options_InnerContent_Colour(_G[hb_lVars["CurrentSkinsIconsExtraPanelButton"]],
@@ -25095,6 +25243,12 @@ function HealBot_Options_UpdateLang()
     g:SetTextColor(1,1,1,1)
     g=_G["HealBot_Options_Skins_OORArrowTxt"]
     g:SetText(HEALBOT_OPTIONS_ICONOPTOORARROW)
+    g:SetTextColor(1,1,1,1)
+    g=_G["HealBot_Options_Skins_RankTxt"]
+    g:SetText(HEALBOT_OPTIONS_ICONOPTRANK)
+    g:SetTextColor(1,1,1,1)
+    g=_G["HealBot_Options_Skins_CombatTxt"]
+    g:SetText(HEALBOT_OPTIONS_ICONOPTCOMBAT)
     g:SetTextColor(1,1,1,1)
     g=_G["HealBot_Options_Skins_ReadyCheckTxt"]
     g:SetText(HEALBOT_OPTIONS_ICONOPTREADYCHECK)
@@ -27707,6 +27861,38 @@ function HealBot_Options_SkinsFramesIconsExtrasClassTab(tab)
     end
 end
 
+function HealBot_Options_SkinsFramesIconsExtrasRankTab(tab)
+      --HealBot_setCall("HealBot_Options_SkinsFramesIconsExtrasRaidTargetTab")
+    if not HealBot_Options_TabRunOnce[tab] then
+        HealBot_Options_ShowLeader:SetChecked(hbv_Skins_GetFrameBoolean("Icons", "SHOWRANK", hb_lVars["Frame"]))
+        HealBot_Options_SetText(HealBot_Options_ShowLeader,HEALBOT_OPTIONS_SHOWLEADER)
+        HealBot_Options_ShowLeaderMainTank:SetChecked(hbv_Skins_GetFrameBoolean("Icons", "SHOWRANKMT", hb_lVars["Frame"]))
+        HealBot_Options_SetText(HealBot_Options_ShowLeaderMainTank,HEALBOT_OPTIONS_SHOWLEADERMT)
+        HealBot_Options_IconRankPosition.initialize=HealBot_Options_IconRankPosition_DropDown
+        UIDropDownMenu_SetText(HealBot_Options_IconRankPosition, HealBot_Options_Lists["IconPosition"][hbv_Skins_GetFrameVar("Icons", "RANKONBAR", hb_lVars["Frame"])])
+        local list=HealBot_Options_AnchorList(hbv_Skins_GetFrameVar("Icons", "RANKONBAR", hb_lVars["Frame"]), true)
+        HealBot_Options_IconRankAnchor.initialize=HealBot_Options_IconRankAnchor_DropDown
+        UIDropDownMenu_SetText(HealBot_Options_IconRankAnchor, list[hbv_Skins_GetFrameVar("Icons", "RANKANCHOR", hb_lVars["Frame"])])
+        HealBot_Options_val_OnLoad(HealBot_IconRankVOffset,HEALBOT_OPTIONS_TEXTOFFSET,-50,50,1,10)
+        HealBot_IconRankVOffset:SetValue(hbv_Skins_GetFrameVar("Icons", "RANKVOFFSET", hb_lVars["Frame"]))
+        HealBot_Options_SetText(HealBot_IconRankVOffset,HEALBOT_OPTIONS_TEXTOFFSET..": "..hbv_Skins_GetFrameVar("Icons", "RANKVOFFSET", hb_lVars["Frame"]))
+        HealBot_Options_val_OnLoad(HealBot_IconRankHOffset,HEALBOT_OPTIONS_TEXTHOROFFSET,-75,75,1,10)
+        HealBot_IconRankHOffset:SetValue(hbv_Skins_GetFrameVar("Icons", "RANKHOFFSET", hb_lVars["Frame"]))
+        HealBot_Options_SetText(HealBot_IconRankHOffset,HEALBOT_OPTIONS_TEXTHOROFFSET..": "..hbv_Skins_GetFrameVar("Icons", "RANKHOFFSET", hb_lVars["Frame"]))
+        HealBot_Options_val2_OnLoad(HealBot_IconRankScale,HEALBOT_OPTIONS_ICONSCALE,2.5,10,0.5,10)
+        HealBot_IconRankScale:SetValue(hbv_Skins_GetFrameVar("Icons", "RANKSCALE", hb_lVars["Frame"])*10)
+        HealBot_Options_SetText(HealBot_IconRankScale,HEALBOT_OPTIONS_ICONSCALE..": "..hbv_Skins_GetFrameVar("Icons", "RANKSCALE", hb_lVars["Frame"]))
+        HealBot_IconRankAlwaysEnabled:SetChecked(hbv_Skins_GetFrameBoolean("Icons", "RANKEN", hb_lVars["Frame"]))
+        HealBot_Options_SetText(HealBot_IconRankAlwaysEnabled,HEALBOT_OPTIONS_ENABLEHEALTHY)
+        HealBot_Options_val2_OnLoad(HealBot_IconRankZoom,HEALBOT_OPTIONS_ICONZOOM,0,25,0.5,100,1)
+        HealBot_IconRankZoom:SetValue(hbv_Skins_GetFrameVar("Icons", "RANKZOOM", hb_lVars["Frame"])*100)
+        HealBot_Options_SetText(HealBot_IconRankZoom,HEALBOT_OPTIONS_ICONZOOM..": "..(hbv_Skins_GetFrameVar("Icons", "RANKZOOM", hb_lVars["Frame"])*200).."%")
+        HealBot_Options_SetLabel("healboticonRankposfontstr",HEALBOT_OPTIONS_ICONPOSITION)
+        HealBot_Options_SetLabel("healboticonRankanchorfontstr",HEALBOT_OPTIONS_ICONANCHOR)
+        HealBot_Options_TabRunOnce[tab]=true
+    end
+end
+
 function HealBot_Options_SkinsFramesIconsExtrasRaidTargetTab(tab)
       --HealBot_setCall("HealBot_Options_SkinsFramesIconsExtrasRaidTargetTab")
     if not HealBot_Options_TabRunOnce[tab] then
@@ -27753,21 +27939,45 @@ function HealBot_Options_SkinsFramesIconsExtrasRaidTargetTab(tab)
     end
 end
 
+function HealBot_Options_SkinsFramesIconsExtrasCombatTab(tab)
+      --HealBot_setCall("HealBot_Options_SkinsFramesIconsExtrasRaidTargetTab")
+    if not HealBot_Options_TabRunOnce[tab] then
+        HealBot_Options_ShowCombatState:SetChecked(hbv_Skins_GetFrameBoolean("Icons", "SHOWCOMBAT", hb_lVars["Frame"]))
+        HealBot_Options_SetText(HealBot_Options_ShowCombatState,HEALBOT_OPTIONS_SHOWCOMBATSTATE)
+        HealBot_Options_ShowHostile:SetChecked(hbv_Skins_GetFrameBoolean("Icons", "SHOWHOSTILE", hb_lVars["Frame"]))
+        HealBot_Options_SetText(HealBot_Options_ShowHostile,HEALBOT_OPTIONS_SHOWHOSTILE)
+        HealBot_Options_IconCombatPosition.initialize=HealBot_Options_IconCombatPosition_DropDown
+        UIDropDownMenu_SetText(HealBot_Options_IconCombatPosition, HealBot_Options_Lists["IconPosition"][hbv_Skins_GetFrameVar("Icons", "COMBATONBAR", hb_lVars["Frame"])])
+        local list=HealBot_Options_AnchorList(hbv_Skins_GetFrameVar("Icons", "COMBATONBAR", hb_lVars["Frame"]), true)
+        HealBot_Options_IconCombatAnchor.initialize=HealBot_Options_IconCombatAnchor_DropDown
+        UIDropDownMenu_SetText(HealBot_Options_IconCombatAnchor, list[hbv_Skins_GetFrameVar("Icons", "COMBATANCHOR", hb_lVars["Frame"])])
+        HealBot_Options_val_OnLoad(HealBot_IconCombatVOffset,HEALBOT_OPTIONS_TEXTOFFSET,-50,50,1,10)
+        HealBot_IconCombatVOffset:SetValue(hbv_Skins_GetFrameVar("Icons", "COMBATVOFFSET", hb_lVars["Frame"]))
+        HealBot_Options_SetText(HealBot_IconCombatVOffset,HEALBOT_OPTIONS_TEXTOFFSET..": "..hbv_Skins_GetFrameVar("Icons", "COMBATVOFFSET", hb_lVars["Frame"]))
+        HealBot_Options_val_OnLoad(HealBot_IconCombatHOffset,HEALBOT_OPTIONS_TEXTHOROFFSET,-75,75,1,10)
+        HealBot_IconCombatHOffset:SetValue(hbv_Skins_GetFrameVar("Icons", "COMBATHOFFSET", hb_lVars["Frame"]))
+        HealBot_Options_SetText(HealBot_IconCombatHOffset,HEALBOT_OPTIONS_TEXTHOROFFSET..": "..hbv_Skins_GetFrameVar("Icons", "COMBATHOFFSET", hb_lVars["Frame"]))
+        HealBot_Options_val2_OnLoad(HealBot_IconCombatScale,HEALBOT_OPTIONS_ICONSCALE,2.5,10,0.5,10)
+        HealBot_IconCombatScale:SetValue(hbv_Skins_GetFrameVar("Icons", "COMBATSCALE", hb_lVars["Frame"])*10)
+        HealBot_Options_SetText(HealBot_IconCombatScale,HEALBOT_OPTIONS_ICONSCALE..": "..hbv_Skins_GetFrameVar("Icons", "COMBATSCALE", hb_lVars["Frame"]))
+        HealBot_IconCombatAlwaysEnabled:SetChecked(hbv_Skins_GetFrameBoolean("Icons", "COMBATEN", hb_lVars["Frame"]))
+        HealBot_Options_SetText(HealBot_IconCombatAlwaysEnabled,HEALBOT_OPTIONS_ENABLEHEALTHY)
+        HealBot_Options_val2_OnLoad(HealBot_IconCombatZoom,HEALBOT_OPTIONS_ICONZOOM,0,25,0.5,100,1)
+        HealBot_IconCombatZoom:SetValue(hbv_Skins_GetFrameVar("Icons", "COMBATZOOM", hb_lVars["Frame"])*100)
+        HealBot_Options_SetText(HealBot_IconCombatZoom,HEALBOT_OPTIONS_ICONZOOM..": "..(hbv_Skins_GetFrameVar("Icons", "COMBATZOOM", hb_lVars["Frame"])*200).."%")
+        HealBot_Options_SetLabel("healboticonCombatposfontstr",HEALBOT_OPTIONS_ICONPOSITION)
+        HealBot_Options_SetLabel("healboticonCombatanchorfontstr",HEALBOT_OPTIONS_ICONANCHOR)
+        HealBot_Options_TabRunOnce[tab]=true
+    end
+end
+
 function HealBot_Options_SkinsFramesIconsExtrasReadyCheckTab(tab)
       --HealBot_setCall("HealBot_Options_SkinsFramesIconsExtrasReadyCheckTab")
     if not HealBot_Options_TabRunOnce[tab] then
         HealBot_Options_ShowReadyCheck:SetChecked(hbv_Skins_GetFrameBoolean("Icons", "SHOWRC", hb_lVars["Frame"]))
         HealBot_Options_SetText(HealBot_Options_ShowReadyCheck,HEALBOT_OPTIONS_SHOWREADYCHECK)
-        HealBot_Options_ShowCombatState:SetChecked(hbv_Skins_GetFrameBoolean("Icons", "SHOWCOMBAT", hb_lVars["Frame"]))
-        HealBot_Options_SetText(HealBot_Options_ShowCombatState,HEALBOT_OPTIONS_SHOWCOMBATSTATE)
-        HealBot_Options_ShowHostile:SetChecked(hbv_Skins_GetFrameBoolean("Icons", "SHOWHOSTILE", hb_lVars["Frame"]))
-        HealBot_Options_SetText(HealBot_Options_ShowHostile,HEALBOT_OPTIONS_SHOWHOSTILE)
         HealBot_Options_ShowResting:SetChecked(hbv_Skins_GetFrameBoolean("Icons", "SHOWRESTING", hb_lVars["Frame"]))
         HealBot_Options_SetText(HealBot_Options_ShowResting,HEALBOT_OPTIONS_SHOWRESTING)
-        HealBot_Options_ShowLeader:SetChecked(hbv_Skins_GetFrameBoolean("Icons", "SHOWRANK", hb_lVars["Frame"]))
-        HealBot_Options_SetText(HealBot_Options_ShowLeader,HEALBOT_OPTIONS_SHOWLEADER)
-        HealBot_Options_ShowLeaderMainTank:SetChecked(hbv_Skins_GetFrameBoolean("Icons", "SHOWRANKMT", hb_lVars["Frame"]))
-        HealBot_Options_SetText(HealBot_Options_ShowLeaderMainTank,HEALBOT_OPTIONS_SHOWLEADERMT)
         HealBot_Options_ShowAFK:SetChecked(hbv_Skins_GetFrameBoolean("Icons", "SHOWAFK", hb_lVars["Frame"]))
         HealBot_Options_SetText(HealBot_Options_ShowAFK,HEALBOT_OPTIONS_SHOWAFK)
         HealBot_Options_IconRCPosition.initialize=HealBot_Options_IconRCPosition_DropDown
@@ -27785,10 +27995,10 @@ function HealBot_Options_SkinsFramesIconsExtrasReadyCheckTab(tab)
         HealBot_IconRCScale:SetValue(hbv_Skins_GetFrameVar("Icons", "RCSCALE", hb_lVars["Frame"])*10)
         HealBot_Options_SetText(HealBot_IconRCScale,HEALBOT_OPTIONS_ICONSCALE..": "..hbv_Skins_GetFrameVar("Icons", "RCSCALE", hb_lVars["Frame"]))
         HealBot_IconRCAlwaysEnabled:SetChecked(hbv_Skins_GetFrameBoolean("Icons", "RCEN", hb_lVars["Frame"]))
+        HealBot_Options_SetText(HealBot_IconRCAlwaysEnabled,HEALBOT_OPTIONS_ENABLEHEALTHY)
         HealBot_Options_val2_OnLoad(HealBot_IconRCZoom,HEALBOT_OPTIONS_ICONZOOM,0,25,0.5,100,1)
         HealBot_IconRCZoom:SetValue(hbv_Skins_GetFrameVar("Icons", "RCZOOM", hb_lVars["Frame"])*100)
         HealBot_Options_SetText(HealBot_IconRCZoom,HEALBOT_OPTIONS_ICONZOOM..": "..(hbv_Skins_GetFrameVar("Icons", "RCZOOM", hb_lVars["Frame"])*200).."%")
-        HealBot_Options_SetText(HealBot_IconRCAlwaysEnabled,HEALBOT_OPTIONS_ENABLEHEALTHY)
         HealBot_Options_SetLabel("healboticonRCposfontstr",HEALBOT_OPTIONS_ICONPOSITION)
         HealBot_Options_SetLabel("healboticonRCanchorfontstr",HEALBOT_OPTIONS_ICONANCHOR)
         HealBot_Options_TabRunOnce[tab]=true
@@ -29008,7 +29218,9 @@ local HealBot_Options_TabFuncs={
                                 ["SkinsFramesIconsBuffsGeneral"]=HealBot_Options_SkinsFramesIconsBuffsGeneralTab,
                                 ["SkinsFramesIconsBuffsText"]=HealBot_Options_SkinsFramesIconsBuffsTextTab,
                                 ["SkinsFramesIconsExtrasClass"]=HealBot_Options_SkinsFramesIconsExtrasClassTab,
+                                ["SkinsFramesIconsExtrasRank"]=HealBot_Options_SkinsFramesIconsExtrasRankTab,
                                 ["SkinsFramesIconsExtrasRaidTarget"]=HealBot_Options_SkinsFramesIconsExtrasRaidTargetTab,
+                                ["SkinsFramesIconsExtrasCombat"]=HealBot_Options_SkinsFramesIconsExtrasCombatTab,
                                 ["SkinsFramesIconsExtrasReadyCheck"]=HealBot_Options_SkinsFramesIconsExtrasReadyCheckTab,
                                 ["SkinsFramesIconsExtrasOORArrow"]=HealBot_Options_SkinsFramesIconsExtrasOORArrowTab,
                                 ["SkinsFramesActionIconsGeneral"]=HealBot_Options_SkinsFramesActionIconsGeneralTab,

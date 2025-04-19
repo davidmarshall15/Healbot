@@ -411,12 +411,6 @@ function HealBot_Panel_addDataStore(unit, nRaidID, isPlayer, nPartyID)
                         hbPanel_dataRanks[dsGUID]=3
                     elseif rank>0 then
                         hbPanel_dataRanks[dsGUID]=rank
-                    elseif hbFRole then
-                        if hbFRole == "TANK" then
-                            hbPanel_dataRanks[dsGUID]=5
-                        elseif hbFRole == "OFFTANK" then
-                            hbPanel_dataRanks[dsGUID]=5
-                        end
                     end
                 end
                 if not hbFRole then
@@ -439,9 +433,7 @@ function HealBot_Panel_addDataStore(unit, nRaidID, isPlayer, nPartyID)
                 HealBot_Panel_SetRole(unit, dsGUID, isPlayer)
                 if IsInGroup() then
                     if UnitIsGroupLeader(unit) then 
-                        hbPanel_dataRanks[dsGUID]=4 
-                    elseif HealBot_MainTanks[dsGUID] then
-                        hbPanel_dataRanks[dsGUID]=5
+                        hbPanel_dataRanks[dsGUID]=4
                     end
                     if hbPanel_dataPlayerRoles[dsGUID] == 0 then hbPanel_dataPlayerRoles[dsGUID]=6 end
                 end
@@ -3848,13 +3840,7 @@ end
 
 function HealBot_Panel_RetUnitRank(guid, frame)
       --HealBot_setCall("HealBot_Panel_RetUnitRank", nil, guid)
-    if (hbPanel_dataRanks[guid] or 0) < 5 then
-        return hbPanel_dataRanks[guid] or 0
-    elseif hbv_Skins_GetFrameBoolean("Icons", "SHOWRANKMT", frame) then
-        return hbPanel_dataRanks[guid] or 0
-    else
-        return 0
-    end
+    return hbPanel_dataRanks[guid] or 0
 end
 
 function HealBot_Panel_RetUnitPlayerRole(guid)

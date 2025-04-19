@@ -521,7 +521,9 @@ function HealBot_Lang_Options_enALL()
                         -- Skins Frames Icons Extra tabs
                                  ["ICONSCLASSROLE"]="Icons Extras Class / Role",
                                  ["ICONSRAIDTARGET"]="Icons Extras Raid Target",
+                                 ["ICONSRANK"]="Icons Extras Rank",
                                  ["ICONSREADYCHECK"]="Icons Extras State",
+                                 ["ICONSCOMBAT"]="Icons Extras Combat",
                                  ["ICONSOORARROW"]="Icons Extras Out of Range Arrow.",
                                  ["ICONSHOWRC"]=HEALBOT_OPTIONS_SHOWREADYCHECK,
                                  ["ICONSHOWCOMBAT"]=HEALBOT_OPTIONS_SHOWCOMBATSTATE,
@@ -1340,7 +1342,9 @@ function HealBot_Lang_Options_enALL()
                                ["ICONTXTFONTOUTLINE"]="Set the font outline for the\ntext displayed on the icons.",
                         -- Skins Frames Icons Extra tabs
                                ["ICONSCLASSROLE"]="Show the Skins Frames Icons Extras Class / Role tab.",
+                               ["ICONSRANK"]="Show the Skins Frames Icons Extras Rank tab.",
                                ["ICONSRAIDTARGET"]="Show the Skins Frames Icons Extras Raid Target tab.",
+                               ["ICONSCOMBAT"]="Show the Skins Frames Icons Extras Combat tab.",
                                ["ICONSHOWCLASS"]="Shows the Class or Role when set.",
                                ["ICONSHOWRC"]="Shows the ready check status.",
                                ["ICONSHOWCOMBAT"]="Shows when a player is in combat.",

@@ -468,8 +468,11 @@ function HealBot_Lang_enALL()
     HEALBOT_OPTIONS_ICONDEBUFFOPTTEXT      ="Debuff icon options";
     HEALBOT_OPTIONS_ICONOPTCLASSROLEBUTTON ="Class / Role"
     HEALBOT_OPTIONS_ICONOPTCLASSROLE       ="Class / Role icon options";
+    HEALBOT_OPTIONS_ICONOPTRANKBUTTON      ="Rank"
     HEALBOT_OPTIONS_ICONOPTRAIDTARGETBUTTON="Raid Target"
+    HEALBOT_OPTIONS_ICONOPTRANK            ="Rank icon options";
     HEALBOT_OPTIONS_ICONOPTRAIDTARGET      ="Raid Target icon options";
+    HEALBOT_OPTIONS_ICONOPTCOMBAT          ="Combat icon options";
     HEALBOT_OPTIONS_ICONOPTREADYCHECK      ="State icon options";
     HEALBOT_OPTIONS_ICONOPTOORARROW        ="Out of Range Arrow icon options";
     HEALBOT_OPTIONS_ICONOPTOORARROWBUTTON  ="OOR Arrow";
@@ -1039,7 +1042,7 @@ function HealBot_Lang_enALL()
     HEALBOT_OPTIONS_SHOWCOMBATSTATE        ="Show Combat State";
     HEALBOT_OPTIONS_SHOWHOSTILE            ="Show Hostile";
     HEALBOT_OPTIONS_SHOWLEADER             ="Show Leader";
-    HEALBOT_OPTIONS_SHOWLEADERMT           ="Include Main Tanks"
+    HEALBOT_OPTIONS_SHOWLEADERMT           ="Show Main Tanks"
     HEALBOT_OPTIONS_SHOWAFK                ="Show AFK";
     HEALBOT_OPTIONS_SHOWRESTING            ="Show Resting (Player only)";
     HEALBOT_OPTIONS_SHOWCLASSICON          ="Show Class";

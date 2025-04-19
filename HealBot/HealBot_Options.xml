@@ -25454,7 +25454,7 @@
                     <Anchors>
                       <Anchor point="TOP">
                         <Offset>
-                          <AbsDimension x="-190" y="-10"/>
+                          <AbsDimension x="-190" y="-12"/>
                         </Offset>
                       </Anchor>
                     </Anchors>
@@ -25483,7 +25483,7 @@
                     <Anchors>
                       <Anchor point="TOP">
                         <Offset>
-                          <AbsDimension x="0" y="-10"/>
+                          <AbsDimension x="0" y="-12"/>
                         </Offset>
                       </Anchor>
                     </Anchors>
@@ -25512,7 +25512,7 @@
                     <Anchors>
                       <Anchor point="TOP">
                         <Offset>
-                          <AbsDimension x="190" y="-10"/>
+                          <AbsDimension x="190" y="-12"/>
                         </Offset>
                       </Anchor>
                     </Anchors>
@@ -25558,7 +25558,7 @@
                         <Anchors>
                           <Anchor point="TOP">
                             <Offset>
-                              <AbsDimension x="-175" y="-10"/>
+                              <AbsDimension x="-175" y="-12"/>
                             </Offset>
                           </Anchor>
                         </Anchors>
@@ -25587,7 +25587,7 @@
                         <Anchors>
                           <Anchor point="TOP">
                             <Offset>
-                              <AbsDimension x="175" y="-10"/>
+                              <AbsDimension x="175" y="-12"/>
                             </Offset>
                           </Anchor>
                         </Anchors>
@@ -25613,7 +25613,7 @@
                         <Anchors>
                           <Anchor point="TOP">
                             <Offset>
-                              <AbsDimension x="0" y="-9"/>
+                              <AbsDimension x="0" y="-11"/>
                             </Offset>
                           </Anchor>
                         </Anchors>
@@ -26066,7 +26066,7 @@
                         <Anchors>
                           <Anchor point="TOP">
                             <Offset>
-                              <AbsDimension x="-175" y="-10"/>
+                              <AbsDimension x="-175" y="-12"/>
                             </Offset>
                           </Anchor>
                         </Anchors>
@@ -26095,7 +26095,7 @@
                         <Anchors>
                           <Anchor point="TOP">
                             <Offset>
-                              <AbsDimension x="175" y="-10"/>
+                              <AbsDimension x="175" y="-12"/>
                             </Offset>
                           </Anchor>
                         </Anchors>
@@ -26121,7 +26121,7 @@
                         <Anchors>
                           <Anchor point="TOP">
                             <Offset>
-                              <AbsDimension x="0" y="-9"/>
+                              <AbsDimension x="0" y="-11"/>
                             </Offset>
                           </Anchor>
                         </Anchors>
@@ -26615,12 +26615,12 @@
                      <Frames>
                       <StatusBar name="HealBot_Options_SkinsFrameIconsExtraClassb">
                         <Size>
-                          <AbsDimension x="135" y="24"/>
+                          <AbsDimension x="85" y="24"/>
                         </Size>
                         <Anchors>
                           <Anchor point="TOPLEFT">
                             <Offset>
-                              <AbsDimension x="15" y="-10"/>
+                              <AbsDimension x="20" y="-12"/>
                             </Offset>
                           </Anchor>
                         </Anchors>
@@ -26642,12 +26642,41 @@
                         <BarTexture file="Interface\AddOns\HealBot\Images\tukuibar.tga"/>
                         <BarColor r="0.2" g="0.2" b="0.2"/>
                       </StatusBar>
-                      <StatusBar name="HealBot_Options_SkinsFrameIconsExtraTargetb">
+                      <StatusBar name="HealBot_Options_SkinsFrameIconsExtraRankb">
                         <Size>
-                          <AbsDimension x="135" y="24"/>
+                          <AbsDimension x="85" y="24"/>
                         </Size>
                         <Anchors>
                           <Anchor point="TOPLEFT" relativeTo="HealBot_Options_SkinsFrameIconsExtraClassb" relativePoint="TOPRIGHT">
+                            <Offset>
+                              <AbsDimension x="10" y="0"/>
+                            </Offset>
+                          </Anchor>
+                        </Anchors>
+                        <Layers>
+                          <Layer level="OVERLAY">
+                            <FontString name= "HealBot_Options_SkinsFrameIconsExtraRankbTxt" inherits="GameFontNormal" text="HEALBOT_OPTIONS_ICONOPTRANKBUTTON">
+                              <Anchors>
+                                <Anchor point="CENTER"></Anchor>
+                              </Anchors>
+                            </FontString>
+                          </Layer>
+                        </Layers>
+                        <Scripts>
+                          <OnLoad>self:SetMinMaxValues(0,100); self:SetValue(100);</OnLoad>
+                          <OnMouseDown>HealBot_Options_ShowIconExtraPanel("HealBot_Options_SkinsFrameIconsExtraRank", "HealBot_Options_SkinsFrameIconsExtraRankb", "SkinsFramesIconsExtrasRank")</OnMouseDown>
+                          <OnEnter>HealBot_Options_Show_Help("ICONSRANK",true)</OnEnter>
+                          <OnLeave>HealBot_Options_Show_Help("ICONSRANK",false)</OnLeave>
+                        </Scripts>
+                        <BarTexture file="Interface\AddOns\HealBot\Images\tukuibar.tga"/>
+                        <BarColor r="0.2" g="0.2" b="0.2"/>
+                      </StatusBar>
+                      <StatusBar name="HealBot_Options_SkinsFrameIconsExtraTargetb">
+                        <Size>
+                          <AbsDimension x="85" y="24"/>
+                        </Size>
+                        <Anchors>
+                          <Anchor point="TOPLEFT" relativeTo="HealBot_Options_SkinsFrameIconsExtraRankb" relativePoint="TOPRIGHT">
                             <Offset>
                               <AbsDimension x="10" y="0"/>
                             </Offset>
@@ -26671,12 +26700,41 @@
                         <BarTexture file="Interface\AddOns\HealBot\Images\tukuibar.tga"/>
                         <BarColor r="0.2" g="0.2" b="0.2"/>
                       </StatusBar>
-                      <StatusBar name="HealBot_Options_SkinsFrameIconsExtraReadyCheckb">
+                      <StatusBar name="HealBot_Options_SkinsFrameIconsExtraCombatb">
                         <Size>
-                          <AbsDimension x="135" y="24"/>
+                          <AbsDimension x="85" y="24"/>
                         </Size>
                         <Anchors>
                           <Anchor point="TOPLEFT" relativeTo="HealBot_Options_SkinsFrameIconsExtraTargetb" relativePoint="TOPRIGHT">
+                            <Offset>
+                              <AbsDimension x="10" y="0"/>
+                            </Offset>
+                          </Anchor>
+                        </Anchors>
+                        <Layers>
+                          <Layer level="OVERLAY">
+                            <FontString name= "HealBot_Options_SkinsFrameIconsExtraCombatbTxt" inherits="GameFontNormal" text="HEALBOT_COMBAT">
+                              <Anchors>
+                                <Anchor point="CENTER"></Anchor>
+                              </Anchors>
+                            </FontString>
+                          </Layer>
+                        </Layers>
+                        <Scripts>
+                          <OnLoad>self:SetMinMaxValues(0,100); self:SetValue(100);</OnLoad>
+                          <OnMouseDown>HealBot_Options_ShowIconExtraPanel("HealBot_Options_SkinsFrameIconsExtraCombat", "HealBot_Options_SkinsFrameIconsExtraCombatb", "SkinsFramesIconsExtrasCombat")</OnMouseDown>
+                          <OnEnter>HealBot_Options_Show_Help("ICONSCOMBAT",true)</OnEnter>
+                          <OnLeave>HealBot_Options_Show_Help("ICONSCOMBAT",false)</OnLeave>
+                        </Scripts>
+                        <BarTexture file="Interface\AddOns\HealBot\Images\tukuibar.tga"/>
+                        <BarColor r="0.2" g="0.2" b="0.2"/>
+                      </StatusBar>
+                      <StatusBar name="HealBot_Options_SkinsFrameIconsExtraReadyCheckb">
+                        <Size>
+                          <AbsDimension x="85" y="24"/>
+                        </Size>
+                        <Anchors>
+                          <Anchor point="TOPLEFT" relativeTo="HealBot_Options_SkinsFrameIconsExtraCombatb" relativePoint="TOPRIGHT">
                             <Offset>
                               <AbsDimension x="10" y="0"/>
                             </Offset>
@@ -26702,7 +26760,7 @@
                       </StatusBar>
                       <StatusBar name="HealBot_Options_SkinsFrameIconsExtraOORArrowb">
                         <Size>
-                          <AbsDimension x="135" y="24"/>
+                          <AbsDimension x="85" y="24"/>
                         </Size>
                         <Anchors>
                           <Anchor point="TOPLEFT" relativeTo="HealBot_Options_SkinsFrameIconsExtraReadyCheckb" relativePoint="TOPRIGHT">
@@ -26940,6 +26998,203 @@
                         </Frames>
                       </Frame>
 
+                      <Frame name="HealBot_Options_SkinsFrameIconsExtraRank" hidden="true" inherits="BackdropTemplate">
+                        <Size>
+                          <AbsDimension y="450"/>
+                        </Size>
+                        <Anchors>
+                          <Anchor point="TOPLEFT">
+                            <Offset>
+                              <AbsDimension x="0" y="-45"/>
+                            </Offset>
+                          </Anchor>
+                          <Anchor point="TOPRIGHT">
+                            <Offset>
+                              <AbsDimension x="0" y="-45"/>
+                            </Offset>
+                          </Anchor>
+                        </Anchors>
+                        <Layers>
+                          <Layer level="BACKGROUND">
+                            <FontString name="HealBot_Options_Skins_RankTxt" text="HEALBOT_OPTIONS_ICONOPTRANK" inherits="GameFontNormal">
+                              <Anchors>
+                                <Anchor point="TOP">
+                                  <Offset>
+                                    <AbsDimension x="0" y="-8" />
+                                  </Offset>
+                                </Anchor>
+                              </Anchors>
+                            </FontString>
+                          </Layer>
+                        </Layers>
+                        <Frames>
+                          <CheckButton name="HealBot_Options_ShowLeader" inherits="HealBotUIPanelCheckButton">
+                            <Anchors>
+                              <Anchor point="TOP">
+                                <Offset>
+                                  <AbsDimension x="-150" y="-55" />
+                                </Offset>
+                              </Anchor>
+                            </Anchors>
+                            <Scripts>
+                              <OnClick>HealBot_Options_ShowLeader_OnClick(self)</OnClick>
+                              <OnEnter>HealBot_Options_Show_Help("ICONSHOWLEADER",true)</OnEnter>
+                              <OnLeave>HealBot_Options_Show_Help("ICONSHOWLEADER",false)</OnLeave>
+                            </Scripts>
+                          </CheckButton>
+                          <CheckButton name="HealBot_Options_ShowLeaderMainTank" inherits="HealBotUIPanelCheckButton">
+                            <Anchors>
+                              <Anchor point="TOP">
+                                <Offset>
+                                  <AbsDimension x="50" y="-55" />
+                                </Offset>
+                              </Anchor>
+                            </Anchors>
+                            <Scripts>
+                              <OnClick>HealBot_Options_ShowLeaderMainTank_OnClick(self)</OnClick>
+                              <OnEnter>HealBot_Options_Show_Help("ICONSHOWLEADERMT",true)</OnEnter>
+                              <OnLeave>HealBot_Options_Show_Help("ICONSHOWLEADERMT",false)</OnLeave>
+                            </Scripts>
+                          </CheckButton>
+                          <Frame name="HealBot_Options_IconRankPosition" inherits="UIDropDownMenuTemplate">
+                            <Anchors>
+                              <Anchor point="TOP">
+                                <Offset>
+                                  <AbsDimension x="-125" y="-125"/>
+                                </Offset>
+                              </Anchor>
+                            </Anchors>
+                            <Layers>
+                              <Layer level="OVERLAY">
+                                <FontString name="healboticonRankposfontstr" inherits="GameFontNormal" text="HEALBOT_OPTIONS_ICONPOSITION">
+                                  <Anchors>
+                                    <Anchor point="BOTTOM" relativeTo="HealBot_Options_IconRankPosition" relativePoint="TOP">
+                                      <Offset>
+                                        <AbsDimension x="0" y="0"/>
+                                      </Offset>
+                                    </Anchor>
+                                  </Anchors>
+                                </FontString>
+                              </Layer>
+                            </Layers>
+                            <Scripts>
+                              <OnLoad>HealBot_Options_UIDropDownMenu_OnLoad(self, 180)</OnLoad>
+                              <OnEnter>HealBot_Options_Show_Help("ICONPOSITION",true)</OnEnter>
+                              <OnLeave>HealBot_Options_Show_Help("ICONPOSITION",false)</OnLeave>
+                            </Scripts>
+                          </Frame>
+                          <Frame name="HealBot_Options_IconRankAnchor" inherits="UIDropDownMenuTemplate">
+                            <Anchors>
+                              <Anchor point="TOP">
+                                <Offset>
+                                  <AbsDimension x="125" y="-125"/>
+                                </Offset>
+                              </Anchor>
+                            </Anchors>
+                            <Layers>
+                              <Layer level="OVERLAY">
+                                <FontString name="healboticonRankanchorfontstr" inherits="GameFontNormal" text="HEALBOT_OPTIONS_ICONANCHOR">
+                                  <Anchors>
+                                    <Anchor point="BOTTOM" relativeTo="HealBot_Options_IconRankAnchor" relativePoint="TOP">
+                                      <Offset>
+                                        <AbsDimension x="0" y="0"/>
+                                      </Offset>
+                                    </Anchor>
+                                  </Anchors>
+                                </FontString>
+                              </Layer>
+                            </Layers>
+                            <Scripts>
+                              <OnLoad>HealBot_Options_UIDropDownMenu_OnLoad(self, 180)</OnLoad>
+                              <OnEnter>HealBot_Options_Show_Help("ICONANCHOR",true)</OnEnter>
+                              <OnLeave>HealBot_Options_Show_Help("ICONANCHOR",false)</OnLeave>
+                            </Scripts>
+                          </Frame>
+                          <Slider name="HealBot_IconRankVOffset" inherits="HealBot_Options_SliderTemplate">
+                            <Size>
+                              <AbsDimension x="425" y="18" />
+                            </Size>
+                            <Anchors>
+                              <Anchor point="TOPLEFT">
+                                <Offset>
+                                  <AbsDimension x="90" y="-200"/>
+                                </Offset>
+                              </Anchor>
+                            </Anchors>
+                            <Scripts>
+                              <OnValueChanged>HealBot_IconRankVOffset_OnValueChanged(self)</OnValueChanged>
+                              <OnEnter>HealBot_Options_Show_Help("ICONOFFSET",true)</OnEnter>
+                              <OnLeave>HealBot_Options_Show_Help("ICONOFFSET",false)</OnLeave>
+                            </Scripts>
+                          </Slider>
+                          <Slider name="HealBot_IconRankHOffset" inherits="HealBot_Options_SliderTemplate">
+                            <Size>
+                              <AbsDimension x="425" y="18" />
+                            </Size>
+                            <Anchors>
+                              <Anchor point="TOPLEFT">
+                                <Offset>
+                                  <AbsDimension x="90" y="-270"/>
+                                </Offset>
+                              </Anchor>
+                            </Anchors>
+                            <Scripts>
+                              <OnValueChanged>HealBot_IconRankHOffset_OnValueChanged(self)</OnValueChanged>
+                              <OnEnter>HealBot_Options_Show_Help("ICONOFFSET",true)</OnEnter>
+                              <OnLeave>HealBot_Options_Show_Help("ICONOFFSET",false)</OnLeave>
+                            </Scripts>
+                          </Slider>
+                          <Slider name="HealBot_IconRankScale" inherits="HealBot_Options_SliderTemplate">
+                            <Size>
+                              <AbsDimension x="425" y="18" />
+                            </Size>
+                            <Anchors>
+                              <Anchor point="TOPLEFT">
+                                <Offset>
+                                  <AbsDimension x="90" y="-340"/>
+                                </Offset>
+                              </Anchor>
+                            </Anchors>
+                            <Scripts>
+                              <OnValueChanged>HealBot_IconRankScale_OnValueChanged(self)</OnValueChanged>
+                              <OnEnter>HealBot_Options_Show_Help("EXTRAICONSCALE",true)</OnEnter>
+                              <OnLeave>HealBot_Options_Show_Help("EXTRAICONSCALE",false)</OnLeave>
+                            </Scripts>
+                          </Slider>
+                          <CheckButton name="HealBot_IconRankAlwaysEnabled" inherits="HealBotUIPanelCheckButton">
+                            <Anchors>
+                              <Anchor point="TOPLEFT" relativeTo="HealBot_IconRankScale" relativePoint="TOPLEFT">
+                                <Offset>
+                                  <AbsDimension x="0" y="-55"/>
+                                </Offset>
+                              </Anchor>
+                            </Anchors>
+                            <Scripts>
+                              <OnClick>HealBot_IconRankAlwaysEnabled_OnClick(self)</OnClick>
+                              <OnEnter>HealBot_Options_Show_Help("ICONALWAYSEN",true)</OnEnter>
+                              <OnLeave>HealBot_Options_Show_Help("ICONALWAYSEN",false)</OnLeave>
+                            </Scripts>
+                          </CheckButton>
+                          <Slider name="HealBot_IconRankZoom" inherits="HealBot_Options_SliderTemplate">
+                            <Size>
+                              <AbsDimension x="250" y="18" />
+                            </Size>
+                            <Anchors>
+                              <Anchor point="TOPLEFT" relativeTo="HealBot_IconRankAlwaysEnabled" relativePoint="TOPLEFT">
+                                <Offset>
+                                  <AbsDimension x="175" y="-3"/>
+                                </Offset>
+                              </Anchor>
+                            </Anchors>
+                            <Scripts>
+                              <OnValueChanged>HealBot_IconRCZoom_OnValueChanged(self)</OnValueChanged>
+                              <OnEnter>HealBot_Options_Show_Help("ICONZOOM",true)</OnEnter>
+                              <OnLeave>HealBot_Options_Show_Help("ICONZOOM",false)</OnLeave>
+                            </Scripts>
+                          </Slider>
+                        </Frames>
+                      </Frame>
+
                       <Frame name="HealBot_Options_SkinsFrameIconsExtraTarget" hidden="true" inherits="BackdropTemplate">
                         <Size>
                           <AbsDimension y="450"/>
@@ -26958,7 +27213,7 @@
                         </Anchors>
                         <Layers>
                           <Layer level="BACKGROUND">
-                            <FontString name="HealBot_Options_Skins_TargetTxt" text="HEALBOT_OPTIONS_ICONOPTRAIDTARGET" inherits="GameFontNormalSmall">
+                            <FontString name="HealBot_Options_Skins_TargetTxt" text="HEALBOT_OPTIONS_ICONOPTRAIDTARGET" inherits="GameFontNormal">
                               <Anchors>
                                 <Anchor point="TOP">
                                   <Offset>
@@ -27235,6 +27490,203 @@
                         </Frames>
                       </Frame>
 
+                      <Frame name="HealBot_Options_SkinsFrameIconsExtraCombat" hidden="true" inherits="BackdropTemplate">
+                        <Size>
+                          <AbsDimension y="450"/>
+                        </Size>
+                        <Anchors>
+                          <Anchor point="TOPLEFT">
+                            <Offset>
+                              <AbsDimension x="0" y="-45"/>
+                            </Offset>
+                          </Anchor>
+                          <Anchor point="TOPRIGHT">
+                            <Offset>
+                              <AbsDimension x="0" y="-45"/>
+                            </Offset>
+                          </Anchor>
+                        </Anchors>
+                        <Layers>
+                          <Layer level="BACKGROUND">
+                            <FontString name="HealBot_Options_Skins_CombatTxt" text="HEALBOT_OPTIONS_ICONOPTCOMBAT" inherits="GameFontNormal">
+                              <Anchors>
+                                <Anchor point="TOP">
+                                  <Offset>
+                                    <AbsDimension x="0" y="-8" />
+                                  </Offset>
+                                </Anchor>
+                              </Anchors>
+                            </FontString>
+                          </Layer>
+                        </Layers>
+                        <Frames>
+                          <CheckButton name="HealBot_Options_ShowCombatState" inherits="HealBotUIPanelCheckButton">
+                            <Anchors>
+                              <Anchor point="TOP">
+                                <Offset>
+                                  <AbsDimension x="-150" y="-55" />
+                                </Offset>
+                              </Anchor>
+                            </Anchors>
+                            <Scripts>
+                              <OnClick>HealBot_Options_ShowCombatState_OnClick(self)</OnClick>
+                              <OnEnter>HealBot_Options_Show_Help("ICONSHOWCOMBAT",true)</OnEnter>
+                              <OnLeave>HealBot_Options_Show_Help("ICONSHOWCOMBAT",false)</OnLeave>
+                            </Scripts>
+                          </CheckButton>
+                          <CheckButton name="HealBot_Options_ShowHostile" inherits="HealBotUIPanelCheckButton">
+                            <Anchors>
+                              <Anchor point="TOP">
+                                <Offset>
+                                  <AbsDimension x="50" y="-55" />
+                                </Offset>
+                              </Anchor>
+                            </Anchors>
+                            <Scripts>
+                              <OnClick>HealBot_Options_ShowHostile_OnClick(self)</OnClick>
+                              <OnEnter>HealBot_Options_Show_Help("ICONSHOWHOSTILE",true)</OnEnter>
+                              <OnLeave>HealBot_Options_Show_Help("ICONSHOWHOSTILE",false)</OnLeave>
+                            </Scripts>
+                          </CheckButton>
+                          <Frame name="HealBot_Options_IconCombatPosition" inherits="UIDropDownMenuTemplate">
+                            <Anchors>
+                              <Anchor point="TOP">
+                                <Offset>
+                                  <AbsDimension x="-125" y="-125"/>
+                                </Offset>
+                              </Anchor>
+                            </Anchors>
+                            <Layers>
+                              <Layer level="OVERLAY">
+                                <FontString name="healboticonCombatposfontstr" inherits="GameFontNormal" text="HEALBOT_OPTIONS_ICONPOSITION">
+                                  <Anchors>
+                                    <Anchor point="BOTTOM" relativeTo="HealBot_Options_IconCombatPosition" relativePoint="TOP">
+                                      <Offset>
+                                        <AbsDimension x="0" y="0"/>
+                                      </Offset>
+                                    </Anchor>
+                                  </Anchors>
+                                </FontString>
+                              </Layer>
+                            </Layers>
+                            <Scripts>
+                              <OnLoad>HealBot_Options_UIDropDownMenu_OnLoad(self, 180)</OnLoad>
+                              <OnEnter>HealBot_Options_Show_Help("ICONPOSITION",true)</OnEnter>
+                              <OnLeave>HealBot_Options_Show_Help("ICONPOSITION",false)</OnLeave>
+                            </Scripts>
+                          </Frame>
+                          <Frame name="HealBot_Options_IconCombatAnchor" inherits="UIDropDownMenuTemplate">
+                            <Anchors>
+                              <Anchor point="TOP">
+                                <Offset>
+                                  <AbsDimension x="125" y="-125"/>
+                                </Offset>
+                              </Anchor>
+                            </Anchors>
+                            <Layers>
+                              <Layer level="OVERLAY">
+                                <FontString name="healboticonCombatanchorfontstr" inherits="GameFontNormal" text="HEALBOT_OPTIONS_ICONANCHOR">
+                                  <Anchors>
+                                    <Anchor point="BOTTOM" relativeTo="HealBot_Options_IconCombatAnchor" relativePoint="TOP">
+                                      <Offset>
+                                        <AbsDimension x="0" y="0"/>
+                                      </Offset>
+                                    </Anchor>
+                                  </Anchors>
+                                </FontString>
+                              </Layer>
+                            </Layers>
+                            <Scripts>
+                              <OnLoad>HealBot_Options_UIDropDownMenu_OnLoad(self, 180)</OnLoad>
+                              <OnEnter>HealBot_Options_Show_Help("ICONANCHOR",true)</OnEnter>
+                              <OnLeave>HealBot_Options_Show_Help("ICONANCHOR",false)</OnLeave>
+                            </Scripts>
+                          </Frame>
+                          <Slider name="HealBot_IconCombatVOffset" inherits="HealBot_Options_SliderTemplate">
+                            <Size>
+                              <AbsDimension x="425" y="18" />
+                            </Size>
+                            <Anchors>
+                              <Anchor point="TOPLEFT">
+                                <Offset>
+                                  <AbsDimension x="90" y="-200"/>
+                                </Offset>
+                              </Anchor>
+                            </Anchors>
+                            <Scripts>
+                              <OnValueChanged>HealBot_IconCombatVOffset_OnValueChanged(self)</OnValueChanged>
+                              <OnEnter>HealBot_Options_Show_Help("ICONOFFSET",true)</OnEnter>
+                              <OnLeave>HealBot_Options_Show_Help("ICONOFFSET",false)</OnLeave>
+                            </Scripts>
+                          </Slider>
+                          <Slider name="HealBot_IconCombatHOffset" inherits="HealBot_Options_SliderTemplate">
+                            <Size>
+                              <AbsDimension x="425" y="18" />
+                            </Size>
+                            <Anchors>
+                              <Anchor point="TOPLEFT">
+                                <Offset>
+                                  <AbsDimension x="90" y="-270"/>
+                                </Offset>
+                              </Anchor>
+                            </Anchors>
+                            <Scripts>
+                              <OnValueChanged>HealBot_IconCombatHOffset_OnValueChanged(self)</OnValueChanged>
+                              <OnEnter>HealBot_Options_Show_Help("ICONOFFSET",true)</OnEnter>
+                              <OnLeave>HealBot_Options_Show_Help("ICONOFFSET",false)</OnLeave>
+                            </Scripts>
+                          </Slider>
+                          <Slider name="HealBot_IconCombatScale" inherits="HealBot_Options_SliderTemplate">
+                            <Size>
+                              <AbsDimension x="425" y="18" />
+                            </Size>
+                            <Anchors>
+                              <Anchor point="TOPLEFT">
+                                <Offset>
+                                  <AbsDimension x="90" y="-340"/>
+                                </Offset>
+                              </Anchor>
+                            </Anchors>
+                            <Scripts>
+                              <OnValueChanged>HealBot_IconCombatScale_OnValueChanged(self)</OnValueChanged>
+                              <OnEnter>HealBot_Options_Show_Help("EXTRAICONSCALE",true)</OnEnter>
+                              <OnLeave>HealBot_Options_Show_Help("EXTRAICONSCALE",false)</OnLeave>
+                            </Scripts>
+                          </Slider>
+                          <CheckButton name="HealBot_IconCombatAlwaysEnabled" inherits="HealBotUIPanelCheckButton">
+                            <Anchors>
+                              <Anchor point="TOPLEFT" relativeTo="HealBot_IconCombatScale" relativePoint="TOPLEFT">
+                                <Offset>
+                                  <AbsDimension x="0" y="-55"/>
+                                </Offset>
+                              </Anchor>
+                            </Anchors>
+                            <Scripts>
+                              <OnClick>HealBot_IconCombatAlwaysEnabled_OnClick(self)</OnClick>
+                              <OnEnter>HealBot_Options_Show_Help("ICONALWAYSEN",true)</OnEnter>
+                              <OnLeave>HealBot_Options_Show_Help("ICONALWAYSEN",false)</OnLeave>
+                            </Scripts>
+                          </CheckButton>
+                          <Slider name="HealBot_IconCombatZoom" inherits="HealBot_Options_SliderTemplate">
+                            <Size>
+                              <AbsDimension x="250" y="18" />
+                            </Size>
+                            <Anchors>
+                              <Anchor point="TOPLEFT" relativeTo="HealBot_IconCombatAlwaysEnabled" relativePoint="TOPLEFT">
+                                <Offset>
+                                  <AbsDimension x="175" y="-3"/>
+                                </Offset>
+                              </Anchor>
+                            </Anchors>
+                            <Scripts>
+                              <OnValueChanged>HealBot_IconCombatZoom_OnValueChanged(self)</OnValueChanged>
+                              <OnEnter>HealBot_Options_Show_Help("ICONZOOM",true)</OnEnter>
+                              <OnLeave>HealBot_Options_Show_Help("ICONZOOM",false)</OnLeave>
+                            </Scripts>
+                          </Slider>
+                        </Frames>
+                      </Frame>
+
                       <Frame name="HealBot_Options_SkinsFrameIconsExtraReadyCheck" hidden="true" inherits="BackdropTemplate">
                         <Size>
                           <AbsDimension y="450"/>
@@ -27269,7 +27721,7 @@
                             <Anchors>
                               <Anchor point="TOP">
                                 <Offset>
-                                  <AbsDimension x="95" y="-5" />
+                                  <AbsDimension x="95" y="-55" />
                                 </Offset>
                               </Anchor>
                             </Anchors>
@@ -27283,7 +27735,7 @@
                             <Anchors>
                               <Anchor point="TOPLEFT">
                                 <Offset>
-                                  <AbsDimension x="70" y="-45" />
+                                  <AbsDimension x="70" y="-55" />
                                 </Offset>
                               </Anchor>
                             </Anchors>
@@ -27297,7 +27749,7 @@
                             <Anchors>
                               <Anchor point="TOP">
                                 <Offset>
-                                  <AbsDimension x="-25" y="-45" />
+                                  <AbsDimension x="-30" y="-55" />
                                 </Offset>
                               </Anchor>
                             </Anchors>
@@ -27307,62 +27759,7 @@
                               <OnLeave>HealBot_Options_Show_Help("ICONSHOWAFK",false)</OnLeave>
                             </Scripts>
                           </CheckButton>
-                          <CheckButton name="HealBot_Options_ShowLeader" inherits="HealBotUIPanelCheckButton">
-                            <Anchors>
-                              <Anchor point="TOP">
-                                <Offset>
-                                  <AbsDimension x="125" y="-45" />
-                                </Offset>
-                              </Anchor>
-                            </Anchors>
-                            <Scripts>
-                              <OnClick>HealBot_Options_ShowLeader_OnClick(self)</OnClick>
-                              <OnEnter>HealBot_Options_Show_Help("ICONSHOWLEADER",true)</OnEnter>
-                              <OnLeave>HealBot_Options_Show_Help("ICONSHOWLEADER",false)</OnLeave>
-                            </Scripts>
-                          </CheckButton>
-                          <CheckButton name="HealBot_Options_ShowLeaderMainTank" inherits="SendMailRadioButtonTemplate">
-                            <Anchors>
-                              <Anchor point="TOP">
-                                <Offset>
-                                  <AbsDimension x="140" y="-70" />
-                                </Offset>
-                              </Anchor>
-                            </Anchors>
-                            <Scripts>
-                              <OnClick>HealBot_Options_ShowLeaderMainTank_OnClick(self)</OnClick>
-                              <OnEnter>HealBot_Options_Show_Help("ICONSHOWLEADERMT",true)</OnEnter>
-                              <OnLeave>HealBot_Options_Show_Help("ICONSHOWLEADERMT",false)</OnLeave>
-                            </Scripts>
-                          </CheckButton>
-                          <CheckButton name="HealBot_Options_ShowCombatState" inherits="HealBotUIPanelCheckButton">
-                            <Anchors>
-                              <Anchor point="TOPLEFT">
-                                <Offset>
-                                  <AbsDimension x="70" y="-75" />
-                                </Offset>
-                              </Anchor>
-                            </Anchors>
-                            <Scripts>
-                              <OnClick>HealBot_Options_ShowCombatState_OnClick(self)</OnClick>
-                              <OnEnter>HealBot_Options_Show_Help("ICONSHOWCOMBAT",true)</OnEnter>
-                              <OnLeave>HealBot_Options_Show_Help("ICONSHOWCOMBAT",false)</OnLeave>
-                            </Scripts>
-                          </CheckButton>
-                          <CheckButton name="HealBot_Options_ShowHostile" inherits="HealBotUIPanelCheckButton">
-                            <Anchors>
-                              <Anchor point="TOP">
-                                <Offset>
-                                  <AbsDimension x="-25" y="-75" />
-                                </Offset>
-                              </Anchor>
-                            </Anchors>
-                            <Scripts>
-                              <OnClick>HealBot_Options_ShowHostile_OnClick(self)</OnClick>
-                              <OnEnter>HealBot_Options_Show_Help("ICONSHOWHOSTILE",true)</OnEnter>
-                              <OnLeave>HealBot_Options_Show_Help("ICONSHOWHOSTILE",false)</OnLeave>
-                            </Scripts>
-                          </CheckButton>
+
                           <Frame name="HealBot_Options_IconRCPosition" inherits="UIDropDownMenuTemplate">
                             <Anchors>
                               <Anchor point="TOP">

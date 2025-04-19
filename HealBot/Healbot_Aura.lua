@@ -705,16 +705,46 @@ function HealBot_Aura_ClassUpdate(button, ClassRole)
     end
 end
 
+function HealBot_Aura_UpdateRank(button)
+        --HealBot_setCall("HealBot_Aura_UpdateRank", button)
+    if HealBot_UnitExtraIcons[button.id] then
+        if button.rank>0 and hbv_Skins_GetFrameBoolean("Icons", "SHOWRANK", button.frame) then
+            HealBot_UnitExtraIcons[button.id][95]["texture"]=HealBot_Media_retRankIcon(button.rank)
+            HealBot_UnitExtraIcons[button.id][95].current=true
+            HealBot_Aura_AddExtraIcon(button, 95)
+        elseif HealBot_Panel_IsTank(button.guid) and hbv_Skins_GetFrameBoolean("Icons", "SHOWRANKMT", button.frame) then 
+            HealBot_UnitExtraIcons[button.id][95]["texture"]="Interface\\Addons\\HealBot\\Images\\tank.tga"
+            HealBot_UnitExtraIcons[button.id][95].current=true
+            HealBot_Aura_AddExtraIcon(button, 95)
+        else
+            HealBot_Aura_RemoveIcon(button, 95)
+        end
+    end
+end
+
+function HealBot_Aura_UpdateCombat(button)
+        --HealBot_setCall("HealBot_Aura_UpdateCombat", button)
+    if HealBot_UnitExtraIcons[button.id] then
+        if button.icon.extra.hostile or button.status.incombat then
+            if button.icon.extra.hostile then
+                HealBot_UnitExtraIcons[button.id][96]["texture"]="Interface\\Addons\\HealBot\\Images\\hostile.tga"
+            else
+                HealBot_UnitExtraIcons[button.id][96]["texture"]="Interface\\Addons\\HealBot\\Images\\incombat.tga"
+            end
+            HealBot_UnitExtraIcons[button.id][96].current=true
+            HealBot_Aura_AddExtraIcon(button, 96)
+        else
+            HealBot_Aura_RemoveIcon(button, 96)
+        end
+    end
+end
+
 function HealBot_Aura_UpdateState(button)
         --HealBot_setCall("HealBot_Aura_UpdateState", button)
     if HealBot_UnitExtraIcons[button.id] then
-        if button.icon.extra.hostile or button.status.incombat or button.icon.extra.readycheck or button.status.afk then
+        if button.icon.extra.readycheck or button.status.afk then
             if button.status.afk then
                 HealBot_UnitExtraIcons[button.id][93]["texture"]="Interface\\Addons\\HealBot\\Images\\afk.tga"
-            elseif button.icon.extra.hostile then
-                HealBot_UnitExtraIcons[button.id][93]["texture"]="Interface\\Addons\\HealBot\\Images\\hostile.tga"
-            elseif button.status.incombat then
-                HealBot_UnitExtraIcons[button.id][93]["texture"]="Interface\\Addons\\HealBot\\Images\\incombat.tga"
             else
                 if button.icon.extra.readycheck == hbv_GetStatic("rcWAITING") then
                     HealBot_UnitExtraIcons[button.id][93]["texture"]="Interface\\RAIDFRAME\\ReadyCheck-Waiting"
@@ -725,10 +755,6 @@ function HealBot_Aura_UpdateState(button)
                 end
                 if HealBot_Panel_RaidUnitButtonCheck(button.guid) then HealBot_Action_SetGuidData(button, "READYCHECK", button.icon.extra.readycheck) end
             end
-            HealBot_UnitExtraIcons[button.id][93].current=true
-            HealBot_Aura_AddExtraIcon(button, 93)
-        elseif button.rank>0 and hbv_Skins_GetFrameBoolean("Icons", "SHOWRANK", button.frame) then
-            HealBot_UnitExtraIcons[button.id][93]["texture"]=HealBot_Media_retRankIcon(button.rank)
             HealBot_UnitExtraIcons[button.id][93].current=true
             HealBot_Aura_AddExtraIcon(button, 93)
         elseif button.player and hbv_Skins_GetFrameBoolean("Icons", "SHOWRESTING", button.frame) and IsResting() then 
@@ -826,7 +852,7 @@ end
 function HealBot_Aura_InitUnitExtraIcons(buttonId)
       --HealBot_setCall("HealBot_Aura_InitUnitExtraIcons")
     HealBot_UnitExtraIcons[buttonId]={}
-    for i=91,94 do
+    for i=91,96 do
         HealBot_UnitExtraIcons[buttonId][i]={}
         HealBot_UnitExtraIcons[buttonId][i]["texture"]=""
         HealBot_UnitExtraIcons[buttonId][i].current=false
@@ -3497,7 +3523,7 @@ function HealBot_Update_AllExtraIcons(button, index)
 end
 
 function HealBot_Aura_UpdateAllExtraIcons()
-    for i=91,94 do
+    for i=91,96 do
         HealBot_Update_AllExtraIcons(nil, i)
     end
 end
@@ -3506,7 +3532,7 @@ function HealBot_Aura_Update_AllIcons(button)
       --HealBot_setCall("HealBot_Aura_Update_AllIcons", button)
     HealBot_Aura_UpdateAllBuffIcons(button)
     HealBot_Aura_UpdateAllDebuffIcons(button)
-    for i=91,94 do
+    for i=91,96 do
         HealBot_Update_AllExtraIcons(button, i)
     end
 end
@@ -3553,7 +3579,7 @@ function HealBot_Aura_RemoveIcons(button)
       --HealBot_setCall("HealBot_Aura_RemoveIcons", button)
     HealBot_Aura_RemoveBuffIcons(button)
     HealBot_Aura_RemoveDebuffIcons(button)
-    for i=91,94 do
+    for i=91,96 do
         HealBot_Aura_RemoveExtraUnitIcons(button, i)
     end
 end

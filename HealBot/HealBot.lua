@@ -1258,9 +1258,6 @@ function HealBot_UpdateUnitGUIDChange(button, notRecalc)
         button.status.change=true
         button.status.guidupdate=true
         HealBot_SpecUpdate(button, HealBot_TimeNow)
-        --if button.isplayer then 
-        --    button.guiddataup=HealBot_TimeNow+5
-        --end
     else
         HealBot_ClassNotKnown(button)
     end
@@ -1782,7 +1779,6 @@ function HealBot_Load()
         HealBot_Debug_PerfUpdate("PerfLevel", HealBot_Globals.CPUUsage)
         HealBot:SetScript("OnUpdate", HealBot_OnUpdate)
         HealBot_Timers_TurboOn()
-        HealBot_UpdateTimers()
         HealBot_Globals.FirstLoad=false
     end
 end
@@ -2790,7 +2786,7 @@ function HealBot_UnitAffectingCombat(button)
     end
     if button.status.incombat~=hbCombatState then
         button.status.incombat=hbCombatState
-        HealBot_Aura_UpdateState(button)
+        HealBot_Aura_UpdateCombat(button)
     end
 end
 
@@ -3621,13 +3617,6 @@ function HealBot_UnitSlowUpdate(button)
                 button.specupdate=0
             end
         elseif button.frame<10 then
-            if not button.player and ((button.guiddataup > 0 and button.guiddataup < HealBot_TimeNow) or button.name == button.unit or button.level == 1) then
-HealBot_AddDebug("Name="..UnitName(button.unit),"GUID Up",true)
-HealBot_AddDebug("Name="..UnitName(button.unit))
-                if button.guiddataup < HealBot_TimeNow then button.guiddataup=0 end
-                HealBot_SetGuidData(button)
-                HealBot_UpdateUnitExists(button)
-            end
             if button.status.castend>0 and button.status.castend<(HealBot_TimeNow*1000) then
                 HealBot_Aux_ClearCastBar(button)
             elseif hbActionSwimWatch[button.guid] and button.status.swimming~=IsSwimming(button.unit) then

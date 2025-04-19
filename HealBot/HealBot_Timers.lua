@@ -482,7 +482,9 @@ function HealBot_Timers_OnLoadMessages()
     end
 end
 
-function HealBot_Timers_LastLoadCalls()
+function HealBot_Timers_LastLoad()
+      --HealBot_setCall("HealBot_Timers_LastLoad")
+    HealBot_Globals.LAG=HealBot_Globals.LAG+0.1
     HealBot_Options_ObjectsEnableDisable("HealBot_FrameStickyOffsetHorizontal",false)
     HealBot_Options_ObjectsEnableDisable("HealBot_FrameStickyOffsetVertical",false)
     HealBot_Options_ObjectsEnableDisable("HealBot_Options_GroupPetsByFive",false)
@@ -493,12 +495,6 @@ function HealBot_Timers_LastLoadCalls()
     HealBot_Timers_Set("PLAYER","InvChange")
     HealBot_Timers_Set("OOC","PartyUpdateCheckSkin")
     HealBot_Timers_Set("LAST","LoadComplete")
-end
-
-function HealBot_Timers_LastLoad()
-      --HealBot_setCall("HealBot_Timers_LastLoad")
-    HealBot_Globals.LAG=HealBot_Globals.LAG+0.1
-    HealBot_Timers_Set("LAST","LastLoadCalls")
     HealBot_Timers_Set("SKINS","EmergHealthCol")
     HealBot_Timers_Set("AURA","ConfigClassHoT")
     HealBot_Timers_Set("AURA","ConfigDebuffs")
@@ -516,15 +512,14 @@ function HealBot_Timers_LastLoad()
     HealBot_Timers_Set("LAST","MediaUpdateIndexes")
     HealBot_Timers_Set("LAST","OnLoadMessages")
     HealBot_Timers_Set("LAST","LastUpdate")
-    HealBot_Timers_Set("LAST","HealBotLoaded")
     HealBot_Timers_Set("LAST","MediaInitFonts",true)
+    HealBot_Timers_Set("LAST","HealBotLoaded",true)
     HealBot_Timers_Set("LAST","CleanPermPrivateData",true,true)
     HealBot_Timers_Set("OOC","RemoveInvalidLoadouts",true,true)
     if not HealBot_Timers_luVars["HelpNotice"] then
         HealBot_Timers_Set("LAST","HealBotLoadedChat")
         HealBot_Timers_luVars["HelpNotice"]=true
     end
-    HealBot_UpdateTimers()
 end
 
 function HealBot_Timers_EnteringWorld2()
@@ -792,7 +787,7 @@ local hbTimerFuncs={["INIT"]={
                         ["ConfigDebuffs"]=HealBot_Aura_ConfigDebuffs,
                         ["BuffTagNames"]=HealBot_Aura_BuffTagNames,
                         ["DebuffTagNames"]=HealBot_Aura_DebuffTagNames,
-                        ["IconUpdAllState"]=HealBot_Update_AuraAllState,
+                        ["IconUpdAllRank"]=HealBot_Update_AuraAllRank,
                         ["IconUpdHostile"]=HealBot_Update_AllStateIconHostile,
                     },
                     ["CHAT"]={
@@ -890,13 +885,12 @@ local hbTimerFuncs={["INIT"]={
                         ["InitPlugins"]=HealBot_Init_Plugins,
                         ["CleanPermPrivateData"]=HealBot_Panel_CleanPermPrivateData,
                         ["PrivateListUpdate"]=HealBot_Panel_PrivateListUpdate,
-                        ["LastLoadCalls"]=HealBot_Timers_LastLoadCalls,
                         ["OnLoadMessages"]=HealBot_Timers_OnLoadMessages,
                         ["PluginTweaksRefresh"]=HealBot_Timers_PluginTweaks_Refresh,
                         ["ExtraBuffsTabInvUp"]=HealBot_Options_BuffsExtraBuffsTabInvUpdate,
                         ["LastLoad"]=HealBot_Timers_LastLoad,
-                        ["HealBotLoaded"]=HealBot_Loaded,
                         ["LastUpdate"]=HealBot_Timers_LastUpdate,
+                        ["HealBotLoaded"]=HealBot_Loaded,
                     },
                     ["OOC"]={
                         ["FullReload"]=HealBot_FullReload,
