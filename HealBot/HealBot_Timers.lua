@@ -340,6 +340,7 @@ end
 function HealBot_Timers_EnableHealBot()
       --HealBot_setCall("HealBot_Timers_EnableHealBot")
     HealBot_Config.DisabledNow=0
+    HealBot_FastFuncsUpdate()
     HealBot_Timers_Set("INIT","RegEvents")
     HealBot_Timers_Set("PLAYER","TalentsChanged")
     HealBot_Timers_Set("OOC","RefreshPartyNextRecalcAll")
@@ -353,6 +354,7 @@ end
 function HealBot_Timers_DisableHealBot()
       --HealBot_setCall("HealBot_Timers_DisableHealBot")
     HealBot_Config.DisabledNow=1
+    HealBot_FastFuncsUpdate()
     HealBot_Timers_Set("INIT","UnRegEvents")
     HealBot_Timers_Set("INIT","RegEvents")
     HealBot_Timers_Set("OOC","RefreshPartyNextRecalcAll")

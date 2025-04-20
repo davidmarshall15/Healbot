@@ -1739,7 +1739,7 @@ function HealBot_Load()
     if not HealBot_luVars["Loaded"] then
         HealBot_Data["PGROUP"]=1
         HealBot_Media_Register()
-        HealBot_FastFuncs()
+        HealBot_FastFuncsUpdate()
         HealBot_Init_Spells_Defaults()
         HealBot_SetPlayerData()
         HealBot_Init_NewChar()
@@ -4042,10 +4042,6 @@ function HealBot_UpdateLast()
     HealBot_Update_Final()
 end
 
-function HealBot_UpdateLastDisabled()
-    HealBot_luVars["fastSwitch"]=0
-end
-
 HealBot_luVars["TestFramesRefresh"]=0
 function HealBot_Update_Test()
       --HealBot_setCall("HealBot_Update_Test")
@@ -4131,33 +4127,33 @@ function HealBot_Update_Disabled()
     -- Do Nothing
 end
 
-local hbFastFuncs={[1]=HealBot_UpdateTimers,  [2]=HealBot_UpdateLast,}
+local hbFastFuncs={}
+for f=1,14 do
+    hbFastFuncs[f]=HealBot_UpdateTimers
+end
+hbFastFuncs[15]=HealBot_UpdateLast
 function HealBot_FastFuncs()
       --HealBot_setCall("HealBot_FastFuncs")
     if HealBot_luVars["UILOCK"] then
         HealBot_Options_CmdButtonsEnableDisable(false)
-        if HealBot_Config.DisabledNow == 1 then
-            hbFastFuncs={[1]=HealBot_UpdateTimers,     [2]=HealBot_UpdateLastDisabled,}
-        else
-            hbFastFuncs={[1]=HealBot_UpdateUnit_Buttons,  [2]=HealBot_UpdateUnit_Buttons,
-                         [3]=HealBot_UpdateUnit_Buttons,  [4]=HealBot_UpdateUnit_Buttons,
-                         [5]=HealBot_UpdateUnit_Buttons,  [6]=HealBot_UpdateUnit_Buttons,
-                         [7]=HealBot_UpdateUnit_Buttons,  [8]=HealBot_UpdateUnit_Buttons,
-                         [9]=HealBot_UpdateUnit_Buttons, [10]=HealBot_UpdateLast,}
-        end
+        hbFastFuncs[8]=hbFastFuncs[1]
     else
         HealBot_Options_CmdButtonsEnableDisable(true)
-        if HealBot_Config.DisabledNow == 1 then
-            hbFastFuncs={[1]=HealBot_UpdateTimers,     [2]=HealBot_Update_OutOfCombat,
-                         [3]=HealBot_UpdateLastDisabled,}
-        else
-            hbFastFuncs={[1]=HealBot_UpdateUnit_Buttons,   [2]=HealBot_UpdateUnit_Buttons,
-                         [3]=HealBot_Update_OutOfCombat,   [4]=HealBot_UpdateUnit_Buttons,
-                         [5]=HealBot_UpdateUnit_Buttons,   [6]=HealBot_UpdateUnit_Buttons,
-                         [7]=HealBot_Update_OutOfCombat,   [8]=HealBot_UpdateUnit_Buttons,
-                         [9]=HealBot_UpdateUnit_Buttons,  [10]=HealBot_UpdateLast,}
+        hbFastFuncs[8]=HealBot_Update_OutOfCombat
+    end
+end
+
+function HealBot_FastFuncsUpdate()
+    if HealBot_Config.DisabledNow == 1 then
+        for f=1,14 do
+            hbFastFuncs[f]=HealBot_Update_Disabled
+        end
+    else
+        for f=1,14 do
+            hbFastFuncs[f]=HealBot_UpdateUnit_Buttons
         end
     end
+    HealBot_FastFuncs()
 end
 
 function HealBot_UpdateLocalUILock(state)
