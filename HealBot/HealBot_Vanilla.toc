@@ -5,19 +5,19 @@
 ## OptionalDeps: LibSharedMedia-3.0, LibDataBroker-1.1, LibDBIcon-1.0
 ## SavedVariablesPerCharacter:  HealBot_Config, HealBot_Config_Spells, HealBot_Config_Buffs, HealBot_Config_Cures, HealBot_ActionIcons_Loadouts, HealBot_ActionIconsData_Loadouts, HealBot_Spell_Loadouts
 ## SavedVariables: Healbot_Config_Skins, Healbot_Config_Aux, HealBot_Globals, HealBot_Class_Spells, HealBot_Class_Buffs, HealBot_Class_Cures, HealBot_Skins_ActionIcons, HealBot_Skins_ActionIconsData
-## Category-enUS: User Interface
-## Category-deDE: Benutzerinterface
-## Category-esES: Interfaz de usuario
-## Category-esMX: Interfaz de usuario
-## Category-frFR: Interface utilisateur
-## Category-itIT: Interfaccia utente
-## Category-koKR: 사용자 인터페이스
-## Category-ptBR: Interface do usuário
-## Category-ruRU: Интерфейс пользователя
-## Category-zhCN: 用户界面
-## Category-zhTW: 使用者介面
+## Category-enUS: HealBot
+## Category-deDE: HealBot
+## Category-esES: HealBot
+## Category-esMX: HealBot
+## Category-frFR: HealBot
+## Category-itIT: HealBot
+## Category-koKR: HealBot
+## Category-ptBR: HealBot
+## Category-ruRU: HealBot
+## Category-zhCN: HealBot
+## Category-zhTW: HealBot
 ## IconTexture: Interface\AddOns\HealBot\Images\HealBot.tga
-## Version: 1.15.7.2
+## Version: 1.15.7.3
 
 Libs\LibStub\LibStub.lua
 Libs\CallbackHandler-1.0\CallbackHandler-1.0.xml

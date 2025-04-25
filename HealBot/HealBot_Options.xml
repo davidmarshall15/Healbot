@@ -27187,7 +27187,7 @@
                               </Anchor>
                             </Anchors>
                             <Scripts>
-                              <OnValueChanged>HealBot_IconRCZoom_OnValueChanged(self)</OnValueChanged>
+                              <OnValueChanged>HealBot_IconRankZoom_OnValueChanged(self)</OnValueChanged>
                               <OnEnter>HealBot_Options_Show_Help("ICONZOOM",true)</OnEnter>
                               <OnLeave>HealBot_Options_Show_Help("ICONZOOM",false)</OnLeave>
                             </Scripts>

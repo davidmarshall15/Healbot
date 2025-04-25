@@ -262,7 +262,9 @@ function HealBot_Aura_UpdateExtraIcon(button, iconData, index)
     if (index == 91 and hbv_Skins_GetFrameBoolean("Icons", "CLASSEN", button.frame)) or
        (index == 92 and hbv_Skins_GetFrameBoolean("Icons", "TARGETEN", button.frame)) or
        (index == 93 and hbv_Skins_GetFrameBoolean("Icons", "RCEN", button.frame)) or
-       (index == 94 and hbv_Skins_GetFrameBoolean("Icons", "OOREN", button.frame)) then
+       (index == 94 and hbv_Skins_GetFrameBoolean("Icons", "OOREN", button.frame)) or
+       (index == 95 and hbv_Skins_GetFrameBoolean("Icons", "RANKEN", button.frame)) or
+       (index == 96 and hbv_Skins_GetFrameBoolean("Icons", "COMBATEN", button.frame)) then
         HealBot_Aura_luVars["exIconAlpha"]=HealBot_Action_BarColourAlpha(button, hbv_Skins_GetFrameVar("BarCol", "HA", button.framecol), 1)
     else
         HealBot_Aura_luVars["exIconAlpha"]=button.status.alpha

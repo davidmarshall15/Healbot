@@ -8686,7 +8686,7 @@ function HealBot_Options_ShowLeaderMainTank_OnClick(self)
     if hbv_Skins_GetFrameBoolean("Icons", "SHOWRANKMT", hb_lVars["Frame"])~=self:GetChecked() then
         hbv_Skins_SetFrameVar(self:GetChecked(), "Icons", "SHOWRANKMT", hb_lVars["Frame"])
         if HealBot_Action_FrameIsVisible(hb_lVars["Frame"]) then 
-            HealBot_Options_framesChanged(false)
+            --HealBot_Options_framesChanged(false)
             HealBot_Timers_Set("AURA","IconUpdAllRank",true)
         end
     end
@@ -9854,6 +9854,12 @@ function HealBot_Options_IconExtraPosition_DropDown(object, id, eId)
                             elseif eId == 94 then
                                 hbv_Skins_SetFrameVar(1, "Icons", "OORANCHOR", hb_lVars["Frame"])
                                 UIDropDownMenu_SetText(HealBot_Options_IconOORArrowAnchor,HEALBOT_OPTIONS_ICONEXTRAANCHOR01)
+                            elseif eId == 95 then
+                                hbv_Skins_SetFrameVar(1, "Icons", "RANKANCHOR", hb_lVars["Frame"])
+                                UIDropDownMenu_SetText(HealBot_Options_IconRankAnchor,HEALBOT_OPTIONS_ICONEXTRAANCHOR01)
+                            elseif eId == 96 then
+                                hbv_Skins_SetFrameVar(1, "Icons", "COMBATANCHOR", hb_lVars["Frame"])
+                                UIDropDownMenu_SetText(HealBot_Options_IconCombatAnchor,HEALBOT_OPTIONS_ICONEXTRAANCHOR01)
                             end
                             HealBot_Update_RemoveExtraIcons(eId)
                             HealBot_Options_framesChanged(true, true)
@@ -10013,7 +10019,7 @@ end
 
 function HealBot_Options_IconRankAnchor_DropDown()
       --HealBot_setCall("HealBot_Options_IconRankAnchor_DropDown")
-    HealBot_Options_IconAnchor_DropDown(HealBot_Options_IconRankAnchor, "RCANCHOR", "RCONBAR", true)
+    HealBot_Options_IconAnchor_DropDown(HealBot_Options_IconRankAnchor, "RANKANCHOR", "RANKONBAR", true)
 end
 
 function HealBot_Options_IconTargetAnchor_DropDown()
@@ -10023,7 +10029,7 @@ end
 
 function HealBot_Options_IconCombatAnchor_DropDown()
       --HealBot_setCall("HealBot_Options_IconCombatAnchor_DropDown")
-    HealBot_Options_IconAnchor_DropDown(HealBot_Options_IconCombatAnchor, "RCANCHOR", "RCONBAR", true)
+    HealBot_Options_IconAnchor_DropDown(HealBot_Options_IconCombatAnchor, "COMBATANCHOR", "COMBATONBAR", true)
 end
 
 function HealBot_Options_IconRCAnchor_DropDown()
@@ -10268,7 +10274,7 @@ function HealBot_Options_BarStateTextPosition_DropDown()
                         if hbv_Skins_GetFrameVar("BarText", "STATETXTANCHOR", hb_lVars["Frame"]) ~= self:GetID() then
                             hbv_Skins_SetFrameVar(self:GetID(), "BarText", "STATETXTANCHOR", hb_lVars["Frame"])
                             UIDropDownMenu_SetText(HealBot_Options_BarStateTextPosition, HealBot_Options_Lists["BarStateTextAnchor"][hbv_Skins_GetFrameVar("BarText", "STATETXTANCHOR", hb_lVars["Frame"])])
-                            HealBot_Text_tagWithName()
+                            HealBot_Timers_Set("SKINS","TagWithName")
                             HealBot_Options_framesChanged(false, false, false, true)
                             HealBot_Timers_Set("SKINS","TextUpdateState",true)
                             HealBot_Options_StateUseNameFontString_Options()
@@ -17417,6 +17423,7 @@ function HealBot_Options_DoSet_Current_Skin(newSkin, ddRefresh, noCallback, optS
                     if HealBot_Data["TIPUSE"] then HealBot_Tooltip_CustomAnchor_Hide() end
                     HealBot_Timers_InitExtraOptions()
                     HealBot_Timers_Set("SKINS","VarsHasSkin")
+                    HealBot_Timers_Set("SKINS","TagWithName")
                     HealBot_Timers_Set("SKINS","PostChange",true)
                    -- HealBot_AddDebug("Update Skins","Frame",true)
                     HealBot_Timers_TurboOn()
@@ -24775,7 +24782,7 @@ function HealBot_Options_OnShow(self)
         HealBot_Media_UpdateIndexes()
     end
     HealBot_Options_UpdateTab(hb_lVars["TabNo"])
-    HealBot_Timers_InitExtraOptions()
+    HealBot_Options_InitExtras()
 end
 
 function HealBot_Options_Close()
@@ -25850,7 +25857,7 @@ function HealBot_Options_OverridesEffectsTabBars(tab)
         HealBot_Options_SetText(HealBot_Options_OverrideHotBarHealthThres, HEALBOT_OPTION_HOTBARHEALTHPCT..HealBot_Globals.OverrideEffects["HOTBARHLTH"].."%")
         HealBot_Options_sliderlabels_Init(HealBot_Options_OverrideFocusGroupDimming,HEALBOT_OPTION_FOCUSGROUPDIMMING,12,44,1,4,HEALBOT_WORD_LOW,HEALBOT_WORD_HIGH)
         HealBot_Options_OverrideFocusGroupDimming:SetValue((HealBot_Globals.OverrideEffects["FGDIMMING"] or 2.8)*10)
-        HealBot_Options_SetText(HealBot_Options_OverrideFocusGroupDimming, HEALBOT_OPTIONS_EMERGFILTERGROUPSRAID)
+        HealBot_Options_SetText(HealBot_Options_OverrideFocusGroupDimming, HEALBOT_OPTION_FOCUSGROUPDIMMING)
         HealBot_Options_OverrideEFGroupRaidOnly:SetChecked(HealBot_Globals.OverrideEffects["FGRAIDONLY"])
         HealBot_Options_SetText(HealBot_Options_OverrideEFGroupRaidOnly,HEALBOT_OPTIONS_EMERGFILTERGROUPSRAID)
         HealBot_Options_sliderlabels_Init(HealBot_Options_OverrideBarUpdateFreq,HEALBOT_OPTION_BARUPDFREQ,1,19,1,2,HEALBOT_OPTIONS_WORD_SLOWER,HEALBOT_OPTIONS_WORD_FASTER)

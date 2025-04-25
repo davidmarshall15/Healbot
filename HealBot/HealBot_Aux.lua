@@ -297,7 +297,7 @@ end
 
 function HealBot_Aux_barsReset()
       --HealBot_setCall("HealBot_Aux_barsReset")
-    HealBot_Timers_Set("AUX","ClearAllMarkedBars")
+    HealBot_Update_AuxClearAllMarkedBars()
     HealBot_Aux_luVars["FluidInUse"]=HealBot_Aux_luVars["TmpFluidInUse"]
 end
 
@@ -314,16 +314,16 @@ function HealBot_Aux_resetBars()
             end
             HealBot_Options_clearAuxBars()
             HealBot_Options_setAuxBars()
-            HealBot_Timers_Set("AUX","UpdateAllAuxBars")
-            HealBot_Timers_Set("AUX","UpdateAllAuxByType")
-            HealBot_Timers_Set("PLAYER","PlayerTargetChanged")
+            HealBot_Update_AllAuxBars()
+            HealBot_Aux_UpdateAllAuxByType()
+            HealBot_PlayerTargetChanged()
             HealBot_Options_framesChanged(false, false, false, false, true)
             HealBot_Timers_Set("LAST","UpdateAllUnitBars")
             HealBot_Timers_Set("AURA","CheckUnits")
             HealBot_Timers_Set("LAST","AuxBarsReset")
         end
     else
-        HealBot_Timers_Set("AUX","ResetBars",true,true) -- All recall require a delay
+        HealBot_Timers_Set("AUX","ResetBars",true) -- All recall require a delay
     end
 end
 

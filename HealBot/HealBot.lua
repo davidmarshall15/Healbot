@@ -52,10 +52,9 @@ HealBot_AuxAssigns["HealthOverlayOOR"]={[0]=false,[1]=false,[2]=false,[3]=false,
 
 local HealBot_luVars={}
 HealBot_luVars["FPS"]={[0]=60,
-                       [1]={[1]=60,[2]=60,[3]=60,[0]=60},
-                       [2]={[1]=60,[2]=60,[3]=60,[0]=60},
-                       [3]={[1]=60,[2]=60,[3]=60,[0]=60},}
-HealBot_luVars["qaFRNext"]=HealBot_TimeNow+5
+                       [1]={[1]=60,[2]=60,[3]=60,[4]=60,[5]=60,[0]=60},
+                       [2]={[1]=60,[2]=60,[3]=60,[4]=60,[5]=60,[0]=60},
+                       [3]={[1]=60,[2]=60,[3]=60,[4]=60,[5]=60,[0]=60},}
 HealBot_luVars["IsSolo"]=true
 HealBot_luVars["IsRaid"]=false
 HealBot_luVars["MaskAuraReCheck"]=false
@@ -2201,10 +2200,10 @@ function HealBot_Update_CPUUsage()
         HealBot_Events_setLag()
     end
     if prevCPU~=HealBot_Globals.CPUUsage then
-        HealBot_Timers_Set("SKINS","FluidFlashInUse",true,true)
         if HealBot_Timers_retLuVars("LoadComplete") then
-            HealBot_Timers_Set("LAST","UpdateCheckInterval",true,true)
+            HealBot_Timers_Set("LAST","UpdateCheckInterval",true)
         end
+        HealBot_Timers_Set("SKINS","FluidFlashInUse",true,true)
         HealBot_Comms_PerfLevel()
     elseif prevFPS~=HealBot_Globals.FPS then
         HealBot_Comms_PerfLevel()
@@ -2240,9 +2239,9 @@ function HealBot_UpdateCheckInterval()
         elseif HealBot_luVars["healthCheckInterval"]>15 then
             HealBot_luVars["healthCheckInterval"]=15
         end
-        HealBot_Timers_Set("LAST","ActionCheckInterval",true,true)
+        HealBot_Timers_Set("LAST","ActionCheckInterval",true)
     end
-    HealBot_Timers_Set("LAST","DebugCheckInterval",true,true)
+    HealBot_Timers_Set("LAST","DebugCheckInterval",true)
 end
 
 function HealBot_DebugCheckInterval()
@@ -2267,20 +2266,22 @@ end
 local fpsRow,fpsCol,fpsCurRate=1,1,1
 function HealBot_Set_FPS()
       --HealBot_setCall("HealBot_Set_FPS", nil, nil, nil, true)
-    if HealBot_luVars["qaFRNext"]<HealBot_TimeNow then
-        fpsCurRate=GetFramerate()
-        if fpsCurRate>150 then fpsCurRate=150 end
-        if fpsCurRate<15 then fpsCurRate=15 end
-        HealBot_luVars["FPS"][fpsRow][fpsCol]=fpsCurRate
-        fpsCol=fpsCol+1
-        if fpsCol>3 then
-            fpsCol=1
-            fpsRow=fpsRow+1
-            if fpsRow>3 then fpsRow=1 end
-        elseif fpsCol == 3 then
-            HealBot_luVars["FPS"][fpsRow][0]=HealBot_Util_Round((HealBot_luVars["FPS"][fpsRow][1]+HealBot_luVars["FPS"][fpsRow][2]+HealBot_luVars["FPS"][fpsRow][3])/3, 2)
-            HealBot_Update_CPUUsage()
-        end
+    fpsCurRate=floor(GetFramerate())
+    if fpsCurRate>150 then fpsCurRate=150 end
+    if fpsCurRate<15 then fpsCurRate=15 end
+    HealBot_luVars["FPS"][fpsRow][fpsCol]=fpsCurRate
+    fpsCol=fpsCol+1
+    if fpsCol>5 then
+        fpsCol=1
+        fpsRow=fpsRow+1
+        if fpsRow>3 then fpsRow=1 end
+    elseif fpsCol == 5 then
+        HealBot_luVars["FPS"][fpsRow][0]=HealBot_Util_Round((HealBot_luVars["FPS"][fpsRow][1]+
+                                                             HealBot_luVars["FPS"][fpsRow][2]+
+                                                             HealBot_luVars["FPS"][fpsRow][3]+
+                                                             HealBot_luVars["FPS"][fpsRow][4]+
+                                                             HealBot_luVars["FPS"][fpsRow][5])/5, 2)
+        HealBot_Update_CPUUsage()
     end
 end
 
@@ -2475,7 +2476,7 @@ function HealBot_VariablesLoaded()
     HealBot_Options_InitVars()
     HealBot_Panel_Init()
     for x=1,3 do
-        for z=0,3 do
+        for z=0,5 do
             HealBot_luVars["FPS"][x][z]=HealBot_Globals.FPS
         end
     end

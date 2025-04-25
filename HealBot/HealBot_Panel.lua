@@ -396,11 +396,7 @@ function HealBot_Panel_addDataStore(unit, nRaidID, isPlayer, nPartyID)
                                 hbFRole="OFFTANK"
                             end
                         elseif hbCombatRole and (hbCombatRole == "HEALER" or hbCombatRole == "TANK") then
-                            if HEALBOT_GAME_VERSION>4 then
-                                hbFRole=hbCombatRole
-                            else
-                                hbFRole=HealBot_Panel_UnitRoleOnSpec(dsGUID, hbFRole)
-                            end
+                            hbFRole=hbCombatRole
                         end
                     end
                     if HEALBOT_GAME_VERSION>3 and rank>0 and GetLFGMode(LE_LFG_CATEGORY_LFR) then
@@ -699,7 +695,7 @@ function HealBot_Panel_ToggelPrivateTanks(unit, perm)
         end
     end
     HealBot_Timers_Set("LAST","PrivateListUpdate")
-    HealBot_Timers_Set("AURA","ResetClassIconTexture",true)
+    HealBot_Timers_setLuVars("ResetClassRank", true)
     --HealBot_Timers_Set("OOC","RefreshPartyNextRecalcAll")
 end
 
@@ -721,7 +717,7 @@ function HealBot_Panel_ToggelPrivateHealers(unit, perm)
         end
     end
     HealBot_Timers_Set("LAST","PrivateListUpdate")
-    HealBot_Timers_Set("AURA","ResetClassIconTexture",true)
+    HealBot_Timers_setLuVars("ResetClassRank", true)
     --HealBot_Timers_Set("OOC","RefreshPartyNextRecalcAll")
 end
 
@@ -827,29 +823,13 @@ function HealBot_Panel_CheckRole(unit)
     return "TANK"
 end
 
-function HealBot_Panel_UnitRoleOnSpec(guid, role)
-      --HealBot_setCall("HealBot_Panel_UnitRoleOnSpec", nil, guid)
-    if HealBot_Panel_RaidUnitButtonCheck(guid) then
-        local s=HealBot_Action_getGuidData(guid, "SPEC")
-        if s == " "..HEALBOT_RESTORATION.." " or s == " "..HEALBOT_DISCIPLINE.." " or s == " "..HEALBOT_HOLY.." " or s == " "..HEALBOT_SHAMAN_RESTORATION.." " then
-            return "HEALER"
-        elseif s == " "..HEALBOT_PROTECTION.." " or (role == "TANK" and s == " "..HEALBOT_FERAL.." ") or (role == "TANK" and s == " "..HEALBOT_BLOOD.." ") then
-            return "TANK"
-        else
-            return "DAMAGER"
-        end
-    else
-        return role
-    end
-end
-
 function HealBot_Panel_UnitRole(unit, guid, isPlayer)
       --HealBot_setCall("HealBot_Panel_UnitRole", nil, guid)
     local role=hbPanel_dataRoles[guid]
     if role == HEALBOT_WORDS_UNKNOWN then
-        if HEALBOT_GAME_VERSION>2 then
+        --if HEALBOT_GAME_VERSION>2 then
             role=UnitGroupRolesAssigned(unit) or HEALBOT_WORDS_UNKNOWN
-        end
+        --end
         hbPanel_dataRoles[guid]=role
     end
     if role == HEALBOT_WORDS_UNKNOWN and isPlayer then

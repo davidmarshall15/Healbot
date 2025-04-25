@@ -1447,7 +1447,7 @@ function HealBot_Text_UpdateText(button)
     if button.text.tagupdate then
         button.text.tagupdate=false
         if not hbv_Skins_GetFrameBoolean("BarText", "TAGSTATEONLYTIP", button.framecol) then
-            if tagWithName[button.frame] then
+            if not tagWithName[button.frame] then
                 button.text.sr, button.text.sg, button.text.sb=HealBot_Text_StateColours(button)
                 if button.status.enabled or button.status.summons then
                     if button.status.range>0 then

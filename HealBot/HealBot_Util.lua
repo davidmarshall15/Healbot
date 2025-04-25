@@ -171,3 +171,38 @@ function HealBot_Util_Deserialize(s, callback)
         HealBot_Util_Deserialize(s, true)
     end
 end
+
+function HealBot_Util_GetTimeElapsed(sDate, future)
+    local sDiff
+    if future then
+        sDiff=sDate-GetServerTime()
+    else
+        sDiff=GetServerTime()-sDate
+    end
+    local sLabel=" secs"
+    if sDiff>300 then
+        sDiff=sDiff/60
+        sLabel=" mins"
+        if sDiff>180 then
+            sDiff=sDiff/60
+            sLabel=" hours"
+            if sDiff>48 then
+                sDiff=sDiff/24
+                sLabel=" days"
+                if sDiff>93 then
+                    sDiff=sDiff/30
+                    sLabel=" months"
+                    if sDiff>36 then
+                        sDiff=sDiff/12
+                        sLabel=" years"
+                    end
+                end
+            end
+        end
+        sDiff=floor(sDiff)
+    end
+    if not future then
+        sLabel=sLabel.." ago"
+    end
+    return sDiff, sLabel
+end

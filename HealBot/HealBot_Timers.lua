@@ -67,15 +67,15 @@ end
 
 function HealBot_Timers_SetnProcs(cpuProfilerOn)
       --HealBot_setCall("HealBot_Timers_SetnProcs")
-    if cpuProfilerOn then
+    if cpuProfilerOn or HealBot_Config.DisabledNow == 1 then
         HealBot_Timers_luVars["nProcsOn"]=2
         HealBot_Timers_luVars["nProcsOff"]=1
     else
-        HealBot_Timers_luVars["nProcsOn"]=HealBot_Util_PerfVal1(250)
-        if HealBot_Timers_luVars["nProcsOn"]<3 then
-            HealBot_Timers_luVars["nProcsOn"]=3
+        HealBot_Timers_luVars["nProcsOn"]=HealBot_Util_PerfVal1(200)
+        if HealBot_Timers_luVars["nProcsOn"]<2 then
+            HealBot_Timers_luVars["nProcsOn"]=2
         end
-        HealBot_Timers_luVars["nProcsOff"]=HealBot_Util_PerfVal1(100)
+        HealBot_Timers_luVars["nProcsOff"]=HealBot_Util_PerfVal1(50)
         if HealBot_Timers_luVars["nProcsOff"]<1 then
             HealBot_Timers_luVars["nProcsOff"]=1
         end
@@ -156,6 +156,12 @@ function HealBot_Timers_nextRecalcPlayers()
         HealBot_Timers_ResetSkins()
     elseif HealBot_Timers_luVars["ResetEnemySkins"] then
         HealBot_Timers_ResetEnemySkins()
+    end
+    if HealBot_Timers_luVars["ResetClassRank"] then
+        HealBot_Timers_luVars["ResetClassRank"]=false
+        HealBot_Timers_Set("AURA","ResetClassIconTexture",true)
+        HealBot_Timers_Set("AURA","IconUpdAllRank",true)
+        HealBot_Timers_Set("SKINS","TextUpdateNames",true)
     end
     HealBot_nextRecalcParty(6)
 end
@@ -468,19 +474,23 @@ end
 
 function HealBot_Timers_OnLoadMessages()
     if HealBot_Timers_luVars["oldOptionsExists"] then
-        if GetServerTime() > 1745600000 then
+        if GetServerTime() >= 1747100000 then
             HealBot_AddChat("=== Please Note ===")
             HealBot_AddChat("The HealBot_Options folder in AddOns can be deleted.")
+        elseif HealBot_Globals.DebugOut then
+            local t,l=HealBot_Util_GetTimeElapsed(1747100000, true)
+            HealBot_AddDebug("The HealBot_Options folder in AddOns can be deleted in "..t..l)
         end
-        HealBot_AddDebug("The HealBot_Options folder in AddOns can be deleted.")
     end
     if HealBot_Timers_luVars["oldDataExists"] then
-        if GetServerTime() > 1746810000 then
+        if GetServerTime() >= 1748300000 then
             HealBot_AddChat("=== Please Note ===")
             HealBot_AddChat("The HealBot_Data folder in AddOns can be deleted.")
             HealBot_AddChat("IMPORTANT: Before deleting HealBot_Data, logon all characters that use HealBot to allow copying saves variables.")
+        elseif HealBot_Globals.DebugOut then
+            local t,l=HealBot_Util_GetTimeElapsed(1748300000, true)
+            HealBot_AddDebug("The HealBot_Data folder in AddOns can be deleted in "..t..l)
         end
-        HealBot_AddDebug("The HealBot_Data folder in AddOns can be deleted.")
     end
 end
 
@@ -515,7 +525,7 @@ function HealBot_Timers_LastLoad()
     HealBot_Timers_Set("LAST","OnLoadMessages")
     HealBot_Timers_Set("LAST","LastUpdate")
     HealBot_Timers_Set("LAST","MediaInitFonts",true)
-    HealBot_Timers_Set("LAST","HealBotLoaded",true)
+    HealBot_Timers_Set("INIT","HealBotLoaded")
     HealBot_Timers_Set("LAST","CleanPermPrivateData",true,true)
     HealBot_Timers_Set("OOC","RemoveInvalidLoadouts",true,true)
     if not HealBot_Timers_luVars["HelpNotice"] then
@@ -640,6 +650,7 @@ local hbTimerFuncs={["INIT"]={
                         ["SetPlayerData"]=HealBot_SetPlayerData,
                         ["InitSpellsDefaults"]=HealBot_Init_Spells_Defaults,
                         ["UpdateLang"]=HealBot_Options_UpdateLang,
+                        ["HealBotLoaded"]=HealBot_Loaded,
                     },
                     ["RESET"]={
                         ["Reload"]=HealBot_Options_ReloadUIAreYouSure,
@@ -718,11 +729,11 @@ local hbTimerFuncs={["INIT"]={
                         ["ResetGlobalDimming"]=HealBot_Action_ResetGlobalDimming,
                         ["VarsHasSkin"]=hbv_Skins_VarsHasSkin,
                         ["OverShield"]=HealBot_Update_AllOverShields,
+                        ["TagWithName"]=HealBot_Text_tagWithName,
                         ["PostChange"]=HealBot_Timers_PostSkinChange,
                     },
                     ["AUX"]={
                         ["BarFlashAlphaMinMax"]=HealBot_Options_AuxBarFlashAlphaMinMaxSet,
-                        ["UpdateAllAuxBars"]=HealBot_Update_AllAuxBars,
                         ["UpdateAllAuxByType"]=HealBot_Aux_UpdateAllAuxByType,
                         ["CheckAllAuxOverLays"]=HealBot_Update_AllAuxOverLays,
                         ["ResetBars"]=HealBot_Aux_resetBars,
@@ -740,7 +751,6 @@ local hbTimerFuncs={["INIT"]={
                         ["UpdateAllAuxTotalHealAbsorbBars"]=HealBot_Update_AllAuxTotalHealAbsorbBars,
                         ["UpdateAllAuxThreatBars"]=HealBot_Update_AllAuxThreatBars,
                         ["CheckInUse"]=HealBot_Options_CheckAuxInUse,
-                        ["ClearAllMarkedBars"]=HealBot_Update_AuxClearAllMarkedBars,
                         ["ResetTextButtons"]=HealBot_Update_AuxTextButtons,
                         ["SetTargetBar"]=HealBot_SetTargetBar,
                     },
@@ -892,7 +902,6 @@ local hbTimerFuncs={["INIT"]={
                         ["ExtraBuffsTabInvUp"]=HealBot_Options_BuffsExtraBuffsTabInvUpdate,
                         ["LastLoad"]=HealBot_Timers_LastLoad,
                         ["LastUpdate"]=HealBot_Timers_LastUpdate,
-                        ["HealBotLoaded"]=HealBot_Loaded,
                     },
                     ["OOC"]={
                         ["FullReload"]=HealBot_FullReload,

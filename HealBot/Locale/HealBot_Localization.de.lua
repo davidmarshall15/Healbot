@@ -13,7 +13,6 @@
 -- ü = \195\188
 --
 
-
 function HealBot_Lang_deDE()
 
 -----------------
@@ -35,6 +34,10 @@ function HealBot_Lang_deDE()
     HEALBOT_MAGIC                           = "Magie";
     HEALBOT_CURSE                           = "Fluch";   
     HEALBOT_POISON                          = "Gift";
+    HEALBOT_BLEED                           = "Bleed";
+    HEALBOT_SPELL_HOLYWORDCHASTISE          = "Segenswort: Z\195\188chtigung"
+    HEALBOT_SPELL_HOLYWORDSERENITY          = "Segenswort: Epiphanie"
+    HEALBOT_SPELL_HOLYWORDSANCTUARY         = "Segenswort: Refugium"
 
     HEALBOT_LOADED                          = " geladen.";
 
