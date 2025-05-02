@@ -832,7 +832,7 @@ function HealBot_Panel_UnitRole(unit, guid, isPlayer)
         --end
         hbPanel_dataRoles[guid]=role
     end
-    if role == HEALBOT_WORDS_UNKNOWN and isPlayer then
+    if role == HEALBOT_WORDS_UNKNOWN then -- and isPlayer then
         role="DAMAGER"
     end
     return role
@@ -854,15 +854,18 @@ function HealBot_Action_SetClassIconTexture(button)
         local unitRole=HEALBOT_WORDS_UNKNOWN
         if hbv_Skins_GetFrameBoolean("Icons", "SHOWROLE", button.frame) then
             unitRole=HealBot_Panel_UnitRole(button.unit, button.guid, button.isplayer)
-        end
-        if HealBot_Media_retClassRoleIcon(unitRole) then
+            if not HealBot_Media_retClassRoleIcon(unitRole) then
+                unitRole="DAMAGER"
+            end
             if HealBot_MainTanks[button.guid] or not hbv_Skins_GetFrameBoolean("Icons", "SHOWMTONLY", button.frame) then
                 HealBot_Aura_ClassUpdate(button, unitRole)
             else
                 HealBot_Aura_ClassUpdate(button, false)
             end
-        else
+        elseif HealBot_MainTanks[button.guid] or not hbv_Skins_GetFrameBoolean("Icons", "SHOWMTONLY", button.frame) then
             HealBot_Aura_ClassUpdate(button, HealBot_Panel_classEN(button.unit))
+        else
+            HealBot_Aura_ClassUpdate(button, false)
         end
     else
         HealBot_Aura_ClassUpdate(button, false)

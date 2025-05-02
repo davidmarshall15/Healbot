@@ -20,8 +20,8 @@ local function HealBot_Debug_OnMouseUp(self, button)
 end
 
 dFrame:SetBackdrop({
-    bgFile="Interface\\Addons\\HealBot\\Images\\WhiteLine",
-    edgeFile="Interface\\Addons\\HealBot\\Images\\border",
+    bgFile="Interface\\Addons\\HealBot\\Images\\frame\\WhiteLine.tga",
+    edgeFile="Interface\\Addons\\HealBot\\Images\\frame\\border.tga",
     tile=true,
     tileSize=8,
     edgeSize=8,
@@ -80,7 +80,7 @@ end
 local function HealBot_Debug_SetupStatusBarButton(bar, x, text)
 	bar:SetSize(22, 22)
 	bar:SetPoint("BOTTOM", x, 12)
-	bar:SetStatusBarTexture("Interface\\Addons\\HealBot\\Images\\tukuibar.tga")
+	bar:SetStatusBarTexture("Interface\\Addons\\HealBot\\Images\\textures\\tukuibar.tga")
 	bar.Text=bar:CreateFontString()
 	bar.Text:SetFontObject(GameFontNormal)
 	bar.Text:SetPoint("CENTER")
@@ -270,8 +270,8 @@ local function HealBot_Debug_pFrameOnMouseUp(self, button)
 end
 
 pFrame:SetBackdrop({
-    bgFile="Interface\\Addons\\HealBot\\Images\\WhiteLine",
-    edgeFile="Interface\\Addons\\HealBot\\Images\\border",
+    bgFile="Interface\\Addons\\HealBot\\Images\\frame\\WhiteLine.tga",
+    edgeFile="Interface\\Addons\\HealBot\\Images\\frame\\border.tga",
     tile=true,
     tileSize=8,
     edgeSize=8,

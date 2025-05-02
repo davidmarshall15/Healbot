@@ -3086,10 +3086,10 @@ function HealBot_Action_SetFocusGroups()
         
         HealBot_Action_luVars["FocusGroupDimming"]=hbv_Skins_GetVar("General", "FGDIMMING")
     end
-    HealBot_Timers_Set("SKINS","UpdateTextButtons")
+    HealBot_Timers_Set("SKINS","UpdateTextButtons",true)
     HealBot_Panel_SetFocusGroups()
     HealBot_Options_framesChanged(false)
-    HealBot_Timers_Set("LAST","BarColourAlphaSetFunc")
+    HealBot_Timers_Set("LAST","BarColourAlphaSetFunc",true)
 end
 
 local hacpr, hacpg=1,1 
@@ -3255,7 +3255,7 @@ function HealBot_Action_PowerIndicators(button)
             if button.mana.power~=1 then
                 button.mana.power=1
                 if hbv_Skins_GetFrameVar("Indicators", "PCOL", button.frame) == 1 then
-                    button.gref.indicator.power[1]:SetTexture([[Interface\AddOns\HealBot\Images\indicator_red.tga]])
+                    button.gref.indicator.power[1]:SetTexture([[Interface\AddOns\HealBot\Images\indicators\indicator_red.tga]])
                 end
                 button.gref.indicator.power[1]:SetAlpha(indAlpha)
                 button.gref.indicator.power[2]:SetAlpha(0)
@@ -3268,11 +3268,11 @@ function HealBot_Action_PowerIndicators(button)
                 button.mana.power=2
                 if hbv_Skins_GetFrameVar("Indicators", "PCOL", button.frame) == 1 then
                     if HealBot_Action_luVars["UnitPowerMax"]<4 then
-                        button.gref.indicator.power[1]:SetTexture([[Interface\AddOns\HealBot\Images\indicator_yellow.tga]]);
-                        button.gref.indicator.power[2]:SetTexture([[Interface\AddOns\HealBot\Images\indicator_yellow.tga]]);
+                        button.gref.indicator.power[1]:SetTexture([[Interface\AddOns\HealBot\Images\indicators\indicator_yellow.tga]]);
+                        button.gref.indicator.power[2]:SetTexture([[Interface\AddOns\HealBot\Images\indicators\indicator_yellow.tga]]);
                     else
-                        button.gref.indicator.power[1]:SetTexture([[Interface\AddOns\HealBot\Images\indicator_orange.tga]]);
-                        button.gref.indicator.power[2]:SetTexture([[Interface\AddOns\HealBot\Images\indicator_orange.tga]]);
+                        button.gref.indicator.power[1]:SetTexture([[Interface\AddOns\HealBot\Images\indicators\indicator_orange.tga]]);
+                        button.gref.indicator.power[2]:SetTexture([[Interface\AddOns\HealBot\Images\indicators\indicator_orange.tga]]);
                     end
                 end
                 button.gref.indicator.power[1]:SetAlpha(indAlpha)
@@ -3286,17 +3286,17 @@ function HealBot_Action_PowerIndicators(button)
                 button.mana.power=3
                 if hbv_Skins_GetFrameVar("Indicators", "PCOL", button.frame) == 1 then
                     if HealBot_Action_luVars["UnitPowerMax"]<4 then
-                        button.gref.indicator.power[1]:SetTexture([[Interface\AddOns\HealBot\Images\indicator_green.tga]]);
-                        button.gref.indicator.power[2]:SetTexture([[Interface\AddOns\HealBot\Images\indicator_green.tga]]);
-                        button.gref.indicator.power[3]:SetTexture([[Interface\AddOns\HealBot\Images\indicator_green.tga]]);
+                        button.gref.indicator.power[1]:SetTexture([[Interface\AddOns\HealBot\Images\indicators\indicator_green.tga]]);
+                        button.gref.indicator.power[2]:SetTexture([[Interface\AddOns\HealBot\Images\indicators\indicator_green.tga]]);
+                        button.gref.indicator.power[3]:SetTexture([[Interface\AddOns\HealBot\Images\indicators\indicator_green.tga]]);
                     elseif HealBot_Action_luVars["UnitPowerMax"]<5 then
-                        button.gref.indicator.power[1]:SetTexture([[Interface\AddOns\HealBot\Images\indicator_lime.tga]]);
-                        button.gref.indicator.power[2]:SetTexture([[Interface\AddOns\HealBot\Images\indicator_lime.tga]]);
-                        button.gref.indicator.power[3]:SetTexture([[Interface\AddOns\HealBot\Images\indicator_lime.tga]]);
+                        button.gref.indicator.power[1]:SetTexture([[Interface\AddOns\HealBot\Images\indicators\indicator_lime.tga]]);
+                        button.gref.indicator.power[2]:SetTexture([[Interface\AddOns\HealBot\Images\indicators\indicator_lime.tga]]);
+                        button.gref.indicator.power[3]:SetTexture([[Interface\AddOns\HealBot\Images\indicators\indicator_lime.tga]]);
                     else
-                        button.gref.indicator.power[1]:SetTexture([[Interface\AddOns\HealBot\Images\indicator_yellow.tga]]);
-                        button.gref.indicator.power[2]:SetTexture([[Interface\AddOns\HealBot\Images\indicator_yellow.tga]]);
-                        button.gref.indicator.power[3]:SetTexture([[Interface\AddOns\HealBot\Images\indicator_yellow.tga]]);
+                        button.gref.indicator.power[1]:SetTexture([[Interface\AddOns\HealBot\Images\indicators\indicator_yellow.tga]]);
+                        button.gref.indicator.power[2]:SetTexture([[Interface\AddOns\HealBot\Images\indicators\indicator_yellow.tga]]);
+                        button.gref.indicator.power[3]:SetTexture([[Interface\AddOns\HealBot\Images\indicators\indicator_yellow.tga]]);
                     end
                 end
                 button.gref.indicator.power[1]:SetAlpha(indAlpha)
@@ -3310,16 +3310,16 @@ function HealBot_Action_PowerIndicators(button)
                 button.mana.power=4
                 if hbv_Skins_GetFrameVar("Indicators", "PCOL", button.frame) == 1 then
                     if HealBot_Action_luVars["UnitPowerMax"]<5 then
-                        button.gref.indicator.power[1]:SetTexture([[Interface\AddOns\HealBot\Images\indicator_green.tga]]);
-                        button.gref.indicator.power[2]:SetTexture([[Interface\AddOns\HealBot\Images\indicator_green.tga]]);
-                        button.gref.indicator.power[3]:SetTexture([[Interface\AddOns\HealBot\Images\indicator_green.tga]]);
-                        button.gref.indicator.power[4]:SetTexture([[Interface\AddOns\HealBot\Images\indicator_green.tga]]);
+                        button.gref.indicator.power[1]:SetTexture([[Interface\AddOns\HealBot\Images\indicators\indicator_green.tga]]);
+                        button.gref.indicator.power[2]:SetTexture([[Interface\AddOns\HealBot\Images\indicators\indicator_green.tga]]);
+                        button.gref.indicator.power[3]:SetTexture([[Interface\AddOns\HealBot\Images\indicators\indicator_green.tga]]);
+                        button.gref.indicator.power[4]:SetTexture([[Interface\AddOns\HealBot\Images\indicators\indicator_green.tga]]);
 
                     else
-                        button.gref.indicator.power[1]:SetTexture([[Interface\AddOns\HealBot\Images\indicator_lime.tga]]);
-                        button.gref.indicator.power[2]:SetTexture([[Interface\AddOns\HealBot\Images\indicator_lime.tga]]);
-                        button.gref.indicator.power[3]:SetTexture([[Interface\AddOns\HealBot\Images\indicator_lime.tga]]);
-                        button.gref.indicator.power[4]:SetTexture([[Interface\AddOns\HealBot\Images\indicator_lime.tga]]);
+                        button.gref.indicator.power[1]:SetTexture([[Interface\AddOns\HealBot\Images\indicators\indicator_lime.tga]]);
+                        button.gref.indicator.power[2]:SetTexture([[Interface\AddOns\HealBot\Images\indicators\indicator_lime.tga]]);
+                        button.gref.indicator.power[3]:SetTexture([[Interface\AddOns\HealBot\Images\indicators\indicator_lime.tga]]);
+                        button.gref.indicator.power[4]:SetTexture([[Interface\AddOns\HealBot\Images\indicators\indicator_lime.tga]]);
                     end
                 end
                 button.gref.indicator.power[1]:SetAlpha(indAlpha)
@@ -3332,10 +3332,10 @@ function HealBot_Action_PowerIndicators(button)
             if button.mana.power~=5 then
                 button.mana.power=5
                 if hbv_Skins_GetFrameVar("Indicators", "PCOL", button.frame) == 1 then
-                    button.gref.indicator.power[1]:SetTexture([[Interface\AddOns\HealBot\Images\indicator_green.tga]]);
-                    button.gref.indicator.power[2]:SetTexture([[Interface\AddOns\HealBot\Images\indicator_green.tga]]);
-                    button.gref.indicator.power[3]:SetTexture([[Interface\AddOns\HealBot\Images\indicator_green.tga]]);
-                    button.gref.indicator.power[4]:SetTexture([[Interface\AddOns\HealBot\Images\indicator_green.tga]]);
+                    button.gref.indicator.power[1]:SetTexture([[Interface\AddOns\HealBot\Images\indicators\indicator_green.tga]]);
+                    button.gref.indicator.power[2]:SetTexture([[Interface\AddOns\HealBot\Images\indicators\indicator_green.tga]]);
+                    button.gref.indicator.power[3]:SetTexture([[Interface\AddOns\HealBot\Images\indicators\indicator_green.tga]]);
+                    button.gref.indicator.power[4]:SetTexture([[Interface\AddOns\HealBot\Images\indicators\indicator_green.tga]]);
                 end
                 button.gref.indicator.power[1]:SetAlpha(indAlpha)
                 button.gref.indicator.power[2]:SetAlpha(indAlpha)
@@ -3441,7 +3441,7 @@ function HealBot_Action_CheckUnitLowMana(button)
         button.gref.indicator.mana[3]:SetAlpha(0)
     end
     if button.player and HealBot_Action_luVars["CheckManaDrink"] then
-        HealBot_BuffThrottleUpdateButton(button)
+        HealBot_Aura_CheckForMana(button)
     end
 end
 
@@ -3453,7 +3453,7 @@ function HealBot_Action_ShowDirectionArrow(button)
         if ooRhbD then
             if button.status.dirarrowshown == 0 or button.status.dirarrowcords~=ooRhbD then 
                 button.status.dirarrowcords=ooRhbD
-                HealBot_Aura_OORUpdate(button, "Interface\\AddOns\\HealBot\\Images\\arrow.blp")
+                HealBot_Aura_OORUpdate(button, "Interface\\AddOns\\HealBot\\Images\\oor\\arrow.blp")
             end
             button.status.dirarrowshown=HealBot_TimeNow+0.2
         elseif button.status.dirarrowshown>0 then
@@ -3561,8 +3561,8 @@ function HealBot_Action_InitFrames()
         if not grpFrame[x] then
             grpFrame[x]=CreateFrame("Frame", "f"..x.."_HealBot_Action", UIParent, BackdropTemplateMixin and "SecureFrameTemplate,BackdropTemplate")
             grpFrame[x]:SetBackdrop({
-                bgFile="Interface\\Addons\\HealBot\\Images\\WhiteLine",
-                edgeFile="Interface\\Addons\\HealBot\\Images\\border",
+                bgFile="Interface\\Addons\\HealBot\\Images\\frame\\WhiteLine.tga",
+                edgeFile="Interface\\Addons\\HealBot\\Images\\frame\\border.tga",
                 tile=true,
                 tileSize=8,
                 edgeSize=8,
@@ -4022,7 +4022,7 @@ function HealBot_Action_InitButton(button, prefix)
     button.gref["Shield"]=_G[button.bName.."Bar3"]
     button.gref["Shield"]:SetMinMaxValues(0,1000)
     button.gref["Shield"]:SetValue(1000)
-    button.gref["Shield"]:SetStatusBarTexture("Interface\\Addons\\HealBot\\Images\\Shield.tga")
+    button.gref["Shield"]:SetStatusBarTexture("Interface\\Addons\\HealBot\\Images\\frame\\Shield.tga")
     button.gref["Shield"]:SetStatusBarColor(0,0,0,0)
     button.gref["Shield"]:SetOrientation("VERTICAL")
     button:SetFrameLevel(HealBot_Action_luVars["buttonFrameLevel"]); 
@@ -5131,11 +5131,11 @@ function HealBot_Action_GetSpell(cType, cKey)
             if sType and sID then
                 if sType == "C" then
                     vSpellText=HealBot_Action_SpellCmdText(cType, sID)
-                    vSpellIcon=[[Interface\Addons\HealBot\Images\icon_command]]
+                    vSpellIcon=[[Interface\Addons\HealBot\Images\options\icon_command]]
                     vSpellType="command"
                 elseif sType == "E" then
                     vSpellText=HEALBOT_EMOTE.."="..sID
-                    vSpellIcon=[[Interface\Addons\HealBot\Images\icon_emote]]
+                    vSpellIcon=[[Interface\Addons\HealBot\Images\options\icon_emote]]
                     vSpellType="emote"
                 elseif sType == "I" then
                     sID=tonumber(sID)
@@ -6660,7 +6660,7 @@ function HealBot_Action_UpdateTestButton(button)
         if (testBarsDat["cnt"] % 4 == 0) and hbv_Skins_GetFrameBoolean("RaidIcon", "SHOW", button.frame) then
             testBarsDat["targetCnt"]=testBarsDat["targetCnt"]+1
             if testBarsDat["targetCnt"]>8 then testBarsDat["targetCnt"]=1 end
-            button.gref.icon[92]:SetTexture(HealBot_Aura_retRaidtargetIcon(testBarsDat["targetCnt"]))
+            button.gref.icon[92]:SetTexture(HealBot_Media_retTargetIcon(testBarsDat["targetCnt"]))
             button.gref.icon[92]:SetAlpha(1)
         else
             button.gref.icon[92]:SetAlpha(0)

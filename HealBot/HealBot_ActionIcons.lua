@@ -176,7 +176,7 @@ function HealBot_ActionIcons_InitFrames()
                         actionIconFrame[x][y].countText:SetWordWrap(false)
                         actionIcons[x][y]=CreateFrame("Button", "ActionIcon_f"..x.."i"..y , actionIconFrame[x][y], "SecureActionButtonTemplate")
                         actionIcons[x][y]:SetFrameLevel(2)
-                        actionIcons[x][y]:SetNormalTexture([[Interface\Addons\HealBot\Images\icon_outline]])
+                        actionIcons[x][y]:SetNormalTexture([[Interface\Addons\HealBot\Images\frame\icon_outline]])
                         actionIcons[x][y].frame=x
                         actionIcons[x][y].id=y
                         actionIcons[x][y].filter=0
@@ -752,8 +752,8 @@ end
 
 function HealBot_ActionIcons_UpdateNumIconsAll()
         --HealBot_setCall("HealBot_ActionIcons_UpdateNumIconsAll")
-    --if not hb_lVars["UpdateNumIcons"] then
-    --    hb_lVars["UpdateNumIcons"]=true
+    if not hb_lVars["UpdateNumIcons"] then
+        hb_lVars["UpdateNumIcons"]=true
         for x,_ in pairs(hbSelfAbility) do
             hbSelfAbility[x]=nil
         end
@@ -762,14 +762,14 @@ function HealBot_ActionIcons_UpdateNumIconsAll()
         end
         HealBot_ActionIcons_UpdateNumIcons(1, true)
         for x=2,10 do
-            HealBot_ActionIcons_UpdateNumIcons(x, true)
-            --C_Timer.After(x/50, function() HealBot_ActionIcons_UpdateNumIcons(x, true) end)
+            --HealBot_ActionIcons_UpdateNumIcons(x, true)
+            C_Timer.After(x/50, function() HealBot_ActionIcons_UpdateNumIcons(x, true) end)
         end
-        HealBot_Options_FramesActionIconsSetLists()
-    --    C_Timer.After(0.01, function() HealBot_ActionIcons_setLuVars("UpdateNumIcons", false) end)
-    --else
-    --    HealBot_Timers_Set("OOC","ActionIconsNumbers",true)
-    --end
+    --    HealBot_Options_FramesActionIconsSetLists()
+        C_Timer.After(0.01, function() HealBot_ActionIcons_setLuVars("UpdateNumIcons", false) end)
+    else
+        HealBot_Timers_Set("OOC","ActionIconsNumbers",true)
+    end
 end
 
 local vFrameAnchor,vFrameSetPointX,vFrameSetPointY=0,0
@@ -899,9 +899,9 @@ function HealBot_ActionIcons_SetAllFramePoints()
         if not hb_lVars["SetPoints"] then
             hb_lVars["SetPoints"]=true
             for x=1,#activeFramesIdx do
-                C_Timer.After(x/40, function() HealBot_ActionIcons_SetFramePoints(activeFramesIdx[x]) end)
+                HealBot_ActionIcons_SetFramePoints(activeFramesIdx[x])
             end
-            C_Timer.After(0.25, function() HealBot_Timers_Set("OOC","SaveActionIconsProfile",1); HealBot_ActionIcons_setLuVars("SetPoints", false) end)
+            C_Timer.After(0.25, function() HealBot_Timers_Set("OOC","SaveActionIconsProfile",true,true); HealBot_ActionIcons_setLuVars("SetPoints", false) end)
         else
             HealBot_Timers_Set("OOC","ActionIconsSetPoints",true)
         end
@@ -1799,7 +1799,7 @@ function HealBot_ActionIcons_ValidateAbility(frame, id, itemsOnly)
             actionIcons[frame][id]:SetNormalTexture(icon)
             actionIcons[frame][id].isIcon=true
         else
-            actionIcons[frame][id]:SetNormalTexture([[Interface\Addons\HealBot\Images\icon_outline]])
+            actionIcons[frame][id]:SetNormalTexture([[Interface\Addons\HealBot\Images\frame\icon_outline]])
             actionIcons[frame][id].isIcon=false
             actionIcons[frame][id]:SetAlpha(0.7)
         end

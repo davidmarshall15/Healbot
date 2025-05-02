@@ -221,7 +221,7 @@ end
 
 function HealBot_Events_RosterUpdate()
       --HealBot_setCall("HealBot_Events_RosterUpdate")
-    HealBot_Timers_Set("OOC","PartyUpdateCheckSkin",true)
+    HealBot_Timers_Set("OOC","PartyUpdateCheckSkin")
     HealBot_Events_PartyMembersChanged();
 end
 

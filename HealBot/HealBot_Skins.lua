@@ -43,20 +43,20 @@ function HealBot_Skins_retColWidth(frame, id)
     end
 end
 
-local indTextures={ [2]=[[Interface\Addons\HealBot\Images\indicator_gold]],
-                    [3]=[[Interface\Addons\HealBot\Images\indicator_silver]],
-                    [4]=[[Interface\Addons\HealBot\Images\indicator_white]],
-                    [5]=[[Interface\Addons\HealBot\Images\indicator_yellow]],
-                    [6]=[[Interface\Addons\HealBot\Images\indicator_orange]],
-                    [7]=[[Interface\Addons\HealBot\Images\indicator_pink]],
-                    [8]=[[Interface\Addons\HealBot\Images\indicator_red]],
-                    [9]=[[Interface\Addons\HealBot\Images\indicator_purple]],
-                   [10]=[[Interface\Addons\HealBot\Images\indicator_aqua]],
-                   [11]=[[Interface\Addons\HealBot\Images\indicator_lime]],
-                   [12]=[[Interface\Addons\HealBot\Images\indicator_green]],
-                   [13]=[[Interface\Addons\HealBot\Images\indicator_blue]],
-                   [14]=[[Interface\Addons\HealBot\Images\indicator_brown]],
-                   [15]=[[Interface\Addons\HealBot\Images\indicator_black]],
+local indTextures={ [2]=[[Interface\Addons\HealBot\Images\indicators\indicator_gold]],
+                    [3]=[[Interface\Addons\HealBot\Images\indicators\indicator_silver]],
+                    [4]=[[Interface\Addons\HealBot\Images\indicators\indicator_white]],
+                    [5]=[[Interface\Addons\HealBot\Images\indicators\indicator_yellow]],
+                    [6]=[[Interface\Addons\HealBot\Images\indicators\indicator_orange]],
+                    [7]=[[Interface\Addons\HealBot\Images\indicators\indicator_pink]],
+                    [8]=[[Interface\Addons\HealBot\Images\indicators\indicator_red]],
+                    [9]=[[Interface\Addons\HealBot\Images\indicators\indicator_purple]],
+                   [10]=[[Interface\Addons\HealBot\Images\indicators\indicator_aqua]],
+                   [11]=[[Interface\Addons\HealBot\Images\indicators\indicator_lime]],
+                   [12]=[[Interface\Addons\HealBot\Images\indicators\indicator_green]],
+                   [13]=[[Interface\Addons\HealBot\Images\indicators\indicator_blue]],
+                   [14]=[[Interface\Addons\HealBot\Images\indicators\indicator_brown]],
+                   [15]=[[Interface\Addons\HealBot\Images\indicators\indicator_black]],
                    }
 
 local tabconcat=table.concat
@@ -614,8 +614,8 @@ function HealBot_Skins_ResetSkin(barType,button,numcols)
                 erButton.used=false
             end
 
-			-- bgFile="Interface\\Addons\\HealBot\\Images\\WhiteLine",
-			-- edgeFile="Interface\\Addons\\HealBot\\Images\\border",
+			-- bgFile="Interface\\Addons\\HealBot\\Images\\frame\\WhiteLine.tga",
+			-- edgeFile="Interface\\Addons\\HealBot\\Images\\frame\\border.tga",
             -- edgeFile="Interface\\Buttons\\WHITE8X8",
 
             tBarsConcat[1]="f"
@@ -1828,6 +1828,7 @@ function HealBot_Skins_Check_Skin(SkinName)
     if not Healbot_Config_Skins.RaidIcon[SkinName] then Healbot_Config_Skins.RaidIcon[SkinName]={} end
     if not Healbot_Config_Skins.IconText[SkinName] then Healbot_Config_Skins.IconText[SkinName]={} end
     if not Healbot_Config_Skins.IconSets[SkinName] then Healbot_Config_Skins.IconSets[SkinName]={} end
+    if not Healbot_Config_Skins.IconSet[SkinName] then Healbot_Config_Skins.IconSet[SkinName]={} end
     if not Healbot_Config_Skins.IconSetsText[SkinName] then Healbot_Config_Skins.IconSetsText[SkinName]={} end
     if not Healbot_Config_Skins.Frame[SkinName] then Healbot_Config_Skins.Frame[SkinName]={} end
     if not Healbot_Config_Skins.StickyFrames[SkinName] then Healbot_Config_Skins.StickyFrames[SkinName]={} end
@@ -2011,6 +2012,6 @@ function HealBot_Skins_Check_Skin(SkinName)
         end
     end
     HealBot_Skins_Clear_UnusedSkin(SkinName)
-    HealBot_Timers_Set("SKINS","VarsHasSkin")
+    hbv_Skins_VarsHasSkin()
     Healbot_Config_Skins.General[SkinName]["VC"]=HealBot_Global_Version()
 end

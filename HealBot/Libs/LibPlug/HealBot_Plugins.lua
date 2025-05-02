@@ -90,7 +90,7 @@ end
 function HealBot_Plugin_Options_SetupStatusBarButton(bar, width, x, text, y)
 	bar:SetSize(width, 22)
 	bar:SetPoint("TOP", x, y or -85)
-	bar:SetStatusBarTexture("Interface\\Addons\\HealBot\\Images\\tukuibar.tga")
+	bar:SetStatusBarTexture("Interface\\Addons\\HealBot\\Images\\textures\\tukuibar.tga")
 	bar.Text=bar:CreateFontString()
 	bar.Text:SetFontObject(GameFontNormal)
     bar.Text:SetPoint("CENTER")

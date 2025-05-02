@@ -1725,8 +1725,8 @@ function HealBot_Share_ShowLinkFrame()
     if not hbLinkFrame then
 		hbLinkFrame=CreateFrame("Frame", "HealBot_Link_Frame", UIParent, BackdropTemplateMixin and "BackdropTemplate")
 		hbLinkFrame:SetBackdrop({
-			bgFile="Interface\\Addons\\HealBot\\Images\\WhiteLine",
-			edgeFile="Interface\\Addons\\HealBot\\Images\\border",
+			bgFile="Interface\\Addons\\HealBot\\Images\\frame\\WhiteLine.tga",
+			edgeFile="Interface\\Addons\\HealBot\\Images\\frame\\border.tga",
 			tile=true,
 			tileSize=8,
 			edgeSize=8,
@@ -1863,8 +1863,8 @@ function HealBot_Share_ShowPostFrame(g,h,f,tTxt)
     if not hbPostLinkFrame then
 		hbPostLinkFrame=CreateFrame("Frame", "HealBot_Link_PostFrame", UIParent, BackdropTemplateMixin and "BackdropTemplate")
 		hbPostLinkFrame:SetBackdrop({
-			bgFile="Interface\\Addons\\HealBot\\Images\\WhiteLine",
-			edgeFile="Interface\\Addons\\HealBot\\Images\\border",
+			bgFile="Interface\\Addons\\HealBot\\Images\\frame\\WhiteLine.tga",
+			edgeFile="Interface\\Addons\\HealBot\\Images\\frame\\border.tga",
 			tile=true,
 			tileSize=8,
 			edgeSize=8,

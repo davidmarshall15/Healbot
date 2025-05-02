@@ -2421,6 +2421,9 @@ end
 
 function HealBot_VariablesLoaded()
       --HealBot_setCall("HealBot_VariablesLoaded")
+    HealBot_Media_setClassRoleIcons()
+    HealBot_Media_setRankIcons()
+    HealBot_Media_setTargetIcons()
     HealBot_Global_MetaVersion()
     HealBot_WoWAPI_SetAll()
     HealBot_globalVars()

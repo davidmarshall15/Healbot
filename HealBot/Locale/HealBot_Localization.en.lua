@@ -836,8 +836,8 @@ function HealBot_Lang_enALL()
     HEALBOT_WORD_NEVER                     ="Never";
     HEALBOT_SHOW_CLASS_AS_ICON             ="as icon";
     HEALBOT_SHOW_CLASS_AS_TEXT             ="as text";
-    HEALBOT_SHOW_ROLE                      ="show role when set";
-    HEALBOT_SHOW_ROLETANKONLY              ="only show tank role";
+    HEALBOT_SHOW_ROLE                      ="show role";
+    HEALBOT_SHOW_ROLETANKONLY              ="only show tanks";
     HEALBOT_SHOW_PLAYERROLE                ="Show role";
     HEALBOT_SHOW_RAIDRANK                  ="Show rank";
     HEALBOT_SHOW_HIDEROLEWHENRANK          ="Hide role when rank exists";

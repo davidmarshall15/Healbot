@@ -24,34 +24,73 @@ local HealBot_Font_Outline={
     [3]="THICKOUTLINE",
 }
 
-local roleTextures={
-    ["DAMAGER"]="Interface\\Addons\\HealBot\\Images\\dps.tga",
-    ["TANK"]="Interface\\Addons\\HealBot\\Images\\tank.tga",
-    ["HEALER"]="Interface\\Addons\\HealBot\\Images\\healer.tga",
-    }
+local roleTextures={}
+local classTextures={}
+local rankTextures={}
+local targetTextures={}
+local currentSet={["CLASS"]=0, ["ROLE"]=0, ["RANK"]=0, ["TARGET"]=0, }
+function HealBot_Media_setClassRoleIcons()
+    local iSet=hbv_Skins_GetVar("IconSet", "CLASS")
+    classTextures["DEAT"]="Interface\\Addons\\HealBot\\Images\\class\\" .. iSet .. "\\Deathknight.tga"
+    classTextures["DEMO"]="Interface\\Addons\\HealBot\\Images\\class\\" .. iSet .. "\\Demonhunter.tga"
+    classTextures["DRUI"]="Interface\\Addons\\HealBot\\Images\\class\\" .. iSet .. "\\Druid.tga"
+    classTextures["HUNT"]="Interface\\Addons\\HealBot\\Images\\class\\" .. iSet .. "\\Hunter.tga"
+    classTextures["MAGE"]="Interface\\Addons\\HealBot\\Images\\class\\" .. iSet .. "\\Mage.tga"
+    classTextures["MONK"]="Interface\\Addons\\HealBot\\Images\\class\\" .. iSet .. "\\Monk.tga"
+    classTextures["PALA"]="Interface\\Addons\\HealBot\\Images\\class\\" .. iSet .. "\\Paladin.tga"
+    classTextures["PRIE"]="Interface\\Addons\\HealBot\\Images\\class\\" .. iSet .. "\\Priest.tga"
+    classTextures["ROGU"]="Interface\\Addons\\HealBot\\Images\\class\\" .. iSet .. "\\Rogue.tga"
+    classTextures["SHAM"]="Interface\\Addons\\HealBot\\Images\\class\\" .. iSet .. "\\Shaman.tga"
+    classTextures["WARL"]="Interface\\Addons\\HealBot\\Images\\class\\" .. iSet .. "\\Warlock.tga"
+    classTextures["WARR"]="Interface\\Addons\\HealBot\\Images\\class\\" .. iSet .. "\\Warrior.tga"
+    classTextures["EVOK"]="Interface\\Addons\\HealBot\\Images\\class\\" .. iSet .. "\\Evoker.tga"
+    if currentSet["CLASS"] ~= iSet then
+        HealBot_IconClassRole_UpdateIcons()
+        HealBot_Timers_Set("AURA","ResetClassIconTexture",true)
+        currentSet["CLASS"]=iSet
+    end
+    
+    iSet=hbv_Skins_GetVar("IconSet", "ROLE")
+    roleTextures["DAMAGER"]="Interface\\Addons\\HealBot\\Images\\role\\" .. iSet .. "\\dps.tga"
+    roleTextures["TANK"]="Interface\\Addons\\HealBot\\Images\\role\\" .. iSet .. "\\tank.tga"
+    roleTextures["HEALER"]="Interface\\Addons\\HealBot\\Images\\role\\" .. iSet .. "\\healer.tga"
+    if currentSet["ROLE"] ~= iSet then
+        HealBot_IconClassRole_UpdateIcons()
+        HealBot_Timers_Set("AURA","ResetClassIconTexture",true)
+        currentSet["ROLE"]=iSet
+    end
+end
 
-local classTextures={
-    ["DEAT"]="Interface\\Addons\\HealBot\\Images\\Deathknight-round",
-    ["DEMO"]="Interface\\Addons\\HealBot\\Images\\Demonhunter-round",
-    ["DRUI"]="Interface\\Addons\\HealBot\\Images\\Druid-round",
-    ["HUNT"]="Interface\\Addons\\HealBot\\Images\\Hunter-round",
-    ["MAGE"]="Interface\\Addons\\HealBot\\Images\\Mage-round",
-    ["MONK"]="Interface\\Addons\\HealBot\\Images\\Monk-round",
-    ["PALA"]="Interface\\Addons\\HealBot\\Images\\Paladin-round",
-    ["PRIE"]="Interface\\Addons\\HealBot\\Images\\Priest-round",
-    ["ROGU"]="Interface\\Addons\\HealBot\\Images\\Rogue-round",
-    ["SHAM"]="Interface\\Addons\\HealBot\\Images\\Shaman-round",
-    ["WARL"]="Interface\\Addons\\HealBot\\Images\\Warlock-round",
-    ["WARR"]="Interface\\Addons\\HealBot\\Images\\Warrior-round",
-    ["EVOK"]="Interface\\Addons\\HealBot\\Images\\Evoker-round",
-    }
+function HealBot_Media_setRankIcons()
+    local iSet=hbv_Skins_GetVar("IconSet", "RANK")
+    rankTextures[1]="Interface\\Addons\\HealBot\\Images\\rank\\" .. iSet .. "\\leader.tga"
+    rankTextures[2]="Interface\\Addons\\HealBot\\Images\\rank\\" .. iSet .. "\\assist.tga"
+    rankTextures[3]="Interface\\Addons\\HealBot\\Images\\rank\\" .. iSet .. "\\looter.tga"
+    rankTextures[4]="Interface\\Addons\\HealBot\\Images\\rank\\" .. iSet .. "\\leader.tga"
+    rankTextures[5]="Interface\\Addons\\HealBot\\Images\\rank\\" .. iSet .. "\\tank.tga"
+    if currentSet["RANK"] ~= iSet then
+        HealBot_IconRank_UpdateIcons()
+        HealBot_Timers_Set("AURA","IconUpdAllRank",true)
+        currentSet["RANK"]=iSet
+    end
+end
 
-local rankTextures={[1]="Interface\\Addons\\HealBot\\Images\\leader.tga",
-                    [2]="Interface\\Addons\\HealBot\\Images\\assist.tga",
-                    [3]="Interface\\Addons\\HealBot\\Images\\looter.tga",
-                    [4]="Interface\\Addons\\HealBot\\Images\\leader.tga",
-                    [5]="Interface\\Addons\\HealBot\\Images\\tank.tga",
-                   }
+function HealBot_Media_setTargetIcons()
+    local iSet=hbv_Skins_GetVar("IconSet", "TARGET")
+    targetTextures[1]="Interface\\Addons\\HealBot\\Images\\target\\" .. iSet .. "\\Star.tga"
+    targetTextures[2]="Interface\\Addons\\HealBot\\Images\\target\\" .. iSet .. "\\Circle.tga"
+    targetTextures[3]="Interface\\Addons\\HealBot\\Images\\target\\" .. iSet .. "\\Diamond.tga"
+    targetTextures[4]="Interface\\Addons\\HealBot\\Images\\target\\" .. iSet .. "\\Triangle.tga"
+    targetTextures[5]="Interface\\Addons\\HealBot\\Images\\target\\" .. iSet .. "\\Moon.tga"
+    targetTextures[6]="Interface\\Addons\\HealBot\\Images\\target\\" .. iSet .. "\\Square.tga"
+    targetTextures[7]="Interface\\Addons\\HealBot\\Images\\target\\" .. iSet .. "\\Cross.tga"
+    targetTextures[8]="Interface\\Addons\\HealBot\\Images\\target\\" .. iSet .. "\\Skull.tga"
+    if currentSet["TARGET"] ~= iSet then
+        HealBot_IconTarget_UpdateIcons()
+        HealBot_Timers_Set("SKINS","IconUpdAllTarget",true)
+        currentSet["TARGET"]=iSet
+    end
+end
 
 function HealBot_Media_retClassRoleIcon(id)
       --HealBot_setCall("HealBot_Media_retClassRoleIcon")
@@ -60,6 +99,10 @@ end
 
 function HealBot_Media_retRankIcon(id)
     return rankTextures[id]
+end
+
+function HealBot_Media_retTargetIcon(id)
+    return targetTextures[id]
 end
 
 function HealBot_Media_PluginState(state)

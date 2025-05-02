@@ -1,6 +1,6 @@
 -- Default Media
 function hbv_Default_TextureFile()
-    return 'Interface\\Addons\\HealBot\\Images\\Smoothv2.tga'
+    return 'Interface\\Addons\\HealBot\\Images\\textures\\Smoothv2.tga'
 end
 
 function hbv_Default_TextureName()
@@ -650,6 +650,8 @@ local hbSkinDefaults={["Enemy"]={["INCSELF"]=true, ["INCTANKS"]=true, ["INCFOCUS
                                 },
                        ["Chat"]={["NOTIFY"]=1, ["MSG"]=HEALBOT_NOTIFYOTHERMSG, ["RESONLY"]=true, ["EOCOOM"]=false, ["EOCOOMV"]=20,
                                 },
+                    ["IconSet"]={["CLASS"]=1, ["ROLE"]=1, ["TARGET"]=1, ["STATE"]=1, ["RANK"]=1, ["RC"]=1, ["COMBAT"]=1,
+                                },
 }
 
 function hbv_Skins_HasDefault(cat, key)
@@ -669,13 +671,19 @@ function hbv_Skins_GetBoolean(cat, key)
 end
 
 function hbv_Skins_GetVar(cat, key)
-    return Healbot_Config_Skins[cat][Healbot_Config_Skins.Current_Skin][key] or hbSkinDefaults[cat][key]
+    if Healbot_Config_Skins[cat] and Healbot_Config_Skins[cat][Healbot_Config_Skins.Current_Skin] then
+        return Healbot_Config_Skins[cat][Healbot_Config_Skins.Current_Skin][key] or hbSkinDefaults[cat][key]
+    else
+        return hbSkinDefaults[cat][key]
+    end
 end
 
 function hbv_Skins_SetVarSkin(value, skin, cat, key)
     if hbSkinDefaults[cat] and hbSkinDefaults[cat][key] == value then
         hbv_Skins_NilVarSkin(skin, cat, key)
     else
+        if not Healbot_Config_Skins[cat] then Healbot_Config_Skins[cat]={} end
+        if not Healbot_Config_Skins[cat][skin] then Healbot_Config_Skins[cat][skin]={} end
         Healbot_Config_Skins[cat][skin][key]=value
     end
 end
@@ -816,7 +824,7 @@ function hbv_Skins_FrameHasDefault(cat, key)
 end
 
 function hbv_Skins_GetFrameBoolean(cat, key, frame)
-    if Healbot_Config_Skins[cat][Healbot_Config_Skins.Current_Skin][frame] then
+    if Healbot_Config_Skins[cat] and Healbot_Config_Skins[cat][Healbot_Config_Skins.Current_Skin] and Healbot_Config_Skins[cat][Healbot_Config_Skins.Current_Skin][frame] then
         if Healbot_Config_Skins[cat][Healbot_Config_Skins.Current_Skin][frame][key] == false then
             return false
         else
@@ -837,6 +845,8 @@ function hbv_Skins_SetFrameVarSkin(value, skin, cat, key, frame)
     if hbSkinFrameDefaults[cat] and hbSkinFrameDefaults[cat][key] == value then
         hbv_Skins_NilFrameVarSkin(skin, cat, key, frame)
     else
+        if not Healbot_Config_Skins[cat] then Healbot_Config_Skins[cat]={} end
+        if not Healbot_Config_Skins[cat][skin] then Healbot_Config_Skins[cat][skin]={} end
         if not Healbot_Config_Skins[cat][skin][frame] then Healbot_Config_Skins[cat][skin][frame]={} end
         Healbot_Config_Skins[cat][skin][frame][key]=value
     end

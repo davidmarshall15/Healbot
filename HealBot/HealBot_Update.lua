@@ -460,7 +460,6 @@ function HealBot_Update_AuxClearAllMarkedBars()
     for xUnit,xButton in pairs(HealBot_PrivateTarget_Button) do
         HealBot_Aux_clearMarkedBars(xButton)
     end
-    HealBot_Aux_setLuVars("WaitOnFullClear", false)
 end
 
 function HealBot_Update_AuxTextButtons()
@@ -646,6 +645,11 @@ function HealBot_Update_RaidTarget()
             HealBot_Aura_RaidTargetUpdate(xButton,0)
         end
     end
+end
+
+function HealBot_Update_RaidTargetReset()
+    HealBot_Update_RaidTarget()
+    HealBot_Events_RaidTargetAll()
 end
 
 function HealBot_Update_ClassIconTexture()

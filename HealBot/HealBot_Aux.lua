@@ -13,7 +13,6 @@ HealBot_Aux_luVars["AuxFluidBarOpacityFreq"]=0.088
 HealBot_Aux_luVars["AuxFluidBarFreq"]=0.088
 HealBot_Aux_luVars["FluidBarSmoothAdj"]=5
 HealBot_Aux_luVars["TestBarsOn"]=false
-HealBot_Aux_luVars["WaitOnFullClear"]=false
 
 local hbCustomRoleCols={["TANK"]={}, ["HEALER"]={}, ["DAMAGER"]={}}
 function HealBot_Aux_SetCustomRoleCols()
@@ -123,10 +122,7 @@ local function HealBot_Aux_clearAllBar(id)
             xButton.aux[id]["CLEAR"]=true
         end
     end
-    if not HealBot_Aux_luVars["WaitOnFullClear"] then
-        HealBot_Aux_luVars["WaitOnFullClear"]=true
-        HealBot_Timers_Set("LAST","AuxBarsReset")
-    end
+    HealBot_Timers_Set("LAST","AuxBarsReset")
 end
 
 local vText,sLen="",0
@@ -304,24 +300,19 @@ end
 function HealBot_Aux_resetBars()
       --HealBot_setCall("HealBot_Aux_resetBars")
     if HealBot_retLuVars("Loaded") then
-        if HealBot_Aux_luVars["WaitOnFullClear"] then
-            HealBot_Timers_Set("AUX","ResetBars",true) -- All recall require a delay
-        else
-            HealBot_Aux_luVars["WaitOnFullClear"]=true
-            HealBot_Aux_luVars["TmpFluidInUse"]=HealBot_Aux_luVars["FluidInUse"]
-            if HealBot_Aux_luVars["FluidInUse"] then
-                HealBot_Aux_luVars["FluidInUse"]=false
-            end
-            HealBot_Options_clearAuxBars()
-            HealBot_Options_setAuxBars()
-            HealBot_Update_AllAuxBars()
-            HealBot_Aux_UpdateAllAuxByType()
-            HealBot_PlayerTargetChanged()
-            HealBot_Options_framesChanged(false, false, false, false, true)
-            HealBot_Timers_Set("LAST","UpdateAllUnitBars")
-            HealBot_Timers_Set("AURA","CheckUnits")
-            HealBot_Timers_Set("LAST","AuxBarsReset")
+        HealBot_Aux_luVars["TmpFluidInUse"]=HealBot_Aux_luVars["FluidInUse"]
+        if HealBot_Aux_luVars["FluidInUse"] then
+            HealBot_Aux_luVars["FluidInUse"]=false
         end
+        HealBot_Options_clearAuxBars()
+        HealBot_Options_setAuxBars()
+        HealBot_Update_AllAuxBars()
+        HealBot_Aux_UpdateAllAuxByType()
+        HealBot_PlayerTargetChanged()
+        HealBot_Options_framesChanged(false, false, false, false, true)
+        HealBot_Timers_Set("LAST","UpdateAllUnitBars")
+        HealBot_Timers_Set("AURA","CheckUnits")
+        HealBot_Aux_barsReset()
     else
         HealBot_Timers_Set("AUX","ResetBars",true) -- All recall require a delay
     end

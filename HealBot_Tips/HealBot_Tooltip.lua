@@ -1777,8 +1777,8 @@ function HealBot_Tooltip_ShowCustomAnchor()
     if not hbCustomTipAnchor then
 		hbCustomTipAnchor=CreateFrame("Frame", "HealBot_Custom_Anchor_Frame", UIParent, BackdropTemplateMixin and "BackdropTemplate")
 		hbCustomTipAnchor:SetBackdrop({
-			bgFile="Interface\\Addons\\HealBot\\Images\\WhiteLine",
-			edgeFile="Interface\\Addons\\HealBot\\Images\\border",
+			bgFile="Interface\\Addons\\HealBot\\Images\\frame\\WhiteLine.tga",
+			edgeFile="Interface\\Addons\\HealBot\\Images\\frame\\border.tga",
 			tile=true,
 			tileSize=8,
 			edgeSize=8,
