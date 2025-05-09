@@ -26,6 +26,8 @@ function HealBot_Lang_Options_enALL()
     local hbSpellsTips10="\n--\n".._G["YELLOW_FONT_COLOR_CODE"].."NOTE: This option only works with spells."
     local hbSpellsTips11="\n--\n".._G["YELLOW_FONT_COLOR_CODE"].."NOTE: Ensure debuff monitoring is turned on to populate this list.\n".._G["YELLOW_FONT_COLOR_CODE"].."NOTE: Existing custom debuffs are excluded from this list."
     local hbSpellsTips12="\n--\n".._G["YELLOW_FONT_COLOR_CODE"].."NOTE: Ensure buff monitoring is turned on to populate this list.\n".._G["YELLOW_FONT_COLOR_CODE"].."NOTE: Existing custom buffs are excluded from this list."
+    local hbSpellsTips13="\n--\n".._G["ORANGE_FONT_COLOR_CODE"].."NOTE: This setting applies to all frames."
+    local hbSpellsTips14="\n--\n".."|cff77c8ff".."Want a custom set of icons included?\n|cff77c8ff - Providing they are appropriate to the set.\n|cff77c8ff - They are 64x64 tga format.\n|cff77c8ff Share them on discord for review."
     HEALBOT_OPTIONS_HELP_TITLES={
                         -- Reset Colours
                                  ["RESETCOLS"]="Reset Col"..HEALBOT_enWORD_COLOUR_SUFFIX,
@@ -410,7 +412,6 @@ function HealBot_Lang_Options_enALL()
                                  ["HEALBARSTXTCHANGERESTEXTCOL"]="Change Text Col"..HEALBOT_enWORD_COLOUR_SUFFIX,
                                  ["HEALBARSTXTCHANGESUMMONTEXTCOL"]="Change Text Col"..HEALBOT_enWORD_COLOUR_SUFFIX,
                                  ["HEALBARSTXTSTATEONLYTIP"]=HEALBOT_OPTIONS_TEXTONLYTIP,
-                                 ["HEALBARSTXTSTATENAMEFONT"]=HEALBOT_OPTIONS_TEXTSTATENAMEFONT,
                                  ["HEALBARSTXTUTF8"]=HEALBOT_OPTIONS_ENABLELIBUTF8,
                                  ["HEALBARSTXTSHOWCLASS"]=HEALBOT_OPTIONS_SHOWCLASSONBAR,
                                  ["HEALBARSTXTSHOWROLE"]=HEALBOT_SHOW_ROLE,
@@ -541,6 +542,10 @@ function HealBot_Lang_Options_enALL()
                                  ["EXTRAICONCLASSSET"]=HEALBOT_SORTBY_CLASS.." "..HEALBOT_SKIN_ICONSET,
                                  ["EXTRAICONROLESET"]=HEALBOT_SORTBY_ROLE.." "..HEALBOT_SKIN_ICONSET,
                                  ["EXTRAICONRANKSET"]=HEALBOT_OPTIONS_ICONOPTRANKBUTTON.." "..HEALBOT_SKIN_ICONSET,
+                                 ["EXTRAICONCOMBATSET"]=HEALBOT_COMBAT.." "..HEALBOT_SKIN_ICONSET,
+                                 ["EXTRAICONTARGETSET"]=HEALBOT_OPTIONS_ICONOPTRAIDTARGETBUTTON.." "..HEALBOT_SKIN_ICONSET,
+                                 ["EXTRAICONRCSET"]=HEALBOT_OPTIONS_READYCHECK.." "..HEALBOT_SKIN_ICONSET,
+                                 ["EXTRAICONSTATESET"]=HEALBOT_OPTIONS_TAB_STATETEXT.." "..HEALBOT_SKIN_ICONSET,
                         -- Skins Frames ActionIcons General tab
                                  ["ACTIONICONSGENERAL"]="General Action Icons.",
                                  ["ACTIONICONSANCHOR"]=HEALBOT_OPTIONS_AUXBARANCHOR,
@@ -1098,7 +1103,7 @@ function HealBot_Lang_Options_enALL()
                                ["HEALBARSBCSPACE"]="Set the space between each column.\nA large column spacer can be used when icons are positioned off the bar.",
                                ["HEALBARSPOWERCOUNT"]="Show an indicator on the heal bar when a player has a power counter.",
                                ["HEALBARSLOWMANA"]="Set if and when indicators are\ndisplayed to show a player is low on mana.",
-                               ["HEALBARSLOWMANAIC"]="Turn On/Off displaying the low\nmana indicator while in combat.\n--\n".._G["YELLOW_FONT_COLOR_CODE"].."NOTE: This setting applies to all frames.",
+                               ["HEALBARSLOWMANAIC"]="Turn On/Off displaying the low\nmana indicator while in combat."..hbSpellsTips13,
                         -- Skins Frames Bars Colours tab
                                ["BARSCOLOUR"]="Show the Skins Frames Bars col"..HEALBOT_enWORD_COLOUR_SUFFIX.." tab.",
                                ["HEALBARSCOLHEALTHTYPE"]="Set the col"..HEALBOT_enWORD_COLOUR_SUFFIX.." of the heal bar.\n".._G["GREEN_FONT_COLOR_CODE"].."When custom is used click on the custom bar to set the col"..HEALBOT_enWORD_COLOUR_SUFFIX..".",
@@ -1226,7 +1231,6 @@ function HealBot_Lang_Options_enALL()
                                ["HEALBARSCOLSUMMONTEXTSTATE"]="Set the state text col"..HEALBOT_enWORD_COLOUR_SUFFIX.." when the player is being summoned.",
                                ["HEALBARSTXTCHANGESUMMONTEXTCOL"]="Change the text col"..HEALBOT_enWORD_COLOUR_SUFFIX.." when the player is being summoned.",
                                ["HEALBARSTXTSTATEONLYTIP"]="Only show the text in the tooltip.",
-                               ["HEALBARSTXTSTATENAMEFONT"]="Use the name font string and settings.\n--\n".._G["YELLOW_FONT_COLOR_CODE"].."NOTE: This setting applies to all frames.",
                                ["HEALBARSNAMETEXTCOLALPHA"]="Set the transparency of the\nname text when in an enabled state.",
                                ["HEALBARSSTATETEXTCOLALPHA"]="Set the transparency of the\nstate text when in an enabled state.",
                                ["HEALBARSTXTCHANGEDEADTEXTCOL"]="Change the text col"..HEALBOT_enWORD_COLOUR_SUFFIX.." when the player is dead.",
@@ -1363,9 +1367,13 @@ function HealBot_Lang_Options_enALL()
                                ["ICONSOORARROW"]="Show the Skins Frames Icons Extras Out of Range Arrow tab.",
                                ["ICONOFFSET"]="Offset the icon relative to the anchor.",
                                ["EXTRAICONSCALE"]="The icon scale relative to the bar.",
-                               ["EXTRAICONCLASSSET"]="Select the class icon set to be used.\n--\n".._G["ORANGE_FONT_COLOR_CODE"].."NOTE: This setting applies to all frames.",
-                               ["EXTRAICONROLESET"]="Select the role icon set to be used.\n--\n".._G["ORANGE_FONT_COLOR_CODE"].."NOTE: This setting applies to all frames.",
-                               ["EXTRAICONRANKSET"]="Select the rank icon set to be used.\n--\n".._G["ORANGE_FONT_COLOR_CODE"].."NOTE: This setting applies to all frames.",
+                               ["EXTRAICONCLASSSET"]="Select the class icon set to be used."..hbSpellsTips13..hbSpellsTips14,
+                               ["EXTRAICONROLESET"]="Select the role icon set to be used."..hbSpellsTips13..hbSpellsTips14,
+                               ["EXTRAICONRANKSET"]="Select the rank icon set to be used."..hbSpellsTips13..hbSpellsTips14,
+                               ["EXTRAICONCOMBATSET"]="Select the combat icon set to be used."..hbSpellsTips13..hbSpellsTips14,
+                               ["EXTRAICONRCSET"]="Select the ready check icon set to be used."..hbSpellsTips13..hbSpellsTips14,
+                               ["EXTRAICONSTATESET"]="Select the state icon set to be used."..hbSpellsTips13..hbSpellsTips14,
+                               ["EXTRAICONTARGETSET"]="Select the raid target icon set to be used."..hbSpellsTips13..hbSpellsTips14,
                         -- Skins Frames ActionIcons General tab
                                ["ACTIONICONSGENERAL"]="Show the Skins Frames Action Icons General tab.",
                                ["ACTIONICONSNUM"]="Set the number of icons to show.",

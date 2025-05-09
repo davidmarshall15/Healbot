@@ -76,7 +76,11 @@
 			</Layer>
 		</Layers>
     </CheckButton>
-
+    <Slider name="HealBot_Options_SliderTemplate" inherits="OptionsSliderTemplate" virtual="true">
+        <Size>
+          <AbsDimension x="240" y="16" />
+        </Size>
+    </Slider>
     <EditBox name="HealBot_Options_EditBoxTemplate" autoFocus="false" historyLines="32" justifyH="LEFT" virtual="true">
         <Layers>
           <Layer level="BORDER">
@@ -27517,8 +27521,8 @@
                             </Anchors>
                             <Scripts>
                               <OnValueChanged>HealBot_IconTargetIconSet_OnValueChanged(self)</OnValueChanged>
-                              <OnEnter>HealBot_Options_Show_Help("EXTRAICONRANKSET",true)</OnEnter>
-                              <OnLeave>HealBot_Options_Show_Help("EXTRAICONRANKSET",false)</OnLeave>
+                              <OnEnter>HealBot_Options_Show_Help("EXTRAICONTARGETSET",true)</OnEnter>
+                              <OnLeave>HealBot_Options_Show_Help("EXTRAICONTARGETSET",false)</OnLeave>
                             </Scripts>
                           </Slider>
                           <CheckButton name="HealBot_Options_BarButtonShowRaidIcon" inherits="HealBotUIPanelCheckButton">
@@ -27813,14 +27817,55 @@
                                 </Anchor>
                               </Anchors>
                             </FontString>
+                            <Texture name="HealBot_Options_Skins_EI_CombatIcon01">
+                              <Size>
+                                <AbsDimension x="40" y="40"/>
+                              </Size>
+                              <Anchors>
+                                <Anchor point="TOPLEFT">
+                                  <Offset>
+                                    <AbsDimension x="20" y="-225" />
+                                  </Offset>
+                                </Anchor>
+                              </Anchors>
+                            </Texture>
+                            <Texture name="HealBot_Options_Skins_EI_CombatIcon02">
+                              <Size>
+                                <AbsDimension x="40" y="40"/>
+                              </Size>
+                              <Anchors>
+                                <Anchor point="TOPRIGHT">
+                                  <Offset>
+                                    <AbsDimension x="-20" y="-225" />
+                                  </Offset>
+                                </Anchor>
+                              </Anchors>
+                            </Texture>
                           </Layer>
                         </Layers>
                         <Frames>
+                          <Slider name="HealBot_IconCombatIconSet" inherits="HealBot_Options_SliderTemplate">
+                            <Size>
+                              <AbsDimension x="110" y="18" />
+                            </Size>
+                            <Anchors>
+                              <Anchor point="TOPRIGHT">
+                                <Offset>
+                                  <AbsDimension x="-70" y="-60"/>
+                                </Offset>
+                              </Anchor>
+                            </Anchors>
+                            <Scripts>
+                              <OnValueChanged>HealBot_IconCombatIconSet_OnValueChanged(self)</OnValueChanged>
+                              <OnEnter>HealBot_Options_Show_Help("EXTRAICONCOMBATSET",true)</OnEnter>
+                              <OnLeave>HealBot_Options_Show_Help("EXTRAICONCOMBATSET",false)</OnLeave>
+                            </Scripts>
+                          </Slider>
                           <CheckButton name="HealBot_Options_ShowCombatState" inherits="HealBotUIPanelCheckButton">
                             <Anchors>
                               <Anchor point="TOP">
                                 <Offset>
-                                  <AbsDimension x="-150" y="-55" />
+                                  <AbsDimension x="-210" y="-55" />
                                 </Offset>
                               </Anchor>
                             </Anchors>
@@ -27834,7 +27879,7 @@
                             <Anchors>
                               <Anchor point="TOP">
                                 <Offset>
-                                  <AbsDimension x="50" y="-55" />
+                                  <AbsDimension x="-20" y="-55" />
                                 </Offset>
                               </Anchor>
                             </Anchors>
@@ -28010,14 +28055,108 @@
                                 </Anchor>
                               </Anchors>
                             </FontString>
+                            <Texture name="HealBot_Options_Skins_EI_ReadyCheckIcon01">
+                              <Size>
+                                <AbsDimension x="40" y="40"/>
+                              </Size>
+                              <Anchors>
+                                <Anchor point="TOPLEFT">
+                                  <Offset>
+                                    <AbsDimension x="20" y="-170" />
+                                  </Offset>
+                                </Anchor>
+                              </Anchors>
+                            </Texture>
+                            <Texture name="HealBot_Options_Skins_EI_ReadyCheckIcon02">
+                              <Size>
+                                <AbsDimension x="40" y="40"/>
+                              </Size>
+                              <Anchors>
+                                <Anchor point="TOP" relativeTo="HealBot_Options_Skins_EI_ReadyCheckIcon01" relativePoint="BOTTOM">
+                                  <Offset>
+                                    <AbsDimension x="0" y="-25" />
+                                  </Offset>
+                                </Anchor>
+                              </Anchors>
+                            </Texture>
+                            <Texture name="HealBot_Options_Skins_EI_ReadyCheckIcon03">
+                              <Size>
+                                <AbsDimension x="40" y="40"/>
+                              </Size>
+                              <Anchors>
+                                <Anchor point="TOP" relativeTo="HealBot_Options_Skins_EI_ReadyCheckIcon02" relativePoint="BOTTOM">
+                                  <Offset>
+                                    <AbsDimension x="0" y="-25" />
+                                  </Offset>
+                                </Anchor>
+                              </Anchors>
+                            </Texture>
+                            <Texture name="HealBot_Options_Skins_EI_StateIcon01">
+                              <Size>
+                                <AbsDimension x="40" y="40"/>
+                              </Size>
+                              <Anchors>
+                                <Anchor point="TOPRIGHT">
+                                  <Offset>
+                                    <AbsDimension x="-20" y="-200" />
+                                  </Offset>
+                                </Anchor>
+                              </Anchors>
+                            </Texture>
+                            <Texture name="HealBot_Options_Skins_EI_StateIcon02">
+                              <Size>
+                                <AbsDimension x="40" y="40"/>
+                              </Size>
+                              <Anchors>
+                                <Anchor point="TOP" relativeTo="HealBot_Options_Skins_EI_StateIcon01" relativePoint="BOTTOM">
+                                  <Offset>
+                                    <AbsDimension x="0" y="-25" />
+                                  </Offset>
+                                </Anchor>
+                              </Anchors>
+                            </Texture>
                           </Layer>
                         </Layers>
                         <Frames>
+                          <Slider name="HealBot_IconReadyCheckIconSet" inherits="HealBot_Options_SliderTemplate">
+                            <Size>
+                              <AbsDimension x="110" y="18" />
+                            </Size>
+                            <Anchors>
+                              <Anchor point="TOPLEFT">
+                                <Offset>
+                                  <AbsDimension x="70" y="-30"/>
+                                </Offset>
+                              </Anchor>
+                            </Anchors>
+                            <Scripts>
+                              <OnValueChanged>HealBot_IconReadyCheckIconSet_OnValueChanged(self)</OnValueChanged>
+                              <OnEnter>HealBot_Options_Show_Help("EXTRAICONRCSET",true)</OnEnter>
+                              <OnLeave>HealBot_Options_Show_Help("EXTRAICONRCSET",false)</OnLeave>
+                            </Scripts>
+                          </Slider>
+                          <Slider name="HealBot_IconStateIconSet" inherits="HealBot_Options_SliderTemplate">
+                            <Size>
+                              <AbsDimension x="110" y="18" />
+                            </Size>
+                            <Anchors>
+                              <Anchor point="TOPRIGHT">
+                                <Offset>
+                                  <AbsDimension x="-70" y="-30"/>
+                                </Offset>
+                              </Anchor>
+                            </Anchors>
+                            <Scripts>
+                              <OnValueChanged>HealBot_IconStateIconSet_OnValueChanged(self)</OnValueChanged>
+                              <OnEnter>HealBot_Options_Show_Help("EXTRAICONSTATESET",true)</OnEnter>
+                              <OnLeave>HealBot_Options_Show_Help("EXTRAICONSTATESET",false)</OnLeave>
+                            </Scripts>
+                          </Slider>
                           <CheckButton name="HealBot_Options_ShowResting" inherits="HealBotUIPanelCheckButton">
                             <Anchors>
                               <Anchor point="TOP">
                                 <Offset>
-                                  <AbsDimension x="95" y="-55" />
+                                  <AbsDimension x="95" y="-70" />
                                 </Offset>
                               </Anchor>
                             </Anchors>
@@ -28031,7 +28170,7 @@
                             <Anchors>
                               <Anchor point="TOPLEFT">
                                 <Offset>
-                                  <AbsDimension x="70" y="-55" />
+                                  <AbsDimension x="70" y="-70" />
                                 </Offset>
                               </Anchor>
                             </Anchors>
@@ -28045,7 +28184,7 @@
                             <Anchors>
                               <Anchor point="TOP">
                                 <Offset>
-                                  <AbsDimension x="-30" y="-55" />
+                                  <AbsDimension x="-30" y="-70" />
                                 </Offset>
                               </Anchor>
                             </Anchors>

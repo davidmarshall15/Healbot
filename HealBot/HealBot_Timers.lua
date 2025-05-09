@@ -79,7 +79,7 @@ HealBot_Timers_luVars["ResetSkins"]=false
 function HealBot_Timers_TurboOn()
       --HealBot_setCall("HealBot_Timers_TurboOn")
     HealBot_Timers_luVars["nProcs"]=HealBot_Timers_luVars["nProcsOn"]
-    HealBot_Timers_Set("LAST","TimerTurboOff",true) --,true)
+    HealBot_Timers_Set("LAST","TimerTurboOff",true,true)
 end
 
 function HealBot_Timers_TurboOff()
@@ -755,7 +755,13 @@ local hbTimerFuncs={["INIT"]={
                         ["ResetClassRoleIcons"]=HealBot_Media_setClassRoleIcons,
                         ["ResetRankIcons"]=HealBot_Media_setRankIcons,
                         ["ResetTargetIcons"]=HealBot_Media_setTargetIcons,
+                        ["ResetReadyCheckIcons"]=HealBot_Media_setReadyCheckIcons,
+                        ["ResetStateIcons"]=HealBot_Media_setStateIcons,
+                        ["ResetCombatIcons"]=HealBot_Media_setCombatIcons,
                         ["IconUpdAllTarget"]=HealBot_Update_RaidTargetReset,
+                        ["IconUpdAllReadyCheck"]=HealBot_Update_ReadyCheckIcon,
+                        ["IconUpdAllState"]=HealBot_Update_AllStateIcon,
+                        ["IconUpdAllCombat"]=HealBot_Update_AllCombatIcon,
                         ["PostChange"]=HealBot_Timers_PostSkinChange,
                     },
                     ["AUX"]={

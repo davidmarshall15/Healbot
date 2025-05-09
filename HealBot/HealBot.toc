@@ -1,4 +1,4 @@
-## Interface: 110105
+## Interface: 40402, 50500, 110105, 110107
 ## Title: HealBot
 ## Author: Strife
 ## Notes: Add multiple frames with customisable bars for healing, decursing, buffing, ressing, range checking and aggro tracking
@@ -17,7 +17,7 @@
 ## Category-zhCN: HealBot
 ## Category-zhTW: HealBot
 ## IconTexture: Interface\AddOns\HealBot\Images\HealBot.tga
-## Version: 11.1.5.1
+## Version: 25.05.09
 
 Libs\LibStub\LibStub.lua
 Libs\CallbackHandler-1.0\CallbackHandler-1.0.xml
@@ -55,7 +55,6 @@ Locale\HealBot_Localization.kr.lua
 Locale\HealBot_Localization.ru.lua
 Locale\HealBot_Localization.tw.lua
 
-HealBot_Options_tww.xml
 HealBot_Options.xml
 HealBot.xml
 HealBot_Action.xml

@@ -1039,6 +1039,7 @@ function HealBot_Lang_enALL()
     HEALBOT_CHAT_SUBSORTPLAYER1            ="Player will be set to first in SubSort"
     HEALBOT_CHAT_SUBSORTPLAYER2            ="Player will be sorted normally in SubSort"
     HEALBOT_OPTIONS_SHOWREADYCHECK         ="Show Ready Check";
+    HEALBOT_OPTIONS_READYCHECK             ="Ready Check";
     HEALBOT_OPTIONS_SHOWCOMBATSTATE        ="Show Combat State";
     HEALBOT_OPTIONS_SHOWHOSTILE            ="Show Hostile";
     HEALBOT_OPTIONS_SHOWLEADER             ="Show Leader";

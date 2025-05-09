@@ -1,9 +1,0 @@
-## Interface: 00001
-## Title: HealBot Data <See Description>
-## Author: Strife
-## RequiredDeps: HealBot
-## Notes: This only remains to allow the transfer of save variables. Logon all your main characters that use HealBot, a future release will recommend deleting the HealBot_Data folder in Addons.
-## SavedVariablesPerCharacter:  HealBot_Config, HealBot_Config_Spells, HealBot_Config_Buffs, HealBot_Config_Cures, HealBot_ActionIcons_Loadouts, HealBot_ActionIconsData_Loadouts, HealBot_Spell_Loadouts
-## SavedVariables: Healbot_Config_Skins, Healbot_Config_Aux, HealBot_Globals, HealBot_Class_Spells, HealBot_Class_Buffs, HealBot_Class_Cures, HealBot_Skins_ActionIcons, HealBot_Skins_ActionIconsData
-
-HealBot_NotInUse.lua

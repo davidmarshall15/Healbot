@@ -8826,6 +8826,61 @@ function HealBot_IconTarget_UpdateIcons()
     HealBot_Options_Skins_EI_TargetIcon08:SetTexture(HealBot_Media_retTargetIcon(8))
 end
 
+function HealBot_IconReadyCheckIconSet_OnValueChanged(self)
+      --HealBot_setCall("HealBot_IconClassVOffset_OnValueChanged")
+    local val=floor(self:GetValue()+0.5)
+    if val~=self:GetValue() then
+        self:SetValue(val)
+    elseif hbv_Skins_GetVar("IconSet", "RC")~=val then
+        hbv_Skins_SetVar(val, "IconSet", "RC")
+        local g=_G[self:GetName().."Text"]
+        g:SetText(self.text .. ": " .. val);
+        HealBot_Timers_Set("SKINS","ResetReadyCheckIcons")
+    end
+end
+
+function HealBot_IconReadyCheck_UpdateIcons()
+    HealBot_Options_Skins_EI_ReadyCheckIcon01:SetTexture(HealBot_Media_retReadyCheckIcon(hbv_GetStatic("rcWAITING")))
+    HealBot_Options_Skins_EI_ReadyCheckIcon02:SetTexture(HealBot_Media_retReadyCheckIcon(hbv_GetStatic("rcREADY")))
+    HealBot_Options_Skins_EI_ReadyCheckIcon03:SetTexture(HealBot_Media_retReadyCheckIcon(hbv_GetStatic("rcNOTREADY")))
+end
+
+function HealBot_IconStateIconSet_OnValueChanged(self)
+      --HealBot_setCall("HealBot_IconClassVOffset_OnValueChanged")
+    local val=floor(self:GetValue()+0.5)
+    if val~=self:GetValue() then
+        self:SetValue(val)
+    elseif hbv_Skins_GetVar("IconSet", "STATE")~=val then
+        hbv_Skins_SetVar(val, "IconSet", "STATE")
+        local g=_G[self:GetName().."Text"]
+        g:SetText(self.text .. ": " .. val);
+        HealBot_Timers_Set("SKINS","ResetStateIcons")
+    end
+end
+
+function HealBot_IconState_UpdateIcons()
+    HealBot_Options_Skins_EI_StateIcon01:SetTexture(HealBot_Media_retStateIcon("AFK"))
+    HealBot_Options_Skins_EI_StateIcon02:SetTexture(HealBot_Media_retStateIcon("REST"))
+end
+
+function HealBot_IconCombatIconSet_OnValueChanged(self)
+      --HealBot_setCall("HealBot_IconClassVOffset_OnValueChanged")
+    local val=floor(self:GetValue()+0.5)
+    if val~=self:GetValue() then
+        self:SetValue(val)
+    elseif hbv_Skins_GetVar("IconSet", "COMBAT")~=val then
+        hbv_Skins_SetVar(val, "IconSet", "COMBAT")
+        local g=_G[self:GetName().."Text"]
+        g:SetText(self.text .. ": " .. val);
+        HealBot_Timers_Set("SKINS","ResetCombatIcons")
+    end
+end
+
+function HealBot_IconCombat_UpdateIcons()
+    HealBot_Options_Skins_EI_CombatIcon01:SetTexture(HealBot_Media_retCombatIcon("INCOMBAT"))
+    HealBot_Options_Skins_EI_CombatIcon02:SetTexture(HealBot_Media_retCombatIcon("HOSTILE"))
+end
+
 function HealBot_IconClassVOffset_OnValueChanged(self)
       --HealBot_setCall("HealBot_IconClassVOffset_OnValueChanged")
     local val=floor(self:GetValue()+0.5)
@@ -14594,13 +14649,10 @@ function HealBot_Options_CopyTab2Frames(frame, tab)
             hbv_Data_AuxSetBarVar(hbv_Aux_GetBarVar("OFFSET", f, x), "OFFSET", frame, x)
             hbv_Data_AuxSetBarVar(hbv_Aux_GetBarVar("DEPTH", f, x), "DEPTH", frame, x)
             hbv_Data_AuxSetBarVar(hbv_Aux_GetBarVar("SIZE", f, x), "SIZE", frame, x)
-            if frame == 10 and hbv_Aux_GetBarVar("USE", f, x)>11 then
-                hbv_Data_AuxSetBarVar(1, frame, x)
-            elseif frame>7 and hbv_Aux_GetBarVar("USE", f, x)>16 then
-                hbv_Data_AuxSetBarVar(1, frame, x)
-            else
-                hbv_Data_AuxSetBarVar(hbv_Aux_GetBarVar("USE", f, x), "USE", frame, x)
-            end
+            local n=hbv_Aux_GetBarVar("USE", f, x)
+            local t=HealBot_Share_SkinEncodeAux(n, f)
+            n=HealBot_Share_SkinDecodeAux(t, frame)
+            hbv_Data_AuxSetBarVar(n, "USE", frame, x)
             hbv_Data_AuxSetBarVar(hbv_Aux_GetBarVar("OTYPE", f, x), "OTYPE", frame, x)
             hbv_Data_AuxSetBarVar(hbv_Aux_GetBarVar("R", f, x), "R", frame, x)
             hbv_Data_AuxSetBarVar(hbv_Aux_GetBarVar("G", f, x), "G", frame, x)
@@ -16821,10 +16873,10 @@ end
 
 --------------------------------------------------------------------------------
 hb_lVars["MaxClassicAuxBarAssign"]=20
-function HealBot_Options_Aux1Assign_GenList()
+function HealBot_Options_Aux1Assign_GenList(frame)
       --HealBot_setCall("HealBot_Options_Aux1Assign_GenList")
     local list={}
-    if hb_lVars["Frame"] == 10 then
+    if frame == 10 then
         for j=1, 4 do
             list[j]=HealBot_Options_AuxAssign_List[j]
         end
@@ -16871,7 +16923,7 @@ end
 function HealBot_Options_AuxAssign_DropDown(object, id)
       --HealBot_setCall("HealBot_Options_AuxAssign_DropDown")
     local info=UIDropDownMenu_CreateInfo()
-    local list=HealBot_Options_Aux1Assign_GenList()
+    local list=HealBot_Options_Aux1Assign_GenList(hb_lVars["Frame"])
     for j=1, getn(list), 1 do
         info.text=list[j];
         info.func=function(self)
@@ -17022,7 +17074,7 @@ local function HealBot_Options_AuxConfigBarChange()
         hbv_Aux_GetBarVar("G", hb_lVars["Frame"], hb_lVars["AuxBar"]),
         hbv_Aux_GetBarVar("B", hb_lVars["Frame"], hb_lVars["AuxBar"]));
 
-    local list=HealBot_Options_Aux1Assign_GenList()
+    local list=HealBot_Options_Aux1Assign_GenList(hb_lVars["Frame"])
     local fstr=_G["HealBot_AuxBarsConfigAssign2_FontStr"]
     fstr:SetText(list[assignment])
     
@@ -17110,7 +17162,7 @@ local function HealBot_Options_AuxConfigTxtChange()
     HealBot_Options_Pct_OnLoad_MinMax(HealBot_Options_AuxTextOORAlpha,HEALBOT_OPTIONS_BARALPHAEOR,0,1,0.01,5)
     HealBot_Options_AuxTextOORAlpha:SetValue(hbv_Aux_GetBarTextVar("COLOA", hb_lVars["Frame"], hb_lVars["AuxTxtBar"]));
     HealBot_Options_Pct_OnValueChanged(HealBot_Options_AuxTextOORAlpha)
-    local list=HealBot_Options_Aux1Assign_GenList()
+    local list=HealBot_Options_Aux1Assign_GenList(hb_lVars["Frame"])
     local fstr=_G["HealBot_AuxTextConfigAssign1_FontStr2"]
     fstr:SetText(list[assignment])
     fstr=_G["HealBot_AuxTextConfigAssign2_FontStr2"]
@@ -17511,6 +17563,7 @@ function HealBot_Options_DoSet_Current_Skin(newSkin, ddRefresh, noCallback, optS
                     HealBot_Timers_Set("SKINS","ResetClassRoleIcons")
                     HealBot_Timers_Set("SKINS","ResetRankIcons")
                     HealBot_Timers_Set("SKINS","ResetTargetIcons")
+                    HealBot_Timers_Set("SKINS","ResetReadyCheckIcons")
                     HealBot_Timers_Set("SKINS","PostChange",true)
                    -- HealBot_AddDebug("Update Skins","Frame",true)
                     HealBot_Timers_TurboOn()
@@ -27287,7 +27340,7 @@ function HealBot_Options_SkinsFramesBarsAuxSettingsTab(tab)
         HealBot_Options_AuxOverlap.initialize=HealBot_Options_AuxOverlap_DropDown
         UIDropDownMenu_SetText(HealBot_Options_AuxOverlap,HealBot_Options_AuxOverlap_List[hbv_Aux_GetOverlayVar("OVERLAP", hb_lVars["Frame"])])
         HealBot_Options_SetLabel("HealBot_AuxOverlap_FontStr",HEALBOT_OPTIONS_AUXOVERLAP)
-        local list=HealBot_Options_Aux1Assign_GenList()
+        local list=HealBot_Options_Aux1Assign_GenList(hb_lVars["Frame"])
         HealBot_Options_Aux1Assign.initialize=HealBot_Options_Aux1Assign_DropDown
         UIDropDownMenu_SetText(HealBot_Options_Aux1Assign, list[hbv_Aux_GetBarVar("USE", hb_lVars["Frame"], 1)])
         HealBot_Options_Aux2Assign.initialize=HealBot_Options_Aux2Assign_DropDown
@@ -27941,7 +27994,7 @@ function HealBot_Options_SkinsFramesIconsExtrasClassTab(tab)
         HealBot_Options_val_OnLoad(HealBot_IconClassIconSet,HEALBOT_SORTBY_CLASS.." "..HEALBOT_SKIN_ICONSET,1,8,1,2)
         HealBot_IconClassIconSet:SetValue(hbv_Skins_GetVar("IconSet", "CLASS"))
         HealBot_Options_SetText(HealBot_IconClassIconSet,HEALBOT_SORTBY_CLASS.." "..HEALBOT_SKIN_ICONSET..": "..hbv_Skins_GetVar("IconSet", "CLASS"))
-        HealBot_Options_val_OnLoad(HealBot_IconRoleIconSet,HEALBOT_SORTBY_ROLE.." "..HEALBOT_SKIN_ICONSET,1,6,1,2)
+        HealBot_Options_val_OnLoad(HealBot_IconRoleIconSet,HEALBOT_SORTBY_ROLE.." "..HEALBOT_SKIN_ICONSET,1,7,1,2)
         HealBot_IconRoleIconSet:SetValue(hbv_Skins_GetVar("IconSet", "ROLE"))
         HealBot_Options_SetText(HealBot_IconRoleIconSet,HEALBOT_SORTBY_ROLE.." "..HEALBOT_SKIN_ICONSET..": "..hbv_Skins_GetVar("IconSet", "ROLE"))
         HealBot_Options_val_OnLoad(HealBot_IconClassHOffset,HEALBOT_OPTIONS_TEXTHOROFFSET,-75,75,1,10)
@@ -28076,6 +28129,9 @@ function HealBot_Options_SkinsFramesIconsExtrasCombatTab(tab)
         HealBot_Options_SetText(HealBot_IconCombatZoom,HEALBOT_OPTIONS_ICONZOOM..": "..(hbv_Skins_GetFrameVar("Icons", "COMBATZOOM", hb_lVars["Frame"])*200).."%")
         HealBot_Options_SetLabel("healboticonCombatposfontstr",HEALBOT_OPTIONS_ICONPOSITION)
         HealBot_Options_SetLabel("healboticonCombatanchorfontstr",HEALBOT_OPTIONS_ICONANCHOR)
+        HealBot_Options_val_OnLoad(HealBot_IconCombatIconSet,HEALBOT_COMBAT.." "..HEALBOT_SKIN_ICONSET,1,4,1,2)
+        HealBot_IconCombatIconSet:SetValue(hbv_Skins_GetVar("IconSet", "COMBAT"))
+        HealBot_Options_SetText(HealBot_IconCombatIconSet,HEALBOT_COMBAT.." "..HEALBOT_SKIN_ICONSET..": "..hbv_Skins_GetVar("IconSet", "COMBAT"))
         HealBot_Options_TabRunOnce[tab]=true
     end
 end
@@ -28110,6 +28166,12 @@ function HealBot_Options_SkinsFramesIconsExtrasReadyCheckTab(tab)
         HealBot_Options_SetText(HealBot_IconRCZoom,HEALBOT_OPTIONS_ICONZOOM..": "..(hbv_Skins_GetFrameVar("Icons", "RCZOOM", hb_lVars["Frame"])*200).."%")
         HealBot_Options_SetLabel("healboticonRCposfontstr",HEALBOT_OPTIONS_ICONPOSITION)
         HealBot_Options_SetLabel("healboticonRCanchorfontstr",HEALBOT_OPTIONS_ICONANCHOR)
+        HealBot_Options_val_OnLoad(HealBot_IconReadyCheckIconSet,HEALBOT_OPTIONS_READYCHECK.." "..HEALBOT_SKIN_ICONSET,1,6,1,2)
+        HealBot_IconReadyCheckIconSet:SetValue(hbv_Skins_GetVar("IconSet", "RC"))
+        HealBot_Options_SetText(HealBot_IconReadyCheckIconSet,HEALBOT_OPTIONS_READYCHECK.." "..HEALBOT_SKIN_ICONSET..": "..hbv_Skins_GetVar("IconSet", "RC"))
+        HealBot_Options_val_OnLoad(HealBot_IconStateIconSet,HEALBOT_OPTIONS_TAB_STATETEXT.." "..HEALBOT_SKIN_ICONSET,1,2,1,1)
+        HealBot_IconStateIconSet:SetValue(hbv_Skins_GetVar("IconSet", "STATE"))
+        HealBot_Options_SetText(HealBot_IconStateIconSet,HEALBOT_OPTIONS_TAB_STATETEXT.." "..HEALBOT_SKIN_ICONSET..": "..hbv_Skins_GetVar("IconSet", "STATE"))
         HealBot_Options_TabRunOnce[tab]=true
     end
 end

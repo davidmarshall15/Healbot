@@ -1,7 +1,0 @@
-## Interface: 00001
-## Title: HealBot Options <No Longer in use>
-## Author: Strife
-## RequiredDeps: HealBot
-## Notes: This is no longer in use. A future release will recommend deleting the HealBot_Options folder in Addons.
-
-HealBot_NotInUse.lua

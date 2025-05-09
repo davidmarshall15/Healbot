@@ -17,7 +17,7 @@
 ## Category-zhCN: HealBot
 ## Category-zhTW: HealBot
 ## IconTexture: Interface\AddOns\HealBot\Images\HealBot.tga
-## Version: 1.15.7.4
+## Version: 25.05.09
 
 Libs\LibStub\LibStub.lua
 Libs\CallbackHandler-1.0\CallbackHandler-1.0.xml
@@ -56,7 +56,6 @@ Locale\HealBot_Localization.kr.lua
 Locale\HealBot_Localization.ru.lua
 Locale\HealBot_Localization.tw.lua
 
-HealBot_Options_vanilla.xml
 HealBot_Options.xml
 HealBot.xml
 HealBot_Action.xml

@@ -549,6 +549,24 @@ function HealBot_Update_AllStateIconAFK()
     end
 end
 
+function HealBot_Update_AllStateIcon()
+      --HealBot_setCall("HealBot_Update_AllStateIconAFK")
+    for _,xButton in pairs(HealBot_Unit_Button) do
+       HealBot_Aura_UpdateState(xButton)
+    end
+    for _,xButton in pairs(HealBot_Private_Button) do
+       HealBot_Aura_UpdateState(xButton)
+    end
+end
+
+function HealBot_Update_AllCombatIcon()
+    if HealBot_Update_luVars["TestBarsOn"] then
+        HealBot_Options_framesChanged(true, true)
+    else
+        HealBot_Update_AllStateIconHostile()
+    end
+end
+
 function HealBot_Update_AllStateIconNotInCombat()
       --HealBot_setCall("HealBot_Update_AllStateIconNotInCombat")
     for _,xButton in pairs(HealBot_Unit_Button) do
@@ -605,44 +623,48 @@ function HealBot_Update_AllStateIconHostile()
 end
 
 function HealBot_Update_RaidTarget()
-    for _,xButton in pairs(HealBot_Unit_Button) do
-        if xButton.icon.extra.targeticon>0 then
-            HealBot_Aura_RaidTargetUpdate(xButton,0)
+    if HealBot_Update_luVars["TestBarsOn"] then
+        HealBot_Options_framesChanged(true, true)
+    else
+        for _,xButton in pairs(HealBot_Unit_Button) do
+            if xButton.icon.extra.targeticon>0 then
+                HealBot_Aura_RaidTargetUpdate(xButton,0)
+            end
         end
-    end
-    for _,xButton in pairs(HealBot_Private_Button) do
-        if xButton.icon.extra.targeticon>0 then
-            HealBot_Aura_RaidTargetUpdate(xButton,0)
+        for _,xButton in pairs(HealBot_Private_Button) do
+            if xButton.icon.extra.targeticon>0 then
+                HealBot_Aura_RaidTargetUpdate(xButton,0)
+            end
         end
-    end
-    for _,xButton in pairs(HealBot_Extra_Button) do
-        if xButton.icon.extra.targeticon>0 then
-            HealBot_Aura_RaidTargetUpdate(xButton,0)
+        for _,xButton in pairs(HealBot_Extra_Button) do
+            if xButton.icon.extra.targeticon>0 then
+                HealBot_Aura_RaidTargetUpdate(xButton,0)
+            end
         end
-    end
-    for _,xButton in pairs(HealBot_Enemy_Button) do
-        if xButton.icon.extra.targeticon>0 then
-            HealBot_Aura_RaidTargetUpdate(xButton,0)
+        for _,xButton in pairs(HealBot_Enemy_Button) do
+            if xButton.icon.extra.targeticon>0 then
+                HealBot_Aura_RaidTargetUpdate(xButton,0)
+            end
         end
-    end
-    for xUnit,xButton in pairs(HealBot_UnitTarget_Button) do
-        if xButton.icon.extra.targeticon>0 then
-            HealBot_Aura_RaidTargetUpdate(xButton,0)
+        for xUnit,xButton in pairs(HealBot_UnitTarget_Button) do
+            if xButton.icon.extra.targeticon>0 then
+                HealBot_Aura_RaidTargetUpdate(xButton,0)
+            end
         end
-    end
-    for xUnit,xButton in pairs(HealBot_PrivateTarget_Button) do
-        if xButton.icon.extra.targeticon>0 then
-            HealBot_Aura_RaidTargetUpdate(xButton,0)
+        for xUnit,xButton in pairs(HealBot_PrivateTarget_Button) do
+            if xButton.icon.extra.targeticon>0 then
+                HealBot_Aura_RaidTargetUpdate(xButton,0)
+            end
         end
-    end
-    for _,xButton in pairs(HealBot_Pet_Button) do
-        if xButton.icon.extra.targeticon>0 then
-            HealBot_Aura_RaidTargetUpdate(xButton,0)
+        for _,xButton in pairs(HealBot_Pet_Button) do
+            if xButton.icon.extra.targeticon>0 then
+                HealBot_Aura_RaidTargetUpdate(xButton,0)
+            end
         end
-    end
-    for _,xButton in pairs(HealBot_Vehicle_Button) do
-        if xButton.icon.extra.targeticon>0 then
-            HealBot_Aura_RaidTargetUpdate(xButton,0)
+        for _,xButton in pairs(HealBot_Vehicle_Button) do
+            if xButton.icon.extra.targeticon>0 then
+                HealBot_Aura_RaidTargetUpdate(xButton,0)
+            end
         end
     end
 end
@@ -654,20 +676,38 @@ end
 
 function HealBot_Update_ClassIconTexture()
       --HealBot_setCall("HealBot_Update_ClassIconTexture")
-    for _,xButton in pairs(HealBot_Unit_Button) do
-        HealBot_Action_SetClassIconTexture(xButton)
+    if HealBot_Update_luVars["TestBarsOn"] then
+        HealBot_Options_framesChanged(true, true)
+    else
+        for _,xButton in pairs(HealBot_Unit_Button) do
+            HealBot_Action_SetClassIconTexture(xButton)
+        end
+        for _,xButton in pairs(HealBot_Private_Button) do
+            HealBot_Action_SetClassIconTexture(xButton)
+        end
+        for _,xButton in pairs(HealBot_Extra_Button) do
+            HealBot_Action_SetClassIconTexture(xButton)
+        end
+        for _,xButton in pairs(HealBot_Pet_Button) do
+            HealBot_Action_SetClassIconTexture(xButton)
+        end
+        for _,xButton in pairs(HealBot_Vehicle_Button) do
+            HealBot_Action_SetClassIconTexture(xButton)
+        end
     end
-    for _,xButton in pairs(HealBot_Private_Button) do
-        HealBot_Action_SetClassIconTexture(xButton)
-    end
-    for _,xButton in pairs(HealBot_Extra_Button) do
-        HealBot_Action_SetClassIconTexture(xButton)
-    end
-    for _,xButton in pairs(HealBot_Pet_Button) do
-        HealBot_Action_SetClassIconTexture(xButton)
-    end
-    for _,xButton in pairs(HealBot_Vehicle_Button) do
-        HealBot_Action_SetClassIconTexture(xButton)
+end
+
+function HealBot_Update_ReadyCheckIcon()
+      --HealBot_setCall("HealBot_Update_ReadyCheckIcon")
+    if HealBot_Update_luVars["TestBarsOn"] then
+        HealBot_Options_framesChanged(true, true)
+    else
+        for _,xButton in pairs(HealBot_Unit_Button) do
+            HealBot_Aura_UpdateState(xButton)
+        end
+        for _,xButton in pairs(HealBot_Private_Button) do
+            HealBot_Aura_UpdateState(xButton)
+        end
     end
 end
 
@@ -744,20 +784,24 @@ end
 
 function HealBot_Update_AuraAllRank()
       --HealBot_setCall("HealBot_Update_AuraAllRank")
-    for _,xButton in pairs(HealBot_Unit_Button) do
-       HealBot_Aura_UpdateRank(xButton)
-    end
-    for _,xButton in pairs(HealBot_Private_Button) do
-       HealBot_Aura_UpdateRank(xButton)
-    end
-    for _,xButton in pairs(HealBot_Pet_Button) do
-       HealBot_Aura_UpdateRank(xButton)
-    end
-    for _,xButton in pairs(HealBot_Vehicle_Button) do
-       HealBot_Aura_UpdateRank(xButton)
-    end
-    for _,xButton in pairs(HealBot_Extra_Button) do
-       HealBot_Aura_UpdateRank(xButton)
+    if HealBot_Update_luVars["TestBarsOn"] then
+        HealBot_Options_framesChanged(true, true)
+    else
+        for _,xButton in pairs(HealBot_Unit_Button) do
+           HealBot_Aura_UpdateRank(xButton)
+        end
+        for _,xButton in pairs(HealBot_Private_Button) do
+           HealBot_Aura_UpdateRank(xButton)
+        end
+        for _,xButton in pairs(HealBot_Pet_Button) do
+           HealBot_Aura_UpdateRank(xButton)
+        end
+        for _,xButton in pairs(HealBot_Vehicle_Button) do
+           HealBot_Aura_UpdateRank(xButton)
+        end
+        for _,xButton in pairs(HealBot_Extra_Button) do
+           HealBot_Aura_UpdateRank(xButton)
+        end
     end
 end
 

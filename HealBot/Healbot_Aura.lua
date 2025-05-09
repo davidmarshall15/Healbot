@@ -699,6 +699,14 @@ function HealBot_Aura_ClassUpdate(button, ClassRole)
     end
 end
 
+function HealBot_Aura_TestTank(button)
+    if HealBot_Aura_luVars["TestBarsOn"] and button.rank == 5 then
+        return true
+    else
+        return HealBot_Panel_IsTank(button.guid)
+    end
+end
+
 function HealBot_Aura_UpdateRank(button)
         --HealBot_setCall("HealBot_Aura_UpdateRank", button)
     if HealBot_UnitExtraIcons[button.id] then
@@ -706,7 +714,7 @@ function HealBot_Aura_UpdateRank(button)
             HealBot_UnitExtraIcons[button.id][95]["texture"]=HealBot_Media_retRankIcon(button.rank)
             HealBot_UnitExtraIcons[button.id][95].current=true
             HealBot_Aura_AddExtraIcon(button, 95)
-        elseif HealBot_Panel_IsTank(button.guid) and hbv_Skins_GetFrameBoolean("Icons", "SHOWRANKMT", button.frame) then 
+        elseif HealBot_Aura_TestTank(button) and hbv_Skins_GetFrameBoolean("Icons", "SHOWRANKMT", button.frame) then 
             HealBot_UnitExtraIcons[button.id][95]["texture"]=HealBot_Media_retRankIcon(5)
             HealBot_UnitExtraIcons[button.id][95].current=true
             HealBot_Aura_AddExtraIcon(button, 95)
@@ -721,9 +729,9 @@ function HealBot_Aura_UpdateCombat(button)
     if HealBot_UnitExtraIcons[button.id] then
         if button.icon.extra.hostile or button.status.incombat then
             if button.icon.extra.hostile then
-                HealBot_UnitExtraIcons[button.id][96]["texture"]="Interface\\Addons\\HealBot\\Images\\combat\\1\\hostile.tga"
+                HealBot_UnitExtraIcons[button.id][96]["texture"]=HealBot_Media_retCombatIcon("HOSTILE")
             else
-                HealBot_UnitExtraIcons[button.id][96]["texture"]="Interface\\Addons\\HealBot\\Images\\combat\\1\\incombat.tga"
+                HealBot_UnitExtraIcons[button.id][96]["texture"]=HealBot_Media_retCombatIcon("INCOMBAT")
             end
             HealBot_UnitExtraIcons[button.id][96].current=true
             HealBot_Aura_AddExtraIcon(button, 96)
@@ -738,21 +746,15 @@ function HealBot_Aura_UpdateState(button)
     if HealBot_UnitExtraIcons[button.id] then
         if button.icon.extra.readycheck or button.status.afk then
             if button.status.afk then
-                HealBot_UnitExtraIcons[button.id][93]["texture"]="Interface\\Addons\\HealBot\\Images\\state\\1\\afk.tga"
+                HealBot_UnitExtraIcons[button.id][93]["texture"]=HealBot_Media_retStateIcon("AFK")
             else
-                if button.icon.extra.readycheck == hbv_GetStatic("rcWAITING") then
-                    HealBot_UnitExtraIcons[button.id][93]["texture"]="Interface\\RAIDFRAME\\ReadyCheck-Waiting"
-                elseif button.icon.extra.readycheck == hbv_GetStatic("rcNOTREADY") then
-                    HealBot_UnitExtraIcons[button.id][93]["texture"]="Interface\\RAIDFRAME\\ReadyCheck-NotReady"
-                else
-                    HealBot_UnitExtraIcons[button.id][93]["texture"]="Interface\\RAIDFRAME\\ReadyCheck-Ready"
-                end
+                HealBot_UnitExtraIcons[button.id][93]["texture"]=HealBot_Media_retReadyCheckIcon(button.icon.extra.readycheck)
                 if HealBot_Panel_RaidUnitButtonCheck(button.guid) then HealBot_Action_SetGuidData(button, "READYCHECK", button.icon.extra.readycheck) end
             end
             HealBot_UnitExtraIcons[button.id][93].current=true
             HealBot_Aura_AddExtraIcon(button, 93)
         elseif button.player and hbv_Skins_GetFrameBoolean("Icons", "SHOWRESTING", button.frame) and IsResting() then 
-            HealBot_UnitExtraIcons[button.id][93]["texture"]="Interface\\Addons\\HealBot\\Images\\state\\1\\rested.tga"
+            HealBot_UnitExtraIcons[button.id][93]["texture"]=HealBot_Media_retStateIcon("REST")
             HealBot_UnitExtraIcons[button.id][93].current=true
             HealBot_Aura_AddExtraIcon(button, 93)
         else
@@ -1093,10 +1095,10 @@ function HealBot_Aura_CheckForMana(button)
     if generalBuffs and HealBot_BuffWatch[HealBot_Config_Buffs.ManaDrinkItem] and not button.aura.buff.update then
         if button.aura.buff.missingbuff ~= HealBot_Aura_luVars["ManaDrink"] then
             if button.mana.pct<HealBot_Config_Buffs.ManaDrinkThreshold then
-                button.aura.buff.update=true
+                HealBot_Events_UnitBuff(button)
             end
         elseif button.mana.pct>=HealBot_Config_Buffs.ManaDrinkThreshold then
-            button.aura.buff.update=true
+            HealBot_Events_UnitBuff(button)
         end
     end
 end

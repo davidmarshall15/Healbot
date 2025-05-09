@@ -2424,6 +2424,9 @@ function HealBot_VariablesLoaded()
     HealBot_Media_setClassRoleIcons()
     HealBot_Media_setRankIcons()
     HealBot_Media_setTargetIcons()
+    HealBot_Media_setReadyCheckIcons()
+    HealBot_Media_setStateIcons()
+    HealBot_Media_setCombatIcons()
     HealBot_Global_MetaVersion()
     HealBot_WoWAPI_SetAll()
     HealBot_globalVars()
@@ -3398,6 +3401,9 @@ function HealBot_Not_Fighting()
             HealBot_luVars["HealBot_RunDelayTimers"]=true
             HealBot_luVars["HealBot_RunLongDelayTimers"]=true
             HealBot_PlayerCheck()
+            xButton, pButton=HealBot_Panel_RaidUnitButton(HealBot_Data["PGUID"])
+            if xButton then HealBot_Events_UnitBuff(xButton) end
+            if pButton then HealBot_Events_UnitBuff(pButton) end
             HealBot_Action_setAlertState()
             if HealBot_Globals.DisableToolTipInCombat and HealBot_Data["TIPBUTTON"] then
                 HealBot_setTooltipUpdateNow()
@@ -3638,7 +3644,7 @@ function HealBot_UnitSlowUpdate(button)
                         HealBot_Events_UnitBuff(button)
                     end
                 elseif button.isplayer or button.isgroupraid then
-                    if button.aggro.status>0 then 
+                    if button.aggro.status>0 and not button.status.incombat then 
                         HealBot_Aggro_ClearUnitAggro(button)
                     elseif button.status.summons and C_IncomingSummon.IncomingSummonStatus(button.unit)~=1 then
                         HealBot_UnitSummonsUpdate(button, false)
@@ -3945,7 +3951,7 @@ function HealBot_UnitUpdateAura(button)
         HealBot_Aux_ClearCastBar(button)
     end
     if button.special.auraupdate<HealBot_TimeNow then
-        button.special.auraupdate=HealBot_TimeNow+0.25
+        button.special.auraupdate=HealBot_TimeNow+0.2
         button.aura.debuff.update=true
         button.aura.buff.update=true
     end
@@ -4025,13 +4031,18 @@ function HealBot_UpdateUnit_Buttons()
             HealBot_luVars["UpdateID"]=0
         end
     end
-    HealBot_luVars["slowUpdateID"]=HealBot_luVars["slowUpdateID"]+1
-    if HealBot_Buttons[HealBot_UpdateQueue[HealBot_luVars["slowUpdateID"]]] then
-        HealBot_UnitSlowUpdate(HealBot_Buttons[HealBot_UpdateQueue[HealBot_luVars["slowUpdateID"]]])
-    elseif HealBot_luVars["slowUpdateID"]>#HealBot_UpdateQueue then
-        HealBot_luVars["slowUpdateID"]=0
+    if HealBot_luVars["slowUpdate"] then
+        HealBot_luVars["slowUpdate"]=false
+        HealBot_luVars["slowUpdateID"]=HealBot_luVars["slowUpdateID"]+1
+        if HealBot_Buttons[HealBot_UpdateQueue[HealBot_luVars["slowUpdateID"]]] then
+            HealBot_UnitSlowUpdate(HealBot_Buttons[HealBot_UpdateQueue[HealBot_luVars["slowUpdateID"]]])
+        elseif HealBot_luVars["slowUpdateID"]>#HealBot_UpdateQueue then
+            HealBot_luVars["slowUpdateID"]=0
+        end
+    else
+        HealBot_luVars["slowUpdate"]=true
+        HealBot_UpdateTimers()
     end
-    HealBot_UpdateTimers()
 end
 
 function HealBot_UpdateTimers(test)
@@ -4132,28 +4143,28 @@ function HealBot_Update_Disabled()
 end
 
 local hbFastFuncs={}
-for f=1,14 do
+for f=1,9 do
     hbFastFuncs[f]=HealBot_UpdateTimers
 end
-hbFastFuncs[15]=HealBot_UpdateLast
+hbFastFuncs[10]=HealBot_UpdateLast
 function HealBot_FastFuncs()
       --HealBot_setCall("HealBot_FastFuncs")
     if HealBot_luVars["UILOCK"] then
         HealBot_Options_CmdButtonsEnableDisable(false)
-        hbFastFuncs[8]=hbFastFuncs[1]
+        hbFastFuncs[5]=hbFastFuncs[1]
     else
         HealBot_Options_CmdButtonsEnableDisable(true)
-        hbFastFuncs[8]=HealBot_Update_OutOfCombat
+        hbFastFuncs[5]=HealBot_Update_OutOfCombat
     end
 end
 
 function HealBot_FastFuncsUpdate()
     if HealBot_Config.DisabledNow == 1 then
-        for f=1,14 do
+        for f=1,9 do
             hbFastFuncs[f]=HealBot_Update_Disabled
         end
     else
-        for f=1,14 do
+        for f=1,9 do
             hbFastFuncs[f]=HealBot_UpdateUnit_Buttons
         end
     end
