@@ -2,6 +2,6 @@
 ## Title: HealBot Options <No Longer in use>
 ## Author: Strife
 ## RequiredDeps: HealBot
-## Notes: This is no longer in use. A future release will recommend deleting the HealBot_Options folder in Addons.
+## Notes: This is no longer in use. The HealBot_Options folder in Addons can be deleted.
 
 HealBot_NotInUse.lua

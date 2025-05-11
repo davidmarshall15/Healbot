@@ -2020,8 +2020,12 @@ function HealBot_Aura_CheckUnitBuff(button)
             end
         end
         HealBot_Aura_CheckUnitGeneralBuff(button)
-    elseif not HealBot_BuffWatch[uaBuffData[button.id][uaBuffSlot].name] and not HealBot_BuffNameTypes[uaBuffData[button.id][uaBuffSlot].name] then
-        if uaNever then HealBot_ExcludeBuffInCache[uaBuffData[button.id][uaBuffSlot].spellId]=true end
+    else
+        if uaNever and not HealBot_BuffWatch[uaBuffData[button.id][uaBuffSlot].name] and not HealBot_BuffNameTypes[uaBuffData[button.id][uaBuffSlot].name] then
+            HealBot_ExcludeBuffInCache[uaBuffData[button.id][uaBuffSlot].spellId]=true
+        else
+            HealBot_Aura_CheckUnitGeneralBuff(button)
+        end
         if not HealBot_Watch_HoT[uaBuffData[button.id][uaBuffSlot].name] and not HealBot_Watch_HoT[uaBuffData[button.id][uaBuffSlot].spellId] then
             if uaBuffData[button.id][uaBuffSlot].sourceUnitIsPlayer then
                 HealBot_UnusedSelfBuffs[uaBuffData[button.id][uaBuffSlot].spellId]=true
@@ -2035,8 +2039,6 @@ function HealBot_Aura_CheckUnitBuff(button)
                 end
             end
         end
-    else
-        HealBot_Aura_CheckUnitGeneralBuff(button)
     end
 end
 

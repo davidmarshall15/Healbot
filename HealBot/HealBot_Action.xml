@@ -1322,29 +1322,4 @@
     </Frames>
   </Button>
 
-   <Button name="HealingButtonTemplateTimeToLive" virtual="true" inherits="SecureUnitButtonTemplate,SecureHandlerEnterLeaveTemplate,SecureHandlerShowHideTemplate">
-    <Size>
-      <AbsDimension x="128" y="18" />
-    </Size>
-    <Scripts>
-      <OnLoad>HealBot_Plugin_TimeToLive_OnLoad(self)</OnLoad>
-    </Scripts>
-    <Frames>
-      <StatusBar name="$parentBar" inherits="HealBot_StatusBar">
-        <Anchors>
-          <Anchor point="TOPLEFT" relativePoint="TOPLEFT">
-            <Offset>
-              <AbsDimension x="0" y="0"/>
-            </Offset>
-          </Anchor>
-          <Anchor point="TOPRIGHT" relativePoint="BOTTOMRIGHT">
-            <Offset>
-              <AbsDimension x="0" y="0"/>
-            </Offset>
-          </Anchor>
-        </Anchors>
-      </StatusBar>
-    </Frames>
-  </Button>
-
 </Ui>
