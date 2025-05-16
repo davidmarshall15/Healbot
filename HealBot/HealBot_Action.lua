@@ -7000,14 +7000,16 @@ local hbFrameSetPointReal={[1]=false,[2]=false,[3]=false,[4]=false,[5]=false,[6]
 local hbFrameGetCoords={[1]=false,[2]=false,[3]=false,[4]=false,[5]=false,[6]=false,[7]=false,[8]=false,[9]=false,[10]=false}
 function HealBot_Action_DelayCheckFrameSetPoint(frame, setPoint, check, useReal)
       --HealBot_setCall("HealBot_Action_DelayCheckFrameSetPoint")
-    if setPoint then
-        hbFrameSetPoint[frame]=true
-        if check then hbFrameSetPointCheck[frame]=true end
-        if useReal then hbFrameSetPointReal[frame]=true end
-    else
-        hbFrameGetCoords[frame]=true
+    if HealBot_Data["UILOCK"] or not grpFrame[frame].isMoving then
+        if setPoint then
+            hbFrameSetPoint[frame]=true
+            if check then hbFrameSetPointCheck[frame]=true end
+            if useReal then hbFrameSetPointReal[frame]=true end
+        else
+            hbFrameGetCoords[frame]=true
+        end
+        HealBot_Timers_Set("OOC","CheckFrameSetPoint",true)
     end
-    HealBot_Timers_Set("OOC","CheckFrameSetPoint",true)
 end
 
 function HealBot_Action_CheckFrameSetPoint()
@@ -8378,13 +8380,17 @@ function HealBot_Action_CheckForStickyFrame(frame,stick)
                     vStickyFrameIsSticky=true
                     break
                 end
-            else
-                HealBot_Action_DelayCheckFrameSetPoint(frame, true)
             end
-            if vStickyFrameLeft then hbv_Skins_SetFrameVar(vStickyFrameLeft, "Anchors", "LEFT", frame) end
-            if vStickyFrameRight then hbv_Skins_SetFrameVar(vStickyFrameRight, "Anchors", "RIGHT", frame) end
-            if vStickyFrameTop then hbv_Skins_SetFrameVar(vStickyFrameTop, "Anchors", "TOP", frame) end
-            if vStickyFrameBottom then hbv_Skins_SetFrameVar(vStickyFrameBottom, "Anchors", "BOTTOM", frame) end
+            if stick then
+                if vStickyFrameLeft then 
+                    hbv_Skins_SetFrameVar(vStickyFrameLeft, "Anchors", "LEFT", frame) 
+                else
+                    HealBot_Action_DelayCheckFrameSetPoint(frame, true)
+                end
+                if vStickyFrameRight then hbv_Skins_SetFrameVar(vStickyFrameRight, "Anchors", "RIGHT", frame) end
+                if vStickyFrameTop then hbv_Skins_SetFrameVar(vStickyFrameTop, "Anchors", "TOP", frame) end
+                if vStickyFrameBottom then hbv_Skins_SetFrameVar(vStickyFrameBottom, "Anchors", "BOTTOM", frame) end
+            end
         end
     end
     if not vStickyFrameIsSticky and not stick then

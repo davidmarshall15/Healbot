@@ -27,7 +27,7 @@ function HealBot_Lang_Options_enALL()
     local hbSpellsTips11="\n--\n".._G["YELLOW_FONT_COLOR_CODE"].."NOTE: Ensure debuff monitoring is turned on to populate this list.\n".._G["YELLOW_FONT_COLOR_CODE"].."NOTE: Existing custom debuffs are excluded from this list."
     local hbSpellsTips12="\n--\n".._G["YELLOW_FONT_COLOR_CODE"].."NOTE: Ensure buff monitoring is turned on to populate this list.\n".._G["YELLOW_FONT_COLOR_CODE"].."NOTE: Existing custom buffs are excluded from this list."
     local hbSpellsTips13="\n--\n".._G["ORANGE_FONT_COLOR_CODE"].."NOTE: This setting applies to all frames."
-    local hbSpellsTips14="\n--\n".."|cff77c8ff".."Want a custom set of icons included?\n|cff77c8ff - Providing they are appropriate to the set.\n|cff77c8ff - They are 64x64 tga format.\n|cff77c8ff Share them on discord for review."
+    local hbSpellsTips14="\n--\n".."|cff77c8ff".."Want a custom set of icons included?\n|cff77c8ff - Providing they are appropriate for the set.\n|cff77c8ff - They are 64x64 tga format.\n".._G["YELLOW_FONT_COLOR_CODE"].."Share them on discord for review."
     HEALBOT_OPTIONS_HELP_TITLES={
                         -- Reset Colours
                                  ["RESETCOLS"]="Reset Col"..HEALBOT_enWORD_COLOUR_SUFFIX,

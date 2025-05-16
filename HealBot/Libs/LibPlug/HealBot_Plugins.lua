@@ -76,7 +76,7 @@ end
 function HealBot_Plugin_Options_SetupStatusBar(bar, width, height, x, y, text, txtCenter)
 	bar:SetSize(width, height)
 	bar:SetPoint("TOP", x, y)
-	bar:SetStatusBarTexture("Interface\\Addons\\HealBot\\Images\\bar8.tga")
+	bar:SetStatusBarTexture("Interface\\Addons\\HealBot\\Images\\textures\\bar8.tga")
 	bar.Text=bar:CreateFontString()
 	bar.Text:SetFontObject(GameFontNormal)
     if txtCenter then
@@ -121,7 +121,7 @@ function HealBot_Plugin_Options_Setup_EditBox(editbox, parent, point, x, y, widt
 	editbox.Txt=editbox:CreateFontString()
 	editbox.Txt:SetFontObject(GameFontNormal)
     if txtTop then
-        editbox.Txt:SetPoint("TOPLEFT", 0 , 12)
+        editbox.Txt:SetPoint("TOP", 0 , 14)
     else
         editbox.Txt:SetPoint("RIGHT", editbox, "LEFT", -15, 0)
     end

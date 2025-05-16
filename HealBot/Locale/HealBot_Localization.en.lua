@@ -1477,13 +1477,13 @@ function HealBot_Lang_enALL()
     HEALBOT_PLUGIN_REQUESTCOL              ="Request col"..HEALBOT_enWORD_COLOUR_SUFFIX
     HEALBOT_PLUGIN_REQUESTSOUND            ="Play sound on request";
     HEALBOT_PLUGIN_AURAWATCHTARGETPLAYERS  ="Target players";
-    HEALBOT_PLUGIN_AURAWATCHPLAYERSFILTER  ="Target players filter";
+    HEALBOT_PLUGIN_AURAWATCHPLAYERSFILTER  ="Target players filter";  -- Can be deleted after AuraWatch June 2025 release.
     HEALBOT_PLUGIN_BUFFWATCHONLYINCOMBAT   ="Only in combat";
-    HEALBOT_PLUGIN_BUFFWATCHSELFBUFF       ="My spell";
-    HEALBOT_PLUGIN_BUFFWATCHPLAYERSBUFF    ="Target players buff";
-    HEALBOT_PLUGIN_BUFFWATCHPLAYERSTAG     ="Target players tag";
-    HEALBOT_PLUGIN_BUFFWATCHPLAYERSDEBUFF  ="Target players debuff";
-    HEALBOT_PLUGIN_BUFFWATCHSELFBUFFH      ="Alert when spell cooldown ends";
+    HEALBOT_PLUGIN_BUFFWATCHSELFBUFF       ="My spell";  -- Can be deleted after AuraWatch June 2025 release.
+    HEALBOT_PLUGIN_BUFFWATCHPLAYERSBUFF    ="Target players buff";  -- Can be deleted after AuraWatch June 2025 release.
+    HEALBOT_PLUGIN_BUFFWATCHPLAYERSTAG     ="Target players tag";  -- Can be deleted after AuraWatch June 2025 release.
+    HEALBOT_PLUGIN_BUFFWATCHPLAYERSDEBUFF  ="Target players debuff";  -- Can be deleted after AuraWatch June 2025 release.
+    HEALBOT_PLUGIN_BUFFWATCHSELFBUFFH      ="Alert when spell cooldown ends";  -- Can be deleted after AuraWatch June 2025 release.
     HEALBOT_PLUGIN_BUFFWATCHSTATE1         ="Inactive"
     HEALBOT_PLUGIN_BUFFWATCHSTATE2         ="Wait on cooldown for "
     HEALBOT_PLUGIN_BUFFWATCHSTATE3         ="Wait on "
@@ -1491,7 +1491,7 @@ function HealBot_Lang_enALL()
     HEALBOT_PLUGIN_BUFFWATCHTTIMEOUT       ="Alert timeout"
     HEALBOT_PLUGIN_BUFFWATCHCOL            ="Alert col"..HEALBOT_enWORD_COLOUR_SUFFIX
     HEALBOT_PLUGIN_STACKS                  ="Stacks"
-    HEALBOT_PLUGIN_BUFFWATCHSOUND          ="Play sound on alert";
+    HEALBOT_PLUGIN_BUFFWATCHSOUND          ="Play sound";
     HEALBOT_PLUGIN_AURAWATCHT              ="Watch"
     HEALBOT_PLUGIN_AURAWATCHBUFFEXISTS     ="Buff exists"
     HEALBOT_PLUGIN_AURAWATCHBUFFEXISTSTAG  ="Buff exists with tag"
@@ -1508,6 +1508,7 @@ function HealBot_Lang_enALL()
     HEALBOT_PLUGIN_AURAWATCHAGGROLEVEL     ="Aggro level"
     HEALBOT_PLUGIN_AURAWATCHRAIDTARGET     ="Raid Target"
     HEALBOT_PLUGIN_AURAWATCHRAIDTARGETF    ="Filter raid target"
+    HEALBOT_PLUGIN_AURAWATCHHEALGRPCFG     ="Heal groups config"
     HEALBOT_PLUGIN_ALERTRANGE              ="Alert Range"
     HEALBOT_PLUGIN_TWEAKSDELETEALL         ="Delete All"
     HEALBOT_PLUGIN_TWEAKSENABLEALL         ="Enable All"

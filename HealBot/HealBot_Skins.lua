@@ -1605,19 +1605,49 @@ local defaultFrameVars={"Indicators", "HeadBar", "IconSetsText", "BarSort", "Fra
 local defaultVars={"Enemy", "General", "Healing", "Adaptive", "Chat"}
 
 function HealBot_Skins_DefaultUnusedFrames(skin)
-    for j=1,10 do
-        defaultFrame[j]=true
+    for f=1,10 do
+        defaultFrame[f]=true
     end
-    for j=1,15 do
-        if Healbot_Config_Skins.HealGroups[Healbot_Config_Skins.Current_Skin][j]["STATE"] then
-            defaultFrame[Healbot_Config_Skins.HealGroups[Healbot_Config_Skins.Current_Skin][j]["FRAME"]]=false
+    for h=1,15 do
+        if Healbot_Config_Skins.HealGroups[Healbot_Config_Skins.Current_Skin][h]["STATE"] then
+            defaultFrame[Healbot_Config_Skins.HealGroups[Healbot_Config_Skins.Current_Skin][h]["FRAME"]]=false
         end
     end
-    for j=1,10 do
-        if defaultFrame[j] then
+    for f=1,10 do
+        if defaultFrame[f] then
             for k=1,#defaultFrameVars do
-                if Healbot_Config_Skins[defaultFrameVars[k]] and Healbot_Config_Skins[defaultFrameVars[k]][skin] and Healbot_Config_Skins[defaultFrameVars[k]][skin][j] then
-                    Healbot_Config_Skins[defaultFrameVars[k]][skin][j]=nil
+                if Healbot_Config_Skins[defaultFrameVars[k]] and Healbot_Config_Skins[defaultFrameVars[k]][skin] and Healbot_Config_Skins[defaultFrameVars[k]][skin][f] then
+                    Healbot_Config_Skins[defaultFrameVars[k]][skin][f]=nil
+                end
+            end
+            if Healbot_Config_Aux.Bar[skin][f] then
+                for i=1,9 do
+                    if Healbot_Config_Aux.Bar[skin][f][i] then
+                        table.foreach(Healbot_Config_Aux.Bar[skin][f][i], function (key,val)
+                            Healbot_Config_Aux.Bar[skin][f][i][key]=nil
+                        end)
+                        HealBot_Util_EmptyTable(Healbot_Config_Aux.Bar[skin][f], i)
+                    end
+                    HealBot_Util_EmptyTable(Healbot_Config_Aux.Bar[skin], f)
+                end
+            end
+            if Healbot_Config_Aux.BarText[skin][f] then
+                for i=1,9 do
+                    if Healbot_Config_Aux.BarText[skin][f][i] then
+                        table.foreach(Healbot_Config_Aux.BarText[skin][f][i], function (key,val)
+                            Healbot_Config_Aux.BarText[skin][f][i][key]=nil
+                        end);
+                        HealBot_Util_EmptyTable(Healbot_Config_Aux.BarText[skin][f], i)
+                    end
+                end
+                HealBot_Util_EmptyTable(Healbot_Config_Aux.BarText[skin], f)
+            end
+            if Healbot_Config_Aux.Overlay and Healbot_Config_Aux.Overlay[skin] then
+                if Healbot_Config_Aux.Overlay[skin][f] then
+                    table.foreach(Healbot_Config_Aux.Overlay[skin][f], function (key,val)
+                        Healbot_Config_Aux.Overlay[skin][f][key]=nil
+                    end);
+                    HealBot_Util_EmptyTable(Healbot_Config_Aux.Overlay[skin], f)
                 end
             end
         end

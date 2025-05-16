@@ -128,14 +128,11 @@
         <FontString inherits="GameFontHighlightSmall"/>
         <Layers>
           <Layer level="ARTWORK">
-            <FontString name="$parentText" text=" " inherits="GameFontNormalSmall">
-              <Size>
-                <AbsDimension x="0" y="10"/>
-              </Size>
+            <FontString name="$parentText" text=" " inherits="GameFontNormal">
               <Anchors>
-                <Anchor point="BOTTOMLEFT" relativeTo="$parent" relativePoint="TOPLEFT">
+                <Anchor point="BOTTOM" relativeTo="$parent" relativePoint="TOP">
                   <Offset>
-                    <AbsDimension x="0" y="4"/>
+                    <AbsDimension x="0" y="1"/>
                   </Offset>
                 </Anchor>
               </Anchors>
@@ -7827,7 +7824,7 @@
                     </Anchors>
                     <Layers>
                       <Layer level="OVERLAY">
-                        <FontString name="healbotbinds1fontstr" inherits="GameFontNormalSmall" text="HEALBOT_OPTIONS_COMBOBINDS">
+                        <FontString name="healbotbinds1fontstr" inherits="GameFontNormal" text="HEALBOT_OPTIONS_COMBOBINDS">
                           <Anchors>
                             <Anchor point="TOP">
                               <Offset>
