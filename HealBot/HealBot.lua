@@ -1094,9 +1094,6 @@ function HealBot_UnitMana(button)
             if not HealBot_Data["UILOCK"] and HEALBOT_GAME_VERSION<5 and button.isplayer and not button.player and (hbManaMax>(button.mana.max*1.25) or hbManaMax<(button.mana.max*0.75)) then
                 HealBot_Events_SpecChange(button)
             end
-            if hbManaCurrent < button.mana.current then
-                button.mana.lowcheck=true
-            end
             button.mana.current=hbManaCurrent
             button.mana.max=hbManaMax
             if button.mana.max>0 then
@@ -1127,6 +1124,7 @@ function HealBot_UnitMana(button)
         HealBot_Aux_setPowerBars(button)
         HealBot_Events_PowerIndicators(button)
     end
+    button.mana.lowcheck=true
 end
 
 function HealBot_GetUnitGuild(button)
