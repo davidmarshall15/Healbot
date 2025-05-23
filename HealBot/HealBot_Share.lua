@@ -483,10 +483,8 @@ end
 function HealBot_Share_ExportBuffs(lData)
       --HealBot_setCall("HealBot_Share_ExportBuffs")
     local ssStr=validType[3].."\n"
-    local hbClassHoTwatch=HealBot_Globals.WatchHoT
-    for xClass,_  in pairs(hbClassHoTwatch) do
-        local HealBot_configClassHoTClass=HealBot_Globals.WatchHoT[xClass]
-        for bId,x  in pairs(HealBot_configClassHoTClass) do
+    for xClass,_  in pairs(HealBot_Globals.WatchHoT) do
+        for bId,x  in pairs(HealBot_Globals.WatchHoT[xClass]) do
             ssStr=ssStr..(HealBot_WoWAPI_SpellName(bId) or HEALBOT_WORDS_UNKNOWN).."~"
             ssStr=ssStr..xClass.."~"
             ssStr=ssStr..bId..","..(HealBot_Globals.CustomBuffs[bId] or 0)..","..x..","..(HealBot_Globals.CustomBuffsShowBarCol[bId] or 1)..","

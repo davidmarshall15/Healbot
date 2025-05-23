@@ -622,7 +622,7 @@ local function HealBot_Aux_UpdateThreatBarById(button, id)
             if hbv_Aux_GetBarTextVar("COLTYPE", button.frame, id) == 1 then
                 button.auxtxt[id]["R"],button.auxtxt[id]["G"],button.auxtxt[id]["B"]=1,1,1
             end
-            HealBot_Aux_setBar(button, id, button.aggro.threatpct*10, true, HealBot_Text_readNumber(button.aggro.threatvalue).." ("..button.aggro.threatpct.."%)")
+            HealBot_Aux_setBar(button, id, button.aggro.threatpct*10, true, HealBot_Util_ReadNumber(button.aggro.threatvalue).." ("..button.aggro.threatpct.."%)")
         else
             HealBot_Aux_setBar(button, id, button.aggro.threatpct*10, true, false)
         end

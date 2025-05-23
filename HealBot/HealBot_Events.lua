@@ -322,20 +322,19 @@ end
 
 function HealBot_Events_CastNotify(unitName,spell,unit)
       --HealBot_setCall("HealBot_Events_CastNotify", nil, nil, unit)
-    local z=HealBot_Events_luVars["ChatNOTIFY"];
     local s=gsub(HealBot_Events_luVars["ChatMSG"],"#s",spell)
     s=gsub(s,"#l",HealBot_WoWAPI_SpellLink(spell, ""))
     s=gsub(s,"#n",unitName)
     local w=nil;
 
-    if z == 3 and UnitIsPlayer(unit) and UnitPlayerControlled(unit) and not UnitIsUnit("player",unit) then
+    if HealBot_Events_luVars["ChatNOTIFY"] == 3 and UnitIsPlayer(unit) and UnitPlayerControlled(unit) and not UnitIsUnit("player",unit) then
         s=gsub(s,unitName,HEALBOT_WORDS_YOU)
         HealBot_Comms_SendInstantMsg(s,unitName)
-    elseif z == 5 then
+    elseif HealBot_Events_luVars["ChatNOTIFY"] == 5 then
         HealBot_Comms_SendInstantMsg(s,false,true)
-    elseif z == 6 then
+    elseif HealBot_Events_luVars["ChatNOTIFY"] == 6 then
         HealBot_Comms_SendInstantMsg(s,false,false,true)
-    elseif z == 4 then
+    elseif HealBot_Events_luVars["ChatNOTIFY"] == 4 then
         HealBot_Comms_SendInstantMsg(s)
     else
         HealBot_AddChat(s);

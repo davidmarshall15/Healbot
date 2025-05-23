@@ -400,7 +400,7 @@ function HealBot_Timers_SpellsLoaded()
     HealBot_Timers_Set("INIT","SpellsTabText")
     HealBot_Timers_Set("AURA","BuffsReset")
     HealBot_Timers_Set("LAST","ResetAllButtons")
-    HealBot_Timers_Set("SKINS","PowerIndicator")
+    HealBot_Timers_Set("SKINS","PowerIndicator",true)
     HealBot_Timers_Set("INIT","PrepSetAllAttribs")
     HealBot_Timers_Set("AURA","InitAuraData")
     HealBot_Timers_Set("INIT","FluidFlash",true)
@@ -550,6 +550,9 @@ function HealBot_Timers_LastLoad()
     HealBot_Timers_Set("INIT","HealBotLoaded")
     HealBot_Timers_Set("LAST","CleanPermPrivateData",true,true)
     HealBot_Timers_Set("OOC","RemoveInvalidLoadouts",true,true)
+    HealBot_Timers_Set("OOC","CleanAurasBuffs",true,true)
+    HealBot_Timers_Set("OOC","CleanAurasDebuffs",true,true)
+    HealBot_Timers_Set("SKINS","PowerIndicator",true,true)
     if not HealBot_Timers_luVars["HelpNotice"] then
         HealBot_Timers_Set("LAST","HealBotLoadedChat")
         HealBot_Timers_luVars["HelpNotice"]=true
@@ -638,9 +641,32 @@ function HealBot_Timers_SetCurrentSkin()
     HealBot_Timers_Set("SKINS","SkinChangePluginUpdate")
 end
 
+function HealBot_Timers_AllTextUpdate()
+    HealBot_Timers_Set("SKINS","TextUpdateHealth")
+    HealBot_Timers_Set("AUX","ResetTextButtons")
+end
+
 function HealBot_Timers_InitExtraOptions()
       --HealBot_setCall("HealBot_Timers_InitExtraOptions")
-    HealBot_Timers_Set("LAST","OptionsInitExtraTabs",true)
+    HealBot_Timers_Set("LAST","OptionsInitExtraTabs")
+end
+
+function HealBot_Timers_SaveAurasBuffs()
+    hbv_Auras_Save("BUFFS")
+end
+
+function HealBot_Timers_SaveAurasDebuffs()
+    hbv_Auras_Save("DEBUFFS")
+end
+
+function HealBot_Timers_CleanAurasBuffs()
+    hbv_Auras_CleanData("BUFFS")
+    HealBot_Timers_Set("OOC","SaveAurasBuffs",true)
+end
+
+function HealBot_Timers_CleanAurasDebuffs()
+    hbv_Auras_CleanData("DEBUFFS")
+    HealBot_Timers_Set("OOC","SaveAurasDebuffs",true)
 end
 
 function HealBot_Timers_LoadedChat()
@@ -807,6 +833,7 @@ local hbTimerFuncs={["INIT"]={
                         ["ResetDebuffCache"]=HealBot_Aura_ResetDebuffCache,
                         ["CustomDebuffFilterDisabled"]=HealBot_Aura_setCustomDebuffFilterDisabled,
                         ["BuffsReset"]=HealBot_Timers_BuffsReset,
+                        ["AuraResetHoTList"]=hbv_Auras_CurrentHoTs,
                         ["RemoveAllBuffIcons"]=HealBot_Update_RemoveAllBuffIcons,
                         ["RemoveAllDebuffIcons"]=HealBot_Update_RemoveAllDebuffIcons,
                         ["ClearAllBuffs"]=HealBot_Update_ClearAllBuffs,
@@ -991,6 +1018,10 @@ local hbTimerFuncs={["INIT"]={
                         ["MarkedAttribsButtons"]=HealBot_Action_MarkedAttribsButtons,
                         ["ProcMarkedAttribsButtons"]=HealBot_Action_ProcMarkedAttribsButtons,
                         ["FrameStrata"]=HealBot_Action_SetStrata,
+                        ["SaveAurasBuffs"]=HealBot_Timers_SaveAurasBuffs,
+                        ["SaveAurasDebuffs"]=HealBot_Timers_SaveAurasDebuffs,
+                        ["CleanAurasBuffs"]=HealBot_Timers_CleanAurasBuffs,
+                        ["CleanAurasDebuffs"]=HealBot_Timers_CleanAurasDebuffs,
                     },
                    }
 
@@ -1062,6 +1093,9 @@ function HealBot_Timers_PluginsSet(tId)
         HealBot_Timers_Set("LAST","InitPlugins",true)
     elseif tId == 10 then
         HealBot_Timers_Set("LAST","PrivateListUpdate",true)
+    elseif tId == 11 then
+        HealBot_Util_SetNumSuffix()
+        HealBot_Timers_AllTextUpdate()
     end
 end
 

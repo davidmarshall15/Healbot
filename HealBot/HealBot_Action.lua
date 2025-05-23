@@ -117,8 +117,8 @@ function HealBot_Action_setAuxAssigns(vName, frame, vValue)
 end
 
 function HealBot_Action_UpdateCheckInterval()
-    HealBot_Action_luVars["deadCheckInterval"]=HealBot_Util_PerfVal2(850)
-    if HealBot_Action_luVars["deadCheckInterval"]<0.75 then HealBot_Action_luVars["deadCheckInterval"]=0.75 end
+    HealBot_Action_luVars["deadCheckInterval"]=HealBot_Util_PerfVal2(950)
+    if HealBot_Action_luVars["deadCheckInterval"]<0.5 then HealBot_Action_luVars["deadCheckInterval"]=0.5 end
     HealBot_Debug_PerfUpdate("deadInt", HealBot_Action_luVars["deadCheckInterval"])
     HealBot_Aura_UpdateCheckInterval()
 end
@@ -4411,7 +4411,7 @@ function HealBot_Action_UnregisterUnitEvents(button)
     button:UnregisterEvent("UNIT_DISTANCE_CHECK_UPDATE")
     button:UnregisterEvent("UNIT_IN_RANGE_UPDATE")
     button:UnregisterEvent("INCOMING_RESURRECT_CHANGED")
-    if HEALBOT_GAME_VERSION>4 then
+    if HEALBOT_GAME_VERSION>5 then
         button:UnregisterEvent("UNIT_ABSORB_AMOUNT_CHANGED")
         button:UnregisterEvent("UNIT_HEAL_ABSORB_AMOUNT_CHANGED")
         button:UnregisterEvent("UNIT_AREA_CHANGED")
@@ -4473,7 +4473,7 @@ function HealBot_Action_RegisterUnitEvents(button)
         button:RegisterUnitEvent("UNIT_DISTANCE_CHECK_UPDATE", button.unit)
         button:RegisterUnitEvent("UNIT_IN_RANGE_UPDATE", button.unit)
         button:RegisterUnitEvent("INCOMING_RESURRECT_CHANGED", button.unit)
-        if HEALBOT_GAME_VERSION>4 then
+        if HEALBOT_GAME_VERSION>5 then
             button:RegisterUnitEvent("UNIT_ABSORB_AMOUNT_CHANGED", button.unit)
             button:RegisterUnitEvent("UNIT_HEAL_ABSORB_AMOUNT_CHANGED", button.unit)
             button:RegisterUnitEvent("UNIT_AREA_CHANGED", button.unit)

@@ -31,12 +31,6 @@ HealBot_Text_EnemySizeWidth["NAME"][2]=100
 HealBot_Text_EnemySizeWidth["HLTH"][1]=100
 HealBot_Text_EnemySizeWidth["HLTH"][2]=100
 
-local vShortChars={}
-vShortChars["LowerK"]="k"
-vShortChars["UpperK"]="K"
-vShortChars["LowerM"]="m"
-vShortChars["UpperM"]="M"
-
 local vTextChars={}
 vTextChars["Nothing"]=""
 vTextChars["Space"]=" "
@@ -187,16 +181,10 @@ function HealBot_Text_Concat(elements)
 end
 
 local tHealthConcat={}
-local tShortConcat={}
 local tabconcat=table.concat
 function HealBot_Text_HealthConcat(elements)
       --HealBot_setCall("HealBot_Text_HealthConcat")
     return tabconcat(tHealthConcat,"",1,elements)
-end
-
-function HealBot_Text_ShortConcat()
-      --HealBot_setCall("HealBot_Text_ShortConcat")
-    return tabconcat(tShortConcat,"",1,2)
 end
 
 local vSetTextLenAux=0
@@ -262,30 +250,20 @@ end
 function HealBot_Text_sethbNumberFormat()
       --HealBot_setCall("HealBot_Text_sethbNumberFormat")
     for j=1,10 do
-        if hbv_Skins_GetFrameVar("BarText", "NUMFORMAT1", j) == 2 or hbv_Skins_GetFrameVar("BarText", "NUMFORMAT1", j) == 5 or hbv_Skins_GetFrameVar("BarText", "NUMFORMAT1", j) == 8 then
+        if hbv_Skins_GetFrameVar("BarText", "NUMFORMAT1", j) == 2 then
             hbNumFormats["Places"][j]=0
-        elseif hbv_Skins_GetFrameVar("BarText", "NUMFORMAT1", j) == 3 or hbv_Skins_GetFrameVar("BarText", "NUMFORMAT1", j) == 6 or hbv_Skins_GetFrameVar("BarText", "NUMFORMAT1", j) == 9 then
+        elseif hbv_Skins_GetFrameVar("BarText", "NUMFORMAT1", j) == 3 then
             hbNumFormats["Places"][j]=1
-        elseif hbv_Skins_GetFrameVar("BarText", "NUMFORMAT1", j) == 4 or hbv_Skins_GetFrameVar("BarText", "NUMFORMAT1", j) == 7 or hbv_Skins_GetFrameVar("BarText", "NUMFORMAT1", j) == 10 then
+        elseif hbv_Skins_GetFrameVar("BarText", "NUMFORMAT1", j) == 4 then
             hbNumFormats["Places"][j]=2
-        elseif hbv_Skins_GetFrameVar("BarText", "NUMFORMAT1", j) == 11 then
+        elseif hbv_Skins_GetFrameVar("BarText", "NUMFORMAT1", j) == 5 then
             hbNumFormats["Places"][j]=3
+        elseif hbv_Skins_GetFrameVar("BarText", "NUMFORMAT1", j) == 6 then
+            hbNumFormats["Places"][j]=9
         else
             hbNumFormats["Places"][j]=-1
         end
-        if hbv_Skins_GetFrameVar("BarText", "NUMFORMAT1", j)>1 and hbv_Skins_GetFrameVar("BarText", "NUMFORMAT1", j)<5 then
-            hbNumFormats["SuffixK"][j]=vShortChars["UpperK"]
-            hbNumFormats["SuffixM"][j]=vShortChars["UpperM"]
-        elseif hbv_Skins_GetFrameVar("BarText", "NUMFORMAT1", j)>4 and hbv_Skins_GetFrameVar("BarText", "NUMFORMAT1", j)<8 then
-            hbNumFormats["SuffixK"][j]=vShortChars["LowerK"]
-            hbNumFormats["SuffixM"][j]=vShortChars["LowerM"]
-        elseif hbv_Skins_GetFrameVar("BarText", "NUMFORMAT1", j) == 11 then
-            hbNumFormats["SuffixK"][j]=vShortChars["UpperK"]
-            hbNumFormats["SuffixM"][j]=vShortChars["UpperM"]
-        else
-            hbNumFormats["SuffixK"][j]=vTextChars["Nothing"]
-            hbNumFormats["SuffixM"][j]=vTextChars["Nothing"]
-        end
+        
         if hbv_Skins_GetFrameVar("BarText", "NUMFORMAT2", j) == 2 then
             hbNumFormats["SurroundLeft"][j]="("
             hbNumFormats["SurroundRight"][j]=")"
@@ -311,11 +289,7 @@ function HealBot_Text_sethbNumberFormat()
             hbNumFormats["SurroundLeft"][j]=vTextChars["Nothing"]
             hbNumFormats["SurroundRight"][j]=vTextChars["Nothing"]
         end
-        if hbNumFormats["Places"][j] == -1 then
-            hbNumFormats["SuffixK"][j]=vTextChars["Nothing"]
-            hbNumFormats["SuffixM"][j]=vTextChars["Nothing"]
-        end
-
+        
         hbNumFormats["OverHealLeft"][j]=vTextChars["Nothing"]
         hbNumFormats["OverHealRight"][j]=vTextChars["Nothing"]
         if hbv_Skins_GetFrameVar("BarText", "OVERHEALFORMAT", j) == 2 then
@@ -690,56 +664,17 @@ function HealBot_Text_TextAggroColours(button)
     return tr,tg,tb
 end
 
-function HealBot_Text_readNumber(n)
-      --HealBot_setCall("HealBot_Text_readNumber")
-    if n<9999 then
-        n=tostring(n)
-    elseif n<99999 then
-        n=tostring(HealBot_Util_Round(n/1000,1)).."K"
-    elseif n<999999 then
-        n=tostring(ceil(n/1000)).."K"
-    elseif n<9999999 then
-        n=tostring(HealBot_Util_Round(n/1000000,2)).."M"
-    elseif n<99999999 then
-        n=tostring(HealBot_Util_Round(n/1000000,1)).."M"
-    else
-        n=tostring(ceil(n/1000000)).."M"
-    end
-    return n
-end
-
 local vShortHealTxtIsK,vShortHealTxtAmount,vShortHealTxtSuffix,vShortHealTxtAbsNum=true,0,"",0
 local hbAbs=math.abs
 function HealBot_Text_shortHealTxt(amount, frame)
       --HealBot_setCall("HealBot_Text_shortHealTxt")
     vShortHealTxtAbsNum=hbAbs(amount)
     if vShortHealTxtAbsNum>999 and hbNumFormats["Places"][frame]>-1 then
-        if hbNumFormats["Places"][frame]<3 then 
-            if vShortHealTxtAbsNum>999999 then
-                vShortHealTxtAmount=HealBot_Util_Round(amount/1000000,hbNumFormats["Places"][frame]) 
-                vShortHealTxtSuffix=hbNumFormats["SuffixM"][frame]
-            else
-                vShortHealTxtAmount=HealBot_Util_Round(amount/1000,hbNumFormats["Places"][frame]) 
-                vShortHealTxtSuffix=hbNumFormats["SuffixK"][frame]
-            end
+        if hbNumFormats["Places"][frame]<4 then 
+            return HealBot_Util_ReadNumber(amount,hbNumFormats["Places"][frame])
         else
-            if vShortHealTxtAbsNum>9999999 then
-                vShortHealTxtAmount=HealBot_Util_Round(amount/1000000,0)
-                vShortHealTxtSuffix=hbNumFormats["SuffixM"][frame]
-            elseif vShortHealTxtAbsNum>999999 then
-                vShortHealTxtAmount=HealBot_Util_Round(amount/1000000,1)
-                vShortHealTxtSuffix=hbNumFormats["SuffixM"][frame]
-            elseif vShortHealTxtAbsNum>9999 then
-                vShortHealTxtAmount=HealBot_Util_Round(amount/1000,0)
-                vShortHealTxtSuffix=hbNumFormats["SuffixK"][frame]
-            else
-                vShortHealTxtAmount=HealBot_Util_Round(amount/1000,1)
-                vShortHealTxtSuffix=hbNumFormats["SuffixK"][frame]
-            end
+            return HealBot_Util_ReadNumber(amount)
         end
-        tShortConcat[1]=vShortHealTxtAmount
-        tShortConcat[2]=vShortHealTxtSuffix
-        return HealBot_Text_ShortConcat()
     else
         return HealBot_Util_Round(amount, 0)
     end

@@ -12,6 +12,22 @@ function HealBot_Util_retLuVars(vName)
     return HealBot_Aggro_luVars[vName]
 end
 
+local nConcat={}
+nConcat[1]=0
+nConcat[2]=""
+local txtConcat={}
+local tabconcat=table.concat
+function HealBot_Util_TextConcat(elements)
+      --HealBot_setCall("HealBot_Text_ShortConcat")
+    return tabconcat(txtConcat,"",1,elements)
+end
+
+function HealBot_Util_NumConcat()
+      --HealBot_setCall("HealBot_Text_ShortConcat")
+    return tabconcat(nConcat,"",1,2)
+end
+
+
 local mult=0
 function HealBot_Util_Round(num, idp)
       --HealBot_setCall("HealBot_Util_Round")
@@ -95,7 +111,7 @@ function HealBot_Util_PerfVal4(mod)  -- max mod is 100, returns fraction of fps 
 end
 
 function HealBot_Util_EmptyTable(t, key)
-    if t[key] then
+    if t and t[key] then
         HealBot_Util_luVars["emptyTable"]=true
         for _,v in pairs(t[key]) do
             if v or v == false then
@@ -202,7 +218,85 @@ function HealBot_Util_GetTimeElapsed(sDate, future)
         sDiff=floor(sDiff)
     end
     if not future then
-        sLabel=sLabel.." ago"
+        txtConcat[1]=sLabel
+        txtConcat[2]=" ago"
+        sLabel=HealBot_Util_TextConcat(2)
     end
     return sDiff, sLabel
+end
+
+local nSuffix={}
+nSuffix[1]="K"
+nSuffix[2]="M"
+nSuffix[3]="B"
+nSuffix[4]="T"
+function HealBot_Util_SetNumSuffix()
+    if HealBot_Globals.UseLowerNumSuffix then
+        nSuffix[1]="k"
+        nSuffix[2]="m"
+        nSuffix[3]="b"
+        nSuffix[4]="t"
+    else
+        nSuffix[1]="K"
+        nSuffix[2]="M"
+        nSuffix[3]="B"
+        nSuffix[4]="T"
+    end
+end
+
+function HealBot_Util_ToggleNumSuffix()
+    if HealBot_Globals.UseLowerNumSuffix then
+        HealBot_Globals.UseLowerNumSuffix=false
+    else
+        HealBot_Globals.UseLowerNumSuffix=true
+    end
+    HealBot_Util_SetNumSuffix()
+    HealBot_Timers_AllTextUpdate()
+end
+
+function HealBot_Util_ReadNumber(n,p)
+    if n<1000000 then
+        if n<10000 then
+            nConcat[1]=n
+            nConcat[2]=""
+        elseif n<100000 then
+            nConcat[1]=HealBot_Util_Round(n/1000,p or 1)
+            nConcat[2]=nSuffix[1]
+        else
+            nConcat[1]=HealBot_Util_Round(n/1000,p or 0)
+            nConcat[2]=nSuffix[1]
+        end
+    elseif n<1000000000 then
+        nConcat[2]=nSuffix[2]
+        if n<10000000 then
+            nConcat[1]=HealBot_Util_Round(n/1000000,p or 2)
+        elseif n<100000000 then
+            nConcat[1]=HealBot_Util_Round(n/1000000,p or 1)
+        else
+            nConcat[1]=HealBot_Util_Round(n/1000000,p or 0)
+        end
+    elseif n<1000000000000 then
+        nConcat[2]=nSuffix[3]
+        if n<10000000000 then
+            nConcat[1]=HealBot_Util_Round(n/1000000000,p or 2)
+        elseif n<100000000000 then
+            nConcat[1]=HealBot_Util_Round(n/1000000000,p or 1)
+        else
+            nConcat[1]=HealBot_Util_Round(n/1000000000,p or 0)
+        end
+    else
+        nConcat[2]=nSuffix[4]
+        if n<10000000000000 then
+            nConcat[1]=HealBot_Util_Round(n/1000000000000,p or 2)
+        elseif n<100000000000000 then
+            nConcat[1]=HealBot_Util_Round(n/1000000000000,p or 1)
+        else
+            nConcat[1]=HealBot_Util_Round(n/1000000000000,p or 0)
+        end
+    end
+    return HealBot_Util_NumConcat()
+end
+
+function HealBot_Util_ReturnedRGB(r,g,b)
+    return HealBot_Util_Round(r,3), HealBot_Util_Round(g,3), HealBot_Util_Round(b,3)
 end

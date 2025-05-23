@@ -337,6 +337,7 @@ function HealBot_Data_InitVars()
         IncMainAssist=true,
         FPS=60,
         LAG=0.05,
+        Auras={["BUFFS"]={},["DEBUFFS"]={},["KEEP"]=14},
         PresetColoursAlias={[1]=HEALBOT_OPTIONS_PRESET.." 1",[2]=HEALBOT_OPTIONS_PRESET.." 2",
                             [3]=HEALBOT_OPTIONS_PRESET.." 3",[4]=HEALBOT_OPTIONS_PRESET.." 4",
                             [5]=HEALBOT_OPTIONS_PRESET.." 5",[6]=HEALBOT_OPTIONS_PRESET.." 6",

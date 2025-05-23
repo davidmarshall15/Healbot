@@ -29518,12 +29518,43 @@
                           </Frame>
                           <EditBox name="HealBot_Options_ActionIconsAlertBuffname" inherits="HealBot_Options_EditBoxTemplate">
                             <Size>
-                              <AbsDimension x="200" y="20"/>
+                              <AbsDimension x="175" y="20"/>
                             </Size>
                             <Anchors>
-                              <Anchor point="TOP" relativeTo="HealBot_Options_ActionIconsAlertFilter" relativePoint="BOTTOM">
+                              <Anchor point="TOPLEFT" relativeTo="HealBot_Options_ActionIconsAlertFilter" relativePoint="BOTTOMLEFT">
                                 <Offset>
-                                  <AbsDimension x="0" y="-12"/>
+                                  <AbsDimension x="25" y="-12"/>
+                                </Offset>
+                              </Anchor>
+                            </Anchors>
+                            <Scripts>
+                              <OnTextChanged>HealBot_Options_ActionIconsAlertBuffnameChanged(self)</OnTextChanged>
+                              <OnEnter>HealBot_Options_Show_Help("ACTIONICONSBUFFNAME",true)</OnEnter>
+                              <OnLeave>HealBot_Options_Show_Help("ACTIONICONSBUFFNAME",false)</OnLeave>
+                            </Scripts>
+                          </EditBox>
+                          <Frame name="HealBot_Options_ActionIconsAlertBuffList" hidden="true" inherits="UIDropDownMenuTemplate">
+                            <Anchors>
+                              <Anchor point="LEFT" relativeTo="HealBot_Options_ActionIconsAlertBuffname" relativePoint="LEFT">
+                                <Offset>
+                                  <AbsDimension x="-22" y="-3" />
+                                </Offset>
+                              </Anchor>
+                            </Anchors>
+                            <Scripts>
+                              <OnLoad>HealBot_Options_UIDropDownMenu_OnLoad(self, 170)</OnLoad>
+                              <OnEnter>HealBot_Options_Show_Help("ACTIONICONSBUFFLIST",true)</OnEnter>
+                              <OnLeave>HealBot_Options_Show_Help("ACTIONICONSBUFFLIST",false)</OnLeave>
+                            </Scripts>
+                          </Frame>
+                          <Button name="HealBot_Options_ActionIconsAlertBuffHelp" inherits="UIPanelButtonTemplate" text="HEALBOT_OPTIONS_QUESTION">
+                            <Size>
+                              <AbsDimension x="22" y="19"/>
+                            </Size>
+                            <Anchors>
+                              <Anchor point="LEFT" relativeTo="HealBot_Options_ActionIconsAlertBuffname" relativePoint="RIGHT">
+                                <Offset>
+                                  <AbsDimension x="8" y="-1" />
                                 </Offset>
                               </Anchor>
                             </Anchors>
@@ -29541,11 +29572,11 @@
                               </Layer>
                             </Layers>
                             <Scripts>
-                              <OnTextChanged>HealBot_Options_ActionIconsAlertBuffnameChanged(self)</OnTextChanged>
-                              <OnEnter>HealBot_Options_Show_Help("ACTIONICONSBUFFNAME",true)</OnEnter>
-                              <OnLeave>HealBot_Options_Show_Help("ACTIONICONSBUFFNAME",false)</OnLeave>
+                              <OnClick>HealBot_Options_ActionIconsAlertBuffHelp_OnClick(self)</OnClick>
+                              <OnEnter>HealBot_Options_Show_Help("ACTIONICONSHELPAURA",true)</OnEnter>
+                              <OnLeave>HealBot_Options_Show_Help("ACTIONICONSHELPAURA",false)</OnLeave>
                             </Scripts>
-                          </EditBox>
+                          </Button>
                           <CheckButton name="HealBot_Options_ActionIconsAlertBuffSelfCast" inherits="HealBotUIPanelCheckButton">
                             <Anchors>
                               <Anchor point="LEFT" relativeTo="HealBot_Options_ActionIconsAlertFilter" relativePoint="RIGHT">
@@ -29565,9 +29596,9 @@
                               <AbsDimension x="90" y="18" />
                             </Size>
                             <Anchors>
-                              <Anchor point="LEFT" relativeTo="HealBot_Options_ActionIconsAlertBuffname" relativePoint="RIGHT">
+                              <Anchor point="TOPLEFT" relativeTo="HealBot_Options_ActionIconsAlertBuffSelfCast" relativePoint="BOTTOMLEFT">
                                 <Offset>
-                                  <AbsDimension x="30" y="-5" />
+                                  <AbsDimension x="-30" y="-25" />
                                 </Offset>
                               </Anchor>
                             </Anchors>
@@ -29636,12 +29667,43 @@
                           </Frame>
                           <EditBox name="HealBot_Options_ActionIconsAlertDebuffname" inherits="HealBot_Options_EditBoxTemplate">
                             <Size>
-                              <AbsDimension x="200" y="20"/>
+                              <AbsDimension x="175" y="20"/>
                             </Size>
                             <Anchors>
-                              <Anchor point="TOP" relativeTo="HealBot_Options_ActionIconsAlertFilter" relativePoint="BOTTOM">
+                              <Anchor point="TOPLEFT" relativeTo="HealBot_Options_ActionIconsAlertFilter" relativePoint="BOTTOMLEFT">
                                 <Offset>
-                                  <AbsDimension x="0" y="-12"/>
+                                  <AbsDimension x="25" y="-12"/>
+                                </Offset>
+                              </Anchor>
+                            </Anchors>
+                            <Scripts>
+                              <OnTextChanged>HealBot_Options_ActionIconsAlertDebuffnameChanged(self)</OnTextChanged>
+                              <OnEnter>HealBot_Options_Show_Help("ACTIONICONSDEBUFFNAME",true)</OnEnter>
+                              <OnLeave>HealBot_Options_Show_Help("ACTIONICONSDEBUFFNAME",false)</OnLeave>
+                            </Scripts>
+                          </EditBox>
+                          <Frame name="HealBot_Options_ActionIconsAlertDebuffList" hidden="true" inherits="UIDropDownMenuTemplate">
+                            <Anchors>
+                              <Anchor point="LEFT" relativeTo="HealBot_Options_ActionIconsAlertDebuffname" relativePoint="LEFT">
+                                <Offset>
+                                  <AbsDimension x="-22" y="-3" />
+                                </Offset>
+                              </Anchor>
+                            </Anchors>
+                            <Scripts>
+                              <OnLoad>HealBot_Options_UIDropDownMenu_OnLoad(self, 170)</OnLoad>
+                              <OnEnter>HealBot_Options_Show_Help("ACTIONICONSDEBUFFLIST",true)</OnEnter>
+                              <OnLeave>HealBot_Options_Show_Help("ACTIONICONSDEBUFFLIST",false)</OnLeave>
+                            </Scripts>
+                          </Frame>
+                          <Button name="HealBot_Options_ActionIconsAlertDebuffHelp" inherits="UIPanelButtonTemplate" text="HEALBOT_OPTIONS_QUESTION">
+                            <Size>
+                              <AbsDimension x="22" y="19"/>
+                            </Size>
+                            <Anchors>
+                              <Anchor point="LEFT" relativeTo="HealBot_Options_ActionIconsAlertDebuffname" relativePoint="RIGHT">
+                                <Offset>
+                                  <AbsDimension x="8" y="-1" />
                                 </Offset>
                               </Anchor>
                             </Anchors>
@@ -29649,7 +29711,7 @@
                               <Layer level="BACKGROUND">
                                 <FontString name="healbotactioniconsalertdebuffnametxt" inherits="GameFontNormal" text="HEALBOT_SKIN_DEBTEXT">
                                   <Anchors>
-                                    <Anchor point="RIGHT" relativeTo="HealBot_Options_ActionIconsAlertBuffname" relativePoint="LEFT">
+                                    <Anchor point="RIGHT" relativeTo="HealBot_Options_ActionIconsAlertDebuffname" relativePoint="LEFT">
                                       <Offset>
                                         <AbsDimension x="-11" y="0"/>
                                       </Offset>
@@ -29659,11 +29721,11 @@
                               </Layer>
                             </Layers>
                             <Scripts>
-                              <OnTextChanged>HealBot_Options_ActionIconsAlertDebuffnameChanged(self)</OnTextChanged>
-                              <OnEnter>HealBot_Options_Show_Help("ACTIONICONSDEBUFFNAME",true)</OnEnter>
-                              <OnLeave>HealBot_Options_Show_Help("ACTIONICONSDEBUFFNAME",false)</OnLeave>
+                              <OnClick>HealBot_Options_ActionIconsAlertDebuffHelp_OnClick(self)</OnClick>
+                              <OnEnter>HealBot_Options_Show_Help("ACTIONICONSHELPAURA",true)</OnEnter>
+                              <OnLeave>HealBot_Options_Show_Help("ACTIONICONSHELPAURA",false)</OnLeave>
                             </Scripts>
-                          </EditBox>
+                          </Button>
                           <CheckButton name="HealBot_Options_ActionIconsAlertDebuffSelfCast" inherits="HealBotUIPanelCheckButton">
                             <Anchors>
                               <Anchor point="LEFT" relativeTo="HealBot_Options_ActionIconsAlertFilter" relativePoint="RIGHT">
@@ -29683,9 +29745,9 @@
                               <AbsDimension x="90" y="18" />
                             </Size>
                             <Anchors>
-                              <Anchor point="LEFT" relativeTo="HealBot_Options_ActionIconsAlertDebuffname" relativePoint="RIGHT">
+                              <Anchor point="TOPLEFT" relativeTo="HealBot_Options_ActionIconsAlertDebuffSelfCast" relativePoint="BOTTOMLEFT">
                                 <Offset>
-                                  <AbsDimension x="30" y="-5" />
+                                  <AbsDimension x="-30" y="-25" />
                                 </Offset>
                               </Anchor>
                             </Anchors>
@@ -29879,7 +29941,6 @@
                               <OnLeave>HealBot_Options_Show_Help("ACTIONICONSONLYII",false)</OnLeave>
                             </Scripts>
                           </CheckButton>
-
                         </Frames>
                       </Frame>
                       <Button name="HealBot_Options_SkinsFrameActionIconsConfigClose" inherits="UIPanelButtonTemplate" text="HEALBOT_OPTIONS_CLOSE">
@@ -30091,7 +30152,6 @@
                       </Button>
                     </Frames>
                   </Frame>
-
                   <Frame name="HealBot_Options_SkinsFrameActionIconsText" hidden="true" inherits="BackdropTemplate">
                     <Size>
                       <AbsDimension y="495"/>
@@ -32941,7 +33001,7 @@
                 <Frames>
                   <Frame name="HealBot_Options_NewCustomCureByName" inherits="BackdropTemplate">
                     <Size>
-                      <AbsDimension y="110"/>
+                      <AbsDimension y="90"/>
                     </Size>
                     <Anchors>
                       <Anchor point="TOPLEFT">
@@ -32989,7 +33049,7 @@
                         <Anchors>
                           <Anchor point="TOP">
                             <Offset>
-                              <AbsDimension x="-20" y="-55" />
+                              <AbsDimension x="-20" y="-43" />
                             </Offset>
                           </Anchor>
                         </Anchors>
@@ -33007,7 +33067,7 @@
                         <Anchors>
                           <Anchor point="TOP">
                             <Offset>
-                              <AbsDimension x="150" y="-55"/>
+                              <AbsDimension x="150" y="-43"/>
                             </Offset>
                           </Anchor>
                         </Anchors>
@@ -33019,19 +33079,107 @@
                       </Button>
                     </Frames>
                   </Frame>
-                  <Frame name="HealBot_Options_NewCustomCureBySelf" inherits="BackdropTemplate">
+                  <Frame name="HealBot_Options_NewCustomCureByHistory" inherits="BackdropTemplate">
                     <Size>
-                      <AbsDimension y="110"/>
+                      <AbsDimension y="90"/>
                     </Size>
                     <Anchors>
                       <Anchor point="TOPLEFT">
                         <Offset>
-                          <AbsDimension x="20" y="-415"/>
+                          <AbsDimension x="20" y="-140"/>
                         </Offset>
                       </Anchor>
                       <Anchor point="TOPRIGHT">
                         <Offset>
-                          <AbsDimension x="-20" y="-415"/>
+                          <AbsDimension x="-20" y="-140"/>
+                        </Offset>
+                      </Anchor>
+                    </Anchors>
+                    <Layers>
+                      <Layer level="BACKGROUND">
+                        <FontString name="HealBot_AddCureByHistory_Text" text="HEALBOT_OPTIONS_ADDDEBUFFBYHISTORY" inherits="GameFontNormal">
+                          <Anchors>
+                            <Anchor point="TOP">
+                              <Offset>
+                                <AbsDimension x="0" y="-12" />
+                              </Offset>
+                            </Anchor>
+                          </Anchors>
+                        </FontString>
+                        <FontString name="HealBot_AddCDebuffByHistory_TimeText" inherits="GameFontNormal">
+                          <Anchors>
+                            <Anchor point="BOTTOM">
+                              <Offset>
+                                <AbsDimension x="0" y="5" />
+                              </Offset>
+                            </Anchor>
+                          </Anchors>
+                        </FontString>
+                        <Texture name="HealBot_Options_CDebuffByHistoryIcon">
+                          <Size>
+                            <AbsDimension x="24" y="24"/>
+                          </Size>
+                          <Anchors>
+                            <Anchor point="TOP">
+                              <Offset>
+                                <AbsDimension x="55" y="-42" />
+                              </Offset>
+                            </Anchor>
+                          </Anchors>
+                        </Texture>
+                      </Layer>
+                    </Layers>
+                    <Frames>
+                      <Frame name="HealBot_Options_CDebuffByHistory" inherits="UIDropDownMenuTemplate" id="1">
+                        <Anchors>
+                          <Anchor point="TOP">
+                            <Offset>
+                              <AbsDimension x="-70" y="-40" />
+                            </Offset>
+                          </Anchor>
+                        </Anchors>
+                        <Layers>
+                          <Layer level="OVERLAY">
+                          </Layer>
+                        </Layers>
+                        <Scripts>
+                          <OnLoad>HealBot_Options_UIDropDownMenu_OnLoad(self, 180)</OnLoad>
+                          <OnEnter>HealBot_Options_Show_Help("DEBUFFSCUSTOMDEBUFFBYHISTORY",true)</OnEnter>
+                          <OnLeave>HealBot_Options_Show_Help("DEBUFFSCUSTOMDEBUFFBYHISTORY",false)</OnLeave>
+                        </Scripts>
+                      </Frame>
+                      <Button name="HealBot_Options_NewHistoryCDebuffBtn" inherits="UIPanelButtonTemplate" text="HEALBOT_OPTIONS_SAVESKIN">
+                        <Size>
+                          <AbsDimension x="120" y="22"/>
+                        </Size>
+                        <Anchors>
+                          <Anchor point="TOP">
+                            <Offset>
+                              <AbsDimension x="150" y="-43"/>
+                            </Offset>
+                          </Anchor>
+                        </Anchors>
+                        <Scripts>
+                          <OnClick>HealBot_Options_ConfirmNewHistoryCDebuff()</OnClick>
+                          <OnEnter>HealBot_Options_Show_Help("DEBUFFSCUSTOMNEWSAVE",true)</OnEnter>
+                          <OnLeave>HealBot_Options_Show_Help("DEBUFFSCUSTOMNEWSAVE",false)</OnLeave>
+                        </Scripts>
+                      </Button>
+                    </Frames>
+                  </Frame>
+                  <Frame name="HealBot_Options_NewCustomCureBySelf" inherits="BackdropTemplate">
+                    <Size>
+                      <AbsDimension y="90"/>
+                    </Size>
+                    <Anchors>
+                      <Anchor point="TOPLEFT">
+                        <Offset>
+                          <AbsDimension x="20" y="-440"/>
+                        </Offset>
+                      </Anchor>
+                      <Anchor point="TOPRIGHT">
+                        <Offset>
+                          <AbsDimension x="-20" y="-440"/>
                         </Offset>
                       </Anchor>
                     </Anchors>
@@ -33053,7 +33201,7 @@
                           <Anchors>
                             <Anchor point="TOP">
                               <Offset>
-                                <AbsDimension x="55" y="-54" />
+                                <AbsDimension x="55" y="-42" />
                               </Offset>
                             </Anchor>
                           </Anchors>
@@ -33065,7 +33213,7 @@
                         <Anchors>
                           <Anchor point="TOP">
                             <Offset>
-                              <AbsDimension x="-70" y="-52" />
+                              <AbsDimension x="-70" y="-40" />
                             </Offset>
                           </Anchor>
                         </Anchors>
@@ -33086,7 +33234,7 @@
                         <Anchors>
                           <Anchor point="TOP">
                             <Offset>
-                              <AbsDimension x="150" y="-55"/>
+                              <AbsDimension x="150" y="-43"/>
                             </Offset>
                           </Anchor>
                         </Anchors>
@@ -33100,17 +33248,17 @@
                   </Frame>
                   <Frame name="HealBot_Options_NewCustomCureByFriend" inherits="BackdropTemplate">
                     <Size>
-                      <AbsDimension y="110"/>
+                      <AbsDimension y="90"/>
                     </Size>
                     <Anchors>
                       <Anchor point="TOPLEFT">
                         <Offset>
-                          <AbsDimension x="20" y="-290"/>
+                          <AbsDimension x="20" y="-340"/>
                         </Offset>
                       </Anchor>
                       <Anchor point="TOPRIGHT">
                         <Offset>
-                          <AbsDimension x="-20" y="-290"/>
+                          <AbsDimension x="-20" y="-340"/>
                         </Offset>
                       </Anchor>
                     </Anchors>
@@ -33129,7 +33277,7 @@
                           <Anchors>
                             <Anchor point="BOTTOM">
                               <Offset>
-                                <AbsDimension x="0" y="12" />
+                                <AbsDimension x="0" y="5" />
                               </Offset>
                             </Anchor>
                           </Anchors>
@@ -33141,7 +33289,7 @@
                           <Anchors>
                             <Anchor point="TOP">
                               <Offset>
-                                <AbsDimension x="55" y="-54" />
+                                <AbsDimension x="55" y="-42" />
                               </Offset>
                             </Anchor>
                           </Anchors>
@@ -33153,7 +33301,7 @@
                         <Anchors>
                           <Anchor point="TOP">
                             <Offset>
-                              <AbsDimension x="-70" y="-52" />
+                              <AbsDimension x="-70" y="-40" />
                             </Offset>
                           </Anchor>
                         </Anchors>
@@ -33174,7 +33322,7 @@
                         <Anchors>
                           <Anchor point="TOP">
                             <Offset>
-                              <AbsDimension x="150" y="-55"/>
+                              <AbsDimension x="150" y="-43"/>
                             </Offset>
                           </Anchor>
                         </Anchors>
@@ -33188,17 +33336,17 @@
                   </Frame>
                   <Frame name="HealBot_Options_NewCustomCureByEnemy" inherits="BackdropTemplate">
                     <Size>
-                      <AbsDimension y="110"/>
+                      <AbsDimension y="90"/>
                     </Size>
                     <Anchors>
                       <Anchor point="TOPLEFT">
                         <Offset>
-                          <AbsDimension x="20" y="-165"/>
+                          <AbsDimension x="20" y="-240"/>
                         </Offset>
                       </Anchor>
                       <Anchor point="TOPRIGHT">
                         <Offset>
-                          <AbsDimension x="-20" y="-165"/>
+                          <AbsDimension x="-20" y="-240"/>
                         </Offset>
                       </Anchor>
                     </Anchors>
@@ -33217,7 +33365,7 @@
                           <Anchors>
                             <Anchor point="BOTTOM">
                               <Offset>
-                                <AbsDimension x="0" y="12" />
+                                <AbsDimension x="0" y="5" />
                               </Offset>
                             </Anchor>
                           </Anchors>
@@ -33229,7 +33377,7 @@
                           <Anchors>
                             <Anchor point="TOP">
                               <Offset>
-                                <AbsDimension x="55" y="-54" />
+                                <AbsDimension x="55" y="-42" />
                               </Offset>
                             </Anchor>
                           </Anchors>
@@ -33241,7 +33389,7 @@
                         <Anchors>
                           <Anchor point="TOP">
                             <Offset>
-                              <AbsDimension x="-70" y="-52" />
+                              <AbsDimension x="-70" y="-40" />
                             </Offset>
                           </Anchor>
                         </Anchors>
@@ -33262,7 +33410,7 @@
                         <Anchors>
                           <Anchor point="TOP">
                             <Offset>
-                              <AbsDimension x="150" y="-55"/>
+                              <AbsDimension x="150" y="-43"/>
                             </Offset>
                           </Anchor>
                         </Anchors>
@@ -36723,7 +36871,7 @@
                 <Frames>
                   <Frame name="HealBot_Options_NewCustomBuffByName" inherits="BackdropTemplate">
                     <Size>
-                      <AbsDimension y="110"/>
+                      <AbsDimension y="90"/>
                     </Size>
                     <Anchors>
                       <Anchor point="TOPLEFT">
@@ -36771,7 +36919,7 @@
                         <Anchors>
                           <Anchor point="TOP">
                             <Offset>
-                              <AbsDimension x="-20" y="-55" />
+                              <AbsDimension x="-20" y="-43" />
                             </Offset>
                           </Anchor>
                         </Anchors>
@@ -36789,7 +36937,7 @@
                         <Anchors>
                           <Anchor point="TOP">
                             <Offset>
-                              <AbsDimension x="150" y="-55"/>
+                              <AbsDimension x="150" y="-43"/>
                             </Offset>
                           </Anchor>
                         </Anchors>
@@ -36801,19 +36949,107 @@
                       </Button>
                     </Frames>
                   </Frame>
-                  <Frame name="HealBot_Options_NewCustomBuffBySelf" inherits="BackdropTemplate">
+                  <Frame name="HealBot_Options_NewCustomBuffByHistory" inherits="BackdropTemplate">
                     <Size>
-                      <AbsDimension y="110"/>
+                      <AbsDimension y="90"/>
                     </Size>
                     <Anchors>
                       <Anchor point="TOPLEFT">
                         <Offset>
-                          <AbsDimension x="20" y="-415"/>
+                          <AbsDimension x="20" y="-140"/>
                         </Offset>
                       </Anchor>
                       <Anchor point="TOPRIGHT">
                         <Offset>
-                          <AbsDimension x="-20" y="-415"/>
+                          <AbsDimension x="-20" y="-140"/>
+                        </Offset>
+                      </Anchor>
+                    </Anchors>
+                    <Layers>
+                      <Layer level="BACKGROUND">
+                        <FontString name="HealBot_AddBuffByHistory_Text" text="HEALBOT_OPTIONS_ADDBUFFBYHISTORY" inherits="GameFontNormal">
+                          <Anchors>
+                            <Anchor point="TOP">
+                              <Offset>
+                                <AbsDimension x="0" y="-12" />
+                              </Offset>
+                            </Anchor>
+                          </Anchors>
+                        </FontString>
+                        <FontString name="HealBot_AddBuffByHistory_TimeText" inherits="GameFontNormal">
+                          <Anchors>
+                            <Anchor point="BOTTOM">
+                              <Offset>
+                                <AbsDimension x="0" y="5" />
+                              </Offset>
+                            </Anchor>
+                          </Anchors>
+                        </FontString>
+                        <Texture name="HealBot_Options_BuffByHistoryIcon">
+                          <Size>
+                            <AbsDimension x="24" y="24"/>
+                          </Size>
+                          <Anchors>
+                            <Anchor point="TOP">
+                              <Offset>
+                                <AbsDimension x="55" y="-42" />
+                              </Offset>
+                            </Anchor>
+                          </Anchors>
+                        </Texture>
+                      </Layer>
+                    </Layers>
+                    <Frames>
+                      <Frame name="HealBot_Options_BuffByHistory" inherits="UIDropDownMenuTemplate" id="1">
+                        <Anchors>
+                          <Anchor point="TOP">
+                            <Offset>
+                              <AbsDimension x="-70" y="-40" />
+                            </Offset>
+                          </Anchor>
+                        </Anchors>
+                        <Layers>
+                          <Layer level="OVERLAY">
+                          </Layer>
+                        </Layers>
+                        <Scripts>
+                          <OnLoad>HealBot_Options_UIDropDownMenu_OnLoad(self, 180)</OnLoad>
+                          <OnEnter>HealBot_Options_Show_Help("BUFFSCUSTOMBUFFBYHISTORY",true)</OnEnter>
+                          <OnLeave>HealBot_Options_Show_Help("BUFFSCUSTOMBUFFBYHISTORY",false)</OnLeave>
+                        </Scripts>
+                      </Frame>
+                      <Button name="HealBot_Options_NewHistoryBuffBtn" inherits="UIPanelButtonTemplate" text="HEALBOT_OPTIONS_SAVESKIN">
+                        <Size>
+                          <AbsDimension x="120" y="22"/>
+                        </Size>
+                        <Anchors>
+                          <Anchor point="TOP">
+                            <Offset>
+                              <AbsDimension x="150" y="-43"/>
+                            </Offset>
+                          </Anchor>
+                        </Anchors>
+                        <Scripts>
+                          <OnClick>HealBot_Options_ConfirmNewHistoryBuff()</OnClick>
+                          <OnEnter>HealBot_Options_Show_Help("BUFFSCUSTOMNEWSAVE",true)</OnEnter>
+                          <OnLeave>HealBot_Options_Show_Help("BUFFSCUSTOMNEWSAVE",false)</OnLeave>
+                        </Scripts>
+                      </Button>
+                    </Frames>
+                  </Frame>
+                  <Frame name="HealBot_Options_NewCustomBuffBySelf" inherits="BackdropTemplate">
+                    <Size>
+                      <AbsDimension y="90"/>
+                    </Size>
+                    <Anchors>
+                      <Anchor point="TOPLEFT">
+                        <Offset>
+                          <AbsDimension x="20" y="-440"/>
+                        </Offset>
+                      </Anchor>
+                      <Anchor point="TOPRIGHT">
+                        <Offset>
+                          <AbsDimension x="-20" y="-440"/>
                         </Offset>
                       </Anchor>
                     </Anchors>
@@ -36835,7 +37071,7 @@
                           <Anchors>
                             <Anchor point="TOP">
                               <Offset>
-                                <AbsDimension x="55" y="-54" />
+                                <AbsDimension x="55" y="-42" />
                               </Offset>
                             </Anchor>
                           </Anchors>
@@ -36847,7 +37083,7 @@
                         <Anchors>
                           <Anchor point="TOP">
                             <Offset>
-                              <AbsDimension x="-70" y="-52" />
+                              <AbsDimension x="-70" y="-40" />
                             </Offset>
                           </Anchor>
                         </Anchors>
@@ -36868,7 +37104,7 @@
                         <Anchors>
                           <Anchor point="TOP">
                             <Offset>
-                              <AbsDimension x="150" y="-55"/>
+                              <AbsDimension x="150" y="-43"/>
                             </Offset>
                           </Anchor>
                         </Anchors>
@@ -36882,17 +37118,17 @@
                   </Frame>
                   <Frame name="HealBot_Options_NewCustomBuffByClass" inherits="BackdropTemplate">
                     <Size>
-                      <AbsDimension y="110"/>
+                      <AbsDimension y="90"/>
                     </Size>
                     <Anchors>
                       <Anchor point="TOPLEFT">
                         <Offset>
-                          <AbsDimension x="20" y="-290"/>
+                          <AbsDimension x="20" y="-340"/>
                         </Offset>
                       </Anchor>
                       <Anchor point="TOPRIGHT">
                         <Offset>
-                          <AbsDimension x="-20" y="-290"/>
+                          <AbsDimension x="-20" y="-340"/>
                         </Offset>
                       </Anchor>
                     </Anchors>
@@ -36911,7 +37147,7 @@
                           <Anchors>
                             <Anchor point="BOTTOM">
                               <Offset>
-                                <AbsDimension x="0" y="12" />
+                                <AbsDimension x="0" y="5" />
                               </Offset>
                             </Anchor>
                           </Anchors>
@@ -36923,7 +37159,7 @@
                           <Anchors>
                             <Anchor point="TOP">
                               <Offset>
-                                <AbsDimension x="55" y="-54" />
+                                <AbsDimension x="55" y="-42" />
                               </Offset>
                             </Anchor>
                           </Anchors>
@@ -36935,7 +37171,7 @@
                         <Anchors>
                           <Anchor point="TOP">
                             <Offset>
-                              <AbsDimension x="-70" y="-52" />
+                              <AbsDimension x="-70" y="-40" />
                             </Offset>
                           </Anchor>
                         </Anchors>
@@ -36956,7 +37192,7 @@
                         <Anchors>
                           <Anchor point="TOP">
                             <Offset>
-                              <AbsDimension x="150" y="-55"/>
+                              <AbsDimension x="150" y="-43"/>
                             </Offset>
                           </Anchor>
                         </Anchors>
@@ -36970,17 +37206,17 @@
                   </Frame>
                   <Frame name="HealBot_Options_NewCustomBuffByOther" inherits="BackdropTemplate">
                     <Size>
-                      <AbsDimension y="110"/>
+                      <AbsDimension y="90"/>
                     </Size>
                     <Anchors>
                       <Anchor point="TOPLEFT">
                         <Offset>
-                          <AbsDimension x="20" y="-165"/>
+                          <AbsDimension x="20" y="-240"/>
                         </Offset>
                       </Anchor>
                       <Anchor point="TOPRIGHT">
                         <Offset>
-                          <AbsDimension x="-20" y="-165"/>
+                          <AbsDimension x="-20" y="-240"/>
                         </Offset>
                       </Anchor>
                     </Anchors>
@@ -36999,7 +37235,7 @@
                           <Anchors>
                             <Anchor point="BOTTOM">
                               <Offset>
-                                <AbsDimension x="0" y="12" />
+                                <AbsDimension x="0" y="5" />
                               </Offset>
                             </Anchor>
                           </Anchors>
@@ -37011,7 +37247,7 @@
                           <Anchors>
                             <Anchor point="TOP">
                               <Offset>
-                                <AbsDimension x="55" y="-54" />
+                                <AbsDimension x="55" y="-42" />
                               </Offset>
                             </Anchor>
                           </Anchors>
@@ -37023,7 +37259,7 @@
                         <Anchors>
                           <Anchor point="TOP">
                             <Offset>
-                              <AbsDimension x="-70" y="-52" />
+                              <AbsDimension x="-70" y="-40" />
                             </Offset>
                           </Anchor>
                         </Anchors>
@@ -37044,7 +37280,7 @@
                         <Anchors>
                           <Anchor point="TOP">
                             <Offset>
-                              <AbsDimension x="150" y="-55"/>
+                              <AbsDimension x="150" y="-43"/>
                             </Offset>
                           </Anchor>
                         </Anchors>

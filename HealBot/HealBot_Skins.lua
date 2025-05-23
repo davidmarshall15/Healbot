@@ -1628,8 +1628,8 @@ function HealBot_Skins_DefaultUnusedFrames(skin)
                         end)
                         HealBot_Util_EmptyTable(Healbot_Config_Aux.Bar[skin][f], i)
                     end
-                    HealBot_Util_EmptyTable(Healbot_Config_Aux.Bar[skin], f)
                 end
+                HealBot_Util_EmptyTable(Healbot_Config_Aux.Bar[skin], f)
             end
             if Healbot_Config_Aux.BarText[skin][f] then
                 for i=1,9 do
@@ -2010,6 +2010,12 @@ function HealBot_Skins_Check_Skin(SkinName)
         HealBot_Util_EmptyTable(Healbot_Config_Skins.AdaptiveCol[SkinName], "Absorbs")
     end
 
+    for gl=1,10 do
+        if hbv_Skins_GetFrameVarSkin(SkinName, "BarText", "NUMFORMAT1", gl) > 6 then
+            hbv_Skins_SetFrameVarSkin(6, SkinName, "BarText", "NUMFORMAT1", gl)
+        end
+    end
+    
     -- Fix Frames
     Healbot_Config_Skins.HealGroups[SkinName][15]["FRAME"]=10
     if Healbot_Config_Skins.HealGroups[SkinName][14]["FRAME"]>5 and Healbot_Config_Skins.HealGroups[SkinName][14]["FRAME"]~=9 then
@@ -2035,7 +2041,7 @@ function HealBot_Skins_Check_Skin(SkinName)
     hbv_Skins_SetFrameVar(HEALBOT_OPTIONS_TARGETHEALS, "FrameAlias", "ALIAS", 8)
     hbv_Skins_SetFrameVar(HEALBOT_WORD_FOCUS, "FrameAlias", "ALIAS", 9)
     hbv_Skins_SetFrameVar(HEALBOT_CUSTOM_CASTBY_ENEMY, "FrameAlias", "ALIAS", 10)
-
+    
     for id=1,8 do
         if Healbot_Config_Skins.HealGroups[SkinName][id]["FRAME"]>5 then
             Healbot_Config_Skins.HealGroups[SkinName][id]["FRAME"]=1

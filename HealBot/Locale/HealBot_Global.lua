@@ -1,12 +1,12 @@
 ﻿local GetAddOnMetadata=GetAddOnMetadata
-HEALBOT_VERSION="11.x"
+HEALBOT_VERSION="25.0"
 
 function HealBot_Global_MetaVersion()
     GetAddOnMetadata=GetAddOnMetadata or (C_AddOns and C_AddOns.GetAddOnMetadata)
     if GetAddOnMetadata then
         HEALBOT_VERSION=GetAddOnMetadata("HealBot", "Version")
     else
-        HEALBOT_VERSION="11.x"
+        HEALBOT_VERSION="25.0"
     end
     HealBot_Comms_SetVersion()
 end
@@ -17,10 +17,10 @@ local vMajor        =string.split(".", select(1, GetBuildInfo()))
 HEALBOT_GAME_VERSION=tonumber(vMajor)
 
 function HealBot_Global_Version()
-    return "11.1.5.1"
+    return "25.1"
 end
 function HealBot_Global_InitVersion()
-    return "11.1.5.0"  -- Keep just behind the global version
+    return "25.0"  -- Keep behind the global version
 end
 
 function HealBot_globalVars()
@@ -472,7 +472,9 @@ function HealBot_globalVars()
     HBC_BLESSING_OF_WISDOM                 =19742
     HEALBOT_DAY_BREAK                      =88821 --HealBot_WoWAPI_SpellName(88821) or "--Daybreak";
     HEALBOT_DEVOTION_AURA                  =465 --HealBot_WoWAPI_SpellName(465) or "--Devotion Aura";
-    HEALBOT_CONCENTRATION_AURA             =19746
+    HEALBOT_CONCENTRATION_AURA             =317920
+    HBC_CONCENTRATION_AURA                 =19746
+    HEALBOT_CRUSADER_AURA                  =32223
     HBC_DIVINE_FAVOR                       =20216
     HBC_DIVINE_INTERVENTION                =19752
     HEALBOT_DIVINE_PROTECTION              =498 --HealBot_WoWAPI_SpellName(498) or "--Divine Protection";

@@ -62,10 +62,6 @@ function HealBot_ActionIcons_retLuVars(vName)
     return hb_lVars[vName]
 end
 
-local function HealBot_ActionIcons_aButton(frame, id)
-    return HealBot_Panel_AllButton(actionIcons[frame][id].guid)
-end
-
 local function HealBot_ActionIcons_SpecChangeCheckSpell(frame, id)
     if hbv_ActionIcons_DataExists("Ability", frame, id) then
         local _, _, aType, aID=HealBot_ActionIcons_GetSpell(hbv_ActionIcons_GetData("Ability", frame, id))
@@ -2364,7 +2360,7 @@ function HealBot_ActionIcons_CheckValidTarget(frame, id)
     if actionIcons[frame][id].guid == "unset" then
         return true
     else
-        aButton=HealBot_ActionIcons_aButton(frame, id)
+        aButton=HealBot_Panel_AllButton(actionIcons[frame][id].guid)
         if aButton and aButton.status.current<HealBot_Unit_Status["DEAD"] then
             return HealBot_Range_SpellInRange(aButton, actionIcons[frame][id].infoName)
         end

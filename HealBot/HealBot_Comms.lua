@@ -22,13 +22,6 @@ function HealBot_Comms_SendAddonMsg(msg, aType, pName)
     end
 end
 
-function HealBot_Comms_Set()
-      --HealBot_setCall("HealBot_Comms_Set")
-    local inInst,inType=HealBot_ZoneType()
-    HealBot_Comms_SendTo(inInst,inType)
-    HealBot_Comms_GuildUpdate()
-end
-
 local hbCommsTo,hbInInst=0,false
 function HealBot_Comms_SendTo(inInst,inType)
       --HealBot_setCall("HealBot_Comms_SendTo")
@@ -201,6 +194,7 @@ end
 
 function HealBot_Comm_round(num, idp)
       --HealBot_setCall("HealBot_Util_Round")
+      -- This function can be delete when all plugins have been released after May 2025
     return HealBot_Util_Round(num, idp)
 end
 

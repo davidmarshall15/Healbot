@@ -105,7 +105,19 @@ function HealBot_Plugin_Options_SetupPlayButton(button, x, y)
     button:SetSize(20, 20)
 end
 
-function HealBot_Plugin_Options_SetupButton(button, width, x, y, text)
+function HealBot_Plugin_SetupButton(button, height, width, x, y, text, anchor, parent, panchor)
+    if parent and panchor then
+        button:SetPoint(anchor, parent, panchor, x, y)
+    else
+        button:SetPoint(anchor, x, y)
+    end
+    button:SetWidth(width)
+    button:SetHeight(height)
+    button:SetNormalFontObject("GameFontNormal")
+    button:SetText(text)
+end
+
+function HealBot_Plugin_Options_SetupButton(button, width, x, y, text, anchor, parent, panchor)
     button:SetPoint("TOP", x, y)
     button:SetWidth(width)
     button:SetHeight(20)

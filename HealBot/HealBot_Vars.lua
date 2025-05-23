@@ -774,7 +774,7 @@ local hbSkinFrameDefaults={["BarCol"]={["HLTH"]=5, ["BACK"]=1, ["BORDER"]=1,
                                        ["HHEIGHT"]=10, ["SHEIGHT"]=10, ["AHEIGHT"]=10, ["OFFSET"]=0, ["OFFSET2"]=0, ["SOFFSET"]=0, ["AOFFSET"]=0,
                                        ["AOFFSET2"]=0, ["HOFFSET"]=0, ["HOFFSET2"]=0, ["SOFFSET2"]=0, ["ALIGN"]=2, ["INCHEALS"]=2, ["INCABSORBS"]=1,
                                        ["OVERHEAL"]=1, ["OVERHEALFORMAT"]=2, ["OVERHEALCOL"]=1, ["SEPARATEFORMAT"]=3, ["SEPARATECOL"]=1, ["HEALEXTRACOL"]=1, ["HLTHTXTANCHOR"]=2,
-                                       ["STATETXTANCHOR"]=1, ["AGGROTXTANCHOR"]=3, ["NUMFORMAT1"]=11, ["NUMFORMAT2"]=1, ["OUTLINE"]=1, ["HOUTLINE"]=1, ["SOUTLINE"]=1,
+                                       ["STATETXTANCHOR"]=1, ["AGGROTXTANCHOR"]=3, ["NUMFORMAT1"]=6, ["NUMFORMAT2"]=1, ["OUTLINE"]=1, ["HOUTLINE"]=1, ["SOUTLINE"]=1,
                                        ["AOUTLINE"]=1, ["HLTHTYPE"]=1, ["MAXCHARS"]=0, ["HMAXCHARS"]=0, ["TAGDC"]=HEALBOT_DISCONNECTED_TAG, ["TAGRIP"]=HEALBOT_DEAD_TAG,
                                        ["TAGOOR"]=HEALBOT_OUTOFRANGE_TAG, ["TAGR"]=HEALBOT_RESERVED_TAG, ["TAGDEBUFF"]=HEALBOT_WORD_DISPEL.." #n",
                                        ["TAGBUFF"]=HEALBOT_WORD_MISSING.." #n", ["TAGGROUP"]=HEALBOT_SORTBY_GROUP.." #g", ["TAGRES"]=HEALBOT_RES_TAG, ["TAGSUM"]=HEALBOT_SUMMONS_TAG,
@@ -834,11 +834,15 @@ function hbv_Skins_GetFrameBoolean(cat, key, frame)
     return hbSkinFrameDefaults[cat][key]
 end
 
-function hbv_Skins_GetFrameVar(cat, key, frame)
-    if Healbot_Config_Skins[cat][Healbot_Config_Skins.Current_Skin][frame] then
-        return Healbot_Config_Skins[cat][Healbot_Config_Skins.Current_Skin][frame][key] or hbSkinFrameDefaults[cat][key]
+function hbv_Skins_GetFrameVarSkin(skin, cat, key, frame)
+    if Healbot_Config_Skins[cat][skin][frame] then
+        return Healbot_Config_Skins[cat][skin][frame][key] or hbSkinFrameDefaults[cat][key]
     end
     return hbSkinFrameDefaults[cat][key]
+end
+
+function hbv_Skins_GetFrameVar(cat, key, frame)
+    return hbv_Skins_GetFrameVarSkin(Healbot_Config_Skins.Current_Skin, cat, key, frame)
 end
 
 function hbv_Skins_SetFrameVarSkin(value, skin, cat, key, frame)
@@ -1206,6 +1210,98 @@ function hbv_ActionIcons_SetColData(r, g, b, a, key, frame, id)
         HealBot_Skins_ActionIconsData[Healbot_Config_Skins.Current_Skin][frame][id][key]["B"]=b
         HealBot_Skins_ActionIconsData[Healbot_Config_Skins.Current_Skin][frame][id][key]["A"]=a
     end
+end
+
+local hbv_Auras={["BUFFS"]={},["DEBUFFS"]={},["HoT"]={}}
+function hbv_Auras_CleanData(cat)
+    local d=60*60*24*HealBot_Globals.Auras["KEEP"]
+    local s=GetServerTime()
+    for id, t in pairs(hbv_Auras[cat]) do
+        if t+d < s then
+            hbv_Auras[cat][id]=nil
+        end
+    end
+end
+
+function hbv_Auras_GetData(cat, key)
+    return hbv_Auras[cat][key]
+end
+
+function hbv_Auras_GetSortedData(cat)
+    local l={}
+    for x,_ in pairs(hbv_Auras[cat]) do
+        local aName=HealBot_Options_CDebuffTextID(x)
+        if tonumber(aName) == nil then
+            table.insert(l,aName)
+        end
+    end
+    table.sort(l)
+    return l
+end
+
+function hbv_Auras_GetSortedNames(cat)
+    local l={}
+    local u={}
+    for x,_ in pairs(hbv_Auras[cat]) do
+        local aName=HealBot_WoWAPI_SpellName(x)
+        if aName ~= "X" and not u[aName] then
+            u[aName]=true
+            table.insert(l,aName)
+        end
+    end
+    table.sort(l)
+    return l
+end
+
+function hbv_Auras_CurrentHoTs()
+    for x,_ in pairs(hbv_Auras["HoT"]) do
+        hbv_Auras["HoT"][x]=nil
+    end
+    for xClass,_  in pairs(HealBot_Globals.WatchHoT) do
+        for bId,_  in pairs(HealBot_Globals.WatchHoT[xClass]) do
+            hbv_Auras["HoT"][bId]=true
+        end
+    end
+end
+
+function hbv_Auras_GetSortedNewBuffs()
+    local l={}
+    for x,_ in pairs(hbv_Auras["BUFFS"]) do
+        if not hbv_Auras["HoT"][x] then
+            local bName=HealBot_Options_CDebuffTextID(x)
+            if tonumber(bName) == nil then
+                table.insert(l,bName)
+            end
+        end
+    end
+    table.sort(l)
+    return l
+end
+
+function hbv_Auras_GetSortedNewDebuffs()
+    local l={}
+    for x,_ in pairs(hbv_Auras["DEBUFFS"]) do
+        if not HealBot_Globals.CustomDebuffs[x] then
+            local dName=HealBot_Options_CDebuffTextID(x)
+            if tonumber(dName) == nil then
+                table.insert(l,dName)
+            end
+        end
+    end
+    table.sort(l)
+    return l
+end
+
+function hbv_Auras_SetData(cat, key)
+    hbv_Auras[cat][key]=GetServerTime()
+end
+
+function hbv_Auras_Save(cat)
+    HealBot_Globals.Auras[cat]=HealBot_Util_Serialize(hbv_Auras[cat], true)
+end
+
+function hbv_Auras_Load(cat)
+    hbv_Auras[cat]=HealBot_Util_Deserialize(HealBot_Globals.Auras[cat])
 end
 
 function hbv_Skins_VarsHasSkin()

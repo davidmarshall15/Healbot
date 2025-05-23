@@ -256,11 +256,13 @@ function HealBot_Lang_enALL()
     HEALBOT_OPTIONS_ADDBUFFCUSTOM          ="Add custom buffs"
     HEALBOT_OPTIONS_ADDBUFFBYNAME          ="Add Buff by Spell Name or ID"
     HEALBOT_OPTIONS_ADDBUFFBYSELF          ="Buffs cast by Self"
+    HEALBOT_OPTIONS_ADDBUFFBYHISTORY       ="Historic Buffs cast by Friends"
     HEALBOT_OPTIONS_ADDBUFFBYCLASS         ="Buffs cast by My Class"
     HEALBOT_OPTIONS_ADDBUFFBYOTHER         ="Buffs cast by Other Classes"
     HEALBOT_OPTIONS_DEBUFFCUSTOM           ="Custom debuffs"
     HEALBOT_OPTIONS_ADDDEBUFFCUSTOM        ="Add custom debuffs"
     HEALBOT_OPTIONS_ADDDEBUFFBYNAME        ="Add Debuff by Spell Name or ID"
+    HEALBOT_OPTIONS_ADDDEBUFFBYHISTORY     ="Historic Debuffs cast by Enemies"
     HEALBOT_OPTIONS_ADDDEBUFFBYSELF        ="Debuffs cast by Self"
     HEALBOT_OPTIONS_ADDDEBUFFBYFRIEND      ="Debuffs cast by Friends"
     HEALBOT_OPTIONS_ADDDEBUFFBYENEMY       ="Debuffs cast by Enemies"
@@ -1456,6 +1458,7 @@ function HealBot_Lang_enALL()
     HEALBOT_PLUGIN_AGGRO3THRESHOLD         ="Aggro level 3 threshold"
     HEALBOT_PLUGIN_AUXMAXINHEALS           ="Aux incoming heals max value"
     HEALBOT_PLUGIN_AUXMAXABSORBS           ="Aux absorbs max value"
+    HEALBOT_PLUGIN_AURAHISTKEEPDAYS        ="Aura history - store days"
     HEALBOT_PLUGIN_INHEALHOTTIME           ="Incoming heals HoT time"
     HEALBOT_PLUGIN_AUTOTIMEDBUFFDURATION   ="Auto All Timed duration less than"
     HEALBOT_PLUGIN_AUTOTIMEDDURATION       ="Auto All Timed duration less than"
@@ -1477,7 +1480,8 @@ function HealBot_Lang_enALL()
     HEALBOT_PLUGIN_REQUESTCOL              ="Request col"..HEALBOT_enWORD_COLOUR_SUFFIX
     HEALBOT_PLUGIN_REQUESTSOUND            ="Play sound on request";
     HEALBOT_PLUGIN_AURAWATCHTARGETPLAYERS  ="Target players";
-    HEALBOT_PLUGIN_AURAWATCHPLAYERSFILTER  ="Target players filter";  -- Can be deleted after AuraWatch June 2025 release.
+    HEALBOT_PLUGIN_AURAWATCHPLAYERSFILTER  ="Target players filter";
+    HEALBOT_PLUGIN_AURAWATCHSELFFILTER     ="Self filter";
     HEALBOT_PLUGIN_BUFFWATCHONLYINCOMBAT   ="Only in combat";
     HEALBOT_PLUGIN_BUFFWATCHSELFBUFF       ="My spell";  -- Can be deleted after AuraWatch June 2025 release.
     HEALBOT_PLUGIN_BUFFWATCHPLAYERSBUFF    ="Target players buff";  -- Can be deleted after AuraWatch June 2025 release.
@@ -1485,7 +1489,7 @@ function HealBot_Lang_enALL()
     HEALBOT_PLUGIN_BUFFWATCHPLAYERSDEBUFF  ="Target players debuff";  -- Can be deleted after AuraWatch June 2025 release.
     HEALBOT_PLUGIN_BUFFWATCHSELFBUFFH      ="Alert when spell cooldown ends";  -- Can be deleted after AuraWatch June 2025 release.
     HEALBOT_PLUGIN_BUFFWATCHSTATE1         ="Inactive"
-    HEALBOT_PLUGIN_BUFFWATCHSTATE2         ="Wait on cooldown for "
+    HEALBOT_PLUGIN_BUFFWATCHSTATE2         ="Wait on CD "
     HEALBOT_PLUGIN_BUFFWATCHSTATE3         ="Wait on "
     HEALBOT_PLUGIN_BUFFWATCHSTATE5         ="Waiting on combat"
     HEALBOT_PLUGIN_BUFFWATCHTTIMEOUT       ="Alert timeout"
@@ -1543,6 +1547,7 @@ function HealBot_Lang_enALL()
     HEALBOT_PLUGIN_TWEAKSLISTHELP          ="Private Focus is per Character.  All other lists are Global."
     HEALBOT_PLUGIN_GROWUP                  ="Grow bottom to top";
     HEALBOT_PLUGIN_HIGHLIGHTHEALBAR        ="Click to highlight health bar"
+    HEALBOT_PLUGIN_USELOWERNUMSUFFIX       ="Use lowercase number suffix"
 
     HEALBOT_CUSTOM_CASTBY_EVERYONE         ="Everyone"
     HEALBOT_CUSTOM_CASTBY_ENEMY            ="Enemy"
@@ -1820,6 +1825,7 @@ function HealBot_Lang_enALL()
     HEALBOT_OPTION_EXCLUDEMOUNT_OFF        ="No longer Excluding Mount"
     HEALBOT_CMD_TOGGLEEXCLUDEMOUNT         ="Toggle Exclude Mount"
     HEALBOT_CMD_TOGGLECLEARINSPECT         ="Toggle execute Clear Inspect after Talent Query"
+    HEALBOT_CMD_TOGGLENUMBERSUFFIX         ="Toggle number suffix to between upper and lower case"
     HEALBOT_OPTIONS_HIDEMINIBOSSFRAMES     ="Hide mini boss frames";
     HEALBOT_OPTIONS_HIDERAIDFRAMES         ="Hide raid frames";
     HEALBOT_OPTIONS_HIDEFOCUSFRAME         ="Hide focus frame";

@@ -126,7 +126,7 @@ function HealBot_Init_TalentLookupImproved(callback)
                 HealBot_Timers_Set("LAST","TalentsLookupImprovedCallback",true,true)
             end
         end
-    elseif HEALBOT_GAME_VERSION>3 then
+    elseif HEALBOT_GAME_VERSION<4 then
         if HealBot_Data["PCLASSTRIM"] == "SHAM" then
             local _, _, _, _, rank=GetTalentInfo(3, 12)
             if rank>0 then
