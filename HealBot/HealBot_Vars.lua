@@ -576,11 +576,19 @@ function hbv_Skins_ColHasDefault(cat, key)
 end
 
 function hbv_Skins_GetColVar(cat, key, c)
-    if Healbot_Config_Skins[cat][Healbot_Config_Skins.Current_Skin][key] then
-        return Healbot_Config_Skins[cat][Healbot_Config_Skins.Current_Skin][key][c] or hbSkinColsDefaults[cat][key][c]
+    if Healbot_Config_Skins[cat]
+    and Healbot_Config_Skins[cat][Healbot_Config_Skins.Current_Skin]
+    and Healbot_Config_Skins[cat][Healbot_Config_Skins.Current_Skin][key]
+    and Healbot_Config_Skins[cat][Healbot_Config_Skins.Current_Skin][key][c] ~= nil then
+        return Healbot_Config_Skins[cat][Healbot_Config_Skins.Current_Skin][key][c]
+    elseif hbSkinColsDefaults[cat]
+    and hbSkinColsDefaults[cat][key]
+    and hbSkinColsDefaults[cat][key][c] ~= nil then
+        return hbSkinColsDefaults[cat][key][c]
     end
-    return hbSkinColsDefaults[cat][key][c]
+    return nil
 end
+
 
 function hbv_Skins_SetColVarSkin(value, skin, cat, key, c)
     if hbSkinColsDefaults[cat][key][c] == value then
@@ -663,11 +671,18 @@ function hbv_Skins_HasDefault(cat, key)
 end
 
 function hbv_Skins_GetBoolean(cat, key)
-    if Healbot_Config_Skins[cat][Healbot_Config_Skins.Current_Skin][key] == false then
-        return false
-    else
-        return Healbot_Config_Skins[cat][Healbot_Config_Skins.Current_Skin][key] or hbSkinDefaults[cat][key]
+    if Healbot_Config_Skins[cat]
+    and Healbot_Config_Skins[cat][Healbot_Config_Skins.Current_Skin] then
+        if Healbot_Config_Skins[cat][Healbot_Config_Skins.Current_Skin][key] == false then
+            return false
+        elseif Healbot_Config_Skins[cat][Healbot_Config_Skins.Current_Skin][key] ~= nil then
+            return Healbot_Config_Skins[cat][Healbot_Config_Skins.Current_Skin][key]
+        end
     end
+    if hbSkinDefaults[cat] and hbSkinDefaults[cat][key] ~= nil then
+        return hbSkinDefaults[cat][key]
+    end
+    return nil
 end
 
 function hbv_Skins_GetVar(cat, key)
@@ -835,10 +850,11 @@ function hbv_Skins_GetFrameBoolean(cat, key, frame)
 end
 
 function hbv_Skins_GetFrameVarSkin(skin, cat, key, frame)
-    if Healbot_Config_Skins[cat][skin][frame] then
-        return Healbot_Config_Skins[cat][skin][frame][key] or hbSkinFrameDefaults[cat][key]
-    end
-    return hbSkinFrameDefaults[cat][key]
+    if Healbot_Config_Skins[cat] and Healbot_Config_Skins[cat][skin] and Healbot_Config_Skins[cat][skin][frame] then
+		return Healbot_Config_Skins[cat][skin][frame][key] or hbSkinFrameDefaults[cat][key]
+	else
+		return hbSkinFrameDefaults[cat][key]
+	end
 end
 
 function hbv_Skins_GetFrameVar(cat, key, frame)
@@ -967,10 +983,16 @@ function hbv_Skins_GetIconTextBoolean(key, frame, set)
 end
 
 function hbv_Skins_GetIconTextVar(key, frame, set)
-    if Healbot_Config_Skins.IconSetsText[Healbot_Config_Skins.Current_Skin][frame] and Healbot_Config_Skins.IconSetsText[Healbot_Config_Skins.Current_Skin][frame][set] then
-        return Healbot_Config_Skins.IconSetsText[Healbot_Config_Skins.Current_Skin][frame][set][key] or hbSkinIconTextDefaults[key]
+    if Healbot_Config_Skins.IconSetsText
+    and Healbot_Config_Skins.IconSetsText[Healbot_Config_Skins.Current_Skin]
+    and Healbot_Config_Skins.IconSetsText[Healbot_Config_Skins.Current_Skin][frame]
+    and Healbot_Config_Skins.IconSetsText[Healbot_Config_Skins.Current_Skin][frame][set]
+    and Healbot_Config_Skins.IconSetsText[Healbot_Config_Skins.Current_Skin][frame][set][key] ~= nil then
+        return Healbot_Config_Skins.IconSetsText[Healbot_Config_Skins.Current_Skin][frame][set][key]
+    elseif hbSkinIconTextDefaults[key] ~= nil then
+        return hbSkinIconTextDefaults[key]
     end
-    return hbSkinIconTextDefaults[key]
+    return nil
 end
 
 function hbv_Skins_SetIconTextVarSkin(value, skin, key, frame, set)
