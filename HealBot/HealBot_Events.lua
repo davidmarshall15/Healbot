@@ -567,8 +567,8 @@ end
 function HealBot_Events_UnitManaUpdate(button)
       --HealBot_setCall("HealBot_Events_UnitManaUpdate", button)
     button.mana.change=true
-    --button.mana.nextcheck=HealBot_TimeNow+15
     HealBot_UnitMana(button)
+    button.mana.changetime=HealBot_TimeNow+0.5
 end
 
 local thauHealAmount=0
@@ -688,8 +688,12 @@ local hbafk=false
 function HealBot_Events_UnitFlagsChanged(button)
           --HealBot_setCall("HealBot_Events_UnitFlagsChanged", button)
     hbafk=false
-    if hbv_Skins_GetFrameBoolean("Icons", "SHOWAFK", button.frame) and UnitIsAFK(button.unit) then
-        hbafk=true
+    if UnitIsAFK(button.unit) then
+        HealBot_Timers_Set("OOC","SaveAurasBuffs",true,true)
+        HealBot_Timers_Set("OOC","SaveAurasDebuffs",true,true)
+        if hbv_Skins_GetFrameBoolean("Icons", "SHOWAFK", button.frame) then
+            hbafk=true
+        end
     end
     if button.status.afk~=hbafk then
         button.status.afk=hbafk
@@ -931,7 +935,7 @@ function HealBot_Events_PlayerEnteringWorld()
     HealBot_setLuVars("CheckAuraFlags", true)
     HealBot_setLuVars("DropCombat", 1)
     HealBot_Timers_Set("INIT","EnteringWorld")
-    HealBot_Timers_Set("OOC","SaveSpellsProfile")
+    --HealBot_Timers_Set("OOC","SaveSpellsProfile")
     HealBot_setLuVars("qaFRNext", HealBot_TimeNow+5)
     HealBot_Timers_TurboOn()
 end
@@ -953,6 +957,9 @@ function HealBot_Events_CursorChanged(isDefault, newCursorType)
       --HealBot_setCall("HealBot_Events_CursorChanged")
     HealBot_Options_CursorChanged(isDefault, newCursorType)
     HealBot_ActionIcons_CursorChanged(isDefault, newCursorType)
+    if HealBot_Events_luVars["pluginAuraWatch"] then
+        HealBot_Plugin_AuraWatch_CursorChanged(isDefault, newCursorType)
+    end
 end
 
 function HealBot_Events_ModifierChange()

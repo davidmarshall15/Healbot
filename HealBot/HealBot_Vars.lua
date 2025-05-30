@@ -137,7 +137,7 @@ end
 local hbAuxBarDefaults={["COLOUR"]=1, ["ANCHOR"]=1, ["OFFSET"]=1, 
                         ["DEPTH"]=5, ["SIZE"]=1, ["USE"]=1,
                         ["R"]=1, ["G"]=1, ["B"]=1, ["A"]=1,
-                        ["OTYPE"]=1, ["TEXT"]=false,
+                        ["OTYPE"]=1, ["TEXT"]=false, ["VERTICALTEXT"]=true,
                         ["MANAONLY"]=false, ["HEALERSMANAONLY"]=false,
                        }
 
@@ -638,7 +638,7 @@ local hbSkinDefaults={["Enemy"]={["INCSELF"]=true, ["INCTANKS"]=true, ["INCFOCUS
                                  ["FGDIMMING"]=2.5, ["HAZARDFREQ"]=0.3, ["HAZARDMINALPHA"]=0.25,
                                  ["GLOBALDIMMING"]=1, ["OFREQ"]=0.2, ["OMIN"]=0.1, ["OMAX"]=0.95,
                                  ["HAZARDFREQ"]=0.3, ["HAZARDMINALPHA"]=0.25, ["VC"]=0, ["FGRAIDONLY"]=false,
-                                 ["GHDIMMING"]=0, ["GHTHRESHOLD"]=50, ["GHMINUNITS"]=5, ["GHRANGE"]=1,
+                                 ["GHDIMMING"]=0, ["GHTHRESHOLD"]=50, ["GHMINUNITS"]=5, ["GHRANGE"]=1, ["POWERALT"]=-1, ["HIDEALT"]=true,
                                 },
                     ["Healing"]={["GROUPPETS"]=true, ["SELFPET"]=false, ["TARGETINCOMBAT"]=2, ["FOCUSINCOMBAT"]=2,
                                  ["PRIVFOCUSINCOMBAT"]=2, ["TOTINCOMBAT"]=3, ["TOFINCOMBAT"]=3,
@@ -1098,18 +1098,20 @@ local hbDataDefaults={["Ability"]="", ["Target"]=HEALBOT_WORDS_UNSET, ["bKey"]="
                       ["AlertDebuffMinStacks"]=1, ["AlertDebuffMaxStacks"]=21, ["AlertGlowStyle"]=1,
                       ["inCombat"]=false, ["inGroup"]=false, ["inInst"]=false, ["AlertHealth"]=50,
                       ["AlertHealthAbove"]=50, ["AlertMana"]=50, ["AlertManaAbove"]=50, ["AlertAggro"]=2,
+                      ["SelfAlertFilter"]=1, ["SelfAlertBuffTag"]="", ["SelfAlertBuff"]="",
+                      ["SelfAlertBuffSelf"]=false, ["SelfAlertBuffMinStacks"]=1, ["SelfAlertBuffMaxStacks"]=21,
                       }
 
 function hbv_ActionIcons_DataExists(key, frame, id, cNo)
     if HealBot_Skins_ActionIconsData[Healbot_Config_Skins.Current_Skin][frame] and HealBot_Skins_ActionIconsData[Healbot_Config_Skins.Current_Skin][frame][id] then
         if HealBot_Skins_ActionIconsData[Healbot_Config_Skins.Current_Skin][frame][id][key] then
-            --if cNo then
-            --    if HealBot_Skins_ActionIconsData[Healbot_Config_Skins.Current_Skin][frame][id][key][cNo] then
-            --        return true
-            --    end
-            --else
+            if cNo then
+                if HealBot_Skins_ActionIconsData[Healbot_Config_Skins.Current_Skin][frame][id][key][cNo] then
+                    return true
+                end
+            else
                 return true
-            --end
+            end
         end
     end
     return false
@@ -1223,28 +1225,53 @@ function hbv_Auras_CleanData(cat)
     end
 end
 
-function hbv_Auras_GetData(cat, key)
+function hbv_Auras_GetData(cat, key, filter)
     return hbv_Auras[cat][key]
 end
 
-function hbv_Auras_GetSortedData(cat)
-    local l={}
-    for x,_ in pairs(hbv_Auras[cat]) do
-        local aName=HealBot_Options_CDebuffTextID(x)
-        if tonumber(aName) == nil then
-            table.insert(l,aName)
+local afName, afReturn="", false
+function hbv_Auras_FilterAura(aura, filter)
+      --HealBot_setCall("HealBot_Options_NewCDebuffBtn_SetCat")
+    afReturn=false
+    if aura then
+        afName=string.sub(aura,1,1)
+        if string.find(afName,"A") or string.find(afName,"B") then
+            if filter == 1 then afReturn=true end
+        elseif string.find(afName,"C") or string.find(afName,"D") then
+            if filter == 2 then afReturn=true end
+        elseif string.find(afName,"E") or string.find(afName,"F") then
+            if filter == 3 then afReturn=true end
+        elseif string.find(afName,"G") or string.find(afName,"H") then
+            if filter == 4 then afReturn=true end
+        elseif string.find(afName,"I") or string.find(afName,"J") then
+            if filter == 5 then afReturn=true end
+        elseif string.find(afName,"K") or string.find(afName,"L") then
+            if filter == 6 then afReturn=true end
+        elseif string.find(afName,"M") or string.find(afName,"N") then
+            if filter == 7 then afReturn=true end
+        elseif string.find(afName,"O") or string.find(afName,"P") then
+            if filter == 8 then afReturn=true end
+        elseif string.find(afName,"Q") or string.find(afName,"R") then
+            if filter == 9 then afReturn=true end
+        elseif string.find(afName,"S") or string.find(afName,"T") then
+            if filter == 10 then afReturn=true end
+        elseif string.find(afName,"U") or string.find(afName,"V") then
+            if filter == 11 then afReturn=true end
+        elseif string.find(afName,"W") or string.find(afName,"Y") then
+            if filter == 12 then afReturn=true end
+        elseif string.find(afName,"X") or string.find(afName,"Z") then
+            if filter == 13 then afReturn=true end
         end
     end
-    table.sort(l)
-    return l
+    return afReturn
 end
 
-function hbv_Auras_GetSortedNames(cat)
+function hbv_Auras_GetSortedNames(cat, filter)
     local l={}
     local u={}
     for x,_ in pairs(hbv_Auras[cat]) do
         local aName=HealBot_WoWAPI_SpellName(x)
-        if aName ~= "X" and not u[aName] then
+        if aName ~= "X" and not u[aName] and hbv_Auras_FilterAura(aName, filter) then
             u[aName]=true
             table.insert(l,aName)
         end
@@ -1264,12 +1291,12 @@ function hbv_Auras_CurrentHoTs()
     end
 end
 
-function hbv_Auras_GetSortedNewBuffs()
+function hbv_Auras_GetSortedNewBuffs(filter)
     local l={}
     for x,_ in pairs(hbv_Auras["BUFFS"]) do
         if not hbv_Auras["HoT"][x] then
             local bName=HealBot_Options_CDebuffTextID(x)
-            if tonumber(bName) == nil then
+            if tonumber(bName) == nil and hbv_Auras_FilterAura(bName, filter) then
                 table.insert(l,bName)
             end
         end
@@ -1278,12 +1305,12 @@ function hbv_Auras_GetSortedNewBuffs()
     return l
 end
 
-function hbv_Auras_GetSortedNewDebuffs()
+function hbv_Auras_GetSortedNewDebuffs(filter)
     local l={}
     for x,_ in pairs(hbv_Auras["DEBUFFS"]) do
         if not HealBot_Globals.CustomDebuffs[x] then
             local dName=HealBot_Options_CDebuffTextID(x)
-            if tonumber(dName) == nil then
+            if tonumber(dName) == nil and hbv_Auras_FilterAura(dName, filter) then
                 table.insert(l,dName)
             end
         end

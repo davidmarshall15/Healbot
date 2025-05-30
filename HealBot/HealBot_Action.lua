@@ -15,7 +15,7 @@ local xButton, pButton, aButton=nil, nil, nil
 local HealBot_Keys_List={"","Shift","Ctrl","Alt","Alt-Shift","Ctrl-Shift","Alt-Ctrl","Alt-Ctrl-Shift"}
 local hbAttribsMinReset={}
 local hbAttribsFramesMinReset={}
-local HB_button,HB_prefix=nil,nil
+local HB_prefix=nil,nil
 local showHBmenu=nil
 local hbMarkedAttribButtons={}
 local hbTrackAttribButtons={}
@@ -246,7 +246,10 @@ function HealBot_Action_SetCustomRoleCols()
 	HealBot_Panel_SetCustomRoleCols()
 end
 
-local hbCustomPowerCols={["ENERGY"]={}, ["FOCUS"]={}, ["FURY"]={}, ["INSANITY"]={}, ["LUNAR_POWER"]={}, ["MAELSTROM"]={}, ["MANA"]={}, ["RAGE"]={}, ["RUNIC_POWER"]={}}
+local hbCustomPowerCols={["ENERGY"]={},              ["FOCUS"]={},              ["FURY"]={},              ["MANA"]={},              ["RAGE"]={}, 
+                         [Enum.PowerType.Energy]={}, [Enum.PowerType.Focus]={}, [Enum.PowerType.Fury]={}, [Enum.PowerType.Mana]={}, [Enum.PowerType.Rage]={},
+                         ["INSANITY"]={},              ["LUNAR_POWER"]={},             ["MAELSTROM"]={},              ["RUNIC_POWER"]={},
+                         [Enum.PowerType.Insanity]={}, [Enum.PowerType.LunarPower]={}, [Enum.PowerType.Maelstrom]={}, [Enum.PowerType.RunicPower]={}}
 function HealBot_Action_SetCustomPowerCols()
       --HealBot_setCall("HealBot_Action_SetCustomPowerCols")
     hbCustomPowerCols["ENERGY"].r, hbCustomPowerCols["ENERGY"].g, hbCustomPowerCols["ENERGY"].b=hbv_Skins_GetPowerCol("ENERGY", HealBot_Globals.OverrideColours["USEPOWER"])
@@ -258,6 +261,15 @@ function HealBot_Action_SetCustomPowerCols()
     hbCustomPowerCols["MANA"].r, hbCustomPowerCols["MANA"].g, hbCustomPowerCols["MANA"].b=hbv_Skins_GetPowerCol("MANA", HealBot_Globals.OverrideColours["USEPOWER"])
     hbCustomPowerCols["RAGE"].r, hbCustomPowerCols["RAGE"].g, hbCustomPowerCols["RAGE"].b=hbv_Skins_GetPowerCol("RAGE", HealBot_Globals.OverrideColours["USEPOWER"])
     hbCustomPowerCols["RUNIC_POWER"].r, hbCustomPowerCols["RUNIC_POWER"].g, hbCustomPowerCols["RUNIC_POWER"].b=hbv_Skins_GetPowerCol("RUNIC_POWER", HealBot_Globals.OverrideColours["USEPOWER"])
+    hbCustomPowerCols[Enum.PowerType.Energy].r, hbCustomPowerCols[Enum.PowerType.Energy].g, hbCustomPowerCols[Enum.PowerType.Energy].b=hbv_Skins_GetPowerCol("ENERGY", HealBot_Globals.OverrideColours["USEPOWER"])
+    hbCustomPowerCols[Enum.PowerType.Focus].r, hbCustomPowerCols[Enum.PowerType.Focus].g, hbCustomPowerCols[Enum.PowerType.Focus].b=hbv_Skins_GetPowerCol("FOCUS", HealBot_Globals.OverrideColours["USEPOWER"])
+    hbCustomPowerCols[Enum.PowerType.Fury].r, hbCustomPowerCols[Enum.PowerType.Fury].g, hbCustomPowerCols[Enum.PowerType.Fury].b=hbv_Skins_GetPowerCol("FURY", HealBot_Globals.OverrideColours["USEPOWER"])
+    hbCustomPowerCols[Enum.PowerType.Insanity].r, hbCustomPowerCols[Enum.PowerType.Insanity].g, hbCustomPowerCols[Enum.PowerType.Insanity].b=hbv_Skins_GetPowerCol("INSANITY", HealBot_Globals.OverrideColours["USEPOWER"])
+    hbCustomPowerCols[Enum.PowerType.LunarPower].r, hbCustomPowerCols[Enum.PowerType.LunarPower].g, hbCustomPowerCols[Enum.PowerType.LunarPower].b=hbv_Skins_GetPowerCol("LUNAR_POWER", HealBot_Globals.OverrideColours["USEPOWER"])
+    hbCustomPowerCols[Enum.PowerType.Maelstrom].r, hbCustomPowerCols[Enum.PowerType.Maelstrom].g, hbCustomPowerCols[Enum.PowerType.Maelstrom].b=hbv_Skins_GetPowerCol("MAELSTROM", HealBot_Globals.OverrideColours["USEPOWER"])
+    hbCustomPowerCols[Enum.PowerType.Mana].r, hbCustomPowerCols[Enum.PowerType.Mana].g, hbCustomPowerCols[Enum.PowerType.Mana].b=hbv_Skins_GetPowerCol("MANA", HealBot_Globals.OverrideColours["USEPOWER"])
+    hbCustomPowerCols[Enum.PowerType.Rage].r, hbCustomPowerCols[Enum.PowerType.Rage].g, hbCustomPowerCols[Enum.PowerType.Rage].b=hbv_Skins_GetPowerCol("RAGE", HealBot_Globals.OverrideColours["USEPOWER"])
+    hbCustomPowerCols[Enum.PowerType.RunicPower].r, hbCustomPowerCols[Enum.PowerType.RunicPower].g, hbCustomPowerCols[Enum.PowerType.RunicPower].b=hbv_Skins_GetPowerCol("RUNIC_POWER", HealBot_Globals.OverrideColours["USEPOWER"])
 end
 
 
@@ -268,29 +280,29 @@ function HealBot_Action_Concat(elements)
     return tabconcat(sConcat,"",1,elements)
 end
 
+function HealBot_Action_ClassAltPower(class)
+    if class == hbv_GetClass("En", HEALBOT_PALADIN) then
+        return 9
+    elseif class == hbv_GetClass("En", HEALBOT_ROGUE) then
+        return 4
+    elseif class == hbv_GetClass("En", HEALBOT_WARLOCK) then
+        return 7
+    elseif class == hbv_GetClass("En", HEALBOT_MONK) then
+        return 12
+    elseif class == hbv_GetClass("En", HEALBOT_EVOKER) then
+        return 19
+    else
+        return 0
+    end
+end
+
 function HealBot_Action_setpcClass(button)
       --HealBot_setCall("HealBot_Action_setpcClass", button)
     for j=1,5 do
         if HEALBOT_GAME_VERSION>3 and hbv_Skins_GetFrameBoolean("HealBar", "POWERCNT", j) then
             local prevHealBot_pcMax=HealBot_Action_luVars["UnitPowerMax"]
-            if HealBot_Data["PCLASSTRIM"] == hbv_GetClass("En", HEALBOT_PALADIN) then
-                HealBot_pcClass[j]=9
-                HealBot_Action_luVars["UnitPowerMax"]=UnitPowerMax("player" , 9);
-            elseif HealBot_Data["PCLASSTRIM"] == hbv_GetClass("En", HEALBOT_ROGUE) or HealBot_Data["PCLASSTRIM"] == hbv_GetClass("En", HEALBOT_DRUID) then
-                HealBot_pcClass[j]=4
-                HealBot_Action_luVars["UnitPowerMax"]=UnitPowerMax("player" , 4);
-            elseif HealBot_Data["PCLASSTRIM"] == hbv_GetClass("En", HEALBOT_WARLOCK) then
-                HealBot_pcClass[j]=7
-                HealBot_Action_luVars["UnitPowerMax"]=UnitPowerMax("player" , 7);
-            elseif HealBot_Data["PCLASSTRIM"] == hbv_GetClass("En", HEALBOT_MONK) then
-                HealBot_pcClass[j]=12
-                HealBot_Action_luVars["UnitPowerMax"]=UnitPowerMax("player" , 12);
-            elseif HealBot_Data["PCLASSTRIM"] == hbv_GetClass("En", HEALBOT_EVOKER) then
-                HealBot_pcClass[j]=19
-                HealBot_Action_luVars["UnitPowerMax"]=UnitPowerMax("player" , 19);
-            else
-                HealBot_Action_luVars["UnitPowerMax"]=0
-            end
+            HealBot_pcClass[j]=HealBot_Action_ClassAltPower(HealBot_Data["PCLASSTRIM"])
+            HealBot_Action_luVars["UnitPowerMax"]=UnitPowerMax("player" , HealBot_pcClass[j]);
             if prevHealBot_pcMax~=HealBot_Action_luVars["UnitPowerMax"] then
                 if HealBot_Action_luVars["UnitPowerMax"] == 0 then
                     HealBot_pcClass[j]=false
@@ -3189,20 +3201,24 @@ function HealBot_Action_GetManaBarColour(button)
     end
     vPowerBarInfo=PowerBarColor[vPowerBarToken]
     if vPowerBarInfo then
-        return vPowerBarInfo.r, vPowerBarInfo.g, vPowerBarInfo.b, vPowerBarToken
+        return vPowerBarInfo.r, vPowerBarInfo.g, vPowerBarInfo.b, vPowerBarType, vPowerBarToken
     elseif not vPowerBarR then
         vPowerBarInfo=PowerBarColor[vPowerBarType] or PowerBarColor["MANA"];
-        return vPowerBarInfo.r, vPowerBarInfo.g, vPowerBarInfo.b, false
+        return vPowerBarInfo.r, vPowerBarInfo.g, vPowerBarInfo.b, vPowerBarType, vPowerBarToken
     else
-        return vPowerBarR, vPowerBarG, vPowerBarB, false
+        return vPowerBarR, vPowerBarG, vPowerBarB, vPowerBarType, vPowerBarToken
     end
 end
 
-local powerR, powerG, powerB, powerType=0,0,0,false
+local powerR, powerG, powerB, powerType, powerToken=0,0,0,false
 function HealBot_Action_GetManaBarCol(button)
       --HealBot_setCall("HealBot_Action_GetManaBarCol", button)
-    powerR, powerG, powerB, powerType=HealBot_Action_GetManaBarColour(button)
-    if powerType and hbCustomPowerCols[powerType] then
+    powerR, powerG, powerB, powerType, powerToken=HealBot_Action_GetManaBarColour(button)
+    if powerToken and hbCustomPowerCols[powerToken] then
+        return hbCustomPowerCols[powerToken].r,
+               hbCustomPowerCols[powerToken].g,
+               hbCustomPowerCols[powerToken].b
+    elseif powerType and hbCustomPowerCols[powerType] then
         return hbCustomPowerCols[powerType].r,
                hbCustomPowerCols[powerType].g,
                hbCustomPowerCols[powerType].b
@@ -3211,11 +3227,55 @@ function HealBot_Action_GetManaBarCol(button)
     end
 end
 
+local powerTypeMax, PowerBarAlt=25, 14
+if HEALBOT_GAME_VERSION<5 then
+    powerTypeMax=6
+    PowerBarAlt=4
+elseif HEALBOT_GAME_VERSION<10 then
+    powerTypeMax=16
+    PowerBarAlt=10
+end
+function HealBot_Action_GetAltPowerBarCol(button)
+    vPowerBarType=UnitPowerBarID(button.unit)
+    if not vPowerBarType or vPowerBarType>powerTypeMax then vPowerBarType=button.poweralt.type end
+    if HealBot_Globals.OverrideColours["USEPOWER"] == 2 and (HealBot_Globals.OverrideColours["POWERALT"] or -1)>-1 then
+        powerType=HealBot_Globals.OverrideColours["POWERALT"]
+    elseif HealBot_Globals.OverrideColours["USEPOWER"] == 1 and hbv_Skins_GetVar("General", "POWERALT")>-1 then
+        powerType=hbv_Skins_GetVar("General", "POWERALT")
+    else
+        powerType=vPowerBarType
+    end
+    if powerType == button.mana.type then
+        powerType=HealBot_Action_ClassAltPower(button.text.classtrim)
+    end
+    if powerType == button.mana.type then
+        if HealBot_Globals.OverrideColours["USEPOWER"] == 2 then
+            if HealBot_Globals.OverrideColours["HIDEALT"] then 
+                powerType=PowerBarAlt
+            end
+        elseif hbv_Skins_GetBoolean("General", "HIDEALT") then
+            powerType=PowerBarAlt
+        end
+    end
+    button.poweralt.type=powerType
+    if hbCustomPowerCols[powerType] then
+        return hbCustomPowerCols[powerType].r,
+               hbCustomPowerCols[powerType].g,
+               hbCustomPowerCols[powerType].b
+    else
+        vPowerBarInfo=PowerBarColor[powerType] or PowerBarColor["MANA"]
+        return vPowerBarInfo.r, vPowerBarInfo.g, vPowerBarInfo.b
+    end
+end
+
 function HealBot_Action_setButtonManaBarCol(button)
       --HealBot_setCall("HealBot_Action_setButtonManaBarCol", button)
     button.mana.r,button.mana.g,button.mana.b=HealBot_Action_GetManaBarCol(button)
     if button.player and HealBot_Data["TIPUSE"] then
         HealBot_Tooltip_setPlayerPowerCols(button.mana.r,button.mana.g,button.mana.b)
+    end
+    if HEALBOT_GAME_VERSION>2 then
+        button.poweralt.r,button.poweralt.g,button.poweralt.b=HealBot_Action_GetAltPowerBarCol(button)
     end
 end
 
@@ -3944,6 +4004,7 @@ function HealBot_Action_InitButton(button, prefix)
     button.aggro={}
     button.mana={}
     button.power={}
+    button.poweralt={}
     button.text={}
     button.icon={}
     button.hotbars={}
@@ -4061,7 +4122,6 @@ function HealBot_Action_InitButton(button, prefix)
         button.gref.aux[x]:EnableMouse(false)
         button.gref.auxtxt[x]=_G[button.bName.."Aux"..x.."_Txt"]
         button.gref.auxtxt[x]:SetSpacing(0)
-        button.gref.auxtxt[x]:SetWordWrap(false)
     end
     button.gref.txt["text"]=_G[button.bName.."Bar_text"]
     button.gref.txt["text"]:SetWordWrap(false)
@@ -4261,16 +4321,25 @@ function HealBot_Action_InitButton(button, prefix)
     button.health.gcol=0
     button.health.dropalert=0
     button.mana.current=0
-    button.mana.max=0
+    button.mana.max=1
     button.mana.pct=0
     button.mana.pctc=0
     button.mana.type=0
+    button.poweralt.current=0
+    button.poweralt.max=1
+    button.poweralt.pct=0
+    button.poweralt.pctc=0
+    button.poweralt.type=0
+    button.poweralt.r=0
+    button.poweralt.g=0
+    button.poweralt.b=1
     button.mana.ind=-1
     button.mana.power=-1
     button.mana.r=0
     button.mana.g=0
     button.mana.b=1
-    button.mana.change=false
+    button.mana.change=true
+    button.mana.slowupd=true
     button.mana.lowcheck=true
     
     button.guild=false
@@ -6012,6 +6081,10 @@ function HealBot_Action_SetBinds(button, maxButton)
     HealBot_Action_DefaultBinds(button)
 end
 
+local hbClicks={[1]="Left",[2]="Right",[3]="Middle"}
+for x=4,20 do
+    hbClicks[x]="Button"..x
+end
 function HealBot_Action_SetAllButtonAttribs(button,cType)
       --HealBot_setCall("HealBot_Action_SetAllButtonAttribs", button)
     if hbMaxMouseButtons[cType]>0 then
@@ -6026,16 +6099,7 @@ function HealBot_Action_SetAllButtonAttribs(button,cType)
                 end
                 attribSet=HealBot_Action_ReturnAttribsFramesMinReset(button, HB_prefix, cType, x)
                 if not attribSet then
-                    if x == 1 then 
-                        HB_button="Left";
-                    elseif x == 2 then 
-                        HB_button="Right";
-                    elseif x == 3 then 
-                        HB_button="Middle";
-                    else
-                        HB_button="Button"..x
-                    end
-                    if HealBot_Action_SetButtonAttrib(button,HB_button,HealBot_Keys_List[y],cType,x,button.unit) then
+                    if HealBot_Action_SetButtonAttrib(button,hbClicks[x],HealBot_Keys_List[y],cType,x,button.unit) then
                         hasSpells=true
                     end
                 elseif attribSet == 2 then

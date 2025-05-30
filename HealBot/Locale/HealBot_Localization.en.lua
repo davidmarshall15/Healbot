@@ -425,6 +425,7 @@ function HealBot_Lang_enALL()
     HEALBOT_OPTIONS_HEALTHINCPERCENT       ="Include percent";
     HEALBOT_OPTIONS_HEALTHINVEHSHOWPLAYER  ="When in vehicle also show player";
     HEALBOT_OPTIONS_SHOWTEXT               ="Show text";
+    HEALBOT_OPTIONS_VERTTEXT               ="Vertical text";
     HEALBOT_OPTIONS_IGNOREINCOMINGONFULL   ="On full health ignore all incoming heals and "..HEALBOT_classicABSORBHOT.."s";
     HEALBOT_OPTIONS_TEXTONLYTIP            ="Only show in tooltip";
     HEALBOT_OPTIONS_TEXTSTATENAMEFONT      ="Use name font string";
@@ -458,6 +459,7 @@ function HealBot_Lang_enALL()
     HEALBOT_OPTIONS_SETDEFAULTS            ="Set defaults";
     HEALBOT_OPTIONS_SETDEFAULTSMSG         ="Reset all options on all characters\nto default values";
     HEALBOT_OPTIONS_SETLOCALDEFAULTSMSG    ="Reset spells/buffs/debuffs for this character\nto default values";
+    HEALBOT_OPTIONS_RESETSPELLSMSG         ="Reset spells for this character to default values";
     HEALBOT_OPTIONS_RIGHTBOPTIONS          ="Right click opens options";
 
     HEALBOT_OPTIONS_BARHEADEROPTTEXT       ="Bar Header options";
@@ -551,13 +553,39 @@ function HealBot_Lang_enALL()
     HEALBOT_OPTIONS_DEBUFFTEXT1            ="Spell to remove debuffs";
 
     HEALBOT_OPTIONS_POWER                  ="Power"
+    HEALBOT_OPTIONS_POWERALT               ="Power Alt"
     HEALBOT_OPTIONS_CASTBAR                ="Cast bar"
 
     HEALBOT_ASTRALPOWER                    ="Astral Power"
     HEALBOT_ENERGY                         ="Energy"
     HEALBOT_MANA                           ="Mana"
     HEALBOT_RAGE                           ="Rage"
+    HEALBOT_RUNES                          ="Runes"
     HEALBOT_RUNICPOWER                     ="Runic Power"
+    HEALBOT_LIGHTFORCE                     ="Light Force"
+    HEALBOT_SOULSHARDS                     ="Soul Shards"
+    HEALBOT_ECLIPSE                        ="Eclipse"
+    HEALBOT_HOLY_POWER                     ="Holy Power"
+    HEALBOT_ALTERNATE_POWER                ="Alternate Power"
+    HEALBOT_DARK_FORCE                     ="Dark Force"
+    HEALBOT_CHI                            ="Chi"
+    HEALBOT_SHADOW_ORB                     ="Shadow Orb"
+    HEALBOT_BURNING_EMBERS                 ="Burning Embers"
+    HEALBOT_DEMONIC_FURY                   ="Demonic Fury"
+    HEALBOT_ARCANE_CHARGES                 ="Arcane Charges"
+    HEALBOT_COMBO_POINTS                   ="Combo Points"
+    HEALBOT_LUNAR_POWER                    ="Lunar Power"
+    HEALBOT_MAELSTROM                      ="Maelstrom"
+    HEALBOT_INSANITY                       ="Insanity"
+    HEALBOT_FURY                           ="Fury"
+    HEALBOT_PAIN                           ="Pain"
+    HEALBOT_ESSENCE                        ="Essence"
+    HEALBOT_RUNE_BLOOD                     ="Blood Runes"
+    HEALBOT_RUNE_FROST                     ="Frost Runes"
+    HEALBOT_RUNE_UNHOLY                    ="Unholy Runes"
+    HEALBOT_ALTERNATE_QUEST                ="Alternate (Quest)"
+    HEALBOT_ALTERNATE_ENCOUNTER            ="Alternate (Encounter)"
+    HEALBOT_ALTERNATE_MOUNT                ="Alternate (Mount)"
     
     HEALBOT_MANAUSER                       ="Mana user"
     HEALBOT_NONMANAUSER                    ="Non mana user"
@@ -694,11 +722,15 @@ function HealBot_Lang_enALL()
     HEALBOT_OPTION_HEALERSMANAONLY         ="Healers only"
     HEALBOT_OPTION_BARUPDFREQ              ="Refresh Speed"
     HEALBOT_OPTION_USEFLUIDBARS            ="Use fluid bars"
+    HEALBOT_OPTION_POWERALT                ="Power Alt"
+    HEALBOT_OPTION_HIDEPOWERALT            ="Hide power alt"
     HEALBOT_OPTION_FLUIDBARSINCALPHA       ="Include col"..HEALBOT_enWORD_COLOUR_SUFFIX.." and alpha"
     HEALBOT_OPTION_HEALTHDROP              ="Health drop"
     HEALBOT_OPTION_USEHEALTHDROP           ="Show on Health bar"
     HEALBOT_OPTION_ALERTCONDITION          ="Alert Condition"
     HEALBOT_OPTION_ALERTCONDITIONS         ="Alert Conditions"
+    HEALBOT_OPTION_ALERTTEXT               ="Alert Text"
+    HEALBOT_OPTION_BINDTEXT                ="Bind Text"
     HEALBOT_OPTION_HEALTHDROPPCT           ="Alert threshold "
     HEALBOT_OPTION_HOTBARHEALTHPCT         ="Min Health+Absorbs threshold "
     HEALBOT_OPTION_HEALTHDROPSPEED         ="Time in seconds"
@@ -1381,6 +1413,8 @@ function HealBot_Lang_enALL()
 
     HEALBOT_OPTIONS_PLUGINS                ="Plugins"
     HEALBOT_OPTIONS_PLUGIN_NA              ="Plugin not available"
+    HEALBOT_OPTIONS_PLUGINTXT              ="Plugin text"
+    HEALBOT_OPTIONS_AUXPLUGINTXT           ="Aux: Plugin text"
 
     HEALBOT_OPTIONS_CONTENT_ABOUT          ="        About"
     HEALBOT_OPTIONS_CONTENT_OVERRIDES      ="        " .. HEALBOT_OPTIONS_TAB_OVERRIDES
@@ -1513,6 +1547,8 @@ function HealBot_Lang_enALL()
     HEALBOT_PLUGIN_AURAWATCHRAIDTARGET     ="Raid Target"
     HEALBOT_PLUGIN_AURAWATCHRAIDTARGETF    ="Filter raid target"
     HEALBOT_PLUGIN_AURAWATCHHEALGRPCFG     ="Heal groups config"
+    HEALBOT_PLUGIN_AURAWATCHSBEXISTS       ="Buff on Self exists"
+    HEALBOT_PLUGIN_AURAWATCHSBEXISTSTAG    ="Buff on Self exists with tag"
     HEALBOT_PLUGIN_ALERTRANGE              ="Alert Range"
     HEALBOT_PLUGIN_TWEAKSDELETEALL         ="Delete All"
     HEALBOT_PLUGIN_TWEAKSENABLEALL         ="Enable All"

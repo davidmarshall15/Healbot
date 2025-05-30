@@ -9,14 +9,16 @@ local hbSelfAbilityRev={}
 local hbCDRunning={}
 local hbOnCD={}
 local hbItem={}
-local hbBuffTags={}
-local hbDebuffTags={}
 local hbConfigCache={[1]={},[2]={},[3]={},[4]={},[5]={},[6]={},[7]={},[8]={},[9]={},[10]={}}
 local hbTmpConfigCache={[1]={},[2]={},[3]={},[4]={},[5]={},[6]={},[7]={},[8]={},[9]={},[10]={}}
 local hbCacheMap={[0]={["Frame"]=0,["ID"]=0},[1]={["Frame"]=0,["ID"]=0}}
 local hbIconUID={}
 local hbBuffGUID={}
+local hbBuffSelf={}
+local hbBuffTags={}
+local hbBuffTagSelf={}
 local hbDebuffGUID={}
+local hbDebuffTags={}
 local hbHealthGUID={}
 local hbHealthAboveGUID={}
 local hbHealthBelowGUID={}
@@ -51,6 +53,21 @@ hb_lVars["HealerGUID"]="x"
 hb_lVars["DPSGUID"]="x"
 hb_lVars["DPSGUIDCaster"]="x"
 hb_lVars["Tip"]=nil
+
+function HealBot_ActionIcons_EmptyLocalTable(t, key)
+    if t and t[key] then
+        hb_lVars["emptyTable"]=true
+        for _,v in pairs(t[key]) do
+            if v or v == false then
+                hb_lVars["emptyTable"]=false
+                break
+            end
+        end
+        if hb_lVars["emptyTable"] then
+            t[key]=nil
+        end
+    end
+end
 
 function HealBot_ActionIcons_setLuVars(vName, vValue)
       --HealBot_setCall("HealBot_ActionIcons_setLuVars - "..vName)
@@ -103,7 +120,7 @@ function HealBot_ActionIcons_SpecChange()
         end
     end
     HealBot_Timers_Set("OOC","ActionIconsNumbers",true)
-    HealBot_Timers_Set("OOC","SaveActionIconsProfile",true,true)
+    HealBot_Timers_Set("OOC","SaveActionIconsProfile",true)
 end
 
 function HealBot_ActionIcons_LoadSpec()
@@ -112,7 +129,7 @@ function HealBot_ActionIcons_LoadSpec()
     if HealBot_ActionIconsData_Loadouts[spec] then
         HealBot_Skins_ActionIconsData[Healbot_Config_Skins.Current_Skin]=HealBot_Util_Deserialize(HealBot_ActionIconsData_Loadouts[spec])
     else
-        HealBot_Timers_Set("OOC","SaveActionIconsProfile",true,true)
+        HealBot_Timers_Set("OOC","SaveActionIconsProfile",true)
     end
     if HealBot_ActionIcons_Loadouts[spec] then
         HealBot_Skins_ActionIcons[Healbot_Config_Skins.Current_Skin]=HealBot_Util_Deserialize(HealBot_ActionIcons_Loadouts[spec])
@@ -178,10 +195,8 @@ function HealBot_ActionIcons_InitFrames()
                         actionIcons[x][y].filter=0
                         actionIcons[x][y].auraIsSelf={}
                         actionIcons[x][y].auraStacks={}
-                        actionIcons[x][y].alertfilter={}
                         for c=1,3 do
                             actionIcons[x][y].auraStacks[c]=0
-                            actionIcons[x][y].alertfilter[c]=0
                         end
                         actionIcons[x][y].health=100
                         actionIcons[x][y].mana=100
@@ -264,7 +279,7 @@ function HealBot_ActionIcons_setFontChange()
             end
         end
     end
-    HealBot_Timers_Set("OOC","SaveActionIconsProfile",true,true)
+    HealBot_Timers_Set("OOC","SaveActionIconsProfile",true)
 end
 
 local hb_ActionHazard_BorderHighlightCol={}
@@ -946,21 +961,34 @@ function HealBot_ActionIcons_ConditionChange(frame, id, old, new, cNo)
     HealBot_ActionIcons_ConditionAdd(frame, id, new, cNo)
 end
 
+function HealBot_ActionIcons_SelfConditionChange(frame, id, old, new)
+        --HealBot_setCall("HealBot_ActionIcons_ConditionChange")
+    HealBot_ActionIcons_ConditionDel(frame, id, old)
+    HealBot_ActionIcons_ConditionAdd(frame, id, new)
+end
+
 function HealBot_ActionIcons_ConditionAdd(frame, id, cond, cNo)
         --HealBot_setCall("HealBot_ActionIcons_ConditionAdd")
-    actionIcons[frame][id].alertfilter[cNo]=cond
     if cond and cond>1 then
         if cond<6 and cond~=3 then
-            if hbv_ActionIcons_DataExists("AlertBuff", frame, id, cNo) then
-                HealBot_ActionIcons_AddBuff(frame, id, hbv_ActionIcons_GetData("AlertBuff", frame, id, cNo), cNo)
+            if cNo then
+                if hbv_ActionIcons_DataExists("AlertBuff", frame, id, cNo) then
+                    HealBot_ActionIcons_AddBuff(frame, id, hbv_ActionIcons_GetData("AlertBuff", frame, id, cNo), cNo)
+                end
+            elseif hbv_ActionIcons_DataExists("SelfAlertBuff", frame, id) then
+                HealBot_ActionIcons_AddBuff(frame, id, hbv_ActionIcons_GetData("SelfAlertBuff", frame, id))
             end
         elseif cond>5 and cond<10 and cond~=7 then
             if hbv_ActionIcons_DataExists("AlertDebuff", frame, id, cNo) then
                 HealBot_ActionIcons_AddDebuff(frame, id, hbv_ActionIcons_GetData("AlertDebuff", frame, id, cNo), cNo)
             end
         elseif cond == 3 then
-            if hbv_ActionIcons_DataExists("AlertBuffTag", frame, id, cNo) then
-                HealBot_ActionIcons_AddBuffTag(frame, id, hbv_ActionIcons_GetData("AlertBuffTag", frame, id, cNo), cNo)
+            if cNo then
+                if hbv_ActionIcons_DataExists("AlertBuffTag", frame, id, cNo) then
+                    HealBot_ActionIcons_AddBuffTag(frame, id, hbv_ActionIcons_GetData("AlertBuffTag", frame, id, cNo), cNo)
+                end
+            elseif hbv_ActionIcons_DataExists("SelfAlertBuffTag", frame, id) then
+                HealBot_ActionIcons_AddBuffTag(frame, id, hbv_ActionIcons_GetData("SelfAlertBuffTag", frame, id))
             end
         elseif cond == 7 then
             if hbv_ActionIcons_DataExists("AlertDebuffTag", frame, id, cNo) then
@@ -990,16 +1018,24 @@ function HealBot_ActionIcons_ConditionDel(frame, id, cond, cNo)
         --HealBot_setCall("HealBot_ActionIcons_ConditionDel")
     if cond and cond>1 then
         if cond<6 and cond~=3 then
-            if hbv_ActionIcons_DataExists("AlertBuff", frame, id, cNo) then
-                HealBot_ActionIcons_DeleteBuff(frame, id, hbv_ActionIcons_GetData("AlertBuff", frame, id, cNo), cNo)
+            if cNo then
+                if hbv_ActionIcons_DataExists("AlertBuff", frame, id, cNo) then
+                    HealBot_ActionIcons_DeleteBuff(frame, id, hbv_ActionIcons_GetData("AlertBuff", frame, id, cNo), cNo)
+                end
+            elseif hbv_ActionIcons_DataExists("SelfAlertBuff", frame, id) then
+                HealBot_ActionIcons_DeleteBuff(frame, id, hbv_ActionIcons_GetData("SelfAlertBuff", frame, id))
             end
         elseif cond>5 and cond<10 and cond~=7 then
             if hbv_ActionIcons_DataExists("AlertDebuff", frame, id, cNo) then
                 HealBot_ActionIcons_DeleteDebuff(frame, id, hbv_ActionIcons_GetData("AlertDebuff", frame, id, cNo), cNo)
             end
         elseif cond == 3 then
-            if hbv_ActionIcons_DataExists("AlertBuffTag", frame, id, cNo) then
-                HealBot_ActionIcons_DeleteBuffTag(frame, id, hbv_ActionIcons_GetData("AlertBuffTag", frame, id, cNo), cNo)
+            if cNo then
+                if hbv_ActionIcons_DataExists("AlertBuffTag", frame, id, cNo) then
+                    HealBot_ActionIcons_DeleteBuffTag(frame, id, hbv_ActionIcons_GetData("AlertBuffTag", frame, id, cNo), cNo)
+                end
+            elseif hbv_ActionIcons_DataExists("SelfAlertBuffTag", frame, id) then
+                HealBot_ActionIcons_DeleteBuffTag(frame, id, hbv_ActionIcons_GetData("SelfAlertBuffTag", frame, id))
             end
         elseif cond == 7 then
             if hbv_ActionIcons_DataExists("AlertDebuffTag", frame, id, cNo) then
@@ -1036,6 +1072,9 @@ function HealBot_ActionIcons_ConditionsDelAll()
                             HealBot_ActionIcons_ConditionDel(activeFramesIdx[x], y, hbv_ActionIcons_GetData("AlertFilter", activeFramesIdx[x], y, c), c)
                         end
                     end
+                    if hbv_ActionIcons_DataExists("SelfAlertFilter", frame, id) then
+                        HealBot_ActionIcons_ConditionDel(frame, id, hbv_ActionIcons_GetData("SelfAlertFilter", frame, id))
+                    end
                     actionIcons[activeFramesIdx[x]][y].guid=""
                 end
             end
@@ -1050,9 +1089,15 @@ function HealBot_ActionIcons_ConditionCheck(frame, id)
         for c=1,3 do
             HealBot_ActionIcons_ConditionAdd(frame, id, hbv_ActionIcons_GetData("AlertFilter", frame, id, c), c)
         end
-    elseif hbv_ActionIcons_DataExists("AlertFilter", frame, id) then
-        for c=1,3 do
-            HealBot_ActionIcons_ConditionDel(frame, id, hbv_ActionIcons_GetData("AlertFilter", frame, id, c), c)
+        HealBot_ActionIcons_ConditionAdd(frame, id, hbv_ActionIcons_GetData("SelfAlertFilter", frame, id))
+    else
+        if hbv_ActionIcons_DataExists("AlertFilter", frame, id) then
+            for c=1,3 do
+                HealBot_ActionIcons_ConditionDel(frame, id, hbv_ActionIcons_GetData("AlertFilter", frame, id, c), c)
+            end
+        end
+        if hbv_ActionIcons_DataExists("SelfAlertFilter", frame, id) then
+            HealBot_ActionIcons_ConditionDel(frame, id, hbv_ActionIcons_GetData("SelfAlertFilter", frame, id))
         end
     end
 end
@@ -1287,45 +1332,87 @@ end
 
 function HealBot_ActionIcons_AddBuff(frame, id, buff, cNo)
         --HealBot_setCall("HealBot_ActionIcons_AddBuff")
-    if actionIcons[frame][id].guid and buff then
-        actionIcons[frame][id].buff[cNo]=buff
-        if not hbBuffGUID[actionIcons[frame][id].guid] then hbBuffGUID[actionIcons[frame][id].guid]={} end
-        if not hbBuffGUID[actionIcons[frame][id].guid][buff] then hbBuffGUID[actionIcons[frame][id].guid][buff]={} end
-        hbBuffGUID[actionIcons[frame][id].guid][buff][actionIcons[frame][id].uid]=cNo
-        HealBot_Aura_BuffWatch(actionIcons[frame][id].guid, buff, true, true)
+    if buff then
+        if cNo then
+            if actionIcons[frame][id].guid then
+                actionIcons[frame][id].buff[cNo]=buff
+                if not hbBuffGUID[actionIcons[frame][id].guid] then hbBuffGUID[actionIcons[frame][id].guid]={} end
+                if not hbBuffGUID[actionIcons[frame][id].guid][buff] then hbBuffGUID[actionIcons[frame][id].guid][buff]={} end
+                hbBuffGUID[actionIcons[frame][id].guid][buff][actionIcons[frame][id].uid]=cNo
+                HealBot_Aura_BuffWatch(actionIcons[frame][id].guid, buff, true, true)
+            end
+        else
+            actionIcons[frame][id].buff[4]=buff
+            if not hbBuffSelf[buff] then hbBuffSelf[buff]={} end
+            hbBuffSelf[buff][actionIcons[frame][id].uid]=true
+            HealBot_Aura_BuffWatch(HealBot_Data["PGUID"], buff, true, true)
+        end
     end
 end
 
 function HealBot_ActionIcons_AddBuffTag(frame, id, tag, cNo)
         --HealBot_setCall("HealBot_ActionIcons_AddBuffTag")
-    if actionIcons[frame][id].guid and tag then
-        if not hbBuffGUID[actionIcons[frame][id].guid] then hbBuffGUID[actionIcons[frame][id].guid]={} end
-        if not hbBuffGUID[actionIcons[frame][id].guid][tag] then hbBuffGUID[actionIcons[frame][id].guid][tag]={} end
-        hbBuffGUID[actionIcons[frame][id].guid][tag][actionIcons[frame][id].uid]=cNo
-        HealBot_Aura_BuffTagWatch(actionIcons[frame][id].guid, tag, true, true)
+    if tag then
+        if cNo then
+            if actionIcons[frame][id].guid then
+                if not hbBuffTags[actionIcons[frame][id].guid] then hbBuffTags[actionIcons[frame][id].guid]={} end
+                if not hbBuffTags[actionIcons[frame][id].guid][tag] then hbBuffTags[actionIcons[frame][id].guid][tag]={} end
+                hbBuffTags[actionIcons[frame][id].guid][tag][actionIcons[frame][id].uid]=cNo
+                HealBot_Aura_BuffTagWatch(actionIcons[frame][id].guid, tag, true, true)
+            end
+        else
+            if not hbBuffTagSelf[tag] then hbBuffTagSelf[tag]={} end
+            hbBuffTagSelf[tag][actionIcons[frame][id].uid]=true
+            HealBot_Aura_BuffTagWatch(HealBot_Data["PGUID"], tag, true, true)
+        end
     end
 end
 
 function HealBot_ActionIcons_DeleteBuff(frame, id, buff, cNo)
         --HealBot_setCall("HealBot_ActionIcons_DeleteBuff")
-    if actionIcons[frame][id].guid and buff then
-        if hbBuffGUID[actionIcons[frame][id].guid] and hbBuffGUID[actionIcons[frame][id].guid][buff] then
-            hbBuffGUID[actionIcons[frame][id].guid][buff][actionIcons[frame][id].uid]=nil
-            if not hbBuffGUID[actionIcons[frame][id].guid][buff] then
-                HealBot_Aura_BuffWatch(actionIcons[frame][id].guid, buff, false, true)
+    if buff then
+        if cNo then 
+            if actionIcons[frame][id].guid and hbBuffGUID[actionIcons[frame][id].guid] and hbBuffGUID[actionIcons[frame][id].guid][buff] then
+                hbBuffGUID[actionIcons[frame][id].guid][buff][actionIcons[frame][id].uid]=nil
+                HealBot_ActionIcons_EmptyLocalTable(hbBuffGUID[actionIcons[frame][id].guid], buff)
+                if not hbBuffGUID[actionIcons[frame][id].guid][buff] and not hbBuffSelf[buff] then
+                    HealBot_Aura_BuffWatch(actionIcons[frame][id].guid, buff, false, true)
+                end
             end
+            actionIcons[frame][id].buff[cNo]=false
+        else
+            if hbBuffSelf[buff] then
+                hbBuffSelf[buff][actionIcons[frame][id].uid]=nil
+                HealBot_ActionIcons_EmptyLocalTable(hbBuffSelf, buff)
+                if not hbBuffSelf[buff] then
+                    HealBot_Aura_BuffWatch(HealBot_Data["PGUID"], buff, false, true)
+                end
+            end
+            actionIcons[frame][id].buff[4]=false
         end
     end
-    actionIcons[frame][id].buff[cNo]=false
 end
 
 function HealBot_ActionIcons_DeleteBuffTag(frame, id, tag, cNo)
         --HealBot_setCall("HealBot_ActionIcons_DeleteBuffTag")
-    if actionIcons[frame][id].guid and tag then
-        if hbBuffTags[actionIcons[frame][id].guid] and hbBuffTags[actionIcons[frame][id].guid][tag] then
-            hbBuffTags[actionIcons[frame][id].guid][tag][actionIcons[frame][id].uid]=nil
+    if tag then
+        if cNo then
+            if actionIcons[frame][id].guid and hbBuffTags[actionIcons[frame][id].guid] and hbBuffTags[actionIcons[frame][id].guid][tag] then
+                hbBuffTags[actionIcons[frame][id].guid][tag][actionIcons[frame][id].uid]=nil
+                HealBot_ActionIcons_EmptyLocalTable(hbBuffTags[actionIcons[frame][id].guid], tag)
+                if not hbBuffTags[actionIcons[frame][id].guid][tag] then
+                    HealBot_Aura_BuffTagWatch(actionIcons[frame][id].guid, tag, false, true)
+                end
+            end
+        else
+            if hbBuffTagSelf[tag] then
+                hbBuffTagSelf[tag][actionIcons[frame][id].uid]=nil
+                HealBot_ActionIcons_EmptyLocalTable(hbBuffTagSelf, tag)
+                if not hbBuffTagSelf[tag] then
+                    HealBot_Aura_BuffTagWatch(HealBot_Data["PGUID"], tag, false, true)
+                end
+            end
         end
-        HealBot_Aura_BuffTagWatch(actionIcons[frame][id].guid, tag, false, true)
     end
 end
 
@@ -1338,18 +1425,40 @@ end
 
 function HealBot_ActionIcons_BuffUpdate(guid, buff, count, active, casterIsPlayer)
         --HealBot_setCall("HealBot_ActionIcons_BuffUpdate", nil, guid)
+    if guid == HealBot_Data["PGUID"] and hbBuffSelf[buff] then
+        for uid,_ in pairs(hbBuffSelf[buff]) do
+            actionIcons[hbIconUID[uid]["Frame"]][hbIconUID[uid]["ID"]].auraIsSelf[4]=casterIsPlayer
+            actionIcons[hbIconUID[uid]["Frame"]][hbIconUID[uid]["ID"]].auraStacks[4]=count
+        end
+    end
     if hbBuffGUID[guid] and hbBuffGUID[guid][buff] then
         for uid,cNo in pairs(hbBuffGUID[guid][buff]) do
             HealBot_ActionIcons_UpdatedAura(hbIconUID[uid]["Frame"], hbIconUID[uid]["ID"], count, casterIsPlayer, cNo)
+        end
+    end
+    if guid == HealBot_Data["PGUID"] and hbBuffSelf[buff] then
+        for uid,_ in pairs(hbBuffSelf[buff]) do
+            HealBot_ActionIcons_CheckHighlightIconAbility(hbIconUID[uid]["Frame"], hbIconUID[uid]["ID"])
         end
     end
 end
 
 function HealBot_ActionIcons_BuffTagUpdate(guid, tag, count, active, casterIsPlayer)
         --HealBot_setCall("HealBot_ActionIcons_BuffTagUpdate", nil, guid)
-    if hbBuffGUID[guid] and hbBuffGUID[guid][tag] then
-        for uid,cNo in pairs(hbBuffGUID[guid][tag]) do
+    if guid == HealBot_Data["PGUID"] and hbBuffTagSelf[tag] then
+        for uid,_ in pairs(hbBuffTagSelf[tag]) do
+            actionIcons[hbIconUID[uid]["Frame"]][hbIconUID[uid]["ID"]].auraIsSelf[4]=casterIsPlayer
+            actionIcons[hbIconUID[uid]["Frame"]][hbIconUID[uid]["ID"]].auraStacks[4]=count
+        end
+    end
+    if hbBuffTags[guid] and hbBuffTags[guid][tag] then
+        for uid,cNo in pairs(hbBuffTags[guid][tag]) do
             HealBot_ActionIcons_UpdatedAura(hbIconUID[uid]["Frame"], hbIconUID[uid]["ID"], count, casterIsPlayer, cNo)
+        end
+    end
+    if guid == HealBot_Data["PGUID"] and hbBuffTagSelf[tag] then
+        for uid,_ in pairs(hbBuffTagSelf[tag]) do
+            HealBot_ActionIcons_CheckHighlightIconAbility(hbIconUID[uid]["Frame"], hbIconUID[uid]["ID"])
         end
     end
 end
@@ -1651,6 +1760,9 @@ function HealBot_ActionIcons_SetTarget(frame, id, unit)
                     for c=1,3 do
                         HealBot_ActionIcons_ConditionDel(frame, id, hbv_ActionIcons_GetData("AlertFilter", frame, id, c), c)
                     end
+                end
+                if hbv_ActionIcons_DataExists("SelfAlertFilter", frame, id) then
+                    HealBot_ActionIcons_ConditionDel(frame, id, hbv_ActionIcons_GetData("SelfAlertFilter", frame, id))
                 end
                 actionIcons[frame][id].filter=1
             end
@@ -1991,7 +2103,7 @@ function HealBot_ActionIcons_CheckAlertChangeFrameId(frame, id)
         HealBot_ActionIcons_FadeIcon(frame, id)
         HealBot_ActionIcons_CheckHighlightIconAbility(frame, id)
     end
-    HealBot_Timers_Set("OOC","SaveActionIconsProfile",true,true)
+    HealBot_Timers_Set("OOC","SaveActionIconsProfile",true)
 end
 
 function HealBot_ActionIcons_CombatState(state)
@@ -2237,6 +2349,34 @@ function HealBot_ActionIcons_AlertIsNone(frame, id, cNo)
     HealBot_ActionIcons_CheckAlertFuncs(frame, id, cNo+1)
 end
 
+function HealBot_ActionIcons_SelfAlertBuffExists(frame, id)
+        --HealBot_setCall("HealBot_ActionIcons_SelfAlertBuffExists")
+    if hb_lVars["AllowBuffs"] and actionIcons[frame][id] and
+       (actionIcons[frame][id].auraIsSelf[4] or not hbv_ActionIcons_GetBooleanData("SelfAlertBuffSelf", frame, id)) and
+       actionIcons[frame][id].auraStacks[4]>=hbv_ActionIcons_GetData("SelfAlertBuffMinStacks", frame, id) and
+       actionIcons[frame][id].auraStacks[4]<=hbv_ActionIcons_GetData("SelfAlertBuffMaxStacks", frame, id) then
+        return HealBot_Aura_CurrentBuff(HealBot_Data["PGUID"], actionIcons[frame][id].buff[4])
+    end
+    return false
+end
+
+function HealBot_ActionIcons_SelfAlertBuffTagExists(frame, id)
+        --HealBot_setCall("HealBot_ActionIcons_SelfAlertBuffTagExists")
+    if hb_lVars["AllowBuffs"] and actionIcons[frame][id] then
+        return HealBot_Aura_ActionIconBuffTag(HealBot_Data["PGUID"], hbv_ActionIcons_GetData("SelfAlertBuffTag", frame, id))
+    end
+    return false
+end
+
+function HealBot_ActionIcons_SelfAlertIsNone(frame, id)
+        --HealBot_setCall("HealBot_ActionIcons_SelfAlertIsNone")
+    return true
+end
+
+local HealBot_ActionIcons_SelfAlertFuncs={[1]=HealBot_ActionIcons_SelfAlertIsNone,
+                                          [2]=HealBot_ActionIcons_SelfAlertBuffExists,
+                                          [3]=HealBot_ActionIcons_SelfAlertBuffTagExists,
+                                         }
 local HealBot_ActionIcons_AlertFuncs={[1]=HealBot_ActionIcons_AlertIsNone,
                                       [2]=HealBot_ActionIcons_AlertBuffExists,
                                       [3]=HealBot_ActionIcons_AlertBuffTagExists,
@@ -2258,7 +2398,11 @@ local HealBot_ActionIcons_AlertFuncs={[1]=HealBot_ActionIcons_AlertIsNone,
 function HealBot_ActionIcons_CheckAlertFuncs(frame, id, cNo)
         --HealBot_setCall("HealBot_ActionIcons_CheckAlertFuncs")
     if cNo>3 then
-        HealBot_ActionIcons_HighlightIcon(frame, id)
+        if HealBot_ActionIcons_SelfAlertFuncs[hbv_ActionIcons_GetData("SelfAlertFilter", frame, id)](frame, id) then
+            HealBot_ActionIcons_HighlightIcon(frame, id)
+        else
+            HealBot_ActionIcons_FadeIcon(frame, id)
+        end
     else
         HealBot_ActionIcons_AlertFuncs[hbv_ActionIcons_GetData("AlertFilter", frame, id, cNo)](frame, id, cNo)
     end
@@ -2738,8 +2882,10 @@ function HealBot_ActionIcons_ClearGUID(guid)
         end
     end
     hbBuffGUID[guid]=nil
+    hbBuffTags[guid]=nil
     HealBot_Aura_BuffWatch(guid, nil, nil, true)
     hbDebuffGUID[guid]=nil
+    hbDebuffTags[guid]=nil
     HealBot_Aura_DebuffWatch(guid, nil, nil, true)
     hbIconKey[guid]=nil
 end

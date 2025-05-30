@@ -424,13 +424,17 @@ function HealBot_SpellBinds_SetData(value, id)
         HealBot_SpellBinds_NilData(id)
     else
         if not HealBot_Config_Spells.Binds then HealBot_Config_Spells.Binds={} end
-        HealBot_Config_Spells.Binds[id]=value
+        if not HealBot_Config_Spells.Binds[id] or HealBot_Config_Spells.Binds[id] ~= value then
+            HealBot_Config_Spells.Binds[id]=value
+        end
     end
 end
 
 function HealBot_SpellBinds_NilData(id)
     if HealBot_Config_Spells.Binds then
-        HealBot_Config_Spells.Binds[id]=nil
-        HealBot_Util_EmptyTable(HealBot_Config_Spells, Binds)
+        if HealBot_Config_Spells.Binds[id] then
+            HealBot_Config_Spells.Binds[id]=nil
+            HealBot_Util_EmptyTable(HealBot_Config_Spells, Binds)
+        end
     end
 end

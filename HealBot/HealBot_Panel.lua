@@ -2277,10 +2277,17 @@ function HealBot_Panel_PlayersTargetsResetSkins()
    -- HealBot_AddDebug("PlayersTargetsResetSkins","Enemy",true)
 end
 
-function HealBot_Panel_PlayersTargetsQueueResetSkins(delay)
+function HealBot_Panel_PlayersTargetsQueueResetSkins()
     if not HealBot_Panel_luVars["PlayersTargetsQueue"] then
         HealBot_Panel_luVars["PlayersTargetsQueue"]=true
         HealBot_Timers_Set("OOC","PlayersTargetsResetSkins",true)
+    end
+end
+
+function HealBot_Panel_PlayersTargetsReset()
+    HealBot_Panel_PlayersTargetsDelAll()
+    if HealBot_Panel_enemyPlayerTargets(HealBot_Data["UILOCK"], 2) then
+        HealBot_Panel_PlayersTargetsQueueResetSkins()
     end
 end
 
@@ -2294,7 +2301,7 @@ function HealBot_Panel_PlayersTargetsDelFrames(unit)
         HealBot_UnitTargets[unit.."target"]=nil
         HealBot_Panel_PlayersTargetsDelToTFrames(unit.."targettarget")
     else
-        HealBot_Timers_Set("OOC","CheckPlayersTargets",true,true)
+        HealBot_Timers_Set("OOC","CheckPlayersTargets",true)
     end
 end
 

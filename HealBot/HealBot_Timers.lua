@@ -93,9 +93,9 @@ function HealBot_Timers_SetnProcs(cpuProfilerOn)
         HealBot_Timers_luVars["nProcsOn"]=2
         HealBot_Timers_luVars["nProcsOff"]=1
     else
-        HealBot_Timers_luVars["nProcsOn"]=HealBot_Util_PerfVal1(200)
-        if HealBot_Timers_luVars["nProcsOn"]<2 then
-            HealBot_Timers_luVars["nProcsOn"]=2
+        HealBot_Timers_luVars["nProcsOn"]=HealBot_Util_PerfVal1(500)
+        if HealBot_Timers_luVars["nProcsOn"]<3 then
+            HealBot_Timers_luVars["nProcsOn"]=3
         end
         HealBot_Timers_luVars["nProcsOff"]=HealBot_Util_PerfVal1(50)
         if HealBot_Timers_luVars["nProcsOff"]<1 then
@@ -539,19 +539,19 @@ function HealBot_Timers_LastLoad()
     HealBot_Timers_Set("AURA","DebuffTagNames")
     HealBot_Timers_Set("SKINS","SetAdaptive")
     HealBot_Timers_Set("INIT","SetPlayerData")
-    HealBot_Timers_Set("AURA","BuffsReset")
     HealBot_Timers_Set("AUX","ResetTextButtons")
     HealBot_Timers_Set("SKINS","TextSetTagInUse")
     HealBot_Timers_Set("OOC","EventsSetFrameUnits")
     HealBot_Timers_Set("LAST","MediaUpdateIndexes")
     HealBot_Timers_Set("LAST","OnLoadMessages")
     HealBot_Timers_Set("LAST","LastUpdate")
-    HealBot_Timers_Set("LAST","MediaInitFonts",true)
     HealBot_Timers_Set("INIT","HealBotLoaded")
+    HealBot_Timers_Set("AURA","BuffsReset")
+    HealBot_Timers_Set("LAST","MediaInitFonts",true)
+    HealBot_Timers_Set("OOC","CleanAurasBuffs",true)
+    HealBot_Timers_Set("OOC","CleanAurasDebuffs",true)
     HealBot_Timers_Set("LAST","CleanPermPrivateData",true,true)
     HealBot_Timers_Set("OOC","RemoveInvalidLoadouts",true,true)
-    HealBot_Timers_Set("OOC","CleanAurasBuffs",true,true)
-    HealBot_Timers_Set("OOC","CleanAurasDebuffs",true,true)
     HealBot_Timers_Set("SKINS","PowerIndicator",true,true)
     if not HealBot_Timers_luVars["HelpNotice"] then
         HealBot_Timers_Set("LAST","HealBotLoadedChat")
@@ -661,12 +661,30 @@ end
 
 function HealBot_Timers_CleanAurasBuffs()
     hbv_Auras_CleanData("BUFFS")
-    HealBot_Timers_Set("OOC","SaveAurasBuffs",true)
+    HealBot_Timers_Set("OOC","SaveAurasBuffs",true,true)
 end
 
 function HealBot_Timers_CleanAurasDebuffs()
     hbv_Auras_CleanData("DEBUFFS")
-    HealBot_Timers_Set("OOC","SaveAurasDebuffs",true)
+    HealBot_Timers_Set("OOC","SaveAurasDebuffs",true,true)
+end
+
+function HealBot_Timers_AuraWatchValidate()
+    if HealBot_Timers_luVars["pluginAuraWatch"] then
+        HealBot_Plugin_AuraWatch_Validate()
+    end
+end
+
+function HealBot_Timers_AuraWatchPreValidate()
+    if HealBot_Timers_luVars["pluginAuraWatch"] then
+        HealBot_Plugin_AuraWatch_PreValidate()
+    end
+end
+
+function HealBot_Timers_SpellsChanged()
+    if HealBot_Timers_luVars["pluginAuraWatch"] then
+        HealBot_Plugin_AuraWatch_RefreshBinds()
+    end
 end
 
 function HealBot_Timers_LoadedChat()
@@ -795,6 +813,10 @@ local hbTimerFuncs={["INIT"]={
                         ["UpdateAllAuxByType"]=HealBot_Aux_UpdateAllAuxByType,
                         ["CheckAllAuxOverLays"]=HealBot_Update_AllAuxOverLays,
                         ["ResetBars"]=HealBot_Aux_resetBars,
+                        ["doResetBars"]=HealBot_Aux_doResetBars,
+                        ["SetBars"]=HealBot_Options_setAuxBars,
+                        ["UpdateAllAuxBars"]=HealBot_Update_AllAuxBars,
+                        ["FluidInUseUpdate"]=HealBot_Aux_FluidInUseUpdate,
                         ["ResetText"]=HealBot_Update_ResetAllAuxText,
                         ["TestUpdate"]=HealBot_Aux_TestUpdate,
                         ["ResetRange"]=HealBot_Update_AuxResetRange,
@@ -1008,6 +1030,7 @@ local hbTimerFuncs={["INIT"]={
                         ["ValidateEnemyPlayerFrames"]=HealBot_Panel_validateEnemyPlayerFrames,
                         ["CheckPlayersTargets"]=HealBot_CheckPlayersTargets,
                         ["DeleteAllPlayerFrames"]=HealBot_Panel_PlayersTargetsDelAll,
+                        ["PlayersTargetsReset"]=HealBot_Panel_PlayersTargetsReset,
                         ["FramesRefresh"]=HealBot_Timer_FramesRefresh,
                         ["RemoveInvalidLoadouts"]=HealBot_Action_RemoveInvalidLoadouts,
                         ["OrphanedCheck"]=HealBot_Skins_Clear_Orphaned,
@@ -1022,6 +1045,9 @@ local hbTimerFuncs={["INIT"]={
                         ["SaveAurasDebuffs"]=HealBot_Timers_SaveAurasDebuffs,
                         ["CleanAurasBuffs"]=HealBot_Timers_CleanAurasBuffs,
                         ["CleanAurasDebuffs"]=HealBot_Timers_CleanAurasDebuffs,
+                        ["AuraWatchPreValidate"]=HealBot_Timers_AuraWatchPreValidate,
+                        ["AuraWatchValidate"]=HealBot_Timers_AuraWatchValidate,
+                        ["PostSpellsChanged"]=HealBot_Timers_SpellsChanged,
                     },
                    }
 

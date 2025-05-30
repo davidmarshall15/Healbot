@@ -1089,21 +1089,21 @@ function HealBot_AuraWatchManaClear()
     hbAuraWatchMana={}
 end
 
-local hbManaCurrent, hbManaMax, pLowManaDrinkNeed=0,0,false
+local hbPowerCurrent, hbPowerMax, pLowManaDrinkNeed=0,0,false
 function HealBot_UnitMana(button)
       --HealBot_setCall("HealBot_UnitMana", button)
     button.mana.update=false
     if button.mana.change then HealBot_Action_setButtonManaBarCol(button) end
     if button.status.current<HealBot_Unit_Status["DEAD"] then
-        hbManaCurrent=UnitPower(button.unit) or 0
-        hbManaMax=UnitPowerMax(button.unit) or 0
-        if button.mana.current~=hbManaCurrent or button.mana.max~=hbManaMax or button.mana.change then
-            if not HealBot_Data["UILOCK"] and HEALBOT_GAME_VERSION<5 and button.isplayer and not button.player and (hbManaMax>(button.mana.max*1.25) or hbManaMax<(button.mana.max*0.75)) then
+        hbPowerCurrent=UnitPower(button.unit) or 0
+        hbPowerMax=UnitPowerMax(button.unit) or 0
+        if button.mana.current~=hbPowerCurrent or button.mana.max~=hbPowerMax then
+            if not HealBot_Data["UILOCK"] and HEALBOT_GAME_VERSION<5 and button.isplayer and not button.player and (hbPowerMax>(button.mana.max*1.25) or hbPowerMax<(button.mana.max*0.75)) then
                 HealBot_Events_SpecChange(button)
             end
             button.mana.lowcheck=true
-            button.mana.current=hbManaCurrent
-            button.mana.max=hbManaMax
+            button.mana.current=hbPowerCurrent
+            button.mana.max=hbPowerMax
             if button.mana.max>0 then
                 button.mana.pct=floor((button.mana.current/button.mana.max)*100)
                 button.mana.pctc=button.mana.pct*10
@@ -1123,15 +1123,47 @@ function HealBot_UnitMana(button)
                 end
             end
             HealBot_Aux_setPowerBars(button)
-            if button.mouseover and HealBot_Data["TIPBUTTON"] then HealBot_setTooltipUpdateNow() end
+        elseif button.mana.change then
+            HealBot_Aux_setPowerBars(button)
+        end
+        hbPowerCurrent=UnitPower(button.unit, button.poweralt.type) or 0
+        hbPowerMax=UnitPowerMax(button.unit, button.poweralt.type) or 0
+        if button.poweralt.current~=hbPowerCurrent or button.poweralt.max~=hbPowerMax then
+            button.poweralt.current=hbPowerCurrent
+            button.poweralt.max=hbPowerMax
+            if button.poweralt.max>0 then
+                button.poweralt.pct=floor((button.poweralt.current/button.poweralt.max)*100)
+                button.poweralt.pctc=button.poweralt.pct*10
+            else
+                button.poweralt.pct=0
+                button.poweralt.pctc=0
+            end
+            HealBot_Aux_setPowerAltBars(button)
+        elseif button.mana.change then
+            HealBot_Aux_setPowerAltBars(button)
         end
         HealBot_Events_PowerIndicators(button)
-    elseif button.mana.current>0 or button.mana.max>0 then
-        button.mana.current=0
-        button.mana.max=0
-        HealBot_Aux_setPowerBars(button)
+        if button.mouseover and HealBot_Data["TIPBUTTON"] then HealBot_setTooltipUpdateNow() end
+    else
+        if button.mana.current>0 or button.mana.max>0 then
+            button.mana.current=0
+            button.mana.max=0
+            button.mana.pctc=0
+            HealBot_Aux_setPowerBars(button)
+        elseif button.mana.change then
+            HealBot_Aux_setPowerBars(button)
+        end
+        if button.poweralt.current>0 or button.poweralt.max>0 then
+            button.poweralt.current=0
+            button.poweralt.max=0
+            button.poweralt.pctc=0
+            HealBot_Aux_setPowerAltBars(button)
+        elseif button.mana.change then
+            HealBot_Aux_setPowerAltBars(button)
+        end
         HealBot_Events_PowerIndicators(button)
     end
+    button.mana.change=false
 end
 
 function HealBot_GetUnitGuild(button)
@@ -1384,14 +1416,14 @@ end
 
 function HealBot_CheckZone()
     --HealBot_setCall("HealBot_CheckZone")
-    HealBot_Timers_Set("LAST","ZoneUpdate")
-    HealBot_Timers_Set("LAST","MountsPetsZone")
+    HealBot_Timers_Set("LAST","ZoneUpdate",true)
+    HealBot_Timers_Set("LAST","MountsPetsZone",true)
 end
 
 function HealBot_CheckSubZone()
     --HealBot_setCall("HealBot_CheckSubZone")
     if HealBot_luVars["mapAreaID"] == 125 then
-        HealBot_Timers_Set("LAST","MountsPetsZone")
+        HealBot_Timers_Set("LAST","MountsPetsZone",true)
     end
 end
 
@@ -2388,7 +2420,7 @@ function HealBot_SetPlayerData()
         HealBot_Data["PFACTION"]=UnitFactionGroup("player")
         if HealBot_Data["PGUID"] and HealBot_Data["PCLASSTRIM"] and HealBot_Data["PLEVEL"] and HealBot_Data["PRACE_EN"] and HealBot_Data["POWERTYPE"] then
             HealBot_Timers_Set("LAST", "SetInHealAbsorbMax")
-            HealBot_Timers_Set("PLAYER","SaveProfile",true)
+            --HealBot_Timers_Set("PLAYER","SaveProfile",true)
         else
             HealBot_Timers_Set("INIT","SetPlayerData",true)
         end
@@ -2472,6 +2504,7 @@ function HealBot_VariablesLoaded()
             HealBot_Config_Cures[key]=val;
         end
     end);
+    --if HealBot_Globals.Auras["KEEP"]>7 then HealBot_Globals.Auras["KEEP"]=3 end
     hbv_Auras_Load("BUFFS")
     hbv_Auras_Load("DEBUFFS")
     hbv_Auras_CurrentHoTs()
@@ -2627,7 +2660,7 @@ function HealBot_GetTalentInfo(button)
                 HealBot_Action_setGuidSpec(button, s)
                 HealBot_Comms_SendInstantAddonMsg("U:"..button.guid.."~"..s)
             end
-            HealBot_Action_setButtonManaBarCol(button)
+            button.mana.change=true
             if button.mouseover and HealBot_Data["TIPBUTTON"] then HealBot_setTooltipUpdateNow() end
             HealBot_UnitMana(button)
         end
@@ -2760,10 +2793,14 @@ function HealBot_Timer_ZoneUpdate()
         HealBot_luVars["InInstance"]=inInst
         HealBot_Timers_Set("LAST","CheckVersions",true,true)
         if HealBot_Config_Buffs.ExtraBuffsOnlyInInstance then
-            HealBot_Timers_Set("LAST","InitItemsData")
+            HealBot_Timers_Set("LAST","InitItemsData",true)
         end
         HealBot_ActionIcons_InstanceState(inInst)
         if HealBot_luVars["auraWatchNotifyZone"] then HealBot_Plugin_AuraWatch_ValidateZone(inInst) end
+        if not HealBot_luVars["InInstance"] then
+            HealBot_Timers_Set("OOC","SaveAurasBuffs",true,true)
+            HealBot_Timers_Set("OOC","SaveAurasDebuffs",true,true)
+        end
     end
     if HEALBOT_GAME_VERSION<5 then
         HealBot_Aura_SetBossHealth(inInst)
@@ -2783,12 +2820,10 @@ function HealBot_Timer_ZoneUpdate()
         HealBot_Options_setLuVars("mapName", mapName)
         HealBot_Options_SetEnableDisableCDBtn()
         HealBot_Options_SetEnableDisableBuffBtn()
-        HealBot_Timers_Set("OOC","PartyUpdateCheckSkin")
-        HealBot_Timers_Set("OOC","SaveAurasBuffs",true)
-        HealBot_Timers_Set("OOC","SaveAurasDebuffs",true)
+        HealBot_Timers_Set("OOC","PartyUpdateCheckSkin",true)
     end
     HealBot_Panel_setLuVars("MAPID", mapAreaID)
-    HealBot_Timers_Set("PLAYER","PlayerCheck")
+    HealBot_Timers_Set("PLAYER","PlayerCheck",true)
 end
 
 function HealBot_Timer_EmoteOOM()
@@ -3644,6 +3679,10 @@ function HealBot_UnitSlowUpdate(button)
             else
                 button.specupdate=0
             end
+        elseif button.mana.changetime and button.mana.changetime<HealBot_TimeNow then
+            button.mana.changetime=false
+            button.mana.change=true
+            HealBot_UnitMana(button)
         elseif button.frame<10 then
             if button.status.castend>0 and button.status.castend<(HealBot_TimeNow*1000) then
                 HealBot_Aux_ClearCastBar(button)
@@ -3698,6 +3737,9 @@ end
 
 function HealBot_PluginClearDown()
     if HealBot_luVars["pluginClearDown"]>0 then
+        if HealBot_luVars["pluginAuraWatch"] then
+            HealBot_Plugin_AuraWatch_ValidateNameRefresh()
+        end
         if HealBot_luVars["pluginClearDown"]<2 then
             HealBot_Timers_Set("SKINS","ActionIconsPlayerNames")
             HealBot_luVars["pluginClearDown"]=2
@@ -3708,7 +3750,7 @@ function HealBot_PluginClearDown()
             HealBot_Plugin_Threat_Cleardown()
             HealBot_luVars["pluginClearDown"]=4
         elseif HealBot_luVars["pluginClearDown"]<5 and HealBot_luVars["pluginAuraWatch"] then
-            HealBot_Plugin_AuraWatch_Validate()
+            HealBot_Timers_Set("OOC","AuraWatchValidate")
             HealBot_luVars["pluginClearDown"]=5
         elseif HealBot_luVars["pluginClearDown"]<6 and HealBot_luVars["pluginHealthWatch"] then
             HealBot_Plugin_HealthWatch_Validate()
@@ -4806,6 +4848,8 @@ function HealBot_PlayerCheck()
         end
         HealBot_luVars["isResting"]=true
         HealBot_Timers_Set("PLAYER","SetRestingState")
+        HealBot_Timers_Set("OOC","SaveAurasBuffs",true,true)
+        HealBot_Timers_Set("OOC","SaveAurasDebuffs",true,true)
     end
     if HealBot_luVars["onTaxi"] then
         if not UnitOnTaxi("player") then

@@ -273,10 +273,10 @@ function HealBot_Tooltip_RequestsClear()
 end
 
 local tipsAuraWatch={[1]={},[2]={},[3]={},[4]={},[5]={},[6]={},[7]={},[8]={}}
-function HealBot_Tooltip_AuraWatch(guid, index, buff, r, g, b)
+function HealBot_Tooltip_AuraWatch(guid, index, txt, r, g, b)
       --HealBot_setCall("HealBot_Tooltip_AuraWatch", nil, guid)
-    if buff then
-        tipsAuraWatch[index][guid]="      Ready for "..buff
+    if txt then
+        tipsAuraWatch[index][guid]="      "..txt
         tipsAuraWatch[index].r=r
         tipsAuraWatch[index].g=g
         tipsAuraWatch[index].b=b

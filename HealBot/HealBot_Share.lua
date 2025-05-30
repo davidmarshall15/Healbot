@@ -848,23 +848,8 @@ local AuxLookupClassic={[0]={[1]="None",
                             [17]="HlthDrop",
                             [18]="Name",
                             [19]="Hlth",
-                            [20]="State",},
-                        [8]={[1]="None",
-                             [2]="Absorb",
-                             [3]="InHeals",
-                             [4]="Power",
-                             [5]="Aggro",
-                             [6]="Threat",
-                             [7]="Overheal",
-                             [8]="Highlight",
-                             [9]="Buff",
-                            [10]="Debuff",
-                            [11]="OOR",
-                            [12]="InRange",
-                            [13]="HlthDrop",
-                            [14]="Name",
-                            [15]="Hlth",
-                            [16]="State",},
+                            [20]="State",
+                            [21]="Plugin"},
                        [10]={[1]="None",
                              [2]="Absorb",
                              [3]="InHeals",
@@ -898,23 +883,9 @@ local AuxLookupRetail={[0]={[1]="None",
                            [19]="Name",
                            [20]="Hlth",
                            [21]="State",
-                           [22]="TotalAbsorb",},
-                       [8]={[1]="None",
-                            [2]="Absorb",
-                            [3]="InHeals",
-                            [4]="Power",
-                            [5]="Aggro",
-                            [6]="Threat",
-                            [7]="Overheal",
-                            [8]="Highlight",
-                            [9]="Buff",
-                           [10]="Debuff",
-                           [11]="OOR",
-                           [12]="InRange",
-                           [13]="HlthDrop",
-                           [14]="Name",
-                           [15]="Hlth",
-                           [16]="State",},
+                           [22]="TotalAbsorb",
+                           [23]="Plugin",
+                           [24]="PowerAlt"},
                       [10]={[1]="None",
                             [2]="Absorb",
                             [3]="InHeals",
@@ -925,14 +896,12 @@ local AuxLookupRetail={[0]={[1]="None",
                             [8]="HlthDrop",
                             [9]="Name",
                            [10]="Hlth",
-                           [11]="State",}
+                           [11]="State"}
                       }
 function HealBot_Share_SkinDecodeAux(dat, frame)
       --HealBot_setCall("HealBot_Share_SkinDecodeAux")
-    if frame<8 then
+    if frame<10 then
         frame=0
-    elseif frame<10 then
-        frame=8
     end
     if HEALBOT_GAME_VERSION<9 then
         for j=1, getn(AuxLookupClassic[frame]), 1 do
@@ -955,10 +924,8 @@ end
 
 function HealBot_Share_SkinEncodeAux(dat, frame)
       --HealBot_setCall("HealBot_Share_SkinEncodeAux")
-    if frame<8 then
+    if frame<10 then
         frame=0
-    elseif frame<10 then
-        frame=8
     end
     if HEALBOT_GAME_VERSION<9 then
         dat=AuxLookupClassic[frame][dat] or dat
@@ -1054,6 +1021,7 @@ local function HealBot_Share_ExportSkinFrames(skinName, varName, id, xType, icon
                 dups=dups..f.."~"
                 if f == 10 then
                     HealBot_Share_BuildSkinData(varName.."~"..id..xType.."~d", dups)
+                    dups=""
                 end
             else
                 if string.len(dups)>1 then
@@ -1063,6 +1031,9 @@ local function HealBot_Share_ExportSkinFrames(skinName, varName, id, xType, icon
                 HealBot_Share_BuildSkinData(varName.."~"..id..xType.."~f~"..f, tabStr)
             end
         end
+    end
+    if string.len(dups)>1 then
+        HealBot_Share_BuildSkinData(varName.."~"..id..xType.."~d", dups)
     end
 end
  

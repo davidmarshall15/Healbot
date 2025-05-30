@@ -889,12 +889,16 @@ function HealBot_Init_Plugins()
         HealBot_setLuVars("pluginAuraWatch", true)
         HealBot_Action_setLuVars("pluginAuraWatch", true)
         HealBot_Events_setLuVars("pluginAuraWatch", true)
+        HealBot_Timers_setLuVars("pluginAuraWatch", true)
         HealBot_Plugin_AuraWatch_Init()
+        HealBot_Timers_Set("OOC","PostSpellsChanged",true)
+        HealBot_Timers_Set("OOC","AuraWatchPreValidate", true)
     else
         HealBot_Range_setLuVars("pluginAuraWatch", false)
         HealBot_setLuVars("pluginAuraWatch", false)
         HealBot_Action_setLuVars("pluginAuraWatch", false)
         HealBot_Events_setLuVars("pluginAuraWatch", false)
+        HealBot_Timers_setLuVars("pluginAuraWatch", false)
     end
 
     loaded, reason=HealBot_WoWAPI_LoadAddOn("HealBot_Plugin_HealthWatch")

@@ -746,7 +746,7 @@ function HealBot_Skins_ResetSkin(barType,button,numcols)
                     end
                     b.gref.aux[x]:SetMinMaxValues(0,1000)
                     HealBot_Media_UpdateTexture(b.gref.aux[x], hbv_Skins_GetFrameVar("HealBar", "TEXTURE", b.frame), "Skins_ResetSkin - HealBar")
-                    b.gref.aux[x]:GetStatusBarTexture():SetHorizTile(false)
+                    --b.gref.aux[x]:GetStatusBarTexture():SetHorizTile(false)
                 else
                     b.gref.aux[x]:SetStatusBarColor(0,0,0,0)
                     b.gref.auxtxt[x]:SetText("")

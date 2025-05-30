@@ -18,6 +18,16 @@ HealBot_Media_luVars["Registered"]=false
 HealBot_Media_luVars["DelayUpdateUsedMedia"]=false
 HealBot_Media_luVars["pluginMedia"]=false
 
+function HealBot_Media_setLuVars(vName, vValue)
+      --HealBot_setCall("HealBot_Aggro_setLuVars - "..vName)
+    HealBot_Media_luVars[vName]=vValue
+end
+
+function HealBot_Media_retLuVars(vName)
+      --HealBot_setCall("HealBot_Aggro_retLuVars - "..vName)
+    return HealBot_Media_luVars[vName]
+end
+
 local HealBot_Font_Outline={
     [1]="",
     [2]="OUTLINE",
@@ -235,17 +245,24 @@ function HealBot_Media_UpdateFont(object, font, height, outline, caller)
 end
 
 function HealBot_Media_UpdateDefaultTexture(object, caller)
-    object:SetStatusBarTexture(HealBot_Default_Texture)
+    if not object.texture or object.texture~="DefaultTexture" then
+        object:SetStatusBarTexture(HealBot_Default_Texture)
+        object.texture="DefaultTexture"
+    end
    -- HealBot_AddDebug("UpdateDefaultTexture  Caller="..(caller or "nil"),"Media DefaultTexture",true)
 end
 
 function HealBot_Media_UpdateTexture(object, texture, caller)
-    object:SetStatusBarTexture(LSM:Fetch('statusbar', texture))
+    if not object.texture or object.texture ~= texture then
+        object:SetStatusBarTexture(LSM:Fetch('statusbar', texture))
+        object.texture=texture
+    end
    -- HealBot_AddDebug("LSM Fetch Texture "..texture.."  Caller="..(caller or "nil"),"Media Texture",true)
 end
 
 function HealBot_Media_UpdateTextureRef(name, texture, caller)
     local g=_G[name]
+    --g:SetStatusBarTexture(LSM:Fetch('statusbar', texture))
     HealBot_Media_UpdateTexture(g, texture, caller)
 end
 
