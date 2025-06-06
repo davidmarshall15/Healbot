@@ -4815,6 +4815,7 @@ function HealBot_Options_AuxMaxChars_OnValueChanged(self)
         HealBot_Text_setTextLen(hb_lVars["Frame"])
         HealBot_Options_framesChanged(false, false, false, true)
         HealBot_Timers_Set("SKINS","SetSkinText")
+        HealBot_Timers_Set("AUX","UpdateAllAuxByType",true)
     end
 end
 

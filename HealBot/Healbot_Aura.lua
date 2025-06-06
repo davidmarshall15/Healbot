@@ -2,6 +2,8 @@ local HealBot_UnitBuffIcons={}
 local HealBot_UnitDebuffIcons={}
 local HealBot_UnitBuffCurrent={}
 local HealBot_UnitDebuffCurrent={}
+local HealBot_UnitBuffTagsCurrent={}
+local HealBot_UnitDebuffTagsCurrent={}
 local HealBot_UnitExtraIcons={}
 local HealBot_BuffNameTypes={}
 local HealBot_BuffMinLevels={}
@@ -57,16 +59,16 @@ HealBot_Aura_AuxAssigns["NameOverlayBuff"]={[0]=false,[1]=false,[2]=false,[3]=fa
 HealBot_Aura_AuxAssigns["NameOverlayDebuff"]={[0]=false,[1]=false,[2]=false,[3]=false,[4]=false,[5]=false,[6]=false,[7]=false,[8]=false,[9]=false,[10]=false}
 HealBot_Aura_AuxAssigns["HealthOverlayBuff"]={[0]=false,[1]=false,[2]=false,[3]=false,[4]=false,[5]=false,[6]=false,[7]=false,[8]=false,[9]=false,[10]=false}
 HealBot_Aura_AuxAssigns["HealthOverlayDebuff"]={[0]=false,[1]=false,[2]=false,[3]=false,[4]=false,[5]=false,[6]=false,[7]=false,[8]=false,[9]=false,[10]=false}
-local HealBot_Aura_luVars={}
-HealBot_Aura_luVars["TankGUID1"]="x"
-HealBot_Aura_luVars["mapName"]=HEALBOT_WORD_OUTSIDE
-HealBot_Aura_luVars["IgnoreFastDurDebuffsSecs"]=-1
-HealBot_Aura_luVars["HotBarDebuff"]=0
-HealBot_Aura_luVars["ManaDrink"]=""
-HealBot_Aura_luVars["WellFed"]=""
-HealBot_Aura_luVars["TestBarsOn"]=false
-HealBot_Aura_luVars["AuraUpdate"]=0.98
---HealBot_Aura_luVars["BossExists"]=false
+local hb_lVars={}
+hb_lVars["TankGUID1"]="x"
+hb_lVars["mapName"]=HEALBOT_WORD_OUTSIDE
+hb_lVars["IgnoreFastDurDebuffsSecs"]=-1
+hb_lVars["HotBarDebuff"]=0
+hb_lVars["ManaDrink"]=""
+hb_lVars["WellFed"]=""
+hb_lVars["TestBarsOn"]=false
+hb_lVars["AuraUpdate"]=0.98
+--hb_lVars["BossExists"]=false
 
 local hbDebuffOnCD={}
 
@@ -77,22 +79,37 @@ local BleedList={}
 
 function HealBot_Aura_setLuVars(vName, vValue)
     --HealBot_setCall("HealBot_Aura_setLuVars - "..vName)
-    HealBot_Aura_luVars[vName]=vValue
+    hb_lVars[vName]=vValue
 end
 
 function HealBot_Aura_retLuVars(vName)
     --HealBot_setCall("HealBot_retLuVars"..vName)
-    return HealBot_Aura_luVars[vName]
+    return hb_lVars[vName]
+end
+
+local function HealBot_Aura_EmptyLocalTable(t, key)
+    if t and t[key] then
+        hb_lVars["emptyTable"]=true
+        for _,v in pairs(t[key]) do
+            if v or v == false then
+                hb_lVars["emptyTable"]=false
+                break
+            end
+        end
+        if hb_lVars["emptyTable"] then
+            t[key]=nil
+        end
+    end
 end
 
 function HealBot_Aura_UpdateCheckInterval()
-    HealBot_Aura_luVars["AuraUpdate"]=HealBot_Util_PerfVal4(98)
-    if HealBot_Aura_luVars["AuraUpdate"]<0.9 then 
-        HealBot_Aura_luVars["AuraUpdate"]=0.9 
-    elseif HealBot_Aura_luVars["AuraUpdate"]>1 then 
-        HealBot_Aura_luVars["AuraUpdate"]=0.99
+    hb_lVars["AuraUpdate"]=HealBot_Util_PerfVal4(98)
+    if hb_lVars["AuraUpdate"]<0.9 then 
+        hb_lVars["AuraUpdate"]=0.9 
+    elseif hb_lVars["AuraUpdate"]>1 then 
+        hb_lVars["AuraUpdate"]=0.99
     end
-    HealBot_Debug_PerfUpdate("AuraUpdate", HealBot_Aura_luVars["AuraUpdate"])
+    HealBot_Debug_PerfUpdate("AuraUpdate", hb_lVars["AuraUpdate"])
 end
 
 function HealBot_Aura_setAuxAssigns(vName, frame, vValue)
@@ -132,7 +149,7 @@ function HealBot_Aura_DeleteExcludeBuffInCache()
         HealBot_ExcludeBuffInCache[id]=nil
     end
     HealBot_setLuVars("UpdateAllAura", 5)
-    HealBot_Aura_luVars["updateAll"]=true
+    hb_lVars["updateAll"]=true
     HealBot_Timers_Set("AURA","CheckBuffs")
 end
 
@@ -249,7 +266,7 @@ function HealBot_Aura_RemoveExtraUnitIcons(button, index)
     HealBot_Aura_RemoveIcon(button, index)
 end
 
-HealBot_Aura_luVars["exIconAlpha"]=0
+hb_lVars["exIconAlpha"]=0
 function HealBot_Aura_UpdateExtraIcon(button, iconData, index)
       --HealBot_setCall("HealBot_Aura_UpdateExtraIcon", button)
     if (index == 91 and hbv_Skins_GetFrameBoolean("Icons", "CLASSEN", button.frame)) or
@@ -258,11 +275,11 @@ function HealBot_Aura_UpdateExtraIcon(button, iconData, index)
        (index == 94 and hbv_Skins_GetFrameBoolean("Icons", "OOREN", button.frame)) or
        (index == 95 and hbv_Skins_GetFrameBoolean("Icons", "RANKEN", button.frame)) or
        (index == 96 and hbv_Skins_GetFrameBoolean("Icons", "COMBATEN", button.frame)) then
-        HealBot_Aura_luVars["exIconAlpha"]=HealBot_Action_BarColourAlpha(button, hbv_Skins_GetFrameVar("BarCol", "HA", button.framecol), 1)
+        hb_lVars["exIconAlpha"]=HealBot_Action_BarColourAlpha(button, hbv_Skins_GetFrameVar("BarCol", "HA", button.framecol), 1)
     else
-        HealBot_Aura_luVars["exIconAlpha"]=button.status.alpha
+        hb_lVars["exIconAlpha"]=button.status.alpha
     end
-    button.gref.icon[index]:SetAlpha(HealBot_Aura_luVars["exIconAlpha"])
+    button.gref.icon[index]:SetAlpha(hb_lVars["exIconAlpha"])
 end
 
 local dbSecsLeft, dbRetAlpha, dbFadeDiff, dbNextAuraUpdate, dbMaxAlpha, dbMaxDur=0,0,0,1,1,1
@@ -351,7 +368,7 @@ function HealBot_Aura_DoUpdateDebuffIcon(button, iconData, index, timer, lastSpe
                     button.gref.txt.expire[index]:SetTextColor(1,1,1,dbiconAlpha);
                     button.gref.txt.expire[index]:SetText(dbSecsLeft)
                 end
-                dbDurNextUpdate=HealBot_Aura_luVars["AuraUpdate"]
+                dbDurNextUpdate=hb_lVars["AuraUpdate"]
             else
                 button.gref.txt.expire[index]:SetTextColor(1,1,1,0)
                 button.gref.txt.expire[index]:SetText(" ");
@@ -359,7 +376,7 @@ function HealBot_Aura_DoUpdateDebuffIcon(button, iconData, index, timer, lastSpe
                 --if (iconData.expirationTime-HealBot_TimeNow-1)>hbv_Skins_GetIconTextVar("DBDURTHRH", button.frame, iconData.iconSet) then
                 --    dbDurNextUpdate=(iconData.expirationTime-HealBot_TimeNow-1)-hbv_Skins_GetIconTextVar("DBDURTHRH", button.frame, iconData.iconSet)
                 --else
-                --    dbDurNextUpdate=HealBot_Aura_luVars["AuraUpdate"]
+                --    dbDurNextUpdate=hb_lVars["AuraUpdate"]
                 --end
             end
         else
@@ -526,7 +543,7 @@ function HealBot_Aura_DoUpdateBuffIcon(button, iconData, index, timer, lastSpell
                     button.gref.txt.expire[index]:SetTextColor(1,1,1,bIconAlpha);
                     button.gref.txt.expire[index]:SetText(bSecsLeft)
                 end
-                bDurNextUpdate=HealBot_Aura_luVars["AuraUpdate"]
+                bDurNextUpdate=hb_lVars["AuraUpdate"]
             else
                 button.gref.txt.expire[index]:SetTextColor(1,1,1,0)
                 button.gref.txt.expire[index]:SetText(" ");
@@ -534,7 +551,7 @@ function HealBot_Aura_DoUpdateBuffIcon(button, iconData, index, timer, lastSpell
                 --if (iconData.expirationTime-HealBot_TimeNow-1)>hbv_Skins_GetIconTextVar("BUFFDURTHRH", button.frame, iconData.iconSet) then
                 --    bDurNextUpdate=(iconData.expirationTime-HealBot_TimeNow-1)-hbv_Skins_GetIconTextVar("BUFFDURTHRH", button.frame, iconData.iconSet)
                 --else
-                --    bDurNextUpdate=HealBot_Aura_luVars["AuraUpdate"]
+                --    bDurNextUpdate=hb_lVars["AuraUpdate"]
                 --end
             end
         else
@@ -701,7 +718,7 @@ function HealBot_Aura_ClassUpdate(button, ClassRole)
 end
 
 function HealBot_Aura_TestTank(button)
-    if HealBot_Aura_luVars["TestBarsOn"] and button.rank == 5 then
+    if hb_lVars["TestBarsOn"] and button.rank == 5 then
         return true
     else
         return HealBot_Panel_IsTank(button.guid)
@@ -869,11 +886,9 @@ function HealBot_Aura_setButtonIcons(buttonId)
     hbTextureUpdateTime[buttonId]={}
 end
 
-function HealBot_Aura_setUnitIcons(unit)
+function HealBot_Aura_setUnitIcons(unit, guid)
       --HealBot_setCall("HealBot_Aura_setUnitIcons", nil, nil, unit)
-    if not HealBot_Aura_WarningFilter[unit] then
-        HealBot_Aura_WarningFilter[unit]={}
-    end
+    if not HealBot_Aura_WarningFilter[unit] then HealBot_Aura_WarningFilter[unit]={} end
 end
 
 function HealBot_Aura_AutoUpdateCustomDebuff(button, name, spellId)
@@ -1089,7 +1104,7 @@ end
 
 function HealBot_Aura_CheckForMana(button)
     if generalBuffs and HealBot_BuffWatch[HealBot_Config_Buffs.ManaDrinkItem] and not button.aura.buff.update then
-        if button.aura.buff.missingbuff ~= HealBot_Aura_luVars["ManaDrink"] then
+        if button.aura.buff.missingbuff ~= hb_lVars["ManaDrink"] then
             if button.mana.pct<HealBot_Config_Buffs.ManaDrinkThreshold then
                 HealBot_Events_UnitBuff(button)
             end
@@ -1137,7 +1152,7 @@ function HealBot_Aura_CheckGeneralBuff(button)
                 if buffWatchTarget["Raid"] then
                     buffCheckThis=true;
                 elseif buffWatchTarget["Self"] and button.player then
-                    if HealBot_Aura_luVars["ManaDrink"]~=buffWatchName or button.mana.pct<HealBot_Config_Buffs.ManaDrinkThreshold then
+                    if hb_lVars["ManaDrink"]~=buffWatchName or button.mana.pct<HealBot_Config_Buffs.ManaDrinkThreshold then
                         buffCheckThis=true
                     end
                 elseif buffWatchTarget["Party"] and button.group == HealBot_Data["PLAYERGROUP"] then 
@@ -1146,7 +1161,7 @@ function HealBot_Aura_CheckGeneralBuff(button)
                     buffCheckThis=true
                 elseif buffWatchTarget["MainTanks"] and HealBot_Panel_IsTank(button.guid) then
                     buffCheckThis=true;
-                elseif buffWatchTarget["SingleTank"] and button.guid == HealBot_Aura_luVars["TankGUID1"] then
+                elseif buffWatchTarget["SingleTank"] and button.guid == hb_lVars["TankGUID1"] then
                     buffCheckThis=true
                 elseif buffWatchTarget[button.text.classtrim] then
                     buffCheckThis=true
@@ -1233,8 +1248,8 @@ end
 local scbUnitClassEN, scbWatchHoT="XXXX", false
 function HealBot_Aura_ShowCustomBuff(button)
       --HealBot_setCall("HealBot_Aura_ShowCustomBuff", button)
-    if (hbCustomBuffsDisabled[uaBuffData[button.id][uaBuffSlot].spellId] and (hbCustomBuffsDisabled[uaBuffData[button.id][uaBuffSlot].spellId][HealBot_Aura_luVars["mapName"]] or hbCustomBuffsDisabled[uaBuffData[button.id][uaBuffSlot].spellId]["ALL"])) or
-       (hbCustomBuffsDisabled[uaBuffData[button.id][uaBuffSlot].name] and (hbCustomBuffsDisabled[uaBuffData[button.id][uaBuffSlot].name][HealBot_Aura_luVars["mapName"]] or hbCustomBuffsDisabled[uaBuffData[button.id][uaBuffSlot].name]["ALL"])) then
+    if (hbCustomBuffsDisabled[uaBuffData[button.id][uaBuffSlot].spellId] and (hbCustomBuffsDisabled[uaBuffData[button.id][uaBuffSlot].spellId][hb_lVars["mapName"]] or hbCustomBuffsDisabled[uaBuffData[button.id][uaBuffSlot].spellId]["ALL"])) or
+       (hbCustomBuffsDisabled[uaBuffData[button.id][uaBuffSlot].name] and (hbCustomBuffsDisabled[uaBuffData[button.id][uaBuffSlot].name][hb_lVars["mapName"]] or hbCustomBuffsDisabled[uaBuffData[button.id][uaBuffSlot].name]["ALL"])) then
        return false, false, true
     else
         scbWatchHoT=HealBot_Watch_HoT[uaBuffData[button.id][uaBuffSlot].name] or HealBot_Watch_HoT[uaBuffData[button.id][uaBuffSlot].spellId] or false
@@ -1425,8 +1440,8 @@ end
 function HealBot_Aura_CheckCurDebuff(button)
       --HealBot_setCall("HealBot_Aura_CheckCurDebuff", button)
     debuffIsCurrent, cDebuffPrio=true, 20
-    if (hbCustomDebuffsDisabled[uaDebuffData[button.id][uaDebuffSlot].spellId] and (hbCustomDebuffsDisabled[uaDebuffData[button.id][uaDebuffSlot].spellId][HealBot_Aura_luVars["mapName"]] or hbCustomDebuffsDisabled[uaDebuffData[button.id][uaDebuffSlot].spellId]["ALL"])) or
-       (hbCustomDebuffsDisabled[uaDebuffData[button.id][uaDebuffSlot].name] and (hbCustomDebuffsDisabled[uaDebuffData[button.id][uaDebuffSlot].name][HealBot_Aura_luVars["mapName"]] or hbCustomDebuffsDisabled[uaDebuffData[button.id][uaDebuffSlot].name]["ALL"])) then
+    if (hbCustomDebuffsDisabled[uaDebuffData[button.id][uaDebuffSlot].spellId] and (hbCustomDebuffsDisabled[uaDebuffData[button.id][uaDebuffSlot].spellId][hb_lVars["mapName"]] or hbCustomDebuffsDisabled[uaDebuffData[button.id][uaDebuffSlot].spellId]["ALL"])) or
+       (hbCustomDebuffsDisabled[uaDebuffData[button.id][uaDebuffSlot].name] and (hbCustomDebuffsDisabled[uaDebuffData[button.id][uaDebuffSlot].name][hb_lVars["mapName"]] or hbCustomDebuffsDisabled[uaDebuffData[button.id][uaDebuffSlot].name]["ALL"])) then
         debuffIsCurrent=false
     elseif HealBot_AuraDebuffCache[uaDebuffData[button.id][uaDebuffSlot].spellId]["typePrio"]>HealBot_AuraDebuffCache[uaDebuffData[button.id][uaDebuffSlot].spellId]["customPrio"] and HealBot_AuraDebuffCache[uaDebuffData[button.id][uaDebuffSlot].spellId]["customPrio"]<21 then
         HealBot_Aura_CheckCurCustomDebuff(button, true)
@@ -1436,7 +1451,7 @@ function HealBot_Aura_CheckCurDebuff(button)
           (not HealBot_Config_Cures.IgnoreCannotDispell or HealBot_Aura_CanDispel[uaDebuffData[button.id][uaDebuffSlot].spellId]) and
           (not hbDebuffOnCD[uaDebuffData[button.id][uaDebuffSlot].debuffType] or hbDebuffOnCD[uaDebuffData[button.id][uaDebuffSlot].debuffType]<HealBot_TimeNow) and 
           (not HealBot_Config_Cures.IgnoreFriendDebuffs or not UnitIsFriend("player",uaDebuffData[button.id][uaDebuffSlot].sourceUnit)) and
-          (uaDebuffData[button.id][uaDebuffSlot].duration == 0 or uaDebuffData[button.id][uaDebuffSlot].duration>=HealBot_Aura_luVars["IgnoreFastDurDebuffsSecs"]) then
+          (uaDebuffData[button.id][uaDebuffSlot].duration == 0 or uaDebuffData[button.id][uaDebuffSlot].duration>=hb_lVars["IgnoreFastDurDebuffsSecs"]) then
             ccdbWatchTarget=HealBot_Options_retDebuffWatchTarget(uaDebuffData[button.id][uaDebuffSlot].debuffType);
             if ccdbWatchTarget then
                 if ccdbWatchTarget["Raid"] then
@@ -1446,7 +1461,7 @@ function HealBot_Aura_CheckCurDebuff(button)
                     ccdbCheckthis=true;
                 elseif ccdbWatchTarget["MainTanks"] and HealBot_Panel_IsTank(button.guid) then
                     ccdbCheckthis=true;
-                elseif ccdbWatchTarget["SingleTank"] and button.guid == HealBot_Aura_luVars["TankGUID1"] then
+                elseif ccdbWatchTarget["SingleTank"] and button.guid == hb_lVars["TankGUID1"] then
                     ccdbCheckthis=true
                 elseif ccdbWatchTarget["Self"] and button.player then
                     ccdbCheckthis=true
@@ -1638,7 +1653,7 @@ function HealBot_Aura_DebuffWarnings(button, debuffName, force, debuffIconIndex)
         if button.mouseover and HealBot_Data["TIPBUTTON"] then 
             HealBot_setTooltipUpdateNow()
         end
-        if button.status.range>0 and (button.isplayer or button.isgroupraid) and button.frame<10 and button.aura.debuff.priority<=HealBot_Aura_retLuVars("HotBarDebuff") then
+        if button.range.current>0 and (button.isplayer or button.isgroupraid) and button.frame<10 and button.aura.debuff.priority<=HealBot_Aura_retLuVars("HotBarDebuff") then
             HealBot_Action_BarHotEnable(button, "DEBUFF")
         elseif button.hotbars.debuff then
             HealBot_Action_BarHotDisable(button, "DEBUFF")
@@ -1806,15 +1821,6 @@ function HealBot_Aura_BuffTagWatch(guid, tag, active, actionicon)
             end
             if not hbbwta[guid][tag] then
                 hbbwta[guid][tag]=0
-                if HealBot_UnitBuffCurrent[guid] then
-                    for bName, _ in pairs(HealBot_UnitBuffCurrent[guid]) do
-                        if (HealBot_BuffTagNames[bName] and HealBot_BuffTagNames[bName] == tag) or
-                           (HealBot_Aura_ID[bName] and HealBot_Globals.CustomBuffTag[HealBot_Aura_ID[bName]] and HealBot_Globals.CustomBuffTag[HealBot_Aura_ID[bName]] == tag) then
-                            hbbwta[guid][tag]=1
-                            break
-                        end
-                    end
-                end
             end
         elseif hbbwta[guid] and hbbwta[guid][tag] then
             hbbwta[guid][tag]=nil
@@ -1860,11 +1866,7 @@ function HealBot_Aura_DebuffWatch(guid, debuff, active, actionicon)
                 HealBot_Aura_AddWatch(guid)
             end
             if not hbdwa[guid][debuff] then
-                if HealBot_Aura_CurrentDebuff(guid, debuff) then
-                    hbdwa[guid][debuff]=1
-                else
-                    hbdwa[guid][debuff]=0
-                end
+                hbdwa[guid][debuff]=0
             end
         elseif hbdwa[guid] and hbdwa[guid][debuff] then
             hbdwa[guid][debuff]=nil
@@ -1891,15 +1893,6 @@ function HealBot_Aura_DebuffTagWatch(guid, tag, active, actionicon)
             end
             if not hbdwta[guid][tag] then
                 hbdwta[guid][tag]=0
-                if HealBot_UnitDebuffCurrent[guid] then
-                    for dName, _ in pairs(HealBot_UnitDebuffCurrent[guid]) do
-                        if (HealBot_DebuffTagNames[dName] and HealBot_DebuffTagNames[dName] == tag) or
-                           (HealBot_Aura_ID[dName] and HealBot_Globals.CDCTag[HealBot_Aura_ID[dName]] and HealBot_Globals.CDCTag[HealBot_Aura_ID[dName]] == tag) then
-                            hbdwta[guid][tag]=1
-                            break
-                        end
-                    end
-                end
             end
         elseif hbdwta[guid] and hbdwta[guid][tag] then
             hbdwta[guid][tag]=nil
@@ -2624,8 +2617,8 @@ end
 
 function HealBot_Aura_IsBoss(unit)
       --HealBot_setCall("HealBot_Aura_IsBoss", nil, nil, unit)
-    if unit and (UnitClassification(unit) == "worldboss" or (UnitClassification(unit) == 'elite' and (UnitLevel(unit) == -1 or UnitHealthMax(unit)>HealBot_Aura_luVars["bossHlth"]))) then
-        --HealBot_Aura_luVars["BossExists"]=true
+    if unit and (UnitClassification(unit) == "worldboss" or (UnitClassification(unit) == 'elite' and (UnitLevel(unit) == -1 or UnitHealthMax(unit)>hb_lVars["bossHlth"]))) then
+        --hb_lVars["BossExists"]=true
         return true
     else
         return false
@@ -2748,7 +2741,10 @@ function HealBot_Aura_CheckUnitBuffs(button, selfOnly)
         end
 
         if button.aura.buff.update then
-            if not HealBot_UnitBuffCurrent[button.guid] then HealBot_UnitBuffCurrent[button.guid]={} end
+            if not HealBot_UnitBuffCurrent[button.guid] then
+                HealBot_UnitBuffCurrent[button.guid]={}
+                HealBot_UnitBuffTagsCurrent[button.guid]={}
+            end
             for bName, _ in pairs(HealBot_UnitBuffCurrent[button.guid]) do
                 HealBot_UnitBuffCurrent[button.guid][bName]=false
             end
@@ -2757,14 +2753,13 @@ function HealBot_Aura_CheckUnitBuffs(button, selfOnly)
             uaSlot=0
             uaBuffData[button.id].lastslot=0
             HealBot_Aura_UpdateUnitBuffs(button, selfOnly)
-            for bName, _ in pairs(HealBot_UnitBuffCurrent[button.guid]) do
+            for bName, bID in pairs(HealBot_UnitBuffCurrent[button.guid]) do
                 if not HealBot_UnitBuffCurrent[button.guid][bName] then
                     HealBot_UnitBuffCurrent[button.guid][bName]=nil
-                    HealBot_Aura_BuffUpdate_Plugins(button, bName, HealBot_Globals.CustomBuffTag[HealBot_Aura_ID[bName]] or HealBot_BuffTagNames[bName], 0, false)
+                    HealBot_Aura_BuffUpdate_Plugins(button.guid, bName, HealBot_Globals.CustomBuffTag[HealBot_Aura_ID[bName]] or HealBot_BuffTagNames[bName], 0, false)
+                else
+                    HealBot_Aura_BuffUpdate_Plugins(button.guid, bName, HealBot_Globals.CustomBuffTag[bID] or HealBot_BuffTagNames[bName], HealBot_AuraBuffCache[bID].count, true, HealBot_AuraBuffCache[bID].sourceUnitIsPlayer)
                 end
-            end
-            for bName, bID in pairs(HealBot_UnitBuffCurrent[button.guid]) do
-                HealBot_Aura_BuffUpdate_Plugins(button, bName, HealBot_Globals.CustomBuffTag[bID] or HealBot_BuffTagNames[bName], HealBot_AuraBuffCache[bID].count, true, HealBot_AuraBuffCache[bID].sourceUnitIsPlayer)
             end
         end
         for z=1,3 do
@@ -2813,7 +2808,7 @@ function HealBot_Aura_CheckUnitBuffs(button, selfOnly)
                 end
             end
             if curBuffName then               
-                if prevMissingbuff~=button.aura.buff.missingbuff or HealBot_Aura_luVars["updateAll"] then
+                if prevMissingbuff~=button.aura.buff.missingbuff or hb_lVars["updateAll"] then
                     button.aura.buff.name="needUpdate"
                 end
                 HealBot_Aura_BuffWarnings(button, curBuffName)
@@ -2850,28 +2845,28 @@ function HealBot_Aura_setDebuffTypeCD(dType, eTime)
     hbDebuffOnCD[dType]=eTime
 end
 
-HealBot_Aura_luVars["bossHlth"]=250000
+hb_lVars["bossHlth"]=250000
 function HealBot_Aura_SetBossHealth(inInst)
       --HealBot_setCall("HealBot_Aura_SetBossHealth")
     if HealBot_Data["PLEVEL"]<50 then
-        HealBot_Aura_luVars["bossHlth"]=HealBot_Data["PLEVEL"]*750
+        hb_lVars["bossHlth"]=HealBot_Data["PLEVEL"]*750
     elseif HealBot_Data["PLEVEL"]<60 then
-        HealBot_Aura_luVars["bossHlth"]=HealBot_Data["PLEVEL"]*900
+        hb_lVars["bossHlth"]=HealBot_Data["PLEVEL"]*900
     elseif HealBot_Data["PLEVEL"]<70 then
-        HealBot_Aura_luVars["bossHlth"]=HealBot_Data["PLEVEL"]*1000
+        hb_lVars["bossHlth"]=HealBot_Data["PLEVEL"]*1000
     elseif HealBot_Data["PLEVEL"]<75 then
-        HealBot_Aura_luVars["bossHlth"]=HealBot_Data["PLEVEL"]*1100
+        hb_lVars["bossHlth"]=HealBot_Data["PLEVEL"]*1100
     elseif HealBot_Data["PLEVEL"]<80 then
-        HealBot_Aura_luVars["bossHlth"]=HealBot_Data["PLEVEL"]*1250
+        hb_lVars["bossHlth"]=HealBot_Data["PLEVEL"]*1250
     elseif HealBot_Data["PLEVEL"]<85 then
-        HealBot_Aura_luVars["bossHlth"]=HealBot_Data["PLEVEL"]*1500
+        hb_lVars["bossHlth"]=HealBot_Data["PLEVEL"]*1500
     else
-        HealBot_Aura_luVars["bossHlth"]=250000
+        hb_lVars["bossHlth"]=250000
     end
     if inInst then
         local difficultyID=GetDungeonDifficultyID()
         if difficultyID~=1 and difficultyID~=173 then
-            HealBot_Aura_luVars["bossHlth"]=HealBot_Aura_luVars["bossHlth"]*2
+            hb_lVars["bossHlth"]=hb_lVars["bossHlth"]*2
         end
     end
 end
@@ -2893,7 +2888,10 @@ function HealBot_Aura_CheckUnitDebuffs(button, selfOnly)
         end
         --button.aura.debuff.type=false
         if button.aura.debuff.update then
-            if not HealBot_UnitDebuffCurrent[button.guid] then HealBot_UnitDebuffCurrent[button.guid]={} end
+            if not HealBot_UnitDebuffCurrent[button.guid] then 
+                HealBot_UnitDebuffCurrent[button.guid]={}
+                HealBot_UnitDebuffTagsCurrent[button.guid]={}
+            end
             for dName, _ in pairs(HealBot_UnitDebuffCurrent[button.guid]) do
                 HealBot_UnitDebuffCurrent[button.guid][dName]=false
             end
@@ -2902,14 +2900,13 @@ function HealBot_Aura_CheckUnitDebuffs(button, selfOnly)
             uaSlot=0
             uaDebuffData[button.id].lastslot=0
             HealBot_Aura_UpdateUnitDebuffs(button, selfOnly)
-            for dName, _ in pairs(HealBot_UnitDebuffCurrent[button.guid]) do
+            for dName, dID in pairs(HealBot_UnitDebuffCurrent[button.guid]) do
                 if not HealBot_UnitDebuffCurrent[button.guid][dName] then
                     HealBot_UnitDebuffCurrent[button.guid][dName]=nil
-                    HealBot_Aura_DebuffUpdate_Plugins(button, dName, HealBot_Globals.CDCTag[HealBot_Aura_ID[dName]] or HealBot_DebuffTagNames[dName], 0, false)
+                    HealBot_Aura_DebuffUpdate_Plugins(button.guid, dName, HealBot_Globals.CDCTag[HealBot_Aura_ID[dName]] or HealBot_DebuffTagNames[dName], 0, false)
+                else
+                    HealBot_Aura_DebuffUpdate_Plugins(button.guid, dName, HealBot_Globals.CDCTag[dID] or HealBot_DebuffTagNames[dName], HealBot_AuraDebuffCache[dID].count, true, HealBot_AuraDebuffCache[dID].sourceUnitIsPlayer)
                 end
-            end
-            for dName, dID in pairs(HealBot_UnitDebuffCurrent[button.guid]) do
-                HealBot_Aura_DebuffUpdate_Plugins(button, dName, HealBot_Globals.CDCTag[dID] or HealBot_DebuffTagNames[dName], HealBot_AuraDebuffCache[dID].count, true, HealBot_AuraDebuffCache[dID].sourceUnitIsPlayer)
             end
         end
 
@@ -2964,7 +2961,7 @@ end
 
 function HealBot_Aura_CheckUnitAuras(button, debuff, selfOnly)
       --HealBot_setCall("HealBot_Aura_CheckUnitAuras", button)
-    if not HealBot_Aura_luVars["TestBarsOn"] then
+    if not hb_lVars["TestBarsOn"] then
         if debuff then
             HealBot_Aura_CheckUnitDebuffs(button, selfOnly)
         else
@@ -2976,7 +2973,7 @@ end
 local lowTime=0
 function HealBot_Aura_ResetCheckBuffsTime(button)
       --HealBot_setCall("HealBot_Aura_ResetCheckBuffsTime", button)
-    lowTime=HealBot_TimeNow+10000000
+    lowTime=HealBot_ServerTimeNow+10000000
     PlayerBuffsList=button.aura.buff.recheck
     button.aura.buff.resetcheck=false
     button.aura.buff.nextcheck=false
@@ -3130,126 +3127,130 @@ function HealBot_Aura_ClearBuff(button)
     end
 end
 
-function HealBot_Aura_BuffUpdate_Plugins(button, aura, tag, count, active, casterIsPlayer)
-      --HealBot_setCall("HealBot_Aura_BuffUpdate_Plugins", button)
-    if hbAuraWatch[button.guid] then
+function HealBot_Aura_UpdateBuffTags(guid, aura, tag, active)
+    if active then
+        if not HealBot_UnitBuffTagsCurrent[guid][tag] then HealBot_UnitBuffTagsCurrent[guid][tag]={} end
+        HealBot_UnitBuffTagsCurrent[guid][tag][aura]=true
+    elseif HealBot_UnitBuffTagsCurrent[guid][tag] then
+        HealBot_UnitBuffTagsCurrent[guid][tag][aura]=nil
+        HealBot_Aura_EmptyLocalTable(HealBot_UnitBuffTagsCurrent[guid], tag)
+        if HealBot_UnitBuffTagsCurrent[guid][tag] then active=true end
+    end
+    return active
+end
+
+function HealBot_Aura_BuffUpdate_Plugins(guid, aura, tag, count, active, casterIsPlayer)
+      --HealBot_setCall("HealBot_Aura_BuffUpdate_Plugins")
+    if hbAuraWatch[guid] then
         if active and not count or count<1 then count=1 end
-        if hbAuraRequests[button.guid] and hbAuraRequests[button.guid][aura] and active and button.frame<7 then
-            HealBot_Plugin_Requests_CancelGUID(button.guid)
-            hbAuraRequests[button.guid][aura]=false
+        if hbAuraRequests[guid] and hbAuraRequests[guid][aura] and active then
+            HealBot_Plugin_Requests_CancelGUID(guid)
+            hbAuraRequests[guid][aura]=false
         end
-        if hbAuraBuffWatch[button.guid] and hbAuraBuffWatch[button.guid][aura] then
+        if hbAuraBuffWatch[guid] and hbAuraBuffWatch[guid][aura] then
             if not active then
-                hbAuraBuffWatch[button.guid][aura]=0
+                hbAuraBuffWatch[guid][aura]=0
                 if HealBot_UnitBuffCurrent[HealBot_Data["PGUID"]] and HealBot_UnitBuffCurrent[HealBot_Data["PGUID"]][aura] then
-                    HealBot_Plugin_AuraWatch_PlayerBuffUpdate(button.guid, aura, count, active, casterIsPlayer, true)
+                    HealBot_Plugin_AuraWatch_PlayerBuffUpdate(guid, aura, count, active, casterIsPlayer, true)
                 else
-                    HealBot_Plugin_AuraWatch_PlayerBuffUpdate(button.guid, aura, count, active, casterIsPlayer, false)
+                    HealBot_Plugin_AuraWatch_PlayerBuffUpdate(guid, aura, count, active, casterIsPlayer, false)
                 end
-            elseif hbAuraBuffWatch[button.guid][aura]~=count then
-                hbAuraBuffWatch[button.guid][aura]=count
+            elseif hbAuraBuffWatch[guid][aura]~=count then
+                hbAuraBuffWatch[guid][aura]=count
                 if HealBot_UnitBuffCurrent[HealBot_Data["PGUID"]] and HealBot_UnitBuffCurrent[HealBot_Data["PGUID"]][aura] then
-                    HealBot_Plugin_AuraWatch_PlayerBuffUpdate(button.guid, aura, count, active, casterIsPlayer, true)
+                    HealBot_Plugin_AuraWatch_PlayerBuffUpdate(guid, aura, count, active, casterIsPlayer, true)
                 else
-                    HealBot_Plugin_AuraWatch_PlayerBuffUpdate(button.guid, aura, count, active, casterIsPlayer, false)
+                    HealBot_Plugin_AuraWatch_PlayerBuffUpdate(guid, aura, count, active, casterIsPlayer, false)
                 end
             end
         end
-        if hbAuraActionBuffWatch[button.guid] and hbAuraActionBuffWatch[button.guid][aura] then
+        if hbAuraActionBuffWatch[guid] and hbAuraActionBuffWatch[guid][aura] then
             if not active then
-                hbAuraActionBuffWatch[button.guid][aura]=0
-                HealBot_ActionIcons_BuffUpdate(button.guid, aura, count, active, casterIsPlayer)
-            elseif hbAuraActionBuffWatch[button.guid][aura]~=count then
-                hbAuraActionBuffWatch[button.guid][aura]=count
-                HealBot_ActionIcons_BuffUpdate(button.guid, aura, count, active, casterIsPlayer)
+                hbAuraActionBuffWatch[guid][aura]=0
+                HealBot_ActionIcons_BuffUpdate(guid, aura, count, active, casterIsPlayer)
+            elseif hbAuraActionBuffWatch[guid][aura]~=count then
+                hbAuraActionBuffWatch[guid][aura]=count
+                HealBot_ActionIcons_BuffUpdate(guid, aura, count, active, casterIsPlayer)
             end
         end
         if tag then
-            if not active and ((hbAuraBuffTagWatch[button.guid] and hbAuraBuffTagWatch[button.guid][tag]) or
-                               (hbAuraActionBuffTagWatch[button.guid] and hbAuraActionBuffTagWatch[button.guid][tag])) then
-                if HealBot_UnitBuffCurrent[button.guid] then
-                    for bName, _ in pairs(HealBot_UnitBuffCurrent[button.guid]) do
-                        if (HealBot_BuffTagNames[bName] and HealBot_BuffTagNames[bName] == tag) or
-                           (HealBot_Globals.CustomBuffTag[HealBot_Aura_ID[bName]] and HealBot_Globals.CustomBuffTag[HealBot_Aura_ID[bName]] == tag) then
-                            active=true
-                            break
-                        end
-                    end
+            active=HealBot_Aura_UpdateBuffTags(guid, aura, tag, active)
+            if hbAuraBuffTagWatch[guid] and hbAuraBuffTagWatch[guid][tag] then
+                if not active then
+                    hbAuraBuffTagWatch[guid][tag]=0
+                    HealBot_Plugin_AuraWatch_PlayerBuffTagUpdate(guid, tag, count, active, casterIsPlayer)
+                elseif hbAuraBuffTagWatch[guid][tag] == 0 then
+                    hbAuraBuffTagWatch[guid][tag]=1
+                    HealBot_Plugin_AuraWatch_PlayerBuffTagUpdate(guid, tag, count, active, casterIsPlayer)
                 end
             end
-            if hbAuraBuffTagWatch[button.guid] and hbAuraBuffTagWatch[button.guid][tag] then
+            if hbAuraActionBuffTagWatch[guid] and hbAuraActionBuffTagWatch[guid][tag] then
                 if not active then
-                    hbAuraBuffTagWatch[button.guid][tag]=0
-                    HealBot_Plugin_AuraWatch_PlayerBuffTagUpdate(button.guid, tag, count, active, casterIsPlayer)
-                elseif hbAuraBuffTagWatch[button.guid][tag] == 0 then
-                    hbAuraBuffTagWatch[button.guid][tag]=1
-                    HealBot_Plugin_AuraWatch_PlayerBuffTagUpdate(button.guid, tag, count, active, casterIsPlayer)
-                end
-            end
-            if hbAuraActionBuffTagWatch[button.guid] and hbAuraActionBuffTagWatch[button.guid][tag] then
-                if not active then
-                    hbAuraActionBuffTagWatch[button.guid][tag]=0
-                    HealBot_ActionIcons_BuffTagUpdate(button.guid, tag, count, active, casterIsPlayer)
-                elseif hbAuraActionBuffTagWatch[button.guid][tag] == 0 then
-                    hbAuraActionBuffTagWatch[button.guid][tag]=1
-                    HealBot_ActionIcons_BuffTagUpdate(button.guid, tag, count, active, casterIsPlayer)
+                    hbAuraActionBuffTagWatch[guid][tag]=0
+                    HealBot_ActionIcons_BuffTagUpdate(guid, tag, count, active, casterIsPlayer)
+                elseif hbAuraActionBuffTagWatch[guid][tag] == 0 then
+                    hbAuraActionBuffTagWatch[guid][tag]=1
+                    HealBot_ActionIcons_BuffTagUpdate(guid, tag, count, active, casterIsPlayer)
                 end
             end
         end
     end
 end
 
-function HealBot_Aura_DebuffUpdate_Plugins(button, aura, tag, count, active, casterIsPlayer)
-      --HealBot_setCall("HealBot_Aura_DebuffUpdate_Plugins", button)
-    if hbAuraWatch[button.guid] then
+function HealBot_Aura_UpdateDebuffTags(guid, aura, tag, active)
+    if active then
+        if not HealBot_UnitDebuffTagsCurrent[guid][tag] then HealBot_UnitDebuffTagsCurrent[guid][tag]={} end
+        HealBot_UnitDebuffTagsCurrent[guid][tag][aura]=true
+    elseif HealBot_UnitDebuffTagsCurrent[guid][tag] then
+        HealBot_UnitDebuffTagsCurrent[guid][tag][aura]=nil
+        HealBot_Aura_EmptyLocalTable(HealBot_UnitDebuffTagsCurrent[guid], tag)
+        if HealBot_UnitDebuffTagsCurrent[guid][tag] then
+            active=true
+        end
+    end
+    return active
+end
+
+function HealBot_Aura_DebuffUpdate_Plugins(guid, aura, tag, count, active, casterIsPlayer)
+      --HealBot_setCall("HealBot_Aura_DebuffUpdate_Plugins")
+    if hbAuraWatch[guid] then
         if count<1 then count=1 end
-        if hbAuraDebuffWatch[button.guid] and hbAuraDebuffWatch[button.guid][aura] then
+        if hbAuraDebuffWatch[guid] and hbAuraDebuffWatch[guid][aura] then
             if not active then
-                hbAuraDebuffWatch[button.guid][aura]=0
-                HealBot_Plugin_AuraWatch_PlayerDebuffUpdate(button.guid, aura, count, active, casterIsPlayer)
-            elseif hbAuraDebuffWatch[button.guid][aura]~=count then
-                hbAuraDebuffWatch[button.guid][aura]=count
-                HealBot_Plugin_AuraWatch_PlayerDebuffUpdate(button.guid, aura, count, active, casterIsPlayer)
+                hbAuraDebuffWatch[guid][aura]=0
+                HealBot_Plugin_AuraWatch_PlayerDebuffUpdate(guid, aura, count, active, casterIsPlayer)
+            elseif hbAuraDebuffWatch[guid][aura]~=count then
+                hbAuraDebuffWatch[guid][aura]=count
+                HealBot_Plugin_AuraWatch_PlayerDebuffUpdate(guid, aura, count, active, casterIsPlayer)
             end
         end
-        if hbAuraActionDebuffWatch[button.guid] and hbAuraActionDebuffWatch[button.guid][aura] then
+        if hbAuraActionDebuffWatch[guid] and hbAuraActionDebuffWatch[guid][aura] then
             if not active then
-                hbAuraActionDebuffWatch[button.guid][aura]=0
-                HealBot_ActionIcons_DebuffUpdate(button.guid, aura, count, active, casterIsPlayer)
-            elseif hbAuraActionDebuffWatch[button.guid][aura]~=count then
-                hbAuraActionDebuffWatch[button.guid][aura]=count
-                HealBot_ActionIcons_DebuffUpdate(button.guid, aura, count, active, casterIsPlayer)
+                hbAuraActionDebuffWatch[guid][aura]=0
+                HealBot_ActionIcons_DebuffUpdate(guid, aura, count, active, casterIsPlayer)
+            elseif hbAuraActionDebuffWatch[guid][aura]~=count then
+                hbAuraActionDebuffWatch[guid][aura]=count
+                HealBot_ActionIcons_DebuffUpdate(guid, aura, count, active, casterIsPlayer)
             end
         end
         if tag then
-            if not active and ((hbAuraDebuffTagWatch[button.guid] and hbAuraDebuffTagWatch[button.guid][tag]) or
-                               (hbAuraActionDebuffTagWatch[button.guid] and hbAuraActionDebuffTagWatch[button.guid][tag])) then
-                if HealBot_UnitDebuffCurrent[button.guid] then
-                    for dName, _ in pairs(HealBot_UnitDebuffCurrent[button.guid]) do
-                        if (HealBot_DebuffTagNames[dName] and HealBot_DebuffTagNames[dName] == tag) or
-                           (HealBot_Globals.CDCTag[HealBot_Aura_ID[dName]] and HealBot_Globals.CDCTag[HealBot_Aura_ID[dName]] == tag) then
-                            active=true
-                            break
-                        end
-                    end
+            active=HealBot_Aura_UpdateDebuffTags(guid, aura, tag, active)
+            if hbAuraDebuffTagWatch[guid] and hbAuraDebuffTagWatch[guid][tag] then
+                if not active then
+                    hbAuraDebuffTagWatch[guid][tag]=0
+                    HealBot_Plugin_AuraWatch_PlayerDebuffTagUpdate(guid, tag, count, active, casterIsPlayer)
+                elseif hbAuraDebuffTagWatch[guid][tag] == 0 then
+                    hbAuraDebuffTagWatch[guid][tag]=1
+                    HealBot_Plugin_AuraWatch_PlayerDebuffTagUpdate(guid, tag, count, active, casterIsPlayer)
                 end
             end
-            if hbAuraDebuffTagWatch[button.guid] and hbAuraDebuffTagWatch[button.guid][tag] then
+            if hbAuraActionDebuffTagWatch[guid] and hbAuraActionDebuffTagWatch[guid][tag] then
                 if not active then
-                    hbAuraDebuffTagWatch[button.guid][tag]=0
-                    HealBot_Plugin_AuraWatch_PlayerDebuffTagUpdate(button.guid, tag, count, active, casterIsPlayer)
-                elseif hbAuraDebuffTagWatch[button.guid][tag] == 0 then
-                    hbAuraDebuffTagWatch[button.guid][tag]=1
-                    HealBot_Plugin_AuraWatch_PlayerDebuffTagUpdate(button.guid, tag, count, active, casterIsPlayer)
-                end
-            end
-            if hbAuraActionDebuffTagWatch[button.guid] and hbAuraActionDebuffTagWatch[button.guid][tag] then
-                if not active then
-                    hbAuraActionDebuffTagWatch[button.guid][tag]=0
-                    HealBot_ActionIcons_DebuffTagUpdate(button.guid, tag, count, active, casterIsPlayer)
-                elseif hbAuraActionDebuffTagWatch[button.guid][tag] == 0 then
-                    hbAuraActionDebuffTagWatch[button.guid][tag]=1
-                    HealBot_ActionIcons_DebuffTagUpdate(button.guid, tag, count, active, casterIsPlayer)
+                    hbAuraActionDebuffTagWatch[guid][tag]=0
+                    HealBot_ActionIcons_DebuffTagUpdate(guid, tag, count, active, casterIsPlayer)
+                elseif hbAuraActionDebuffTagWatch[guid][tag] == 0 then
+                    hbAuraActionDebuffTagWatch[guid][tag]=1
+                    HealBot_ActionIcons_DebuffTagUpdate(guid, tag, count, active, casterIsPlayer)
                 end
             end
         end
@@ -3927,16 +3928,16 @@ function HealBot_Aura_InitItemsDataReady()
         HealBot_Buff_Aura2Item[x]=nil;
     end
     
-    HealBot_Aura_luVars["ManaDrink"]=""
+    hb_lVars["ManaDrink"]=""
     if HealBot_Config_Buffs.CheckManaDrink then
         InitItemsDataPrev["MANADRINK"]=true
         hbCustomItemID=HealBot_WoWAPI_ItemInfoInstant(HealBot_Config_Buffs.ManaDrinkItem or "x") or 0
         if hbCustomItemID>0 and HealBot_IsItemInBag(hbCustomItemID) and (IsInInstance() or not HealBot_Config_Buffs.ExtraBuffsOnlyInInstance) then
             if HealBot_BuffWatch[HealBot_Config_Buffs.BackupManaDrinkItem] then HealBot_Aura_ClearBuffWatch(HealBot_Config_Buffs.BackupManaDrinkItem) end
             HealBot_Buff_Aura2Item[HEALBOT_MANA_DRINK]=hbCustomItemID
-            HealBot_Aura_luVars["ManaDrink"]=HealBot_Config_Buffs.ManaDrinkItem
-            if not HealBot_BuffWatch[HealBot_Aura_luVars["ManaDrink"]] then
-                HealBot_Aura_SetBuffWatch(HealBot_Aura_luVars["ManaDrink"])
+            hb_lVars["ManaDrink"]=HealBot_Config_Buffs.ManaDrinkItem
+            if not HealBot_BuffWatch[hb_lVars["ManaDrink"]] then
+                HealBot_Aura_SetBuffWatch(hb_lVars["ManaDrink"])
                 InitItemsDataUpdate=true
             end
         else
@@ -3947,9 +3948,9 @@ function HealBot_Aura_InitItemsDataReady()
             hbCustomItemID=HealBot_WoWAPI_ItemInfoInstant(HealBot_Config_Buffs.BackupManaDrinkItem or "x") or 0
             if hbCustomItemID>0 and HealBot_IsItemInBag(hbCustomItemID) and (IsInInstance() or not HealBot_Config_Buffs.ExtraBuffsOnlyInInstance) then
                 HealBot_Buff_Aura2Item[HEALBOT_MANA_DRINK]=hbCustomItemID
-                HealBot_Aura_luVars["ManaDrink"]=HealBot_Config_Buffs.BackupManaDrinkItem
-                if not HealBot_BuffWatch[HealBot_Aura_luVars["ManaDrink"]] then
-                    HealBot_Aura_SetBuffWatch(HealBot_Aura_luVars["ManaDrink"])
+                hb_lVars["ManaDrink"]=HealBot_Config_Buffs.BackupManaDrinkItem
+                if not HealBot_BuffWatch[hb_lVars["ManaDrink"]] then
+                    HealBot_Aura_SetBuffWatch(hb_lVars["ManaDrink"])
                     InitItemsDataUpdate=true
                 end
             elseif HealBot_BuffWatch[HealBot_Config_Buffs.BackupManaDrinkItem] then
@@ -3969,9 +3970,9 @@ function HealBot_Aura_InitItemsDataReady()
             if HealBot_BuffWatch[HealBot_Config_Buffs.BackupWellFedItem] then HealBot_Aura_ClearBuffWatch(HealBot_Config_Buffs.BackupWellFedItem) end
             HealBot_Buff_Aura2Item[HEALBOT_WELL_FED]=hbCustomItemID
             HealBot_Buff_Aura2Item[HEALBOT_HEARTY_WELL_FED]=hbCustomItemID
-            HealBot_Aura_luVars["WellFed"]=HealBot_Config_Buffs.WellFedItem
-            if not HealBot_BuffWatch[HealBot_Aura_luVars["WellFed"]] then
-                HealBot_Aura_SetBuffWatch(HealBot_Aura_luVars["WellFed"])
+            hb_lVars["WellFed"]=HealBot_Config_Buffs.WellFedItem
+            if not HealBot_BuffWatch[hb_lVars["WellFed"]] then
+                HealBot_Aura_SetBuffWatch(hb_lVars["WellFed"])
                 InitItemsDataUpdate=true
             end
         else
@@ -3983,9 +3984,9 @@ function HealBot_Aura_InitItemsDataReady()
             if hbCustomItemID>0 and HealBot_IsItemInBag(hbCustomItemID) and (IsInInstance() or not HealBot_Config_Buffs.ExtraBuffsOnlyInInstance) then
                 HealBot_Buff_Aura2Item[HEALBOT_WELL_FED]=hbCustomItemID
                 HealBot_Buff_Aura2Item[HEALBOT_HEARTY_WELL_FED]=hbCustomItemID
-                HealBot_Aura_luVars["WellFed"]=HealBot_Config_Buffs.BackupWellFedItem
-                if not HealBot_BuffWatch[HealBot_Aura_luVars["WellFed"]] then
-                    HealBot_Aura_SetBuffWatch(HealBot_Aura_luVars["WellFed"])
+                hb_lVars["WellFed"]=HealBot_Config_Buffs.BackupWellFedItem
+                if not HealBot_BuffWatch[hb_lVars["WellFed"]] then
+                    HealBot_Aura_SetBuffWatch(hb_lVars["WellFed"])
                     InitItemsDataUpdate=true
                 end
             elseif HealBot_BuffWatch[HealBot_Config_Buffs.BackupWellFedItem] then
@@ -5404,8 +5405,10 @@ function HealBot_Aura_ClearGUID(guid)
     hbAuraWatchRaidTarget[guid]=nil
     hbAuraDebuffTagWatch[guid]=nil
     HealBot_UnitDebuffCurrent[guid]=nil
+    HealBot_UnitDebuffTagsCurrent[guid]=nil
     hbAuraDebuffWatch[guid]=nil
     hbAuraBuffTagWatch[guid]=nil
     hbAuraBuffWatch[guid]=nil
     HealBot_UnitBuffCurrent[guid]=nil
+    HealBot_UnitBuffTagsCurrent[guid]=nil
 end

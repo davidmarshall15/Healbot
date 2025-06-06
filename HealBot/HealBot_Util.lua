@@ -191,9 +191,9 @@ end
 function HealBot_Util_GetTimeElapsed(sDate, future)
     local sDiff
     if future then
-        sDiff=sDate-GetServerTime()
+        sDiff=sDate-HealBot_ServerTimeNow
     else
-        sDiff=GetServerTime()-sDate
+        sDiff=HealBot_ServerTimeNow-sDate
     end
     local sLabel=" secs"
     if sDiff>300 then

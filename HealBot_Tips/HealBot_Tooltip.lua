@@ -85,7 +85,7 @@ function HealBot_Tooltip_GetHealSpell(button,sName)
                 return nil, 1, 0.2, 0, false, false
             else
                 if not button.player then
-                    if HealBot_WoWAPI_UsableItem(sName) and HealBot_Range_Unit(button.unit, button.guid) then
+                    if HealBot_WoWAPI_UsableItem(sName) and button.range.current>0 then
                         return sName, 0.2, 0.5, 1, true, true
                     else
                         return sName, 0.1, 0.25, 0.7, true, false
@@ -97,10 +97,8 @@ function HealBot_Tooltip_GetHealSpell(button,sName)
         else
             return nil, 1, 0.2, 0
         end
-    end
-
-    if not HealBot_Range_SpellInRange(button,sName) then
-        return sName, 1, 0.2, 0, false, false
+    elseif not HealBot_Range_SpellInRange(button,sName) then
+        return sName, 1, 0.4, 0, false, false
     end
 
     return sName, 1, 1, 1, false, true
@@ -122,7 +120,7 @@ local HealBot_Tooltip_GCD=HealBot_Tooltip_GCDV1
 if HEALBOT_GAME_VERSION>3 then
     HealBot_Tooltip_GCD=HealBot_Tooltip_GCDV4
 end
-function HealBot_Tooltip_getSpellCD(validSpellName, isMacro)
+function HealBot_Tooltip_getSpellCD(button, validSpellName, isMacro)
       --HealBot_setCall("HealBot_Tooltip_getSpellCD")
     local z, x=HealBot_WoWAPI_SpellCooldown(validSpellName);
     local gcd=0
@@ -160,7 +158,7 @@ function HealBot_Tooltip_setspellName(button, spellName)
         else
             local e,t=string.split("=", spellName)
             if e and e == HEALBOT_EMOTE and t then
-                if button.status.range<1 then
+                if button.range.current<1 then
                     spellAR,spellAG,spellAB=0.7,0.3,0
                 else
                     spellAR,spellAG,spellAB=1,0.58,0
@@ -173,7 +171,7 @@ function HealBot_Tooltip_setspellName(button, spellName)
                     validSpellName, spellAR, spellAG, spellAB, isItem, inRange=HealBot_Tooltip_GetHealSpell(button,spellName)
                     if validSpellName and not isItem then
                         if inRange then
-                            validSpellName,spellAR,spellAG,spellAB=HealBot_Tooltip_getSpellCD(validSpellName, false)
+                            validSpellName,spellAR,spellAG,spellAB=HealBot_Tooltip_getSpellCD(button, validSpellName, false)
                         end
                     else
                         spellType=HEALBOT_OPTIONS_ITEM
@@ -192,7 +190,7 @@ function HealBot_Tooltip_setspellName(button, spellName)
                             end
                         end
                     end
-                    validSpellName,spellAR,spellAG,spellAB=HealBot_Tooltip_getSpellCD(validSpellName, true)
+                    validSpellName,spellAR,spellAG,spellAB=HealBot_Tooltip_getSpellCD(button, validSpellName, true)
                     spellType=HEALBOT_MACRO
                 end
             end
@@ -471,7 +469,7 @@ function HealBot_ToolTip_ShowDebug(button)
         else
             HealBot_Tooltip_SetLine("UnitExists is False",0.4,1,1,1)
         end
-        hbTipDebugText["range40"]=button.status.range
+        hbTipDebugText["range40"]=button.range.current
         hbTipDebugText["status"]=hbStates[button.status.current] or ("Unknown ("..button.status.current..")")
         if button.player then hbTipDebugText["player"]="True" end
         if button.isplayer then hbTipDebugText["isPlayer"]="True" end
@@ -1217,9 +1215,9 @@ function HealBot_Tooltip_DisplayActionIconTooltip(icon, target)
         if icon.range<1 then
             HealBot_Tooltip_SetLine("icon SpellRangeNeeds 0",1,1,1,1)
         elseif icon.range<35 then
-            HealBot_Tooltip_SetLine("icon SpellRangeNeeds 30",1,1,1,1)
-        elseif icon.range<45 then
-            HealBot_Tooltip_SetLine("icon SpellRangeNeeds 40",1,1,1,1)
+            HealBot_Tooltip_SetLine("icon SpellRangeNeeds <35",1,1,1,1)
+        elseif icon.range<50 then
+            HealBot_Tooltip_SetLine("icon SpellRangeNeeds <50",1,1,1,1)
         else
             HealBot_Tooltip_SetLine("icon SpellRangeNeeds 100",1,1,1,1)
         end

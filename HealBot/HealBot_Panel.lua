@@ -313,13 +313,13 @@ function HealBot_Panel_SetPermPrivateData(unit, guid, focus)
     if focus then
         HealBot_Config.PrivData["NAME"]=UnitName(unit) or HEALBOT_WORDS_UNKNOWN
         HealBot_Config.PrivData["CLASS"]=UnitClass(unit) or HEALBOT_WORDS_UNKNOWN
-        HealBot_Config.PrivData["TIME"]=GetServerTime()
+        HealBot_Config.PrivData["TIME"]=HealBot_ServerTimeNow
     else
         if not HealBot_Globals.PermPrivateData[guid] then
             HealBot_Globals.PermPrivateData[guid]={}
             HealBot_Globals.PermPrivateData[guid]["NAME"]=UnitName(unit) or HEALBOT_WORDS_UNKNOWN
             HealBot_Globals.PermPrivateData[guid]["CLASS"]=UnitClass(unit) or HEALBOT_WORDS_UNKNOWN
-            HealBot_Globals.PermPrivateData[guid]["TIME"]=GetServerTime()
+            HealBot_Globals.PermPrivateData[guid]["TIME"]=HealBot_ServerTimeNow
             aButton=HealBot_Panel_AllButton(guid)
             if aButton then 
                 HealBot_Globals.PermPrivateData[guid]["CLASSTRIM"]=aButton.text.classtrim
@@ -3874,6 +3874,14 @@ end
 
 function HealBot_Panel_setButtonPetGUID(button)
     hbPanel_buttonPetGUIDs[button.guid]=button
+end
+
+function HealBot_Panel_RaidUnitDupButton(guid)
+    return hbPanel_buttonGUIDs[guid]
+end
+
+function HealBot_Panel_RaidUnitPrivDupButton(guid)
+    return hbPanel_buttonpGUIDs[guid]
 end
 
 function HealBot_Panel_RaidUnitButton(guid)

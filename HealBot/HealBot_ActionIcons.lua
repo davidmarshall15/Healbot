@@ -54,7 +54,7 @@ hb_lVars["DPSGUID"]="x"
 hb_lVars["DPSGUIDCaster"]="x"
 hb_lVars["Tip"]=nil
 
-function HealBot_ActionIcons_EmptyLocalTable(t, key)
+local function HealBot_ActionIcons_EmptyLocalTable(t, key)
     if t and t[key] then
         hb_lVars["emptyTable"]=true
         for _,v in pairs(t[key]) do
@@ -2446,18 +2446,18 @@ end
 function HealBot_ActionIcons_UpdateRangeCheck(frame, id, button)
         --HealBot_setCall("HealBot_ActionIcons_UpdateRangeCheck")
     if actionIcons[frame][id].range<35 then
-        if button.status.range<2 then
+        if button.range.current<2 then
             HealBot_ActionIcons_FadeIcon(frame, id)
         elseif not actionIcons[frame][id].highlight then
             HealBot_ActionIcons_CheckHighlightIconAbility(frame, id)
         end
-    elseif actionIcons[frame][id].range<45 then
-        if button.status.range<1 then
+    elseif actionIcons[frame][id].range<50 then
+        if button.range.current<1 then
             HealBot_ActionIcons_FadeIcon(frame, id)
         elseif not actionIcons[frame][id].highlight then
             HealBot_ActionIcons_CheckHighlightIconAbility(frame, id)
         end
-    elseif button.status.range>-1 then
+    elseif button.range.current>-1 then
         HealBot_ActionIcons_CheckHighlightIconAbility(frame, id)
     else
         HealBot_ActionIcons_FadeIcon(frame, id)

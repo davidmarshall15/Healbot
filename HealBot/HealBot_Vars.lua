@@ -1214,64 +1214,82 @@ function hbv_ActionIcons_SetColData(r, g, b, a, key, frame, id)
     end
 end
 
-local hbv_Auras={["BUFFS"]={},["DEBUFFS"]={},["HoT"]={}}
+local hbv_Auras={["BUFFS"]={[1]={},[2]={},[3]={},[4]={},[5]={},[6]={},[7]={},[8]={},[9]={},[10]={},[11]={},[12]={},[13]={}},
+               ["DEBUFFS"]={[1]={},[2]={},[3]={},[4]={},[5]={},[6]={},[7]={},[8]={},[9]={},[10]={},[11]={},[12]={},[13]={}}}
+local hbv_AurasData={["BUFFS"]={},["DEBUFFS"]={},["HoT"]={}}
+local auraNextClean={["BUFFS"]=1,["DEBUFFS"]=1}
 function hbv_Auras_CleanData(cat)
-    local d=60*60*24*HealBot_Globals.Auras["KEEP"]
-    local s=GetServerTime()
-    for id, t in pairs(hbv_Auras[cat]) do
-        if t+d < s then
-            hbv_Auras[cat][id]=nil
+    if auraNextClean[cat] == 13 then
+        auraNextClean[cat]=1
+        if cat == "BUFFS" then
+            HealBot_Timers_Set("OOC","SaveAurasBuffs",true,true)
+        else
+            HealBot_Timers_Set("OOC","SaveAurasDebuffs",true,true)
+        end
+        HealBot_AddDebug(cat.." cleaned ","Auras_Load",true)
+    else
+        local d=60*60*24*HealBot_Globals.AuraHistory["KEEP"]
+        for id, t in pairs(hbv_Auras[cat][auraNextClean[cat]]) do
+            if t+d < HealBot_ServerTimeNow then
+                hbv_Auras[cat][auraNextClean[cat]][id]=nil
+            end
+        end
+        auraNextClean[cat]=auraNextClean[cat]+1
+        if cat == "BUFFS" then
+            HealBot_Timers_Set("OOC","CleanAurasBuffs",true)
+        else
+            HealBot_Timers_Set("OOC","CleanAurasDebuffs",true)
         end
     end
 end
 
 function hbv_Auras_GetData(cat, key, filter)
-    return hbv_Auras[cat][key]
+    return hbv_Auras[cat][filter][key]
 end
 
-local afName, afReturn="", false
-function hbv_Auras_FilterAura(aura, filter)
+local afName, filter="", -1
+function hbv_Auras_FilterAura(aura)
       --HealBot_setCall("HealBot_Options_NewCDebuffBtn_SetCat")
-    afReturn=false
+    filter=-1
     if aura then
         afName=string.sub(aura,1,1)
         if string.find(afName,"A") or string.find(afName,"B") then
-            if filter == 1 then afReturn=true end
+            filter=1
         elseif string.find(afName,"C") or string.find(afName,"D") then
-            if filter == 2 then afReturn=true end
+            filter=2
         elseif string.find(afName,"E") or string.find(afName,"F") then
-            if filter == 3 then afReturn=true end
+            filter=3
         elseif string.find(afName,"G") or string.find(afName,"H") then
-            if filter == 4 then afReturn=true end
+            filter=4
         elseif string.find(afName,"I") or string.find(afName,"J") then
-            if filter == 5 then afReturn=true end
+            filter=5
         elseif string.find(afName,"K") or string.find(afName,"L") then
-            if filter == 6 then afReturn=true end
+            filter=6
         elseif string.find(afName,"M") or string.find(afName,"N") then
-            if filter == 7 then afReturn=true end
+            filter=7
         elseif string.find(afName,"O") or string.find(afName,"P") then
-            if filter == 8 then afReturn=true end
+            filter=8
         elseif string.find(afName,"Q") or string.find(afName,"R") then
-            if filter == 9 then afReturn=true end
+            filter=9
         elseif string.find(afName,"S") or string.find(afName,"T") then
-            if filter == 10 then afReturn=true end
+            filter=10
         elseif string.find(afName,"U") or string.find(afName,"V") then
-            if filter == 11 then afReturn=true end
+            filter=11
         elseif string.find(afName,"W") or string.find(afName,"Y") then
-            if filter == 12 then afReturn=true end
+            filter=12
         elseif string.find(afName,"X") or string.find(afName,"Z") then
-            if filter == 13 then afReturn=true end
+            filter=13
         end
     end
-    return afReturn
+    return filter
 end
 
 function hbv_Auras_GetSortedNames(cat, filter)
     local l={}
     local u={}
-    for x,_ in pairs(hbv_Auras[cat]) do
+    for x,_ in pairs(hbv_Auras[cat][filter]) do
         local aName=HealBot_WoWAPI_SpellName(x)
-        if aName ~= "X" and not u[aName] and hbv_Auras_FilterAura(aName, filter) then
+        if aName and aName ~= "X" and not u[aName] then
             u[aName]=true
             table.insert(l,aName)
         end
@@ -1281,22 +1299,22 @@ function hbv_Auras_GetSortedNames(cat, filter)
 end
 
 function hbv_Auras_CurrentHoTs()
-    for x,_ in pairs(hbv_Auras["HoT"]) do
-        hbv_Auras["HoT"][x]=nil
+    for x,_ in pairs(hbv_AurasData["HoT"]) do
+        hbv_AurasData["HoT"][x]=nil
     end
     for xClass,_  in pairs(HealBot_Globals.WatchHoT) do
         for bId,_  in pairs(HealBot_Globals.WatchHoT[xClass]) do
-            hbv_Auras["HoT"][bId]=true
+            hbv_AurasData["HoT"][bId]=true
         end
     end
 end
 
 function hbv_Auras_GetSortedNewBuffs(filter)
     local l={}
-    for x,_ in pairs(hbv_Auras["BUFFS"]) do
-        if not hbv_Auras["HoT"][x] then
+    for x,_ in pairs(hbv_Auras["BUFFS"][filter]) do
+        if not hbv_AurasData["HoT"][x] then
             local bName=HealBot_Options_CDebuffTextID(x)
-            if tonumber(bName) == nil and hbv_Auras_FilterAura(bName, filter) then
+            if tonumber(bName) == nil then
                 table.insert(l,bName)
             end
         end
@@ -1307,10 +1325,10 @@ end
 
 function hbv_Auras_GetSortedNewDebuffs(filter)
     local l={}
-    for x,_ in pairs(hbv_Auras["DEBUFFS"]) do
+    for x,_ in pairs(hbv_Auras["DEBUFFS"][filter]) do
         if not HealBot_Globals.CustomDebuffs[x] then
             local dName=HealBot_Options_CDebuffTextID(x)
-            if tonumber(dName) == nil and hbv_Auras_FilterAura(dName, filter) then
+            if tonumber(dName) == nil then
                 table.insert(l,dName)
             end
         end
@@ -1320,15 +1338,82 @@ function hbv_Auras_GetSortedNewDebuffs(filter)
 end
 
 function hbv_Auras_SetData(cat, key)
-    hbv_Auras[cat][key]=GetServerTime()
+    if not hbv_AurasData[cat][key] then
+        local s=HealBot_WoWAPI_SpellInfo(key)
+        if s then
+            hbv_AurasData[cat][key]=hbv_Auras_FilterAura(key)
+        else
+            hbv_AurasData[cat][key]=-1
+        end
+    end
+    if hbv_AurasData[cat][key]>-1 then
+        hbv_Auras[cat][hbv_AurasData[cat][key]][key]=HealBot_ServerTimeNow
+    end
 end
 
+local auraNextSave={["BUFFS"]=1,["DEBUFFS"]=1}
 function hbv_Auras_Save(cat)
-    HealBot_Globals.Auras[cat]=HealBot_Util_Serialize(hbv_Auras[cat], true)
+    HealBot_Globals.AuraHistory[cat][auraNextSave[cat]]=HealBot_Util_Serialize(hbv_Auras[cat][auraNextSave[cat]], true)
+    if auraNextSave[cat] == 13 then
+        auraNextSave[cat]=1
+        HealBot_Globals.AuraHistory["LASTSAVE"]=HealBot_ServerTimeNow
+        HealBot_AddDebug(cat.." saved ","Auras_Load",true)
+        if HealBot_Globals.Auras then HealBot_Globals.Auras=nil end
+    else
+        --HealBot_AddDebug(cat.." saving "..auraNextSave[cat],"Auras_Load",true)
+        auraNextSave[cat]=auraNextSave[cat]+1
+        if cat == "BUFFS" then
+            HealBot_Timers_Set("OOC","SaveNextAurasBuffs",true,true)
+        else
+            HealBot_Timers_Set("OOC","SaveNextAurasDebuffs",true,true)
+        end
+    end
 end
 
+local function hbv_Auras_Convert(cat)
+    local tmpAuras=HealBot_Util_Deserialize(HealBot_Globals.Auras[cat])
+    for id,t in pairs(tmpAuras) do
+        local s=HealBot_WoWAPI_SpellInfo(id)
+        if s then
+            local f=hbv_Auras_FilterAura(s)
+            if f>-1 then
+                hbv_AurasData[cat][id]=f
+                hbv_Auras[cat][f][id]=t
+            end
+        end
+    end
+    HealBot_Globals.Auras[cat]=nil
+end
+
+local auraNextLoad={["BUFFS"]=1,["DEBUFFS"]=1}
 function hbv_Auras_Load(cat)
-    hbv_Auras[cat]=HealBot_Util_Deserialize(HealBot_Globals.Auras[cat])
+    if HealBot_Globals.Auras and HealBot_Globals.Auras[cat] then
+        hbv_Auras_Convert(cat)
+        HealBot_Globals.AuraHistory[cat]["FASTSAVES"]=nil
+        HealBot_Globals.AuraHistory[cat][14]=nil
+        HealBot_Globals.AuraHistory[cat][15]=nil
+    else
+        hbv_Auras[cat][auraNextLoad[cat]]=HealBot_Util_Deserialize(HealBot_Globals.AuraHistory[cat][auraNextLoad[cat]])
+        if type(hbv_Auras[cat][auraNextLoad[cat]]) ~= "table" then 
+            hbv_Auras[cat][auraNextLoad[cat]]={}
+        else
+            for id,_ in pairs(hbv_Auras[cat][auraNextLoad[cat]]) do
+                hbv_AurasData[cat][id]=auraNextLoad[cat]
+            end
+        end
+        if auraNextLoad[cat] == 13 then
+            auraNextLoad[cat]=1
+            HealBot_AddDebug(cat.." loaded ","Auras_Load",true)
+        else
+            --HealBot_AddDebug(cat.." loading "..auraNextLoad[cat],"Auras_Load",true)
+            auraNextLoad[cat]=auraNextLoad[cat]+1
+            if cat == "BUFFS" then
+                HealBot_Timers_Set("OOC","LoadAurasBuffs",true)
+            else
+                HealBot_Timers_Set("OOC","LoadAurasDebuffs",true)
+            end
+        end
+    end
 end
 
 function hbv_Skins_VarsHasSkin()

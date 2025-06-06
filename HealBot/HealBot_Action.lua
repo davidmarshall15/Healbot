@@ -117,10 +117,15 @@ function HealBot_Action_setAuxAssigns(vName, frame, vValue)
 end
 
 function HealBot_Action_UpdateCheckInterval()
-    HealBot_Action_luVars["deadCheckInterval"]=HealBot_Util_PerfVal2(950)
-    if HealBot_Action_luVars["deadCheckInterval"]<0.5 then HealBot_Action_luVars["deadCheckInterval"]=0.5 end
+    HealBot_Action_luVars["deadCheckInterval"]=HealBot_Util_PerfVal2(900)
+    if HealBot_Action_luVars["deadCheckInterval"]<0.5 then
+        HealBot_Action_luVars["deadCheckInterval"]=0.5
+    elseif HealBot_Action_luVars["deadCheckInterval"]>2 then 
+        HealBot_Action_luVars["deadCheckInterval"]=2
+    end
     HealBot_Debug_PerfUpdate("deadInt", HealBot_Action_luVars["deadCheckInterval"])
     HealBot_Aura_UpdateCheckInterval()
+    HealBot_Range_UpdateCheckInterval()
 end
 
 function HealBot_Action_setAdaptive()
@@ -1219,7 +1224,7 @@ function HealBot_Action_EmergBarCheck(button, force)
 		if button.status.current<HealBot_Unit_Status["DEAD"] and button.health.current>0 then
 			if hbv_Skins_GetFrameBoolean("Emerg", "DEBUFFBARCOL", button.frame) and button.aura.debuff.colbar>0 then
                 erButton.state=1
-                HealBot_Action_EmergBarUpdate(button, erButton, (HealBot_Options_retDebuffCureSpell(button.aura.debuff.type) or button.status.rangespell), button.aura.debuff.r, button.aura.debuff.g, button.aura.debuff.b)
+                HealBot_Action_EmergBarUpdate(button, erButton, (HealBot_Options_retDebuffCureSpell(button.aura.debuff.type) or button.range.spell), button.aura.debuff.r, button.aura.debuff.g, button.aura.debuff.b)
                 if hbv_Skins_GetFrameVar("Emerg", "DEBUFFGLOW", button.frame)>1 and
                   (button.aura.debuff.dispellable or not hbv_Skins_GetFrameBoolean("Emerg", "DEBUFFGLOWONLYDISPEL", button.frame)) then
                     HealBot_Action_EnableEmergButtonGlowType(button, button.aura.debuff.r, button.aura.debuff.g, button.aura.debuff.b, "ED", hbv_Skins_GetFrameVar("Emerg", "DEBUFFGLOW", button.frame))
@@ -1328,8 +1333,8 @@ function HealBot_Action_EmergBarUpdate(button, eButton, rSpell, r, g, b)
         hbEmergBarColourFuncs[hbv_Skins_GetFrameVar("Emerg", "BARCOL", button.frame)](button, eButton)
     end
 	if eButton.state>0 then
-        if button.status.rangespell == rSpell then
-            ebRange=button.status.range
+        if button.range.spell == rSpell then
+            ebRange=button.range.current
         elseif not button.player then
             ebRange=HealBot_Range_UnitCurrent(button, rSpell)
         end
@@ -1432,7 +1437,7 @@ function HealBot_Action_UpdateHealsInButton(button)
         end
         button.health.inhptc=floor(auhiHiPct*1000)
         hbHealsInColourFuncs[hbv_Skins_GetFrameVar("BarIACol", "IC", button.frame)](button)
-        if button.status.range>0 then
+        if button.range.current>0 then
             button.health.inheala=HealBot_Action_BarColourAlpha(button, (hbv_Skins_GetFrameVar("BarIACol", "IA", button.frame)*button.status.alpha),2)
         else
             button.health.inheala=HealBot_Action_BarColourAlpha(button, (hbv_Skins_GetFrameVar("BarIACol", "IA", button.frame)*(button.status.alpha/3)),2)
@@ -1557,7 +1562,7 @@ function HealBot_Action_UpdateAbsorbsButton(button)
         end
         button.health.abptc=floor(auaHaPct*1000)
         hbAbsorbsColourFuncs[hbv_Skins_GetFrameVar("BarIACol", "AC", button.frame)](button)
-        if button.status.range>0 then
+        if button.range.current>0 then
             button.health.absorba=HealBot_Action_BarColourAlpha(button, (hbv_Skins_GetFrameVar("BarIACol", "AA", button.frame)*button.status.alpha),2)
         else
             button.health.absorba=HealBot_Action_BarColourAlpha(button, (hbv_Skins_GetFrameVar("BarIACol", "AA", button.frame)*(button.status.alpha/3)),2)
@@ -1811,7 +1816,7 @@ end
 
 function HealBot_Action_AdaptiveOORUpdate(button)
       --HealBot_setCall("HealBot_Action_AdaptiveOORUpdate", button)
-    if hbAdaptive["OOR"] and button.status.current<HealBot_Unit_Status["DC"] and button.status.range<1 then
+    if hbAdaptive["OOR"] and button.status.current<HealBot_Unit_Status["DC"] and button.range.current<1 then
         if hbAdaptiveOrderName["OOR"]<button.adaptive.current then
             button.adaptive.current=hbAdaptiveOrderName["OOR"]
         end
@@ -2199,7 +2204,7 @@ function HealBot_Action_UpdatePluginBarCol(button, r, g, b)
             if button.plugin.colbar>1 then
                 button.status.r,button.status.g,button.status.b=r, g, b
                 HealBot_Action_setState(button, HealBot_Unit_Status["PLUGINBARCOL"])
-                if button.status.range>0 then  
+                if button.range.current>0 then  
                     curAlpha=HealBot_Action_BarColourAlpha(button, hbv_Skins_GetFrameVar("BarCol", "HA", button.framecol),1)
                 else
                     curAlpha=HealBot_Action_BarColourAlpha(button, hbv_Skins_GetFrameVar("BarCol", "ORA", button.framecol),1)
@@ -2268,6 +2273,7 @@ end
 
 function HealBot_Action_UpdateDebuffButton(button)
       --HealBot_setCall("HealBot_Action_UpdateDebuffButton", button)
+    button.status.refresh=false
     if hbAdaptive["Debuffs"] and button.aura.debuff.colbar>0 and button.aura.debuff.colbar<3 then
         if hbAdaptiveOrderName["Debuffs"]<button.adaptive.current then
             button.adaptive.current=hbAdaptiveOrderName["Debuffs"]
@@ -2284,7 +2290,7 @@ function HealBot_Action_UpdateDebuffButton(button)
             if HealBot_Range_WarnInRange(button, button.aura.debuff.curespell, HealBot_Config_Cures.WarnRange_Bar) then
                 button.status.r,button.status.g,button.status.b=button.aura.debuff.r,button.aura.debuff.g,button.aura.debuff.b
                 HealBot_Action_setState(button, HealBot_Unit_Status["DEBUFFBARCOL"])
-                if button.status.range>0 then
+                if button.range.current>0 then
                     curAlpha=HealBot_Action_BarColourAlpha(button, hbv_Skins_GetFrameVar("BarCol", "HA", button.framecol),1)
                 else
                     curAlpha=HealBot_Action_BarColourAlpha(button, hbv_Skins_GetFrameVar("BarCol", "ORA", button.framecol),1)
@@ -2327,7 +2333,7 @@ function HealBot_Action_UpdateBuffButton(button)
             if HealBot_Range_WarnInRange(button, button.aura.buff.name, HealBot_Config_Buffs.WarnRange_Bar) then
                 HealBot_Action_setState(button, HealBot_Unit_Status["BUFFBARCOL"])
                 button.status.r,button.status.g,button.status.b=button.aura.buff.r,button.aura.buff.g,button.aura.buff.b
-                if button.status.range>0 then  
+                if button.range.current>0 then  
                     curAlpha=HealBot_Action_BarColourAlpha(button, hbv_Skins_GetFrameVar("BarCol", "HA", button.framecol), 1)
                 else
                     curAlpha=HealBot_Action_BarColourAlpha(button, hbv_Skins_GetFrameVar("BarCol", "ORA", button.framecol), 1)
@@ -2520,9 +2526,6 @@ function HealBot_Action_UpdateTheDeadButton(button)
                 button.status.hasres=false
                 if HealBot_Action_luVars["pluginTimeToLive"] and button.status.plugin then HealBot_Plugin_TimeToLive_UnitUpdate(button) end
                 HealBot_Aux_UpdateResBar(button, HEALBOT_DEAD_LABEL)
-                if button.status.range<1 then
-                    HealBot_Update_OORBar(button)
-                end
                 HealBot_Action_DisableDebuffIconGlow(button)
                 if not button.status.isspirit then
                     HealBot_Action_DisableBuffIconGlow(button)
@@ -2665,7 +2668,7 @@ end
 function HealBot_Action_UpdateGroupHealth(button)
       --HealBot_setCall("HealBot_Action_UpdateHealthHotBar", button)
     if (button.isplayer or button.isgroupraid) and button.frame<10 then
-        if button.status.range>HealBot_Action_luVars["GroupBarsRange"] and button.health.hpct>0 and button.health.hpct<HealBot_Action_luVars["GroupBarsHealth"] then
+        if button.range.current>HealBot_Action_luVars["GroupBarsRange"] and button.health.hpct>0 and button.health.hpct<HealBot_Action_luVars["GroupBarsHealth"] then
             if not button.hotbars.grouphealth then
                 HealBot_Action_AddGroupHealth(button)
             end
@@ -2680,7 +2683,7 @@ end
 function HealBot_Action_UpdateHotBars(button)
       --HealBot_setCall("HealBot_Action_UpdateHealthHotBar", button)
     if (button.isplayer or button.isgroupraid) and button.frame<10 then
-        if button.status.range>0 and button.health.hpct>0 and (button.health.hpct+button.health.absorbspctc)<HealBot_Action_luVars["HotBarsHealth"] then
+        if button.range.current>0 and button.health.hpct>0 and (button.health.hpct+button.health.absorbspctc)<HealBot_Action_luVars["HotBarsHealth"] then
             HealBot_Action_BarHotEnable(button, "HEALTH")
             HealBot_Update_TextPlayersAlphaButton(button)
         elseif button.hotbars.health then
@@ -2822,7 +2825,7 @@ function HealBot_Action_UpdateHealthButton(button, hlthevent)
                 if button.status.current<HealBot_Unit_Status["BUFFNOCOL"] then
                     HealBot_Range_ButtonSpell(button)
                 end
-                if button.status.range>0 then
+                if button.range.current>0 then
                     curAlpha=HealBot_Action_BarColourAlpha(button, hbv_Skins_GetFrameVar("BarCol", "HA", button.framecol), 1)
                     if button.status.current<HealBot_Unit_Status["BUFFNOCOL"] then HealBot_Action_setState(button, HealBot_Unit_Status["ENABLEDIR"]) end
                 else
@@ -2835,7 +2838,7 @@ function HealBot_Action_UpdateHealthButton(button, hlthevent)
                 curAlpha=HealBot_Action_BarColourAlpha(button, hbv_Skins_GetFrameVar("BarCol", "DISA", button.framecol), 1)
                 HealBot_Action_setEnabled(button, false, curAlpha)
             end
-            hbBarColourFuncs[hbv_Skins_GetFrameVar("BarCol", "HLTH", button.framecol)](button)
+            hbBarColourFuncs[hbv_Skins_GetFrameVar("BarCol", "HLTH", button.frame)](button)
             HealBot_Action_UpdateHealthStatusBarColor(button)
         end
         HealBot_Action_UpdateBackground(button)
@@ -3508,7 +3511,7 @@ end
 local ooRhbX, ooRhbY, ooRhbD=0,0,-999
 function HealBot_Action_ShowDirectionArrow(button)
       --HealBot_setCall("HealBot_Action_ShowDirectionArrow", button)
-    if button.status.range == 0 and (not hbv_Skins_GetFrameBoolean("Icons", "SHOWDIRMOUSE", button.frame) or button.mouseover) then
+    if button.range.current == 0 and (not hbv_Skins_GetFrameBoolean("Icons", "SHOWDIRMOUSE", button.frame) or button.mouseover) then
         ooRhbX, ooRhbY, ooRhbD=HealBot_Range_DirectionCheck(button.unit)
         if ooRhbD then
             if button.status.dirarrowshown == 0 or button.status.dirarrowcords~=ooRhbD then 
@@ -3986,6 +3989,7 @@ function HealBot_Action_InitButton(button, prefix)
     button.aura.debuff={}
     button.aura.debuff.temp={}
     button.status={}
+    button.range={}
     button.special={}
     button.debug={}
     button.event={}
@@ -4357,8 +4361,10 @@ function HealBot_Action_InitButton(button, prefix)
     button.status.isdead=false
     button.status.isspirit=false
     button.status.resstart=0
-    button.status.range=-9
-    button.status.rangespell=HealBot_Range_Spell("HEAL")
+    button.status.range=1  -- Remove when not exists in any plugins
+    button.range.current=-9
+    button.range.spell=HealBot_Range_Spell("HEAL")
+    button.range.nextcheck=0
     button.status.deadnextcheck=0
     button.status.unittype=0
     button.status.enabled=false
@@ -4384,6 +4390,7 @@ function HealBot_Action_InitButton(button, prefix)
     button.level=1
     button.status.events=false
     button.status.duplicate=false
+    button.status.dupid=0
     button.name=false
 
     button.status.classknown=false
@@ -6405,6 +6412,7 @@ function HealBot_Action_SetHealButton(unit,guid,frame,unitType,duplicate,role,pr
             
             hButton.status.role=role
             hButton.status.duplicate=duplicate
+            hButton.status.dupid=0
             if hButton.group~=HealBot_Panel_RetUnitGroups(unit) then
                 hButton.group=HealBot_Panel_RetUnitGroups(unit)
                 if HealBot_Text_TagInUse(hButton.framecol, "GROUP") then
@@ -8100,7 +8108,7 @@ end
 
 local function HealBot_Action_IsPlayersDead(button)
       --HealBot_setCall("HealBot_Action_IsPlayersDead", button)
-    if button.status.isdead and button.status.range>-1 then
+    if button.status.isdead and button.range.current>-1 then
         return true
     else
         return false
@@ -8142,7 +8150,7 @@ function HealBot_Action_retResSpell(button)
         if HealBot_Action_luVars["lastMassRes"]>(GetTime()-2) then
             arResSpell=HealBot_Init_retSmartCast_MassRes()
         else
-            if button.status.range<1 or HealBot_Action_UseMassRes() then
+            if button.range.current<1 or HealBot_Action_UseMassRes() then
                 arResSpell=HealBot_Init_retSmartCast_MassRes();
                 HealBot_Action_luVars["lastMassRes"]=GetTime()
             else

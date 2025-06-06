@@ -496,7 +496,7 @@ end
 
 function HealBot_Timers_OnLoadMessages()
     if HealBot_Timers_luVars["oldOptionsExists"] then
-        if GetServerTime() >= 1747100000 then
+        if HealBot_ServerTimeNow >= 1747100000 then
             HealBot_AddChat("=== Please Note ===")
             HealBot_AddChat("The HealBot_Options folder in AddOns can be deleted.")
         elseif HealBot_Globals.DebugOut then
@@ -505,7 +505,7 @@ function HealBot_Timers_OnLoadMessages()
         end
     end
     if HealBot_Timers_luVars["oldDataExists"] then
-        if GetServerTime() >= 1748300000 then
+        if HealBot_ServerTimeNow >= 1748300000 then
             HealBot_AddChat("=== Please Note ===")
             HealBot_AddChat("The HealBot_Data folder in AddOns can be deleted.")
             HealBot_AddChat("IMPORTANT: Before deleting HealBot_Data, logon all characters that use HealBot to allow copying saves variables.")
@@ -548,11 +548,11 @@ function HealBot_Timers_LastLoad()
     HealBot_Timers_Set("INIT","HealBotLoaded")
     HealBot_Timers_Set("AURA","BuffsReset")
     HealBot_Timers_Set("LAST","MediaInitFonts",true)
-    HealBot_Timers_Set("OOC","CleanAurasBuffs",true)
-    HealBot_Timers_Set("OOC","CleanAurasDebuffs",true)
     HealBot_Timers_Set("LAST","CleanPermPrivateData",true,true)
     HealBot_Timers_Set("OOC","RemoveInvalidLoadouts",true,true)
     HealBot_Timers_Set("SKINS","PowerIndicator",true,true)
+    HealBot_Timers_Set("OOC","CleanAurasBuffs",true,true)
+    HealBot_Timers_Set("OOC","CleanAurasDebuffs",true,true)
     if not HealBot_Timers_luVars["HelpNotice"] then
         HealBot_Timers_Set("LAST","HealBotLoadedChat")
         HealBot_Timers_luVars["HelpNotice"]=true
@@ -651,22 +651,36 @@ function HealBot_Timers_InitExtraOptions()
     HealBot_Timers_Set("LAST","OptionsInitExtraTabs")
 end
 
+function HealBot_Timers_LoadAurasBuffs()
+    hbv_Auras_Load("BUFFS")
+end
+
 function HealBot_Timers_SaveAurasBuffs()
     hbv_Auras_Save("BUFFS")
+end
+
+function HealBot_Timers_SaveNextAurasBuffs()
+    HealBot_Timers_Set("OOC","SaveAurasBuffs",true)
+end
+
+function HealBot_Timers_LoadAurasDebuffs()
+    hbv_Auras_Load("DEBUFFS")
 end
 
 function HealBot_Timers_SaveAurasDebuffs()
     hbv_Auras_Save("DEBUFFS")
 end
 
+function HealBot_Timers_SaveNextAurasDebuffs()
+    HealBot_Timers_Set("OOC","SaveAurasDebuffs",true)
+end
+
 function HealBot_Timers_CleanAurasBuffs()
     hbv_Auras_CleanData("BUFFS")
-    HealBot_Timers_Set("OOC","SaveAurasBuffs",true,true)
 end
 
 function HealBot_Timers_CleanAurasDebuffs()
     hbv_Auras_CleanData("DEBUFFS")
-    HealBot_Timers_Set("OOC","SaveAurasDebuffs",true,true)
 end
 
 function HealBot_Timers_AuraWatchValidate()
@@ -1041,8 +1055,12 @@ local hbTimerFuncs={["INIT"]={
                         ["MarkedAttribsButtons"]=HealBot_Action_MarkedAttribsButtons,
                         ["ProcMarkedAttribsButtons"]=HealBot_Action_ProcMarkedAttribsButtons,
                         ["FrameStrata"]=HealBot_Action_SetStrata,
+                        ["LoadAurasBuffs"]=HealBot_Timers_LoadAurasBuffs,
+                        ["LoadAurasDebuffs"]=HealBot_Timers_LoadAurasDebuffs,
                         ["SaveAurasBuffs"]=HealBot_Timers_SaveAurasBuffs,
                         ["SaveAurasDebuffs"]=HealBot_Timers_SaveAurasDebuffs,
+                        ["SaveNextAurasBuffs"]=HealBot_Timers_SaveNextAurasBuffs,
+                        ["SaveNextAurasDebuffs"]=HealBot_Timers_SaveNextAurasDebuffs,
                         ["CleanAurasBuffs"]=HealBot_Timers_CleanAurasBuffs,
                         ["CleanAurasDebuffs"]=HealBot_Timers_CleanAurasDebuffs,
                         ["AuraWatchPreValidate"]=HealBot_Timers_AuraWatchPreValidate,

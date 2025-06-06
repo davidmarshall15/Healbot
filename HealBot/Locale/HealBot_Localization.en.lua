@@ -1432,6 +1432,7 @@ function HealBot_Lang_enALL()
 
     HEALBOT_CUSTOM_CATEGORY                ="Category"
     HEALBOT_CUSTOM_CAT_CUSTOM              ="Custom"
+    HEALBOT_CUSTOM_CAT_01                  ="0-9"
     HEALBOT_CUSTOM_CAT_02                  ="A-B"
     HEALBOT_CUSTOM_CAT_03                  ="C-D"
     HEALBOT_CUSTOM_CAT_04                  ="E-F"
@@ -1445,6 +1446,7 @@ function HealBot_Lang_enALL()
     HEALBOT_CUSTOM_CAT_12                  ="U-V"
     HEALBOT_CUSTOM_CAT_13                  ="W-X"
     HEALBOT_CUSTOM_CAT_14                  ="Y-Z"
+    HEALBOT_CUSTOM_CAT_15                  ="Other"
 
     HEALBOT_PLUGIN_THREAT                  ="HealBot Threat"
     HEALBOT_PLUGIN_TIMETODIE               ="HealBot TimeToDie"
@@ -1549,6 +1551,10 @@ function HealBot_Lang_enALL()
     HEALBOT_PLUGIN_AURAWATCHHEALGRPCFG     ="Heal groups config"
     HEALBOT_PLUGIN_AURAWATCHSBEXISTS       ="Buff on Self exists"
     HEALBOT_PLUGIN_AURAWATCHSBEXISTSTAG    ="Buff on Self exists with tag"
+    HEALBOT_PLUGIN_AURAWATCHCHAT           ="Player says"
+    HEALBOT_PLUGIN_AURAWATCHCHATTEXT       ="Chat text"
+    HEALBOT_PLUGIN_AURAWATCHCHATCHAN       ="Chat channel"
+    HEALBOT_PLUGIN_AURAWATCHCHATTIME       ="Valid for"
     HEALBOT_PLUGIN_ALERTRANGE              ="Alert Range"
     HEALBOT_PLUGIN_TWEAKSDELETEALL         ="Delete All"
     HEALBOT_PLUGIN_TWEAKSENABLEALL         ="Enable All"
@@ -1584,6 +1590,9 @@ function HealBot_Lang_enALL()
     HEALBOT_PLUGIN_GROWUP                  ="Grow bottom to top";
     HEALBOT_PLUGIN_HIGHLIGHTHEALBAR        ="Click to highlight health bar"
     HEALBOT_PLUGIN_USELOWERNUMSUFFIX       ="Use lowercase number suffix"
+    HEALBOT_WORD_SAY                       ="Say"
+    HEALBOT_WORD_YELL                      ="Yell"
+    HEALBOT_PLUGIN_AURAWATCHINSTANCE       ="Instance"
 
     HEALBOT_CUSTOM_CASTBY_EVERYONE         ="Everyone"
     HEALBOT_CUSTOM_CASTBY_ENEMY            ="Enemy"

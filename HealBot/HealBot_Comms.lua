@@ -152,7 +152,7 @@ function HealBot_Comms_About()
         end
     end
 
-    HealBot_Options_SetLabel("HealBot_Error_Clientx",HEALBOT_WORD_CLIENT..": "..GetLocale())
+    HealBot_Options_SetLabel("HealBot_Error_Clientx",HEALBOT_WORD_CLIENT..": "..GetLocale().." "..GetBuildInfo())
     if HealBot_Globals.localLang then
         HealBot_Options_SetLabel("HealBot_Error_Versionx",HEALBOT_OPTIONS_LANG..": "..HealBot_Globals.localLang)
     else
