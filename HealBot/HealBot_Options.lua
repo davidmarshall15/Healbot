@@ -26,7 +26,6 @@ local HealBot_Options_AuxOverlap_List={}
 local HealBot_Options_AuxBarColours_List={}
 local HealBot_Options_AuxBarOpacityType_List={}
 local HealBot_Options_AuxBarAnchor_List={}
-local HealBot_Options_AuxBarAnchor_ShortList={}
 local HealBot_Options_Class_HoTctlAction_List={}
 local HealBot_Options_Class_HoTctlIDMethod_List={}
 local HealBot_Options_UseOverrideFocusGroups_List={}
@@ -931,9 +930,9 @@ function HealBot_Options_setLists()
     }
 
     HealBot_Options_Lists["BarNameTextAnchor"]={
-        HEALBOT_OPTIONS_ICONBELOWANCHOR01,
-        HEALBOT_OPTIONS_ICONBELOWANCHOR03,
-        HEALBOT_OPTIONS_ICONBELOWANCHOR02,
+        HEALBOT_OPTIONS_ANCHORLEFT,
+        HEALBOT_OPTIONS_ANCHORCENTER,
+        HEALBOT_OPTIONS_ANCHORRIGHT,
     }
 
     HealBot_Options_Lists["HotBarsDebuffPrio"]={
@@ -1268,14 +1267,14 @@ function HealBot_Options_setLists()
     }
 
     HealBot_Options_ActionAnchor_List={
-        HEALBOT_OPTIONS_TOPLEFT,
-        HEALBOT_OPTIONS_BOTTOMLEFT,
-        HEALBOT_OPTIONS_TOPRIGHT,
-        HEALBOT_OPTIONS_BOTTOMRIGHT,
-        HEALBOT_OPTIONS_TOP,
-        HEALBOT_OPTIONS_BUTTONLEFT,
-        HEALBOT_OPTIONS_BUTTONRIGHT,
-        HEALBOT_OPTIONS_BOTTOM,
+        HEALBOT_OPTIONS_ANCHORTOPLEFT,
+        HEALBOT_OPTIONS_ANCHORBOTTOMLEFT,
+        HEALBOT_OPTIONS_ANCHORTOPRIGHT,
+        HEALBOT_OPTIONS_ANCHORBOTTOMRIGHT,
+        HEALBOT_OPTIONS_ANCHORTOP,
+        HEALBOT_OPTIONS_ANCHORLEFT,
+        HEALBOT_OPTIONS_ANCHORRIGHT,
+        HEALBOT_OPTIONS_ANCHORBOTTOM,
     }
 
     HealBot_Options_BarsGrowDirection_List={
@@ -1410,25 +1409,14 @@ function HealBot_Options_setLists()
     }
 
     HealBot_Options_AuxBarAnchor_List={
-        HEALBOT_OPTIONS_AUXBARANCHOR01,
-        HEALBOT_OPTIONS_AUXBARANCHOR02,
-        HEALBOT_OPTIONS_AUXBARANCHOR03,
-        HEALBOT_OPTIONS_AUXBARANCHOR04,
-        HEALBOT_OPTIONS_AUXBARANCHOR05,
-        HEALBOT_OPTIONS_AUXBARANCHOR06,
-        HEALBOT_OPTIONS_AUXBARANCHOR07,
-        HEALBOT_OPTIONS_AUXBARANCHOR08,
-    }
-
-    HealBot_Options_AuxBarAnchor_ShortList={
-        HEALBOT_OPTIONS_AUXBARANCHOR11,
-        HEALBOT_OPTIONS_AUXBARANCHOR12,
-        HEALBOT_OPTIONS_AUXBARANCHOR13,
-        HEALBOT_OPTIONS_AUXBARANCHOR14,
-        HEALBOT_OPTIONS_AUXBARANCHOR15,
-        HEALBOT_OPTIONS_AUXBARANCHOR16,
-        HEALBOT_OPTIONS_AUXBARANCHOR17,
-        HEALBOT_OPTIONS_AUXBARANCHOR18,
+        HEALBOT_OPTIONS_ANCHORBOTTOM,
+        HEALBOT_OPTIONS_ANCHORTOP,
+        HEALBOT_OPTIONS_ANCHORLEFT,
+        HEALBOT_OPTIONS_ANCHORRIGHT,
+        HEALBOT_OPTIONS_ANCHORBOTTOMLEFT,
+        HEALBOT_OPTIONS_ANCHORBOTTOMRIGHT,
+        HEALBOT_OPTIONS_ANCHORTOPLEFT,
+        HEALBOT_OPTIONS_ANCHORTOPRIGHT,
     }
 
     HealBot_Options_AuxOverlap_List={
@@ -1669,30 +1657,30 @@ function HealBot_Options_setLists()
     }
 
     HealBot_Options_Lists["IndicatorAnchor"]={
-        HEALBOT_OPTIONS_TOP,
-        HEALBOT_OPTIONS_BOTTOM,
-        HEALBOT_OPTIONS_BUTTONLEFT,
-        HEALBOT_OPTIONS_BUTTONRIGHT,
-        HEALBOT_OPTIONS_TOPLEFT,
-        HEALBOT_OPTIONS_BOTTOMLEFT,
-        HEALBOT_OPTIONS_TOPRIGHT,
-        HEALBOT_OPTIONS_BOTTOMRIGHT,
+        HEALBOT_OPTIONS_ANCHORTOP,
+        HEALBOT_OPTIONS_ANCHORBOTTOM,
+        HEALBOT_OPTIONS_ANCHORLEFT,
+        HEALBOT_OPTIONS_ANCHORRIGHT,
+        HEALBOT_OPTIONS_ANCHORTOPLEFT,
+        HEALBOT_OPTIONS_ANCHORBOTTOMLEFT,
+        HEALBOT_OPTIONS_ANCHORTOPRIGHT,
+        HEALBOT_OPTIONS_ANCHORBOTTOMRIGHT,
     }
 
     HealBot_Options_Lists["ActionIconsAnchor"]={
-        HEALBOT_OPTIONS_TOPLEFT,
-        HEALBOT_OPTIONS_TOP,
-        HEALBOT_OPTIONS_TOPRIGHT,
-        HEALBOT_OPTIONS_BUTTONRIGHT,
-        HEALBOT_OPTIONS_BOTTOMRIGHT,
-        HEALBOT_OPTIONS_BOTTOM,
-        HEALBOT_OPTIONS_BOTTOMLEFT,
-        HEALBOT_OPTIONS_BUTTONLEFT,
+        HEALBOT_OPTIONS_ANCHORTOPLEFT,
+        HEALBOT_OPTIONS_ANCHORTOP,
+        HEALBOT_OPTIONS_ANCHORTOPRIGHT,
+        HEALBOT_OPTIONS_ANCHORRIGHT,
+        HEALBOT_OPTIONS_ANCHORBOTTOMRIGHT,
+        HEALBOT_OPTIONS_ANCHORBOTTOM,
+        HEALBOT_OPTIONS_ANCHORBOTTOMLEFT,
+        HEALBOT_OPTIONS_ANCHORLEFT,
     }
 
     HealBot_Options_Lists["AggroIndAnchor"]={
-        HEALBOT_OPTIONS_TOP,
-        HEALBOT_OPTIONS_BOTTOM,
+        HEALBOT_OPTIONS_ANCHORTOP,
+        HEALBOT_OPTIONS_ANCHORBOTTOM,
     }
 
     HealBot_Options_Lists["ActionIconsTarget"]={
@@ -10098,22 +10086,22 @@ function HealBot_Options_IconExtraPosition_DropDown(object, id, eId)
                             UIDropDownMenu_SetText(object,HealBot_Options_Lists["IconPosition"][hbv_Skins_GetFrameVar("Icons", id, hb_lVars["Frame"])])
                             if eId == 91 then
                                 hbv_Skins_SetFrameVar(1, "Icons", "CLASSANCHOR", hb_lVars["Frame"])
-                                UIDropDownMenu_SetText(HealBot_Options_IconClassAnchor,HEALBOT_OPTIONS_ICONEXTRAANCHOR01)
+                                UIDropDownMenu_SetText(HealBot_Options_IconClassAnchor,HEALBOT_OPTIONS_ANCHORLEFT)
                             elseif eId == 92 then
                                 hbv_Skins_SetFrameVar(1, "Icons", "TARGETANCHOR", hb_lVars["Frame"])
-                                UIDropDownMenu_SetText(HealBot_Options_IconTargetAnchor,HEALBOT_OPTIONS_ICONEXTRAANCHOR01)
+                                UIDropDownMenu_SetText(HealBot_Options_IconTargetAnchor,HEALBOT_OPTIONS_ANCHORLEFT)
                             elseif eId == 93 then
                                 hbv_Skins_SetFrameVar(1, "Icons", "RCANCHOR", hb_lVars["Frame"])
-                                UIDropDownMenu_SetText(HealBot_Options_IconRCAnchor,HEALBOT_OPTIONS_ICONEXTRAANCHOR01)
+                                UIDropDownMenu_SetText(HealBot_Options_IconRCAnchor,HEALBOT_OPTIONS_ANCHORLEFT)
                             elseif eId == 94 then
                                 hbv_Skins_SetFrameVar(1, "Icons", "OORANCHOR", hb_lVars["Frame"])
-                                UIDropDownMenu_SetText(HealBot_Options_IconOORArrowAnchor,HEALBOT_OPTIONS_ICONEXTRAANCHOR01)
+                                UIDropDownMenu_SetText(HealBot_Options_IconOORArrowAnchor,HEALBOT_OPTIONS_ANCHORLEFT)
                             elseif eId == 95 then
                                 hbv_Skins_SetFrameVar(1, "Icons", "RANKANCHOR", hb_lVars["Frame"])
-                                UIDropDownMenu_SetText(HealBot_Options_IconRankAnchor,HEALBOT_OPTIONS_ICONEXTRAANCHOR01)
+                                UIDropDownMenu_SetText(HealBot_Options_IconRankAnchor,HEALBOT_OPTIONS_ANCHORLEFT)
                             elseif eId == 96 then
                                 hbv_Skins_SetFrameVar(1, "Icons", "COMBATANCHOR", hb_lVars["Frame"])
-                                UIDropDownMenu_SetText(HealBot_Options_IconCombatAnchor,HEALBOT_OPTIONS_ICONEXTRAANCHOR01)
+                                UIDropDownMenu_SetText(HealBot_Options_IconCombatAnchor,HEALBOT_OPTIONS_ANCHORLEFT)
                             end
                             HealBot_Update_RemoveExtraIcons(eId)
                             HealBot_Options_framesChanged(true, true)
@@ -10161,33 +10149,33 @@ function HealBot_Options_AnchorList(onBar, Extra)
     if Extra then
         if onBar == 3 then
             list={
-                HEALBOT_OPTIONS_ICONEXTRAANCHOR01,
-                HEALBOT_OPTIONS_ICONEXTRAANCHOR02,
-                HEALBOT_OPTIONS_ICONBELOWANCHOR03,
+                HEALBOT_OPTIONS_ANCHORLEFT,
+                HEALBOT_OPTIONS_ANCHORRIGHT,
+                HEALBOT_OPTIONS_ANCHORCENTER,
             }
         elseif onBar == 2 then
             list={
-                HEALBOT_OPTIONS_ICONEXTRAANCHOR01,
-                HEALBOT_OPTIONS_ICONEXTRAANCHOR02,
+                HEALBOT_OPTIONS_ANCHORLEFT,
+                HEALBOT_OPTIONS_ANCHORRIGHT,
             }
         else
             list={
-                HEALBOT_OPTIONS_ICONEXTRAANCHOR01,
-                HEALBOT_OPTIONS_ICONEXTRAANCHOR02,
-                HEALBOT_OPTIONS_ICONEXTRAANCHOR03,
-                HEALBOT_OPTIONS_ICONEXTRAANCHOR04,
-                HEALBOT_OPTIONS_ICONOFFBARANCHOR03,
-                HEALBOT_OPTIONS_ICONOFFBARANCHOR04,
-                HEALBOT_OPTIONS_ICONOFFBARANCHOR01,
-                HEALBOT_OPTIONS_ICONOFFBARANCHOR02,
+                HEALBOT_OPTIONS_ANCHORLEFT,
+                HEALBOT_OPTIONS_ANCHORRIGHT,
+                HEALBOT_OPTIONS_ANCHORTOP,
+                HEALBOT_OPTIONS_ANCHORBOTTOM,
+                HEALBOT_OPTIONS_ANCHORTOPLEFT,
+                HEALBOT_OPTIONS_ANCHORTOPRIGHT,
+                HEALBOT_OPTIONS_ANCHORBOTTOMLEFT,
+                HEALBOT_OPTIONS_ANCHORBOTTOMRIGHT,
             }
         end
     elseif onBar == 1 then
         list ={
-            HEALBOT_OPTIONS_ICONONBARANCHOR01,
-            HEALBOT_OPTIONS_ICONONBARANCHOR02,
-            HEALBOT_OPTIONS_ICONONBARANCHOR03,
-            HEALBOT_OPTIONS_ICONONBARANCHOR04,
+            HEALBOT_OPTIONS_ANCHORBOTTOMLEFT,
+            HEALBOT_OPTIONS_ANCHORBOTTOMRIGHT,
+            HEALBOT_OPTIONS_ANCHORTOPLEFT,
+            HEALBOT_OPTIONS_ANCHORTOPRIGHT,
             HEALBOT_OPTIONS_ICONONBARANCHOR05,
             HEALBOT_OPTIONS_ICONONBARANCHOR06,
             HEALBOT_OPTIONS_ICONONBARANCHOR07,
@@ -10195,15 +10183,15 @@ function HealBot_Options_AnchorList(onBar, Extra)
         }
     elseif onBar == 2 then
         list={
-            HEALBOT_OPTIONS_ICONOFFBARANCHOR01,
-            HEALBOT_OPTIONS_ICONOFFBARANCHOR02,
-            HEALBOT_OPTIONS_ICONOFFBARANCHOR03,
-            HEALBOT_OPTIONS_ICONOFFBARANCHOR04,
+            HEALBOT_OPTIONS_ANCHORBOTTOMLEFT,
+            HEALBOT_OPTIONS_ANCHORBOTTOMRIGHT,
+            HEALBOT_OPTIONS_ANCHORTOPLEFT,
+            HEALBOT_OPTIONS_ANCHORTOPRIGHT,
         }
     else
         list={
-            HEALBOT_OPTIONS_ICONBELOWANCHOR01,
-            HEALBOT_OPTIONS_ICONBELOWANCHOR02,
+            HEALBOT_OPTIONS_ANCHORLEFT,
+            HEALBOT_OPTIONS_ANCHORRIGHT,
         }
     end
     return list
@@ -17415,7 +17403,7 @@ local function HealBot_Options_AuxConfigBarChange()
     end
     for x=1,9 do
         fstr=_G["HealBot_Aux"..x.."Config_FontStr1"]
-        fstr:SetText(HEALBOT_WORD_ANCHOR.." |cffffffff"..HealBot_Options_AuxBarAnchor_ShortList[hbv_Aux_GetBarVar("ANCHOR", hb_lVars["Frame"], x)])
+        fstr:SetText(HEALBOT_WORD_ANCHOR.." |cffffffff"..HealBot_Options_AuxBarAnchor_List[hbv_Aux_GetBarVar("ANCHOR", hb_lVars["Frame"], x)])
         if hbv_Aux_GetBarVar("USE", hb_lVars["Frame"], x)>1 and
            hbv_Aux_GetBarVar("OTYPE", hb_lVars["Frame"], x) == 2 then
             hb_lVars["AuxBarsFlash"]=true
@@ -28175,7 +28163,7 @@ function HealBot_Options_SkinsFramesBarsAuxConfigTab(tab)
         HealBot_Options_SkinBarAuxBarOverlayBuff:SetChecked(hbv_Aux_GetOverlayBoolean("OVERLAYBUFF", hb_lVars["Frame"]))
         HealBot_Options_SetText(HealBot_Options_SkinBarAuxBarOverlayBuff,HEALBOT_OPTIONS_BUFF)
         HealBot_Options_val_OnLoad(HealBot_Options_AuxBarDepth,HEALBOT_OPTIONS_TXTDEPTH,1,75,1,5)
-        HealBot_Options_val_OnLoad(HealBot_Options_AuxBarOffset,HEALBOT_OPTIONS_TXTOFFSET,-75,20,1,5)
+        HealBot_Options_val_OnLoad(HealBot_Options_AuxBarOffset,HEALBOT_OPTIONS_TXTOFFSET,-75,125,1,5)
         HealBot_Options_AuxBarOffset:SetValue(hbv_Aux_GetBarVar("OFFSET", hb_lVars["Frame"], hb_lVars["AuxBar"]))
         HealBot_Options_Pct_OnLoad_MinMax(HealBot_Options_AuxBarSize,HEALBOT_OPTIONS_TXTSIZE,0.25,1,0.01,5)
         HealBot_Options_SetLabel("HealBot_SkinBarAuxBarOverlayRecentHealst",HEALBOT_SKIN_OVERLAYCOL_TEXT)

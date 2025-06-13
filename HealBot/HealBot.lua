@@ -1229,9 +1229,10 @@ local uuUnitClassEN="XXXX"
 function HealBot_UpdateUnitNotExists(button, isSetHealButton)
       --HealBot_setCall("HealBot_UpdateUnitNotExists - c="..button.status.current, button)
     HealBot_Action_setState(button, HealBot_Unit_Status["RESERVED"])
-    button.status.slowupdate=true
-    button.status.update=true
-    button.status.change=true
+    --button.status.slowupdate=true
+    --button.status.update=true
+    --button.status.change=true
+    HealBot_UpdateUnitExists(button)
     HealBot_UpdateUnitClear(button)
     HealBot_UnitHealth(button, true)
     HealBot_Text_setNameTag(button)
@@ -1290,10 +1291,11 @@ function HealBot_UpdateUnitGUIDChange(button, notRecalc)
             HealBot_Panel_updDataStore(button)
         end
         button.status.slowupdate=true
-        button.status.update=true
-        button.status.change=true
+        --button.status.update=true
+        --button.status.change=true
+        HealBot_UpdateUnitExists(button)
         button.status.guidupdate=true
-        HealBot_UnitSlowUpdate(button)
+        --HealBot_UnitSlowUpdate(button)
         HealBot_SpecUpdate(button, HealBot_TimeNow)
     else
         HealBot_ClassNotKnown(button)
@@ -1391,15 +1393,26 @@ function HealBot_UpdateUnitExists(button)
     else
         button.health.mixcolr, button.health.mixcolg, button.health.mixcolb=button.text.r, button.text.g, button.text.b
         button.status.change=false
-        button.status.slowupdate=true
-        button.status.postchange=true
+        HealBot_Events_UnitStatus(button)
+        HealBot_UnitHealth(button)
+        HealBot_HealsInUpdate(button)
+        HealBot_AbsorbsUpdate(button)
+        HealBot_Update_AuxRange(button)
+        HealBot_Aura_Update_AllIcons(button)
+        HealBot_Text_setNameTag(button)
+        HealBot_Text_UpdateStateButton(button)
+        HealBot_Text_UpdateNameButton(button)
+        HealBot_Text_UpdateHealthButton(button)
+        HealBot_ActionIcons_UnitChange(button.guid, button.unit)
+        if HealBot_luVars["pluginAuraWatch"] then
+            HealBot_Plugin_AuraWatch_UpdateButton(button)
+        end
+        HealBot_Text_Update(button)
         if not button.status.duplicate and button.status.unittype<20 then
             button.status.plugin=true
         else
             button.status.plugin=false
         end
-        HealBot_Text_setNameTag(button)
-        HealBot_Text_UpdateNameButton(button)
         HealBot_UpdateUnit(button)
     end
 end
@@ -2157,9 +2170,7 @@ end
 
 function HealBot_Reset_Button(button)
       --HealBot_setCall("HealBot_Reset_Button", button)
-    button.status.slowupdate=true
-    button.status.change=true
-    button.status.update=true
+    HealBot_UpdateUnitExists(button)
     if HealBot_Action_AlwaysEnabled(button.guid) then HealBot_Action_Toggle_Enabled(button.unit); end
 end
 
@@ -2795,8 +2806,8 @@ function HealBot_Timer_ZoneUpdate()
         HealBot_ActionIcons_InstanceState(inInst)
         if HealBot_luVars["auraWatchNotifyZone"] then HealBot_Plugin_AuraWatch_ValidateZone(inInst) end
         if not HealBot_luVars["InInstance"] and not HealBot_Globals.AuraHistory["FREQSAVES"] then
-            HealBot_Timers_Set("OOC","SaveAurasBuffs",true,true)
-            HealBot_Timers_Set("OOC","SaveAurasDebuffs",true,true)
+            hbv_Auras_Save_Buffs()
+            hbv_Auras_Save_Debuffs()
         end
     end
     if HEALBOT_GAME_VERSION<5 then
@@ -2819,8 +2830,8 @@ function HealBot_Timer_ZoneUpdate()
         HealBot_Options_SetEnableDisableBuffBtn()
         HealBot_Timers_Set("OOC","PartyUpdateCheckSkin",true)
         if HealBot_Globals.AuraHistory["FREQSAVES"] then
-            HealBot_Timers_Set("OOC","SaveAurasBuffs",true,true)
-            HealBot_Timers_Set("OOC","SaveAurasDebuffs",true,true)
+            hbv_Auras_Save_Buffs()
+            hbv_Auras_Save_Debuffs()
         end
     end
     HealBot_Panel_setLuVars("MAPID", mapAreaID)
@@ -3038,12 +3049,12 @@ function HealBot_UnitHealth(button, force)
             button.health.current=health
             button.health.max=healthMax
             if not button.status.isdead then
-                if health>1 then
+                if health>0 then
                     HealBot_OverHeal(button)
                 else
                     HealBot_Action_UpdateTheDeadButton(button)
                 end
-            elseif health>1 then
+            elseif health>0 then
                 HealBot_Action_UpdateTheDeadButton(button)
             end
             HealBot_Action_UpdateHealthButton(button, true)
@@ -3572,22 +3583,6 @@ function HealBot_UnitSlowUpdate(button)
                     HealBot_UpdateUnit(button)
                 end
                 if button.special.unit then HealBot_UnitUpdateAura(button) end
-            elseif button.status.postchange then
-                button.status.postchange=false
-                HealBot_Events_UnitStatus(button)
-                HealBot_UnitHealth(button)
-                HealBot_HealsInUpdate(button)
-                HealBot_AbsorbsUpdate(button)
-                HealBot_Update_AuxRange(button)
-                HealBot_Aura_Update_AllIcons(button)
-                HealBot_Text_UpdateStateButton(button)
-                HealBot_Text_UpdateNameButton(button)
-                HealBot_Text_UpdateHealthButton(button)
-                HealBot_ActionIcons_UnitChange(button.guid, button.unit)
-                if HealBot_luVars["pluginAuraWatch"] then
-                    HealBot_Plugin_AuraWatch_UpdateButton(button)
-                end
-                HealBot_Text_Update(button)
             elseif button.status.postupdate then
                 button.status.postupdate=false
                 HealBot_Events_UnitFlagsChanged(button)
@@ -3619,7 +3614,6 @@ function HealBot_UnitSlowUpdate(button)
                     HealBot_Events_UnitBuff(button)
                     HealBot_Events_UnitDebuff(button)
                     HealBot_GetUnitGuild(button)
-                    HealBot_RefreshUnit(button)
                 end
                 if HealBot_Globals.PermPrivateData[button.guid] then
                     HealBot_Globals.PermPrivateData[button.guid]["CLASSTRIM"]=button.text.classtrim
@@ -4039,7 +4033,7 @@ end
 function HealBot_UnitUpdateButton(button)
       --HealBot_setCall("HealBot_UnitUpdateButton", button, nil, nil, true)
     if HealBot_UnitExists(button) then
-        if button.status.isdead and button.status.deadnextcheck<HealBot_TimeNow then
+        if (button.status.isdead or button.health.current == 0) and button.status.deadnextcheck<HealBot_TimeNow then
             HealBot_Action_UpdateTheDeadButton(button)
         --elseif button.status.update then
         --    HealBot_UnitSlowUpdate(button)
@@ -4877,8 +4871,8 @@ function HealBot_PlayerCheck()
         end
         HealBot_luVars["isResting"]=true
         HealBot_Timers_Set("PLAYER","SetRestingState")
-        HealBot_Timers_Set("OOC","SaveAurasBuffs",true,true)
-        HealBot_Timers_Set("OOC","SaveAurasDebuffs",true,true)
+        hbv_Auras_Save_Buffs()
+        hbv_Auras_Save_Debuffs()
     end
     if HealBot_luVars["onTaxi"] then
         if not UnitOnTaxi("player") then

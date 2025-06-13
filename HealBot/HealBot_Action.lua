@@ -2811,9 +2811,6 @@ function HealBot_Action_UpdateHealthButton(button, hlthevent)
         HealBot_Action_UpdateGroupHealth(button)
         HealBot_Text_setHealthText(button)
         HealBot_Text_UpdateText(button)
-        --if button.aux[button.frame].sticky then
-        --    button.aux[button.frame]:SetWidth(50)
-        --end
         HealBot_Action_OverShield(button)
     end
     HealBot_Action_EmergBarCheck(button)
@@ -6506,11 +6503,12 @@ function HealBot_Action_SetHealButton(unit,guid,frame,unitType,duplicate,role,pr
                     else
                         if hButton.guid~=guid then
                             HealBot_UpdateUnitGUIDChange(hButton)
+                        else
+                            --HealBot_UpdateUnitExists(hButton)
+                            hButton.status.change=true
+                            hButton.status.update=true
+                            hButton.status.slowupdate=true
                         end
-                        --HealBot_UpdateUnitExists(hButton)
-                        hButton.status.change=true
-                        hButton.status.update=true
-                        hButton.status.slowupdate=true
                     end
                 end
                 if not hButton.status.events then HealBot_Action_RegisterUnitEvents(hButton) end

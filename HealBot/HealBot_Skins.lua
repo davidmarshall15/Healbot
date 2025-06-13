@@ -13,7 +13,7 @@ local AuxIdx={[1]={},[2]={},[3]={},[4]={},[5]={},[6]={},[7]={},[8]={},[9]={}}
 local icon1,expire1,count1,icon51,expire51,count51=nil,nil,nil,nil,nil,nil
 local barScale,h,hwidth,hheight,iScale,iZoom,itScale,x,hcpct=nil,nil,nil,nil,nil,nil,nil,nil,nil
 local abtSize={[0]=1,[1]=1,[2]=1,[3]=2,[4]=2,[5]=2,[6]=3,[7]=3,[8]=3,[9]=3,[10]=4,[11]=4,[12]=4,[13]=4,[14]=4,[15]=5}
-local auxWidth,auxHeight,auxTmp,auxOffsetBelow,auxOffsetLeft,auxOffsetRight=0,0,0,0,0,0
+local auxAdj,auxTmp,auxOffsetBelow,auxOffsetAbove,auxOffsetLeft,auxOffsetRight=0,0,0,0,0,0
 local AuxOverlapOffset=0
 local tBarsConcat={}
 local erButton=nil
@@ -123,24 +123,25 @@ function HealBot_Skins_ResetSkinWidth(button)
     button.gref["InHeal"]:SetWidth(bWidth)
     button.gref["Absorb"]:SetWidth(bWidth)
     button:SetWidth(bWidth)
-    auxWidth=0
+    auxOffsetLeft=0
+    auxOffsetRight=0
     for x=1,9 do
-        if hbv_Aux_GetBarVar("USE", button.frame, x)>1 and
-           hbv_Aux_GetOverlayVar("OVERLAP", button.frame) == 2 and
-           hbv_Aux_GetBarVar("ANCHOR", button.frame, x)>2 and
-           hbv_Aux_GetBarVar("ANCHOR", button.frame, x)<5 then
-            auxTmp=auxWidth
-            auxWidth=auxWidth+hbv_Aux_GetBarVar("DEPTH", button.frame, x)
-            auxWidth=auxWidth+hbv_Aux_GetBarVar("OFFSET", button.frame, x)
-            if auxWidth<auxTmp then auxWidth=auxTmp end
+        if hbv_Aux_GetBarVar("USE", button.frame, x)>1 and hbv_Aux_GetOverlayVar("OVERLAP", button.frame) == 2 then
+            auxTmp=hbv_Aux_GetBarVar("DEPTH", button.frame, x)+hbv_Aux_GetBarVar("OFFSET", button.frame, x)
+            if hbv_Aux_GetBarVar("ANCHOR", button.frame, x) == 3 then
+                if auxTmp>auxOffsetLeft then auxOffsetLeft=auxTmp end
+            elseif hbv_Aux_GetBarVar("ANCHOR", button.frame, x) == 4 then
+                if auxTmp>auxOffsetRight then auxOffsetRight=auxTmp end
+            end
         end
     end
-    auxWidth=ceil(auxWidth*frameScale)
+    auxOffsetLeft=ceil(auxOffsetLeft*frameScale)
+    auxOffsetRight=ceil(auxOffsetRight*frameScale)
     for x=1,9 do
         if hbv_Aux_GetBarVar("USE", button.frame, x)>1 then
             if hbv_Aux_GetBarVar("ANCHOR", button.frame, x)<3 or hbv_Aux_GetBarVar("ANCHOR", button.frame, x)>4 then
                 if hbv_Aux_GetOverlayVar("OVERLAP", button.frame) == 2 then
-                    button.gref.aux[x]:SetWidth(ceil((bWidth+auxWidth)*hbv_Aux_GetBarVar("SIZE", button.frame, x)))
+                    button.gref.aux[x]:SetWidth(ceil((bWidth+auxOffsetLeft+auxOffsetRight)*hbv_Aux_GetBarVar("SIZE", button.frame, x)))
                 else
                     button.gref.aux[x]:SetWidth(ceil(bWidth*hbv_Aux_GetBarVar("SIZE", button.frame, x)))
                 end
@@ -444,50 +445,31 @@ function HealBot_Skins_ResetSkin(barType,button,numcols)
         btextoutline2=hbv_Skins_GetFrameVar("BarText", "HOUTLINE", button.frame)
         btextoutline3=hbv_Skins_GetFrameVar("BarText", "SOUTLINE", button.frame)
         btextoutline4=hbv_Skins_GetFrameVar("BarText", "AOUTLINE", button.frame)
-        auxHeight=0
-        auxWidth=0
+        auxOffsetAbove=0
         auxOffsetBelow=0
         auxOffsetLeft=0
         auxOffsetRight=0
 
         for x=1,9 do
-            if hbv_Aux_GetBarVar("USE", button.frame, x)>1 then
-                --if hbv_Aux_GetBarVar("ANCHOR", button.framecol, x) == 9 then
-                --    button.aux[x].sticky=true
-                --else
-                --    button.aux[x].sticky=false
-                    if hbv_Aux_GetBarVar("DEPTH", button.frame, x)+hbv_Aux_GetBarVar("OFFSET", button.frame, x)>0 then
-                        auxTmp=hbv_Aux_GetBarVar("DEPTH", button.frame, x)+hbv_Aux_GetBarVar("OFFSET", button.frame, x)
-                    else
-                        auxTmp=0
-                    end
-                    if hbv_Aux_GetBarVar("ANCHOR", button.frame, x)<3 or hbv_Aux_GetBarVar("ANCHOR", button.frame, x)>4 then
-                        if hbv_Aux_GetBarVar("ANCHOR", button.frame, x) == 1 or
-                           hbv_Aux_GetBarVar("ANCHOR", button.frame, x) == 5 or
-                           hbv_Aux_GetBarVar("ANCHOR", button.frame, x) == 6 then
-                            auxOffsetBelow=auxOffsetBelow+auxTmp
-                        end
-                        auxHeight=auxHeight+auxTmp
-                    else
-                        if hbv_Aux_GetBarVar("ANCHOR", button.frame, x) == 3 then
-                            auxOffsetLeft=auxOffsetLeft+auxTmp
-                        else
-                            auxOffsetRight=auxOffsetRight+auxTmp
-                        end
-                        auxWidth=auxWidth+auxTmp
-                    end
-                --end
+            if hbv_Aux_GetBarVar("USE", button.frame, x)>1 and hbv_Aux_GetBarVar("DEPTH", button.frame, x)+hbv_Aux_GetBarVar("OFFSET", button.frame, x)>0 then
+                auxTmp=hbv_Aux_GetBarVar("DEPTH", button.frame, x)+hbv_Aux_GetBarVar("OFFSET", button.frame, x)
+                if hbv_Aux_GetBarVar("ANCHOR", button.frame, x) == 3 then
+                    if auxTmp>auxOffsetLeft then auxOffsetLeft=auxTmp end
+                elseif hbv_Aux_GetBarVar("ANCHOR", button.frame, x) == 4 then
+                    if auxTmp>auxOffsetRight then auxOffsetRight=auxTmp end
+                elseif hbv_Aux_GetBarVar("ANCHOR", button.frame, x) == 1 or
+                       hbv_Aux_GetBarVar("ANCHOR", button.frame, x) == 5 or
+                       hbv_Aux_GetBarVar("ANCHOR", button.frame, x) == 6 then
+                    if auxTmp>auxOffsetBelow then auxOffsetBelow=auxTmp end
+                else
+                    if auxTmp>auxOffsetAbove then auxOffsetAbove=auxTmp end
+                end
             end
         end
-        if auxHeight<0 then auxHeight=0 end
-        if auxWidth<0 then auxWidth=0 end
-        if auxOffsetBelow<0 then auxOffsetBelow=0 end
-        if auxOffsetRight<0 then auxOffsetRight=0 end
+        auxOffsetAbove=ceil(auxOffsetAbove*frameScale)
         auxOffsetBelow=ceil(auxOffsetBelow*frameScale)
         auxOffsetLeft=ceil(auxOffsetLeft*frameScale)
         auxOffsetRight=ceil(auxOffsetRight*frameScale)
-        auxHeight=ceil(auxHeight*frameScale)
-        auxWidth=ceil(auxWidth*frameScale)
     end
 
     if button then
@@ -518,7 +500,7 @@ function HealBot_Skins_ResetSkin(barType,button,numcols)
         if b.skinreset or b.enemyreset then
             if button.frame<10 and HealBot_Panel_isSpecialPlayerUnit(button.unit)>1 then
                 pWidth=ceil(zWidth*hbv_Skins_GetVar("Enemy", "PLAYERTARGETSIZE"))
-                pWidth=pWidth+(bOutline*2)+auxWidth+hbv_Skins_GetFrameVar("HealBar", "CMARGIN", b.frame)
+                pWidth=pWidth+(bOutline*2)+auxOffsetLeft+auxOffsetRight+hbv_Skins_GetFrameVar("HealBar", "CMARGIN", b.frame)
                 HealBot_Skins_ColAdjFrames[button.frame][button.id]=pWidth
                 pWidth=pWidth+zWidth
              --   HealBot_Skins_ColAdjFrames[button.frame][button.id]=pWidth-zWidth
@@ -526,7 +508,7 @@ function HealBot_Skins_ResetSkin(barType,button,numcols)
                 HealBot_Skins_ColAdjFrames[button.frame][button.id]=0
             end
 
-            if HealBot_Action_SetBackBarHeightWidth(button.frame, (bheight+auxHeight+(bOutline*2)), (pWidth+auxWidth+(bOutline*2)), framePad, (zWidth+auxWidth+(bOutline*2))) then
+            if HealBot_Action_SetBackBarHeightWidth(button.frame, (bheight+auxOffsetAbove+auxOffsetBelow+(bOutline*2)), (pWidth+auxOffsetLeft+auxOffsetRight+(bOutline*2)), framePad, (zWidth+auxOffsetLeft+auxOffsetRight+(bOutline*2))) then
                 b.auxreset=true
             end
 
@@ -551,8 +533,8 @@ function HealBot_Skins_ResetSkin(barType,button,numcols)
             else
                 button.gref["Shield"]:SetWidth(ceil(bWidth/10))
             end
-            b.gref["Back"]:SetHeight(bheight+auxHeight+(bOutline*2))
-            b.gref["Back"]:SetWidth(bWidth+auxWidth+(bOutline*2))
+            b.gref["Back"]:SetHeight(bheight+auxOffsetAbove+auxOffsetBelow+(bOutline*2))
+            b.gref["Back"]:SetWidth(bWidth+auxOffsetLeft+auxOffsetRight+(bOutline*2))
             b.gref["InHeal"]:SetHeight(bheight);
             b.gref["InHeal"]:SetWidth(bWidth)
             b.gref["Absorb"]:SetHeight(bheight);
@@ -655,95 +637,50 @@ function HealBot_Skins_ResetSkin(barType,button,numcols)
             for x=1,9 do
                 if hbv_Aux_GetBarVar("USE", button.frame, x)>1 then
                     b.gref.aux[x]:ClearAllPoints()
-                    if button.aux[x].sticky then
-                        b.gref.aux[x]:SetOrientation("VERTICAL")
-                        b.gref.aux[x]:SetHeight(ceil(bheight*hbv_Aux_GetBarVar("SIZE", button.frame, x)))
-                        if hbv_Skins_GetFrameVar("Anchors", "BARS", button.frame)<3 then
-                            b.gref.aux[x]:SetPoint("RIGHT",b.gref["Back"],"RIGHT",0,0)
-                        else
-                            b.gref.aux[x]:SetPoint("LEFT",b.gref["Back"],"LEFT",0,0)
-                        end
-                    elseif hbv_Aux_GetBarVar("ANCHOR", button.frame, x)<5 then
-                        if hbv_Aux_GetBarVar("ANCHOR", button.frame, x)<3 then
-                            b.gref.aux[x]:SetOrientation("HORIZONTAL")
-                            if hbv_Aux_GetOverlayVar("OVERLAP", button.frame) == 2 then
-                                b.gref.aux[x]:SetWidth(ceil((bWidth+auxWidth)*hbv_Aux_GetBarVar("SIZE", button.frame, x)))
-                              --  AuxOverlapOffset=ceil(((bWidth+auxWidth)*(1-hbv_Aux_GetBarVar("SIZE", button.frame, x)))/2)
-                            else
-                                b.gref.aux[x]:SetWidth(ceil(bWidth*hbv_Aux_GetBarVar("SIZE", button.frame, x)))
-                            end
-                            b.gref.aux[x]:SetHeight(ceil(hbv_Aux_GetBarVar("DEPTH", button.frame, x)*frameScale))
-                            if hbv_Aux_GetBarVar("ANCHOR", button.frame, x) == 1 then
-                                b.gref.aux[x]:SetPoint("TOP",AuxBelow,"BOTTOM",0,-(ceil(hbv_Aux_GetBarVar("OFFSET", button.frame, x))*frameScale))
-                                AuxBelow=b.gref.aux[x]
-                            else
-                                b.gref.aux[x]:SetPoint("BOTTOM",AuxAbove,"TOP",0,ceil(hbv_Aux_GetBarVar("OFFSET", button.frame, x)*frameScale))
-                                AuxAbove=b.gref.aux[x]
-                            end
-                            --if hbv_Aux_GetOverlayVar("OVERLAP", button.frame) == 2 then
-                            --    b.gref.aux[x]:SetPoint("RIGHT",b.gref["Back"],"RIGHT",-(bOutline+AuxOverlapOffset),0)
-                            --else
-                            --    b.gref.aux[x]:SetPoint("CENTER",b.gref["Bar"],"CENTER",0,0)
-                            --end
-                        else
-                            b.gref.aux[x]:SetOrientation("VERTICAL")
-                            b.gref.aux[x]:SetWidth(ceil(hbv_Aux_GetBarVar("DEPTH", button.frame, x)*frameScale))
-                            if hbv_Aux_GetOverlayVar("OVERLAP", button.frame) == 1 then
-                                b.gref.aux[x]:SetHeight(ceil((bheight+auxHeight)*hbv_Aux_GetBarVar("SIZE", button.frame, x)))
-                                --b.gref.aux[x]:SetPoint("TOP",b.gref["Back"],"TOP",0,-(bOutline))
-                            else
-                                b.gref.aux[x]:SetHeight(ceil(bheight*hbv_Aux_GetBarVar("SIZE", button.frame, x)))
-                            end
-                            if hbv_Aux_GetBarVar("ANCHOR", button.frame, x) == 3 then
-                                b.gref.aux[x]:SetPoint("RIGHT",AuxLeft,"LEFT",-(ceil(hbv_Aux_GetBarVar("OFFSET", button.frame, x)*frameScale)),0)
-                                AuxLeft=b.gref.aux[x]
-                            else
-                                b.gref.aux[x]:SetPoint("LEFT",AuxRight,"RIGHT",ceil(hbv_Aux_GetBarVar("OFFSET", button.frame, x)*frameScale),0)
-                                AuxRight=b.gref.aux[x]
-                            end
-                        end
-                    else
+                    auxAdj=0
+                    if hbv_Aux_GetBarVar("ANCHOR", button.frame, x)<3 or hbv_Aux_GetBarVar("ANCHOR", button.frame, x)>4 then
                         b.gref.aux[x]:SetOrientation("HORIZONTAL")
+                        b.gref.aux[x]:SetHeight(ceil(hbv_Aux_GetBarVar("DEPTH", button.frame, x)*frameScale))
                         if hbv_Aux_GetOverlayVar("OVERLAP", button.frame) == 2 then
-                            b.gref.aux[x]:SetWidth(ceil((bWidth+auxWidth)*hbv_Aux_GetBarVar("SIZE", button.frame, x)))
+                            b.gref.aux[x]:SetWidth(ceil((bWidth+auxOffsetLeft+auxOffsetRight)*hbv_Aux_GetBarVar("SIZE", button.frame, x)))
+                            if hbv_Aux_GetBarVar("ANCHOR", button.frame, x)<3 then
+                                auxAdj=floor((auxOffsetRight-auxOffsetLeft)/2)
+                            elseif hbv_Aux_GetBarVar("ANCHOR", button.frame, x) == 5 or hbv_Aux_GetBarVar("ANCHOR", button.frame, x) == 7 then
+                                auxAdj=auxOffsetLeft
+                            else
+                                auxAdj=auxOffsetRight
+                            end
                         else
                             b.gref.aux[x]:SetWidth(ceil(bWidth*hbv_Aux_GetBarVar("SIZE", button.frame, x)))
                         end
-                        b.gref.aux[x]:SetHeight(ceil(hbv_Aux_GetBarVar("DEPTH", button.frame, x)*frameScale))
-                        if hbv_Aux_GetBarVar("ANCHOR", button.frame, x) == 5 then
-                            b.gref.aux[x]:SetPoint("TOP",AuxBelow,"BOTTOM",0,-(ceil(hbv_Aux_GetBarVar("OFFSET", button.frame, x))*frameScale))
-                            if hbv_Aux_GetOverlayVar("OVERLAP", button.frame) == 2 then
-                                b.gref.aux[x]:SetPoint("LEFT",b.gref["Bar"],"LEFT",-auxOffsetLeft,0)
-                            else
-                                b.gref.aux[x]:SetPoint("LEFT",b.gref["Bar"],"LEFT",0,0)
-                            end
-                            AuxBelow=b.gref.aux[x]
-                        elseif hbv_Aux_GetBarVar("ANCHOR", button.frame, x) == 6 then
-                            b.gref.aux[x]:SetPoint("TOP",AuxBelow,"BOTTOM",0,-(ceil(hbv_Aux_GetBarVar("OFFSET", button.frame, x))*frameScale))
-                            if hbv_Aux_GetOverlayVar("OVERLAP", button.frame) == 2 then
-                                b.gref.aux[x]:SetPoint("RIGHT",b.gref["Bar"],"RIGHT",auxOffsetRight,0)
-                            else
-                                b.gref.aux[x]:SetPoint("RIGHT",b.gref["Bar"],"RIGHT",0,0)
-                            end
-                            AuxBelow=b.gref.aux[x]
-                        elseif hbv_Aux_GetBarVar("ANCHOR", button.frame, x) == 7 then
-                            b.gref.aux[x]:SetPoint("BOTTOM",AuxAbove,"TOP",0,ceil(hbv_Aux_GetBarVar("OFFSET", button.frame, x)*frameScale))
-                            if hbv_Aux_GetOverlayVar("OVERLAP", button.frame) == 2 then
-                                b.gref.aux[x]:SetPoint("LEFT",b.gref["Bar"],"LEFT",-auxOffsetLeft,0)
-                            else
-                                b.gref.aux[x]:SetPoint("LEFT",b.gref["Bar"],"LEFT",0,0)
-                            end
-                            AuxAbove=b.gref.aux[x]
+                    else
+                        b.gref.aux[x]:SetOrientation("VERTICAL")
+                        b.gref.aux[x]:SetWidth(ceil(hbv_Aux_GetBarVar("DEPTH", button.frame, x)*frameScale))
+                        if hbv_Aux_GetOverlayVar("OVERLAP", button.frame) == 1 then
+                            b.gref.aux[x]:SetHeight(ceil((bheight+auxOffsetAbove+auxOffsetBelow)*hbv_Aux_GetBarVar("SIZE", button.frame, x)))
+                            auxAdj=floor((auxOffsetAbove-auxOffsetBelow)/2)
                         else
-                            b.gref.aux[x]:SetPoint("BOTTOM",AuxAbove,"TOP",0,ceil(hbv_Aux_GetBarVar("OFFSET", button.frame, x)*frameScale))
-                            if hbv_Aux_GetOverlayVar("OVERLAP", button.frame) == 2 then
-                                b.gref.aux[x]:SetPoint("RIGHT",b.gref["Bar"],"RIGHT",auxOffsetRight,0)
-                            else
-                                b.gref.aux[x]:SetPoint("RIGHT",b.gref["Bar"],"RIGHT",0,0)
-                            end
-                            AuxAbove=b.gref.aux[x]
+                            b.gref.aux[x]:SetHeight(ceil(bheight*hbv_Aux_GetBarVar("SIZE", button.frame, x)))
                         end
                     end
+                    if hbv_Aux_GetBarVar("ANCHOR", button.frame, x) == 1 then
+                        b.gref.aux[x]:SetPoint("TOP",b.gref["Bar"],"BOTTOM",auxAdj,-(ceil(hbv_Aux_GetBarVar("OFFSET", button.frame, x))*frameScale))
+                    elseif hbv_Aux_GetBarVar("ANCHOR", button.frame, x) == 2 then
+                        b.gref.aux[x]:SetPoint("BOTTOM",b.gref["Bar"],"TOP",auxAdj,(ceil(hbv_Aux_GetBarVar("OFFSET", button.frame, x))*frameScale))
+                    elseif hbv_Aux_GetBarVar("ANCHOR", button.frame, x) == 3 then
+                        b.gref.aux[x]:SetPoint("RIGHT",b.gref["Bar"],"LEFT",-(ceil(hbv_Aux_GetBarVar("OFFSET", button.frame, x)*frameScale)),auxAdj)
+                    elseif hbv_Aux_GetBarVar("ANCHOR", button.frame, x) == 4 then
+                        b.gref.aux[x]:SetPoint("LEFT",b.gref["Bar"],"RIGHT",(ceil(hbv_Aux_GetBarVar("OFFSET", button.frame, x)*frameScale)),auxAdj)
+                    elseif hbv_Aux_GetBarVar("ANCHOR", button.frame, x) == 5 then
+                        b.gref.aux[x]:SetPoint("TOPLEFT",b.gref["Bar"],"BOTTOMLEFT",-auxAdj,-(ceil(hbv_Aux_GetBarVar("OFFSET", button.frame, x))*frameScale))
+                    elseif hbv_Aux_GetBarVar("ANCHOR", button.frame, x) == 6 then
+                        b.gref.aux[x]:SetPoint("TOPRIGHT",b.gref["Bar"],"BOTTOMRIGHT",auxAdj,-(ceil(hbv_Aux_GetBarVar("OFFSET", button.frame, x))*frameScale))
+                    elseif hbv_Aux_GetBarVar("ANCHOR", button.frame, x) == 7 then
+                        b.gref.aux[x]:SetPoint("BOTTOMLEFT",b.gref["Bar"],"TOPLEFT",-auxAdj,(ceil(hbv_Aux_GetBarVar("OFFSET", button.frame, x))*frameScale))
+                    elseif hbv_Aux_GetBarVar("ANCHOR", button.frame, x) == 8 then
+                        b.gref.aux[x]:SetPoint("BOTTOMRIGHT",b.gref["Bar"],"TOPRIGHT",auxAdj,(ceil(hbv_Aux_GetBarVar("OFFSET", button.frame, x))*frameScale))
+                    end
+
                     b.gref.aux[x]:SetMinMaxValues(0,1000)
                     HealBot_Media_UpdateTexture(b.gref.aux[x], hbv_Skins_GetFrameVar("HealBar", "TEXTURE", b.frame), "Skins_ResetSkin - HealBar")
                     --b.gref.aux[x]:GetStatusBarTexture():SetHorizTile(false)
@@ -802,7 +739,7 @@ function HealBot_Skins_ResetSkin(barType,button,numcols)
                                          hbv_Aux_GetBarTextVar("OUTLINE", b.framecol, x),
                                          "Skins_ResetSkin - AuxBarText")
                 b.gref.auxtxt[x]:ClearAllPoints();
-                b.gref.auxtxt[x]:SetWidth(ceil((zWidth+auxWidth)*hbv_Aux_GetBarVar("SIZE", b.frame, x)))
+                b.gref.auxtxt[x]:SetWidth(ceil((zWidth+auxOffsetLeft+auxOffsetRight)*hbv_Aux_GetBarVar("SIZE", b.frame, x)))
                 if hbv_Aux_GetBarVar("ANCHOR", b.frame, x)<3 or hbv_Aux_GetBarVar("ANCHOR", b.frame, x)>4 then
                     b.gref.auxtxt[x]:SetWordWrap(false)
                 else
@@ -1424,7 +1361,7 @@ function HealBot_Skins_ResetSkin(barType,button,numcols)
         h=button
         --bar=_G[h:GetName().."Bar"]
         local back=_G[h:GetName().."Bar5"]
-        hwidth=ceil((bWidth+auxWidth+(bOutline*2))*hbv_Skins_GetFrameVar("HeadBar", "WIDTH", h.frame))
+        hwidth=ceil((bWidth+auxOffsetLeft+auxOffsetRight+(bOutline*2))*hbv_Skins_GetFrameVar("HeadBar", "WIDTH", h.frame))
         hheight=ceil(hbv_Skins_GetFrameVar("HeadBar", "HEIGHT", h.frame)*frameScale)
         h:SetHeight(hheight);
         h:SetWidth(hwidth);

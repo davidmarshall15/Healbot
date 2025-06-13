@@ -133,7 +133,6 @@ function hbv_GetClass(ctype, key)
 end
 
 -- Aux
-
 local hbAuxBarDefaults={["COLOUR"]=1, ["ANCHOR"]=1, ["OFFSET"]=1, 
                         ["DEPTH"]=5, ["SIZE"]=1, ["USE"]=1,
                         ["R"]=1, ["G"]=1, ["B"]=1, ["A"]=1,
@@ -1222,9 +1221,9 @@ function hbv_Auras_CleanData(cat)
     if auraNextClean[cat] == 13 then
         auraNextClean[cat]=1
         if cat == "BUFFS" then
-            HealBot_Timers_Set("OOC","SaveAurasBuffs",true,true)
+            hbv_Auras_Save_Buffs()
         else
-            HealBot_Timers_Set("OOC","SaveAurasDebuffs",true,true)
+            hbv_Auras_Save_Debuffs()
         end
         HealBot_AddDebug(cat.." cleaned ","Auras_Load",true)
     else
@@ -1309,10 +1308,10 @@ function hbv_Auras_CurrentHoTs()
     end
 end
 
-function hbv_Auras_GetSortedNewBuffs(filter)
+function hbv_Auras_GetSortedNewBuffs(filter, incKnown)
     local l={}
     for x,_ in pairs(hbv_Auras["BUFFS"][filter]) do
-        if not hbv_AurasData["HoT"][x] then
+        if not hbv_AurasData["HoT"][x] or incKnown then
             local bName=HealBot_Options_CDebuffTextID(x)
             if tonumber(bName) == nil then
                 table.insert(l,bName)
@@ -1323,10 +1322,10 @@ function hbv_Auras_GetSortedNewBuffs(filter)
     return l
 end
 
-function hbv_Auras_GetSortedNewDebuffs(filter)
+function hbv_Auras_GetSortedNewDebuffs(filter, incKnown)
     local l={}
     for x,_ in pairs(hbv_Auras["DEBUFFS"][filter]) do
-        if not HealBot_Globals.CustomDebuffs[x] then
+        if not HealBot_Globals.CustomDebuffs[x] or incKnown then
             local dName=HealBot_Options_CDebuffTextID(x)
             if tonumber(dName) == nil then
                 table.insert(l,dName)
@@ -1357,16 +1356,38 @@ function hbv_Auras_Save(cat)
     if auraNextSave[cat] == 13 then
         auraNextSave[cat]=1
         HealBot_Globals.AuraHistory["LASTSAVE"]=HealBot_ServerTimeNow
-        HealBot_AddDebug(cat.." saved ","Auras_Load",true)
+        HealBot_Timers_Set("LAST","PluginTweaksRefreshLastSave",true)
         if HealBot_Globals.Auras then HealBot_Globals.Auras=nil end
     else
-        --HealBot_AddDebug(cat.." saving "..auraNextSave[cat],"Auras_Load",true)
         auraNextSave[cat]=auraNextSave[cat]+1
         if cat == "BUFFS" then
             HealBot_Timers_Set("OOC","SaveNextAurasBuffs",true,true)
         else
             HealBot_Timers_Set("OOC","SaveNextAurasDebuffs",true,true)
         end
+    end
+end
+
+local auraDelaySave={["BUFFS"]=false,["DEBUFFS"]=false}
+function hbv_Auras_Save_Buffs()
+    if auraNextSave["BUFFS"] == 1 then
+        if not auraDelaySave["BUFFS"] then
+            HealBot_Timers_Set("OOC","SaveAurasBuffs",true,true)
+        end
+    elseif not auraDelaySave["BUFFS"] then
+        auraDelaySave["BUFFS"]=true
+        C_Timer.After(60, function() auraDelaySave["BUFFS"]=false; hbv_Auras_Save_Buffs() end)
+    end
+end
+
+function hbv_Auras_Save_Debuffs()
+    if auraNextSave["DEBUFFS"] == 1 then
+        if not auraDelaySave["DEBUFFS"] then
+            HealBot_Timers_Set("OOC","SaveAurasDebuffs",true,true)
+        end
+    elseif not auraDelaySave["DEBUFFS"] then
+        auraDelaySave["DEBUFFS"]=true
+        C_Timer.After(60, function() auraDelaySave["DEBUFFS"]=false; hbv_Auras_Save_Debuffs() end)
     end
 end
 
@@ -1403,9 +1424,7 @@ function hbv_Auras_Load(cat)
         end
         if auraNextLoad[cat] == 13 then
             auraNextLoad[cat]=1
-            HealBot_AddDebug(cat.." loaded ","Auras_Load",true)
         else
-            --HealBot_AddDebug(cat.." loading "..auraNextLoad[cat],"Auras_Load",true)
             auraNextLoad[cat]=auraNextLoad[cat]+1
             if cat == "BUFFS" then
                 HealBot_Timers_Set("OOC","LoadAurasBuffs",true)

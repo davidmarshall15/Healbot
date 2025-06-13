@@ -689,8 +689,8 @@ function HealBot_Events_UnitFlagsChanged(button)
           --HealBot_setCall("HealBot_Events_UnitFlagsChanged", button)
     hbafk=false
     if UnitIsAFK(button.unit) then
-        HealBot_Timers_Set("OOC","SaveAurasBuffs",true,true)
-        HealBot_Timers_Set("OOC","SaveAurasDebuffs",true,true)
+        hbv_Auras_Save_Buffs()
+        hbv_Auras_Save_Debuffs()
         if hbv_Skins_GetFrameBoolean("Icons", "SHOWAFK", button.frame) then
             hbafk=true
         end

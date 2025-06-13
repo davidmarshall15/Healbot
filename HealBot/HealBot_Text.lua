@@ -1489,11 +1489,15 @@ function HealBot_Text_UpdateText(button)
                         button.gref.txt["text2"]:SetText(button.unit)
                     end
                 else
-                    button.gref.txt["text2"]:SetText("")
+                    button.gref.txt["text2"]:SetText("0")
                 end
+            elseif button.status.current<HealBot_Unit_Status["DC"] then
+                button.gref.txt["text2"]:SetText("0")
             else
                 button.gref.txt["text2"]:SetText("")
             end
+        elseif button.status.current<HealBot_Unit_Status["DC"] then
+            button.gref.txt["text2"]:SetText("0")
         else
             button.gref.txt["text2"]:SetText("")
         end

@@ -130,6 +130,7 @@ local function HealBot_Range_IsSpellInRange(button, spellName, limit, spellOnly)
 end
 
 local rSpellId=0
+
 function HealBot_Range_SpellInRange(button, spellName)
     if button.player then
         return true
@@ -139,8 +140,8 @@ function HealBot_Range_SpellInRange(button, spellName)
         if HealBot_Range_IsSpellInRange(button, spellName, true, true)>0 then
             return true
         elseif rSpellId and HealBot_Spell_IDs[rSpellId] and HealBot_Spell_IDs[rSpellId].range>0 and
-               ((HealBot_Spell_IDs[rSpellId].range>50 and button.range.current>-1) or
-                (HealBot_Spell_IDs[rSpellId].range>35 and button.range.current>0) or
+               ((HealBot_Spell_IDs[rSpellId].range>=55 and button.range.current>-1) or
+                (HealBot_Spell_IDs[rSpellId].range>=35 and button.range.current>0) or
                 (HealBot_Spell_IDs[rSpellId].range>25 and button.range.current>1)) then
             return true
         elseif button.range.current<1 then
@@ -177,12 +178,7 @@ function HealBot_Range_Unit(unit, guid, limit)
 end
 
 function HealBot_Range_UnitGUID(unit)
-    aButton=HealBot_Panel_AllButton(UnitGUID(unit) or "x")
-    if aButton then
-        return HealBot_Range_Unit(aButton.unit, aButton.guid)
-    else
-        return HealBot_Range_Unit(unit, UnitGUID(unit))
-    end
+    return HealBot_Range_Unit(unit, UnitGUID(unit))
 end
 
 local uRange=0
@@ -207,10 +203,12 @@ end
 local oldRange,newRange=-99,-98
 function HealBot_Range_UpdateUnit(button)
       --HealBot_setCall("HealBot_Range_UpdateUnit", button)
-    if button.player then
-        button.range.current=2
-    elseif button.status.current<HealBot_Unit_Status["DC"] then
-        newRange=HealBot_Range_UnitCurrent(button, button.range.spell)
+    if button.status.current<HealBot_Unit_Status["DC"] then
+        if button.player then
+            newRange=2
+        else
+            newRange=HealBot_Range_UnitCurrent(button, button.range.spell)
+        end
         button.range.nextcheck=HealBot_TimeNow+HealBot_Range_luVars["rangeCheckInterval"]
         if newRange~=button.range.current then
             oldRange=button.range.current
@@ -362,11 +360,11 @@ function HealBot_Range_DirectionCheck(unit)
 end
 
 function HealBot_Range_UpdateCheckInterval()
-    HealBot_Range_luVars["rangeCheckInterval"]=HealBot_Util_PerfVal2(970)
-    if HealBot_Range_luVars["rangeCheckInterval"]<0.075 then 
-        HealBot_Range_luVars["rangeCheckInterval"]=0.075 
-    elseif HealBot_Range_luVars["rangeCheckInterval"]>0.5 then
-        HealBot_Range_luVars["rangeCheckInterval"]=0.5
+    HealBot_Range_luVars["rangeCheckInterval"]=HealBot_Util_PerfVal2(950)
+    if HealBot_Range_luVars["rangeCheckInterval"]<0.2 then 
+        HealBot_Range_luVars["rangeCheckInterval"]=0.2 
+    elseif HealBot_Range_luVars["rangeCheckInterval"]>0.75 then
+        HealBot_Range_luVars["rangeCheckInterval"]=0.75
     end
     HealBot_Debug_PerfUpdate("rangeInt", HealBot_Range_luVars["rangeCheckInterval"])
 end

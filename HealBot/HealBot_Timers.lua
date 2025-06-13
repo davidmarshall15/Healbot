@@ -257,6 +257,12 @@ function HealBot_Timers_PluginTweaks_Refresh()
     end
 end
 
+function HealBot_Timers_PluginTweaks_RefreshLastSave()
+    if HealBot_Timers_luVars["pluginTweaks"] then
+        HealBot_Plugin_Options_Tweaks_LastSave()
+    end
+end
+
 function HealBot_Timers_SkinBarTextColours()
       --HealBot_setCall("HealBot_Timers_SkinBarTextColours")
     HealBot_Panel_resetTestCols(true)
@@ -523,8 +529,8 @@ function HealBot_Timers_LastLoad()
     HealBot_Options_ObjectsEnableDisable("HealBot_FrameStickyOffsetVertical",false)
     HealBot_Options_ObjectsEnableDisable("HealBot_Options_GroupPetsByFive",false)
     HealBot_Options_ObjectsEnableDisable("HealBot_Options_SelfPet",false)
+    HealBot_SetPlayerData()
     HealBot_Timers_InitSpells()
-    HealBot_Init_Plugins()
     HealBot_Timers_Set("LAST","MountsPetsUse")
     HealBot_Timers_Set("PLAYER","InvChange")
     HealBot_Timers_Set("OOC","PartyUpdateCheckSkin")
@@ -538,7 +544,6 @@ function HealBot_Timers_LastLoad()
     HealBot_Timers_Set("AURA","BuffTagNames")
     HealBot_Timers_Set("AURA","DebuffTagNames")
     HealBot_Timers_Set("SKINS","SetAdaptive")
-    HealBot_Timers_Set("INIT","SetPlayerData")
     HealBot_Timers_Set("AUX","ResetTextButtons")
     HealBot_Timers_Set("SKINS","TextSetTagInUse")
     HealBot_Timers_Set("OOC","EventsSetFrameUnits")
@@ -547,6 +552,7 @@ function HealBot_Timers_LastLoad()
     HealBot_Timers_Set("LAST","LastUpdate")
     HealBot_Timers_Set("INIT","HealBotLoaded")
     HealBot_Timers_Set("AURA","BuffsReset")
+    HealBot_Timers_Set("LAST","InitPlugins",true)
     HealBot_Timers_Set("LAST","MediaInitFonts",true)
     HealBot_Timers_Set("LAST","CleanPermPrivateData",true,true)
     HealBot_Timers_Set("OOC","RemoveInvalidLoadouts",true,true)
@@ -994,6 +1000,7 @@ local hbTimerFuncs={["INIT"]={
                         ["PrivateListUpdate"]=HealBot_Panel_PrivateListUpdate,
                         ["OnLoadMessages"]=HealBot_Timers_OnLoadMessages,
                         ["PluginTweaksRefresh"]=HealBot_Timers_PluginTweaks_Refresh,
+                        ["PluginTweaksRefreshLastSave"]=HealBot_Timers_PluginTweaks_RefreshLastSave,
                         ["ExtraBuffsTabInvUp"]=HealBot_Options_BuffsExtraBuffsTabInvUpdate,
                         ["LastLoad"]=HealBot_Timers_LastLoad,
                         ["LastUpdate"]=HealBot_Timers_LastUpdate,
@@ -1140,6 +1147,11 @@ function HealBot_Timers_PluginsSet(tId)
     elseif tId == 11 then
         HealBot_Util_SetNumSuffix()
         HealBot_Timers_AllTextUpdate()
+    elseif tId == 12 then
+        hbv_Auras_Save_Buffs()
+        hbv_Auras_Save_Debuffs()
+    elseif tId == 13 then
+        HealBot_Timers_Set("LAST","PluginTweaksRefreshLastSave",true)
     end
 end
 

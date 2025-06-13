@@ -1838,6 +1838,11 @@ function HealBot_ActionIcons_UpdateActiveFrame(frame, active)
     end
 end
 
+local nRange=40
+if HEALBOT_GAME_VERSION>10 then
+    nRange=46
+end
+
 function HealBot_ActionIcons_ValidateAbility(frame, id, itemsOnly)
         --HealBot_setCall("HealBot_ActionIcons_ValidateAbility")
     if not HealBot_Data["UILOCK"] and hb_lVars["Loaded"] then
@@ -1869,9 +1874,9 @@ function HealBot_ActionIcons_ValidateAbility(frame, id, itemsOnly)
                 actionIcons[frame][id]:SetAttribute("spell1", hbAbility)
             end
             if HealBot_Spell_IDs[aID] then
-                actionIcons[frame][id].range=HealBot_Spell_IDs[aID].range or 40
+                actionIcons[frame][id].range=HealBot_Spell_IDs[aID].range or nRange
             else
-                actionIcons[frame][id].range=40
+                actionIcons[frame][id].range=nRange
             end
             HealBot_ActionIcons_SelfCountText(frame, id)
         elseif hbAbility and type(hbAbility) == "number" and GetMacroIndexByName(hbAbility)>0 then           
@@ -2451,7 +2456,7 @@ function HealBot_ActionIcons_UpdateRangeCheck(frame, id, button)
         elseif not actionIcons[frame][id].highlight then
             HealBot_ActionIcons_CheckHighlightIconAbility(frame, id)
         end
-    elseif actionIcons[frame][id].range<50 then
+    elseif actionIcons[frame][id].range<55 then
         if button.range.current<1 then
             HealBot_ActionIcons_FadeIcon(frame, id)
         elseif not actionIcons[frame][id].highlight then

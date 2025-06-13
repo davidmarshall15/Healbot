@@ -219,55 +219,111 @@ local function HealBot_Init_Spell_RangesPref()
         HealBot_Spell_RangesPref[HEALBOT_HURRICANE]=true
         HealBot_Spell_RangesPref[HEALBOT_REJUVENATION]=true
         HealBot_Spell_RangesPref[HEALBOT_HEALING_TOUCH]=true
+        HealBot_Spell_RangesPref[HEALBOT_REGROWTH]=true
+        HealBot_Spell_RangesPref[HEALBOT_REMOVE_CORRUPTION]=true
+        HealBot_Spell_RangesPref[HEALBOT_NATURES_CURE]=true
+        HealBot_Spell_RangesPref[HEALBOT_ENTANGLING_ROOTS]=true
+        HealBot_Spell_RangesPref[HEALBOT_GROWL]=true
+        HealBot_Spell_RangesPref[HEALBOT_CYCLONE]=true
+        HealBot_Spell_RangesPref[HEALBOT_MOONFIRE]=true
+        HealBot_Spell_RangesPref[22568]=true
+        HealBot_Spell_RangesPref[HEALBOT_REVIVE]=true
+        HealBot_Spell_RangesPref[HEALBOT_REBIRTH]=true
     elseif HealBot_Data["PCLASSTRIM"] == "MAGE" then
         HealBot_Spell_RangesPref[HEALBOT_FROSTFIRE_BOLT]=true
         HealBot_Spell_RangesPref[HEALBOT_FIRE_BLAST]=true
+        HealBot_Spell_RangesPref[HEALBOT_ARCANE_BRILLIANCE]=true
+        HealBot_Spell_RangesPref[HEALBOT_REMOVE_CURSE]=true
+        HealBot_Spell_RangesPref[HEALBOT_SLOW_FALL]=true
+        HealBot_Spell_RangesPref[5019]=true
+        HealBot_Spell_RangesPref[118]=true
+        HealBot_Spell_RangesPref[116]=true
+        HealBot_Spell_RangesPref[133]=true
+        HealBot_Spell_RangesPref[44425]=true
     elseif HealBot_Data["PCLASSTRIM"] == "PALA" then
         HealBot_Spell_RangesPref[HEALBOT_HOLY_SHOCK]=true
         HealBot_Spell_RangesPref[HEALBOT_JUDGMENT]=true
         HealBot_Spell_RangesPref[HEALBOT_FLASH_OF_LIGHT]=true
         HealBot_Spell_RangesPref[HEALBOT_HOLY_LIGHT]=true
         HealBot_Spell_RangesPref[HBC_HOLY_LIGHT]=true
+        HealBot_Spell_RangesPref[HEALBOT_WORD_OF_GLORY]=true
+        HealBot_Spell_RangesPref[HEALBOT_CLEANSE]=true
+        HealBot_Spell_RangesPref[HEALBOT_CLEANSE_TOXIN]=true
+        HealBot_Spell_RangesPref[HEALBOT_RECKONING]=true
+        HealBot_Spell_RangesPref[183218]=true
+        HealBot_Spell_RangesPref[HEALBOT_REDEMPTION]=true
     elseif HealBot_Data["PCLASSTRIM"] == "PRIE" then
         HealBot_Spell_RangesPref[HEALBOT_SMITE]=true
         HealBot_Spell_RangesPref[HEALBOT_SHADOW_WORD_PAIN]=true
         HealBot_Spell_RangesPref[HEALBOT_FLASH_HEAL]=true
         HealBot_Spell_RangesPref[HEALBOT_HEAL]=true
         HealBot_Spell_RangesPref[HBC_HEAL]=true
+        HealBot_Spell_RangesPref[2050]=true
         HealBot_Spell_RangesPref[HEALBOT_RENEW]=true
+        HealBot_Spell_RangesPref[HEALBOT_POWER_WORD_SHIELD]=true
+        HealBot_Spell_RangesPref[HEALBOT_PURIFY]=true
+        HealBot_Spell_RangesPref[8092]=true
+        HealBot_Spell_RangesPref[5019]=true
+        HealBot_Spell_RangesPref[HEALBOT_RESURRECTION]=true
     elseif HealBot_Data["PCLASSTRIM"] == "SHAM" then
         HealBot_Spell_RangesPref[HEALBOT_LIGHTNING_BOLT]=true
         HealBot_Spell_RangesPref[HBC_LIGHTNING_BOLT]=true
         HealBot_Spell_RangesPref[HEALBOT_HEALING_WAVE]=true
         HealBot_Spell_RangesPref[HEALBOT_HEALING_SURGE]=true
         HealBot_Spell_RangesPref[HBC_HEALING_WAVE]=true
+        HealBot_Spell_RangesPref[HEALBOT_WATER_WALKING]=true
+        HealBot_Spell_RangesPref[188070]=true
+        HealBot_Spell_RangesPref[HBC_SHAMAN_CURE_POISON]=true
+        HealBot_Spell_RangesPref[HBC_SHAMAN_CURE_DISEASE]=true
+        HealBot_Spell_RangesPref[HEALBOT_PURGE]=true
+        HealBot_Spell_RangesPref[HEALBOT_EARTH_SHOCK]=true
+        HealBot_Spell_RangesPref[HEALBOT_ELEMENTAL_BLAST]=true
+        HealBot_Spell_RangesPref[HEALBOT_LIGHTNING_BOLT]=true
+        HealBot_Spell_RangesPref[HBC_LIGHTNING_BOLT]=true
+        HealBot_Spell_RangesPref[HEALBOT_ANCESTRALSPIRIT]=true
     elseif HealBot_Data["PCLASSTRIM"] == "MONK" then
         HealBot_Spell_RangesPref[HEALBOT_CRACKLING_JADE_LIGHTNING]=true
         HealBot_Spell_RangesPref[HEALBOT_SOOTHING_MIST]=true
+        HealBot_Spell_RangesPref[HEALBOT_DETOX]=true
+        HealBot_Spell_RangesPref[HEALBOT_PROVOKE]=true
+        HealBot_Spell_RangesPref[HEALBOT_UPLIFT]=true
     elseif HealBot_Data["PCLASSTRIM"] == "WARL" then
         HealBot_Spell_RangesPref[HEALBOT_CORRUPTION]=true
         HealBot_Spell_RangesPref[HEALBOT_FEAR]=true
+        HealBot_Spell_RangesPref[686]=true
+        HealBot_Spell_RangesPref[232670]=true
+        HealBot_Spell_RangesPref[234153]=true
+        HealBot_Spell_RangesPref[5019]=true
     elseif HealBot_Data["PCLASSTRIM"] == "WARR" then
         HealBot_Spell_RangesPref[HEALBOT_TAUNT]=true
+        HealBot_Spell_RangesPref[2764]=true
     elseif HealBot_Data["PCLASSTRIM"] == "HUNT" then
         HealBot_Spell_RangesPref[HEALBOT_ARCANE_SHOT]=true
         HealBot_Spell_RangesPref[HEALBOT_CONCUSSIVE_SHOT]=true
         HealBot_Spell_RangesPref[HEALBOT_AIMED_SHOT]=true
         HealBot_Spell_RangesPref[HEALBOT_MENDPET]=true
+        HealBot_Spell_RangesPref[75]=true
     elseif HealBot_Data["PCLASSTRIM"] == "ROGU" then
         HealBot_Spell_RangesPref[HEALBOT_THROW]=true
         HealBot_Spell_RangesPref[HEALBOT_GOUGE]=true
+        HealBot_Spell_RangesPref[185565]=true
+        HealBot_Spell_RangesPref[36554]=true
+        HealBot_Spell_RangesPref[2764]=true
     elseif HealBot_Data["PCLASSTRIM"] == "DEAT" then
+        HealBot_Spell_RangesPref[49576]=true
+        HealBot_Spell_RangesPref[61999]=true
         HealBot_Spell_RangesPref[HEALBOT_DEATH_COIL]=true
         HealBot_Spell_RangesPref[HEALBOT_PLAGUE_STRIKE]=true
     elseif HealBot_Data["PCLASSTRIM"] == "DEMO" then
         HealBot_Spell_RangesPref[185123]=true
         HealBot_Spell_RangesPref[185245]=true
+        HealBot_Spell_RangesPref[204021]=true
     elseif HealBot_Data["PCLASSTRIM"] == "EVOK" then
-        HealBot_Spell_RangesPref[361469]=true
         HealBot_Spell_RangesPref[362969]=true
         HealBot_Spell_RangesPref[HEALBOT_LIVING_FLAME]=true
         HealBot_Spell_RangesPref[HEALBOT_ECHO]=true
+        HealBot_Spell_RangesPref[HEALBOT_RETURN]=true
+        HealBot_Spell_RangesPref[HEALBOT_NATURALIZE]=true
     end
 end
 
@@ -280,19 +336,42 @@ function HealBot_Init_SetRangeSpells(sType, spellName, spellId)
     end
 end
 
+local rTarget={["HEAL30MIN"]=25,["HARM30MIN"]=25,["HEALMIN"]=37,["HARMMIN"]=37,
+               ["HEAL30MAX"]=38,["HARM30MAX"]=38,["HEALMAX"]=70,["HARMMAX"]=70,}
+
+local function HealBot_Init_UpdateRangeTarget(spellId, range, target, minKey, maxKey)
+    if HealBot_Spell_RangesPref[spellId] then
+        if range <= target then
+            if range>rTarget[minKey] then rTarget[minKey]=range end
+        else
+            if range<rTarget[maxKey] then rTarget[maxKey]=range end
+        end
+    end
+end
+
+local sTarget,nTarget=30,40
+if HEALBOT_GAME_VERSION>10 then
+    sTarget=34
+    nTarget=46
+end
+
 function HealBot_Init_SetSpellRange(id, spellName, range)
     HealBot_Spell_IDs[id].range=range
-    if range > 27 and range < 33 then
-        if HealBot_WoWAPI_HelpfulSpell(spellName) then
+    if HealBot_WoWAPI_HelpfulSpell(spellName) then
+        if range > rTarget["HEAL30MIN"] and range < rTarget["HEAL30MAX"] then
             HealBot_Init_SetRangeSpells("HEAL30", spellName, id)
-        elseif IsHarmfulSpell(spellName) then
-            HealBot_Init_SetRangeSpells("HARM30", spellName, id)
-        end
-    elseif range > 39 and range < 71 then
-        if HealBot_WoWAPI_HelpfulSpell(spellName) then
+            HealBot_Init_UpdateRangeTarget(id, range, sTarget, "HEAL30MIN", "HEAL30MAX")
+        elseif range > rTarget["HEALMIN"] and range < rTarget["HEALMAX"] then
             HealBot_Init_SetRangeSpells("HEAL", spellName, id)
-        elseif IsHarmfulSpell(spellName) then
+            HealBot_Init_UpdateRangeTarget(id, range, nTarget, "HEALMIN", "HEALMAX")
+        end
+    elseif IsHarmfulSpell(spellName) then
+        if range > rTarget["HARM30MIN"] and range < rTarget["HARM30MAX"] then
+            HealBot_Init_SetRangeSpells("HARM30", spellName, id)
+            HealBot_Init_UpdateRangeTarget(id, range, sTarget, "HARM30MIN", "HARM30MAX")
+        elseif range > rTarget["HARMMIN"] and range < rTarget["HARMMAX"] then
             HealBot_Init_SetRangeSpells("HARM", spellName, id)
+            HealBot_Init_UpdateRangeTarget(id, range, nTarget, "HARMMIN", "HARMMAX")
         end
     end
 end
