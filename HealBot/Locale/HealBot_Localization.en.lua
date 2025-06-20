@@ -422,6 +422,7 @@ function HealBot_Lang_enALL()
     HEALBOT_DISABLED_TARGET                ="Target";
     HEALBOT_OPTIONS_SHOWCLASSONBAR         ="Show class on bar";
     HEALBOT_OPTIONS_SHOWHEALTHONBAR        ="Show health on bar";
+    HEALBOT_OPTIONS_HIDEHEALTHONMAX        ="Hide health on max";
     HEALBOT_OPTIONS_HEALTHINCPERCENT       ="Include percent";
     HEALBOT_OPTIONS_HEALTHINVEHSHOWPLAYER  ="When in vehicle also show player";
     HEALBOT_OPTIONS_SHOWTEXT               ="Show text";

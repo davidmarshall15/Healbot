@@ -2774,7 +2774,7 @@ function HealBot_Options_ShowEnemyIncFocus_OnClick(self)
     if hbv_Skins_GetBoolean("Enemy", "INCFOCUS")~=self:GetChecked() then
         hbv_Skins_SetVar(self:GetChecked(), "Enemy", "INCFOCUS")
         HealBot_Timers_setLuVars("ResetSkins", true)
-        HealBot_Timers_Set("OOC","RefreshPartyNextRecalcEnemy")
+        HealBot_Timers_Set("OOCNT","RefreshPartyNextRecalcEnemy")
     end
 end
 
@@ -7744,7 +7744,7 @@ function HealBot_Options_HealGroups_OnClick(self, id)
     if Healbot_Config_Skins.HealGroups[Healbot_Config_Skins.Current_Skin][id]["STATE"]~=self:GetChecked() then
         Healbot_Config_Skins.HealGroups[Healbot_Config_Skins.Current_Skin][id]["STATE"]=self:GetChecked()
         HealBot_Timers_setLuVars("ResetSkins", true)
-        HealBot_Timers_Set("OOC","RefreshPartyNextRecalcAll")
+        HealBot_Timers_Set("OOCNT","RefreshPartyNextRecalcAll")
         if id == 8 or id == 12 or id == 14 then
             HealBot_Timers_Set("OOC","EventsSetFrameUnits",true)
         end
@@ -9379,6 +9379,20 @@ function HealBot_Options_ShowHealthOnBar_OnClick(self)
       --HealBot_setCall("HealBot_Options_ShowHealthOnBar_OnClick")
     if hbv_Skins_GetFrameBoolean("BarText", "HLTHONBAR", hb_lVars["Frame"])~=self:GetChecked() then
         hbv_Skins_SetFrameVar(self:GetChecked(), "BarText", "HLTHONBAR", hb_lVars["Frame"])
+        if HealBot_Action_FrameIsVisible(hb_lVars["Frame"]) then 
+            if hb_lVars["TestBarsOn"] then
+                HealBot_Timers_Set("SKINS","UpdateTextButtons")
+            else
+                HealBot_Options_HealthUpdateText()
+            end
+        end
+    end
+end
+
+function HealBot_Options_HideHealthOnMax_OnClick(self)
+      --HealBot_setCall("HealBot_Options_HideHealthOnMax_OnClick")
+    if hbv_Skins_GetFrameBoolean("BarText", "HLTHMAXHIDE", hb_lVars["Frame"])~=self:GetChecked() then
+        hbv_Skins_SetFrameVar(self:GetChecked(), "BarText", "HLTHMAXHIDE", hb_lVars["Frame"])
         if HealBot_Action_FrameIsVisible(hb_lVars["Frame"]) then 
             if hb_lVars["TestBarsOn"] then
                 HealBot_Timers_Set("SKINS","UpdateTextButtons")
@@ -11442,7 +11456,7 @@ function HealBot_Options_ToggleMainAssist()
         HealBot_Globals.IncMainAssist=true
         HealBot_AddChat(HEALBOT_CHAT_MAINASSISTON)
     end
-    HealBot_Timers_Set("OOC","RefreshPartyNextRecalcPlayers")
+    HealBot_Timers_Set("OOCNT","RefreshPartyNextRecalcPlayers")
 end
 
 function HealBot_Options_ToggleClearInspect()
@@ -28276,6 +28290,8 @@ function HealBot_Options_SkinsFramesTextHealthTextTab(tab)
     if not HealBot_Options_TabRunOnce[tab] then
         HealBot_Options_ShowHealthOnBar:SetChecked(hbv_Skins_GetFrameBoolean("BarText", "HLTHONBAR", hb_lVars["Frame"]))
         HealBot_Options_SetText(HealBot_Options_ShowHealthOnBar,HEALBOT_OPTIONS_SHOWHEALTHONBAR)
+        HealBot_Options_HideHealthOnMax:SetChecked(hbv_Skins_GetFrameBoolean("BarText", "HLTHMAXHIDE", hb_lVars["Frame"]))
+        HealBot_Options_SetText(HealBot_Options_HideHealthOnMax,HEALBOT_OPTIONS_HIDEHEALTHONMAX)
         HealBot_Options_HealthIncludePercent:SetChecked(hbv_Skins_GetFrameBoolean("BarText", "HLTHINCPTC", hb_lVars["Frame"]))
         HealBot_Options_SetText(HealBot_Options_HealthIncludePercent,HEALBOT_OPTIONS_HEALTHINCPERCENT)
         HealBot_Options_HealthInVehicleShowPlayer:SetChecked(hbv_Skins_GetFrameBoolean("BarText", "HLTHINVEHSHOWPLAYER", hb_lVars["Frame"]))

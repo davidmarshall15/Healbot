@@ -315,7 +315,7 @@ function HealBot_Action_setpcClass(button)
                 else
                     button.skinreset=true
                     button.icon.reset=true
-                    HealBot_Timers_Set("OOC","RefreshPartyNextRecalcPlayers",true)
+                    HealBot_Timers_Set("OOC","RefreshPartyNextRecalcPlayers")
                 end
             end
         else
@@ -6292,7 +6292,7 @@ function HealBot_Action_setGuidSpec(button, spec)
     button.spec=" "..spec.." "
     HealBot_Action_SetGuidData(button, "SPEC", button.spec)
     HealBot_Action_SetGuidData(button, "TMPSPEC", button.spec)
-    HealBot_Timers_Set("OOC","RefreshPartyNextRecalcPlayers",true)
+    HealBot_Timers_Set("OOC","RefreshPartyNextRecalcPlayers")
 end
 
 function HealBot_Action_ActiveButtonId()
@@ -6529,13 +6529,13 @@ function HealBot_Action_SetHealButton(unit,guid,frame,unitType,duplicate,role,pr
             end
         else                
             if unitType>40 then
-                HealBot_Timers_Set("OOC","RefreshPartyNextRecalcEnemy",true,true)
+                HealBot_Timers_Set("OOC","RefreshPartyNextRecalcEnemy",true)
             elseif hbv_IsUnitType(unitType, HEALBOT_PET) then 
-                HealBot_Timers_Set("OOC","RefreshPartyNextRecalcPets",true,true)
+                HealBot_Timers_Set("OOC","RefreshPartyNextRecalcPets",true)
             elseif hbv_IsUnitType(unitType, HEALBOT_VEHICLE) then
-                HealBot_Timers_Set("OOC","RefreshPartyNextRecalcVehicle",true,true)
+                HealBot_Timers_Set("OOC","RefreshPartyNextRecalcVehicle",true)
             else
-                HealBot_Timers_Set("OOC","RefreshPartyNextRecalcPlayers",true,true)
+                HealBot_Timers_Set("OOC","RefreshPartyNextRecalcPlayers",true)
             end
         end
     end

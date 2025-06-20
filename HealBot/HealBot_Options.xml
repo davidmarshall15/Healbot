@@ -20743,7 +20743,7 @@
                             <Anchors>
                               <Anchor point="TOPLEFT">
                                 <Offset>
-                                  <AbsDimension x="58" y="-70" />
+                                  <AbsDimension x="58" y="-50" />
                                 </Offset>
                               </Anchor>
                             </Anchors>
@@ -20788,7 +20788,7 @@
                             <Anchors>
                               <Anchor point="TOPRIGHT">
                                 <Offset>
-                                  <AbsDimension x="-58" y="-70" />
+                                  <AbsDimension x="-58" y="-50" />
                                 </Offset>
                               </Anchor>
                             </Anchors>
@@ -20815,7 +20815,7 @@
                             <Anchors>
                               <Anchor point="TOPLEFT">
                                 <Offset>
-                                  <AbsDimension x="58" y="-170" />
+                                  <AbsDimension x="58" y="-150" />
                                 </Offset>
                               </Anchor>
                             </Anchors>
@@ -20842,7 +20842,7 @@
                             <Anchors>
                               <Anchor point="TOPLEFT" relativeTo="HealBot_Options_AuxBarColour" relativePoint="BOTTOMLEFT">
                                 <Offset>
-                                  <AbsDimension x="20" y="-12"/>
+                                  <AbsDimension x="20" y="-5"/>
                                 </Offset>
                               </Anchor>
                             </Anchors>
@@ -20856,7 +20856,7 @@
                             <Anchors>
                               <Anchor point="TOPLEFT" relativeTo="HealBot_Options_AuxBarColour" relativePoint="BOTTOMLEFT">
                                 <Offset>
-                                  <AbsDimension x="0" y="-70" />
+                                  <AbsDimension x="0" y="-58" />
                                 </Offset>
                               </Anchor>
                             </Anchors>
@@ -21120,7 +21120,7 @@
                             <Anchors>
                               <Anchor point="BOTTOMLEFT">
                                 <Offset>
-                                  <AbsDimension x="50" y="95" />
+                                  <AbsDimension x="50" y="130" />
                                 </Offset>
                               </Anchor>
                             </Anchors>
@@ -21132,12 +21132,12 @@
                           </Slider>
                           <Slider name="HealBot_Options_AuxBarDepth" inherits="HealBot_Options_SliderTemplate">
                             <Size>
-                              <AbsDimension x="225" y="16" />
+                              <AbsDimension x="500" y="16" />
                             </Size>
                             <Anchors>
                               <Anchor point="LEFT" relativeTo="HealBot_Options_AuxBarSize"  relativePoint="LEFT">
                                 <Offset>
-                                  <AbsDimension x="0" y="-58" />
+                                  <AbsDimension x="0" y="-55" />
                                 </Offset>
                               </Anchor>
                             </Anchors>
@@ -21149,12 +21149,12 @@
                           </Slider>
                           <Slider name="HealBot_Options_AuxBarOffset" inherits="HealBot_Options_SliderTemplate">
                             <Size>
-                              <AbsDimension x="225" y="16" />
+                              <AbsDimension x="500" y="16" />
                             </Size>
                             <Anchors>
-                              <Anchor point="LEFT" relativeTo="HealBot_Options_AuxBarDepth"  relativePoint="RIGHT">
+                              <Anchor point="LEFT" relativeTo="HealBot_Options_AuxBarDepth"  relativePoint="LEFT">
                                 <Offset>
-                                  <AbsDimension x="50" y="0" />
+                                  <AbsDimension x="0" y="-55" />
                                 </Offset>
                               </Anchor>
                             </Anchors>
@@ -22880,7 +22880,7 @@
                                 <Anchors>
                                   <Anchor point="TOPLEFT">
                                     <Offset>
-                                      <AbsDimension x="230" y="-40" />
+                                      <AbsDimension x="120" y="-40" />
                                     </Offset>
                                   </Anchor>
                                 </Anchors>
@@ -22890,11 +22890,25 @@
                                   <OnLeave>HealBot_Options_Show_Help("HEALBARSTXTSHOWHEALTH",false)</OnLeave>
                                 </Scripts>
                               </CheckButton>
+                              <CheckButton name="HealBot_Options_HideHealthOnMax" inherits="HealBotUIPanelCheckButton">
+                                <Anchors>
+                                  <Anchor point="TOPLEFT">
+                                    <Offset>
+                                      <AbsDimension x="320" y="-40" />
+                                    </Offset>
+                                  </Anchor>
+                                </Anchors>
+                                <Scripts>
+                                  <OnClick>HealBot_Options_HideHealthOnMax_OnClick(self)</OnClick>
+                                  <OnEnter>HealBot_Options_Show_Help("HEALBARSTXTHIDEHEALTHMAX",true)</OnEnter>
+                                  <OnLeave>HealBot_Options_Show_Help("HEALBARSTXTHIDEHEALTHMAX",false)</OnLeave>
+                                </Scripts>
+                              </CheckButton>
                               <Frame name="HealBot_Options_BarHealthType" inherits="UIDropDownMenuTemplate">
                                 <Anchors>
                                   <Anchor point="TOPLEFT" relativeTo="HealBot_Options_ShowHealthOnBar" relativePoint="BOTTOMLEFT">
                                     <Offset>
-                                      <AbsDimension x="-195" y="-8" />
+                                      <AbsDimension x="-85" y="-8" />
                                     </Offset>
                                   </Anchor>
                                 </Anchors>

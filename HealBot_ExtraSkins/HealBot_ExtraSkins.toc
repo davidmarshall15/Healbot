@@ -1,4 +1,4 @@
-## Interface: 11507, 40402, 50500, 110105, 110107
+## Interface: 11507, 40402, 50500, 110107
 ## Title: HealBot Extra Skins
 ## Author: Strife
 ## Notes: Large store of extra skins for HealBot.

@@ -240,9 +240,9 @@ function HealBot_Range_UpdateUnit(button)
                 end
                 if hbv_Skins_GetFrameBoolean("BarSort", "OORLAST", button.frame) then
                     if button.status.unittype<20 then
-                        HealBot_Timers_Set("OOC","RefreshPartyNextRecalcPlayers",true)
+                        HealBot_Timers_Set("OOCNT","RefreshPartyNextRecalcPlayers")
                     elseif button.status.unittype<30 then
-                        HealBot_Timers_Set("OOC","RefreshPartyNextRecalcPets",true)
+                        HealBot_Timers_Set("OOCNT","RefreshPartyNextRecalcPets")
                     end
                 end
                 HealBot_Action_UpdateHotBar(button)

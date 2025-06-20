@@ -259,28 +259,28 @@ function HealBot_AllRefreshTypes()
     HealBot_RefreshTypes[0]=true
 end
 
-function HealBot_nextRecalcParty(typeRequired,delay)
+function HealBot_nextRecalcParty(typeRequired)
       --HealBot_setCall("HealBot_nextRecalcParty"..typeRequired)
     if typeRequired == 3 then
         if Healbot_Config_Skins.HealGroups[Healbot_Config_Skins.Current_Skin][11]["STATE"] and Healbot_Config_Skins.HealGroups[Healbot_Config_Skins.Current_Skin][11]["FRAME"]<6 then
-            HealBot_nextRecalcParty(6,delay)
+            HealBot_nextRecalcParty(6)
         end
         if Healbot_Config_Skins.HealGroups[Healbot_Config_Skins.Current_Skin][12]["STATE"] and Healbot_Config_Skins.HealGroups[Healbot_Config_Skins.Current_Skin][12]["FRAME"]<6 then
-            HealBot_nextRecalcParty(6,delay)
+            HealBot_nextRecalcParty(6)
         end
     elseif typeRequired == 4 then
         if Healbot_Config_Skins.HealGroups[Healbot_Config_Skins.Current_Skin][13]["STATE"] and Healbot_Config_Skins.HealGroups[Healbot_Config_Skins.Current_Skin][13]["FRAME"]<6 then
-            HealBot_nextRecalcParty(6,delay)
+            HealBot_nextRecalcParty(6)
         end
         if Healbot_Config_Skins.HealGroups[Healbot_Config_Skins.Current_Skin][14]["STATE"] and Healbot_Config_Skins.HealGroups[Healbot_Config_Skins.Current_Skin][14]["FRAME"]<6 then
-            HealBot_nextRecalcParty(6,delay)
+            HealBot_nextRecalcParty(6)
         end
     elseif typeRequired == 2 then
         if hbv_Skins_GetBoolean("Healing", "SELFPET") then
-            HealBot_nextRecalcParty(6,delay)
+            HealBot_nextRecalcParty(6)
         end
         if Healbot_Config_Skins.HealGroups[Healbot_Config_Skins.Current_Skin][10]["STATE"] and Healbot_Config_Skins.HealGroups[Healbot_Config_Skins.Current_Skin][10]["FRAME"]<6 then
-            HealBot_nextRecalcParty(6,delay)
+            HealBot_nextRecalcParty(6)
         end
     elseif typeRequired == 1 then
         if Healbot_Config_Skins.HealGroups[Healbot_Config_Skins.Current_Skin][9]["STATE"] and Healbot_Config_Skins.HealGroups[Healbot_Config_Skins.Current_Skin][9]["FRAME"]<6 then
@@ -573,7 +573,7 @@ function HealBot_TalentQuery(button)
         end
         if s~=" " then
             if button.spec~=s then
-                HealBot_Timers_Set("OOC","RefreshPartyNextRecalcPlayers",true)
+                HealBot_Timers_Set("OOC","RefreshPartyNextRecalcPlayers")
                 HealBot_SpecUpdate(button, HealBot_TimeNow+15)
             else
                 button.specupdate=0
@@ -1243,9 +1243,9 @@ function HealBot_UpdateUnitNotExists(button, isSetHealButton)
     button.status.classknown=false
     if not isSetHealButton then
         if hbv_IsUnitType(button.status.unittype, HEALBOT_VEHICLE) and Healbot_Config_Skins.HealGroups[Healbot_Config_Skins.Current_Skin][9]["STATE"] then
-            HealBot_Timers_Set("OOC","RefreshPartyNextRecalcVehicle")
+            HealBot_Timers_Set("OOCNT","RefreshPartyNextRecalcVehicle")
         elseif hbv_IsUnitType(button.status.unittype, HEALBOT_PET) and Healbot_Config_Skins.HealGroups[Healbot_Config_Skins.Current_Skin][10]["STATE"] then
-            HealBot_Timers_Set("OOC","RefreshPartyNextRecalcPets")
+            HealBot_Timers_Set("OOCNT","RefreshPartyNextRecalcPets")
         end
     end
     if button.status.dirarrowshown>0 then HealBot_Action_HideDirectionArrow(button) end
@@ -1295,8 +1295,9 @@ function HealBot_UpdateUnitGUIDChange(button, notRecalc)
         --button.status.change=true
         HealBot_UpdateUnitExists(button)
         button.status.guidupdate=true
-        --HealBot_UnitSlowUpdate(button)
         HealBot_SpecUpdate(button, HealBot_TimeNow)
+--        HealBot_Events_UpdateRange(button)
+        HealBot_Range_UpdateUnit(button)
     else
         HealBot_ClassNotKnown(button)
     end
@@ -1421,7 +1422,7 @@ function HealBot_RecalcParty(changeType)
     --HealBot_setCall("HealBot_RecalcParty")
     HealBot_RefreshTypes[changeType]=false
     if changeType == 5 and not HealBot_luVars["UpdateEnemyFrame"] then
-        HealBot_Timers_Set("OOC","RefreshPartyNextRecalcEnemy")
+        HealBot_Timers_Set("OOCNT","RefreshPartyNextRecalcEnemy")
     else
         HealBot_Action_resetShouldHealSomeFrames()
         HealBot_Panel_PartyChanged(HealBot_Data["UILOCK"], changeType)
@@ -2680,7 +2681,7 @@ function HealBot_Timer_FramesRefresh()
     if not HealBot_luVars["ProcessRefresh"] and not HealBot_Data["UILOCK"] then
         HealBot_luVars["ProcessRefresh"]=true
         HealBot_luVars["checkEnemyPlayerTargets"]=true
-        HealBot_Timers_Set("OOC","ProcessRefreshTypes")
+        HealBot_Timers_Set("OOCNT","ProcessRefreshTypes")
     elseif HealBot_Data["UILOCK"] then
         HealBot_Timers_Set("OOC","FramesRefresh",true)
     end
@@ -3160,7 +3161,7 @@ function HealBot_VehicleChange(button, enterVehicle)
     if doRefresh then
         HealBot_UnitHealth(button)
         if Healbot_Config_Skins.HealGroups[Healbot_Config_Skins.Current_Skin][9]["STATE"] then
-            HealBot_Timers_Set("OOC","RefreshPartyNextRecalcVehicle")
+            HealBot_Timers_Set("OOCNT","RefreshPartyNextRecalcVehicle")
         end
         if UnitIsUnit(button.unit,"player") then HealBot_PlayerCheck() end
     end
@@ -3444,6 +3445,8 @@ function HealBot_AfterCombatCleanup()
         --HealBot_Timers_Set("LAST","IconNotInCombat")
         HealBot_Update_AllUnitBars(true)
         if HealBot_luVars["pluginThreat"] then HealBot_Plugin_Threat_TogglePanel() end
+        HealBot_Timers_Set("OOCNT","RefreshPartyNextRecalcAll")
+       -- HealBot_Timers_TurboOn()
     elseif not HealBot_luVars["UpdateEnemyFrame"] then
         HealBot_UnlockEnemyFrame()
     end
@@ -3452,7 +3455,7 @@ end
 function HealBot_UnlockEnemyFrame()
       --HealBot_setCall("HealBot_UnlockEnemyFrame")
     HealBot_luVars["UpdateEnemyFrame"]=true
-    HealBot_Timers_Set("OOC","RefreshPartyNextRecalcEnemy")
+    HealBot_Timers_Set("OOCNT","RefreshPartyNextRecalcEnemy")
 end
 
 function HealBot_Not_Fighting()
@@ -3809,7 +3812,7 @@ function HealBot_ProcessRefreshTypes()
         elseif HealBot_RefreshTypes[6] then
             HealBot_RecalcParty(6)
             --if not HealBot_RefreshTypes[5] then
-            --    HealBot_Timers_Set("OOC","RefreshPartyNextRecalcEnemy")
+            --    HealBot_Timers_Set("OOCNT","RefreshPartyNextRecalcEnemy")
             --end
         elseif HealBot_RefreshTypes[5] then
             HealBot_RecalcParty(5)
@@ -3841,7 +3844,7 @@ function HealBot_ProcessRefreshTypes()
             end
             return
         end
-        HealBot_Timers_Set("OOC","ProcessRefreshTypes")
+        HealBot_Timers_Set("OOCNT","ProcessRefreshTypes")
     else
         HealBot_Timers_Set("OOC","ProcessRefreshTypes",true)
     end

@@ -290,16 +290,16 @@ function HealBot_Panel_updDataStore(button)
         else
             hbPanel_buttonGUIDs[button.guid]=button
         end
-        HealBot_Timers_Set("OOC","RefreshPartyNextRecalcPlayers",true)
+        HealBot_Timers_Set("OOCNT","RefreshPartyNextRecalcPlayers")
     elseif hbPanel_dataPetUnits[button.unit] then
         hbPanel_dataPetNames[button.name]=button.unit
         hbPanel_dataPetGUIDs[button.guid]=button.unit
         hbPanel_dataPetUnits[button.unit]=button.guid
         hbPanel_buttonPetGUIDs[button.guid]=button
         if hbv_IsUnitType(button.status.unittype, HEALBOT_VEHICLE) then
-            HealBot_Timers_Set("OOC","RefreshPartyNextRecalcVehicle",true)
+            HealBot_Timers_Set("OOCNT","RefreshPartyNextRecalcVehicle")
         else
-            HealBot_Timers_Set("OOC","RefreshPartyNextRecalcPets",true)
+            HealBot_Timers_Set("OOCNT","RefreshPartyNextRecalcPets")
         end
     elseif button.status.unittype>30 then
         hbPanel_buttonExtraGUIDs[button.guid]=button
@@ -578,7 +578,7 @@ function HealBot_Panel_SethbTopRole(Role)
     if HealBot_Globals.TopRole~=Role then
         HealBot_Globals.TopRole=Role
         HealBot_AddChat(HEALBOT_CHAT_NEWTOPROLE..Role)
-        HealBot_Timers_Set("OOC","RefreshPartyNextRecalcAll")
+        HealBot_Timers_Set("OOCNT","RefreshPartyNextRecalcAll")
     end
 end
 
@@ -587,7 +587,7 @@ function HealBot_Panel_ClearBlackList()
     for x,_ in pairs(HealBot_Panel_BlackList) do
         HealBot_Panel_BlackList[x]=nil
     end
-    HealBot_Timers_Set("OOC","RefreshPartyNextRecalcAll")
+    HealBot_Timers_Set("OOCNT","RefreshPartyNextRecalcAll")
 end
 
 function HealBot_Panel_AddBlackList(unit)
@@ -595,7 +595,7 @@ function HealBot_Panel_AddBlackList(unit)
     xGUID=UnitGUID(unit)
     if xGUID then
         HealBot_Panel_BlackList[xGUID]=true;
-        HealBot_Timers_Set("OOC","RefreshPartyNextRecalcAll")
+        HealBot_Timers_Set("OOCNT","RefreshPartyNextRecalcAll")
     end
 end
 
@@ -618,7 +618,7 @@ function HealBot_Panel_ToggelPrivFocus(unit, recall)
         xGUID=UnitGUID(unit)
         if not xGUID or HealBot_Config.PrivFocus == xGUID then
             if HealBot_Config.PrivFocus ~= "x" then
-                HealBot_Timers_Set("OOC","RefreshPartyNextRecalcPlayers")
+                HealBot_Timers_Set("OOCNT","RefreshPartyNextRecalcPlayers")
             end
             HealBot_Config.PrivFocus="x"
             HealBot_Panel_luVars["PrivFocusUnit"]=false
@@ -630,7 +630,7 @@ function HealBot_Panel_ToggelPrivFocus(unit, recall)
             if aButton then
                 HealBot_Events_UnitBuff(aButton)
             end
-            HealBot_Timers_Set("OOC","RefreshPartyNextRecalcPlayers")
+            HealBot_Timers_Set("OOCNT","RefreshPartyNextRecalcPlayers")
         end
         HealBot_Timers_Set("OOC","UpdateTargetMyFriend")
     elseif not recall and UnitExists(unit) then
@@ -650,8 +650,8 @@ end
 
 function HealBot_Panel_PrivateListUpdate()
       --HealBot_setCall("HealBot_Panel_PrivateListUpdate")
-    HealBot_Timers_Set("OOC","RefreshPartyNextRecalcPlayers")
-    HealBot_Timers_Set("OOC","RefreshPartyNextRecalcPets")
+    HealBot_Timers_Set("OOCNT","RefreshPartyNextRecalcPlayers")
+    HealBot_Timers_Set("OOCNT","RefreshPartyNextRecalcPets")
     HealBot_Timers_Set("AURA","CheckUnits",true)
     HealBot_Timers_Set("LAST","PluginTweaksRefresh",true)
 end
@@ -2272,8 +2272,8 @@ function HealBot_Panel_PlayersTargetsResetSkins()
         HealBot_setLuVars("resetOnNoTargetFrames", true)
     end
     HealBot_Timers_setLuVars("ResetEnemySkins", true)
-    HealBot_Timers_Set("OOC","RefreshPartyNextRecalcPlayers")
-    HealBot_Timers_Set("OOC","RefreshPartyNextRecalcTarget")
+    HealBot_Timers_Set("OOCNT","RefreshPartyNextRecalcPlayers")
+    HealBot_Timers_Set("OOCNT","RefreshPartyNextRecalcTarget")
    -- HealBot_AddDebug("PlayersTargetsResetSkins","Enemy",true)
 end
 

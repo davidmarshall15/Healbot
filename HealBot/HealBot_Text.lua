@@ -757,6 +757,9 @@ function HealBot_Text_DoSetHealthText(button, IgnoreInHeals, force)
     if button.health.current == 0 then
         button.text.health="0"
         force=true
+    elseif hbv_Skins_GetFrameBoolean("BarText", "HLTHMAXHIDE", button.framecol) and button.health.current == button.health.max then
+        button.text.health=""
+        force=true
     else
         tHealthConcat[1]=hbNumFormats["SurroundLeft"][button.framecol]
         if hbv_Skins_GetFrameVar("BarText", "HLTHTYPE", button.framecol) == 1 then

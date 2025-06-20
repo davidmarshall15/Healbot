@@ -216,7 +216,7 @@ end
 
 function HealBot_Events_PartyMembersChanged()
       --HealBot_setCall("HealBot_Events_PartyMembersChanged")
-    HealBot_Timers_Set("OOC","RefreshPartyNextRecalcPlayers",true)
+    HealBot_Timers_Set("OOC","RefreshPartyNextRecalcPlayers")
 end
 
 function HealBot_Events_RosterUpdate()
@@ -725,7 +725,7 @@ end
 function HealBot_Events_PetsChanged()
       --HealBot_setCall("HealBot_Events_PetsChanged")
     if Healbot_Config_Skins.HealGroups[Healbot_Config_Skins.Current_Skin][10]["STATE"] then
-        HealBot_Timers_Set("OOC","RefreshPartyNextRecalcPets")
+        HealBot_Timers_Set("OOCNT","RefreshPartyNextRecalcPets")
     end
 end
 
@@ -937,7 +937,7 @@ function HealBot_Events_PlayerEnteringWorld()
     HealBot_Timers_Set("INIT","EnteringWorld")
     --HealBot_Timers_Set("OOC","SaveSpellsProfile")
     HealBot_setLuVars("qaFRNext", HealBot_ServerTimeNow+2)
-    HealBot_Timers_TurboOn()
+    --HealBot_Timers_TurboOn()
 end
 
 function HealBot_Events_PlayerLeavingWorld()
