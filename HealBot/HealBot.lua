@@ -923,28 +923,28 @@ function HealBot_SlashCmd(cmd)
         elseif (HBcmd == "ma" and x) then
             x=tonumber(x)
             if type(x) == "number" then
-                if x>0 and x<21 then
+                if x>9 and x<201 then
                     HealBot_AddChat("Aux MAX Absorbs set to MaxHealth / "..x)
                     HealBot_Globals.AbsorbDiv=x
                     HealBot_Timers_Set("LAST", "SetInHealAbsorbMax")
                 else
-                    HealBot_AddChat("The MAX Absorbs divider must be between 1 and 20")
+                    HealBot_AddChat("The MAX Absorbs divider must be between 10 and 200")
                 end
             else
-                HealBot_AddChat("The MAX Absorbs divider must be a number between 1 and 20")
+                HealBot_AddChat("The MAX Absorbs divider must be a number between 10 and 200")
             end
         elseif (HBcmd == "mi" and x) then
             x=tonumber(x)
             if type(x) == "number" then
-                if x>0 and x<21 then
+                if x>9 and x<201 then
                     HealBot_AddChat("Aux MAX In Heals set to MaxHealth / "..x)
                     HealBot_Globals.InHealDiv=x
                     HealBot_Timers_Set("LAST", "SetInHealAbsorbMax")
                 else
-                    HealBot_AddChat("The MAX In Heals divider must be between 1 and 20")
+                    HealBot_AddChat("The MAX In Heals divider must be between 10 and 200")
                 end
             else
-                HealBot_AddChat("The MAX In Heals divider must be a number between 1 and 20")
+                HealBot_AddChat("The MAX In Heals divider must be a number between 10 and 200")
             end
         elseif (HBcmd == "mt" and x) then
             x=tonumber(x)
@@ -1225,14 +1225,12 @@ function HealBot_ClassNotKnown(button)
     HealBot_UpdateUnitClear(button, true)
 end
 
-local uuUnitClassEN="XXXX"
 function HealBot_UpdateUnitNotExists(button, isSetHealButton)
       --HealBot_setCall("HealBot_UpdateUnitNotExists - c="..button.status.current, button)
     HealBot_Action_setState(button, HealBot_Unit_Status["RESERVED"])
-    --button.status.slowupdate=true
-    --button.status.update=true
-    --button.status.change=true
-    HealBot_UpdateUnitExists(button)
+    button.status.slowupdate=true
+    button.status.update=true
+    button.status.change=true
     HealBot_UpdateUnitClear(button)
     HealBot_UnitHealth(button, true)
     HealBot_Text_setNameTag(button)
@@ -1329,6 +1327,7 @@ function HealBot_UnitExists(button)
 end
 
 local guName=false
+local uuUnitClassEN="XXXX"
 function HealBot_SetGuidData(button)
     _, uuUnitClassEN=UnitClass(button.unit);
     if uuUnitClassEN then

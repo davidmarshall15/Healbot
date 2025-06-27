@@ -35,15 +35,21 @@ end
 function HealBot_Aux_setInHealAbsorbMax()
       --HealBot_setCall("HealBot_Aux_setInHealAbsorbMax")
     local maxHlth=HealBot_MaxPlayerHealth(HealBot_Data["PGUID"])
-    if not HealBot_Globals.AbsorbDiv then HealBot_Globals.AbsorbDiv=12 end
-    if not HealBot_Globals.InHealDiv then HealBot_Globals.InHealDiv=12 end
+    if not HealBot_Globals.AIHDivAdj then 
+        HealBot_Globals.AIHDivAdj=true
+        if not HealBot_Globals.AbsorbDiv then HealBot_Globals.AbsorbDiv=10 end
+        if not HealBot_Globals.InHealDiv then HealBot_Globals.InHealDiv=10 end
+        HealBot_Globals.AbsorbDiv=HealBot_Globals.AbsorbDiv*10
+        HealBot_Globals.InHealDiv=HealBot_Globals.InHealDiv*10
+        HealBot_Globals.HealAbsorbsDiv=HealBot_Globals.HealAbsorbsDiv*10
+    end
     if maxHlth and maxHlth>1 then
-        HealBot_Aux_luVars["AbsorbMax"]=ceil((maxHlth/HealBot_Globals.AbsorbDiv)/1000)
-        HealBot_Aux_luVars["InHealMax"]=ceil((maxHlth/HealBot_Globals.InHealDiv)/1000)
-        HealBot_Aux_luVars["HealAbsorbsMax"]=ceil((maxHlth/HealBot_Globals.HealAbsorbsDiv)/1000)
-        HealBot_Aux_luVars["AbsorbMax"]=HealBot_Aux_luVars["AbsorbMax"]*1000
-        HealBot_Aux_luVars["InHealMax"]=HealBot_Aux_luVars["InHealMax"]*1000
-        HealBot_Aux_luVars["HealAbsorbsMax"]=HealBot_Aux_luVars["HealAbsorbsMax"]*1000
+        HealBot_Aux_luVars["AbsorbMax"]=ceil((maxHlth/(HealBot_Globals.AbsorbDiv/10))/10)
+        HealBot_Aux_luVars["InHealMax"]=ceil((maxHlth/(HealBot_Globals.InHealDiv/10))/10)
+        HealBot_Aux_luVars["HealAbsorbsMax"]=ceil((maxHlth/(HealBot_Globals.HealAbsorbsDiv/10))/10)
+        HealBot_Aux_luVars["AbsorbMax"]=HealBot_Aux_luVars["AbsorbMax"]*10
+        HealBot_Aux_luVars["InHealMax"]=HealBot_Aux_luVars["InHealMax"]*10
+        HealBot_Aux_luVars["HealAbsorbsMax"]=HealBot_Aux_luVars["HealAbsorbsMax"]*10
 
         HealBot_Timers_Set("AUX","UpdateAllAuxInHealsBars")
         HealBot_Timers_Set("AUX","UpdateAllAuxAbsorbBars")
