@@ -7965,23 +7965,27 @@ end
 local modKey=1 -- Not Locked
 function HealBot_Action_IsFrameLocked(frame)
       --HealBot_setCall("HealBot_Action_IsFrameLocked")
-    modKey=1 -- Not Locked
-    if hbv_Skins_GetFrameVar("Frame", "LOCKED", frame)>2 then
-        if IsAltKeyDown() then 
-            if IsControlKeyDown() then
-                modKey=5
-            else
-                modKey=4
-            end
-        elseif IsControlKeyDown() then
-            modKey=3
-        end
-    end
-    if (HealBot_Action_luVars["TestBarsOn"] and not hbv_Skins_GetFrameBoolean("StickyFrames", "STUCK", frame)) 
-      or hbv_Skins_GetFrameVar("Frame", "LOCKED", frame) == modKey then
-        return false
-    else
+    if HEALBOT_GAME_VERSION>1 and HealBot_Data["UILOCK"] then
         return true
+    else
+        modKey=1 -- Not Locked
+        if hbv_Skins_GetFrameVar("Frame", "LOCKED", frame)>2 then
+            if IsAltKeyDown() then 
+                if IsControlKeyDown() then
+                    modKey=5
+                else
+                    modKey=4
+                end
+            elseif IsControlKeyDown() then
+                modKey=3
+            end
+        end
+        if (HealBot_Action_luVars["TestBarsOn"] and not hbv_Skins_GetFrameBoolean("StickyFrames", "STUCK", frame)) 
+          or hbv_Skins_GetFrameVar("Frame", "LOCKED", frame) == modKey then
+            return false
+        else
+            return true
+        end
     end
 end
 

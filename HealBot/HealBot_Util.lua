@@ -256,10 +256,12 @@ end
 
 function HealBot_Util_ReadNumber(n,p)
     if n<1000000 then
-        if n<10000 then
+        if n<1000 then
             nConcat[1]=n
             nConcat[2]=""
-        elseif n<100000 then
+        elseif n<10000 then
+            nConcat[1]=HealBot_Util_Round(n/1000,p or 2)
+            nConcat[2]=nSuffix[1]        elseif n<100000 then
             nConcat[1]=HealBot_Util_Round(n/1000,p or 1)
             nConcat[2]=nSuffix[1]
         else
