@@ -4197,7 +4197,7 @@ function HealBot_Aura_InitData()
                         [(HealBot_WoWAPI_SpellName(HBC_DETECT_GREATER_INVISIBILITY) or "Detect Greater Invisibility")]=HBC_INV_ID,
                     }
                 end
-            elseif HEALBOT_GAME_VERSION<5 then
+            elseif HEALBOT_GAME_VERSION<6 then
                 HealBot_BuffNameTypes={
                     [(HealBot_WoWAPI_SpellName(HEALBOT_MARK_OF_THE_WILD) or "Mark of the Wild")]=HBC_STATS_ID,
                     [(HealBot_WoWAPI_SpellName(HBC_BLESSING_OF_KINGS) or "Blessing of Kings")]=HBC_STATS_ID,
@@ -4205,6 +4205,7 @@ function HealBot_Aura_InitData()
                     [(HealBot_WoWAPI_SpellName(HBC_INNER_WILL) or "Inner Will")]=HBC_INNER_ID,
                     [(HealBot_WoWAPI_SpellName(HEALBOT_POWER_WORD_FORTITUDE) or "Power Word: Fortitude")]=HBC_STAMINA_ID,
                     [(HealBot_WoWAPI_SpellName(HEALBOT_COMMANDING_SHOUT) or "Commanding Shout")]=HBC_STAMINA_ID,
+                    [(HealBot_WoWAPI_SpellName(HEALBOT_DARK_INTENT) or "Dark Intent")]=HBC_STAMINA_ID,
                     [(HealBot_WoWAPI_SpellName(HEALBOT_ARCANE_BRILLIANCE) or "Arcane Brilliance")]=HBC_INT_ID,
                     [(HealBot_WoWAPI_SpellName(HEALBOT_DALARAN_BRILLIANCE) or "Dalaran Brilliance")]=HBC_INT_ID,
                 }

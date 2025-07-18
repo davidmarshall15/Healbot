@@ -44,7 +44,7 @@ function hbv_SkinDefault_NilData(skin, id)
     HealBot_Config.SkinDefault[skin][id]=nil
 end
 
--- Vardefaults
+-- Var defaults
 local sVars={["cBuff"]=HEALBOT_CUSTOM_en.."Buff",
              ["cDebuff"]=HEALBOT_CUSTOM_en.."15",
              ["rcWAITING"]=0,

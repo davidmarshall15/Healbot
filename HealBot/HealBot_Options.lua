@@ -411,7 +411,15 @@ local hbCustomBuff_Text={}
 local hbActionIcons_Text={}
 function HealBot_Options_InitVars()
       --HealBot_setCall("HealBot_Options_InitVars")
+    customDebuffPriority=hbv_GetStatic("cDebuff")
+    customBuffPriority=hbv_GetStatic("cBuff")
     if not HealBot_Globals.OptionsTheme then HealBot_Globals.OptionsTheme=1 end
+    if not HealBot_Globals.CDCBarColour[customDebuffPriority] then
+        HealBot_Globals.CDCBarColour[customDebuffPriority]={}
+        HealBot_Globals.CDCBarColour[customDebuffPriority]=0.45
+        HealBot_Globals.CDCBarColour[customDebuffPriority]=0
+        HealBot_Globals.CDCBarColour[customDebuffPriority]=0.26
+    end
     optionsButton:SetText(HEALBOT_ACTION_OPTIONS)
     optionsButton:SetWidth(100)
     optionsButton:SetPoint("TOPLEFT", 14, -58)
@@ -3632,14 +3640,21 @@ function HealBot_FrameScale_OnValueChanged(self)
       --HealBot_setCall("HealBot_FrameScale_OnValueChanged")
 --    local val=floor(self:GetValue()+0.5)
     local val=HealBot_Util_Round(self:GetValue(), 1)
+    val=val*2
+    val=5*floor(val)
     val=val/10;
-    if hbv_Skins_GetFrameVar("Frame", "SCALE", hb_lVars["Frame"])~=val then
-        hbv_Skins_SetFrameVar(val, "Frame", "SCALE", hb_lVars["Frame"])
-        local g=_G[self:GetName().."Text"]
-        g:SetText(self.text .. ": " .. val);
-        HealBot_Options_framesChanged(true, true, true, true, true)
-        HealBot_Timers_Set("LAST","UpdateButtonGlow")
-        HealBot_Timers_Set("LAST","UpdateIconGlow")
+    if val ~= self:GetValue() then
+        self:SetValue(val)
+    else
+        val=val/10
+        if hbv_Skins_GetFrameVar("Frame", "SCALE", hb_lVars["Frame"])~=val then
+            hbv_Skins_SetFrameVar(val, "Frame", "SCALE", hb_lVars["Frame"])
+            local g=_G[self:GetName().."Text"]
+            g:SetText(self.text .. ": " .. val);
+            HealBot_Options_framesChanged(true, true, true, true, true)
+            HealBot_Timers_Set("LAST","UpdateButtonGlow")
+            HealBot_Timers_Set("LAST","UpdateIconGlow")
+        end
     end
 end
 
