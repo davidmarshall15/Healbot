@@ -414,11 +414,11 @@ function HealBot_Options_InitVars()
     customDebuffPriority=hbv_GetStatic("cDebuff")
     customBuffPriority=hbv_GetStatic("cBuff")
     if not HealBot_Globals.OptionsTheme then HealBot_Globals.OptionsTheme=1 end
-    if not HealBot_Globals.CDCBarColour[customDebuffPriority] then
+    if not HealBot_Globals.CDCBarColour[customDebuffPriority] or type(HealBot_Globals.CDCBarColour[customDebuffPriority]) == "number" then
         HealBot_Globals.CDCBarColour[customDebuffPriority]={}
-        HealBot_Globals.CDCBarColour[customDebuffPriority]=0.45
-        HealBot_Globals.CDCBarColour[customDebuffPriority]=0
-        HealBot_Globals.CDCBarColour[customDebuffPriority]=0.26
+        HealBot_Globals.CDCBarColour[customDebuffPriority].R=0.45
+        HealBot_Globals.CDCBarColour[customDebuffPriority].G=0
+        HealBot_Globals.CDCBarColour[customDebuffPriority].B=0.26
     end
     optionsButton:SetText(HEALBOT_ACTION_OPTIONS)
     optionsButton:SetWidth(100)
