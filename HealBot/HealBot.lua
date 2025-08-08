@@ -2622,9 +2622,9 @@ function HealBot_GetTalentInfo(button)
             end
             if canInspect then
                 if HEALBOT_GAME_VERSION>4 then
-              --      i=GetSpecialization(isInspect)
+                    i=C_SpecializationInfo.GetSpecialization(isInspect)
                     if i then
-                        _, s=GetSpecializationInfo(i, isInspect)
+                        _, s=C_SpecializationInfo.GetSpecializationInfo(i, isInspect)
                     end
                 else
                     local group=GetActiveTalentGroup(isInspect)
