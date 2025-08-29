@@ -698,8 +698,8 @@ function HealBot_Init_Spells_Defaults()
         if HEALBOT_GAME_VERSION>10 then 
             if HealBot_Data["PCLASSTRIM"] == "SHAM" then
                 HealBot_Init_CheckSpell("SPELL", nil, 77130, HEALBOT_PURIFY_SPIRIT, nil)
-            --elseif HealBot_Data["PCLASSTRIM"] == "DRUI" then
-            --    HealBot_Init_CheckSpell("SPELL", nil, 88423, HEALBOT_NATURES_CURE, nil)
+            elseif HealBot_Data["PCLASSTRIM"] == "DRUI" then
+                HealBot_Init_CheckSpell("SPELL", nil, 88423, HEALBOT_NATURES_CURE, nil)
             end
         end
         if HEALBOT_GAME_VERSION<3 then

@@ -277,7 +277,7 @@ function HealBot_Aura_UpdateExtraIcon(button, iconData, index)
        (index == 96 and hbv_Skins_GetFrameBoolean("Icons", "COMBATEN", button.frame)) then
         hb_lVars["exIconAlpha"]=HealBot_Action_BarColourAlpha(button, hbv_Skins_GetFrameVar("BarCol", "HA", button.framecol), 1)
     else
-        hb_lVars["exIconAlpha"]=button.status.alpha
+        hb_lVars["exIconAlpha"]=button.status.alpha or 1
     end
     button.gref.icon[index]:SetAlpha(hb_lVars["exIconAlpha"])
 end
