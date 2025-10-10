@@ -1,4 +1,4 @@
-## Interface: 50500, 110200
+## Interface: 50500, 50501, 110200, 110205
 ## Title: HealBot
 ## Author: Strife
 ## Notes: Add multiple frames with customisable bars for healing, decursing, buffing, ressing, range checking and aggro tracking
