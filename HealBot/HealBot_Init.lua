@@ -129,21 +129,21 @@ function HealBot_Init_TalentLookupImproved(callback)
     elseif HEALBOT_GAME_VERSION<4 then
         if HealBot_Data["PCLASSTRIM"] == "SHAM" then
             local _, _, _, _, rank=GetTalentInfo(3, 12)
-            if rank>0 then
+            if (rank or 0)>0 then
                 HealBot_Options_setLuVars("ShamanImprovedCleanseSpirit", true)
             else
                 HealBot_Options_setLuVars("ShamanImprovedCleanseSpirit", false)
             end
         elseif HealBot_Data["PCLASSTRIM"] == "DRUI" then
             local _, _, _, _, rank=GetTalentInfo(3, 15)
-            if rank>0 then
+            if (rank or 0)>0 then
                 HealBot_Options_setLuVars("DruidImprovedNaturesCure", true)
             else
                 HealBot_Options_setLuVars("DruidImprovedNaturesCure", false)
             end
         elseif HealBot_Data["PCLASSTRIM"] == "PALA" then
             local _, _, _, _, rank=GetTalentInfo(1, 14)
-            if rank>0 then
+            if (rank or 0)>0 then
                 HealBot_Options_setLuVars("PaladinImprovedCleanse", true)
             else
                 HealBot_Options_setLuVars("PaladinImprovedCleanse", false)
