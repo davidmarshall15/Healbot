@@ -2863,9 +2863,11 @@ end
 
 function HealBot_ValidLivingEnemy(pUnit, eUnit)
       --HealBot_setCall("HealBot_ValidLivingEnemy", nil, nil, pUnit)
-    if UnitExists(pUnit) and UnitExists(eUnit) and not UnitIsFriend("player", eUnit) and UnitHealthMax(eUnit)>99 and
-       UnitHealth(eUnit)>(UnitHealthMax(eUnit)/20) then
-        return true
+    if UnitExists(pUnit) and UnitExists(eUnit) and not UnitIsFriend("player", eUnit) then
+        local _,_,hlthptc=HealBot_WoWAPI_UnitHealth(eUnit)
+        if hlthptc>4 then
+            return true
+        end
     end
     return false
 end
@@ -2990,40 +2992,28 @@ function HealBot_UnitHealth(button, force)
     button.health.updhlth=false
     --button.health.nextcheck=HealBot_TimeNow+HealBot_luVars["healthCheckInterval"]
     if button.status.current<HealBot_Unit_Status["DC"] then
+        if HealBot_UnitInVehicle[button.unit] and UnitExists(HealBot_UnitInVehicle[button.unit]) then
+            health, healthMax, button.health.pct=HealBot_WoWAPI_UnitHealth(HealBot_UnitInVehicle[button.unit])
+        else
+            health, healthMax, button.health.pct=HealBot_WoWAPI_UnitHealth(button.unit)
+        end
         if button.status.isdead then
             if HealBot_IsUnitReallyDead(button) then
                 healthMax=button.health.max
                 health=0
             elseif UnitIsFeignDeath(button.unit) then
                 health=button.health.current
-                healthMax=UnitHealthMax(button.unit)
-            else
-                health,healthMax=UnitHealth(button.unit),UnitHealthMax(button.unit)
             end
         else
-            if HealBot_UnitInVehicle[button.unit] and UnitExists(HealBot_UnitInVehicle[button.unit]) then
-                health,healthMax=UnitHealth(HealBot_UnitInVehicle[button.unit]),UnitHealthMax(HealBot_UnitInVehicle[button.unit])
-            elseif UnitIsFeignDeath(button.unit) then
+            if UnitIsFeignDeath(button.unit) then
                 health=button.health.current
-                healthMax=UnitHealthMax(button.unit)
-            else
-                health,healthMax=UnitHealth(button.unit),UnitHealthMax(button.unit)
-            end
-            if healthMax == 100 and (button.unit == "target" or button.unit == "focus" or not button.isplayer) then
-                local class=HealBot_EnClass(button.unit)
-                if HealBot_Health80[class] and button.level>0 then
-                    if button.level<75 then
-                        healthMax=math.floor((HealBot_Health80[class]/150)*(button.level+(button.level/10)))
-                    else
-                        healthMax=math.floor((HealBot_Health80[class]/80)*(button.level+0.5))
-                    end
-                    health=floor((healthMax/100)*health)
-                end
             end
         end
         if healthMax == 0 then healthMax=1 end
-        if health>healthMax then healthMax=health end
-        if health<0 then health=0 end
+        if HEALBOT_GAME_VERSION<12 then
+            if health>healthMax then healthMax=health end
+            if health<0 then health=0 end
+        end
         if (health~=button.health.current) or (healthMax~=button.health.max) then
             if HealBot_luVars["pluginTimeToDie"] and button.status.plugin then
                 HealBot_Plugin_TimeToDie_UnitUpdate(button, health)

@@ -824,7 +824,7 @@ function HealBot_Action_DoRefreshTooltip()
                             if vUnit and UnitExists(vUnit) then
                                 local lr,lg,lb=HealBot_Action_ClassColour(xButton.unit, xButton.text.classtrim)
                                 HealBot_Tooltip_SetLine(UnitName(vUnit),lr,lg,lb,1,hlth.."/"..maxhlth.." ("..hPct.."%)",xButton.health.rcol,xButton.health.gcol,0,1)
-                                hlth,maxhlth=UnitHealth(xButton.unit),UnitHealthMax(xButton.unit)
+                                hlth,maxhlth=HealBot_WoWAPI_UnitHealth(xButton.unit)
                                 hPct=floor((hlth/maxhlth)*100)
                                 hlth=HealBot_Util_ReadNumber(hlth)
                                 maxhlth=HealBot_Util_ReadNumber(maxhlth)

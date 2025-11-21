@@ -195,7 +195,8 @@ function HealBot_Panel_TankRole(unit, guid, isPlayer, offtank)
     end
     HealBot_MainTanks[guid]=unit
     if isPlayer then
-        if UnitHealthMax(unit)>hbRoleOnes[hbTANK1].health then
+        local _,hlthMax=HealBot_WoWAPI_UnitHealth(unit)
+        if hlthMax>hbRoleOnes[hbTANK1].health then
             if hbRoleOnes[hbTANK1].health>0 then
                 if hbRoleOnes[hbTANK2].guid == guid then
                     hbRoleOnes[hbTANK2].health=0
@@ -205,10 +206,10 @@ function HealBot_Panel_TankRole(unit, guid, isPlayer, offtank)
                     hbRoleOnes[hbTANK2].guid=hbRoleOnes[hbTANK1].guid
                 end
             end
-            hbRoleOnes[hbTANK1].health=UnitHealthMax(unit)
+            hbRoleOnes[hbTANK1].health=hlthMax
             hbRoleOnes[hbTANK1].guid=guid
-        elseif UnitHealthMax(unit)>hbRoleOnes[hbTANK2].health then
-            hbRoleOnes[hbTANK2].health=UnitHealthMax(unit)
+        elseif hlthMax>hbRoleOnes[hbTANK2].health then
+            hbRoleOnes[hbTANK2].health=hlthMax
             hbRoleOnes[hbTANK2].guid=guid
         end
     end
@@ -219,9 +220,12 @@ function HealBot_Panel_HealerRole(unit, guid, isPlayer)
       --HealBot_setCall("HealBot_Panel_HealerRole")
     HealBot_unitRole[unit]=hbRole[HEALBOT_WORD_HEALER]
     HealBot_MainHealers[guid]=unit
-    if isPlayer and UnitHealthMax(unit)>hbRoleOnes[hbHEALER].health then
-        hbRoleOnes[hbHEALER].health=UnitHealthMax(unit)
-        hbRoleOnes[hbHEALER].guid=guid
+    if isPlayer then
+        local _,hlthMax=HealBot_WoWAPI_UnitHealth(unit)
+        if hlthMax>hbRoleOnes[hbHEALER].health then
+            hbRoleOnes[hbHEALER].health=hlthMax
+            hbRoleOnes[hbHEALER].guid=guid
+        end
     end
     if hbPanel_dataPlayerRoles[guid] == 0 or hbPanel_dataPlayerRoles[guid]>5 then hbPanel_dataPlayerRoles[guid]=3 end
 end
@@ -237,13 +241,14 @@ function HealBot_Panel_DamagerRole(unit, guid, isPlayer)
       --HealBot_setCall("HealBot_Panel_DamagerRole")
     HealBot_unitRole[unit]=hbRole[HEALBOT_WORD_DPS]
     if isPlayer then
-        if UnitHealthMax(unit)>hbRoleOnes[hbDPS].health then
-            hbRoleOnes[hbDPS].health=UnitHealthMax(unit)
+        local _,hlthMax=HealBot_WoWAPI_UnitHealth(unit)
+        if hlthMax>hbRoleOnes[hbDPS].health then
+            hbRoleOnes[hbDPS].health=hlthMax
             hbRoleOnes[hbDPS].guid=guid
         end
         if (UnitPowerType(unit) or 1) == 0 then
             local _, uuUnitClassEN=UnitClass(unit) or "X"
-            local maxHealth=UnitHealthMax(unit)
+            local maxHealth=hlthMax
             if hbClassCasterPrefBonus[uuUnitClassEN] then
                 maxHealth=maxHealth*hbClassCasterPrefBonus[uuUnitClassEN]
             end
@@ -2575,22 +2580,23 @@ function HealBot_Panel_sortOrder(unit, barOrder, mainSort)
             vSubOrderKey=(HealBot_UnitGroups[unit] or 1)
         end
     elseif barOrder == 4 then
+        local _,hlthMax=HealBot_WoWAPI_UnitHealth(unit)
         if UnitIsUnit(unit, "player") then
             if hbv_Skins_GetFrameBoolean("BarSort", "SUBPF", hbCurrentFrame) then
                 vSubOrderKey=-99999999
             else
-                vSubOrderKey=0-UnitHealthMax(unit)
+                vSubOrderKey=0-hlthMax
             end
         elseif UnitExists(unit) then
             if hbv_Skins_GetFrameBoolean("BarSort", "OORLAST", hbCurrentFrame) and not HealBot_Range_UnitGUID(unit) then
-                vSubOrderKey=9999999-UnitHealthMax(unit)
+                vSubOrderKey=9999999-hlthMax
             else
-                vSubOrderKey=0-UnitHealthMax(unit)
+                vSubOrderKey=0-hlthMax
             end
         else
             vSubOrderKey=99999999
         end
-        if UnitIsPlayer(unit) and UnitHealthMax(unit)>TempMaxH then TempMaxH=UnitHealthMax(unit); end
+        if UnitIsPlayer(unit) and hlthMax>TempMaxH then TempMaxH=hlthMax; end
     elseif barOrder == 5 then
         if UnitIsUnit(unit, "player") then
             if not mainSort and hbv_Skins_GetFrameBoolean("BarSort", "SUBPF", hbCurrentFrame) then

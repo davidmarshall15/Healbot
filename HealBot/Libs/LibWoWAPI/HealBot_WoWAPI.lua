@@ -11,6 +11,7 @@ function HealBot_WoWAPI_SetAll()
     HealBot_WoWAPI_SetC_SpellBook()
     HealBot_WoWAPI_SetC_Item()
     HealBot_WoWAPI_SetC_AddOns()
+    HealBot_WoWAPI_SetHealth()
 end
 
 -- GetSpellIDForSpellIdentifier
@@ -327,4 +328,28 @@ end
 
 function HealBot_WoWAPI_LoadAddOn(name)
     return HealBot_WoWAPI_AddOnLoad(name)
+end
+
+-- Health
+local hlth, maxhlth, pcthlth = 0,0,0
+function HealBot_WoWAPI_ClassicUnitHealth(unit)
+    hlth,maxhlth=UnitHealth(unit),UnitHealthMax(unit)
+    pcthlth=hlth/maxhlth
+    return hlth, maxhlth, pcthlth
+end
+
+function HealBot_WoWAPI_MidnightUnitHealth(unit)
+    pcthlth=UnitHealthPercent(unit)
+    return pcthlth, 100, pcthlth
+end
+
+local HealBot_WoWAPI_UnitHealthPercent=HealBot_WoWAPI_ClassicUnitHealth
+function HealBot_WoWAPI_SetHealth()
+    if UnitHealthPercent then  -- if HEALBOT_GAME_VERSION>11 then
+        HealBot_WoWAPI_UnitHealthPercent=HealBot_WoWAPI_MidnightUnitHealth
+    end
+end
+
+function HealBot_WoWAPI_UnitHealth(unit)
+    return HealBot_WoWAPI_UnitHealthPercent(unit)
 end

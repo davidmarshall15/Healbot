@@ -844,9 +844,9 @@ function HealBot_Text_DoSetHealthText(button, IgnoreInHeals, force)
             if hbv_Skins_GetFrameVar("BarText", "HLTHTYPE", button.framecol) == 1 then
                 tHealthConcat[3]=HealBot_Text_shortHealTxt(UnitHealth(button.unit), button.framecol, hbBarHealthTextLen[button.framecol])
             elseif hbv_Skins_GetFrameVar("BarText", "HLTHTYPE", button.framecol) == 2 then
-                tHealthConcat[3]=HealBot_Text_shortHealTxt(UnitHealth(button.unit)-UnitHealthMax(button.unit), button.framecol, hbBarHealthTextLen[button.framecol])
+                tHealthConcat[3]=HealBot_Text_shortHealTxt(button.health.current-button.health.max, button.framecol, hbBarHealthTextLen[button.framecol])
             else
-                vHealthTextTotal=floor((UnitHealth(button.unit)/UnitHealthMax(button.unit))*100)
+                vHealthTextTotal=button.health.pct
                 tHealthConcat[3]=vHealthTextTotal..vTextChars["Percent"]
             end
             vHealthTextVehiclePlayer=HealBot_Text_HealthConcat(3)

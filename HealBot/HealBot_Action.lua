@@ -2776,7 +2776,7 @@ local HealBot_TextColChangeWithHealth={[1]=true,[4]=true,[5]=true}
 function HealBot_Action_UpdateHealthButton(button, hlthevent)
       --HealBot_setCall("HealBot_Action_UpdateHealthButton", button)
     if hlthevent then
-        button.health.pct=button.health.current/button.health.max
+        --button.health.pct=button.health.current/button.health.max
         button.health.hpct=floor(button.health.pct*1000)
         button.health.rcol, button.health.gcol=HealBot_Action_BarColourPct(button.health.pct)
 
