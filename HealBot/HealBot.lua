@@ -3014,15 +3014,15 @@ function HealBot_UnitHealth(button, force)
             if health>healthMax then healthMax=health end
             if health<0 then health=0 end
         end
-        if (health~=button.health.current) or (healthMax~=button.health.max) then
+        if HEALBOT_GAME_VERSION>11 or ((health~=button.health.current) or (healthMax~=button.health.max)) then
             if HealBot_luVars["pluginTimeToDie"] and button.status.plugin then
                 HealBot_Plugin_TimeToDie_UnitUpdate(button, health)
             end
             if button.isplayer and not HealBot_Data["UILOCK"] then
-                if HealBot_luVars["regAggro"] and health<button.health.current then
+                if HealBot_luVars["regAggro"] and (HEALBOT_GAME_VERSION>11 or health<button.health.current) then
                     HealBot_Events_UnitThreat(button)
                 end
-                if healthMax>(button.health.max*1.25) or healthMax<(button.health.max*0.75) then
+                if HEALBOT_GAME_VERSION>11 or (healthMax>(button.health.max*1.25) or healthMax<(button.health.max*0.75)) then
                     if button.player then 
                         HealBot_Timers_Set("LAST", "SetInHealAbsorbMax")
                     elseif HEALBOT_GAME_VERSION<5 then 
@@ -3030,7 +3030,7 @@ function HealBot_UnitHealth(button, force)
                     end
                 end
             end
-            if button.frame<10 and health<button.health.current and HealBot_luVars["HealthDropPct"]<=(button.health.hpct-floor((health/healthMax)*1000))
+            if HEALBOT_GAME_VERSION<12 and button.frame<10 and health<button.health.current and HealBot_luVars["HealthDropPct"]<=(button.health.hpct-floor((health/healthMax)*1000))
                and not button.health.init and health>0 and (button.status.unittype<20 or HealBot_luVars["UILOCK"]) then
                 button.health.hlthdrop=true
             else
@@ -3039,12 +3039,12 @@ function HealBot_UnitHealth(button, force)
             button.health.current=health
             button.health.max=healthMax
             if not button.status.isdead then
-                if health>0 then
+                if HEALBOT_GAME_VERSION>11 or health>0 then
                     HealBot_OverHeal(button)
                 else
                     HealBot_Action_UpdateTheDeadButton(button)
                 end
-            elseif health>0 then
+            elseif HEALBOT_GAME_VERSION>11 or health>0 then
                 HealBot_Action_UpdateTheDeadButton(button)
             end
             HealBot_Action_UpdateHealthButton(button, true)
