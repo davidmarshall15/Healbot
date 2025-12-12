@@ -2667,7 +2667,7 @@ end
 
 function HealBot_Action_UpdateGroupHealth(button)
       --HealBot_setCall("HealBot_Action_UpdateHealthHotBar", button)
-    if (button.isplayer or button.isgroupraid) and button.frame<10 then
+    if (button.isplayer or button.isgroupraid) and button.frame<10 and HEALBOT_GAME_VERSION<12 then
         if button.range.current>HealBot_Action_luVars["GroupBarsRange"] and button.health.hpct>0 and button.health.hpct<HealBot_Action_luVars["GroupBarsHealth"] then
             if not button.hotbars.grouphealth then
                 HealBot_Action_AddGroupHealth(button)
@@ -2777,10 +2777,14 @@ function HealBot_Action_UpdateHealthButton(button, hlthevent)
       --HealBot_setCall("HealBot_Action_UpdateHealthButton", button)
     if hlthevent then
         --button.health.pct=button.health.current/button.health.max
-        button.health.hpct=floor(button.health.pct*1000)
+        if HEALBOT_GAME_VERSION<12 then
+            button.health.hpct=floor(button.health.pct*1000)
+        else
+            button.health.hpct=button.health.pct
+        end
         button.health.rcol, button.health.gcol=HealBot_Action_BarColourPct(button.health.pct)
 
-        if button.health.hpct>890 then
+        if HEALBOT_GAME_VERSION>11 or button.health.hpct>890 then
             button.health.mixcolr, button.health.mixcolg, button.health.mixcolb=button.text.r, button.text.g, button.text.b
             button.health.rmixcolr=hbCustomRoleCols[button.roletxt].r
             button.health.rmixcolg=hbCustomRoleCols[button.roletxt].g
@@ -2817,8 +2821,8 @@ function HealBot_Action_UpdateHealthButton(button, hlthevent)
 
     if button.status.current<HealBot_Unit_Status["DEAD"] then --or (button.status.current == HealBot_Unit_Status["RESERVED"] and UnitHealth(button.unit)) then
         if button.status.hlthupd then 
-            if button.status.current>HealBot_Unit_Status["ENABLEDIR"] or button.health.pct<=hbv_Skins_GetFrameVar("BarVisibility", hbAlert, button.frame) or
-               button.aggro.status>hbv_Skins_GetFrameVar("BarAggro", "ALERT", button.frame) or HealBot_AlwaysEnabled[button.guid] then
+            if button.status.current>HealBot_Unit_Status["ENABLEDIR"] or button.aggro.status>hbv_Skins_GetFrameVar("BarAggro", "ALERT", button.frame) or 
+               HealBot_AlwaysEnabled[button.guid] or HEALBOT_GAME_VERSION == 12 or button.health.pct<=hbv_Skins_GetFrameVar("BarVisibility", hbAlert, button.frame) then
                 if button.status.current<HealBot_Unit_Status["BUFFNOCOL"] then
                     HealBot_Range_ButtonSpell(button)
                 end
@@ -2845,7 +2849,7 @@ function HealBot_Action_UpdateHealthButton(button, hlthevent)
         button.mana.current=0
         button.gref["Bar"]:SetStatusBarColor(0.2,0.2,0.2,0.4);
     end
-    if button.gref["Bar"]:GetValue()~=button.health.hpct then
+    if HEALBOT_GAME_VERSION>11 or button.gref["Bar"]:GetValue()~=button.health.hpct then
         if button.health.init or not HealBot_Action_luVars["FluidInUse"] then
             button.gref["Bar"]:SetValue(button.health.hpct)
             button.health.initover=true
@@ -3108,7 +3112,9 @@ local hacpr, hacpg=1,1
 function HealBot_Action_BarColourPct(hlthPct)
       --HealBot_setCall("HealBot_Action_BarColourPct")
     hacpr, hacpg=1,1
-    if hlthPct>=0.98 then 
+    if HEALBOT_GAME_VERSION>11 then
+        hacpr=0
+    elseif hlthPct>=0.98 then 
         hacpr=0
     elseif hlthPct<0.98 and hlthPct>=0.65 then 
         hacpr=2.94-(hlthPct*3)
@@ -3308,7 +3314,7 @@ end
 
 function HealBot_Action_PowerIndicators(button)
       --HealBot_setCall("HealBot_Action_PowerIndicators", button)
-    if HealBot_pcClass[button.frame] and button.player and button.status.current<HealBot_Unit_Status["DEAD"] then
+    if HEALBOT_GAME_VERSION<12 and HealBot_pcClass[button.frame] and button.player and button.status.current<HealBot_Unit_Status["DEAD"] then
         hbPowerIndicator=UnitPower("player", HealBot_pcClass[button.frame])
         local indAlpha=HealBot_Action_BarColourAlpha(button, 1, 1)
         if hbPowerIndicator == 1 then

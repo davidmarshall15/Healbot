@@ -672,7 +672,7 @@ function HealBot_Action_DoRefreshTooltip()
             local maxmana=xButton.mana.max
             powerCols.r,powerCols.g,powerCols.b=xButton.mana.r+0.34,xButton.mana.g+0.34,xButton.mana.b+0.34
 
-            if hlth>maxhlth then hlth=maxhlth end
+            if HEALBOT_GAME_VERSION < 12 and hlth>maxhlth then hlth=maxhlth end
 
             local UnitOffline=HealBot_Action_GetTimeOffline(xButton); --added by Diacono
             local UnitTag=xButton.text.tag
@@ -811,11 +811,13 @@ function HealBot_Action_DoRefreshTooltip()
                     else
                         if HealBot_Globals.Tooltip_ShowHealth and hlth and maxhlth then
                             local hPct=100
-                            if maxhlth>0 then
-                                hPct=floor((hlth/maxhlth)*100)
+                            if HEALBOT_GAME_VERSION > 11 then
+                                hPct=hlth
+                            else
+                                if maxhlth>0 then hPct=floor((hlth/maxhlth)*100) end
+                                hlth=HealBot_Util_ReadNumber(hlth)
+                                maxhlth=HealBot_Util_ReadNumber(maxhlth)
                             end
-                            hlth=HealBot_Util_ReadNumber(hlth)
-                            maxhlth=HealBot_Util_ReadNumber(maxhlth)
                             local vUnit=HealBot_retIsInVehicle(xUnit)
                             local pZone=" "
                             if zone and not strfind(zone,"Level") then
@@ -846,8 +848,10 @@ function HealBot_Action_DoRefreshTooltip()
                                     end
                                 else
                                     local mPct=xButton.mana.pct
-                                    mana=HealBot_Util_ReadNumber(mana)
-                                    maxmana=HealBot_Util_ReadNumber(maxmana)
+                                    if HEALBOT_GAME_VERSION < 12 then
+                                        mana=HealBot_Util_ReadNumber(mana)
+                                        maxmana=HealBot_Util_ReadNumber(maxmana)
+                                    end
                                     if xButton.aggro.threatpct<1 then
                                         if HealBot_Tooltip_luVars["uGroup"]>0 then
                                             HealBot_Tooltip_SetLine(HEALBOT_SORTBY_GROUP.." "..HealBot_Tooltip_luVars["uGroup"],1,1,1,1,mana.."/"..maxmana.." ("..mPct.."%)",powerCols.r,powerCols.g,powerCols.b,1)

@@ -1097,14 +1097,17 @@ function HealBot_UnitMana(button)
     if button.status.current<HealBot_Unit_Status["DEAD"] then
         hbPowerCurrent=UnitPower(button.unit) or 0
         hbPowerMax=UnitPowerMax(button.unit) or 0
-        if button.mana.current~=hbPowerCurrent or button.mana.max~=hbPowerMax then
+        if HEALBOT_GAME_VERSION == 12 or button.mana.current~=hbPowerCurrent or button.mana.max~=hbPowerMax then
             if not HealBot_Data["UILOCK"] and HEALBOT_GAME_VERSION<5 and button.isplayer and not button.player and (hbPowerMax>(button.mana.max*1.25) or hbPowerMax<(button.mana.max*0.75)) then
                 HealBot_Events_SpecChange(button)
             end
             button.mana.lowcheck=true
             button.mana.current=hbPowerCurrent
             button.mana.max=hbPowerMax
-            if button.mana.max>0 then
+            if HEALBOT_GAME_VERSION == 12 then
+                button.mana.pct=hbPowerCurrent
+                button.mana.pctc=hbPowerCurrent
+            elseif button.mana.max>0 then
                 button.mana.pct=floor((button.mana.current/button.mana.max)*100)
                 button.mana.pctc=button.mana.pct*10
             else
@@ -1128,15 +1131,18 @@ function HealBot_UnitMana(button)
         end
         hbPowerCurrent=UnitPower(button.unit, button.poweralt.type) or 0
         hbPowerMax=UnitPowerMax(button.unit, button.poweralt.type) or 0
-        if button.poweralt.current~=hbPowerCurrent or button.poweralt.max~=hbPowerMax then
+        if HEALBOT_GAME_VERSION == 12 or button.poweralt.current~=hbPowerCurrent or button.poweralt.max~=hbPowerMax then
             button.poweralt.current=hbPowerCurrent
             button.poweralt.max=hbPowerMax
-            if button.poweralt.max>0 then
+            if HEALBOT_GAME_VERSION == 12 then
+                button.poweralt.pct=hbPowerCurrent
+                button.mana.pctc=hbPowerCurrent*10
+            elseif button.poweralt.max>0 then
                 button.poweralt.pct=floor((button.poweralt.current/button.poweralt.max)*100)
-                button.poweralt.pctc=button.poweralt.pct*10
+                button.mana.pctc=button.mana.pct*10
             else
                 button.poweralt.pct=0
-                button.poweralt.pctc=0
+                button.mana.pctc=0
             end
             HealBot_Aux_setPowerAltBars(button)
         elseif button.mana.change then
@@ -1763,9 +1769,11 @@ function HealBot_Register_Events()
         HealBot:RegisterEvent("PLAYER_CONTROL_LOST");
         HealBot:RegisterEvent("PLAYER_UPDATE_RESTING");
         HealBot:RegisterEvent("BAG_UPDATE");
-        HealBot:RegisterEvent("COMBAT_LOG_EVENT_UNFILTERED")
         HealBot:RegisterEvent("DISPLAY_SIZE_CHANGED")
         HealBot:RegisterEvent("UI_SCALE_CHANGED")
+        if HEALBOT_GAME_VERSION<12 then
+            HealBot:RegisterEvent("COMBAT_LOG_EVENT_UNFILTERED")
+        end
     end
     HealBot:RegisterEvent("PLAYER_REGEN_DISABLED");
     HealBot:RegisterEvent("PLAYER_REGEN_ENABLED");
@@ -1972,6 +1980,7 @@ end
 local hiuOverHeal,hiuPlayerInHeal=0
 function HealBot_OverHeal(button)
       --HealBot_setCall("HealBot_OverHeal", button)
+    if HEALBOT_GAME_VERSION == 12 then return end
     if HealBot_luVars["overhealUnit"] == button.unit then
         hiuPlayerInHeal=UnitGetIncomingHeals(button.unit, "player") or 0
         hiuOverHeal=(button.health.current+hiuPlayerInHeal)-button.health.max
@@ -2014,7 +2023,7 @@ function HealBot_HealsInAmountV4(button)
       --HealBot_setCall("HealBot_HealsInAmountV4", button)
     if button.status.current<HealBot_Unit_Status["DEAD"] then
         hiuHealAmount=UnitGetIncomingHeals(button.unit) or 0
-        if hiuHealAmount>HealBot_luVars["BonusMinInHeal"] then
+        if HEALBOT_GAME_VERSION < 12 and hiuHealAmount>HealBot_luVars["BonusMinInHeal"] then
             hiuHealAmount=hiuHealAmount+HealBot_luVars["BonusHealing"]
         end
     else
@@ -2031,7 +2040,7 @@ function HealBot_HealsInUpdate(button)
       --HealBot_setCall("HealBot_HealsInUpdate", button)
     button.health.updinheal=false
     HealBot_HealsInAmount(button)
-    if hiuHealAmount>0 and button.range.current>0 then
+    if HEALBOT_GAME_VERSION<12 and hiuHealAmount>0 and button.range.current>0 then
         if button.health.incoming~=hiuHealAmount then
             button.health.incoming=hiuHealAmount
             HealBot_Action_UpdateHealsInButton(button)
@@ -2044,7 +2053,7 @@ function HealBot_HealsInUpdate(button)
         HealBot_Action_UpdateInHealStatusBarColor(button)
         HealBot_Text_setInHealAbsorbsText(button)
     end
-    if button.health.auxincoming~=hiuHealAmount then
+    if HEALBOT_GAME_VERSION<12 and button.health.auxincoming~=hiuHealAmount then
         button.health.auxincoming=hiuHealAmount
         HealBot_OverHeal(button)
         HealBot_Aux_UpdateHealInBar(button)
@@ -2113,7 +2122,7 @@ function HealBot_AbsorbsUpdate(button)
       --HealBot_setCall("HealBot_AbsorbsUpdate", button)
     button.health.updabsorb=false
     HealBot_AbsorbsAmount(button)
-    if button.range.current>0 and abuAbsorbAmount>0 then
+    if HEALBOT_GAME_VERSION<12 and button.range.current>0 and abuAbsorbAmount>0 then
         if button.health.absorbs~=abuAbsorbAmount then
             button.health.absorbs=abuAbsorbAmount
             button.health.absorbspctc=floor((button.health.absorbs/button.health.max)*1000)
@@ -2131,7 +2140,7 @@ function HealBot_AbsorbsUpdate(button)
         HealBot_Action_UpdateAbsorbStatusBarColor(button)
         HealBot_Action_AdaptiveAbsorbsUpdate(button)
     end
-    if button.health.auxabsorbs~=abuAbsorbAmount then
+    if HEALBOT_GAME_VERSION<12 and button.health.auxabsorbs~=abuAbsorbAmount then
         button.health.auxabsorbs=abuAbsorbAmount
         HealBot_Aux_UpdateAbsorbBar(button)
     end
@@ -4025,7 +4034,7 @@ end
 function HealBot_UnitUpdateButton(button)
       --HealBot_setCall("HealBot_UnitUpdateButton", button, nil, nil, true)
     if HealBot_UnitExists(button) then
-        if (button.status.isdead or button.health.current == 0) and button.status.deadnextcheck<HealBot_TimeNow then
+        if (button.status.isdead or HEALBOT_GAME_VERSION == 12 or button.health.current == 0) and button.status.deadnextcheck<HealBot_TimeNow then
             HealBot_Action_UpdateTheDeadButton(button)
         --elseif button.status.update then
         --    HealBot_UnitSlowUpdate(button)
