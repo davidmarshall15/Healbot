@@ -392,18 +392,18 @@ function HealBot_Action_UpdateFluidBars()
         aufbButtonActive=false
         if xButton.status.current<HealBot_Unit_Status["DEAD"] then
             aufbBarValue=xButton.gref["Bar"]:GetValue()
-            if aufbBarValue>xButton.health.hpct then
-                aufbSetValue=aufbBarValue-ceil((aufbBarValue-xButton.health.hpct)/HealBot_Action_luVars["FluidBarSmoothAdj"])
-                if aufbSetValue<xButton.health.hpct then 
-                    aufbSetValue=xButton.health.hpct
+            if aufbBarValue>xButton.health.current then
+                aufbSetValue=aufbBarValue-ceil((aufbBarValue-xButton.health.current)/HealBot_Action_luVars["FluidBarSmoothAdj"])
+                if aufbSetValue<xButton.health.current then 
+                    aufbSetValue=xButton.health.current
                 else
                     aufbButtonActive=true
                 end
                 xButton.gref["Bar"]:SetValue(aufbSetValue)
-            elseif aufbBarValue<xButton.health.hpct then
-                aufbSetValue=aufbBarValue+ceil((xButton.health.hpct-aufbBarValue)/HealBot_Action_luVars["FluidBarSmoothAdj"])
-                if aufbSetValue>xButton.health.hpct then 
-                    aufbSetValue=xButton.health.hpct
+            elseif aufbBarValue<xButton.health.current then
+                aufbSetValue=aufbBarValue+ceil((xButton.health.current-aufbBarValue)/HealBot_Action_luVars["FluidBarSmoothAdj"])
+                if aufbSetValue>xButton.health.current then 
+                    aufbSetValue=xButton.health.current
                 else
                     aufbButtonActive=true
                 end
@@ -2667,7 +2667,7 @@ end
 
 function HealBot_Action_UpdateGroupHealth(button)
       --HealBot_setCall("HealBot_Action_UpdateHealthHotBar", button)
-    if (button.isplayer or button.isgroupraid) and button.frame<10 and HEALBOT_GAME_VERSION<12 then
+    if (button.isplayer or button.isgroupraid) and button.frame<10 and not HEALBOT_MIDNIGHT then
         if button.range.current>HealBot_Action_luVars["GroupBarsRange"] and button.health.hpct>0 and button.health.hpct<HealBot_Action_luVars["GroupBarsHealth"] then
             if not button.hotbars.grouphealth then
                 HealBot_Action_AddGroupHealth(button)
@@ -2682,7 +2682,7 @@ end
 
 function HealBot_Action_UpdateHotBars(button)
       --HealBot_setCall("HealBot_Action_UpdateHealthHotBar", button)
-    if (button.isplayer or button.isgroupraid) and button.frame<10 then
+    if not HEALBOT_MIDNIGHT and (button.isplayer or button.isgroupraid) and button.frame<10 then
         if button.range.current>0 and button.health.hpct>0 and (button.health.hpct+button.health.absorbspctc)<HealBot_Action_luVars["HotBarsHealth"] then
             HealBot_Action_BarHotEnable(button, "HEALTH")
             HealBot_Update_TextPlayersAlphaButton(button)
@@ -2771,20 +2771,24 @@ local hbBarColourFuncs={[1]=HealBot_Action_BarColourHealth,
                         [4]=HealBot_Action_BarColourCustom,
                         [5]=HealBot_Action_BarColourClassHlthMix,
                         [6]=HealBot_Action_BarColourRoleHlthMix}
-local mixPct=0
+local mixPct,maxPct=0,100
 local HealBot_TextColChangeWithHealth={[1]=true,[4]=true,[5]=true}
 function HealBot_Action_UpdateHealthButton(button, hlthevent)
       --HealBot_setCall("HealBot_Action_UpdateHealthButton", button)
     if hlthevent then
+        button.gref["Bar"]:SetMinMaxValues(0, button.health.max)
         --button.health.pct=button.health.current/button.health.max
-        if HEALBOT_GAME_VERSION<12 then
+        if not HEALBOT_MIDNIGHT then
             button.health.hpct=floor(button.health.pct*1000)
         else
+            button.gref["Bar"]:SetValue(button.health.current)
+        --    _, maxPct = button.gref["Bar"]:GetMinMaxValues()
             button.health.hpct=button.health.pct
+        --    button.health.hpct=floor((button.gref["Bar"]:GetValue()/maxPct)*1000)
         end
         button.health.rcol, button.health.gcol=HealBot_Action_BarColourPct(button.health.pct)
 
-        if HEALBOT_GAME_VERSION>11 or button.health.hpct>890 then
+        if HEALBOT_MIDNIGHT or button.health.hpct>890 then
             button.health.mixcolr, button.health.mixcolg, button.health.mixcolb=button.text.r, button.text.g, button.text.b
             button.health.rmixcolr=hbCustomRoleCols[button.roletxt].r
             button.health.rmixcolg=hbCustomRoleCols[button.roletxt].g
@@ -2793,12 +2797,12 @@ function HealBot_Action_UpdateHealthButton(button, hlthevent)
             mixPct=(250-(button.health.hpct-640))/250
             button.health.mixcolr=button.text.r+((1-button.text.r)*mixPct)
             button.health.mixcolg=button.text.g+((1-button.text.g)*mixPct)
-            button.health.mixcolb=button.text.b*(button.health.hpct/1000)
+            button.health.mixcolb=button.text.b*button.health.pct
             button.health.rmixcolr=hbCustomRoleCols[button.roletxt].r+
                                   ((1-hbCustomRoleCols[button.roletxt].r)*mixPct)
             button.health.rmixcolg=hbCustomRoleCols[button.roletxt].g+
                                   ((1-hbCustomRoleCols[button.roletxt].g)*mixPct)
-            button.health.rmixcolb=hbCustomRoleCols[button.roletxt].b*(button.health.hpct/1000)
+            button.health.rmixcolb=hbCustomRoleCols[button.roletxt].b*button.health.pct
         else
             button.health.mixcolr, button.health.mixcolg, button.health.mixcolb=button.health.rcol, button.health.gcol, 0
             button.health.rmixcolr, button.health.rmixcolg, button.health.rmixcolb=button.health.rcol, button.health.gcol, 0
@@ -2822,7 +2826,7 @@ function HealBot_Action_UpdateHealthButton(button, hlthevent)
     if button.status.current<HealBot_Unit_Status["DEAD"] then --or (button.status.current == HealBot_Unit_Status["RESERVED"] and UnitHealth(button.unit)) then
         if button.status.hlthupd then 
             if button.status.current>HealBot_Unit_Status["ENABLEDIR"] or button.aggro.status>hbv_Skins_GetFrameVar("BarAggro", "ALERT", button.frame) or 
-               HealBot_AlwaysEnabled[button.guid] or HEALBOT_GAME_VERSION == 12 or button.health.pct<=hbv_Skins_GetFrameVar("BarVisibility", hbAlert, button.frame) then
+               HealBot_AlwaysEnabled[button.guid] or HEALBOT_MIDNIGHT or button.health.pct<=hbv_Skins_GetFrameVar("BarVisibility", hbAlert, button.frame) then
                 if button.status.current<HealBot_Unit_Status["BUFFNOCOL"] then
                     HealBot_Range_ButtonSpell(button)
                 end
@@ -2849,9 +2853,9 @@ function HealBot_Action_UpdateHealthButton(button, hlthevent)
         button.mana.current=0
         button.gref["Bar"]:SetStatusBarColor(0.2,0.2,0.2,0.4);
     end
-    if HEALBOT_GAME_VERSION>11 or button.gref["Bar"]:GetValue()~=button.health.hpct then
+    if not HEALBOT_MIDNIGHT and (button.gref["Bar"]:GetValue()~=button.health.current) then
         if button.health.init or not HealBot_Action_luVars["FluidInUse"] then
-            button.gref["Bar"]:SetValue(button.health.hpct)
+            button.gref["Bar"]:SetValue(button.health.current)
             button.health.initover=true
         else
             HealBot_Action_setFluid_BarButtons(button)
@@ -3112,7 +3116,7 @@ local hacpr, hacpg=1,1
 function HealBot_Action_BarColourPct(hlthPct)
       --HealBot_setCall("HealBot_Action_BarColourPct")
     hacpr, hacpg=1,1
-    if HEALBOT_GAME_VERSION>11 then
+    if HEALBOT_MIDNIGHT then
         hacpr=0
     elseif hlthPct>=0.98 then 
         hacpr=0
@@ -3314,7 +3318,7 @@ end
 
 function HealBot_Action_PowerIndicators(button)
       --HealBot_setCall("HealBot_Action_PowerIndicators", button)
-    if HEALBOT_GAME_VERSION<12 and HealBot_pcClass[button.frame] and button.player and button.status.current<HealBot_Unit_Status["DEAD"] then
+    if not HEALBOT_MIDNIGHT and HealBot_pcClass[button.frame] and button.player and button.status.current<HealBot_Unit_Status["DEAD"] then
         hbPowerIndicator=UnitPower("player", HealBot_pcClass[button.frame])
         local indAlpha=HealBot_Action_BarColourAlpha(button, 1, 1)
         if hbPowerIndicator == 1 then
@@ -4323,6 +4327,7 @@ function HealBot_Action_InitButton(button, prefix)
     button.status.update=true
     button.status.change=true
     button.status.hlthupd=true
+    button.status.mnreset=false
     --button.mana.nextcheck=0
     button.health.rcol=0
     button.health.gcol=0

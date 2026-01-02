@@ -1889,7 +1889,7 @@ function HealBot_Panel_TestBarShow(index,button,tRole,r,g,b,tpR,tpG,tpB)
         button.health.mixcolr,button.health.mixcolg,button.health.mixcolb=button.text.r,button.text.g,button.text.b
         button.mana.r,button.mana.g,button.mana.b=HealBot_colIndex["hctr5"..index],HealBot_colIndex["hctg5"..index],HealBot_colIndex["hctb5"..index]
         button.health.rcol,button.health.gcol=0,1
-        button.health.pct=1000
+        button.health.pct=100
         HealBot_Panel_TestBarColUpdate(button)
     end
     button:Show()

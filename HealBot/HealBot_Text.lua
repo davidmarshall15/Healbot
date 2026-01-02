@@ -754,7 +754,7 @@ end
 
 function HealBot_Text_DoSetHealthText(button, IgnoreInHeals, force)
       --HealBot_setCall("HealBot_Text_DoSetHealthText", button)
-    if HEALBOT_GAME_VERSION>11 then
+    if HEALBOT_MIDNIGHT then
         vHealthTextTotal=button.health.current
     elseif button.health.current == 0 then
         button.text.health="0"
@@ -1448,7 +1448,7 @@ function HealBot_Text_UpdateText(button)
     end
     if button.text.healthupdate then
         button.text.healthupdate=false
-        if HEALBOT_GAME_VERSION == 12 or button.health.current>0 then
+        if HEALBOT_MIDNIGHT or button.health.current>0 then
             if button.status.enabled then
                 if button.range.current>0 then
                     button.text.ha=HealBot_Action_BarColourAlpha(button, hbv_Skins_GetFrameVar("BarTextCol", "HCA", button.framecol), 1)

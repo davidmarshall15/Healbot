@@ -1,12 +1,12 @@
 ﻿local GetAddOnMetadata=GetAddOnMetadata
-HEALBOT_VERSION="25.0"
+HEALBOT_VERSION="26.0"
 
 function HealBot_Global_MetaVersion()
     GetAddOnMetadata=GetAddOnMetadata or (C_AddOns and C_AddOns.GetAddOnMetadata)
     if GetAddOnMetadata then
         HEALBOT_VERSION=GetAddOnMetadata("HealBot", "Version")
     else
-        HEALBOT_VERSION="25.0"
+        HEALBOT_VERSION="26.0"
     end
     HealBot_Comms_SetVersion()
 end
@@ -16,11 +16,16 @@ HEALBOT_ABOUT_URL="healbot.dpm15.net"
 local vMajor        =string.split(".", select(1, GetBuildInfo()))
 HEALBOT_GAME_VERSION=tonumber(vMajor)
 
+HEALBOT_MIDNIGHT=false
+if HEALBOT_GAME_VERSION>11 then
+    HEALBOT_MIDNIGHT=true
+end
+
 function HealBot_Global_Version()
-    return "25.1"
+    return "26.1"
 end
 function HealBot_Global_InitVersion()
-    return "25.0"  -- Keep behind the global version
+    return "26.0"  -- Keep behind the global version
 end
 
 function HealBot_globalVars()

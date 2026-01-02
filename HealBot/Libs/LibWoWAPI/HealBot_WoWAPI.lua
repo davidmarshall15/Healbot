@@ -339,13 +339,14 @@ function HealBot_WoWAPI_ClassicUnitHealth(unit)
 end
 
 function HealBot_WoWAPI_MidnightUnitHealth(unit)
-    pcthlth=UnitHealthPercent(unit)
-    return pcthlth, 100, pcthlth
+    hlth,maxhlth=UnitHealth(unit),UnitHealthMax(unit)
+    pcthlth=UnitHealthPercent(unit, false)
+    return hlth, maxhlth, pcthlth
 end
 
 local HealBot_WoWAPI_UnitHealthPercent=HealBot_WoWAPI_ClassicUnitHealth
 function HealBot_WoWAPI_SetHealth()
-    if UnitHealthPercent then  -- if HEALBOT_GAME_VERSION>11 then
+    if UnitHealthPercent then  -- if HEALBOT_MIDNIGHT then
         HealBot_WoWAPI_UnitHealthPercent=HealBot_WoWAPI_MidnightUnitHealth
     end
 end

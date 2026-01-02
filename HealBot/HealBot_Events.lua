@@ -280,7 +280,7 @@ function HealBot_Events_UnitStatus(button)
     HealBot_SetUnitDisconnect(button)
     if button.status.current<HealBot_Unit_Status["DC"] then
         HealBot_Action_UpdateTheDeadButton(button)
-        if HEALBOT_GAME_VERSION<12 and button.health.current == 0 then
+        if HEALBOT_MIDNIGHT or button.health.current == 0 then
             HealBot_UnitHealth(button)
         end
     end

@@ -7040,7 +7040,7 @@ end
 
 function HealBot_Options_FluidFlashInUse()
       --HealBot_setCall("HealBot_Options_FluidFlashInUse")
-    if HealBot_Globals.CPUUsage>7 then
+    if not HEALBOT_MIDNIGHT and HealBot_Globals.CPUUsage>7 then
         if HealBot_Globals.OverrideEffects["USE"] == 1 then
             HealBot_setLuVars("UseHealthDrop", hbv_Skins_GetBoolean("General", "HEALTHDROP"))
             HealBot_Action_setLuVars("HealthDropTime", hbv_Skins_GetVar("General", "HEALTHDROPTIME"))
