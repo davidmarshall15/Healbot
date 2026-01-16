@@ -189,10 +189,11 @@ function HealBot_MountsPets_getContinent()
                 info=C_Map.GetMapInfo(info['parentMapID'])
             end
             if(info['mapType'] == 2) then
-                return info['mapID']
+                return info['mapID'] or 0
             end
         end
     end
+    return 0
 end
 
 function HealBot_MountsPets_ZoneChange()
@@ -211,7 +212,7 @@ function HealBot_MountsPets_ZoneChange()
                 HealBot_mountData["incFlying"]=false
             elseif Continent == 1415 then
                 HealBot_mountData["incAbyseal"]=true
-            else
+            elseif Continent > 0 then
                 local mapAreaID=C_Map.GetBestMapForUnit("player") or 0
                 if mapAreaID>0 then
                     if mapAreaID == 125 then

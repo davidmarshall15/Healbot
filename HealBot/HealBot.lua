@@ -1746,7 +1746,7 @@ function HealBot_Register_Events()
         local regPower=false
         if HEALBOT_GAME_VERSION>10 then
             HealBot:RegisterEvent("LEARNED_SPELL_IN_SKILL_LINE")
-        else
+        elseif HEALBOT_GAME_VERSION>2 then
             HealBot:RegisterEvent("LEARNED_SPELL_IN_TAB")
         end
         HealBot:RegisterEvent("PLAYER_LEVEL_UP");
@@ -1913,7 +1913,7 @@ function HealBot_UnRegister_Events()
     HealBot:UnregisterEvent("RAID_TARGET_UPDATE")
     if HEALBOT_GAME_VERSION>10 then
         HealBot:UnregisterEvent("LEARNED_SPELL_IN_SKILL_LINE")
-    else
+    elseif HEALBOT_GAME_VERSION>2 then
         HealBot:UnregisterEvent("LEARNED_SPELL_IN_TAB")
     end
     HealBot:UnregisterEvent("PLAYER_LEVEL_UP");
