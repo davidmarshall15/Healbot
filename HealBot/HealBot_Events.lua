@@ -388,7 +388,7 @@ end
 
 function HealBot_Events_UnitSpellCastStop(button, unitTarget, castGUID, spellID)
       --HealBot_setCall("HealBot_Events_UnitSpellCastStop", button)
-    if castGUID == HealBot_Events_luVars["overhealCastID"] then
+    if not HEALBOT_MIDNIGHT and castGUID == HealBot_Events_luVars["overhealCastID"] then
         _,xButton,pButton=HealBot_UnitID(HealBot_Events_luVars["overhealUnit"], true)
         HealBot_Events_luVars["overhealUnit"]="-nil-"
         HealBot_setLuVars("overhealUnit", "-nil-")
