@@ -4157,7 +4157,7 @@ function HealBot_Action_InitButton(button, prefix)
     for x=1,9 do
         button.gref.aux[x]=_G[button.bName.."Aux"..x]
         button.gref.aux[x]:UnregisterAllEvents()
-        button.gref.aux[x]:SetMinMaxValues(0,1000)
+        button.gref.aux[x]:SetMinMaxValues(0,100)
         button.gref.aux[x]:SetFrameLevel(button.gref["Bar"]:GetFrameLevel()+x)
         button.gref.aux[x]:EnableMouse(false)
         button.gref.auxtxt[x]=_G[button.bName.."Aux"..x.."_Txt"]
@@ -4363,7 +4363,6 @@ function HealBot_Action_InitButton(button, prefix)
     button.mana.current=0
     button.mana.max=1
     button.mana.pct=0
-    button.mana.pctc=0
     button.mana.type=0
     button.poweralt.current=0
     button.poweralt.max=1

@@ -353,7 +353,7 @@ function HealBot_Events_UnitSpellCastStart(button, unitTarget, castGUID, spellID
         else
             scName=HealBot_WoWAPI_SpellName(spellID) or spellID or "x"
         end
-        if HealBot_Events_ResSpells[scName] then
+        if not HEALBOT_MIDNIGHT and HealBot_Events_ResSpells[scName] then
             if HealBot_Events_ResSpells[scName] == 2 then
                 if HealBot_Events_luVars["massResTime"]<HealBot_ServerTimeNow then
                     HealBot_Events_luVars["massResUnit"]=button.unit
@@ -455,11 +455,11 @@ function HealBot_Events_UnitSpellCastSent(caster,unitName,castGUID,spellID)
         uscUnitName=HealBot_UnitNameOnly(unitName)
         uscSpellName=HealBot_WoWAPI_SpellName(spellID) or spellID
 
-        if uscUnitName == HEALBOT_WORDS_UNKNOWN then
+        if not HEALBOT_MIDNIGHT and uscUnitName == HEALBOT_WORDS_UNKNOWN then
             uscUnitName=HealBot_GetCorpseName(uscUnitName)
         end
 
-        if uscUnitName == "" then
+        if not HEALBOT_MIDNIGHT and uscUnitName == "" then
             if spellID == HEALBOT_MENDPET and UnitExists("pet") then
                 uscUnitName=UnitName("pet")
                 uscUnit="pet"
@@ -469,7 +469,7 @@ function HealBot_Events_UnitSpellCastSent(caster,unitName,castGUID,spellID)
             if uscUnit and not UnitExists(uscUnit) then uscUnit=nil end
         end
 
-        if uscUnit and uscUnitName then
+        if uscUnit and (HEALBOT_MIDNIGHT or uscUnitName) then
             _,xButton,pButton=HealBot_UnitID(uscUnit)
             if (xButton and hbv_Skins_GetFrameVar("BarText", "OVERHEAL", xButton.frame)<3) or
                (pButton and hbv_Skins_GetFrameVar("BarText", "OVERHEAL", pButton.frame)<3) then
@@ -483,7 +483,7 @@ function HealBot_Events_UnitSpellCastSent(caster,unitName,castGUID,spellID)
                 if HealBot_Events_ResSpells[uscSpellName] then
                     if HealBot_Events_ResSpells[uscSpellName] == 2 then
                         HealBot_Events_CastNotify(HEALBOT_SORTBY_GROUP,uscSpellName,(uscUnit or ""))
-                    elseif uscUnit and uscUnitName then
+                    elseif uscUnit and (HEALBOT_MIDNIGHT or uscUnitName) then
                         HealBot_Events_CastNotify(uscUnitName,uscSpellName,uscUnit)
                     end
                 end
@@ -585,13 +585,18 @@ function HealBot_Events_TotalHealAbsorbs(button)
     end
 end
 
+local eutEnemyUnit,eutEnemyTarget="target","targetTarget"
 function HealBot_Events_UnitThreat(button)
       --HealBot_setCall("HealBot_Events_UnitThreat", button)
     if UnitAffectingCombat(button.unit) then
         if button.status.current<HealBot_Unit_Status["DC"] then
             if not HealBot_Data["UILOCK"] and HealBot_retLuVars("UpdateEnemyFrame") and HealBot_Data["PALIVE"] then
+                if not HEALBOT_MIDNIGHT then 
+                    eutEnemyUnit=button.unit.."target"
+                    eutEnemyTarget=button.unit.."targettarget" 
+                end
                 if hbv_Skins_GetVar("General", "UNITINCOMBAT")>1 and button.range.current>0 and
-                   HealBot_ValidLivingEnemy(button.unit, button.unit.."target") and UnitIsUnit(button.unit, button.unit.."targettarget") then
+                   HealBot_ValidLivingEnemy(button.unit, eutEnemyUnit) and (HEALBOT_MIDNIGHT or UnitIsUnit(button.unit, eutEnemyTarget)) then
                     if hbv_Skins_GetVar("General", "UNITINCOMBAT") == 3 then
                         HealBot_PlayerRegenDisabled()
                     else

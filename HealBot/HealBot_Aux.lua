@@ -230,7 +230,7 @@ local function HealBot_Aux_setBar(button, id, value, isFluid, text, endTime, Cas
             button.auxtxt[id]["G"]=hbv_Aux_GetBarTextVar("COLG", button.frame, id)
             button.auxtxt[id]["B"]=hbv_Aux_GetBarTextVar("COLB", button.frame, id)
         end
-        if HealBot_Text_Len(text)>hbAuxTextMaxChars[button.frame][id] then
+        if not HEALBOT_MIDNIGHT and HealBot_Text_Len(text)>hbAuxTextMaxChars[button.frame][id] then
             text=HealBot_Text_Sub(text,1,hbAuxTextMaxChars[button.frame][id])
         end
         button.gref.auxtxt[id]:SetText(text)
@@ -564,19 +564,22 @@ local function HealBot_Aux_setPowerBarsById(button, id)
                 button.aux[id]["B"]=button.mana.b
             end
             if button.mana.change then HealBot_Aux_UpdBar(button) end
+            button.gref.aux[id]:SetMinMaxValues(0,button.mana.max)
             if hbv_Aux_GetBarBoolean("TEXT", button.frame, id) then
                 if hbv_Aux_GetBarTextVar("COLTYPE", button.frame, id) == 1 then
                     HealBot_Aux_AutoTextColour(button, id, button.mana.r, button.mana.g, button.mana.b, 0.25)
                 end
-                if hbv_Skins_GetFrameVar("BarText", "HLTHTYPE", button.frame) == 1 then
-                    HealBot_Aux_setBar(button, id, button.mana.pctc, true, HealBot_Text_shortHealTxt(button.mana.current, button.frame, hbAuxTextMaxChars[button.frame][id]))
+                if HEALBOT_MIDNIGHT then
+                    HealBot_Aux_setBar(button, id, button.mana.current, true, button.mana.current)
+                elseif hbv_Skins_GetFrameVar("BarText", "HLTHTYPE", button.frame) == 1 then
+                    HealBot_Aux_setBar(button, id, button.mana.current, true, HealBot_Text_shortHealTxt(button.mana.current, button.frame, hbAuxTextMaxChars[button.frame][id]))
                 elseif hbv_Skins_GetFrameVar("BarText", "HLTHTYPE", button.frame) == 2 then
-                    HealBot_Aux_setBar(button, id, button.mana.pctc, true, HealBot_Text_shortHealTxt(button.mana.current-button.mana.max, button.frame, hbAuxTextMaxChars[button.frame][id]))
+                    HealBot_Aux_setBar(button, id, button.mana.current, true, HealBot_Text_shortHealTxt(button.mana.current-button.mana.max, button.frame, hbAuxTextMaxChars[button.frame][id]))
                 else
-                    HealBot_Aux_setBar(button, id, button.mana.pctc, true, button.mana.pct.."%")
+                    HealBot_Aux_setBar(button, id, button.mana.current, true, button.mana.pct.."%")
                 end
             else
-                HealBot_Aux_setBar(button, id, button.mana.pctc, true)
+                HealBot_Aux_setBar(button, id, button.mana.current, true)
             end
         end
     else
@@ -1569,14 +1572,14 @@ function HealBot_Aux_UpdateResBar(button, text, startTime, endTime, CastIsChan)
                     button.aux[id]["G"]=hbv_Skins_GetFrameVar("BarTextCol", "NDCG", button.frame)
                     button.aux[id]["B"]=hbv_Skins_GetFrameVar("BarTextCol", "NDCB", button.frame)
                 end
-                button.gref.aux[id]:SetMinMaxValues(0,1000)
+                button.gref.aux[id]:SetMinMaxValues(0,100)
                 if hbv_Aux_GetBarBoolean("TEXT", button.frame, id) then
                     if hbv_Aux_GetBarTextVar("COLTYPE", button.frame, id) == 1 then
                         HealBot_Aux_AutoTextColour(button, id, hbv_Skins_GetFrameVar("BarTextCol", "NDCR", button.frame), hbv_Skins_GetFrameVar("BarTextCol", "NDCG", button.frame), hbv_Skins_GetFrameVar("BarTextCol", "NDCB", button.frame), 0.25)
                     end
-                    HealBot_Aux_setBar(button, id, 1000, false, text)
+                    HealBot_Aux_setBar(button, id, 100, false, text)
                 else
-                    HealBot_Aux_setBar(button, id, 1000)
+                    HealBot_Aux_setBar(button, id, 100)
                 end
             end
         else
@@ -2258,7 +2261,7 @@ function HealBot_Aux_ResetTextByTypeById(button, id)
             HealBot_Aux_setBar(button, id, 1000, false, button.text.tag)
         else
             if hbAuxPowerAssigned[button.frame][id] then
-                HealBot_Aux_setBar(button, id, button.mana.pctc, true, " ")
+                HealBot_Aux_setBar(button, id, button.mana.pct, true, " ")
                 HealBot_Aux_setPowerBarsById(button, id)
             elseif hbAuxPowerAltAssigned[button.frame][id] then
                 HealBot_Aux_setBar(button, id, button.poweralt.pctc, true, " ")

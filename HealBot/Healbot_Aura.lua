@@ -2490,6 +2490,11 @@ function HealBot_Aura_UpdateUnitBuffsV9(button, selfOnly)
             uaZ=uaZ+1
         end)
     end
+    AuraUtil.ForEachAura(button.unit, "RAID_IN_COMBAT", nil, function(...)
+        uaName, uaTexture, uaCount, uaDebuffType, uaDuration, uaExpirationTime, uaUnitCaster, _, _, uaSpellId=...
+        HealBot_Aura_UpdateUnitBuffsData(button, selfOnly, uaZ)
+        uaZ=uaZ+1
+    end)
 end
 
 local HealBot_Aura_UpdateUnitBuffs=HealBot_Aura_UpdateUnitBuffsV2
@@ -2519,6 +2524,10 @@ function HealBot_Aura_PostUpdateUnitDebuffsData(button, spellID, spellName, debu
             local aSpellId=nil
             if HEALBOT_GAME_VERSION>8 then
                 AuraUtil.ForEachAura(button.unit, "HARMFUL|RAID", nil, function(...)
+                    _, _, _, _, _, _, _, _, _, aSpellId=...
+                    HealBot_Aura_CanDispel[aSpellId]=true
+                end)
+                AuraUtil.ForEachAura(button.unit, "RAID_PLAYER_DISPELLABLE", nil, function(...)
                     _, _, _, _, _, _, _, _, _, aSpellId=...
                     HealBot_Aura_CanDispel[aSpellId]=true
                 end)
@@ -2666,6 +2675,11 @@ function HealBot_Aura_UpdateUnitDebuffsV9(button, selfOnly)
             uaZ=uaZ+1
         end)
     end
+    AuraUtil.ForEachAura(button.unit, "RAID_PLAYER_DISPELLABLE", nil, function(...)
+        uaName, uaTexture, uaCount, uaDebuffType, uaDuration, uaExpirationTime, uaUnitCaster, _, _, uaSpellId, _, uaIsBossDebuff=...
+        HealBot_Aura_UpdateUnitDebuffsData(button, selfOnly, uaZ)
+        uaZ=uaZ+1
+    end)
 end
 
 local HealBot_Aura_UpdateUnitDebuffs=HealBot_Aura_UpdateUnitDebuffsV2

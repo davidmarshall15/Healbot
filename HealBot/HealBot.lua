@@ -1106,13 +1106,10 @@ function HealBot_UnitMana(button)
             button.mana.max=hbPowerMax
             if HEALBOT_MIDNIGHT then
                 button.mana.pct=hbPowerCurrent
-                button.mana.pctc=hbPowerCurrent
             elseif button.mana.max>0 then
                 button.mana.pct=floor((button.mana.current/button.mana.max)*100)
-                button.mana.pctc=button.mana.pct*10
             else
                 button.mana.pct=0
-                button.mana.pctc=0
             end
             if hbManaExtra[button.guid] then
                 if hbManaWatch[button.guid] then
@@ -1136,13 +1133,10 @@ function HealBot_UnitMana(button)
             button.poweralt.max=hbPowerMax
             if HEALBOT_MIDNIGHT then
                 button.poweralt.pct=hbPowerCurrent
-                button.mana.pctc=hbPowerCurrent*10
             elseif button.poweralt.max>0 then
                 button.poweralt.pct=floor((button.poweralt.current/button.poweralt.max)*100)
-                button.mana.pctc=button.mana.pct*10
             else
                 button.poweralt.pct=0
-                button.mana.pctc=0
             end
             HealBot_Aux_setPowerAltBars(button)
         elseif button.mana.change then
@@ -1151,7 +1145,7 @@ function HealBot_UnitMana(button)
         HealBot_Events_PowerIndicators(button)
         if button.mouseover and HealBot_Data["TIPBUTTON"] then HealBot_setTooltipUpdateNow() end
     else
-        if button.mana.current>0 or button.mana.max>0 then
+        if HEALBOT_MIDNIGHT or button.mana.current>0 or button.mana.max>0 then
             button.mana.current=0
             button.mana.max=0
             button.mana.pctc=0
@@ -1159,7 +1153,7 @@ function HealBot_UnitMana(button)
         elseif button.mana.change then
             HealBot_Aux_setPowerBars(button)
         end
-        if button.poweralt.current>0 or button.poweralt.max>0 then
+        if HEALBOT_MIDNIGHT or button.poweralt.current>0 or button.poweralt.max>0 then
             button.poweralt.current=0
             button.poweralt.max=0
             button.poweralt.pctc=0
@@ -3964,7 +3958,7 @@ local HealBot_CDKnown={}
 local hbStartTime, hbDuration, hbCDTime, hbCDEnd=0,0,0,0
 function HealBot_SpellCooldown(spellName, spellId)
       --HealBot_setCall("HealBot_SpellCooldown")
-    if not HEALBOT_MIDNIGHT or not HealBot_luVars["UILOCK"] then
+    if not HEALBOT_MIDNIGHT then
         hbStartTime, hbDuration=HealBot_WoWAPI_SpellCooldown(spellName)
         hbCDEnd=(hbStartTime or 0)+(hbDuration or 0)
         hbCDTime=hbCDEnd-HealBot_TimeNow
@@ -4189,7 +4183,7 @@ function HealBot_Update_Final()
     HealBot_UpdateTimers()
 end
 
-local ouNoneInCombat=true
+local ouNoneInCombat,ouEnemyUnit,ouEnemyTarget=true,"target","targettarget"
 function HealBot_Update_OutOfCombat()
       --HealBot_setCall("HealBot_Update_OutOfCombat", nil, nil, nil, true)
     if HealBot_Config.DisabledNow == 1 and HealBot_Data["UILOCK"] then
@@ -4197,16 +4191,24 @@ function HealBot_Update_OutOfCombat()
     elseif (HealBot_Data["UILOCK"] or not HealBot_luVars["UpdateEnemyFrame"]) and HealBot_luVars["AllOutOfCombatCheck"]<=HealBot_TimeNow then
         ouNoneInCombat=true
         for xUnit,xButton in pairs(HealBot_Private_Button) do
+            if not HEALBOT_MIDNIGHT then 
+                ouEnemyUnit=xUnit.."target"
+                ouEnemyTarget=xUnit.."targettarget"
+            end
             if xButton.status.current<HealBot_Unit_Status["DEAD"] and xButton.range.current>-1 and UnitAffectingCombat(xUnit) and
-               HealBot_ValidLivingEnemy(xUnit, xUnit.."target") and UnitIsUnit(xButton.unit, xButton.unit.."targettarget") then
+               HealBot_ValidLivingEnemy(xUnit, ouEnemyUnit) and (HEALBOT_MIDNIGHT or UnitIsUnit(xUnit, ouEnemyTarget)) then
                 ouNoneInCombat=false
                 break
             end
         end
         if ouNoneInCombat then
             for xUnit,xButton in pairs(HealBot_Unit_Button) do
+                if not HEALBOT_MIDNIGHT then 
+                    ouEnemyUnit=xUnit.."target"
+                    ouEnemyTarget=xUnit.."targettarget"
+                end
                 if xButton.status.current<HealBot_Unit_Status["DEAD"] and xButton.range.current>-1 and UnitAffectingCombat(xUnit) and
-                   HealBot_ValidLivingEnemy(xUnit, xUnit.."target") and UnitIsUnit(xButton.unit, xButton.unit.."targettarget") then
+                   HealBot_ValidLivingEnemy(xUnit, ouEnemyUnit) and (HEALBOT_MIDNIGHT or UnitIsUnit(xUnit, ouEnemyTarget)) then
                     ouNoneInCombat=false
                     break
                 end
@@ -4481,7 +4483,7 @@ function HealBot_CalcThreat(button)
         elseif HealBot_ValidLivingEnemy("player", "target") then
             ctEnemyUnit="playertarget"
         end
-        if ctEnemyUnit then
+        if not HEALBOT_MIDNIGHT and ctEnemyUnit then
             _, UnitThreatData["tmpstatus"], UnitThreatData["tmppct"], _, UnitThreatData["tmpvalue"]=UnitDetailedThreatSituation(button.unit, ctEnemyUnit)
             UnitThreatData["threatpct"]=ceil(UnitThreatData["tmppct"] or 0)
             UnitThreatData["status"]=UnitThreatData["tmpstatus"] or 0
@@ -4549,7 +4551,11 @@ function HealBot_UnitNameOnly(unitName)
       --HealBot_setCall("HealBot_UnitNameOnly")
     hbNameOnly=false
     if unitName then
-        hbNameOnly=strtrim(string.match(unitName, "^[^-]*"))
+        if not HEALBOT_MIDNIGHT then
+            hbNameOnly=strtrim(string.match(unitName, "^[^-]*"))
+        else
+            hbNameOnly=unitName
+        end
     end
     return hbNameOnly
 end

@@ -595,6 +595,14 @@ function HealBot_Panel_ClearBlackList()
     HealBot_Timers_Set("OOCNT","RefreshPartyNextRecalcAll")
 end
 
+function HealBot_Panel_OnBlackList(guid)
+    if not HEALBOT_MIDNIGHT then
+        return false
+    else
+        return HealBot_Panel_BlackList[guid]
+    end
+end
+
 function HealBot_Panel_AddBlackList(unit)
       --HealBot_setCall("HealBot_Panel_AddBlackList", nil, nil, unit)
     xGUID=UnitGUID(unit)
@@ -2489,7 +2497,7 @@ function HealBot_Panel_SubSort(doSubSort, unitType, preCombat)
             elseif (unitType>10 and HealBot_TrackUnit[unitType][vSubSortUnit]) or (unitType<10 and HealBot_TrackPrivateUnit[unitType][vSubSortUnit]) then
                 vExists=true
             end
-            if not vExists and not HealBot_Panel_BlackList[vSubSortGUID] then
+            if not vExists and not HealBot_Panel_OnBlackList(vSubSortGUID) then
                 vRole=3
                 if HealBot_MainTanks[vSubSortGUID] then
                     vRole=1
@@ -2881,7 +2889,7 @@ function HealBot_Panel_validTarget(unit)
     if UnitExists(unit) then
         vTargetValid=true
         vTargetGUID=UnitGUID(unit) or unit
-        if HealBot_Panel_BlackList[vTargetGUID] then
+        if HealBot_Panel_OnBlackList(vTargetGUID) then
             vTargetValid=false
         end
     else
@@ -3147,7 +3155,7 @@ function HealBot_Panel_validFocus()
     if UnitExists("focus") then
         vFocusUnitValid=true
         vFocusGUID=UnitGUID("focus") or "focus"
-        if HealBot_Panel_BlackList[vFocusGUID] then
+        if HealBot_Panel_OnBlackList(vFocusGUID) then
             vFocusUnitValid=false
         end
     else
@@ -3462,7 +3470,7 @@ function HealBot_Panel_TargetChanged(preCombat)
             HealBot_Panel_targetHeals(preCombat)
             vTargetButton=HealBot_Extra_Button["target"]
             if vTargetButton then
-                if HealBot_TrackUnit[vTargetButton.status.unittype][vTargetButton.unit] and not HealBot_Panel_BlackList[vTargetButton.guid] then
+                if HealBot_TrackUnit[vTargetButton.status.unittype][vTargetButton.unit] and not HealBot_Panel_OnBlackList(vTargetButton.guid) then
                     HealBot_Panel_TargetShow(vTargetButton, preCombat)
                 else
                     HealBot_Action_MarkDeleteButton(vTargetButton)
@@ -3477,7 +3485,7 @@ function HealBot_Panel_TargetChanged(preCombat)
             HealBot_Panel_totHeals(preCombat)
             vTargetButton=HealBot_Extra_Button["targettarget"]
             if vTargetButton then
-                if HealBot_TrackUnit[vTargetButton.status.unittype][vTargetButton.unit] and not HealBot_Panel_BlackList[vTargetButton.guid] then
+                if HealBot_TrackUnit[vTargetButton.status.unittype][vTargetButton.unit] and not HealBot_Panel_OnBlackList(vTargetButton.guid) then
                     HealBot_Panel_TargetShow(vTargetButton, preCombat)
                 else
                     HealBot_Action_MarkDeleteButton(vTargetButton)
@@ -3573,7 +3581,7 @@ function HealBot_Panel_FocusChanged(preCombat)
                 HealBot_Panel_focusHeals(preCombat)
                 vFocusButton=HealBot_Extra_Button["focus"]
                 if vFocusButton then
-                    if HealBot_TrackUnit[vFocusButton.status.unittype][vFocusButton.unit] and not HealBot_Panel_BlackList[vFocusButton.guid] then
+                    if HealBot_TrackUnit[vFocusButton.status.unittype][vFocusButton.unit] and not HealBot_Panel_OnBlackList(vFocusButton.guid) then
                         HealBot_Panel_FocusShow(vFocusButton, preCombat)
                     else
                         HealBot_Action_MarkDeleteButton(vFocusButton)
@@ -3588,7 +3596,7 @@ function HealBot_Panel_FocusChanged(preCombat)
                 HealBot_Panel_tofHeals(preCombat)
                 vFocusButton=HealBot_Extra_Button["focustarget"]
                 if vFocusButton then
-                    if HealBot_TrackUnit[vFocusButton.status.unittype][vFocusButton.unit] and not HealBot_Panel_BlackList[vFocusButton.guid] then
+                    if HealBot_TrackUnit[vFocusButton.status.unittype][vFocusButton.unit] and not HealBot_Panel_OnBlackList(vFocusButton.guid) then
                         HealBot_Panel_FocusShow(vFocusButton, preCombat)
                     else
                         HealBot_Action_MarkDeleteButton(vFocusButton)
@@ -3732,7 +3740,7 @@ function HealBot_Panel_PlayersChanged(preCombat)
 
     for xUnit,xButton in pairs(HealBot_Unit_Button) do
         if xButton.status.unittype>10 and xButton.status.unittype<20 then
-            if HealBot_TrackUnit[xButton.status.unittype] and HealBot_TrackUnit[xButton.status.unittype][xUnit] and not HealBot_Panel_BlackList[xButton.guid] then
+            if HealBot_TrackUnit[xButton.status.unittype] and HealBot_TrackUnit[xButton.status.unittype][xUnit] and not HealBot_Panel_OnBlackList(xButton.guid) then
                 HealBot_Panel_UnitShow(xButton, true, preCombat)
             else
                 if HealBot_UnitTargets[xUnit] then --and HealBot_UnitTargets[xUnit]>0 then
@@ -3747,7 +3755,7 @@ function HealBot_Panel_PlayersChanged(preCombat)
     HealBot_Panel_luVars["NumPrivate"]=0
     for xUnit,xButton in pairs(HealBot_Private_Button) do
         if xButton.status.unittype>0 and xButton.status.unittype<10 then
-            if HealBot_TrackPrivateUnit[xButton.status.unittype] and HealBot_TrackPrivateUnit[xButton.status.unittype][xUnit] and not HealBot_Panel_BlackList[xButton.guid] then
+            if HealBot_TrackPrivateUnit[xButton.status.unittype] and HealBot_TrackPrivateUnit[xButton.status.unittype][xUnit] and not HealBot_Panel_OnBlackList(xButton.guid) then
                 HealBot_Panel_UnitShow(xButton, true, preCombat)
                 HealBot_Panel_luVars["NumPrivate"]=HealBot_Panel_luVars["NumPrivate"]+1
             else
@@ -3787,7 +3795,7 @@ function HealBot_Panel_PlayersChanged(preCombat)
     if vTargetWithPlayers then
         vTargetButton=HealBot_Extra_Button["target"]
         if vTargetButton then
-            if HealBot_TrackUnit[vTargetButton.status.unittype] and HealBot_TrackUnit[vTargetButton.status.unittype][vTargetButton.unit] and not HealBot_Panel_BlackList[vTargetButton.guid] then
+            if HealBot_TrackUnit[vTargetButton.status.unittype] and HealBot_TrackUnit[vTargetButton.status.unittype][vTargetButton.unit] and not HealBot_Panel_OnBlackList(vTargetButton.guid) then
                 HealBot_Panel_TargetShow(vTargetButton, preCombat)
             else
                 HealBot_Action_MarkDeleteButton(vTargetButton)
@@ -3797,7 +3805,7 @@ function HealBot_Panel_PlayersChanged(preCombat)
     if vToTWithPlayers then
         vTargetButton=HealBot_Extra_Button["targettarget"]
         if vTargetButton then
-            if HealBot_TrackUnit[vTargetButton.status.unittype] and HealBot_TrackUnit[vTargetButton.status.unittype][vTargetButton.unit] and not HealBot_Panel_BlackList[vTargetButton.guid] then
+            if HealBot_TrackUnit[vTargetButton.status.unittype] and HealBot_TrackUnit[vTargetButton.status.unittype][vTargetButton.unit] and not HealBot_Panel_OnBlackList(vTargetButton.guid) then
                 HealBot_Panel_TargetShow(vTargetButton, preCombat)
             else
                 HealBot_Action_MarkDeleteButton(vTargetButton)
@@ -3807,7 +3815,7 @@ function HealBot_Panel_PlayersChanged(preCombat)
     if vFocusWithPlayers then
         vFocusButton=HealBot_Extra_Button["focus"]
         if vFocusButton then
-            if HealBot_TrackUnit[vFocusButton.status.unittype] and HealBot_TrackUnit[vFocusButton.status.unittype][vFocusButton.unit] and not HealBot_Panel_BlackList[vFocusButton.guid] then
+            if HealBot_TrackUnit[vFocusButton.status.unittype] and HealBot_TrackUnit[vFocusButton.status.unittype][vFocusButton.unit] and not HealBot_Panel_OnBlackList(vFocusButton.guid) then
                 HealBot_Panel_FocusShow(vFocusButton, preCombat)
             else
                 HealBot_Action_MarkDeleteButton(vFocusButton)
@@ -3817,7 +3825,7 @@ function HealBot_Panel_PlayersChanged(preCombat)
     if vToFWithPlayers then
         vFocusButton=HealBot_Extra_Button["focustarget"]
         if vFocusButton then
-            if HealBot_TrackUnit[vFocusButton.status.unittype] and HealBot_TrackUnit[vFocusButton.status.unittype][vFocusButton.unit] and not HealBot_Panel_BlackList[vFocusButton.guid] then
+            if HealBot_TrackUnit[vFocusButton.status.unittype] and HealBot_TrackUnit[vFocusButton.status.unittype][vFocusButton.unit] and not HealBot_Panel_OnBlackList(vFocusButton.guid) then
                 HealBot_Panel_FocusShow(vFocusButton, preCombat)
             else
                 HealBot_Action_MarkDeleteButton(vFocusButton)
@@ -3917,6 +3925,7 @@ function HealBot_Panel_RaidPetUnitButtonCheck(guid)
 end
 
 function HealBot_Panel_AllUnitButton(guid)
+    if HEALBOT_MIDNIGHT then return end 
     return hbPanel_buttonGUIDs[guid] or hbPanel_buttonPetGUIDs[guid] or hbPanel_buttonExtraGUIDs[guid], hbPanel_buttonpGUIDs[guid]
 end
 
