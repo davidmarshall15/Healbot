@@ -579,7 +579,7 @@ function HealBot_Events_TotalHealAbsorbs(button)
     else
         thauHealAmount=0
     end
-    if button.health.healabsorbs~=thauHealAmount then
+    if HEALBOT_MIDNIGHT or button.health.healabsorbs~=thauHealAmount then
         button.health.healabsorbs=thauHealAmount
         HealBot_Aux_UpdateTotalHealAbsorbsBar(button)
     end

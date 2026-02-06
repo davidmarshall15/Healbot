@@ -1146,7 +1146,7 @@ function HealBot_Aura_CheckGeneralBuff(button)
             end
             buffSpellStart=buffSpellStart or 0
             buffSpellDur=buffSpellDur or 0
-            if (buffSpellStart+buffSpellDur)-HealBot_TimeNow<2 then
+            if HEALBOT_MIDNIGHT or (buffSpellStart+buffSpellDur)-HealBot_TimeNow<2 then
                 buffCheckThis=false;
                 buffWatchTarget=HealBot_Options_retBuffWatchTarget(buffWatchName) or "";
                 if buffWatchTarget["Raid"] then

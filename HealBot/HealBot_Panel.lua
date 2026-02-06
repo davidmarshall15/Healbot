@@ -3940,6 +3940,7 @@ end
 
 function HealBot_Panel_RaidUnitName(uName)
       --HealBot_setCall("HealBot_Panel_RaidUnitName")
+    if HEALBOT_MIDNIGHT then return end 
     return hbPanel_dataNames[uName] or hbPanel_dataPetNames[uName]
 end
 

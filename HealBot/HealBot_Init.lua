@@ -186,7 +186,7 @@ end
 local function HealBot_Init_Range(spellId, spellBookId, tipSet)
       --HealBot_setCall("HealBot_Init_ManaCost")
     local range=0
-    if spellBookId then
+    if not HEALBOT_MIDNIGHT and spellBookId then
         if not tipSet then
             HealBot_SetToolTip(HealBot_ScanTooltip)
             HealBot_ScanTooltip:SetSpellBookItem(spellBookId, BOOKTYPE_SPELL);
@@ -206,7 +206,7 @@ local function HealBot_Init_Range(spellId, spellBookId, tipSet)
             end
         end
     end
-    if not range or type(range)~="number" then range=0 end
+    if not range or type(range)~="number" then range=40 end
     return range
 end
 
