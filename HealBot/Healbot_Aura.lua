@@ -46,7 +46,6 @@ local buffCheck, generalBuffs, buffWarnings, debuffCheck, debuffWarnings=false,f
 local tmpBCheck, tmpCBuffs, tmpGBuffs, tmpDCheck, tmpBGroup, tmpDGroup, tmpNumGroup=false,false,false,false,false,false,0
 local uaName, uaTexture, uaCount, uaDebuffType, uaDuration="","",0,"",0
 local uaExpirationTime, uaUnitCaster, uaUnitIsPlayer, uaSpellId, uaIsBossDebuff=0,"",false,0,false
-local uaExtra17, uaExtra18, uaExtra19=nil, nil, nil
 local uaBuffData={}
 local uaDebuffData={}
 local uaBuffSlot, uaDebuffSlot=0,0
@@ -2403,6 +2402,7 @@ function HealBot_Aura_StartCheckClassicAbsorbs(button)
     end
 end
 
+local uaExtra17, uaExtra18, uaExtra19=nil, nil, nil
 function HealBot_Aura_CheckClassicAbsorbs(button)
     if HealBot_Classic_Absorbs[uaName] then
         hbClassicAbsorbsAmount[button.id][uaName]=0
@@ -2419,9 +2419,8 @@ function HealBot_Aura_CheckClassicAbsorbs(button)
     end
 end
 
-local hbClassicAbsorbValues=0
 function HealBot_Aura_EndCheckClassicAbsorbs(button)
-    hbClassicAbsorbValues=0
+    local hbClassicAbsorbValues=0
     for n,t in pairs(hbClassicAbsorbsTrack[button.id]) do
         if not hbClassicAbsorbsTrack[button.id][n] then
             hbClassicAbsorbsTrack[button.id][n]=nil;
@@ -2435,11 +2434,11 @@ function HealBot_Aura_EndCheckClassicAbsorbs(button)
     end
 end
 
-local hbClassicAbsorbTotal=0
 function HealBot_Aura_UpdateUnitBuffsV1(button, selfOnly)
       --HealBot_setCall("HealBot_Aura_UpdateUnitBuffsV1", button)
     uaZ=1
-    hbClassicAbsorbTotal=0
+    local hbClassicAbsorbValues=0
+    local hbClassicAbsorbTotal=0
     while true do
         uaName, uaTexture, uaCount, uaDebuffType, uaDuration, uaExpirationTime, uaUnitCaster, _, _, uaSpellId, _, _, _, _, _, _, uaExtra17, uaExtra18, uaExtra19=UnitAura(button.unit,uaZ,"HELPFUL")
         if uaSpellId then
@@ -2480,21 +2479,22 @@ function HealBot_Aura_UpdateUnitBuffsV2(button, selfOnly)
     HealBot_Aura_EndCheckClassicAbsorbs(button)
 end
 
+local uaAura={}
 function HealBot_Aura_UpdateUnitBuffsV9(button, selfOnly)
       --HealBot_setCall("HealBot_Aura_UpdateUnitBuffsV9", button)
     uaZ=1
-    if not HEALBOT_MIDNIGHT or not HealBot_Data["UILOCK"] then
-        AuraUtil.ForEachAura(button.unit, "HELPFUL", nil, function(...)
-            uaName, uaTexture, uaCount, uaDebuffType, uaDuration, uaExpirationTime, uaUnitCaster, _, _, uaSpellId=...
-            HealBot_Aura_UpdateUnitBuffsData(button, selfOnly, uaZ)
-            uaZ=uaZ+1
-        end)
-    end
-    AuraUtil.ForEachAura(button.unit, "RAID_IN_COMBAT", nil, function(...)
-        uaName, uaTexture, uaCount, uaDebuffType, uaDuration, uaExpirationTime, uaUnitCaster, _, _, uaSpellId=...
+    while true do
+        if not HEALBOT_MIDNIGHT or not HealBot_Data["UILOCK"] then
+            uaAura=C_UnitAuras.GetAuraDataByIndex(button.unit, uaZ, "HELPFUL")
+        else
+            uaAura=C_UnitAuras.GetAuraDataByIndex(button.unit, uaZ, "RAID_IN_COMBAT")
+        end
+        if not uaAura then break end
+        uaName, uaTexture, uaCount, uaDebuffType, uaDuration, uaExpirationTime, uaUnitCaster, uaSpellId=
+        uaAura.name, uaAura.icon, uaAura.applications, uaAura.dispelName, uaAura.duration, uaAura.expirationTime, uaAura.sourceUnit, uaAura.spellId
         HealBot_Aura_UpdateUnitBuffsData(button, selfOnly, uaZ)
         uaZ=uaZ+1
-    end)
+    end
 end
 
 local HealBot_Aura_UpdateUnitBuffs=HealBot_Aura_UpdateUnitBuffsV2
@@ -2523,14 +2523,12 @@ function HealBot_Aura_PostUpdateUnitDebuffsData(button, spellID, spellName, debu
         if HealBot_Aura_CanDispel[spellID] == nil then
             local aSpellId=nil
             if HEALBOT_GAME_VERSION>8 then
-                AuraUtil.ForEachAura(button.unit, "HARMFUL|RAID", nil, function(...)
-                    _, _, _, _, _, _, _, _, _, aSpellId=...
-                    HealBot_Aura_CanDispel[aSpellId]=true
-                end)
-                AuraUtil.ForEachAura(button.unit, "RAID_PLAYER_DISPELLABLE", nil, function(...)
-                    _, _, _, _, _, _, _, _, _, aSpellId=...
-                    HealBot_Aura_CanDispel[aSpellId]=true
-                end)
+                while true do
+                    uaAura=C_UnitAuras.GetAuraDataByIndex(button.unit, uaZ, "RAID_PLAYER_DISPELLABLE")
+                    if not uaAura then break end
+                    HealBot_Aura_CanDispel[uaAura.spellId]=true
+                    uaZ=uaZ+1
+                end
             else
                 local aId=1
                 while true do
@@ -2668,18 +2666,18 @@ end
 function HealBot_Aura_UpdateUnitDebuffsV9(button, selfOnly)
       --HealBot_setCall("HealBot_Aura_UpdateUnitDebuffsV9", button)
     uaZ=1
-    if not HEALBOT_MIDNIGHT or not HealBot_Data["UILOCK"] then
-        AuraUtil.ForEachAura(button.unit, "HARMFUL", nil, function(...)
-            uaName, uaTexture, uaCount, uaDebuffType, uaDuration, uaExpirationTime, uaUnitCaster, _, _, uaSpellId, _, uaIsBossDebuff=...
-            HealBot_Aura_UpdateUnitDebuffsData(button, selfOnly, uaZ)
-            uaZ=uaZ+1
-        end)
-    end
-    AuraUtil.ForEachAura(button.unit, "RAID_PLAYER_DISPELLABLE", nil, function(...)
-        uaName, uaTexture, uaCount, uaDebuffType, uaDuration, uaExpirationTime, uaUnitCaster, _, _, uaSpellId, _, uaIsBossDebuff=...
+    while true do        
+        if not HEALBOT_MIDNIGHT or not HealBot_Data["UILOCK"] then
+            uaAura=C_UnitAuras.GetAuraDataByIndex(button.unit, uaZ, "HARMFUL")
+        else
+            uaAura=C_UnitAuras.GetAuraDataByIndex(button.unit, uaZ, "RAID_PLAYER_DISPELLABLE")
+        end
+        if not uaAura then break end
+        uaName, uaTexture, uaCount, uaDebuffType, uaDuration, uaExpirationTime, uaUnitCaster, uaSpellId, uaIsBossDebuff=
+        uaAura.name, uaAura.icon, uaAura.applications, uaAura.dispelName, uaAura.duration, uaAura.expirationTime, uaAura.sourceUnit, uaAura.spellId, uaAura.isBossAura
         HealBot_Aura_UpdateUnitDebuffsData(button, selfOnly, uaZ)
         uaZ=uaZ+1
-    end)
+    end
 end
 
 local HealBot_Aura_UpdateUnitDebuffs=HealBot_Aura_UpdateUnitDebuffsV2
