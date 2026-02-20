@@ -124,7 +124,7 @@ function HealBot_Tooltip_getSpellCD(button, validSpellName, isMacro)
       --HealBot_setCall("HealBot_Tooltip_getSpellCD")
     local z, x=0,0
     local gcd=0
-    if not HEALBOT_MIDNIGHT and HealBot_Globals.Tooltip_IgnoreGCD then
+    if not HealBot_Util_isMidnight(false) and HealBot_Globals.Tooltip_IgnoreGCD then
         gcd=HealBot_Tooltip_GCD()
         z, x=HealBot_WoWAPI_SpellCooldown(validSpellName);
     end
@@ -705,8 +705,8 @@ function HealBot_Action_DoRefreshTooltip()
                         uLvl=""
                     end
                     local uClass=UnitCreatureFamily(xUnit) or UnitClass(xUnit) or UnitCreatureType(xUnit)
-                    if not HEALBOT_MIDNIGHT then
-                    if uClass == uName then uClass=UnitCreatureType(xUnit) or "" end
+                    if not HealBot_Util_isMidnight(false) then
+                        if uClass == uName then uClass=UnitCreatureType(xUnit) or "" end
                         if not uClass or uClass == "" then
                             if strfind(xUnit,"pet") then
                                 uClass=HEALBOT_WORD_PET
@@ -1111,14 +1111,14 @@ function HealBot_Tooltip_DebugActionIconCondition(icon, index, cond)
         elseif cond == 10 or cond == 11 then
             if cond == 10 then
                 HealBot_Tooltip_SetLine("Condition "..index.." is "..HealBot_Options_RetActionIconsAlertFilter(cond),1,1,1,1,hbv_ActionIcons_GetData("AlertHealth", icon.frame, icon.id))
-                if not HEALBOT_MIDNIGHT and icon.health<=hbv_ActionIcons_GetData("AlertHealth", icon.frame, icon.id) then
+                if not HealBot_Util_isMidnight(false) and icon.health<=hbv_ActionIcons_GetData("AlertHealth", icon.frame, icon.id) then
                     HealBot_Tooltip_SetLine("icon.health is ",0.4,1,1,1,icon.health,0.25,1,0.25,1)
                 else
                     HealBot_Tooltip_SetLine("icon.health is ",0.4,1,1,1,icon.health,1,0.25,0.25,1)
                 end
             else
                 HealBot_Tooltip_SetLine("Condition "..index.." is "..HealBot_Options_RetActionIconsAlertFilter(cond),1,1,1,1,hbv_ActionIcons_GetData("AlertHealthAbove", icon.frame, icon.id))
-                if not HEALBOT_MIDNIGHT and icon.health>=hbv_ActionIcons_GetData("AlertHealthAbove", icon.frame, icon.id) then
+                if not HealBot_Util_isMidnight(false) and icon.health>=hbv_ActionIcons_GetData("AlertHealthAbove", icon.frame, icon.id) then
                     HealBot_Tooltip_SetLine("icon.health is ",0.4,1,1,1,icon.health,0.25,1,0.25,1)
                 else
                     HealBot_Tooltip_SetLine("icon.health is ",0.4,1,1,1,icon.health,1,0.25,0.25,1)
@@ -1127,14 +1127,14 @@ function HealBot_Tooltip_DebugActionIconCondition(icon, index, cond)
         elseif cond == 12 or cond == 13 then
             if cond == 12 then
                 HealBot_Tooltip_SetLine("Condition "..index.." is "..HealBot_Options_RetActionIconsAlertFilter(cond),1,1,1,1,hbv_ActionIcons_GetData("AlertMana", icon.frame, icon.id))
-                if not HEALBOT_MIDNIGHT and icon.mana<=hbv_ActionIcons_GetData("AlertMana", icon.frame, icon.id) then
+                if not HealBot_Util_isMidnight(false) and icon.mana<=hbv_ActionIcons_GetData("AlertMana", icon.frame, icon.id) then
                     HealBot_Tooltip_SetLine("icon.mana is ",0.4,1,1,1,icon.mana,0.25,1,0.25,1)
                 else
                     HealBot_Tooltip_SetLine("icon.mana is ",0.4,1,1,1,icon.mana,1,0.25,0.25,1)
                 end
             else
                 HealBot_Tooltip_SetLine("Condition "..index.." is "..HealBot_Options_RetActionIconsAlertFilter(cond),1,1,1,1,hbv_ActionIcons_GetData("AlertManaAbove", icon.frame, icon.id))
-                if not HEALBOT_MIDNIGHT and icon.mana>=hbv_ActionIcons_GetData("AlertManaAbove", icon.frame, icon.id) then
+                if not HealBot_Util_isMidnight(false) and icon.mana>=hbv_ActionIcons_GetData("AlertManaAbove", icon.frame, icon.id) then
                     HealBot_Tooltip_SetLine("icon.mana is ",0.4,1,1,1,icon.mana,0.25,1,0.25,1)
                 else
                     HealBot_Tooltip_SetLine("icon.mana is ",0.4,1,1,1,icon.mana,1,0.25,0.25,1)
@@ -1142,7 +1142,7 @@ function HealBot_Tooltip_DebugActionIconCondition(icon, index, cond)
             end
         elseif cond == 14 then
             HealBot_Tooltip_SetLine("Condition "..index.." is "..HealBot_Options_RetActionIconsAlertFilter(cond),1,1,1,1,hbv_ActionIcons_GetData("AlertAggro", icon.frame, icon.id))
-            if not HEALBOT_MIDNIGHT and icon.aggro>=hbv_ActionIcons_GetData("AlertAggro", icon.frame, icon.id) then
+            if not HealBot_Util_isMidnight(false) and icon.aggro>=hbv_ActionIcons_GetData("AlertAggro", icon.frame, icon.id) then
                 HealBot_Tooltip_SetLine("icon.aggro is ",0.4,1,1,1,icon.aggro,0.25,1,0.25,1)
             else
                 HealBot_Tooltip_SetLine("icon.aggro is ",0.4,1,1,1,icon.aggro,1,0.25,0.25,1)

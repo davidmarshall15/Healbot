@@ -388,7 +388,7 @@ local hbSmooth=0
 function HealBot_Action_UpdateFluidBars()
       --HealBot_setCall("HealBot_Action_UpdateFluidBars")
     HealBot_Action_luVars["FluidBarInUse"]=false
-    if 1==1 or HEALBOT_MIDNIGHT then
+    if 1==1 or HealBot_Util_isMidnight(false) then
         for id,xButton in pairs(HealBot_Fluid_BarButtons) do
             xButton.gref["Bar"]:SetValue(xButton.health.current)
             HealBot_Fluid_BarButtons[id]=nil
@@ -1948,7 +1948,7 @@ end
 
 function HealBot_Action_BackgroundColourCustom(button)
       --HealBot_setCall("HealBot_Action_BackgroundColourCustom", button)
-    if HEALBOT_MIDNIGHT then
+    if HealBot_Util_isMidnight(false) then
         if button.status.hostile then
             button.gref["Back"]:SetStatusBarColor(hbv_Skins_GetFrameVar("BarCol", "BRE", button.framecol),
                                                   hbv_Skins_GetFrameVar("BarCol", "BGE", button.framecol),
@@ -2696,7 +2696,7 @@ end
 
 function HealBot_Action_UpdateGroupHealth(button)
       --HealBot_setCall("HealBot_Action_UpdateHealthHotBar", button)
-    if (button.isplayer or button.isgroupraid) and button.frame<10 and not HEALBOT_MIDNIGHT then
+    if (button.isplayer or button.isgroupraid) and button.frame<10 and not HealBot_Util_isMidnight(false) then
         if button.range.current>HealBot_Action_luVars["GroupBarsRange"] and button.health.hpct>0 and button.health.hpct<HealBot_Action_luVars["GroupBarsHealth"] then
             if not button.hotbars.grouphealth then
                 HealBot_Action_AddGroupHealth(button)
@@ -2711,7 +2711,7 @@ end
 
 function HealBot_Action_UpdateHotBars(button)
       --HealBot_setCall("HealBot_Action_UpdateHealthHotBar", button)
-    if not HEALBOT_MIDNIGHT and (button.isplayer or button.isgroupraid) and button.frame<10 then
+    if not HealBot_Util_isMidnight(false) and (button.isplayer or button.isgroupraid) and button.frame<10 then
         if button.range.current>0 and button.health.hpct>0 and (button.health.hpct+button.health.absorbspctc)<HealBot_Action_luVars["HotBarsHealth"] then
             HealBot_Action_BarHotEnable(button, "HEALTH")
             HealBot_Update_TextPlayersAlphaButton(button)
@@ -2807,7 +2807,7 @@ function HealBot_Action_UpdateHealthButton(button, hlthevent)
     if hlthevent then
         button.gref["Bar"]:SetMinMaxValues(0, button.health.max)
         --button.health.pct=button.health.current/button.health.max
-        if not HEALBOT_MIDNIGHT then
+        if not HealBot_Util_isMidnight(false) then
             button.health.hpct=floor(button.health.pct*1000)
         else
            -- button.gref["Bar"]:SetValue(button.health.current)
@@ -2817,7 +2817,7 @@ function HealBot_Action_UpdateHealthButton(button, hlthevent)
         end
         button.health.rcol, button.health.gcol=HealBot_Action_BarColourPct(button.health.pct)
 
-        if HEALBOT_MIDNIGHT or button.health.hpct>890 then
+        if HealBot_Util_isMidnight(false) or button.health.hpct>890 then
             button.health.mixcolr, button.health.mixcolg, button.health.mixcolb=button.text.r, button.text.g, button.text.b
             button.health.rmixcolr=hbCustomRoleCols[button.roletxt].r
             button.health.rmixcolg=hbCustomRoleCols[button.roletxt].g
@@ -2855,7 +2855,7 @@ function HealBot_Action_UpdateHealthButton(button, hlthevent)
     if button.status.current<HealBot_Unit_Status["DEAD"] then --or (button.status.current == HealBot_Unit_Status["RESERVED"] and UnitHealth(button.unit)) then
         if button.status.hlthupd then 
             if button.status.current>HealBot_Unit_Status["ENABLEDIR"] or button.aggro.status>hbv_Skins_GetFrameVar("BarAggro", "ALERT", button.frame) or 
-               HealBot_AlwaysEnabled[button.guid] or HEALBOT_MIDNIGHT or button.health.pct<=hbv_Skins_GetFrameVar("BarVisibility", hbAlert, button.frame) then
+               HealBot_AlwaysEnabled[button.guid] or HealBot_Util_isMidnight(false) or button.health.pct<=hbv_Skins_GetFrameVar("BarVisibility", hbAlert, button.frame) then
                 if button.status.current<HealBot_Unit_Status["BUFFNOCOL"] then
                     HealBot_Range_ButtonSpell(button)
                 end
@@ -2882,7 +2882,7 @@ function HealBot_Action_UpdateHealthButton(button, hlthevent)
         button.mana.current=0
         button.gref["Bar"]:SetStatusBarColor(0.2,0.2,0.2,0.4);
     end
-    if HEALBOT_MIDNIGHT or (button.gref["Bar"]:GetValue()~=button.health.current) then
+    if HealBot_Util_isMidnight(false) or (button.gref["Bar"]:GetValue()~=button.health.current) then
         if button.health.init or not HealBot_Action_luVars["FluidInUse"] then
             button.gref["Bar"]:SetValue(button.health.current)
             button.health.initover=true
@@ -3145,7 +3145,7 @@ local hacpr, hacpg=1,1
 function HealBot_Action_BarColourPct(hlthPct)
       --HealBot_setCall("HealBot_Action_BarColourPct")
     hacpr, hacpg=1,1
-    if HEALBOT_MIDNIGHT then
+    if HealBot_Util_isMidnight(false) then
         hacpr=0
     elseif hlthPct>=0.98 then 
         hacpr=0
@@ -3347,7 +3347,7 @@ end
 
 function HealBot_Action_PowerIndicators(button)
       --HealBot_setCall("HealBot_Action_PowerIndicators", button)
-    if not HEALBOT_MIDNIGHT and HealBot_pcClass[button.frame] and button.player and button.status.current<HealBot_Unit_Status["DEAD"] then
+    if not HealBot_Util_isMidnight(false) and HealBot_pcClass[button.frame] and button.player and button.status.current<HealBot_Unit_Status["DEAD"] then
         hbPowerIndicator=UnitPower("player", HealBot_pcClass[button.frame])
         local indAlpha=HealBot_Action_BarColourAlpha(button, 1, 1)
         if hbPowerIndicator == 1 then
@@ -3497,7 +3497,7 @@ end
 function HealBot_Action_CheckUnitLowMana(button)
       --HealBot_setCall("HealBot_Action_CheckUnitLowMana", button)
     if button.mana.type == 0 and button.frame<10 then
-        if not HEALBOT_MIDNIGHT and button.status.current<HealBot_Unit_Status["DEAD"] and button.mana.max>0 and 
+        if not HealBot_Util_isMidnight(false) and button.status.current<HealBot_Unit_Status["DEAD"] and button.mana.max>0 and 
            hbv_Skins_GetFrameVar("HealBar", "LOWMANA", button.frame)>1 then
             local indAlpha=HealBot_Action_BarColourAlpha(button, 1, 1)
             if button.mana.pct<hbLowManaTrig[button.frame][1] then

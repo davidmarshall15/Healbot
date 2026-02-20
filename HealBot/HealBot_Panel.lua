@@ -596,7 +596,7 @@ function HealBot_Panel_ClearBlackList()
 end
 
 function HealBot_Panel_OnBlackList(guid)
-    if not HEALBOT_MIDNIGHT then
+    if not HealBot_Util_isMidnight(false) then
         return false
     else
         return HealBot_Panel_BlackList[guid]
@@ -3925,7 +3925,7 @@ function HealBot_Panel_RaidPetUnitButtonCheck(guid)
 end
 
 function HealBot_Panel_AllUnitButton(guid)
-    if HEALBOT_MIDNIGHT then return end 
+    if HealBot_Util_isMidnight(false) then return end 
     return hbPanel_buttonGUIDs[guid] or hbPanel_buttonPetGUIDs[guid] or hbPanel_buttonExtraGUIDs[guid], hbPanel_buttonpGUIDs[guid]
 end
 
@@ -3940,7 +3940,7 @@ end
 
 function HealBot_Panel_RaidUnitName(uName)
       --HealBot_setCall("HealBot_Panel_RaidUnitName")
-    if HEALBOT_MIDNIGHT then return end 
+    if HealBot_Util_isMidnight(false) then return end 
     return hbPanel_dataNames[uName] or hbPanel_dataPetNames[uName]
 end
 

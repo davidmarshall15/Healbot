@@ -230,7 +230,7 @@ local function HealBot_Aux_setBar(button, id, value, isFluid, text, endTime, Cas
             button.auxtxt[id]["G"]=hbv_Aux_GetBarTextVar("COLG", button.frame, id)
             button.auxtxt[id]["B"]=hbv_Aux_GetBarTextVar("COLB", button.frame, id)
         end
-        if not HEALBOT_MIDNIGHT and HealBot_Text_Len(text)>hbAuxTextMaxChars[button.frame][id] then
+        if not HealBot_Util_isMidnight(false) and HealBot_Text_Len(text)>hbAuxTextMaxChars[button.frame][id] then
             text=HealBot_Text_Sub(text,1,hbAuxTextMaxChars[button.frame][id])
         end
         button.gref.auxtxt[id]:SetText(text)
@@ -569,7 +569,7 @@ local function HealBot_Aux_setPowerBarsById(button, id)
                 if hbv_Aux_GetBarTextVar("COLTYPE", button.frame, id) == 1 then
                     HealBot_Aux_AutoTextColour(button, id, button.mana.r, button.mana.g, button.mana.b, 0.25)
                 end
-                if HEALBOT_MIDNIGHT then
+                if HealBot_Util_isMidnight(false) then
                     HealBot_Aux_setBar(button, id, button.mana.current, true, button.mana.current)
                 elseif hbv_Skins_GetFrameVar("BarText", "HLTHTYPE", button.frame) == 1 then
                     HealBot_Aux_setBar(button, id, button.mana.current, true, HealBot_Text_shortHealTxt(button.mana.current, button.frame, hbAuxTextMaxChars[button.frame][id]))

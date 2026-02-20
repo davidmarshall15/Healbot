@@ -511,7 +511,7 @@ end
 
 function HealBot_Text_ColoursCustom(button, cType)
       --HealBot_setCall("HealBot_Text_ColoursCustom", button)
-    if HEALBOT_MIDNIGHT then
+    if HealBot_Util_isMidnight(false) then
         if cType == "NAME" then
             if button.status.hostile then
                 tr=hbv_Skins_GetFrameVar("BarTextCol", "NCRE", button.framecol)
@@ -792,7 +792,7 @@ end
 
 function HealBot_Text_DoSetHealthText(button, IgnoreInHeals, force)
       --HealBot_setCall("HealBot_Text_DoSetHealthText", button)
-    if HEALBOT_MIDNIGHT then
+    if HealBot_Util_isMidnight(false) then
         button.text.healthcomplete=button.health.current
         button.text.healthupdate=true
         HealBot_Text_UpdateText(button)
@@ -1490,7 +1490,7 @@ function HealBot_Text_UpdateText(button)
     end
     if button.text.healthupdate then
         button.text.healthupdate=false
-        if HEALBOT_MIDNIGHT or button.health.current>0 then
+        if HealBot_Util_isMidnight(false) or button.health.current>0 then
             if button.status.enabled then
                 if button.range.current>0 then
                     button.text.ha=HealBot_Action_BarColourAlpha(button, hbv_Skins_GetFrameVar("BarTextCol", "HCA", button.framecol), 1)

@@ -300,6 +300,18 @@ function HealBot_Util_ReadNumber(n,p)
     return HealBot_Util_NumConcat()
 end
 
+function HealBot_Util_isMidnight(onlyInCombat)
+    if HEALBOT_MIDNIGHT then
+        if onlyInCombat and not HealBot_Data["UILOCK"] then
+            return false
+        else
+            return true
+       end
+    else
+        return false
+    end
+end
+
 function HealBot_Util_ReturnedRGB(r,g,b)
     return HealBot_Util_Round(r,3), HealBot_Util_Round(g,3), HealBot_Util_Round(b,3)
 end

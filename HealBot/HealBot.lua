@@ -1097,14 +1097,14 @@ function HealBot_UnitMana(button)
     if button.status.current<HealBot_Unit_Status["DEAD"] then
         hbPowerCurrent=UnitPower(button.unit) or 0
         hbPowerMax=UnitPowerMax(button.unit) or 0
-        if HEALBOT_MIDNIGHT or button.mana.current~=hbPowerCurrent or button.mana.max~=hbPowerMax then
+        if HealBot_Util_isMidnight(false) or button.mana.current~=hbPowerCurrent or button.mana.max~=hbPowerMax then
             if not HealBot_Data["UILOCK"] and HEALBOT_GAME_VERSION<5 and button.isplayer and not button.player and (hbPowerMax>(button.mana.max*1.25) or hbPowerMax<(button.mana.max*0.75)) then
                 HealBot_Events_SpecChange(button)
             end
             button.mana.lowcheck=true
             button.mana.current=hbPowerCurrent
             button.mana.max=hbPowerMax
-            if HEALBOT_MIDNIGHT then
+            if HealBot_Util_isMidnight(false) then
                 button.mana.pct=hbPowerCurrent
             elseif button.mana.max>0 then
                 button.mana.pct=floor((button.mana.current/button.mana.max)*100)
@@ -1128,10 +1128,10 @@ function HealBot_UnitMana(button)
         end
         hbPowerCurrent=UnitPower(button.unit, button.poweralt.type) or 0
         hbPowerMax=UnitPowerMax(button.unit, button.poweralt.type) or 0
-        if HEALBOT_MIDNIGHT or button.poweralt.current~=hbPowerCurrent or button.poweralt.max~=hbPowerMax then
+        if HealBot_Util_isMidnight(false) or button.poweralt.current~=hbPowerCurrent or button.poweralt.max~=hbPowerMax then
             button.poweralt.current=hbPowerCurrent
             button.poweralt.max=hbPowerMax
-            if HEALBOT_MIDNIGHT then
+            if HealBot_Util_isMidnight(false) then
                 button.poweralt.pct=hbPowerCurrent
             elseif button.poweralt.max>0 then
                 button.poweralt.pct=floor((button.poweralt.current/button.poweralt.max)*100)
@@ -1145,7 +1145,7 @@ function HealBot_UnitMana(button)
         HealBot_Events_PowerIndicators(button)
         if button.mouseover and HealBot_Data["TIPBUTTON"] then HealBot_setTooltipUpdateNow() end
     else
-        if HEALBOT_MIDNIGHT or button.mana.current>0 or button.mana.max>0 then
+        if HealBot_Util_isMidnight(false) or button.mana.current>0 or button.mana.max>0 then
             button.mana.current=0
             button.mana.max=0
             button.mana.pctc=0
@@ -1153,7 +1153,7 @@ function HealBot_UnitMana(button)
         elseif button.mana.change then
             HealBot_Aux_setPowerBars(button)
         end
-        if HEALBOT_MIDNIGHT or button.poweralt.current>0 or button.poweralt.max>0 then
+        if HealBot_Util_isMidnight(false) or button.poweralt.current>0 or button.poweralt.max>0 then
             button.poweralt.current=0
             button.poweralt.max=0
             button.poweralt.pctc=0
@@ -1312,7 +1312,7 @@ function HealBot_TargetWatch(guid, enable)
 end
 
 function HealBot_UnitExists(button)
-    if not HEALBOT_MIDNIGHT or not HealBot_luVars["UILOCK"] then
+    if not HealBot_Util_isMidnight(true) then
         if UnitExists(button.unit) then
             if button.guid~=UnitGUID(button.unit) then
                 HealBot_UpdateUnitGUIDChange(button, true)
@@ -1769,7 +1769,7 @@ function HealBot_Register_Events()
         HealBot:RegisterEvent("BAG_UPDATE");
         HealBot:RegisterEvent("DISPLAY_SIZE_CHANGED")
         HealBot:RegisterEvent("UI_SCALE_CHANGED")
-        if not HEALBOT_MIDNIGHT then
+        if not HealBot_Util_isMidnight(false) then
             HealBot:RegisterEvent("COMBAT_LOG_EVENT_UNFILTERED")
         end
     end
@@ -1980,7 +1980,7 @@ end
 local hiuOverHeal,hiuPlayerInHeal=0
 function HealBot_OverHeal(button)
       --HealBot_setCall("HealBot_OverHeal", button)
-    if HEALBOT_MIDNIGHT then return end
+    if HealBot_Util_isMidnight(false) then return end
     if HealBot_luVars["overhealUnit"] == button.unit then
         hiuPlayerInHeal=UnitGetIncomingHeals(button.unit, "player") or 0
         hiuOverHeal=(button.health.current+hiuPlayerInHeal)-button.health.max
@@ -2040,7 +2040,7 @@ function HealBot_HealsInUpdate(button)
       --HealBot_setCall("HealBot_HealsInUpdate", button)
     button.health.updinheal=false
     HealBot_HealsInAmount(button)
-    if not HEALBOT_MIDNIGHT and hiuHealAmount>0 and button.range.current>0 then
+    if not HealBot_Util_isMidnight(false) and hiuHealAmount>0 and button.range.current>0 then
         if button.health.incoming~=hiuHealAmount then
             button.health.incoming=hiuHealAmount
             HealBot_Action_UpdateHealsInButton(button)
@@ -2053,7 +2053,7 @@ function HealBot_HealsInUpdate(button)
         HealBot_Action_UpdateInHealStatusBarColor(button)
         HealBot_Text_setInHealAbsorbsText(button)
     end
-    if not HEALBOT_MIDNIGHT and button.health.auxincoming~=hiuHealAmount then
+    if not HealBot_Util_isMidnight(false) and button.health.auxincoming~=hiuHealAmount then
         button.health.auxincoming=hiuHealAmount
         HealBot_OverHeal(button)
         HealBot_Aux_UpdateHealInBar(button)
@@ -2122,7 +2122,7 @@ function HealBot_AbsorbsUpdate(button)
       --HealBot_setCall("HealBot_AbsorbsUpdate", button)
     button.health.updabsorb=false
     HealBot_AbsorbsAmount(button)
-    if not HEALBOT_MIDNIGHT and button.range.current>0 and abuAbsorbAmount>0 then
+    if not HealBot_Util_isMidnight(false) and button.range.current>0 and abuAbsorbAmount>0 then
         if button.health.absorbs~=abuAbsorbAmount then
             button.health.absorbs=abuAbsorbAmount
             button.health.absorbspctc=floor((button.health.absorbs/button.health.max)*1000)
@@ -2140,7 +2140,7 @@ function HealBot_AbsorbsUpdate(button)
         HealBot_Action_UpdateAbsorbStatusBarColor(button)
         HealBot_Action_AdaptiveAbsorbsUpdate(button)
     end
-    if not HEALBOT_MIDNIGHT and button.health.auxabsorbs~=abuAbsorbAmount then
+    if not HealBot_Util_isMidnight(false) and button.health.auxabsorbs~=abuAbsorbAmount then
         button.health.auxabsorbs=abuAbsorbAmount
         HealBot_Aux_UpdateAbsorbBar(button)
     end
@@ -3015,20 +3015,20 @@ function HealBot_UnitHealth(button, force)
                 health=button.health.current
             end
         end
-        if not HEALBOT_MIDNIGHT then
+        if not HealBot_Util_isMidnight(false) then
             if healthMax == 0 then healthMax=1 end
             if health>healthMax then healthMax=health end
             if health<0 then health=0 end
         end
-        if HEALBOT_MIDNIGHT or ((health~=button.health.current) or (healthMax~=button.health.max)) then
+        if HealBot_Util_isMidnight(false) or ((health~=button.health.current) or (healthMax~=button.health.max)) then
             if HealBot_luVars["pluginTimeToDie"] and button.status.plugin then
                 HealBot_Plugin_TimeToDie_UnitUpdate(button, health)
             end
             if button.isplayer and not HealBot_Data["UILOCK"] then
-                if HealBot_luVars["regAggro"] and (HEALBOT_MIDNIGHT or health<button.health.current) then
+                if HealBot_luVars["regAggro"] and (HealBot_Util_isMidnight(false) or health<button.health.current) then
                     HealBot_Events_UnitThreat(button)
                 end
-                if not HEALBOT_MIDNIGHT and (healthMax>(button.health.max*1.25) or healthMax<(button.health.max*0.75)) then
+                if not HealBot_Util_isMidnight(false) and (healthMax>(button.health.max*1.25) or healthMax<(button.health.max*0.75)) then
                     if button.player then 
                         HealBot_Timers_Set("LAST", "SetInHealAbsorbMax")
                     elseif HEALBOT_GAME_VERSION<5 then 
@@ -3036,7 +3036,7 @@ function HealBot_UnitHealth(button, force)
                     end
                 end
             end
-            if not HEALBOT_MIDNIGHT and button.frame<10 and health<button.health.current and HealBot_luVars["HealthDropPct"]<=(button.health.hpct-floor((health/healthMax)*1000))
+            if not HealBot_Util_isMidnight(false) and button.frame<10 and health<button.health.current and HealBot_luVars["HealthDropPct"]<=(button.health.hpct-floor((health/healthMax)*1000))
                and not button.health.init and health>0 and (button.status.unittype<20 or HealBot_luVars["UILOCK"]) then
                 button.health.hlthdrop=true
             else
@@ -3045,12 +3045,12 @@ function HealBot_UnitHealth(button, force)
             button.health.current=health
             button.health.max=healthMax
             if not button.status.isdead then
-                if HEALBOT_MIDNIGHT or health>0 then
+                if HealBot_Util_isMidnight(false) or health>0 then
                     HealBot_OverHeal(button)
                 else
                     HealBot_Action_UpdateTheDeadButton(button)
                 end
-            elseif HEALBOT_MIDNIGHT or health>0 then
+            elseif HealBot_Util_isMidnight(false) or health>0 then
                 HealBot_Action_UpdateTheDeadButton(button)
             end
             HealBot_Action_UpdateHealthButton(button, true)
@@ -3079,7 +3079,7 @@ function HealBot_UnitHealth(button, force)
                 HealBot_Action_DisableBorderHazardType(button, "HLTHDROP")
             end
         end
-    elseif HEALBOT_MIDNIGHT or button.health.current>0 or force then
+    elseif HealBot_Util_isMidnight(false) or button.health.current>0 or force then
         button.health.current=0
         button.status.alpha=0
         button.gref["Bar"]:SetValue(0)
@@ -3191,7 +3191,7 @@ function HealBot_RaidTargetUpdate(button)
       --HealBot_setCall("HealBot_RaidTargetUpdate", button)
     if button.status.current<HealBot_Unit_Status["RESERVED"] and hbv_Skins_GetFrameBoolean("RaidIcon", "SHOW", button.frame) then
         local x=GetRaidTargetIndex(button.unit)
-        if not HEALBOT_MIDNIGHT and x and hbRaidTargetIconsChecked[button.frame][x] then
+        if not HealBot_Util_isMidnight(false) and x and hbRaidTargetIconsChecked[button.frame][x] then
             HealBot_Aura_RaidTargetUpdate(button, x)
         else
             HealBot_Aura_RaidTargetUpdate(button, 0)
@@ -3958,7 +3958,7 @@ local HealBot_CDKnown={}
 local hbStartTime, hbDuration, hbCDTime, hbCDEnd=0,0,0,0
 function HealBot_SpellCooldown(spellName, spellId)
       --HealBot_setCall("HealBot_SpellCooldown")
-    if not HEALBOT_MIDNIGHT then
+    if not HealBot_Util_isMidnight(false) then
         hbStartTime, hbDuration=HealBot_WoWAPI_SpellCooldown(spellName)
         hbCDEnd=(hbStartTime or 0)+(hbDuration or 0)
         hbCDTime=hbCDEnd-HealBot_TimeNow
@@ -4034,7 +4034,7 @@ end
 function HealBot_UnitUpdateButton(button)
       --HealBot_setCall("HealBot_UnitUpdateButton", button, nil, nil, true)
     if HealBot_UnitExists(button) then
-        if (button.status.isdead or HEALBOT_MIDNIGHT or button.health.current == 0) and button.status.deadnextcheck<HealBot_TimeNow then
+        if (button.status.isdead or HealBot_Util_isMidnight(false) or button.health.current == 0) and button.status.deadnextcheck<HealBot_TimeNow then
             HealBot_Action_UpdateTheDeadButton(button)
         --elseif button.status.update then
         --    HealBot_UnitSlowUpdate(button)
@@ -4191,24 +4191,24 @@ function HealBot_Update_OutOfCombat()
     elseif (HealBot_Data["UILOCK"] or not HealBot_luVars["UpdateEnemyFrame"]) and HealBot_luVars["AllOutOfCombatCheck"]<=HealBot_TimeNow then
         ouNoneInCombat=true
         for xUnit,xButton in pairs(HealBot_Private_Button) do
-            if not HEALBOT_MIDNIGHT then 
+            if not HealBot_Util_isMidnight(false) then 
                 ouEnemyUnit=xUnit.."target"
                 ouEnemyTarget=xUnit.."targettarget"
             end
             if xButton.status.current<HealBot_Unit_Status["DEAD"] and xButton.range.current>-1 and UnitAffectingCombat(xUnit) and
-               HealBot_ValidLivingEnemy(xUnit, ouEnemyUnit) and (HEALBOT_MIDNIGHT or UnitIsUnit(xUnit, ouEnemyTarget)) then
+               HealBot_ValidLivingEnemy(xUnit, ouEnemyUnit) and (HealBot_Util_isMidnight(false) or UnitIsUnit(xUnit, ouEnemyTarget)) then
                 ouNoneInCombat=false
                 break
             end
         end
         if ouNoneInCombat then
             for xUnit,xButton in pairs(HealBot_Unit_Button) do
-                if not HEALBOT_MIDNIGHT then 
+                if not HealBot_Util_isMidnight(false) then 
                     ouEnemyUnit=xUnit.."target"
                     ouEnemyTarget=xUnit.."targettarget"
                 end
                 if xButton.status.current<HealBot_Unit_Status["DEAD"] and xButton.range.current>-1 and UnitAffectingCombat(xUnit) and
-                   HealBot_ValidLivingEnemy(xUnit, ouEnemyUnit) and (HEALBOT_MIDNIGHT or UnitIsUnit(xUnit, ouEnemyTarget)) then
+                   HealBot_ValidLivingEnemy(xUnit, ouEnemyUnit) and (HealBot_Util_isMidnight(false) or UnitIsUnit(xUnit, ouEnemyTarget)) then
                     ouNoneInCombat=false
                     break
                 end
@@ -4483,7 +4483,7 @@ function HealBot_CalcThreat(button)
         elseif HealBot_ValidLivingEnemy("player", "target") then
             ctEnemyUnit="playertarget"
         end
-        if not HEALBOT_MIDNIGHT and ctEnemyUnit then
+        if not HealBot_Util_isMidnight(false) and ctEnemyUnit then
             _, UnitThreatData["tmpstatus"], UnitThreatData["tmppct"], _, UnitThreatData["tmpvalue"]=UnitDetailedThreatSituation(button.unit, ctEnemyUnit)
             UnitThreatData["threatpct"]=ceil(UnitThreatData["tmppct"] or 0)
             UnitThreatData["status"]=UnitThreatData["tmpstatus"] or 0
@@ -4551,7 +4551,7 @@ function HealBot_UnitNameOnly(unitName)
       --HealBot_setCall("HealBot_UnitNameOnly")
     hbNameOnly=false
     if unitName then
-        if not HEALBOT_MIDNIGHT then
+        if not HealBot_Util_isMidnight(false) then
             hbNameOnly=strtrim(string.match(unitName, "^[^-]*"))
         else
             hbNameOnly=unitName
@@ -5069,10 +5069,10 @@ end
 function HealBot_retHbFocus(unit)
       --HealBot_setCall("HealBot_retHbFocus", nil, nil, unit)
     local unitName=UnitName(unit)
-    if HealBot_Globals.FocusMonitor[unitName] then
+    if not HealBot_Util_isMidnight(true) and HealBot_Globals.FocusMonitor[unitName] then
         if HealBot_Globals.FocusMonitor[unitName] == "all" then
             return true
-        elseif not HEALBOT_MIDNIGHT then
+        elseif not HealBot_Util_isMidnight(false) then
             local _,z=IsInInstance()
             if z == "pvp" or z == "arena" then
                 if HealBot_Globals.FocusMonitor[unitName] == "bg" then

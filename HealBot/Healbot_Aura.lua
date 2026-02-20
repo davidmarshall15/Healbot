@@ -1145,7 +1145,7 @@ function HealBot_Aura_CheckGeneralBuff(button)
             end
             buffSpellStart=buffSpellStart or 0
             buffSpellDur=buffSpellDur or 0
-            if HEALBOT_MIDNIGHT or (buffSpellStart+buffSpellDur)-HealBot_TimeNow<2 then
+            if HealBot_Util_isMidnight(false) or (buffSpellStart+buffSpellDur)-HealBot_TimeNow<2 then
                 buffCheckThis=false;
                 buffWatchTarget=HealBot_Options_retBuffWatchTarget(buffWatchName) or "";
                 if buffWatchTarget["Raid"] then
@@ -2484,7 +2484,7 @@ function HealBot_Aura_UpdateUnitBuffsV9(button, selfOnly)
       --HealBot_setCall("HealBot_Aura_UpdateUnitBuffsV9", button)
     uaZ=1
     while true do
-        if not HEALBOT_MIDNIGHT or not HealBot_Data["UILOCK"] then
+        if not HealBot_Util_isMidnight(true) then
             uaAura=C_UnitAuras.GetAuraDataByIndex(button.unit, uaZ, "HELPFUL")
         else
             uaAura=C_UnitAuras.GetAuraDataByIndex(button.unit, uaZ, "RAID_IN_COMBAT")
@@ -2667,7 +2667,7 @@ function HealBot_Aura_UpdateUnitDebuffsV9(button, selfOnly)
       --HealBot_setCall("HealBot_Aura_UpdateUnitDebuffsV9", button)
     uaZ=1
     while true do        
-        if not HEALBOT_MIDNIGHT or not HealBot_Data["UILOCK"] then
+        if not HealBot_Util_isMidnight(true) then
             uaAura=C_UnitAuras.GetAuraDataByIndex(button.unit, uaZ, "HARMFUL")
         else
             uaAura=C_UnitAuras.GetAuraDataByIndex(button.unit, uaZ, "RAID_PLAYER_DISPELLABLE")

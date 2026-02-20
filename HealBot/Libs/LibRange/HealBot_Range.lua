@@ -165,7 +165,7 @@ end
 local inRange, checkedRange=false,false
 function HealBot_Range_Unit(unit, guid, limit)
     inRange, checkedRange=UnitInRange(unit)
-    if not HEALBOT_MIDNIGHT and checkedRange then
+    if not HealBot_Util_isMidnight(false) and checkedRange then
         return inRange
     elseif not limit then
         if not UnitIsVisible(unit) or not HealBot_Range_UnitInPhase(unit, guid) then
