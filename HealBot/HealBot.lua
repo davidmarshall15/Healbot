@@ -3474,7 +3474,7 @@ function HealBot_Not_Fighting()
             if HealBot_Globals.FrameStrataIC ~= HealBot_Globals.FrameStrata then
                 HealBot_Action_SetStrata()
             end
-            if HealBot_luVars["EOCOOM"] and HealBot_Data["POWERTYPE"] == 0 then
+            if not HealBot_Util_isMidnight() and HealBot_luVars["EOCOOM"] and HealBot_Data["POWERTYPE"] == 0 then
                 aButton=HealBot_Panel_RaidButton(HealBot_Data["PGUID"])
                 if aButton and aButton.status.current<HealBot_Unit_Status["DEAD"] then
                     HealBot_Timers_Set("PLAYER","EmoteOOM")
@@ -5069,7 +5069,7 @@ end
 function HealBot_retHbFocus(unit)
       --HealBot_setCall("HealBot_retHbFocus", nil, nil, unit)
     local unitName=UnitName(unit)
-    if not HealBot_Util_isMidnight(true) and HealBot_Globals.FocusMonitor[unitName] then
+    if not HealBot_Util_isMidnight() and HealBot_Globals.FocusMonitor[unitName] then
         if HealBot_Globals.FocusMonitor[unitName] == "all" then
             return true
         elseif not HealBot_Util_isMidnight(false) then

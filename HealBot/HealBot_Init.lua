@@ -159,7 +159,7 @@ local function HealBot_Init_ManaCost(spellId, spellBookId, tipSet)
     if hbMana and hbMana[1] and hbMana[1].cost then
         manaCost=hbMana[1].cost
     end
-    if spellBookId and manaCost == 0 then
+    if not HealBot_Util_isMidnight(true) and spellBookId and manaCost == 0 then
         if not tipSet then
             HealBot_SetToolTip(HealBot_ScanTooltip)
             HealBot_ScanTooltip:SetSpellBookItem(spellBookId, BOOKTYPE_SPELL);
