@@ -2753,7 +2753,17 @@ end
 
 function HealBot_Action_BarColourCustom(button)
       --HealBot_setCall("HealBot_Action_BarColourCustom", button)
-    if button.status.hostile then
+    if HealBot_Util_isMidnight(false) then
+        if button.status.hostile then
+            button.status.r=hbv_Skins_GetFrameVar("BarCol", "HRE", button.framecol)
+            button.status.g=hbv_Skins_GetFrameVar("BarCol", "HGE", button.framecol)
+            button.status.b=hbv_Skins_GetFrameVar("BarCol", "HBE", button.framecol)
+        else
+            button.status.r=hbv_Skins_GetFrameVar("BarCol", "HR", button.framecol)
+            button.status.g=hbv_Skins_GetFrameVar("BarCol", "HG", button.framecol)
+            button.status.b=hbv_Skins_GetFrameVar("BarCol", "HB", button.framecol)
+        end
+    elseif button.status.hostile then
         if button.health.pct>hbv_Skins_GetFrameVar("BarCol", "HIT", button.framecol) then
             button.status.r=hbv_Skins_GetFrameVar("BarCol", "HRE", button.framecol)
             button.status.g=hbv_Skins_GetFrameVar("BarCol", "HGE", button.framecol)
