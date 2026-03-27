@@ -1314,7 +1314,11 @@ end
 function HealBot_UnitExists(button)
     if not HealBot_Util_isMidnight(true) then
         if UnitExists(button.unit) then
-            if button.guid~=UnitGUID(button.unit) then
+            if HealBot_Util_isMidnight() then
+                if button.name~=UnitName(button.unit) then
+                    HealBot_UpdateUnitGUIDChange(button, true)
+                end
+            elseif button.guid~=UnitGUID(button.unit) then
                 HealBot_UpdateUnitGUIDChange(button, true)
                 if hbAuraTargetWatch[button.guid] then
                     HealBot_Plugin_AuraWatch_TargetUpdate(button)
