@@ -813,11 +813,7 @@ function HealBot_Action_DoRefreshTooltip()
                         HealBot_Tooltip_SetLine(HB_TOOLTIP_OFFLINE,1,0.5,0,1,UnitOffline,1,1,1,1)
                     else
                         if HealBot_Globals.Tooltip_ShowHealth and hlth and maxhlth then
-                            local hPct=100
-                            if HEALBOT_GAME_VERSION > 11 then
-                                hPct=hlth
-                            else
-                                if maxhlth>0 then hPct=floor((hlth/maxhlth)*100) end
+                            if not HealBot_Util_isMidnight(false) then
                                 hlth=HealBot_Util_ReadNumber(hlth)
                                 maxhlth=HealBot_Util_ReadNumber(maxhlth)
                             end
@@ -827,15 +823,19 @@ function HealBot_Action_DoRefreshTooltip()
                                 pZone=zone
                             end
                             if vUnit and UnitExists(vUnit) then
-                                local lr,lg,lb=HealBot_Action_ClassColour(xButton.unit, xButton.text.classtrim)
-                                HealBot_Tooltip_SetLine(UnitName(vUnit),lr,lg,lb,1,hlth.."/"..maxhlth.." ("..hPct.."%)",xButton.health.rcol,xButton.health.gcol,0,1)
-                                hlth,maxhlth=HealBot_WoWAPI_UnitHealth(xButton.unit)
-                                hPct=floor((hlth/maxhlth)*100)
-                                hlth=HealBot_Util_ReadNumber(hlth)
-                                maxhlth=HealBot_Util_ReadNumber(maxhlth)
                                 pZone="  "..uName
                             end
-                            HealBot_Tooltip_SetLine(pZone,1,1,1,1,hlth.."/"..maxhlth.." ("..hPct.."%)",xButton.health.rcol,xButton.health.gcol,0,1)
+                            HealBot_Tooltip_SetLine(pZone,1,1,1,1,hlth.."/"..maxhlth.." ("..xButton.health.cpct.."%)",xButton.health.rcol,xButton.health.gcol,0,1)
+                            if vUnit and UnitExists(vUnit) then
+                                local hPct=100
+                                local lr,lg,lb=HealBot_Action_ClassColour(xButton.unit, xButton.text.classtrim)
+                                hlth,maxhlth,_,hPct=HealBot_WoWAPI_UnitHealth(vUnit)
+                                if not HealBot_Util_isMidnight(false) then
+                                    hlth=HealBot_Util_ReadNumber(hlth)
+                                    maxhlth=HealBot_Util_ReadNumber(maxhlth)
+                                end
+                                HealBot_Tooltip_SetLine(UnitName(vUnit),lr,lg,lb,1,hlth.."/"..maxhlth.." ("..hPct.."%)",xButton.health.rcol,xButton.health.gcol,0,1)
+                            end
                         end
                         if HealBot_Globals.Tooltip_ShowMana then
                             if xButton.aggro.threatpct>0 or mana or HealBot_Tooltip_luVars["uGroup"]>0 or string.len(UnitTag)>0 then

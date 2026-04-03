@@ -793,7 +793,11 @@ end
 function HealBot_Text_DoSetHealthText(button, IgnoreInHeals, force)
       --HealBot_setCall("HealBot_Text_DoSetHealthText", button)
     if HealBot_Util_isMidnight(false) then
-        button.text.healthcomplete=button.health.current
+        if hbv_Skins_GetFrameVar("BarText", "HLTHTYPE", button.framecol) == 1 then
+            button.text.healthcomplete=hbNumFormats["SurroundLeft"][button.framecol] .. button.health.current .. hbNumFormats["SurroundRight"][button.framecol]
+        else
+            button.text.healthcomplete=hbNumFormats["SurroundLeft"][button.framecol] .. button.health.cpct .. "%" .. hbNumFormats["SurroundRight"][button.framecol]
+        end
         button.text.healthupdate=true
         HealBot_Text_UpdateText(button)
     else
@@ -856,7 +860,7 @@ function HealBot_Text_DoSetHealthText(button, IgnoreInHeals, force)
                 elseif hbv_Skins_GetFrameVar("BarText", "INCABSORBS", button.framecol) == 2 then
                     vHealthTextTotal=floor(((button.health.current+button.health.absorbs)/button.health.max)*100)
                 else
-                    vHealthTextTotal=floor((button.health.current/button.health.max)*100)
+                    vHealthTextTotal=button.health.cpct
                 end
                 if IgnoreInHeals and vHealthTextTotal>100 then
                     vHealthTextTotal=100
@@ -870,8 +874,8 @@ function HealBot_Text_DoSetHealthText(button, IgnoreInHeals, force)
                hbv_Skins_GetFrameVar("BarText", "HLTHTYPE", button.framecol)<3 then
                 tHealthConcat[vHealthTextConcatIndex+1]="  "
                 tHealthConcat[vHealthTextConcatIndex+2]=hbNumFormats["SurroundLeft"][button.framecol]
-                tHealthConcat[vHealthTextConcatIndex+3]=floor((button.health.current/button.health.max)*100)
-                tHealthConcat[vHealthTextConcatIndex+4]="%"
+                tHealthConcat[vHealthTextConcatIndex+3]=button.health.cpct
+                tHealthConcat[vHealthTextConcatIndex+4]=vTextChars["Percent"]
                 tHealthConcat[vHealthTextConcatIndex+5]=hbNumFormats["SurroundRight"][button.framecol]
                 vHealthTextConcatIndex=vHealthTextConcatIndex+5
             end
@@ -889,7 +893,7 @@ function HealBot_Text_DoSetHealthText(button, IgnoreInHeals, force)
                 elseif hbv_Skins_GetFrameVar("BarText", "HLTHTYPE", button.framecol) == 2 then
                     tHealthConcat[3]=HealBot_Text_shortHealTxt(button.health.current-button.health.max, button.framecol, hbBarHealthTextLen[button.framecol])
                 else
-                    vHealthTextTotal=button.health.pct
+                    vHealthTextTotal=button.health.cpct
                     tHealthConcat[3]=vHealthTextTotal..vTextChars["Percent"]
                 end
                 vHealthTextVehiclePlayer=HealBot_Text_HealthConcat(3)
@@ -942,7 +946,7 @@ function HealBot_Text_setHealthText(button)
         if button.text.tag~=vTextChars["Nothing"] and hbv_Skins_GetFrameVar("BarTextCol", "STATE", button.framecol)~=2 then
             button.text.tagupdate=true
         end
-        if button.text.healthcomplete~=vTextChars["Nothing"] then
+        if HealBot_Util_isMidnight(false) or button.text.healthcomplete~=vTextChars["Nothing"] then
             button.text.healthcomplete=vTextChars["Nothing"]
             button.text.healthupdate=true
         end

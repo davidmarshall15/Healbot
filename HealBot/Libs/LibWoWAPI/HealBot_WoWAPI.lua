@@ -2,6 +2,11 @@ local hbInfo, _
 HealBot_Spell_IDs={};
 HealBot_Spell_Names={};
 
+local CC_ScaleTo1000 = C_CurveUtil.CreateCurve();
+CC_ScaleTo1000:SetType(Enum.LuaCurveType.Linear);
+CC_ScaleTo1000:AddPoint(0.0, 0);
+CC_ScaleTo1000:AddPoint(1.0, 1000);
+
 local function HealBot_WoWAPI_True()
     return true
 end
@@ -12,6 +17,7 @@ function HealBot_WoWAPI_SetAll()
     HealBot_WoWAPI_SetC_Item()
     HealBot_WoWAPI_SetC_AddOns()
     HealBot_WoWAPI_SetHealth()
+    HealBot_WoWAPI_SetMana()
 end
 
 -- GetSpellIDForSpellIdentifier
@@ -331,17 +337,21 @@ function HealBot_WoWAPI_LoadAddOn(name)
 end
 
 -- Health
-local hlth, maxhlth, pcthlth = 0,0,0
+local hlth, maxhlth, pcthlth, cpcthlth, hpcthlth = 0,0,0,0,0
 function HealBot_WoWAPI_ClassicUnitHealth(unit)
     hlth,maxhlth=UnitHealth(unit),UnitHealthMax(unit)
     pcthlth=hlth/maxhlth
-    return hlth, maxhlth, pcthlth
+    cpcthlth=floor(pcthlth*100)
+    hpcthlth=floor(pcthlth*1000)   
+    return hlth, maxhlth, pcthlth, cpcthlth, hpcthlth
 end
 
 function HealBot_WoWAPI_MidnightUnitHealth(unit)
     hlth,maxhlth=UnitHealth(unit),UnitHealthMax(unit)
     pcthlth=UnitHealthPercent(unit, false)
-    return hlth, maxhlth, pcthlth
+    cpcthlth=UnitHealthPercent(unit, true, CurveConstants.ScaleTo100)
+    hpcthlth=UnitHealthPercent(unit, true, CC_ScaleTo1000)
+    return hlth, maxhlth, pcthlth, cpcthlth, hpcthlth
 end
 
 local HealBot_WoWAPI_UnitHealthPercent=HealBot_WoWAPI_ClassicUnitHealth
@@ -353,4 +363,31 @@ end
 
 function HealBot_WoWAPI_UnitHealth(unit)
     return HealBot_WoWAPI_UnitHealthPercent(unit)
+end
+
+-- Mana
+local mana, maxmana, cpctmana, hpctmana = 0,0,0,0
+function HealBot_WoWAPI_ClassicUnitMana(unit, pType)
+    mana,maxmana=UnitPower(unit),UnitPowerMax(unit)
+    cpctmana=floor(pcthlth*100)
+    hpctmana=floor(pcthlth*1000)   
+    return mana, maxmana, cpctmana, hpctmana
+end
+
+function HealBot_WoWAPI_MidnightUnitMana(unit, pType)
+    mana,maxmana=UnitPower(unit),UnitPowerMax(unit)
+    cpctmana=UnitPowerPercent(unit, pType, true, CurveConstants.ScaleTo100)
+    hpctmana=UnitPowerPercent(unit, pType, true, CC_ScaleTo1000)
+    return mana, maxmana, cpctmana, hpctmana
+end
+
+local HealBot_WoWAPI_UnitManaPercent=HealBot_WoWAPI_ClassicUnitMana
+function HealBot_WoWAPI_SetMana()
+    if UnitPowerPercent then  -- if HEALBOT_MIDNIGHT then
+        HealBot_WoWAPI_UnitManaPercent=HealBot_WoWAPI_MidnightUnitMana
+    end
+end
+
+function HealBot_WoWAPI_UnitMana(unit, pType)
+    return HealBot_WoWAPI_UnitManaPercent(unit, pType)
 end

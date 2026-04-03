@@ -1095,8 +1095,7 @@ function HealBot_UnitMana(button)
     button.mana.update=false
     if button.mana.change then HealBot_Action_setButtonManaBarCol(button) end
     if button.status.current<HealBot_Unit_Status["DEAD"] then
-        hbPowerCurrent=UnitPower(button.unit) or 0
-        hbPowerMax=UnitPowerMax(button.unit) or 0
+        hbPowerCurrent, hbPowerMax, button.mana.pct, button.mana.hpct=HealBot_WoWAPI_UnitMana(button.unit, button.mana.type)
         if HealBot_Util_isMidnight(false) or button.mana.current~=hbPowerCurrent or button.mana.max~=hbPowerMax then
             if not HealBot_Data["UILOCK"] and HEALBOT_GAME_VERSION<5 and button.isplayer and not button.player and (hbPowerMax>(button.mana.max*1.25) or hbPowerMax<(button.mana.max*0.75)) then
                 HealBot_Events_SpecChange(button)
@@ -1104,11 +1103,7 @@ function HealBot_UnitMana(button)
             button.mana.lowcheck=true
             button.mana.current=hbPowerCurrent
             button.mana.max=hbPowerMax
-            if HealBot_Util_isMidnight(false) then
-                button.mana.pct=hbPowerCurrent
-            elseif button.mana.max>0 then
-                button.mana.pct=floor((button.mana.current/button.mana.max)*100)
-            else
+            if not HealBot_Util_isMidnight(false) and button.mana.max<1 then
                 button.mana.pct=0
             end
             if hbManaExtra[button.guid] then
@@ -3003,9 +2998,9 @@ function HealBot_UnitHealth(button, force)
     --button.health.nextcheck=HealBot_TimeNow+HealBot_luVars["healthCheckInterval"]
     if button.status.current<HealBot_Unit_Status["DC"] then
         if HealBot_UnitInVehicle[button.unit] and UnitExists(HealBot_UnitInVehicle[button.unit]) then
-            health, healthMax, button.health.pct=HealBot_WoWAPI_UnitHealth(HealBot_UnitInVehicle[button.unit])
+            health, healthMax, button.health.pct, button.health.cpct, button.health.hpct=HealBot_WoWAPI_UnitHealth(HealBot_UnitInVehicle[button.unit])
         else
-            health, healthMax, button.health.pct=HealBot_WoWAPI_UnitHealth(button.unit)
+            health, healthMax, button.health.pct, button.health.cpct, button.health.hpct=HealBot_WoWAPI_UnitHealth(button.unit)
         end
         if button.status.isdead then
             if HealBot_IsUnitReallyDead(button) then

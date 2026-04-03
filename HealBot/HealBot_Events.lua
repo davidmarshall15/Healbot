@@ -693,7 +693,7 @@ local hbafk=false
 function HealBot_Events_UnitFlagsChanged(button)
           --HealBot_setCall("HealBot_Events_UnitFlagsChanged", button)
     hbafk=false
-    if not HealBot_Util_isMidnight(true) and UnitIsAFK(button.unit) then
+    if not HealBot_Util_isMidnight(false) and UnitIsAFK(button.unit) then
         hbv_Auras_Save_Buffs()
         hbv_Auras_Save_Debuffs()
         if hbv_Skins_GetFrameBoolean("Icons", "SHOWAFK", button.frame) then

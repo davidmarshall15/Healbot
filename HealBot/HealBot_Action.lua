@@ -388,9 +388,9 @@ local hbSmooth=0
 function HealBot_Action_UpdateFluidBars()
       --HealBot_setCall("HealBot_Action_UpdateFluidBars")
     HealBot_Action_luVars["FluidBarInUse"]=false
-    if 1==1 or HealBot_Util_isMidnight(false) then
+    if HealBot_Util_isMidnight(false) then
         for id,xButton in pairs(HealBot_Fluid_BarButtons) do
-            xButton.gref["Bar"]:SetValue(xButton.health.current)
+            xButton.gref["Bar"]:SetValue(xButton.health.hpct)
             HealBot_Fluid_BarButtons[id]=nil
         end
         for id,xButton in pairs(HealBot_Fluid_InHealButtons) do
@@ -406,18 +406,18 @@ function HealBot_Action_UpdateFluidBars()
             aufbButtonActive=false
             if xButton.status.current<HealBot_Unit_Status["DEAD"] then
                 aufbBarValue=xButton.gref["Bar"]:GetValue()
-                if aufbBarValue>xButton.health.current then
-                    aufbSetValue=aufbBarValue-ceil((aufbBarValue-xButton.health.current)/HealBot_Action_luVars["FluidBarSmoothAdj"])
-                    if aufbSetValue<xButton.health.current then 
-                        aufbSetValue=xButton.health.current
+                if aufbBarValue>xButton.health.hpct then
+                    aufbSetValue=aufbBarValue-ceil((aufbBarValue-xButton.health.hpct)/HealBot_Action_luVars["FluidBarSmoothAdj"])
+                    if aufbSetValue<xButton.health.hpct then 
+                        aufbSetValue=xButton.health.hpct
                     else
                         aufbButtonActive=true
                     end
                     xButton.gref["Bar"]:SetValue(aufbSetValue)
-                elseif aufbBarValue<xButton.health.current then
-                    aufbSetValue=aufbBarValue+ceil((xButton.health.current-aufbBarValue)/HealBot_Action_luVars["FluidBarSmoothAdj"])
-                    if aufbSetValue>xButton.health.current then 
-                        aufbSetValue=xButton.health.current
+                elseif aufbBarValue<xButton.health.hpct then
+                    aufbSetValue=aufbBarValue+ceil((xButton.health.hpct-aufbBarValue)/HealBot_Action_luVars["FluidBarSmoothAdj"])
+                    if aufbSetValue>xButton.health.hpct then 
+                        aufbSetValue=xButton.health.hpct
                     else
                         aufbButtonActive=true
                     end
@@ -2815,16 +2815,6 @@ local HealBot_TextColChangeWithHealth={[1]=true,[4]=true,[5]=true}
 function HealBot_Action_UpdateHealthButton(button, hlthevent)
       --HealBot_setCall("HealBot_Action_UpdateHealthButton", button)
     if hlthevent then
-        button.gref["Bar"]:SetMinMaxValues(0, button.health.max)
-        --button.health.pct=button.health.current/button.health.max
-        if not HealBot_Util_isMidnight(false) then
-            button.health.hpct=floor(button.health.pct*1000)
-        else
-           -- button.gref["Bar"]:SetValue(button.health.current)
-        --    _, maxPct = button.gref["Bar"]:GetMinMaxValues()
-            button.health.hpct=button.health.pct
-        --    button.health.hpct=floor((button.gref["Bar"]:GetValue()/maxPct)*1000)
-        end
         button.health.rcol, button.health.gcol=HealBot_Action_BarColourPct(button.health.pct)
 
         if HealBot_Util_isMidnight(false) or button.health.hpct>890 then
@@ -2894,7 +2884,7 @@ function HealBot_Action_UpdateHealthButton(button, hlthevent)
     end
     if HealBot_Util_isMidnight(false) or (button.gref["Bar"]:GetValue()~=button.health.current) then
         if button.health.init or not HealBot_Action_luVars["FluidInUse"] then
-            button.gref["Bar"]:SetValue(button.health.current)
+            button.gref["Bar"]:SetValue(button.health.hpct)
             button.health.initover=true
         else
             HealBot_Action_setFluid_BarButtons(button)
@@ -4373,6 +4363,7 @@ function HealBot_Action_InitButton(button, prefix)
     button.mana.current=0
     button.mana.max=1
     button.mana.pct=0
+    button.mana.hpct=0
     button.mana.type=0
     button.poweralt.current=0
     button.poweralt.max=1
@@ -4446,6 +4437,7 @@ function HealBot_Action_InitButton(button, prefix)
     button.health.current=-1
     button.health.max=100
     button.health.pct=.999
+    button.health.cpct=99
     button.health.hpct=999
     button.health.incoming=0
     button.health.auxincoming=0
@@ -4460,6 +4452,7 @@ function HealBot_Action_InitButton(button, prefix)
     button.health.updhlth=true
     button.spec=" "
     button.specupdate=0
+    button.gref["Bar"]:SetMinMaxValues(0, 1000)
     button.gref["Bar"]:SetStatusBarColor(0, 0, 0, 0)
     button.gref["Bar"]:SetValue(1000)
     button.gref["InHeal"]:SetStatusBarColor(0, 0, 0, 0)
