@@ -312,6 +312,9 @@ function HealBot_Util_isMidnight(onlyInCombat)
     end
 end
 
+-- Global secret value check do a polyfll for non-Midnight clients
+HealBot_issecretvalue = issecretvalue or function() return false end
+
 function HealBot_Util_ReturnedRGB(r,g,b)
     return HealBot_Util_Round(r,3), HealBot_Util_Round(g,3), HealBot_Util_Round(b,3)
 end

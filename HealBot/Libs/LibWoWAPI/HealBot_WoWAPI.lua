@@ -369,8 +369,14 @@ end
 local mana, maxmana, cpctmana, hpctmana = 0,0,0,0
 function HealBot_WoWAPI_ClassicUnitMana(unit, pType)
     mana,maxmana=UnitPower(unit),UnitPowerMax(unit)
-    cpctmana=floor(pcthlth*100)
-    hpctmana=floor(pcthlth*1000)   
+    if maxmana>0 then
+        local pctmana=mana/maxmana
+        cpctmana=floor(pctmana*100)
+        hpctmana=floor(pctmana*1000)
+    else
+        cpctmana=0
+        hpctmana=0
+    end
     return mana, maxmana, cpctmana, hpctmana
 end
 
