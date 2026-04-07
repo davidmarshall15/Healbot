@@ -1947,7 +1947,7 @@ end
 
 function HealBot_UnitID(unit, incEnemy)
       --HealBot_setCall("HealBot_UnitID")
-    if UnitIsUnit(unit, "player") then
+    if HealBot_SafeUnitIsUnit(unit, "player") then
         if HealBot_Unit_Button[HealBot_Data["PUNIT"]] or HealBot_Private_Button[HealBot_Data["PUNIT"]] then
             unit=HealBot_Data["PUNIT"]
         end

@@ -2364,7 +2364,7 @@ local function HealBot_Aura_FilterUnitBuffs(button, selfOnly)
     if not uaUnitCaster then 
         uaUnitCaster="nil"
         uaUnitIsPlayer=false
-    elseif UnitIsUnit(uaUnitCaster,"player") then
+    elseif HealBot_SafeUnitIsUnit(uaUnitCaster,"player") then
         uaUnitIsPlayer=true
     else
         uaUnitIsPlayer=false
@@ -2591,7 +2591,7 @@ local function HealBot_Aura_FilterUnitDebuffs(button, selfOnly)
     if not uaUnitCaster then 
         uaUnitCaster="nil"
         uaUnitIsPlayer=false
-    elseif UnitIsUnit(uaUnitCaster,"player") then
+    elseif HealBot_SafeUnitIsUnit(uaUnitCaster,"player") then
         uaUnitIsPlayer=true
     else
         uaUnitIsPlayer=false
