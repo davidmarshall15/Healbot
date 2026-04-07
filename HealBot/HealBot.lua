@@ -1123,11 +1123,12 @@ function HealBot_UnitMana(button)
         end
         hbPowerCurrent=UnitPower(button.unit, button.poweralt.type) or 0
         hbPowerMax=UnitPowerMax(button.unit, button.poweralt.type) or 0
-        if HealBot_Util_isMidnight(false) or button.poweralt.current~=hbPowerCurrent or button.poweralt.max~=hbPowerMax then
+        local powerAltIsSecret = HealBot_issecretvalue(hbPowerCurrent) or HealBot_issecretvalue(hbPowerMax) or HealBot_issecretvalue(button.poweralt.current) or HealBot_issecretvalue(button.poweralt.max)
+        if powerAltIsSecret or button.poweralt.current~=hbPowerCurrent or button.poweralt.max~=hbPowerMax then
             button.poweralt.current=hbPowerCurrent
             button.poweralt.max=hbPowerMax
-            if HealBot_Util_isMidnight(false) then
-                button.poweralt.pct=hbPowerCurrent
+            if powerAltIsSecret then
+                button.poweralt.pct=0
             elseif button.poweralt.max>0 then
                 button.poweralt.pct=floor((button.poweralt.current/button.poweralt.max)*100)
             else
@@ -1946,7 +1947,7 @@ end
 
 function HealBot_UnitID(unit, incEnemy)
       --HealBot_setCall("HealBot_UnitID")
-    if UnitIsUnit(unit, "player") then
+    if HealBot_SafeUnitIsUnit(unit, "player") then
         if HealBot_Unit_Button[HealBot_Data["PUNIT"]] or HealBot_Private_Button[HealBot_Data["PUNIT"]] then
             unit=HealBot_Data["PUNIT"]
         end
@@ -1979,7 +1980,16 @@ end
 local hiuOverHeal,hiuPlayerInHeal=0
 function HealBot_OverHeal(button)
       --HealBot_setCall("HealBot_OverHeal", button)
-    if HealBot_Util_isMidnight(false) then return end
+    if HealBot_Util_isMidnight(false) then
+        -- In Midnight, health values may be secret — skip overheal arithmetic
+        if button.health.overheal~=0 then
+            button.health.overheal=0
+            HealBot_OverHealText(button)
+            HealBot_Aux_UpdateOverHealBar(button)
+            HealBot_Action_AdaptiveOverhealsUpdate(button)
+        end
+        return
+    end
     if HealBot_luVars["overhealUnit"] == button.unit then
         hiuPlayerInHeal=UnitGetIncomingHeals(button.unit, "player") or 0
         hiuOverHeal=(button.health.current+hiuPlayerInHeal)-button.health.max
@@ -2039,20 +2049,26 @@ function HealBot_HealsInUpdate(button)
       --HealBot_setCall("HealBot_HealsInUpdate", button)
     button.health.updinheal=false
     HealBot_HealsInAmount(button)
-    if not HealBot_Util_isMidnight(false) and hiuHealAmount>0 and button.range.current>0 then
+    local hiuIsSecret = HealBot_issecretvalue(hiuHealAmount) or HealBot_issecretvalue(button.health.incoming)
+    if not hiuIsSecret and hiuHealAmount>0 and button.range.current>0 then
         if button.health.incoming~=hiuHealAmount then
             button.health.incoming=hiuHealAmount
             HealBot_Action_UpdateHealsInButton(button)
             HealBot_Text_setInHealAbsorbsText(button)
         end
-    elseif button.health.incoming>0 or button.gref["InHeal"]:GetValue()>0 then
+    elseif hiuIsSecret and button.range.current>0 then
+        -- Secret incoming heals: pass to bar widget directly, skip arithmetic
+        button.health.incoming=1  -- flag as having incoming heals
+        button.gref["InHeal"]:SetValue(button.health.hpct)
+        HealBot_Text_setInHealAbsorbsText(button)
+    elseif button.health.incoming>0 or (not HealBot_Util_isMidnight(false) and button.gref["InHeal"]:GetValue()>0) then
         button.health.incoming=0
         button.gref["InHeal"]:SetValue(0)
         button.health.inheala=0
         HealBot_Action_UpdateInHealStatusBarColor(button)
         HealBot_Text_setInHealAbsorbsText(button)
     end
-    if not HealBot_Util_isMidnight(false) and button.health.auxincoming~=hiuHealAmount then
+    if not hiuIsSecret and button.health.auxincoming~=hiuHealAmount then
         button.health.auxincoming=hiuHealAmount
         HealBot_OverHeal(button)
         HealBot_Aux_UpdateHealInBar(button)
@@ -2121,16 +2137,26 @@ function HealBot_AbsorbsUpdate(button)
       --HealBot_setCall("HealBot_AbsorbsUpdate", button)
     button.health.updabsorb=false
     HealBot_AbsorbsAmount(button)
-    if not HealBot_Util_isMidnight(false) and button.range.current>0 and abuAbsorbAmount>0 then
+    local abuIsSecret = HealBot_issecretvalue(abuAbsorbAmount) or HealBot_issecretvalue(button.health.absorbs)
+    if not abuIsSecret and button.range.current>0 and abuAbsorbAmount>0 then
         if button.health.absorbs~=abuAbsorbAmount then
             button.health.absorbs=abuAbsorbAmount
-            button.health.absorbspctc=floor((button.health.absorbs/button.health.max)*1000)
+            if not HealBot_issecretvalue(button.health.max) and button.health.max>0 then
+                button.health.absorbspctc=floor((button.health.absorbs/button.health.max)*1000)
+            else
+                button.health.absorbspctc=0
+            end
             HealBot_Action_UpdateHotBar(button)
             HealBot_Action_UpdateAbsorbsButton(button)
             HealBot_Text_setInHealAbsorbsText(button)
             HealBot_Action_AdaptiveAbsorbsUpdate(button)
         end
-    elseif button.health.absorbs>0 or button.gref["Absorb"]:GetValue()>0 then
+    elseif abuIsSecret and button.range.current>0 then
+        -- Secret absorbs: pass to bar widget directly, skip arithmetic
+        button.health.absorbs=1  -- flag as having absorbs
+        button.gref["Absorb"]:SetValue(button.health.hpct)
+        HealBot_Text_setInHealAbsorbsText(button)
+    elseif button.health.absorbs>0 or (not HealBot_Util_isMidnight(false) and button.gref["Absorb"]:GetValue()>0) then
         button.health.absorbs=0
         button.health.absorbspctc=0
         HealBot_Text_setInHealAbsorbsText(button)
@@ -2139,7 +2165,7 @@ function HealBot_AbsorbsUpdate(button)
         HealBot_Action_UpdateAbsorbStatusBarColor(button)
         HealBot_Action_AdaptiveAbsorbsUpdate(button)
     end
-    if not HealBot_Util_isMidnight(false) and button.health.auxabsorbs~=abuAbsorbAmount then
+    if not abuIsSecret and button.health.auxabsorbs~=abuAbsorbAmount then
         button.health.auxabsorbs=abuAbsorbAmount
         HealBot_Aux_UpdateAbsorbBar(button)
     end
@@ -3014,28 +3040,29 @@ function HealBot_UnitHealth(button, force)
                 health=button.health.current
             end
         end
-        if not HealBot_Util_isMidnight(false) then
+        local healthIsSecret = HealBot_issecretvalue(health) or HealBot_issecretvalue(button.health.current) or HealBot_issecretvalue(healthMax) or HealBot_issecretvalue(button.health.max)
+        if not healthIsSecret then
             if healthMax == 0 then healthMax=1 end
             if health>healthMax then healthMax=health end
             if health<0 then health=0 end
         end
-        if HealBot_Util_isMidnight(false) or ((health~=button.health.current) or (healthMax~=button.health.max)) then
-            if HealBot_luVars["pluginTimeToDie"] and button.status.plugin then
+        if healthIsSecret or ((health~=button.health.current) or (healthMax~=button.health.max)) then
+            if not healthIsSecret and HealBot_luVars["pluginTimeToDie"] and button.status.plugin then
                 HealBot_Plugin_TimeToDie_UnitUpdate(button, health)
             end
             if button.isplayer and not HealBot_Data["UILOCK"] then
-                if HealBot_luVars["regAggro"] and (HealBot_Util_isMidnight(false) or health<button.health.current) then
+                if HealBot_luVars["regAggro"] and (healthIsSecret or health<button.health.current) then
                     HealBot_Events_UnitThreat(button)
                 end
-                if not HealBot_Util_isMidnight(false) and (healthMax>(button.health.max*1.25) or healthMax<(button.health.max*0.75)) then
-                    if button.player then 
+                if not healthIsSecret and (healthMax>(button.health.max*1.25) or healthMax<(button.health.max*0.75)) then
+                    if button.player then
                         HealBot_Timers_Set("LAST", "SetInHealAbsorbMax")
-                    elseif HEALBOT_GAME_VERSION<5 then 
-                        HealBot_Events_SpecChange(button) 
+                    elseif HEALBOT_GAME_VERSION<5 then
+                        HealBot_Events_SpecChange(button)
                     end
                 end
             end
-            if not HealBot_Util_isMidnight(false) and button.frame<10 and health<button.health.current and HealBot_luVars["HealthDropPct"]<=(button.health.hpct-floor((health/healthMax)*1000))
+            if not healthIsSecret and button.frame<10 and health<button.health.current and HealBot_luVars["HealthDropPct"]<=(button.health.hpct-floor((health/healthMax)*1000))
                and not button.health.init and health>0 and (button.status.unittype<20 or HealBot_luVars["UILOCK"]) then
                 button.health.hlthdrop=true
             else
@@ -3044,12 +3071,12 @@ function HealBot_UnitHealth(button, force)
             button.health.current=health
             button.health.max=healthMax
             if not button.status.isdead then
-                if HealBot_Util_isMidnight(false) or health>0 then
+                if healthIsSecret or health>0 then
                     HealBot_OverHeal(button)
                 else
                     HealBot_Action_UpdateTheDeadButton(button)
                 end
-            elseif HealBot_Util_isMidnight(false) or health>0 then
+            elseif healthIsSecret or health>0 then
                 HealBot_Action_UpdateTheDeadButton(button)
             end
             HealBot_Action_UpdateHealthButton(button, true)
@@ -3074,11 +3101,11 @@ function HealBot_UnitHealth(button, force)
                     HealBot_Action_EnableBorderHazardType(button, button.health.mixcolr, button.health.mixcolg, button.health.mixcolb, "HLTHDROP")
                 end
                 HealBot_Update_HealthDropAuxBar(button)
-            elseif button.hazard.hlthdrop and (button.health.current == 0 or button.health.hpct>button.hazard.hpct) then
+            elseif button.hazard.hlthdrop and (button.health.hpct == 0 or button.health.hpct>button.hazard.hpct) then
                 HealBot_Action_DisableBorderHazardType(button, "HLTHDROP")
             end
         end
-    elseif HealBot_Util_isMidnight(false) or button.health.current>0 or force then
+    elseif HealBot_issecretvalue(button.health.current) or button.health.current>0 or force then
         button.health.current=0
         button.status.alpha=0
         button.gref["Bar"]:SetValue(0)
@@ -3957,8 +3984,8 @@ local HealBot_CDKnown={}
 local hbStartTime, hbDuration, hbCDTime, hbCDEnd=0,0,0,0
 function HealBot_SpellCooldown(spellName, spellId)
       --HealBot_setCall("HealBot_SpellCooldown")
-    if not HealBot_Util_isMidnight(false) then
-        hbStartTime, hbDuration=HealBot_WoWAPI_SpellCooldown(spellName)
+    hbStartTime, hbDuration=HealBot_WoWAPI_SpellCooldown(spellName)
+    if not (HealBot_issecretvalue(hbStartTime) or HealBot_issecretvalue(hbDuration)) then
         hbCDEnd=(hbStartTime or 0)+(hbDuration or 0)
         hbCDTime=hbCDEnd-HealBot_TimeNow
         if hbCDTime>2 then

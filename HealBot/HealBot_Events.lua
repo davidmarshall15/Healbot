@@ -450,7 +450,7 @@ end
 local uscUnit, uscUnitName, uscSpellName=nil,false,false
 function HealBot_Events_UnitSpellCastSent(caster,unitName,castGUID,spellID)
       --HealBot_setCall("HealBot_Events_UnitSpellCastSent")
-    if UnitIsUnit("player",caster) then
+    if HealBot_SafeUnitIsUnit("player",caster) then
         uscUnit=nil
         uscUnitName=HealBot_UnitNameOnly(unitName)
         uscSpellName=HealBot_WoWAPI_SpellName(spellID) or spellID
