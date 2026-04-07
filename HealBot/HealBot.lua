@@ -3105,7 +3105,7 @@ function HealBot_UnitHealth(button, force)
                 HealBot_Action_DisableBorderHazardType(button, "HLTHDROP")
             end
         end
-    elseif healthIsSecret or button.health.current>0 or force then
+    elseif HealBot_issecretvalue(button.health.current) or button.health.current>0 or force then
         button.health.current=0
         button.status.alpha=0
         button.gref["Bar"]:SetValue(0)
