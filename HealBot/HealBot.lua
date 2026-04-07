@@ -2049,7 +2049,7 @@ function HealBot_HealsInUpdate(button)
       --HealBot_setCall("HealBot_HealsInUpdate", button)
     button.health.updinheal=false
     HealBot_HealsInAmount(button)
-    local hiuIsSecret = HealBot_issecretvalue(hiuHealAmount)
+    local hiuIsSecret = HealBot_issecretvalue(hiuHealAmount) or HealBot_issecretvalue(button.health.incoming)
     if not hiuIsSecret and hiuHealAmount>0 and button.range.current>0 then
         if button.health.incoming~=hiuHealAmount then
             button.health.incoming=hiuHealAmount
@@ -2137,7 +2137,7 @@ function HealBot_AbsorbsUpdate(button)
       --HealBot_setCall("HealBot_AbsorbsUpdate", button)
     button.health.updabsorb=false
     HealBot_AbsorbsAmount(button)
-    local abuIsSecret = HealBot_issecretvalue(abuAbsorbAmount)
+    local abuIsSecret = HealBot_issecretvalue(abuAbsorbAmount) or HealBot_issecretvalue(button.health.absorbs)
     if not abuIsSecret and button.range.current>0 and abuAbsorbAmount>0 then
         if button.health.absorbs~=abuAbsorbAmount then
             button.health.absorbs=abuAbsorbAmount
@@ -3040,7 +3040,7 @@ function HealBot_UnitHealth(button, force)
                 health=button.health.current
             end
         end
-        local healthIsSecret = HealBot_issecretvalue(health)
+        local healthIsSecret = HealBot_issecretvalue(health) or HealBot_issecretvalue(button.health.current) or HealBot_issecretvalue(healthMax) or HealBot_issecretvalue(button.health.max)
         if not healthIsSecret then
             if healthMax == 0 then healthMax=1 end
             if health>healthMax then healthMax=health end
