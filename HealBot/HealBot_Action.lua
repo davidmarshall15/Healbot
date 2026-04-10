@@ -2815,7 +2815,7 @@ local HealBot_TextColChangeWithHealth={[1]=true,[4]=true,[5]=true}
 function HealBot_Action_UpdateHealthButton(button, hlthevent)
       --HealBot_setCall("HealBot_Action_UpdateHealthButton", button)
     if hlthevent then
-        button.health.rcol, button.health.gcol=HealBot_Action_BarColourPct(button.health.pct)
+        --button.health.rcol, button.health.gcol=HealBot_Action_BarColourPct(button.health.pct)
 
         if HealBot_Util_isMidnight(false) or button.health.hpct>890 then
             button.health.mixcolr, button.health.mixcolg, button.health.mixcolb=button.text.r, button.text.g, button.text.b

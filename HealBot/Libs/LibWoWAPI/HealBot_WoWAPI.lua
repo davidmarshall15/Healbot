@@ -2,16 +2,39 @@ local hbInfo, _
 HealBot_Spell_IDs={};
 HealBot_Spell_Names={};
 
-local CC_ScaleTo1000 = C_CurveUtil.CreateCurve();
-CC_ScaleTo1000:SetType(Enum.LuaCurveType.Linear);
-CC_ScaleTo1000:AddPoint(0.0, 0);
-CC_ScaleTo1000:AddPoint(1.0, 1000);
+local CC_ScaleTo1000=nil
+local CC_ScaleTo100=nil
+local CC_ScaleColPct=nil
+local function HealBot_WoWAPI_SetCC_ScaleTo1000()
+    if C_CurveUtil then 
+        if not CC_ScaleTo100 then 
+            CC_ScaleTo100 = C_CurveUtil.CreateCurve();
+            CC_ScaleTo100:SetType(Enum.LuaCurveType.Linear);
+            CC_ScaleTo100:AddPoint(0.0, 0);
+            CC_ScaleTo100:AddPoint(1.0, 100);
+        end
+        if not CC_ScaleTo1000 then 
+            CC_ScaleTo1000 = C_CurveUtil.CreateCurve();
+            CC_ScaleTo1000:SetType(Enum.LuaCurveType.Linear);
+            CC_ScaleTo1000:AddPoint(0.0, 0);
+            CC_ScaleTo1000:AddPoint(1.0, 1000);
+        end
+        if not CC_ScaleColPct then
+            CC_ScaleColPct=C_CurveUtil.CreateColorCurve()
+            CC_ScaleColPct:SetType(Enum.LuaCurveType.Linear)
+            CC_ScaleColPct:AddPoint(0.0, CreateColor(1, 0, 0))
+            CC_ScaleColPct:AddPoint(0.3, CreateColor(1, 1, 0))
+            CC_ScaleColPct:AddPoint(0.7, CreateColor(0, 1, 0))
+        end
+    end
+end
 
 local function HealBot_WoWAPI_True()
     return true
 end
 
 function HealBot_WoWAPI_SetAll()
+    HealBot_WoWAPI_SetCC_ScaleTo1000()
     HealBot_WoWAPI_SetC_Spell()
     HealBot_WoWAPI_SetC_SpellBook()
     HealBot_WoWAPI_SetC_Item()
@@ -337,21 +360,24 @@ function HealBot_WoWAPI_LoadAddOn(name)
 end
 
 -- Health
-local hlth, maxhlth, pcthlth, cpcthlth, hpcthlth = 0,0,0,0,0
+local hlth, maxhlth, pcthlth, cpcthlth, hpcthlth, pctColR, pctColG, pctCol = 0,0,0,0,0,0,0,nil
 function HealBot_WoWAPI_ClassicUnitHealth(unit)
     hlth,maxhlth=UnitHealth(unit),UnitHealthMax(unit)
     pcthlth=hlth/maxhlth
     cpcthlth=floor(pcthlth*100)
-    hpcthlth=floor(pcthlth*1000)   
-    return hlth, maxhlth, pcthlth, cpcthlth, hpcthlth
+    hpcthlth=floor(pcthlth*1000)
+    pctColR, pctColG=HealBot_Action_BarColourPct(pcthlth)
+    return hlth, maxhlth, pcthlth, cpcthlth, hpcthlth, pctColR, pctColG
 end
 
 function HealBot_WoWAPI_MidnightUnitHealth(unit)
     hlth,maxhlth=UnitHealth(unit),UnitHealthMax(unit)
-    pcthlth=UnitHealthPercent(unit, false)
-    cpcthlth=UnitHealthPercent(unit, true, CurveConstants.ScaleTo100)
+    pcthlth=UnitHealthPercent(unit, true)
+    cpcthlth=UnitHealthPercent(unit, true, CC_ScaleTo100)
     hpcthlth=UnitHealthPercent(unit, true, CC_ScaleTo1000)
-    return hlth, maxhlth, pcthlth, cpcthlth, hpcthlth
+    pctCol=UnitHealthPercent(unit, true, CC_ScaleColPct)
+    pctColR, pctColG=pctCol:GetRGB()
+    return hlth, maxhlth, pcthlth, cpcthlth, hpcthlth, pctColR, pctColG
 end
 
 local HealBot_WoWAPI_UnitHealthPercent=HealBot_WoWAPI_ClassicUnitHealth
@@ -366,17 +392,18 @@ function HealBot_WoWAPI_UnitHealth(unit)
 end
 
 -- Mana
-local mana, maxmana, cpctmana, hpctmana = 0,0,0,0
+local mana, maxmana, pctmana, cpctmana, hpctmana = 0,0,0,0
 function HealBot_WoWAPI_ClassicUnitMana(unit, pType)
     mana,maxmana=UnitPower(unit),UnitPowerMax(unit)
-    cpctmana=floor(pcthlth*100)
-    hpctmana=floor(pcthlth*1000)   
+    pctmana=mana/maxmana
+    cpctmana=floor(pctmana*100)
+    hpctmana=floor(pctmana*1000)   
     return mana, maxmana, cpctmana, hpctmana
 end
 
 function HealBot_WoWAPI_MidnightUnitMana(unit, pType)
     mana,maxmana=UnitPower(unit),UnitPowerMax(unit)
-    cpctmana=UnitPowerPercent(unit, pType, true, CurveConstants.ScaleTo100)
+    cpctmana=UnitPowerPercent(unit, pType, true, CC_ScaleTo100)
     hpctmana=UnitPowerPercent(unit, pType, true, CC_ScaleTo1000)
     return mana, maxmana, cpctmana, hpctmana
 end

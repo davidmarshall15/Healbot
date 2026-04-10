@@ -2522,6 +2522,7 @@ function HealBot_VariablesLoaded()
             HealBot_Config_Cures[key]=val;
         end
     end);
+    HealBot_Action_SetCustomClassCols(2)
     HealBot_Timers_Set("OOC","LoadAurasBuffs")
     HealBot_Timers_Set("OOC","LoadAurasDebuffs")
     hbv_Auras_CurrentHoTs()
@@ -2533,7 +2534,6 @@ function HealBot_VariablesLoaded()
         HealBot_Config.MyFriend=nil
     end
     HealBot_Update_Skins()
-    HealBot_Action_SetCustomClassCols(2)
     HealBot_Lang_InitVars()
     HealBot_Timers_Lang()
     HealBot_Options_InitVars()
@@ -2998,9 +2998,9 @@ function HealBot_UnitHealth(button, force)
     --button.health.nextcheck=HealBot_TimeNow+HealBot_luVars["healthCheckInterval"]
     if button.status.current<HealBot_Unit_Status["DC"] then
         if HealBot_UnitInVehicle[button.unit] and UnitExists(HealBot_UnitInVehicle[button.unit]) then
-            health, healthMax, button.health.pct, button.health.cpct, button.health.hpct=HealBot_WoWAPI_UnitHealth(HealBot_UnitInVehicle[button.unit])
+            health, healthMax, button.health.pct, button.health.cpct, button.health.hpct, button.health.rcol, button.health.gcol=HealBot_WoWAPI_UnitHealth(HealBot_UnitInVehicle[button.unit])
         else
-            health, healthMax, button.health.pct, button.health.cpct, button.health.hpct=HealBot_WoWAPI_UnitHealth(button.unit)
+            health, healthMax, button.health.pct, button.health.cpct, button.health.hpct, button.health.rcol, button.health.gcol=HealBot_WoWAPI_UnitHealth(button.unit)
         end
         if button.status.isdead then
             if HealBot_IsUnitReallyDead(button) then
