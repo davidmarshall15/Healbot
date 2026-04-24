@@ -188,29 +188,40 @@ end
 
 function HealBot_Panel_TankRole(unit, guid, isPlayer, offtank)
       --HealBot_setCall("HealBot_Panel_TankRole")
+    if HealBot_issecretvalue(unit) then return end
     if offtank then
         HealBot_unitRole[unit]=hbRole[HEALBOT_OFFTANK]
     else
         HealBot_unitRole[unit]=hbRole[HEALBOT_MAINTANK]
     end
+    if HealBot_issecretvalue(guid) then return end
     HealBot_MainTanks[guid]=unit
     if isPlayer then
         local _,hlthMax=HealBot_WoWAPI_UnitHealth(unit)
-        if hlthMax>hbRoleOnes[hbTANK1].health then
-            if hbRoleOnes[hbTANK1].health>0 then
-                if hbRoleOnes[hbTANK2].guid == guid then
-                    hbRoleOnes[hbTANK2].health=0
-                    hbRoleOnes[hbTANK2].guid="x"
-                else
-                    hbRoleOnes[hbTANK2].health=hbRoleOnes[hbTANK1].health
-                    hbRoleOnes[hbTANK2].guid=hbRoleOnes[hbTANK1].guid
+        if not HealBot_issecretvalue(hlthMax) then
+            if hlthMax>hbRoleOnes[hbTANK1].health then
+                if hbRoleOnes[hbTANK1].health>0 then
+                    if hbRoleOnes[hbTANK2].guid == guid then
+                        hbRoleOnes[hbTANK2].health=0
+                        hbRoleOnes[hbTANK2].guid="x"
+                    else
+                        hbRoleOnes[hbTANK2].health=hbRoleOnes[hbTANK1].health
+                        hbRoleOnes[hbTANK2].guid=hbRoleOnes[hbTANK1].guid
+                    end
                 end
+                hbRoleOnes[hbTANK1].health=hlthMax
+                hbRoleOnes[hbTANK1].guid=guid
+            elseif hlthMax>hbRoleOnes[hbTANK2].health then
+                hbRoleOnes[hbTANK2].health=hlthMax
+                hbRoleOnes[hbTANK2].guid=guid
+            end
+        else
+            if hbRoleOnes[hbTANK1].guid~=guid then
+                hbRoleOnes[hbTANK2].health=hbRoleOnes[hbTANK1].health
+                hbRoleOnes[hbTANK2].guid=hbRoleOnes[hbTANK1].guid
             end
             hbRoleOnes[hbTANK1].health=hlthMax
             hbRoleOnes[hbTANK1].guid=guid
-        elseif hlthMax>hbRoleOnes[hbTANK2].health then
-            hbRoleOnes[hbTANK2].health=hlthMax
-            hbRoleOnes[hbTANK2].guid=guid
         end
     end
     if hbPanel_dataPlayerRoles[guid] == 0 or hbPanel_dataPlayerRoles[guid]>5 then hbPanel_dataPlayerRoles[guid]=2 end
@@ -218,11 +229,18 @@ end
 
 function HealBot_Panel_HealerRole(unit, guid, isPlayer)
       --HealBot_setCall("HealBot_Panel_HealerRole")
+    if HealBot_issecretvalue(unit) then return end
     HealBot_unitRole[unit]=hbRole[HEALBOT_WORD_HEALER]
+    if HealBot_issecretvalue(guid) then return end
     HealBot_MainHealers[guid]=unit
     if isPlayer then
         local _,hlthMax=HealBot_WoWAPI_UnitHealth(unit)
-        if hlthMax>hbRoleOnes[hbHEALER].health then
+        if not HealBot_issecretvalue(hlthMax) then
+            if hlthMax>hbRoleOnes[hbHEALER].health then
+                hbRoleOnes[hbHEALER].health=hlthMax
+                hbRoleOnes[hbHEALER].guid=guid
+            end
+        else
             hbRoleOnes[hbHEALER].health=hlthMax
             hbRoleOnes[hbHEALER].guid=guid
         end
@@ -239,23 +257,29 @@ end
 
 function HealBot_Panel_DamagerRole(unit, guid, isPlayer)
       --HealBot_setCall("HealBot_Panel_DamagerRole")
+    if HealBot_issecretvalue(unit) then return end
     HealBot_unitRole[unit]=hbRole[HEALBOT_WORD_DPS]
     if isPlayer then
         local _,hlthMax=HealBot_WoWAPI_UnitHealth(unit)
-        if hlthMax>hbRoleOnes[hbDPS].health then
+        if not HealBot_issecretvalue(hlthMax) then
+            if hlthMax>hbRoleOnes[hbDPS].health then
+                hbRoleOnes[hbDPS].health=hlthMax
+                hbRoleOnes[hbDPS].guid=guid
+            end
+            if (UnitPowerType(unit) or 1) == 0 then
+                local _, uuUnitClassEN=UnitClass(unit) or "X"
+                local maxHealth=hlthMax
+                if hbClassCasterPrefBonus[uuUnitClassEN] then
+                    maxHealth=maxHealth*hbClassCasterPrefBonus[uuUnitClassEN]
+                end
+                if maxHealth>hbRoleOnes[hbDPSC].health then
+                    hbRoleOnes[hbDPSC].health=maxHealth
+                    hbRoleOnes[hbDPSC].guid=guid
+                end
+            end
+        else
             hbRoleOnes[hbDPS].health=hlthMax
             hbRoleOnes[hbDPS].guid=guid
-        end
-        if (UnitPowerType(unit) or 1) == 0 then
-            local _, uuUnitClassEN=UnitClass(unit) or "X"
-            local maxHealth=hlthMax
-            if hbClassCasterPrefBonus[uuUnitClassEN] then
-                maxHealth=maxHealth*hbClassCasterPrefBonus[uuUnitClassEN]
-            end
-            if maxHealth>hbRoleOnes[hbDPSC].health then
-                hbRoleOnes[hbDPSC].health=maxHealth
-                hbRoleOnes[hbDPSC].guid=guid
-            end
         end
     end
 end
@@ -596,7 +620,7 @@ function HealBot_Panel_ClearBlackList()
 end
 
 function HealBot_Panel_OnBlackList(guid)
-    if not HealBot_Util_isMidnight(false) then
+    if HealBot_issecretvalue(guid) then
         return false
     else
         return HealBot_Panel_BlackList[guid]
@@ -3925,7 +3949,7 @@ function HealBot_Panel_RaidPetUnitButtonCheck(guid)
 end
 
 function HealBot_Panel_AllUnitButton(guid)
-    if HealBot_Util_isMidnight(false) then return end 
+    if HealBot_issecretvalue(guid) then return end 
     return hbPanel_buttonGUIDs[guid] or hbPanel_buttonPetGUIDs[guid] or hbPanel_buttonExtraGUIDs[guid], hbPanel_buttonpGUIDs[guid]
 end
 
@@ -3940,7 +3964,7 @@ end
 
 function HealBot_Panel_RaidUnitName(uName)
       --HealBot_setCall("HealBot_Panel_RaidUnitName")
-    if HealBot_Util_isMidnight(false) then return end 
+    if HealBot_issecretvalue(uName) then return end 
     return hbPanel_dataNames[uName] or hbPanel_dataPetNames[uName]
 end
 

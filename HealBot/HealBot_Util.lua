@@ -300,6 +300,12 @@ function HealBot_Util_ReadNumber(n,p)
     return HealBot_Util_NumConcat()
 end
 
+function HealBot_SafeUnitIsUnit(unit1, unit2)
+    local result = UnitIsUnit(unit1, unit2)
+    if HealBot_issecretvalue(result) then return false end
+    return result
+end
+
 function HealBot_Util_isMidnight(onlyInCombat)
     if HEALBOT_MIDNIGHT then
         if onlyInCombat and not HealBot_Data["UILOCK"] then

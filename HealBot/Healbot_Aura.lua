@@ -285,6 +285,15 @@ local dbSecsLeft, dbRetAlpha, dbFadeDiff, dbNextAuraUpdate, dbMaxAlpha, dbMaxDur
 function HealBot_Aura_DebuffIconAlphaValue(button, iconData, secsLeft)
       --HealBot_setCall("HealBot_Aura_DebuffIconAlphaValue", button, nil, nil, true)
     dbNextAuraUpdate=999
+    if HealBot_issecretvalue(iconData.expirationTime) or HealBot_issecretvalue(iconData.duration) then
+        -- Secret values: show icon at full alpha, skip fade/duration arithmetic
+        if hbv_Skins_GetIconBoolean("DI15EN", button.frame, iconData.iconSet) then
+            dbRetAlpha=HealBot_Action_BarColourAlpha(button, hbv_Skins_GetFrameVar("BarCol", "HA", button.framecol), 1)
+        else
+            dbRetAlpha=button.status.alpha
+        end
+        return dbRetAlpha, dbNextAuraUpdate
+    end
     if secsLeft>-3 then
         if hbv_Skins_GetIconBoolean("DFADE", button.frame, iconData.iconSet) then
             if iconData.duration<hbv_Skins_GetIconVar("DFADESECS", button.frame, iconData.iconSet) then
@@ -338,8 +347,12 @@ function HealBot_Aura_DoUpdateDebuffIcon(button, iconData, index, timer, lastSpe
     if iconData.current and lastSpellId == iconData.spellId then
         dbAlphaNextUpdate=999
         dbDurNextUpdate=999
-        dbSecsLeft=floor((iconData.expirationTime-HealBot_TimeNow)-0.5)
-        if iconData.expirationTime>0 then
+        if HealBot_issecretvalue(iconData.expirationTime) then
+            dbSecsLeft=-1
+        else
+            dbSecsLeft=floor((iconData.expirationTime-HealBot_TimeNow)-0.5)
+        end
+        if not HealBot_issecretvalue(iconData.expirationTime) and iconData.expirationTime>0 then
             dbiconAlpha, dbAlphaNextUpdate=HealBot_Aura_DebuffIconAlphaValue(button, iconData, dbSecsLeft)
         elseif hbv_Skins_GetIconBoolean("DI15EN", button.frame, iconData.iconSet) then
             dbiconAlpha=HealBot_Action_BarColourAlpha(button, hbv_Skins_GetFrameVar("BarCol", "HA", button.framecol), 1)
@@ -350,7 +363,7 @@ function HealBot_Aura_DoUpdateDebuffIcon(button, iconData, index, timer, lastSpe
         if dbiconAlpha<button.status.alpha then
             dbiconAlpha=button.status.alpha
         end
-        if dbSecsLeft>-2 and hbv_Skins_GetIconTextBoolean("DBSDUR", button.frame, iconData.iconSet) then
+        if not HealBot_issecretvalue(iconData.expirationTime) and dbSecsLeft>-2 and hbv_Skins_GetIconTextBoolean("DBSDUR", button.frame, iconData.iconSet) then
             if dbSecsLeft<=hbv_Skins_GetIconTextVar("DBDURTHRH", button.frame, iconData.iconSet) then
                 if dbSecsLeft<=hbv_Skins_GetIconTextVar("DBDURWARN", button.frame, iconData.iconSet) then
                     if UnitIsFriend("player",button.unit) then
@@ -458,6 +471,15 @@ local bSecsLeft, bRetAlpha, bFadeDiff, bNextAuraUpdate, bMaxAlpha, bMaxDur=0,0,0
 function HealBot_Aura_BuffIconAlphaValue(button, iconData, secsLeft)
       --HealBot_setCall("HealBot_Aura_BuffIconAlphaValue", button, nil, nil, true)
     bNextAuraUpdate=999
+    if HealBot_issecretvalue(iconData.expirationTime) or HealBot_issecretvalue(iconData.duration) then
+        -- Secret values: show icon at full alpha, skip fade/duration arithmetic
+        if hbv_Skins_GetIconBoolean("BUFFI15EN", button.frame, iconData.iconSet) then
+            bRetAlpha=HealBot_Action_BarColourAlpha(button, hbv_Skins_GetFrameVar("BarCol", "HA", button.framecol), 1)
+        else
+            bRetAlpha=button.status.alpha
+        end
+        return bRetAlpha, bNextAuraUpdate
+    end
     if secsLeft>-3 then
         if hbv_Skins_GetIconBoolean("BUFFFADE", button.frame, iconData.iconSet) then
             if iconData.duration<hbv_Skins_GetIconVar("BUFFFADESECS", button.frame, iconData.iconSet) then
@@ -512,8 +534,12 @@ function HealBot_Aura_DoUpdateBuffIcon(button, iconData, index, timer, lastSpell
     if iconData.current and lastSpellId == iconData.spellId then
         bAlphaNextUpdate=999
         bDurNextUpdate=999
-        bSecsLeft=floor((iconData.expirationTime-HealBot_TimeNow)-0.5)
-        if iconData.expirationTime>0 then
+        if HealBot_issecretvalue(iconData.expirationTime) then
+            bSecsLeft=-1
+        else
+            bSecsLeft=floor((iconData.expirationTime-HealBot_TimeNow)-0.5)
+        end
+        if not HealBot_issecretvalue(iconData.expirationTime) and iconData.expirationTime>0 then
             bIconAlpha, bAlphaNextUpdate=HealBot_Aura_BuffIconAlphaValue(button, iconData, bSecsLeft)
         elseif hbv_Skins_GetIconBoolean("BUFFI15EN", button.frame, iconData.iconSet) then
             bIconAlpha=HealBot_Action_BarColourAlpha(button, hbv_Skins_GetFrameVar("BarCol", "HA", button.framecol), 1)
@@ -524,7 +550,7 @@ function HealBot_Aura_DoUpdateBuffIcon(button, iconData, index, timer, lastSpell
         if bIconAlpha<button.status.alpha then
             bIconAlpha=button.status.alpha
         end
-        if bSecsLeft>-2 and hbv_Skins_GetIconTextBoolean("BUFFSDUR", button.frame, iconData.iconSet)
+        if not HealBot_issecretvalue(iconData.expirationTime) and bSecsLeft>-2 and hbv_Skins_GetIconTextBoolean("BUFFSDUR", button.frame, iconData.iconSet)
                         and (not hbv_Skins_GetIconTextBoolean("BUFFSSDUR", button.frame, iconData.iconSet) or UnitIsUnit(iconData.unitCaster,"player")) then
             if bSecsLeft<=hbv_Skins_GetIconTextVar("BUFFDURTHRH", button.frame, iconData.iconSet) then
                 if bSecsLeft<=hbv_Skins_GetIconTextVar("BUFFDURWARN", button.frame, iconData.iconSet) then
@@ -1151,7 +1177,7 @@ function HealBot_Aura_CheckGeneralBuff(button)
                 if buffWatchTarget["Raid"] then
                     buffCheckThis=true;
                 elseif buffWatchTarget["Self"] and button.player then
-                    if hb_lVars["ManaDrink"]~=buffWatchName or button.mana.pct<HealBot_Config_Buffs.ManaDrinkThreshold then
+                    if hb_lVars["ManaDrink"]~=buffWatchName or (not HealBot_issecretvalue(button.mana.pct) and button.mana.pct<HealBot_Config_Buffs.ManaDrinkThreshold) then
                         buffCheckThis=true
                     end
                 elseif buffWatchTarget["Party"] and button.group == HealBot_Data["PLAYERGROUP"] then 
@@ -1679,6 +1705,7 @@ end
 local asbtPrevEndTime=0
 function HealBot_Aura_SetUnitBuffTimer(button)
       --HealBot_setCall("HealBot_Aura_SetUnitBuffTimer", button)
+    if HealBot_issecretvalue(uaBuffData[button.id][uaBuffSlot].expirationTime) then return end
     asbtPrevEndTime=button.aura.buff.recheck[uaBuffData[button.id][uaBuffSlot].name] or 0
     if HealBot_ShortBuffs[uaBuffData[button.id][uaBuffSlot].name] then 
         button.aura.buff.recheck[uaBuffData[button.id][uaBuffSlot].name]=uaBuffData[button.id][uaBuffSlot].expirationTime-HealBot_Config_Buffs.ShortBuffTimer
@@ -1980,7 +2007,7 @@ end
 
 function HealBot_Aura_CheckUnitBuff(button)
       --HealBot_setCall("HealBot_Aura_CheckUnitBuff", button)
-    if uaBuffData[button.id][uaBuffSlot].name == HEALBOT_SPIRIT_OF_REDEMPTION_NAME and button.health.current>0 then 
+    if uaBuffData[button.id][uaBuffSlot].name == HEALBOT_SPIRIT_OF_REDEMPTION_NAME and not HealBot_issecretvalue(button.health.current) and button.health.current>0 then 
         C_Timer.After(0.1, function() HealBot_Action_UpdateTheDeadButton(button) end)
     end
     if HealBot_Buff_Aura2Item[uaBuffData[button.id][uaBuffSlot].name] then
@@ -2336,7 +2363,7 @@ local function HealBot_Aura_FilterUnitBuffs(button, selfOnly)
     if not uaUnitCaster then 
         uaUnitCaster="nil"
         uaUnitIsPlayer=false
-    elseif UnitIsUnit(uaUnitCaster,"player") then
+    elseif HealBot_SafeUnitIsUnit(uaUnitCaster,"player") then
         uaUnitIsPlayer=true
     else
         uaUnitIsPlayer=false
@@ -2362,7 +2389,9 @@ local function HealBot_Aura_UpdateUnitBuffsData(button, selfOnly, gSlot)
         if not uaUnitCaster then uaUnitCaster="nil" end
         if not HealBot_ExcludeBuffInCache[uaSpellId] and uaSlot<20 and HealBot_Aura_FilterUnitBuffs(button, selfOnly) then
             uaSlot=uaSlot+1
-            uaExpirationTime=HealBot_Util_Round(uaExpirationTime,1)
+            if not HealBot_issecretvalue(uaExpirationTime) then
+                uaExpirationTime=HealBot_Util_Round(uaExpirationTime,1)
+            end
             if uaBuffData[button.id][uaSlot].spellId~=uaSpellId or uaBuffData[button.id][uaSlot].sourceUnit~=uaUnitCaster then 
                 uaBuffData[button.id][uaSlot].name=uaName
                 if BleedList[uaSpellId] and (not uaDebuffType or not HealBot_Options_retDebuffCureType(uaDebuffType)) then
@@ -2484,15 +2513,17 @@ function HealBot_Aura_UpdateUnitBuffsV9(button, selfOnly)
       --HealBot_setCall("HealBot_Aura_UpdateUnitBuffsV9", button)
     uaZ=1
     while true do
-        if not HealBot_Util_isMidnight(true) then
-            uaAura=C_UnitAuras.GetAuraDataByIndex(button.unit, uaZ, "HELPFUL")
-        else
+        if HealBot_Util_isMidnight(true) and not UnitIsFriend("player", button.unit) then
             uaAura=C_UnitAuras.GetAuraDataByIndex(button.unit, uaZ, "RAID_IN_COMBAT")
+        else
+            uaAura=C_UnitAuras.GetAuraDataByIndex(button.unit, uaZ, "HELPFUL")
         end
         if not uaAura then break end
         uaName, uaTexture, uaCount, uaDebuffType, uaDuration, uaExpirationTime, uaUnitCaster, uaSpellId=
         uaAura.name, uaAura.icon, uaAura.applications, uaAura.dispelName, uaAura.duration, uaAura.expirationTime, uaAura.sourceUnit, uaAura.spellId
-        HealBot_Aura_UpdateUnitBuffsData(button, selfOnly, uaZ)
+        if not HealBot_issecretvalue(uaSpellId) and not HealBot_issecretvalue(uaName) then
+            HealBot_Aura_UpdateUnitBuffsData(button, selfOnly, uaZ)
+        end
         uaZ=uaZ+1
     end
 end
@@ -2558,7 +2589,7 @@ local function HealBot_Aura_FilterUnitDebuffs(button, selfOnly)
     if not uaUnitCaster then 
         uaUnitCaster="nil"
         uaUnitIsPlayer=false
-    elseif UnitIsUnit(uaUnitCaster,"player") then
+    elseif HealBot_SafeUnitIsUnit(uaUnitCaster,"player") then
         uaUnitIsPlayer=true
     else
         uaUnitIsPlayer=false
@@ -2593,7 +2624,9 @@ local function HealBot_Aura_UpdateUnitDebuffsData(button, selfOnly, gSlot)
             --    HealBot_Aura_IconSet[uaSpellId].spellId]=3
             --end
             uaSlot=uaSlot+1
-            uaExpirationTime=HealBot_Util_Round(uaExpirationTime,1)
+            if not HealBot_issecretvalue(uaExpirationTime) then
+                uaExpirationTime=HealBot_Util_Round(uaExpirationTime,1)
+            end
             if uaDebuffData[button.id][uaSlot].spellId~=uaSpellId or uaDebuffData[button.id][uaSlot].sourceUnit~=(uaUnitCaster) then 
                 uaDebuffData[button.id][uaSlot].name=uaName
                 if BleedList[uaSpellId] and (not uaDebuffType or not HealBot_Options_retDebuffCureSpell(uaDebuffType)) then
@@ -2666,16 +2699,18 @@ end
 function HealBot_Aura_UpdateUnitDebuffsV9(button, selfOnly)
       --HealBot_setCall("HealBot_Aura_UpdateUnitDebuffsV9", button)
     uaZ=1
-    while true do        
-        if not HealBot_Util_isMidnight(true) then
-            uaAura=C_UnitAuras.GetAuraDataByIndex(button.unit, uaZ, "HARMFUL")
-        else
+    while true do
+        if HealBot_Util_isMidnight(true) and not UnitIsFriend("player", button.unit) then
             uaAura=C_UnitAuras.GetAuraDataByIndex(button.unit, uaZ, "RAID_PLAYER_DISPELLABLE")
+        else
+            uaAura=C_UnitAuras.GetAuraDataByIndex(button.unit, uaZ, "HARMFUL")
         end
         if not uaAura then break end
         uaName, uaTexture, uaCount, uaDebuffType, uaDuration, uaExpirationTime, uaUnitCaster, uaSpellId, uaIsBossDebuff=
         uaAura.name, uaAura.icon, uaAura.applications, uaAura.dispelName, uaAura.duration, uaAura.expirationTime, uaAura.sourceUnit, uaAura.spellId, uaAura.isBossAura
-        HealBot_Aura_UpdateUnitDebuffsData(button, selfOnly, uaZ)
+        if not HealBot_issecretvalue(uaSpellId) and not HealBot_issecretvalue(uaName) then
+            HealBot_Aura_UpdateUnitDebuffsData(button, selfOnly, uaZ)
+        end
         uaZ=uaZ+1
     end
 end

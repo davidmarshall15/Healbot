@@ -1,12 +1,12 @@
 ﻿local GetAddOnMetadata=GetAddOnMetadata
-HEALBOT_VERSION="26.0"
+HEALBOT_VERSION="26.3"
 
 function HealBot_Global_MetaVersion()
     GetAddOnMetadata=GetAddOnMetadata or (C_AddOns and C_AddOns.GetAddOnMetadata)
     if GetAddOnMetadata then
         HEALBOT_VERSION=GetAddOnMetadata("HealBot", "Version")
     else
-        HEALBOT_VERSION="26.0"
+        HEALBOT_VERSION="26.3"
     end
     HealBot_Comms_SetVersion()
 end
@@ -21,11 +21,13 @@ if HEALBOT_GAME_VERSION>11 then
     HEALBOT_MIDNIGHT=true
 end
 
+HealBot_issecretvalue = issecretvalue or function() return false end
+
 function HealBot_Global_Version()
-    return "26.1"
+    return "26.4"
 end
 function HealBot_Global_InitVersion()
-    return "26.0"  -- Keep behind the global version
+    return "26.3"  -- Keep behind the global version
 end
 
 function HealBot_globalVars()

@@ -1074,7 +1074,8 @@ end
 local hbConcatLater=false
 function HealBot_Text_setInHealAbsorbsText(button)
       --HealBot_setCall("HealBot_Text_setInHealAbsorbsText", button)
-    if hbv_Skins_GetFrameBoolean("BarText", "HLTHONBAR", button.framecol) and button.health.max then
+    if HealBot_issecretvalue(button.health.current) or HealBot_issecretvalue(button.health.max) then return end
+    if hbv_Skins_GetFrameBoolean("BarText", "HLTHONBAR", button.framecol) and not HealBot_issecretvalue(button.health.current) and not HealBot_issecretvalue(button.health.max) and button.health.max then
         if button.status.current<HealBot_Unit_Status["DEAD"] and hbv_Skins_GetFrameBoolean("BarText", "IGNOREONFULL", button.framecol) then
             ignoreInHeals=true
         else

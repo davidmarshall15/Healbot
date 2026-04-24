@@ -363,10 +363,22 @@ end
 local hlth, maxhlth, pcthlth, cpcthlth, hpcthlth, pctColR, pctColG, pctCol = 0,0,0,0,0,0,0,nil
 function HealBot_WoWAPI_ClassicUnitHealth(unit)
     hlth,maxhlth=UnitHealth(unit),UnitHealthMax(unit)
-    pcthlth=hlth/maxhlth
-    cpcthlth=floor(pcthlth*100)
-    hpcthlth=floor(pcthlth*1000)
-    pctColR, pctColG=HealBot_Action_BarColourPct(pcthlth)
+    if (maxhlth or 0)>0 then
+        if hlth>maxhlth then maxhlth=hlth end
+        pcthlth=hlth/maxhlth
+        cpcthlth=floor(pcthlth*100)
+        cpcthlth=floor(pcthlth*1000)
+        pctColR, pctColG=HealBot_Action_BarColourPct(pcthlth)
+    else
+        hlth=100
+        maxhlth=100
+        pcthlth=1
+        cpcthlth=100
+        cpcthlth=1000
+        pctColR=0
+        pctColG=1
+    end
+    
     return hlth, maxhlth, pcthlth, cpcthlth, hpcthlth, pctColR, pctColG
 end
 
@@ -395,9 +407,14 @@ end
 local mana, maxmana, pctmana, cpctmana, hpctmana = 0,0,0,0
 function HealBot_WoWAPI_ClassicUnitMana(unit, pType)
     mana,maxmana=UnitPower(unit),UnitPowerMax(unit)
-    pctmana=mana/maxmana
-    cpctmana=floor(pctmana*100)
-    hpctmana=floor(pctmana*1000)   
+    if (maxmana or 0)>0 then
+        pctmana=mana/maxmana
+        cpctmana=floor(pctmana*100)
+        hpctmana=floor(pctmana*1000)
+    else
+        cpctmana=0
+        hpctmana=0
+    end
     return mana, maxmana, cpctmana, hpctmana
 end
 
