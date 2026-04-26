@@ -306,7 +306,7 @@ end
 
 function HealBot_Events_UnitGuildUpdate(unitTarget)
       --HealBot_setCall("HealBot_Events_UnitGuildUpdate")
-    if UnitIsUnit(unitTarget, "player") then
+    if HealBot_SafeUnitIsUnit(unitTarget, "player") then
         HealBot_Timers_Set("LAST","GuildUpdate")
     end
     local _,xButton,pButton=HealBot_UnitID(unitTarget)

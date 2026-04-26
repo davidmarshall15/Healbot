@@ -167,13 +167,13 @@ local function HealBot_Init_ManaCost(spellId, spellBookId, tipSet)
         local ttText=getglobal("HealBot_ScanTooltipTextLeft2");
         if (ttText:GetText()) then
             local line=ttText:GetText();
-            if line then
+            if line and not HealBot_issecretvalue(line) then
                 manaCost=tonumber((gsub(line, "%D", "")))
             end
             if manaCost == 0 then
                 ttText=getglobal("HealBot_ScanTooltipTextLeft3")
                 line=ttText:GetText()
-                if line then
+                if line and not HealBot_issecretvalue(line) then
                     manaCost=tonumber((gsub(line, "%D", "")))
                 end
             end

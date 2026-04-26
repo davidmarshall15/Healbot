@@ -367,14 +367,14 @@ function HealBot_WoWAPI_ClassicUnitHealth(unit)
         if hlth>maxhlth then maxhlth=hlth end
         pcthlth=hlth/maxhlth
         cpcthlth=floor(pcthlth*100)
-        cpcthlth=floor(pcthlth*1000)
+        hpcthlth=floor(pcthlth*1000)
         pctColR, pctColG=HealBot_Action_BarColourPct(pcthlth)
     else
         hlth=100
         maxhlth=100
         pcthlth=1
         cpcthlth=100
-        cpcthlth=1000
+        hpcthlth=1000
         pctColR=0
         pctColG=1
     end

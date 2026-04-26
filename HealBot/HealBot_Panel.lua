@@ -376,7 +376,7 @@ function HealBot_Panel_addDataStore(unit, nRaidID, isPlayer, nPartyID)
     if UnitExists(unit) then
         local dsGUID=UnitGUID(unit)
         local dsName=UnitName(unit)
-        if dsGUID then
+        if dsGUID and not HealBot_issecretvalue(dsGUID) then
             if HealBot_Config.PrivFocus == dsGUID then
                 HealBot_Panel_SetPrivFocus(unit)
             end
@@ -2554,7 +2554,7 @@ function HealBot_Panel_SubSort(doSubSort, unitType, preCombat)
     end
 end
 
-local vSubOrderKey,allowOOR=99,true
+local vSubOrderKey,allowOOR,vSubOrderInc=99,true,1
 function HealBot_Panel_sortOrder(unit, barOrder, mainSort)
       --HealBot_setCall("HealBot_Panel_sortOrder")
     vSubOrderKey=99
@@ -2616,19 +2616,25 @@ function HealBot_Panel_sortOrder(unit, barOrder, mainSort)
         if UnitIsUnit(unit, "player") then
             if hbv_Skins_GetFrameBoolean("BarSort", "SUBPF", hbCurrentFrame) then
                 vSubOrderKey=-99999999
-            else
+            elseif not HealBot_issecretvalue(hlthMax) then
                 vSubOrderKey=0-hlthMax
+            else
+                vSubOrderKey=0-vSubOrderInc
+                vSubOrderInc=vSubOrderInc+1
             end
         elseif UnitExists(unit) then
             if hbv_Skins_GetFrameBoolean("BarSort", "OORLAST", hbCurrentFrame) and not HealBot_Range_UnitGUID(unit) then
                 vSubOrderKey=9999999-hlthMax
-            else
+            elseif not HealBot_issecretvalue(hlthMax) then
                 vSubOrderKey=0-hlthMax
+            else
+                vSubOrderKey=0-vSubOrderInc
+                vSubOrderInc=vSubOrderInc+1
             end
         else
             vSubOrderKey=99999999
         end
-        if UnitIsPlayer(unit) and hlthMax>TempMaxH then TempMaxH=hlthMax; end
+        if UnitIsPlayer(unit) and not HealBot_issecretvalue(hlthMax) and hlthMax>TempMaxH then TempMaxH=hlthMax; end
     elseif barOrder == 5 then
         if UnitIsUnit(unit, "player") then
             if not mainSort and hbv_Skins_GetFrameBoolean("BarSort", "SUBPF", hbCurrentFrame) then
@@ -4231,6 +4237,7 @@ end
 
 function HealBot_Panel_PrePartyChanged(preCombat, changeType)
       --HealBot_setCall("HealBot_Panel_PrePartyChanged")
+    vSubOrderInc=1
     if changeType>0 then
         if changeType>5 then
             if (Healbot_Config_Skins.HealGroups[Healbot_Config_Skins.Current_Skin][9]["STATE"] and Healbot_Config_Skins.HealGroups[Healbot_Config_Skins.Current_Skin][9]["FRAME"]<6) or

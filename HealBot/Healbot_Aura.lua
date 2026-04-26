@@ -2509,15 +2509,11 @@ function HealBot_Aura_UpdateUnitBuffsV2(button, selfOnly)
 end
 
 local uaAura={}
-function HealBot_Aura_UpdateUnitBuffsV9(button, selfOnly)
-      --HealBot_setCall("HealBot_Aura_UpdateUnitBuffsV9", button)
+function HealBot_Aura_UpdateUnitBuffsV9Aura(button, selfOnly, filter)
+      --HealBot_setCall("HealBot_Aura_UpdateUnitBuffsV9Aura", button)
     uaZ=1
     while true do
-        if HealBot_Util_isMidnight(true) and not UnitIsFriend("player", button.unit) then
-            uaAura=C_UnitAuras.GetAuraDataByIndex(button.unit, uaZ, "RAID_IN_COMBAT")
-        else
-            uaAura=C_UnitAuras.GetAuraDataByIndex(button.unit, uaZ, "HELPFUL")
-        end
+        uaAura=C_UnitAuras.GetAuraDataByIndex(button.unit, uaZ, filter)
         if not uaAura then break end
         uaName, uaTexture, uaCount, uaDebuffType, uaDuration, uaExpirationTime, uaUnitCaster, uaSpellId=
         uaAura.name, uaAura.icon, uaAura.applications, uaAura.dispelName, uaAura.duration, uaAura.expirationTime, uaAura.sourceUnit, uaAura.spellId
@@ -2525,6 +2521,13 @@ function HealBot_Aura_UpdateUnitBuffsV9(button, selfOnly)
             HealBot_Aura_UpdateUnitBuffsData(button, selfOnly, uaZ)
         end
         uaZ=uaZ+1
+    end
+end
+function HealBot_Aura_UpdateUnitBuffsV9(button, selfOnly)
+      --HealBot_setCall("HealBot_Aura_UpdateUnitBuffsV9", button)
+    HealBot_Aura_UpdateUnitBuffsV9Aura(button, selfOnly, "HELPFUL")
+    if HealBot_Util_isMidnight(true) then
+        HealBot_Aura_UpdateUnitBuffsV9Aura(button, selfOnly, "RAID_IN_COMBAT")
     end
 end
 
@@ -2696,15 +2699,11 @@ function HealBot_Aura_UpdateUnitDebuffsV5(button, selfOnly)
     end
 end
 
-function HealBot_Aura_UpdateUnitDebuffsV9(button, selfOnly)
-      --HealBot_setCall("HealBot_Aura_UpdateUnitDebuffsV9", button)
+function HealBot_Aura_UpdateUnitDebuffsV9Aura(button, selfOnly, filter)
+      --HealBot_setCall("HealBot_Aura_UpdateUnitDebuffsV9Auras", button)
     uaZ=1
     while true do
-        if HealBot_Util_isMidnight(true) and not UnitIsFriend("player", button.unit) then
-            uaAura=C_UnitAuras.GetAuraDataByIndex(button.unit, uaZ, "RAID_PLAYER_DISPELLABLE")
-        else
-            uaAura=C_UnitAuras.GetAuraDataByIndex(button.unit, uaZ, "HARMFUL")
-        end
+        uaAura=C_UnitAuras.GetAuraDataByIndex(button.unit, uaZ, filter)
         if not uaAura then break end
         uaName, uaTexture, uaCount, uaDebuffType, uaDuration, uaExpirationTime, uaUnitCaster, uaSpellId, uaIsBossDebuff=
         uaAura.name, uaAura.icon, uaAura.applications, uaAura.dispelName, uaAura.duration, uaAura.expirationTime, uaAura.sourceUnit, uaAura.spellId, uaAura.isBossAura
@@ -2712,6 +2711,14 @@ function HealBot_Aura_UpdateUnitDebuffsV9(button, selfOnly)
             HealBot_Aura_UpdateUnitDebuffsData(button, selfOnly, uaZ)
         end
         uaZ=uaZ+1
+    end
+end
+
+function HealBot_Aura_UpdateUnitDebuffsV9(button, selfOnly)
+      --HealBot_setCall("HealBot_Aura_UpdateUnitDebuffsV9", button)
+    HealBot_Aura_UpdateUnitDebuffsV9Aura(button, selfOnly, "HARMFUL")
+    if HealBot_Util_isMidnight(true) then
+        HealBot_Aura_UpdateUnitDebuffsV9Aura(button, selfOnly, "RAID_PLAYER_DISPELLABLE")
     end
 end
 
