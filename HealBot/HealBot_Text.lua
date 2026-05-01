@@ -795,8 +795,10 @@ function HealBot_Text_DoSetHealthText(button, IgnoreInHeals, force)
     if HealBot_Util_isMidnight(false) then
         if hbv_Skins_GetFrameVar("BarText", "HLTHTYPE", button.framecol) == 1 then
             button.text.healthcomplete=hbNumFormats["SurroundLeft"][button.framecol] .. button.health.current .. hbNumFormats["SurroundRight"][button.framecol]
+        elseif hbNumFormats["Places"][button.frame] < 1 or hbNumFormats["Places"][button.frame] > 2 then
+            button.text.healthcomplete=hbNumFormats["SurroundLeft"][button.framecol] .. format("%i%%",button.health.cpct) .. hbNumFormats["SurroundRight"][button.framecol]
         else
-            button.text.healthcomplete=hbNumFormats["SurroundLeft"][button.framecol] .. button.health.cpct .. "%" .. hbNumFormats["SurroundRight"][button.framecol]
+            button.text.healthcomplete=hbNumFormats["SurroundLeft"][button.framecol] .. format("%."..hbNumFormats["Places"][button.frame].."f%%",button.health.cpct) .. hbNumFormats["SurroundRight"][button.framecol]
         end
         button.text.healthupdate=true
         HealBot_Text_UpdateText(button)
@@ -1074,7 +1076,7 @@ end
 local hbConcatLater=false
 function HealBot_Text_setInHealAbsorbsText(button)
       --HealBot_setCall("HealBot_Text_setInHealAbsorbsText", button)
-    if HealBot_issecretvalue(button.health.current) or HealBot_issecretvalue(button.health.max) then return end
+    --if HealBot_issecretvalue(button.health.current) or HealBot_issecretvalue(button.health.max) then return end
     if hbv_Skins_GetFrameBoolean("BarText", "HLTHONBAR", button.framecol) and not HealBot_issecretvalue(button.health.current) and not HealBot_issecretvalue(button.health.max) and button.health.max then
         if button.status.current<HealBot_Unit_Status["DEAD"] and hbv_Skins_GetFrameBoolean("BarText", "IGNOREONFULL", button.framecol) then
             ignoreInHeals=true
@@ -1495,7 +1497,7 @@ function HealBot_Text_UpdateText(button)
     end
     if button.text.healthupdate then
         button.text.healthupdate=false
-        if HealBot_Util_isMidnight(false) or button.health.current>0 then
+        if HealBot_issecretvalue(button.health.current) or button.health.current>0 then
             if button.status.enabled then
                 if button.range.current>0 then
                     button.text.ha=HealBot_Action_BarColourAlpha(button, hbv_Skins_GetFrameVar("BarTextCol", "HCA", button.framecol), 1)

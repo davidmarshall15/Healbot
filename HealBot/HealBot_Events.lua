@@ -280,7 +280,7 @@ function HealBot_Events_UnitStatus(button)
     HealBot_SetUnitDisconnect(button)
     if button.status.current<HealBot_Unit_Status["DC"] then
         HealBot_Action_UpdateTheDeadButton(button)
-        if HealBot_Util_isMidnight(false) or button.health.current == 0 then
+        if HealBot_issecretvalue(button.health.current) or button.health.current == 0 then
             HealBot_UnitHealth(button)
         end
     end

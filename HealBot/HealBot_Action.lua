@@ -2853,7 +2853,7 @@ function HealBot_Action_UpdateHealthButton(button, hlthevent)
     if hlthevent then
         --button.health.rcol, button.health.gcol=HealBot_Action_BarColourPct(button.health.pct)
 
-        if HealBot_Util_isMidnight(false) or button.health.hpct>890 then
+        if HealBot_issecretvalue(button.health.hpct) or button.health.hpct>890 then
             button.health.mixcolr, button.health.mixcolg, button.health.mixcolb=button.text.r, button.text.g, button.text.b
             button.health.rmixcolr=hbCustomRoleCols[button.roletxt].r
             button.health.rmixcolg=hbCustomRoleCols[button.roletxt].g
@@ -2891,7 +2891,7 @@ function HealBot_Action_UpdateHealthButton(button, hlthevent)
     if button.status.current<HealBot_Unit_Status["DEAD"] then --or (button.status.current == HealBot_Unit_Status["RESERVED"] and UnitHealth(button.unit)) then
         if button.status.hlthupd then 
             if button.status.current>HealBot_Unit_Status["ENABLEDIR"] or button.aggro.status>hbv_Skins_GetFrameVar("BarAggro", "ALERT", button.frame) or 
-               HealBot_AlwaysEnabled[button.guid] or HealBot_Util_isMidnight(false) or button.health.pct<=hbv_Skins_GetFrameVar("BarVisibility", hbAlert, button.frame) then
+               HealBot_AlwaysEnabled[button.guid] or HealBot_issecretvalue(button.health.pct) or button.health.pct<=hbv_Skins_GetFrameVar("BarVisibility", hbAlert, button.frame) then
                 if button.status.current<HealBot_Unit_Status["BUFFNOCOL"] then
                     HealBot_Range_ButtonSpell(button)
                 end
@@ -2918,7 +2918,7 @@ function HealBot_Action_UpdateHealthButton(button, hlthevent)
         button.mana.current=0
         button.gref["Bar"]:SetStatusBarColor(0.2,0.2,0.2,0.4);
     end
-    if HealBot_Util_isMidnight(false) or (button.gref["Bar"]:GetValue()~=button.health.current) then
+    if HealBot_Util_isMidnight(false) or (button.gref["Bar"]:GetValue()~=button.health.hpct) then
         if button.health.init or not HealBot_Action_luVars["FluidInUse"] then
             button.gref["Bar"]:SetValue(button.health.hpct)
             button.health.initover=true
@@ -4488,7 +4488,6 @@ function HealBot_Action_InitButton(button, prefix)
     button.health.updhlth=true
     button.spec=" "
     button.specupdate=0
-    button.gref["Bar"]:SetMinMaxValues(0, 1000)
     button.gref["Bar"]:SetStatusBarColor(0, 0, 0, 0)
     button.gref["Bar"]:SetValue(1000)
     button.gref["InHeal"]:SetStatusBarColor(0, 0, 0, 0)

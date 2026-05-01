@@ -573,7 +573,7 @@ local function HealBot_Aux_setPowerBarsById(button, id)
                     if hbv_Skins_GetFrameVar("BarText", "HLTHTYPE", button.frame) == 1 then
                         HealBot_Aux_setBar(button, id, button.mana.hpct, true, button.mana.current)
                     else
-                        HealBot_Aux_setBar(button, id, button.mana.hpct, true, button.mana.pct.."%")
+                        HealBot_Aux_setBar(button, id, button.mana.hpct, true, format("%i%%",button.mana.pct))
                     end
                 elseif hbv_Skins_GetFrameVar("BarText", "HLTHTYPE", button.frame) == 1 then
                     HealBot_Aux_setBar(button, id, button.mana.hpct, true, HealBot_Text_shortHealTxt(button.mana.current, button.frame, hbAuxTextMaxChars[button.frame][id]))

@@ -9,19 +9,19 @@ local function HealBot_WoWAPI_SetCC_ScaleTo1000()
     if C_CurveUtil then 
         if not CC_ScaleTo100 then 
             CC_ScaleTo100 = C_CurveUtil.CreateCurve();
-            CC_ScaleTo100:SetType(Enum.LuaCurveType.Cosine);
+            CC_ScaleTo100:SetType(Enum.LuaCurveType.Linear);
             CC_ScaleTo100:AddPoint(0.0, 0);
             CC_ScaleTo100:AddPoint(1.0, 100);
         end
         if not CC_ScaleTo1000 then 
             CC_ScaleTo1000 = C_CurveUtil.CreateCurve();
-            CC_ScaleTo1000:SetType(Enum.LuaCurveType.Cosine);
+            CC_ScaleTo1000:SetType(Enum.LuaCurveType.Linear);
             CC_ScaleTo1000:AddPoint(0.0, 0);
             CC_ScaleTo1000:AddPoint(1.0, 1000);
         end
         if not CC_ScaleColPct then
             CC_ScaleColPct=C_CurveUtil.CreateColorCurve()
-            CC_ScaleColPct:SetType(Enum.LuaCurveType.Cosine)
+            CC_ScaleColPct:SetType(Enum.LuaCurveType.Linear)
             CC_ScaleColPct:AddPoint(0.0, CreateColor(1, 0, 0))
             CC_ScaleColPct:AddPoint(0.35, CreateColor(1, 1, 0))
             CC_ScaleColPct:AddPoint(0.7, CreateColor(0, 1, 0))
@@ -378,7 +378,6 @@ function HealBot_WoWAPI_ClassicUnitHealth(unit)
         pctColR=0
         pctColG=1
     end
-    
     return hlth, maxhlth, pcthlth, cpcthlth, hpcthlth, pctColR, pctColG
 end
 

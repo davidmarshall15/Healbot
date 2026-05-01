@@ -2627,14 +2627,16 @@ function HealBot_ActionIcons_SelfAbilityCD(spellName, frame, id)
     else
         sbStartTime, sbDuration=0,0
     end
-    sbCDEnd=(sbStartTime or 0)+(sbDuration or 0)
-    sbCDTime=sbCDEnd-HealBot_TimeNow
-    if sbCDTime>0.15 then
-        HealBot_ActionIcons_SelfTimerStart(spellName, actionIcons[frame][id].uid, sbCDTime, sbCDEnd)
-    elseif hbOnCD[spellName] then
-        hbOnCD[spellName]=nil
-        hbCDRunning[spellName]=0
-        C_Timer.After(0.15, function() HealBot_ActionIcons_CheckValidHighlightIcon(spellName, frame, id) end)
+    if not HealBot_Util_isMidnight(true) then
+        sbCDEnd=(sbStartTime or 0)+(sbDuration or 0)
+        sbCDTime=sbCDEnd-HealBot_TimeNow
+        if sbCDTime>0.15 then
+            HealBot_ActionIcons_SelfTimerStart(spellName, actionIcons[frame][id].uid, sbCDTime, sbCDEnd)
+        elseif hbOnCD[spellName] then
+            hbOnCD[spellName]=nil
+            hbCDRunning[spellName]=0
+            C_Timer.After(0.15, function() HealBot_ActionIcons_CheckValidHighlightIcon(spellName, frame, id) end)
+        end
     end
 end
 
