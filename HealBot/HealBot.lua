@@ -3970,7 +3970,7 @@ local hbStartTime, hbDuration, hbCDTime, hbCDEnd=0,0,0,0
 function HealBot_SpellCooldown(spellName, spellId)
       --HealBot_setCall("HealBot_SpellCooldown")
     hbStartTime, hbDuration=HealBot_WoWAPI_SpellCooldown(spellName)
-    if not (HealBot_issecretvalue(hbStartTime) and not HealBot_issecretvalue(hbDuration)) then
+    if not HealBot_issecretvalue(hbStartTime) and not HealBot_issecretvalue(hbDuration) then
         hbCDEnd=(hbStartTime or 0)+(hbDuration or 0)
         hbCDTime=hbCDEnd-HealBot_TimeNow
         if hbCDTime>2 then
