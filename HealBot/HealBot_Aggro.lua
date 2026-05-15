@@ -111,21 +111,21 @@ end
 
 local hbAuraWatchAggro={}
 local hbActionWatchAggro={}
-function HealBot_Aggro_AuraWatch(guid, state)
+function HealBot_Aggro_AuraWatch(unit, state)
       --HealBot_setCall("HealBot_Aggro_AuraWatch", nil, guid)
     if state then
-        hbAuraWatchAggro[guid]=true
+        hbAuraWatchAggro[unit]=true
     else
-        hbAuraWatchAggro[guid]=nil
+        hbAuraWatchAggro[unit]=nil
     end
 end
 
-function HealBot_Aggro_ActionWatch(guid, state)
-      --HealBot_setCall("HealBot_Aggro_ActionWatch", nil, guid)
+function HealBot_Aggro_ActionWatch(unit, state)
+      --HealBot_setCall("HealBot_Aggro_ActionWatch", nil, nil, unit)
     if state then
-        hbActionWatchAggro[guid]=true
+        hbActionWatchAggro[unit]=true
     else
-        hbActionWatchAggro[guid]=nil
+        hbActionWatchAggro[unit]=nil
     end
 end
 
@@ -192,11 +192,11 @@ function HealBot_Aggro_UpdateUnit(button,status,threatData)
             HealBot_Aux_UpdateThreatBar(button)
         end
         HealBot_Aggro_IndicatorUpdate(button)
-        if hbAuraWatchAggro[button.guid] then
+        if hbAuraWatchAggro[button.unit] then
             HealBot_Plugin_AuraWatch_AggroUpdate(button)
         end
-        if hbActionWatchAggro[button.guid] then
-            HealBot_ActionIcons_UpdateAggro(button.guid, button.aggro.status)
+        if hbActionWatchAggro[button.unit] then
+            HealBot_ActionIcons_UpdateAggro(button.unit, button.guid, button.aggro.status)
         end
     end
     if button.aggro.threatpct~=threatData["threatpct"] or button.aggro.threatvalue~=threatData["threatvalue"] or button.aggro.mobname~=threatData["threatname"] then
@@ -224,8 +224,3 @@ function HealBot_Aggro_ClearUnitAggro(button)
     HealBot_Aggro_UpdateUnit(button,false,hbClearThreat)
 end
 
-function HealBot_Aggro_ClearGUID(guid)
-        --HealBot_setCall("HealBot_Aggro_ClearGUID", nil, guid)
-    hbAuraWatchAggro[guid]=nil
-    hbActionWatchAggro[guid]=nil
-end

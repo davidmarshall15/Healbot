@@ -1338,7 +1338,7 @@ function HealBot_Text_setNameText(button)
             if hbv_Skins_GetFrameBoolean("BarText", "CLASSONBAR", button.framecol) then
                 vSetNameTextClass=UnitClass(button.unit) or ""
                 if hbv_Skins_GetFrameBoolean("BarText", "SHOWROLE", button.framecol) then
-                    vSetNameTextRole=HealBot_Panel_UnitRole(button.unit, button.guid, button.isplayer)
+                    vSetNameTextRole=HealBot_Panel_UnitRole(button.unit, button.isplayer)
                     if vSetNameTextRole == "DAMAGER" then
                         vSetNameTextClass=hbv_Skins_GetFrameVar("BarText", "ROLEDPS", button.framecol)
                     elseif vSetNameTextRole == "HEALER" then

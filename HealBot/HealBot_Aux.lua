@@ -552,7 +552,7 @@ end
 
 local function HealBot_Aux_setPowerBarsById(button, id)
     if button.status.current<HealBot_Unit_Status["DEAD"] then
-        if button.mana.max == 0 or HealBot_Aux_ManaOnly(button, id, button.mana.type) then
+        if (not HealBot_issecretvalue(button.mana.max) and button.mana.max == 0) or HealBot_Aux_ManaOnly(button, id, button.mana.type) then
             button.aux[id]["R"]=0
             button.aux[id]["G"]=0
             button.aux[id]["B"]=0
@@ -624,7 +624,7 @@ end
 
 local function HealBot_Aux_setPowerAltBarsById(button, id)
     if button.status.current<HealBot_Unit_Status["DEAD"] then
-        if button.poweralt.max == 0 or HealBot_Aux_ManaOnly(button, id, button.poweralt.type) then
+        if (not HealBot_issecretvalue(button.poweralt.max) and button.poweralt.max == 0) or HealBot_Aux_ManaOnly(button, id, button.poweralt.type) then
             button.aux[id]["R"]=0
             button.aux[id]["G"]=0
             button.aux[id]["B"]=0

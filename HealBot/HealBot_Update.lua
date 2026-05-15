@@ -959,40 +959,41 @@ function HealBot_Update_RemoveExtraIcons(index)
     end
 end
 
+function HealBot_Update_Unit(button)
+    button.status.slowupdate=true
+    button.status.update=true
+    if not HealBot_Data["UILOCK"] and button.status.postcombat then
+        button.status.postcombat=false
+        button.status.postupdate=true
+    end
+end
+
 function HealBot_Update_AllUnitBars(playersOnly)
       --HealBot_setCall("HealBot_Update_AllUnitBars")
     for _,xButton in pairs(HealBot_Unit_Button) do
-        xButton.status.slowupdate=true
-        xButton.status.update=true
+        HealBot_Update_Unit(xButton)
     end
     for _,xButton in pairs(HealBot_Private_Button) do
-        xButton.status.slowupdate=true
-        xButton.status.update=true
+        HealBot_Update_Unit(xButton)
     end
     if not playersOnly then
         for _,xButton in pairs(HealBot_Pet_Button) do
-            xButton.status.slowupdate=true
-            xButton.status.update=true
+            HealBot_Update_Unit(xButton)
         end
         for _,xButton in pairs(HealBot_Vehicle_Button) do
-            xButton.status.slowupdate=true
-            xButton.status.update=true
+            HealBot_Update_Unit(xButton)
         end
         for _,xButton in pairs(HealBot_Extra_Button) do
-            xButton.status.slowupdate=true
-            xButton.status.update=true
+            HealBot_Update_Unit(xButton)
         end
         for _,xButton in pairs(HealBot_Enemy_Button) do
-            xButton.status.slowupdate=true
-            xButton.status.update=true
+            HealBot_Update_Unit(xButton)
         end
         for xUnit,xButton in pairs(HealBot_UnitTarget_Button) do
-            xButton.status.slowupdate=true
-            xButton.status.update=true
+            HealBot_Update_Unit(xButton)
         end
         for xUnit,xButton in pairs(HealBot_PrivateTarget_Button) do
-            xButton.status.slowupdate=true
-            xButton.status.update=true
+            HealBot_Update_Unit(xButton)
         end
     end
 end

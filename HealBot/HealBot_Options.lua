@@ -394,7 +394,7 @@ function HealBot_Options_DebuffSpellAuraCD(spellName)
       --HealBot_setCall("HealBot_Options_DebuffSpellAuraCD")
     if HealBot_Debuff_Types[spellName] then
         hbDebuffSpellStart, hbDebuffSpellDuration=HealBot_WoWAPI_SpellCooldown(spellName)
-        if hbDebuffSpellDuration>2 then
+        if not HealBot_issecretvalue(hbDebuffSpellStart) and not HealBot_issecretvalue(hbDebuffSpellDuration) and hbDebuffSpellDuration>2 then
             hbDebuffSpellEnd=((hbDebuffSpellStart or 0)+(hbDebuffSpellDuration or 0))-0.1
             table.foreach(HealBot_Debuff_Types[spellName], function (i,dType)
                 HealBot_Aura_setDebuffTypeCD(dType, hbDebuffSpellEnd)

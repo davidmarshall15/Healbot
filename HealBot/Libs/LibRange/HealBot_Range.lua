@@ -225,7 +225,6 @@ function HealBot_Range_UpdateUnit(button)
                     HealBot_AbsorbsUpdate(button)
                 end
                 HealBot_Action_AdaptiveOORUpdate(button)
-                HealBot_Update_PluginsChange(button)
                 if button.status.dirarrowshown>0 or (hbv_Skins_GetFrameBoolean("Icons", "SHOWDIR", button.frame) and button.range.current == 0) then
                     HealBot_Action_ShowDirectionArrow(button)
                 end
@@ -257,14 +256,14 @@ function HealBot_Range_UpdateUnit(button)
                 end
                 
                 
-                if hbRangeRequests[button.guid] and button.range.current>-1 then
-                    HealBot_Plugin_Requests_CancelGUID(button.guid)
-                    hbRangeRequests[button.guid]=nil
+                if hbRangeRequests[button.unit] and button.range.current>-1 then
+                    HealBot_Plugin_Requests_CancelGUID(button.unit)
+                    hbRangeRequests[button.unit]=nil
                 end
                 if HealBot_Range_luVars["pluginAuraWatch"] then
                     HealBot_Plugin_AuraWatch_RangeUpdate(button)
                 end
-                if hbActionIconsInRange[button.guid] then
+                if hbActionIconsInRange[button.unit] then
                     HealBot_ActionIcons_UpdateRange(button)
                 end
                 if button.mouseover and HealBot_Data["TIPBUTTON"] then
@@ -277,21 +276,21 @@ function HealBot_Range_UpdateUnit(button)
     end
 end
 
-function HealBot_Range_ActionIcons(guid, state)
+function HealBot_Range_ActionIcons(unit, state)
       --HealBot_setCall("HealBot_Range_ActionIcons", nil, guid)
     if state then
-        hbActionIconsInRange[guid]=true
+        hbActionIconsInRange[unit]=true
     else
-        hbActionIconsInRange[guid]=nil
+        hbActionIconsInRange[unit]=nil
     end
 end
 
-function HealBot_Range_Requests(guid, state)
+function HealBot_Range_Requests(unit, state)
       --HealBot_setCall("HealBot_Requests", nil, guid)
     if state then
-        hbRangeRequests[guid]=true
+        hbRangeRequests[unit]=true
     else
-        hbRangeRequests[guid]=nil
+        hbRangeRequests[unit]=nil
     end
 end
 
@@ -367,9 +366,4 @@ function HealBot_Range_UpdateCheckInterval()
         HealBot_Range_luVars["rangeCheckInterval"]=0.75
     end
     HealBot_Debug_PerfUpdate("rangeInt", HealBot_Range_luVars["rangeCheckInterval"])
-end
-
-function HealBot_Range_ClearGUID(guid)
-    hbRangeRequests[guid]=nil
-    hbActionIconsInRange[guid]=nil
 end
