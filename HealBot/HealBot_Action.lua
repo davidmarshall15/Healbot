@@ -6369,11 +6369,13 @@ end
 
 function HealBot_Action_SetGuidData(button, attrib, value, callback)
       --HealBot_setCall("HealBot_Action_SetGuidData", button)
-    if hbGuidData[button.guid] then 
-        hbGuidData[button.guid][attrib]=value
-    else
-        HealBot_Action_initGuidData(button)
-        if not callback then HealBot_Action_SetGuidData(button, attrib, value, true) end
+    if not HealBot_issecretvalue(button.guid) then
+        if hbGuidData[button.guid] then 
+            hbGuidData[button.guid][attrib]=value
+        else
+            HealBot_Action_initGuidData(button)
+            if not callback then HealBot_Action_SetGuidData(button, attrib, value, true) end
+        end
     end
 end
 

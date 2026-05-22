@@ -1328,9 +1328,19 @@ function HealBot_Text_setNoNameText(button)
     vSetNameTextName=vTextChars["Nothing"]
 end
 
+local htNameOnly=""
 function HealBot_Text_setNameText(button)
       --HealBot_setCall("HealBot_Text_setNameText", button)
-    button.text.nameonly=HealBot_GetUnitName(button)
+    htNameOnly=HealBot_GetUnitName(button)
+    if not HealBot_issecretvalue(htNameOnly) then
+        button.text.nameonly=htNameOnly
+    elseif not button.text.nameonly then
+        if not HealBot_issecretvalue(button.unit) then
+            button.text.nameonly=button.unit
+        else
+            button.text.nameonly=""
+        end
+    end
     if button.status.current<HealBot_Unit_Status["RESERVED"] then
         if hbv_Skins_GetFrameVar("BarText", "STATETXTANCHOR", button.frame) == 6 and button.text.nametag~=vTextChars["Nothing"] then
             HealBot_Text_setNoNameText(button)

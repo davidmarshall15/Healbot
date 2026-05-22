@@ -1270,7 +1270,7 @@ end
 
 function HealBot_ActionIcons_DelFalling(frame, id)
         --HealBot_setCall("HealBot_ActionIcons_DelFalling")
-    if actionIcons[frame][id].guid then
+    if actionIcons[frame][id].guid and actionIcons[frame][id].unit then
         HealBot_ActionWatchFalling(actionIcons[frame][id].unit, false)
         if hbFallGUID[actionIcons[frame][id].guid] then hbFallGUID[actionIcons[frame][id].guid][actionIcons[frame][id].uid]=nil end
     end
