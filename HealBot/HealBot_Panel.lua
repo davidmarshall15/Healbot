@@ -4405,7 +4405,6 @@ function HealBot_Panel_ClearGUID(guid)
       --HealBot_setCall("HealBot_Panel_ClearGUID", nil, guid)
     hbPanel_dataPlayerRoles[guid]=nil
     hbPanel_dataRanks[guid]=nil
-    hbPanel_GUIDs[guid]=nil
     hbPanel_buttonGUIDs[guid]=nil
     hbPanel_buttonPetGUIDs[guid]=nil
     hbPanel_buttonpGUIDs[guid]=nil
