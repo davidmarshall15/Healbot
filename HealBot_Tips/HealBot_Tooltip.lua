@@ -1108,7 +1108,7 @@ function HealBot_Tooltip_DebugActionIconCondition(icon, index, cond)
                     end
                 end
             end
-        elseif cond == 10 or cond == 11 then
+        elseif icon.health and (cond == 10 or cond == 11) then
             if cond == 10 then
                 HealBot_Tooltip_SetLine("Condition "..index.." is "..HealBot_Options_RetActionIconsAlertFilter(cond),1,1,1,1,hbv_ActionIcons_GetData("AlertHealth", icon.frame, icon.id))
                 if not HealBot_Util_isMidnight(false) and icon.health<=hbv_ActionIcons_GetData("AlertHealth", icon.frame, icon.id) then

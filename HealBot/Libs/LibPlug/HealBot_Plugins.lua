@@ -146,3 +146,13 @@ function HealBot_Plugin_Options_Setup_EditBox(editbox, parent, point, x, y, widt
         editbox.Hdr:SetText(headertext)
     end
 end
+
+function HealBot_Plugin_SetFillStyle(dir)
+    if HEALBOT_GAME_VERSION<3 then
+        return dir
+    elseif dir == "REVERSE" then
+        return 3
+    else
+        return 0
+    end
+end

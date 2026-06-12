@@ -1727,7 +1727,7 @@ function HealBot_Register_Events()
         local regPower=false
         if HEALBOT_GAME_VERSION>10 then
             HealBot:RegisterEvent("LEARNED_SPELL_IN_SKILL_LINE")
-        elseif HEALBOT_GAME_VERSION>2 then
+        elseif HEALBOT_GAME_VERSION>2 and HEALBOT_GAME_VERSION<5 then
             HealBot:RegisterEvent("LEARNED_SPELL_IN_TAB")
         end
         HealBot:RegisterEvent("PLAYER_LEVEL_UP");
