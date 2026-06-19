@@ -1,9 +1,11 @@
 local xButton={}
 local pButton={}
+local xUnit="x"
 
 function HealBot_Plugin_ThreatUpdate(guid)
       --HealBot_setCall("HealBot_Plugin_ThreatUpdate", nil, guid)
-    xButton,pButton=HealBot_Panel_RaidPetUnitButton(guid)
+    xUnit=HealBot_GUIDUnit(guid)
+    xButton,pButton=HealBot_Panel_RaidPetUnitButton(xUnit)
     if xButton and xButton.status.plugin then
         HealBot_CalcThreat(xButton)
         HealBot_Plugin_Threat_UnitUpdate(xButton)
@@ -17,7 +19,8 @@ end
 
 function HealBot_Plugin_TTDUpdate(guid)
       --HealBot_setCall("HealBot_Plugin_TTDUpdate", nil, guid)
-    xButton,pButton=HealBot_Panel_RaidPetUnitButton(guid)
+    xUnit=HealBot_GUIDUnit(guid)
+    xButton,pButton=HealBot_Panel_RaidPetUnitButton(xUnit)
     if xButton and xButton.status.plugin then
         HealBot_Plugin_TimeToDie_UnitUpdate(xButton, xButton.health.current)
     elseif pButton and pButton.status.plugin then

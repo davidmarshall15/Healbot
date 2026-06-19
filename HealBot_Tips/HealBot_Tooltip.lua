@@ -717,7 +717,7 @@ function HealBot_Action_DoRefreshTooltip()
                     end
                     local uSpec=" "
                     if HealBot_Globals.Tooltip_ShowSpec then
-                        if HealBot_Panel_RaidUnitButtonCheck(xButton.guid) then
+                        if HealBot_Panel_RaidUnitButtonCheck(xButton.unit) then
                             uSpec=HealBot_Action_getGuidData(xButton.guid, "SPEC")
                         else
                             uSpec=xButton.spec
@@ -754,7 +754,7 @@ function HealBot_Action_DoRefreshTooltip()
                                 uRoleIdx=0
                             end
                         else
-                            if HealBot_Panel_RaidUnitButtonCheck(xButton.guid) then
+                            if HealBot_Panel_RaidUnitButtonCheck(xButton.unit) then
                                 if uRoleIdx == 0 then
                                     if xButton.status.incombat then
                                         uRank=HEALBOT_WORD_INCOMBAT
@@ -778,7 +778,7 @@ function HealBot_Action_DoRefreshTooltip()
                                 end
                             end
                         end
-                        if mana and maxmana>0 and not UnitOffline and HealBot_Tooltip_luVars["uGroup"]>0 and string.len(UnitTag)>0 then
+                        if mana and not HealBot_issecretvalue(maxmana) and maxmana>0 and not UnitOffline and HealBot_Tooltip_luVars["uGroup"]>0 and string.len(UnitTag)>0 then
                             HealBot_Tooltip_SetLine(uName.." - "..UnitTag,r,g,b,1,uSpec..uClass,r,g,b,1)
                         elseif string.len(uGuild)>0 then
                             HealBot_Tooltip_SetLine(uName.." - "..uGuild,r,g,b,1,uSpec..uClass,r,g,b,1)
@@ -793,14 +793,14 @@ function HealBot_Action_DoRefreshTooltip()
                         end
                     elseif string.len(uGuild)>0 then
                         local uRace=" "..(UnitRace(xButton.unit) or "")
-                        if mana and maxmana>0 and not UnitOffline and HealBot_Tooltip_luVars["uGroup"]>0 and string.len(UnitTag)>0 then
+                        if mana and not HealBot_issecretvalue(maxmana) and maxmana>0 and not UnitOffline and HealBot_Tooltip_luVars["uGroup"]>0 and string.len(UnitTag)>0 then
                             HealBot_Tooltip_SetLine(uName.." - "..UnitTag,r,g,b,1,uSpec..uClass,r,g,b,1)
                         else
                             HealBot_Tooltip_SetLine(uName,r,g,b,1,uSpec..uClass,r,g,b,1)
                         end
                         HealBot_Tooltip_SetLine(uGuild,r,g,b,1,uLvl..uRace,r,g,b,1)
                     else
-                        if mana and maxmana>0 and not UnitOffline and HealBot_Tooltip_luVars["uGroup"]>0 and string.len(UnitTag)>0 then
+                        if mana and not HealBot_issecretvalue(maxmana) and maxmana>0 and not UnitOffline and HealBot_Tooltip_luVars["uGroup"]>0 and string.len(UnitTag)>0 then
                             HealBot_Tooltip_SetLine(uName.." - "..UnitTag,r,g,b,1,uLvl..uSpec..uClass,r,g,b,1)
                         else
                             HealBot_Tooltip_SetLine(uName,r,g,b,1,uLvl..uSpec..uClass,r,g,b,1)
@@ -839,7 +839,7 @@ function HealBot_Action_DoRefreshTooltip()
                         end
                         if HealBot_Globals.Tooltip_ShowMana then
                             if xButton.aggro.threatpct>0 or mana or HealBot_Tooltip_luVars["uGroup"]>0 or string.len(UnitTag)>0 then
-                                if not mana or (maxmana and maxmana == 0) then
+                                if not mana or HealBot_issecretvalue(maxmana) or (maxmana and maxmana == 0) then
                                     if xButton.aggro.threatpct>0 then
                                         HealBot_Tooltip_SetLine(HEALBOT_WORD_THREAT.." "..xButton.aggro.threatpct.."%",1,0.1,0.1,1,UnitTag,xButton.text.sr,xButton.text.sg,xButton.text.sb,1)
                                         local threatvalue=HealBot_Util_ReadNumber(xButton.aggro.threatvalue)

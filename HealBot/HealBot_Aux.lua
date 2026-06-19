@@ -34,7 +34,7 @@ end
 
 function HealBot_Aux_setInHealAbsorbMax()
       --HealBot_setCall("HealBot_Aux_setInHealAbsorbMax")
-    local maxHlth=HealBot_MaxPlayerHealth(HealBot_Data["PGUID"])
+    local maxHlth=HealBot_MaxPlayerHealth("player")
     if not HealBot_Globals.AIHDivAdj then 
         HealBot_Globals.AIHDivAdj=true
         if not HealBot_Globals.AbsorbDiv then HealBot_Globals.AbsorbDiv=10 end

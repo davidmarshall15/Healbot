@@ -159,8 +159,8 @@ function HealBot_Aggro_PlayerTargeted(button, targeted, name)
     end
 end
 
-function HealBot_Aggro_PlayerNotTargeted(guid)
-    xButton, pButton=HealBot_Panel_AllUnitButton(guid)
+function HealBot_Aggro_PlayerNotTargeted(unit)
+    xButton, pButton=HealBot_Panel_AllUnitButton(unit)
     if xButton then HealBot_Aggro_PlayerTargeted(xButton, false) end
     if pButton then HealBot_Aggro_PlayerTargeted(pButton, false) end
 end

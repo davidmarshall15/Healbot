@@ -217,16 +217,9 @@ function HealBot_Panel_TankRole(unit, guid, isPlayer, offtank)
                 hbRoleOnes[hbTANK2].health=hlthMax
                 hbRoleOnes[hbTANK2].guid=guid
             end
-        else
-            if hbRoleOnes[hbTANK1].guid~=guid then
-                hbRoleOnes[hbTANK2].health=hbRoleOnes[hbTANK1].health
-                hbRoleOnes[hbTANK2].guid=hbRoleOnes[hbTANK1].guid
-            end
-            hbRoleOnes[hbTANK1].health=hlthMax
-            hbRoleOnes[hbTANK1].guid=guid
         end
     end
-    if hbPanel_dataPlayerRoles[guid] == 0 or hbPanel_dataPlayerRoles[guid]>5 then hbPanel_dataPlayerRoles[guid]=2 end
+    if hbPanel_dataPlayerRoles[unit] == 0 or hbPanel_dataPlayerRoles[unit]>5 then hbPanel_dataPlayerRoles[unit]=2 end
 end
 
 function HealBot_Panel_HealerRole(unit, guid, isPlayer)
@@ -243,12 +236,9 @@ function HealBot_Panel_HealerRole(unit, guid, isPlayer)
                 hbRoleOnes[hbHEALER].health=hlthMax
                 hbRoleOnes[hbHEALER].guid=guid
             end
-        else
-            hbRoleOnes[hbHEALER].health=hlthMax
-            hbRoleOnes[hbHEALER].guid=guid
         end
     end
-    if hbPanel_dataPlayerRoles[guid] == 0 or hbPanel_dataPlayerRoles[guid]>5 then hbPanel_dataPlayerRoles[guid]=3 end
+    if hbPanel_dataPlayerRoles[unit] == 0 or hbPanel_dataPlayerRoles[unit]>5 then hbPanel_dataPlayerRoles[unit]=3 end
 end
 
 local hbClassCasterPrefBonus={}
@@ -280,9 +270,6 @@ function HealBot_Panel_DamagerRole(unit, guid, isPlayer)
                     hbRoleOnes[hbDPSC].guid=guid
                 end
             end
-        else
-            hbRoleOnes[hbDPS].health=hlthMax
-            hbRoleOnes[hbDPS].guid=guid
         end
     end
 end
@@ -312,22 +299,22 @@ function HealBot_Panel_updDataStore(button)
         hbPanel_dataGUIDs[button.guid]=button.unit
         hbPanel_dataUnits[button.unit]=button.guid
         button.roletxt=HealBot_Panel_UnitRoleDefault(button.unit)
-        button.rank=HealBot_Panel_RetUnitRank(button.guid, button.frame)
-        if button.role~=hbPanel_dataPlayerRoles[button.guid] then
-            button.role=hbPanel_dataPlayerRoles[button.guid]
+        button.rank=HealBot_Panel_RetUnitRank(button.unit, button.frame)
+        if button.role~=hbPanel_dataPlayerRoles[button.unit] then
+            button.role=hbPanel_dataPlayerRoles[button.unit]
             HealBot_setLuVars("pluginClearDown", 1)
         end
         if button.status.unittype<10 then
-            hbPanel_buttonpGUIDs[button.guid]=button
+            hbPanel_buttonpGUIDs[button.unit]=button
         else
-            hbPanel_buttonGUIDs[button.guid]=button
+            hbPanel_buttonGUIDs[button.unit]=button
         end
         HealBot_Timers_Set("OOCNT","RefreshPartyNextRecalcPlayers")
     elseif hbPanel_dataPetUnits[button.unit] then
         hbPanel_dataPetNames[button.name]=button.unit
         hbPanel_dataPetGUIDs[button.guid]=button.unit
         hbPanel_dataPetUnits[button.unit]=button.guid
-        hbPanel_buttonPetGUIDs[button.guid]=button
+        hbPanel_buttonPetGUIDs[button.unit]=button
         if hbv_IsUnitType(button.status.unittype, HEALBOT_VEHICLE) then
             HealBot_Timers_Set("OOCNT","RefreshPartyNextRecalcVehicle")
         else
@@ -352,7 +339,7 @@ function HealBot_Panel_SetPermPrivateData(unit, guid, focus)
             HealBot_Globals.PermPrivateData[guid]["NAME"]=UnitName(unit) or HEALBOT_WORDS_UNKNOWN
             HealBot_Globals.PermPrivateData[guid]["CLASS"]=UnitClass(unit) or HEALBOT_WORDS_UNKNOWN
             HealBot_Globals.PermPrivateData[guid]["TIME"]=HealBot_ServerTimeNow
-            aButton=HealBot_Panel_AllButton(guid)
+            aButton=HealBot_Panel_AllButton(unit)
             if aButton then 
                 HealBot_Globals.PermPrivateData[guid]["CLASSTRIM"]=aButton.text.classtrim
             else
@@ -383,8 +370,8 @@ function HealBot_Panel_addDataStore(unit, nRaidID, isPlayer, nPartyID)
             if HealBot_Config.PrivFocus == dsGUID then
                 HealBot_Panel_SetPrivFocus(unit)
             end
-            hbPanel_dataRanks[dsGUID]=0
-            hbPanel_dataPlayerRoles[dsGUID]=0
+            hbPanel_dataRanks[unit]=0
+            hbPanel_dataPlayerRoles[unit]=0
             if isPlayer then
                 --if UnitIsUnit(unit, "player") then unit="player" end
                 hbPanel_dataNames[dsName]=unit
@@ -398,11 +385,11 @@ function HealBot_Panel_addDataStore(unit, nRaidID, isPlayer, nPartyID)
             end
             if HealBot_MyPrivateTanks[dsGUID] or HealBot_Globals.PermPrivateTanks[dsGUID] then
                 hbPanel_dataRoles[unit]="TANK"
-                hbPanel_dataPlayerRoles[dsGUID]=4
+                hbPanel_dataPlayerRoles[unit]=4
                 if HealBot_Globals.PermPrivateTanks[dsGUID] then HealBot_Panel_SetPermPrivateData(unit, dsGUID) end
             elseif HealBot_MyPrivateHealers[dsGUID] or HealBot_Globals.PermPrivateHealers[dsGUID] then
                 hbPanel_dataRoles[unit]="HEALER"
-                hbPanel_dataPlayerRoles[dsGUID]=5
+                hbPanel_dataPlayerRoles[unit]=5
                 if HealBot_Globals.PermPrivateHealers[dsGUID] then HealBot_Panel_SetPermPrivateData(unit, dsGUID) end
             elseif HealBot_MyPrivateDamagers[dsGUID] or  HealBot_Globals.PermPrivateDamagers[dsGUID] then
                 hbPanel_dataRoles[unit]="DAMAGER"
@@ -418,12 +405,12 @@ function HealBot_Panel_addDataStore(unit, nRaidID, isPlayer, nPartyID)
                     if UnitIsUnit(unit, "player") then
                         HealBot_Data["PGROUP"]=hbSubgroup or 1
                     end
-                    if hbPanel_dataPlayerRoles[dsGUID] == 0 then hbPanel_dataPlayerRoles[dsGUID]=7 end
+                    if hbPanel_dataPlayerRoles[unit] == 0 then hbPanel_dataPlayerRoles[unit]=7 end
                     if hbPanel_dataRoles[unit] == HEALBOT_WORDS_UNKNOWN then
                         if hbRRole and (string.lower(hbRRole) == "maintank" or (HealBot_Globals.IncMainAssist and string.lower(hbRRole) == "mainassist")) then
                             if string.lower(hbRRole) == "maintank" then 
                                 hbFRole="TANK"
-                                hbPanel_dataPlayerRoles[dsGUID]=1 
+                                hbPanel_dataPlayerRoles[unit]=1 
                             else
                                 hbFRole="OFFTANK"
                             end
@@ -433,12 +420,12 @@ function HealBot_Panel_addDataStore(unit, nRaidID, isPlayer, nPartyID)
                     end
                     if HEALBOT_GAME_VERSION>3 and rank>0 and GetLFGMode(LE_LFG_CATEGORY_LFR) then
                         if UnitIsGroupLeader(unit) then
-                            hbPanel_dataRanks[dsGUID]=2
+                            hbPanel_dataRanks[unit]=2
                         end
                     elseif isML then
-                        hbPanel_dataRanks[dsGUID]=3
+                        hbPanel_dataRanks[unit]=3
                     elseif rank>0 then
-                        hbPanel_dataRanks[dsGUID]=rank
+                        hbPanel_dataRanks[unit]=rank
                     end
                 end
                 if not hbFRole then
@@ -461,9 +448,9 @@ function HealBot_Panel_addDataStore(unit, nRaidID, isPlayer, nPartyID)
                 HealBot_Panel_SetRole(unit, dsGUID, isPlayer)
                 if IsInGroup() then
                     if UnitIsGroupLeader(unit) then 
-                        hbPanel_dataRanks[dsGUID]=4
+                        hbPanel_dataRanks[unit]=4
                     end
-                    if hbPanel_dataPlayerRoles[dsGUID] == 0 then hbPanel_dataPlayerRoles[dsGUID]=6 end
+                    if hbPanel_dataPlayerRoles[unit] == 0 then hbPanel_dataPlayerRoles[unit]=6 end
                 end
             end
         end
@@ -669,7 +656,7 @@ function HealBot_Panel_ToggelPrivFocus(unit, recall)
             HealBot_Config.PrivFocus=xGUID
             HealBot_Panel_SetPermPrivateData(unit, xGUID, true)
             HealBot_Panel_SetPrivFocus(unit)
-            aButton=HealBot_Panel_AllButton(xGUID)
+            aButton=HealBot_Panel_AllButton(unit)
             if aButton then
                 HealBot_Events_UnitBuff(aButton)
             end
@@ -678,7 +665,7 @@ function HealBot_Panel_ToggelPrivFocus(unit, recall)
         HealBot_Timers_Set("OOC","UpdateTargetMyFriend")
     elseif not recall and UnitExists(unit) then
         xGUID=UnitGUID(unit) or "x"
-        xUnit=HealBot_Panel_PlayerUnitGUID(xGUID) or HealBot_Panel_PetUnitGUID(xGUID)
+        xUnit=HealBot_Panel_PlayerUnitGUID(unit) or HealBot_Panel_PetUnitGUID(unit)
         if xUnit then HealBot_Panel_ToggelPrivFocus(xUnit, true) end
     else
         HealBot_AddChat("Invalid Unit "..unit)
@@ -3885,20 +3872,20 @@ function HealBot_Panel_RetUnitGroups(unit)
     return HealBot_UnitGroups[unit] or 1
 end
 
-function HealBot_Panel_RetUnitRank(guid, frame)
+function HealBot_Panel_RetUnitRank(unit, frame)
       --HealBot_setCall("HealBot_Panel_RetUnitRank", nil, guid)
-    if HealBot_issecretvalue(guid) then
+    if HealBot_issecretvalue(unit) then
         return 0
     end
-    return hbPanel_dataRanks[guid] or 0
+    return hbPanel_dataRanks[unit] or 0
 end
 
-function HealBot_Panel_RetUnitPlayerRole(guid)
-      --HealBot_setCall("HealBot_Panel_RetUnitPlayerRole", nil, guid)
-    if HealBot_issecretvalue(guid) then
+function HealBot_Panel_RetUnitPlayerRole(unit)
+      --HealBot_setCall("HealBot_Panel_RetUnitPlayerRole")
+    if HealBot_issecretvalue(unit) then
         return 0
     end
-    return hbPanel_dataPlayerRoles[guid] or 0
+    return hbPanel_dataPlayerRoles[unit] or 0
 end
 
 local focusHeal=true
@@ -3912,9 +3899,9 @@ function HealBot_Panel_PlayerGUIDUnit(unit)
     return hbPanel_dataUnits[unit]
 end
 
-function HealBot_Panel_PlayerUnitGUID(guid)
+function HealBot_Panel_PlayerUnitGUID(unit)
       --HealBot_setCall("HealBot_Panel_PlayerUnitGUID")
-    return hbPanel_dataGUIDs[guid]
+    return hbPanel_dataGUIDs[unit]
 end
 
 function HealBot_Panel_PetGUIDUnit(unit)
@@ -3922,70 +3909,70 @@ function HealBot_Panel_PetGUIDUnit(unit)
     return hbPanel_dataPetUnits[unit]
 end
 
-function HealBot_Panel_PetUnitGUID(guid)
+function HealBot_Panel_PetUnitGUID(unit)
       --HealBot_setCall("HealBot_Panel_PetUnitGUID")
-    return hbPanel_dataPetGUIDs[guid]
+    return hbPanel_dataPetGUIDs[unit]
 end
 
 function HealBot_Panel_setButtonGUID(button)
-    hbPanel_buttonGUIDs[button.guid]=button
+    hbPanel_buttonGUIDs[button.unit]=button
 end
 
 function HealBot_Panel_setButtonpGUID(button)
-    hbPanel_buttonpGUIDs[button.guid]=button
+    hbPanel_buttonpGUIDs[button.unit]=button
 end
 
 function HealBot_Panel_setButtonPetGUID(button)
-    hbPanel_buttonPetGUIDs[button.guid]=button
+    hbPanel_buttonPetGUIDs[button.unit]=button
 end
 
-function HealBot_Panel_RaidUnitDupButton(guid)
-    return hbPanel_buttonGUIDs[guid]
+function HealBot_Panel_RaidUnitDupButton(unit)
+    return hbPanel_buttonGUIDs[unit]
 end
 
-function HealBot_Panel_RaidUnitPrivDupButton(guid)
-    return hbPanel_buttonpGUIDs[guid]
+function HealBot_Panel_RaidUnitPrivDupButton(unit)
+    return hbPanel_buttonpGUIDs[unit]
 end
 
-function HealBot_Panel_RaidUnitButton(guid)
-    return hbPanel_buttonGUIDs[guid], hbPanel_buttonpGUIDs[guid]
+function HealBot_Panel_RaidUnitButton(unit)
+    return hbPanel_buttonGUIDs[unit], hbPanel_buttonpGUIDs[unit]
 end
 
-function HealBot_Panel_RaidButton(guid)
-    xButton, pButton=HealBot_Panel_RaidUnitButton(guid)
+function HealBot_Panel_RaidButton(unit)
+    xButton, pButton=HealBot_Panel_RaidUnitButton(unit)
     return xButton or pButton
 end
 
-function HealBot_Panel_RaidUnitButtonCheck(guid)
-    return hbPanel_buttonGUIDs[guid] or hbPanel_buttonpGUIDs[guid]
+function HealBot_Panel_RaidUnitButtonCheck(unit)
+    return hbPanel_buttonGUIDs[unit] or hbPanel_buttonpGUIDs[unit]
 end
 
-function HealBot_Panel_RaidPetUnitButton(guid)
-    return hbPanel_buttonGUIDs[guid] or hbPanel_buttonPetGUIDs[guid], hbPanel_buttonpGUIDs[guid]
+function HealBot_Panel_RaidPetUnitButton(unit)
+    return hbPanel_buttonGUIDs[unit] or hbPanel_buttonPetGUIDs[unit], hbPanel_buttonpGUIDs[unit]
 end
 
-function HealBot_Panel_RaidPetButton(guid)
-    xButton, pButton=HealBot_Panel_RaidPetUnitButton(guid)
+function HealBot_Panel_RaidPetButton(unit)
+    xButton, pButton=HealBot_Panel_RaidPetUnitButton(unit)
     return xButton or pButton
 end
 
-function HealBot_Panel_RaidPetUnitButtonCheck(guid)
-    if HealBot_issecretvalue(guid) then return end 
-    return hbPanel_buttonGUIDs[guid] or hbPanel_buttonpGUIDs[guid] or hbPanel_buttonPetGUIDs[guid]
+function HealBot_Panel_RaidPetUnitButtonCheck(unit)
+    if HealBot_issecretvalue(unit) then return end 
+    return hbPanel_buttonGUIDs[unit] or hbPanel_buttonpGUIDs[unit] or hbPanel_buttonPetGUIDs[unit]
 end
 
-function HealBot_Panel_AllUnitButton(guid, unit)
-    if HealBot_issecretvalue(guid) then return end 
-    return hbPanel_buttonGUIDs[guid] or hbPanel_buttonPetGUIDs[guid] or hbPanel_buttonExtraGUIDs[unit], hbPanel_buttonpGUIDs[guid]
+function HealBot_Panel_AllUnitButton(unit)
+    if HealBot_issecretvalue(unit) then return end 
+    return hbPanel_buttonGUIDs[unit] or hbPanel_buttonPetGUIDs[unit] or hbPanel_buttonExtraGUIDs[unit], hbPanel_buttonpGUIDs[unit]
 end
 
-function HealBot_Panel_AllButton(guid)
-    xButton, pButton=HealBot_Panel_AllUnitButton(guid)
+function HealBot_Panel_AllButton(unit)
+    xButton, pButton=HealBot_Panel_AllUnitButton(unit)
     return xButton or pButton
 end
 
-function HealBot_Panel_AllUnitButtonCheck(guid, unit)
-    return hbPanel_buttonGUIDs[guid] or hbPanel_buttonpGUIDs[guid] or hbPanel_buttonPetGUIDs[guid] or hbPanel_buttonExtraGUIDs[unit]
+function HealBot_Panel_AllUnitButtonCheck(unit)
+    return hbPanel_buttonGUIDs[unit] or hbPanel_buttonpGUIDs[unit] or hbPanel_buttonPetGUIDs[unit] or hbPanel_buttonExtraGUIDs[unit]
 end
 
 function HealBot_Panel_RaidUnitName(uName)
@@ -4399,13 +4386,4 @@ function HealBot_Panel_Init()
                                 [9]=HEALBOT_ROGUE,
                               }
     end
-end
-
-function HealBot_Panel_ClearGUID(guid)
-      --HealBot_setCall("HealBot_Panel_ClearGUID", nil, guid)
-    hbPanel_dataPlayerRoles[guid]=nil
-    hbPanel_dataRanks[guid]=nil
-    hbPanel_buttonGUIDs[guid]=nil
-    hbPanel_buttonPetGUIDs[guid]=nil
-    hbPanel_buttonpGUIDs[guid]=nil
 end

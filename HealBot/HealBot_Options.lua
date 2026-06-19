@@ -1558,10 +1558,7 @@ function HealBot_Options_setLists()
     HEALBOT_PLUGIN_PERFORMANCE,
     HEALBOT_PLUGIN_MYCOOLDOWNS,
     HEALBOT_PLUGIN_TWEAKS,
-    HEALBOT_PLUGIN_REQUESTS,
     HEALBOT_PLUGIN_AURAWATCH,
-    HEALBOT_PLUGIN_HEALTHWATCH,
-    HEALBOT_PLUGIN_MANAWATCH,
     HEALBOT_PLUGIN_MEDIA,
     }
 
@@ -18086,11 +18083,8 @@ local function HealBot_Options_Plugins_ShowFrame()
                     [6]="pluginPerformance",
                     [7]="pluginMyCooldowns",
                     [8]="pluginTweaks",
-                    [9]="pluginRequests",
-                   [10]="pluginAuraWatch",
-                   [11]="pluginHealthWatch",
-                   [12]="pluginManaWatch",
-                   [13]="pluginMedia",}
+                    [9]="pluginAuraWatch",
+                   [10]="pluginMedia",}
     HealBot_Options_PluginThreatFrame:Hide()
     HealBot_Options_PluginTimeToDieFrame:Hide()
     HealBot_Options_PluginTimeToLiveFrame:Hide()
@@ -18098,10 +18092,7 @@ local function HealBot_Options_Plugins_ShowFrame()
     HealBot_Options_PluginCombatProtFrame:Hide()
     HealBot_Options_PluginPerformanceFrame:Hide()
     HealBot_Options_PluginTweaksFrame:Hide()
-    HealBot_Options_PluginRequestsFrame:Hide()
     HealBot_Options_PluginAuraWatchFrame:Hide()
-    HealBot_Options_PluginHealthWatchFrame:Hide()
-    HealBot_Options_PluginManaWatchFrame:Hide()
     HealBot_Options_PluginMyCooldownsFrame:Hide()
     HealBot_Options_PluginMediaFrame:Hide()
     if not HealBot_Init_retLuVars(pluginId[hb_lVars["curPlugin"]].."Loaded") then
@@ -18136,18 +18127,9 @@ local function HealBot_Options_Plugins_ShowFrame()
             HealBot_Plugin_Tweaks_Options()
             HealBot_Options_PluginTweaksFrame:Show()
         elseif hb_lVars["curPlugin"] == 9 then
-            HealBot_Plugin_Requests_Options()
-            HealBot_Options_PluginRequestsFrame:Show()
-        elseif hb_lVars["curPlugin"] == 10 then
             HealBot_Plugin_AuraWatch_Options()
             HealBot_Options_PluginAuraWatchFrame:Show()
-        elseif hb_lVars["curPlugin"] == 11 then
-            HealBot_Plugin_HealthWatch_Options()
-            HealBot_Options_PluginHealthWatchFrame:Show()
-        elseif hb_lVars["curPlugin"] == 12 then
-            HealBot_Plugin_ManaWatch_Options()
-            HealBot_Options_PluginManaWatchFrame:Show()
-        elseif hb_lVars["curPlugin"] == 13 then
+        elseif hb_lVars["curPlugin"] == 10 then
             HealBot_Plugin_Media_Options()
             HealBot_Options_PluginMediaFrame:Show()
         end

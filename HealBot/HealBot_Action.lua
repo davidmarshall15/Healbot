@@ -2309,16 +2309,6 @@ function HealBot_Action_UpdatePluginBarCol(button, r, g, b)
     end
 end
 
-function HealBot_Action_UpdateRequestButton(button, r, g, b)
-      --HealBot_setCall("HealBot_Action_UpdateRequestButton", button)
-    HealBot_Action_UpdatePluginBarCol(button, r, g, b)
-    if button.request.colbar == 4 then
-        HealBot_Action_EnableBorderHazardType(button, r, g, b, "PLUGIN")
-    elseif button.request.colbar>4 then
-        HealBot_Action_EnableButtonGlowType(button, r, g, b, "PLUGIN", "R", button.request.colbar)
-    end
-end
-
 function HealBot_Action_UpdateAuraWatchButton(button, index, barCol, r, g, b)
       --HealBot_setCall("HealBot_Action_UpdateAuraWatchButton", button)
     if barCol == 4 then
@@ -2327,26 +2317,6 @@ function HealBot_Action_UpdateAuraWatchButton(button, index, barCol, r, g, b)
         HealBot_Action_EnableButtonGlowType(button, r, g, b, "PLUGIN", "AW"..index, barCol)
     elseif barCol<4 then
         HealBot_Action_UpdatePluginBarCol(button, r, g, b)
-    end
-end
-
-function HealBot_Action_UpdateHealthWatchButton(button, r, g, b)
-      --HealBot_setCall("HealBot_Action_UpdateHealthWatchButton", button)
-    HealBot_Action_UpdatePluginBarCol(button, r, g, b)
-    if button.healthwatch.colbar == 4 then
-        HealBot_Action_EnableBorderHazardType(button, r, g, b, "PLUGIN")
-    elseif button.healthwatch.colbar>4 then
-        HealBot_Action_EnableButtonGlowType(button, r, g, b, "PLUGIN", "HW", button.healthwatch.colbar)
-    end
-end
-
-function HealBot_Action_UpdateManaWatchButton(button, r, g, b)
-      --HealBot_setCall("HealBot_Action_UpdateManaWatchButton", button)
-    HealBot_Action_UpdatePluginBarCol(button, r, g, b)
-    if button.manawatch.colbar == 4 then
-        HealBot_Action_EnableBorderHazardType(button, r, g, b, "PLUGIN")
-    elseif button.manawatch.colbar>4 then
-        HealBot_Action_EnableButtonGlowType(button, r, g, b, "PLUGIN", "MW", button.manawatch.colbar)
     end
 end
 
@@ -2563,8 +2533,8 @@ function HealBot_Action_UpdateTheDeadButton(button)
                     HealBot_Action_UpdateUnitDeadButtons(button, 3)
                 end
             elseif HealBot_IsUnitDead(button) then
-                if not HealBot_issecretvalue(button.guid) and HealBot_PluginUpdate_TimeToLive[button.guid] then
-                    HealBot_PluginUpdate_TimeToLive[button.guid]=false
+                if not HealBot_issecretvalue(button.unit) and HealBot_PluginUpdate_TimeToLive[button.unit] then
+                    HealBot_PluginUpdate_TimeToLive[button.unit]=false
                     HealBot_Plugin_TimeToLive_UnitUpdate(button, true)
                 end
                 HealBot_Action_setState(button, HealBot_Unit_Status["DEAD"])
@@ -2634,17 +2604,17 @@ function HealBot_Action_UpdateTheDeadButton(button)
     end
 end
 
-function HealBot_Action_UpdatePlugin_TimeToLive(guid)
+function HealBot_Action_UpdatePlugin_TimeToLive(unit)
       --HealBot_setCall("HealBot_Action_UpdatePlugin_TimeToLive", nil, guid)
-    HealBot_PluginUpdate_TimeToLive[guid]=true
+    HealBot_PluginUpdate_TimeToLive[unit]=true
 end
 
-function HealBot_Action_IsUnitDead(button, guid)
+function HealBot_Action_IsUnitDead(button, unit)
       --HealBot_setCall("HealBot_Action_IsUnitDead", button)
     if button then
         return button.status.isdead
     else
-        aButton=HealBot_Panel_AllButton(guid)
+        aButton=HealBot_Panel_AllButton(unit)
         if aButton and aButton.status.isdead then
             return true
         end
@@ -6508,8 +6478,8 @@ function HealBot_Action_SetHealButton(unit,guid,frame,unitType,duplicate,role,pr
                     HealBot_Text_setNameTag(hButton)
                 end
             end
-            if hButton.rank ~= HealBot_Panel_RetUnitRank(guid, frame) then
-                hButton.rank=HealBot_Panel_RetUnitRank(guid, frame)
+            if hButton.rank ~= HealBot_Panel_RetUnitRank(unit, frame) then
+                hButton.rank=HealBot_Panel_RetUnitRank(unit, frame)
                 HealBot_Timers_Set("AURA","IconUpdAllRank",true)
             end
             hButton.roletxt=HealBot_Panel_UnitRoleDefault(unit)
@@ -8591,7 +8561,6 @@ end
 function HealBot_Action_ClearGUID(guid)
         --HealBot_setCall("HealBot_Action_ClearGUID", nil, guid)
     hbGuidData[guid]=nil
-    HealBot_PluginUpdate_TimeToLive[guid]=nil
     if HealBot_Action_luVars["pluginTimeToLive"] then HealBot_Plugin_TTLRemoveUnit(guid) end
     if HealBot_Action_luVars["pluginThreat"] then HealBot_Plugin_ThreatRemoveUnit(guid) end
     if HealBot_Action_luVars["pluginTimeToDie"] then HealBot_Plugin_TTDRemoveUnit(guid) end

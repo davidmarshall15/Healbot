@@ -157,6 +157,7 @@ function HealBot_Events_Combat_Log()
     if HEALBOT_GAME_VERSION<5 and LogEvent == "SPELL_ABSORBED" then
         LogAbsorbAmount=Log22 or Log19 or 0
         if LogAbsorbAmount>0 then
+            xUnit=HealBot_GUIDUnit(LogDestGUID)
             xButton,pButton=HealBot_Panel_RaidPetUnitButton(LogDestGUID)
             if xButton then HealBot_Classic_AbsorbsUpdate(xButton, LogAbsorbAmount) end
             if pButton then HealBot_Classic_AbsorbsUpdate(pButton, LogAbsorbAmount) end
@@ -165,7 +166,8 @@ function HealBot_Events_Combat_Log()
 
     if HealBot_Data["PGUID"] == LogSourceGUID then
         if LogEvent == "SPELL_HEAL" then
-            xButton,pButton=HealBot_Panel_RaidPetUnitButton(LogDestGUID)
+            xUnit=HealBot_GUIDUnit(LogDestGUID)
+            xButton,pButton=HealBot_Panel_RaidPetUnitButton(xUnit)
             if xButton then HealBot_Update_RecentHealsBar(xButton) end
             if pButton then HealBot_Update_RecentHealsBar(pButton) end
         end
@@ -266,7 +268,8 @@ end
 
 function HealBot_Events_InspectReady(guid)
       --HealBot_setCall("HealBot_Events_InspectReady", nil, guid)
-    xButton,pButton=HealBot_Panel_AllUnitButton(guid)
+    xUnit=HealBot_GUIDUnit(guid)
+    xButton,pButton=HealBot_Panel_AllUnitButton(xUnit)
     if xButton then
         HealBot_GetTalentInfo(xButton)
     end
@@ -769,8 +772,10 @@ function HealBot_Events_AddonMsg(addon_id,msg,distribution,sender_id)
                 elseif datatype == "U" then
                     if datamsg then
                         local guid,s=strsplit("~", datamsg)
+                        
                         if guid and s then
-                            xButton,pButton=HealBot_Panel_RaidUnitButton(guid)
+                            xUnit=HealBot_GUIDUnit(guid)
+                            xButton,pButton=HealBot_Panel_RaidUnitButton(xUnit)
                             if xButton and xButton.spec~=" "..s.." " then
                                 HealBot_Action_setGuidSpec(xButton, s)
                                 if pButton then pButton.spec=" "..s.." " end

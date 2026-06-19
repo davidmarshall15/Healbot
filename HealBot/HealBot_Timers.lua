@@ -252,8 +252,6 @@ function HealBot_Timers_SkinChangePluginUpdate()
     if HealBot_Timers_luVars["pluginPerformance"] and HealBot_Plugin_Performance_Profile then HealBot_Plugin_Performance_Profile() end
     if HealBot_Timers_luVars["pluginTweaks"] and HealBot_Plugin_Tweaks_Profile then HealBot_Plugin_Tweaks_Profile() end
     if HealBot_Timers_luVars["pluginMedia"] and HealBot_Plugin_Media_Profile then HealBot_Plugin_Media_Profile() end
-    if HealBot_Timers_luVars["pluginHealthWatch"] and HealBot_Plugin_HealthWatch_Profile then HealBot_Plugin_HealthWatch_Profile() end
-    if HealBot_Timers_luVars["pluginManaWatch"] and HealBot_Plugin_ManaWatch_Profile then HealBot_Plugin_ManaWatch_Profile() end
     if HealBot_Timers_luVars["pluginMyCooldowns"] and HealBot_Plugin_MyCooldowns_Profile then HealBot_Plugin_MyCooldowns_Profile(); HealBot_Plugin_MyCooldowns_UpdateAll() end
 end
 
@@ -278,14 +276,14 @@ end
 
 function HealBot_Timers_CheckPlayerAura()
       --HealBot_setCall("HealBot_Timers_CheckPlayerAura")
-    xButton, pButton=HealBot_Panel_RaidUnitButton(HealBot_Data["PGUID"])
+    xButton, pButton=HealBot_Panel_RaidUnitButton("player")
     if xButton then HealBot_Events_CheckUnitAura(xButton) end
     if pButton then HealBot_Events_CheckUnitAura(pButton) end
 end
 
 function HealBot_Timers_CheckTalentInfo()
       --HealBot_setCall("HealBot_Timers_CheckTalentInfo")
-    xButton, pButton=HealBot_Panel_RaidUnitButton(HealBot_Data["PGUID"])
+    xButton, pButton=HealBot_Panel_RaidUnitButton("player")
     if xButton then HealBot_GetTalentInfo(xButton) end
     if pButton then HealBot_GetTalentInfo(pButton) end
 end
@@ -293,7 +291,7 @@ end
 function HealBot_Timers_PowerIndicator()
       --HealBot_setCall("HealBot_Timers_PowerIndicator")
     if HealBot_Data["PCLASSTRIM"] then
-        xButton, pButton=HealBot_Panel_RaidUnitButton(HealBot_Data["PGUID"])
+        xButton, pButton=HealBot_Panel_RaidUnitButton("player")
         if xButton then
             HealBot_Action_setpcClass(xButton)
             xButton.mana.power=-1
@@ -312,7 +310,7 @@ end
 
 function HealBot_Timers_TipPowerCol()
       --HealBot_setCall("HealBot_Timers_TipPowerCol")
-    aButton=HealBot_Panel_RaidButton(HealBot_Data["PGUID"])
+    aButton=HealBot_Panel_RaidButton("player")
     if aButton then
         HealBot_Tooltip_setPlayerPowerCols(aButton.mana.r,aButton.mana.g,aButton.mana.b)
     end
@@ -495,7 +493,7 @@ end
 
 function HealBot_Timers_SetPlayerRestingState()
       --HealBot_setCall("HealBot_Timers_SetPlayerRestingState")
-    xButton, pButton=HealBot_Panel_RaidUnitButton(HealBot_Data["PGUID"])
+    xButton, pButton=HealBot_Panel_RaidUnitButton("player")
     if xButton then HealBot_Aura_UpdateState(xButton) end
     if pButton then HealBot_Aura_UpdateState(pButton) end
 end

@@ -950,16 +950,6 @@ function HealBot_Init_Plugins()
         HealBot_Panel_setLuVars("pluginTweaks", true)
     end
 
-    loaded, reason=HealBot_WoWAPI_LoadAddOn("HealBot_Plugin_Requests")
-    HealBot_Init_luVars["pluginRequestsReason"]=reason or ""
-    HealBot_Init_luVars["pluginRequestsLoaded"]=loaded
-    if loaded and HealBot_Globals.PluginRequests then
-        HealBot_Action_setLuVars("pluginRequests", true)
-        HealBot_Plugin_Requests_Init()
-    else
-        HealBot_Action_setLuVars("pluginRequests", false)
-    end
-
     loaded, reason=HealBot_WoWAPI_LoadAddOn("HealBot_Plugin_AuraWatch")
     HealBot_Init_luVars["pluginAuraWatchReason"]=reason or ""
     HealBot_Init_luVars["pluginAuraWatchLoaded"]=loaded
@@ -978,34 +968,6 @@ function HealBot_Init_Plugins()
         HealBot_Action_setLuVars("pluginAuraWatch", false)
         HealBot_Events_setLuVars("pluginAuraWatch", false)
         HealBot_Timers_setLuVars("pluginAuraWatch", false)
-    end
-
-    loaded, reason=HealBot_WoWAPI_LoadAddOn("HealBot_Plugin_HealthWatch")
-    HealBot_Init_luVars["pluginHealthWatchReason"]=reason or ""
-    HealBot_Init_luVars["pluginHealthWatchLoaded"]=loaded
-    if loaded and HealBot_Globals.PluginHealthWatch then
-        HealBot_Action_setLuVars("pluginHealthWatch", true)
-        HealBot_setLuVars("pluginHealthWatch", true)
-        HealBot_Timers_setLuVars("pluginHealthWatch", true)
-        HealBot_Plugin_HealthWatch_Init()
-    else
-        HealBot_Action_setLuVars("pluginHealthWatch", false)
-        HealBot_setLuVars("pluginHealthWatch", false)
-        HealBot_Timers_setLuVars("pluginHealthWatch", false)
-    end
-
-    loaded, reason=HealBot_WoWAPI_LoadAddOn("HealBot_Plugin_ManaWatch")
-    HealBot_Init_luVars["pluginManaWatchReason"]=reason or ""
-    HealBot_Init_luVars["pluginManaWatchLoaded"]=loaded
-    if loaded and HealBot_Globals.PluginManaWatch then
-        HealBot_Action_setLuVars("pluginManaWatch", true)
-        HealBot_setLuVars("pluginManaWatch", true)
-        HealBot_Timers_setLuVars("pluginManaWatch", true)
-        HealBot_Plugin_ManaWatch_Init()
-    else
-        HealBot_Action_setLuVars("pluginManaWatch", false)
-        HealBot_setLuVars("pluginManaWatch", false)
-        HealBot_Timers_setLuVars("pluginManaWatch", false)
     end
 
     loaded, reason=HealBot_WoWAPI_LoadAddOn("HealBot_Plugin_MyCooldowns")

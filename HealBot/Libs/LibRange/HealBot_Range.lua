@@ -85,7 +85,7 @@ local hbInPhase, hbPhaseShift=true,""
 function HealBot_Range_UnitInPhase(unit, guid)
       --HealBot_setCall("HealBot_Range_UnitInPhase", button)
     if HEALBOT_GAME_VERSION<9 then
-        if not HealBot_Data["UILOCK"] and HealBot_Aura_CurrentBuff(guid, hbPhaseShift) then
+        if not HealBot_Data["UILOCK"] and HealBot_Aura_CurrentBuff(unit, hbPhaseShift) then
             hbInPhase=false
         else
             hbInPhase=UnitInPhase(unit)

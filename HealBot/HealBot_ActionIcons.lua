@@ -1343,13 +1343,13 @@ function HealBot_ActionIcons_AddBuff(frame, id, buff, cNo)
                 if not hbBuffGUID[actionIcons[frame][id].guid] then hbBuffGUID[actionIcons[frame][id].guid]={} end
                 if not hbBuffGUID[actionIcons[frame][id].guid][buff] then hbBuffGUID[actionIcons[frame][id].guid][buff]={} end
                 hbBuffGUID[actionIcons[frame][id].guid][buff][actionIcons[frame][id].uid]=cNo
-                HealBot_Aura_BuffWatch(actionIcons[frame][id].guid, buff, true, true)
+                HealBot_Aura_BuffWatch(actionIcons[frame][id].unit, buff, true, true)
             end
         else
             actionIcons[frame][id].buff[4]=buff
             if not hbBuffSelf[buff] then hbBuffSelf[buff]={} end
             hbBuffSelf[buff][actionIcons[frame][id].uid]=true
-            HealBot_Aura_BuffWatch(HealBot_Data["PGUID"], buff, true, true)
+            HealBot_Aura_BuffWatch("player", buff, true, true)
         end
     end
 end
@@ -1362,12 +1362,12 @@ function HealBot_ActionIcons_AddBuffTag(frame, id, tag, cNo)
                 if not hbBuffTags[actionIcons[frame][id].guid] then hbBuffTags[actionIcons[frame][id].guid]={} end
                 if not hbBuffTags[actionIcons[frame][id].guid][tag] then hbBuffTags[actionIcons[frame][id].guid][tag]={} end
                 hbBuffTags[actionIcons[frame][id].guid][tag][actionIcons[frame][id].uid]=cNo
-                HealBot_Aura_BuffTagWatch(actionIcons[frame][id].guid, tag, true, true)
+                HealBot_Aura_BuffTagWatch(actionIcons[frame][id].unit, tag, true, true)
             end
         else
             if not hbBuffTagSelf[tag] then hbBuffTagSelf[tag]={} end
             hbBuffTagSelf[tag][actionIcons[frame][id].uid]=true
-            HealBot_Aura_BuffTagWatch(HealBot_Data["PGUID"], tag, true, true)
+            HealBot_Aura_BuffTagWatch("player", tag, true, true)
         end
     end
 end
@@ -1380,7 +1380,7 @@ function HealBot_ActionIcons_DeleteBuff(frame, id, buff, cNo)
                 hbBuffGUID[actionIcons[frame][id].guid][buff][actionIcons[frame][id].uid]=nil
                 HealBot_ActionIcons_EmptyLocalTable(hbBuffGUID[actionIcons[frame][id].guid], buff)
                 if not hbBuffGUID[actionIcons[frame][id].guid][buff] and not hbBuffSelf[buff] then
-                    HealBot_Aura_BuffWatch(actionIcons[frame][id].guid, buff, false, true)
+                    HealBot_Aura_BuffWatch(actionIcons[frame][id].unit, buff, false, true)
                 end
             end
             actionIcons[frame][id].buff[cNo]=false
@@ -1389,7 +1389,7 @@ function HealBot_ActionIcons_DeleteBuff(frame, id, buff, cNo)
                 hbBuffSelf[buff][actionIcons[frame][id].uid]=nil
                 HealBot_ActionIcons_EmptyLocalTable(hbBuffSelf, buff)
                 if not hbBuffSelf[buff] then
-                    HealBot_Aura_BuffWatch(HealBot_Data["PGUID"], buff, false, true)
+                    HealBot_Aura_BuffWatch("player", buff, false, true)
                 end
             end
             actionIcons[frame][id].buff[4]=false
@@ -1405,7 +1405,7 @@ function HealBot_ActionIcons_DeleteBuffTag(frame, id, tag, cNo)
                 hbBuffTags[actionIcons[frame][id].guid][tag][actionIcons[frame][id].uid]=nil
                 HealBot_ActionIcons_EmptyLocalTable(hbBuffTags[actionIcons[frame][id].guid], tag)
                 if not hbBuffTags[actionIcons[frame][id].guid][tag] then
-                    HealBot_Aura_BuffTagWatch(actionIcons[frame][id].guid, tag, false, true)
+                    HealBot_Aura_BuffTagWatch(actionIcons[frame][id].unit, tag, false, true)
                 end
             end
         else
@@ -1413,7 +1413,7 @@ function HealBot_ActionIcons_DeleteBuffTag(frame, id, tag, cNo)
                 hbBuffTagSelf[tag][actionIcons[frame][id].uid]=nil
                 HealBot_ActionIcons_EmptyLocalTable(hbBuffTagSelf, tag)
                 if not hbBuffTagSelf[tag] then
-                    HealBot_Aura_BuffTagWatch(HealBot_Data["PGUID"], tag, false, true)
+                    HealBot_Aura_BuffTagWatch("player", tag, false, true)
                 end
             end
         end
@@ -1474,7 +1474,7 @@ function HealBot_ActionIcons_AddDebuff(frame, id, debuff, cNo)
         if not hbDebuffGUID[actionIcons[frame][id].guid] then hbDebuffGUID[actionIcons[frame][id].guid]={} end
         if not hbDebuffGUID[actionIcons[frame][id].guid][debuff] then hbDebuffGUID[actionIcons[frame][id].guid][debuff]={} end
         hbDebuffGUID[actionIcons[frame][id].guid][debuff][actionIcons[frame][id].uid]=cNo
-        HealBot_Aura_DebuffWatch(actionIcons[frame][id].guid, debuff, true, true)
+        HealBot_Aura_DebuffWatch(actionIcons[frame][id].unit, debuff, true, true)
     end
 end
 
@@ -1484,7 +1484,7 @@ function HealBot_ActionIcons_AddDebuffTag(frame, id, tag, cNo)
         if not hbDebuffTags[actionIcons[frame][id].guid] then hbDebuffTags[actionIcons[frame][id].guid]={} end
         if not hbDebuffTags[actionIcons[frame][id].guid][tag] then hbDebuffTags[actionIcons[frame][id].guid][tag]={} end
         hbDebuffTags[actionIcons[frame][id].guid][tag][actionIcons[frame][id].uid]=cNo
-        HealBot_Aura_DebuffTagWatch(actionIcons[frame][id].guid, tag, true, true)
+        HealBot_Aura_DebuffTagWatch(actionIcons[frame][id].unit, tag, true, true)
     end
 end
 
@@ -1494,7 +1494,7 @@ function HealBot_ActionIcons_DeleteDebuff(frame, id, debuff, cNo)
         if hbDebuffGUID[actionIcons[frame][id].guid] and hbDebuffGUID[actionIcons[frame][id].guid][debuff] then
             hbDebuffGUID[actionIcons[frame][id].guid][debuff][actionIcons[frame][id].uid]=nil
             if not hbDebuffGUID[actionIcons[frame][id].guid][debuff] then
-                HealBot_Aura_DebuffWatch(actionIcons[frame][id].guid, debuff, false, true)
+                HealBot_Aura_DebuffWatch(actionIcons[frame][id].unit, debuff, false, true)
             end
         end
     end
@@ -1507,7 +1507,7 @@ function HealBot_ActionIcons_DeleteDebuffTag(frame, id, tag, cNo)
         if hbDebuffTags[actionIcons[frame][id].guid] and hbDebuffTags[actionIcons[frame][id].guid][tag] then
             hbDebuffTags[actionIcons[frame][id].guid][tag][actionIcons[frame][id].uid]=nil
         end
-        HealBot_Aura_BuffTagWatch(actionIcons[frame][id].guid, tag, false, true)
+        HealBot_Aura_BuffTagWatch(actionIcons[frame][id].unit, tag, false, true)
     end
 end
 
@@ -2146,7 +2146,7 @@ function HealBot_ActionIcons_CurrentBuff(frame, id, cNo)
             return false
         end
     end
-    return HealBot_Aura_CurrentBuff(actionIcons[frame][id].guid, actionIcons[frame][id].buff[cNo])
+    return HealBot_Aura_CurrentBuff(actionIcons[frame][id].unit, actionIcons[frame][id].buff[cNo])
 end
 
 function HealBot_ActionIcons_CurrentBuffTag(frame, id, cNo)
@@ -2158,7 +2158,7 @@ function HealBot_ActionIcons_CurrentBuffTag(frame, id, cNo)
             return false
         end
     end
-    HealBot_Aura_ActionIconBuffTag(actionIcons[frame][id].guid, hbv_ActionIcons_GetData("AlertBuffTag", frame, id, cNo))
+    HealBot_Aura_ActionIconBuffTag(actionIcons[frame][id].unit, hbv_ActionIcons_GetData("AlertBuffTag", frame, id, cNo))
 end
 
 function HealBot_ActionIcons_AlertBuffExists(frame, id, cNo)
@@ -2230,7 +2230,7 @@ function HealBot_ActionIcons_CurrentDebuffTag(frame, id, cNo)
             return false
         end
     end
-    return HealBot_Aura_ActionIconDebuffTag(actionIcons[frame][id].guid, hbv_ActionIcons_GetData("AlertDebuffTag", frame, id, cNo))
+    return HealBot_Aura_ActionIconDebuffTag(actionIcons[frame][id].unit, hbv_ActionIcons_GetData("AlertDebuffTag", frame, id, cNo))
 end
 
 function HealBot_ActionIcons_AlertDebuffExists(frame, id, cNo)
@@ -2364,7 +2364,7 @@ function HealBot_ActionIcons_SelfAlertBuffExists(frame, id)
        (actionIcons[frame][id].auraIsSelf[4] or not hbv_ActionIcons_GetBooleanData("SelfAlertBuffSelf", frame, id)) and
        actionIcons[frame][id].auraStacks[4]>=hbv_ActionIcons_GetData("SelfAlertBuffMinStacks", frame, id) and
        actionIcons[frame][id].auraStacks[4]<=hbv_ActionIcons_GetData("SelfAlertBuffMaxStacks", frame, id) then
-        return HealBot_Aura_CurrentBuff(HealBot_Data["PGUID"], actionIcons[frame][id].buff[4])
+        return HealBot_Aura_CurrentBuff("player", actionIcons[frame][id].buff[4])
     end
     return false
 end
@@ -2372,7 +2372,7 @@ end
 function HealBot_ActionIcons_SelfAlertBuffTagExists(frame, id)
         --HealBot_setCall("HealBot_ActionIcons_SelfAlertBuffTagExists")
     if hb_lVars["AllowBuffs"] and actionIcons[frame][id] then
-        return HealBot_Aura_ActionIconBuffTag(HealBot_Data["PGUID"], hbv_ActionIcons_GetData("SelfAlertBuffTag", frame, id))
+        return HealBot_Aura_ActionIconBuffTag("player", hbv_ActionIcons_GetData("SelfAlertBuffTag", frame, id))
     end
     return false
 end
@@ -2513,7 +2513,7 @@ function HealBot_ActionIcons_CheckValidTarget(frame, id)
     if actionIcons[frame][id].guid == "unset" then
         return true
     else
-        aButton=HealBot_Panel_AllButton(actionIcons[frame][id].guid)
+        aButton=HealBot_Panel_AllButton(actionIcons[frame][id].unit)
         if aButton and aButton.status.current<HealBot_Unit_Status["DEAD"] then
             return HealBot_Range_SpellInRange(aButton, actionIcons[frame][id].infoName)
         end
@@ -2894,9 +2894,7 @@ function HealBot_ActionIcons_ClearGUID(guid)
     end
     hbBuffGUID[guid]=nil
     hbBuffTags[guid]=nil
-    HealBot_Aura_BuffWatch(guid, nil, nil, true)
     hbDebuffGUID[guid]=nil
     hbDebuffTags[guid]=nil
-    HealBot_Aura_DebuffWatch(guid, nil, nil, true)
     hbIconKey[guid]=nil
 end
