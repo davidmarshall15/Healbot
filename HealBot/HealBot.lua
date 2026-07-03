@@ -1291,9 +1291,7 @@ function HealBot_UnitExists(button)
     if not HealBot_Util_isMidnight(true) then
         if UnitExists(button.unit) then
             if HealBot_Util_isMidnight() then
-                if button.name~=UnitName(button.unit) then
-                    HealBot_UpdateUnitGUIDChange(button, true)
-                end
+                HealBot_UpdateUnitGUIDChange(button, true)
             elseif button.guid~=UnitGUID(button.unit) then
                 HealBot_UpdateUnitGUIDChange(button, true)
                 if hbAuraTargetWatch[button.guid] then
@@ -3582,7 +3580,7 @@ end
 
 function HealBot_UnitSlowUpdate(button)
       --HealBot_setCall("HealBot_UnitSlowUpdate", button, nil, nil, true)
-    if HealBot_UnitExists(button) then
+    if UnitExists(button.unit) then
         if button.status.slowupdate then
             if button.status.update then
                 if button.status.change then
@@ -4035,7 +4033,7 @@ end
 
 function HealBot_UnitUpdateButton(button)
       --HealBot_setCall("HealBot_UnitUpdateButton", button, nil, nil, true)
-    if HealBot_UnitExists(button) then
+    if UnitExists(button.unit) then
         if (button.status.isdead or HealBot_Util_isMidnight(false) or button.health.current == 0) and button.status.deadnextcheck<HealBot_TimeNow then
             HealBot_Action_UpdateTheDeadButton(button)
         --elseif button.status.update then

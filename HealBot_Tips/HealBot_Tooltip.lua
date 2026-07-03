@@ -252,25 +252,6 @@ function HealBot_Tooltip_Init()
     end
 end
 
-local tipsRequests={}
-function HealBot_Tooltip_Requests(guid, buff, text, r, g, b)
-      --HealBot_setCall("HealBot_Tooltip_Requests", nil, guid)
-    if buff then
-        tipsRequests[guid]="      Requested "..buff.." ("..text..")"
-        tipsRequests.r=r
-        tipsRequests.g=g
-        tipsRequests.b=b
-    else
-        tipsRequests[guid]=nil
-    end
-    if HealBot_Data["TIPBUTTON"] and hbTip:IsVisible() then HealBot_Action_RefreshTooltip() end
-end
-
-function HealBot_Tooltip_RequestsClear()
-      --HealBot_setCall("HealBot_Tooltip_RequestsClear")
-    tipsRequests={}
-end
-
 local tipsAuraWatch={[1]={},[2]={},[3]={},[4]={},[5]={},[6]={},[7]={},[8]={}}
 function HealBot_Tooltip_AuraWatch(guid, index, txt, r, g, b)
       --HealBot_setCall("HealBot_Tooltip_AuraWatch", nil, guid)
@@ -913,10 +894,6 @@ function HealBot_Action_DoRefreshTooltip()
                         HealBot_Tooltip_SetLine("  ",0,0,0,0)
                         local br,bg,bb=HealBot_Options_RetBuffRGB(xButton)
                         HealBot_Tooltip_SetLine("  Requires "..xButton.aura.buff.name,br,bg,bb,1," ",0,0,0,0)
-                    end
-                    if tipsRequests[xButton.guid] then
-                        HealBot_Tooltip_SetLine("  ",0,0,0,0)
-                        HealBot_Tooltip_SetLine(tipsRequests[xButton.guid],tipsRequests.r,tipsRequests.g,tipsRequests.b,1," ",0,0,0,0)
                     end
                     HealBot_Tooltip_luVars["incSpace"]=true
                     for x=1,8 do
@@ -1601,7 +1578,6 @@ end
 
 function HealBot_Tooltip_ClearGUID(guid)
       --HealBot_setCall("HealBot_Tooltip_ClearGUID", nil, guid)
-    tipsRequests[guid]=nil
     for x=1,8 do
         tipsAuraWatch[x][guid]=nil
     end
