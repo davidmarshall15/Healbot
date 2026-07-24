@@ -6439,7 +6439,7 @@ function HealBot_Action_SetHealButton(unit,guid,frame,unitType,duplicate,role,pr
             HealBot_Add_RefreshList(hButton.id)
             hButton.gref["Back"]:ClearAllPoints()
             erButton=HealBot_Emerg_Button[hButton.id]
-            if hButton.frame~=frame or hButton.skin~=Healbot_Config_Skins.Current_Skin or (not HealBot_issecretvalue(guid) and hButton.guid~=guid) then
+            if hButton.frame~=frame or hButton.skin~=Healbot_Config_Skins.Current_Skin or HealBot_issecretvalue(guid) or HealBot_issecretvalue(hButton.guid) or hButton.guid~=guid then
                 hButton.icon.reset=true
                 hButton.text.reset=true
                 hButton.skinreset=true
@@ -6486,7 +6486,7 @@ function HealBot_Action_SetHealButton(unit,guid,frame,unitType,duplicate,role,pr
             if hButton.player then
                 HealBot_Data["PLAYERGROUP"]=hButton.group
             end
-            if HealBot_issecretvalue(guid) or hButton.unit~=unit or hButton.reset or hButton.guid~=guid or hButton.status.unittype~=unitType then
+            if HealBot_issecretvalue(guid) or HealBot_issecretvalue(hButton.guid) or hButton.unit~=unit or hButton.reset or hButton.guid~=guid or hButton.status.unittype~=unitType then
                 hButton.status.unittype=unitType                                           -- 1=Tanks  2=Healers  3=Self  4=Private  5=privfocus  8=privfocusToT
                 if hbv_IsUnitType(unitType, HEALBOT_PRIVATETARGET) then                    -- 11=Raid  12=Group
                     HealBot_PrivateTarget_Button[unit]=hButton                             -- 21=vehicle  22=pet
@@ -6529,7 +6529,7 @@ function HealBot_Action_SetHealButton(unit,guid,frame,unitType,duplicate,role,pr
                     hButton:SetAttribute("toggleForVehicle", true)
                     hButton.special.unit=false
                 end
-                if HealBot_issecretvalue(guid) or hButton.unit~=unit or hButton.guid~=guid or hButton.reset then
+                if HealBot_issecretvalue(guid) or HealBot_issecretvalue(hButton.guid) or hButton.unit~=unit or hButton.guid~=guid or hButton.reset then
                     if HealBot_Private_Button[unit] or HealBot_Unit_Button[unit] then
                         if UnitInRaid(unit) then
                             hButton.isgroupraid=true
@@ -6558,7 +6558,7 @@ function HealBot_Action_SetHealButton(unit,guid,frame,unitType,duplicate,role,pr
                     if not UnitExists(unit) then
                         HealBot_UpdateUnitNotExists(hButton, true)
                     else
-                        if HealBot_issecretvalue(guid) or hButton.guid~=guid then
+                        if HealBot_issecretvalue(guid) or HealBot_issecretvalue(hButton.guid) or hButton.guid~=guid then
                             HealBot_UpdateUnitGUIDChange(hButton)
                         else
                             --HealBot_UpdateUnitExists(hButton)

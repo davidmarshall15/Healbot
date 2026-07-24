@@ -1128,7 +1128,7 @@ function HealBot_Aura_SetGeneralBuff(button, bName)
 end
 
 function HealBot_Aura_CheckForMana(button)
-    if generalBuffs and HealBot_BuffWatch[HealBot_Config_Buffs.ManaDrinkItem] and not button.aura.buff.update then
+    if generalBuffs and HealBot_BuffWatch[HealBot_Config_Buffs.ManaDrinkItem] and not button.aura.buff.update and not HealBot_issecretvalue(button.mana.pct)then
         if button.aura.buff.missingbuff ~= hb_lVars["ManaDrink"] then
             if button.mana.pct<HealBot_Config_Buffs.ManaDrinkThreshold then
                 HealBot_Events_UnitBuff(button)
@@ -2667,7 +2667,7 @@ function HealBot_Aura_UpdateUnitDebuffsV2(button, selfOnly)
 end
 
 function HealBot_Aura_UpdateUnitDebuffsV5(button, selfOnly)
-      --HealBot_setCall("HealBot_Aura_UpdateUnitDebuffsV2", button)
+      --HealBot_setCall("HealBot_Aura_UpdateUnitDebuffsV5", button)
     uaZ=1
     while true do
         uaName, uaTexture, uaCount, uaDebuffType, uaDuration, uaExpirationTime, uaUnitCaster, _, _, uaSpellId, _, uaIsBossDebuff=UnitDebuff(button.unit,uaZ)
@@ -2676,6 +2676,22 @@ function HealBot_Aura_UpdateUnitDebuffsV5(button, selfOnly)
             uaZ=uaZ+1
         else
             break
+        end
+    end
+end
+
+function HealBot_Aura_UpdateUnitDebuffsV9Alt(button, selfOnly, filter)
+      --HealBot_setCall("HealBot_Aura_UpdateUnitDebuffsV9Alt", button)
+    uaZ=1
+    uaAura=C_UnitAuras.GetUnitAuras(button.unit, filter, 20, 3)
+	for _, uAura in ipairs(uaAura) do
+        if uAura.dispelName then
+            uaName, uaTexture, uaCount, uaDebuffType, uaDuration, uaExpirationTime, uaUnitCaster, uaSpellId, uaIsBossDebuff=
+            uAura.name, uAura.icon, uAura.applications, uAura.dispelName, uAura.duration, uAura.expirationTime, uAura.sourceUnit, uAura.spellId, uAura.isBossAura
+            if not HealBot_issecretvalue(uaSpellId) and not HealBot_issecretvalue(uaName) then
+                HealBot_Aura_UpdateUnitDebuffsData(button, selfOnly, uaZ)
+            end
+            uaZ=uaZ+1
         end
     end
 end
@@ -2699,7 +2715,7 @@ function HealBot_Aura_UpdateUnitDebuffsV9(button, selfOnly)
       --HealBot_setCall("HealBot_Aura_UpdateUnitDebuffsV9", button)
     HealBot_Aura_UpdateUnitDebuffsV9Aura(button, selfOnly, "HARMFUL")
     if HealBot_Util_isMidnight(true) then
-        HealBot_Aura_UpdateUnitDebuffsV9Aura(button, selfOnly, "RAID_PLAYER_DISPELLABLE")
+        HealBot_Aura_UpdateUnitDebuffsV9Alt(button, selfOnly, "RAID_PLAYER_DISPELLABLE")
     end
 end
 

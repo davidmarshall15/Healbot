@@ -896,13 +896,15 @@ function HealBot_Action_DoRefreshTooltip()
                         HealBot_Tooltip_SetLine("  Requires "..xButton.aura.buff.name,br,bg,bb,1," ",0,0,0,0)
                     end
                     HealBot_Tooltip_luVars["incSpace"]=true
-                    for x=1,8 do
-                        if tipsAuraWatch[x][xButton.guid] then
-                            if HealBot_Tooltip_luVars["incSpace"] then
-                                HealBot_Tooltip_SetLine("  ",0,0,0,0)
-                                HealBot_Tooltip_luVars["incSpace"]=false
+                    if not HealBot_issecretvalue(xButton.guid) then
+                        for x=1,8 do
+                            if tipsAuraWatch[x][xButton.guid] then
+                                if HealBot_Tooltip_luVars["incSpace"] then
+                                    HealBot_Tooltip_SetLine("  ",0,0,0,0)
+                                    HealBot_Tooltip_luVars["incSpace"]=false
+                                end
+                                HealBot_Tooltip_SetLine(tipsAuraWatch[x][xButton.guid],tipsAuraWatch[x].r,tipsAuraWatch[x].g,tipsAuraWatch[x].b,1," ",0,0,0,0)
                             end
-                            HealBot_Tooltip_SetLine(tipsAuraWatch[x][xButton.guid],tipsAuraWatch[x].r,tipsAuraWatch[x].g,tipsAuraWatch[x].b,1," ",0,0,0,0)
                         end
                     end
                     local d=false
