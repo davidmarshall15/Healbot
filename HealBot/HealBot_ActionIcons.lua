@@ -1870,7 +1870,14 @@ function HealBot_ActionIcons_ValidateAbility(frame, id, itemsOnly)
             hbSelfAbility[hbSelfAbilityRev[actionIcons[frame][id].uid]][actionIcons[frame][id].uid]=nil
             hbSelfAbilityRev[actionIcons[frame][id].uid]=false
         end
-        if hbAbility and HealBot_Spells_KnownByName(hbAbility) then
+        local abilityIsSpell=(hbAbility and HealBot_Spells_KnownByName(hbAbility)) and true or false
+        if abilityIsSpell and type(hbAbility) == "string" and not HealBot_Spell_Names[hbAbility] and HealBot_IsKnownItem(hbAbility) then
+            -- The name resolves to a spell the player does not know (eg the enchanting
+            -- recipe that shares its name with a weapon oil) but it is an item we hold,
+            -- so use the item instead of trying to cast the spell
+            abilityIsSpell=false
+        end
+        if abilityIsSpell then
             actionIcons[frame][id]:SetAttribute("type1", "spell")
             if HEALBOT_GAME_VERSION == 4 and aID == HEALBOT_HOLY_WORD_SANCTUARY and HealBot_WoWAPI_SpellName(HEALBOT_HOLY_WORD_CHASTISE) then
                 actionIcons[frame][id]:SetAttribute("spell1", HealBot_WoWAPI_SpellName(HEALBOT_HOLY_WORD_CHASTISE))

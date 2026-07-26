@@ -5049,17 +5049,18 @@ function HealBot_Action_SetSpell(cType, cKey, sText)
                 sText="C:"..cID 
             else
                 local spellId=HealBot_Spells_KnownByName(sText)
-                if spellId then
+                local itemID=HealBot_WoWAPI_ItemInfoInstant(sText)
+                -- A name can match both an item and a spell, eg a weapon oil and
+                -- the enchanting recipe that creates it. Only store it as a spell
+                -- when the player actually knows that spell, otherwise the item.
+                if spellId and (HealBot_Spell_Names[sText] or not itemID) then
                     sText="S:"..spellId.."^"..sText
+                elseif itemID then
+                    sText="I:"..itemID
                 else
-                    local itemID=HealBot_WoWAPI_ItemInfoInstant(sText)
-                    if itemID then 
-                        sText="I:"..itemID 
-                    else
-                        local e,t=string.split("=", sText)
-                        if e and e == HEALBOT_EMOTE and t then
-                            sText="E:"..t
-                        end
+                    local e,t=string.split("=", sText)
+                    if e and e == HEALBOT_EMOTE and t then
+                        sText="E:"..t
                     end
                 end
             end
@@ -7641,7 +7642,14 @@ function HealBot_Action_UseSmartCast(self,button)
       --HealBot_setCall("HealBot_Action_UseSmartCast", self)
     local sName=HealBot_Action_SmartCast(button);
     if sName then
-        if HealBot_Spells_KnownByName(sName) then
+        local castAsSpell=HealBot_Spells_KnownByName(sName) and true or false
+        if castAsSpell and type(sName) == "string" and not HealBot_Spell_Names[sName] and HealBot_IsKnownItem(sName) then
+            -- The name resolves to a spell the player does not know (eg the enchanting
+            -- recipe that shares its name with a weapon oil) but it is an item we hold,
+            -- so use the item instead of trying to cast the spell
+            castAsSpell=false
+        end
+        if castAsSpell then
             if HEALBOT_GAME_VERSION<4 then
                 uLevel=button.level
                 if uLevel and uLevel>0 and HealBot_Data["PCLASSTRIM"] then
