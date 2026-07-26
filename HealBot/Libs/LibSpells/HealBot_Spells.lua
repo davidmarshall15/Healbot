@@ -269,7 +269,10 @@ function HealBot_Spells_ResetBuffs(pClassTrim)
       --HealBot_setCall("HealBot_Spells_ResetBuffs")
     HealBot_Config_Buffs.HealBotBuffText={[1]=HEALBOT_WORDS_NONE,[2]=HEALBOT_WORDS_NONE,[3]=HEALBOT_WORDS_NONE,[4]=HEALBOT_WORDS_NONE,[5]=HEALBOT_WORDS_NONE,
                                       [6]=HEALBOT_WORDS_NONE,[7]=HEALBOT_WORDS_NONE,[8]=HEALBOT_WORDS_NONE,[9]=HEALBOT_WORDS_NONE,[10]=HEALBOT_WORDS_NONE}
-    HealBot_Config_Buffs.HealBotBuffDropDown={[1]=4,[2]=4,[3]=4,[4]=4,[5]=4,[6]=4,[7]=4,[8]=4,[9]=2,[10]=2}
+    -- 9 and 10 are the main hand / off hand weapon enchant dropdowns, 1 is "None".
+    -- Defaulting them to an entry of the list picks whatever sorts first, which is
+    -- an arbitrary weapon oil, so leave them unset until the player chooses one.
+    HealBot_Config_Buffs.HealBotBuffDropDown={[1]=4,[2]=4,[3]=4,[4]=4,[5]=4,[6]=4,[7]=4,[8]=4,[9]=1,[10]=1}
     if pClassTrim == "DRUI" then
         if HealBot_Spells_KnownByID(HEALBOT_MARK_OF_THE_WILD) then
             HealBot_Config_Buffs.HealBotBuffText[1]=HealBot_Spells_KnownByID(HEALBOT_MARK_OF_THE_WILD)

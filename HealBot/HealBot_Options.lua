@@ -1907,6 +1907,14 @@ function HealBot_Options_UpdateBuffSpellsWeaponEnchantList()
         if sName then HealBot_Options_InsertBuffSpellsWeaponEnchantList(sName, 1) end
         sName=HealBot_WoWAPI_ItemInfo(HEALBOT_WIZARD_OIL_SPELL)
         if sName then HealBot_Options_InsertBuffSpellsWeaponEnchantList(sName, 1) end
+        sName=HealBot_WoWAPI_ItemInfo(HEALBOT_LESSER_MANA_OIL_SPELL)
+        if sName then HealBot_Options_InsertBuffSpellsWeaponEnchantList(sName, 1) end
+        sName=HealBot_WoWAPI_ItemInfo(HEALBOT_MINOR_MANA_OIL_SPELL)
+        if sName then HealBot_Options_InsertBuffSpellsWeaponEnchantList(sName, 1) end
+        sName=HealBot_WoWAPI_ItemInfo(HEALBOT_LESSER_WIZARD_OIL_SPELL)
+        if sName then HealBot_Options_InsertBuffSpellsWeaponEnchantList(sName, 1) end
+        sName=HealBot_WoWAPI_ItemInfo(HEALBOT_MINOR_WIZARD_OIL_SPELL)
+        if sName then HealBot_Options_InsertBuffSpellsWeaponEnchantList(sName, 1) end
         if HEALBOT_GAME_VERSION>1 then
             sName=HealBot_WoWAPI_ItemInfo(HEALBOT_SUPERIOR_MANA_OIL_SPELL)
             if sName then HealBot_Options_InsertBuffSpellsWeaponEnchantList(sName, 1) end
