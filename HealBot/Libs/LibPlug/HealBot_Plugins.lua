@@ -150,8 +150,34 @@ function HealBot_Plugin_Options_Setup_EditBox(editbox, parent, point, x, y, widt
     end
 end
 
+-- StatusBar:SetFillStyle used to take a string, newer clients only accept the
+-- Enum.StatusBarFillStyle value. The classic flavours are not consistent about
+-- this (the Anniversary client rejects the string) so probe the widget once and
+-- return whichever form this client understands.
+local hbFillStyleEnum=nil
+local function HealBot_Plugin_UseFillStyleEnum()
+    if hbFillStyleEnum == nil then
+        hbFillStyleEnum=false
+        if Enum and Enum.StatusBarFillStyle and Enum.StatusBarFillStyle.Standard then
+            local probe=CreateFrame("StatusBar")
+            probe:Hide()
+            if pcall(probe.SetFillStyle, probe, "STANDARD") then
+                hbFillStyleEnum=false
+            elseif pcall(probe.SetFillStyle, probe, Enum.StatusBarFillStyle.Standard) then
+                hbFillStyleEnum=true
+            end
+        end
+    end
+    return hbFillStyleEnum
+end
+
 function HealBot_Plugin_SetFillStyle(dir)
-    if HEALBOT_GAME_VERSION<3 then
+    if HealBot_Plugin_UseFillStyleEnum() then
+        if dir == "REVERSE" then
+            return Enum.StatusBarFillStyle.Reverse or 3
+        end
+        return Enum.StatusBarFillStyle.Standard or 0
+    elseif HEALBOT_GAME_VERSION<3 then
         return dir
     elseif dir == "REVERSE" then
         return 3
