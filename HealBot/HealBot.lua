@@ -3987,6 +3987,8 @@ function HealBot_Update_Slow()
 end
 
 local HealBot_CDKnown={}
+local HealBot_CDPending={}
+local hbPendingCDTimeout=300
 local hbStartTime, hbDuration, hbCDTime, hbCDEnd=0,0,0,0
 function HealBot_SpellCooldown(spellName, spellId)
       --HealBot_setCall("HealBot_SpellCooldown")
@@ -3995,6 +3997,7 @@ function HealBot_SpellCooldown(spellName, spellId)
         hbCDEnd=(hbStartTime or 0)+(hbDuration or 0)
         hbCDTime=hbCDEnd-HealBot_TimeNow
         if hbCDTime>2 then
+            HealBot_CDPending[spellId]=nil
             if HealBot_luVars["pluginMyCooldowns"] then
                 HealBot_Plugin_MyCooldowns_PlayerUpdate(spellName, spellId, hbStartTime, hbDuration)
             end
@@ -4010,6 +4013,12 @@ function HealBot_SpellCooldown(spellName, spellId)
                 HealBot_AddDebug("CD for spell "..spellName.." NOT found on HealBot_CDKnown[spellId] "..HealBot_CDKnown[spellId],"Cooldown",true)
             end
         end
+        if hbCDTime<=2 and HealBot_Spell_IDs[spellId] and HealBot_Spell_IDs[spellId].cooldown>2 then
+            -- The spell has a cooldown but is not on it yet. Nature's Swiftness and
+            -- friends only start theirs once the buff they grant has been spent, which
+            -- can be long after the cast, so keep watching until it shows up.
+            HealBot_CDPending[spellId]=HealBot_TimeNow+hbPendingCDTimeout
+        end
         if hbCDTime>0.4 then
             if HealBot_luVars["pluginAuraWatch"] then
                 HealBot_Plugin_AuraWatch_SelfCD(spellName, hbCDTime, hbCDEnd)
@@ -4022,6 +4031,19 @@ end
 function HealBot_Check_SpellCooldown(spellId, delay)
       --HealBot_setCall("HealBot_Check_SpellCooldown")
     HealBot_CDQueue[spellId]=HealBot_TimeNow+delay
+end
+
+-- Called on SPELL_UPDATE_COOLDOWN, the only notice we get that a cooldown started
+-- without the spell being cast right then
+function HealBot_Check_PendingCooldowns()
+      --HealBot_setCall("HealBot_Check_PendingCooldowns")
+    for spellId, cdExpiry in pairs(HealBot_CDPending) do
+        if cdExpiry<HealBot_TimeNow then
+            HealBot_CDPending[spellId]=nil
+        else
+            HealBot_Check_SpellCooldown(spellId, 0.1)
+        end
+    end
 end
 
 function HealBot_CheckUnitRange(button)
