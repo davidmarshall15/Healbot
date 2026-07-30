@@ -1689,6 +1689,37 @@ function HealBot_InvReady()
     HealBot_Timers_Set("AURA","BuffsReset",true,true)
 end
 
+local hbEventValid={}
+local function HealBot_EventIsValid(event)
+      --HealBot_setCall("HealBot_EventIsValid")
+    if hbEventValid[event] == nil then
+        if C_EventUtils and C_EventUtils.IsEventValid then
+            hbEventValid[event]=C_EventUtils.IsEventValid(event) and true or false
+        else
+            hbEventValid[event]=true
+        end
+    end
+    return hbEventValid[event]
+end
+
+-- Registering an event this build does not know throws, and the flavours do not
+-- expose the same set, so check first and report back whether it took
+function HealBot_RegisterEvent(event)
+      --HealBot_setCall("HealBot_RegisterEvent")
+    if not HealBot_EventIsValid(event) then return false end
+    if not pcall(HealBot.RegisterEvent, HealBot, event) then
+        hbEventValid[event]=false
+        return false
+    end
+    return true
+end
+
+function HealBot_UnregisterEvent(event)
+      --HealBot_setCall("HealBot_UnregisterEvent")
+    if not HealBot_EventIsValid(event) then return false end
+    return pcall(HealBot.UnregisterEvent, HealBot, event)
+end
+
 function HealBot_Register_Events()
       --HealBot_setCall("HealBot_Register_Events")
     if HealBot_Config.DisabledNow == 0 then
@@ -1698,9 +1729,12 @@ function HealBot_Register_Events()
         if HEALBOT_GAME_VERSION>2 then
             HealBot:RegisterEvent("UNIT_ENTERED_VEHICLE");
             HealBot:RegisterEvent("UNIT_EXITED_VEHICLE");
-            if HEALBOT_GAME_VERSION == 3 then
-                HealBot:RegisterEvent("ACTIVE_TALENT_GROUP_CHANGED")
-            end
+        end
+        if HEALBOT_GAME_VERSION<4 then
+            -- Dual spec is no longer Wrath only, Classic Era and TBC Anniversary
+            -- also swap talent groups, so watch for it on every classic flavour
+            HealBot_RegisterEvent("ACTIVE_TALENT_GROUP_CHANGED")
+            HealBot_RegisterEvent("PLAYER_TALENT_UPDATE")
         end
         if HEALBOT_GAME_VERSION>3 then
             HealBot:RegisterEvent("COMPANION_LEARNED");
@@ -1723,10 +1757,10 @@ function HealBot_Register_Events()
         HealBot:RegisterEvent("SPELL_UPDATE_CHARGES")
         HealBot:RegisterEvent("PLAYER_TARGET_CHANGED");
         local regPower=false
-        if HEALBOT_GAME_VERSION>10 then
-            HealBot:RegisterEvent("LEARNED_SPELL_IN_SKILL_LINE")
-        elseif HEALBOT_GAME_VERSION>2 and HEALBOT_GAME_VERSION<5 then
-            HealBot:RegisterEvent("LEARNED_SPELL_IN_TAB")
+        -- The classic clients do not agree on which of the two exists, so take
+        -- whichever this build accepts rather than guessing from the version
+        if not HealBot_RegisterEvent("LEARNED_SPELL_IN_SKILL_LINE") then
+            HealBot_RegisterEvent("LEARNED_SPELL_IN_TAB")
         end
         HealBot:RegisterEvent("PLAYER_LEVEL_UP");
         HealBot:RegisterEvent("CHARACTER_POINTS_CHANGED");
@@ -1851,9 +1885,10 @@ function HealBot_UnRegister_Events()
             if HEALBOT_GAME_VERSION>2 then
                 HealBot:UnregisterEvent("UNIT_ENTERED_VEHICLE");
                 HealBot:UnregisterEvent("UNIT_EXITED_VEHICLE");
-                if HEALBOT_GAME_VERSION == 3 then
-                    HealBot:UnregisterEvent("ACTIVE_TALENT_GROUP_CHANGED")
-                end
+            end
+            if HEALBOT_GAME_VERSION<4 then
+                HealBot_UnregisterEvent("ACTIVE_TALENT_GROUP_CHANGED")
+                HealBot_UnregisterEvent("PLAYER_TALENT_UPDATE")
             end
             if HEALBOT_GAME_VERSION>3 then
                 HealBot:UnregisterEvent("COMPANION_LEARNED");
@@ -1891,11 +1926,8 @@ function HealBot_UnRegister_Events()
         HealBot:UnregisterEvent("SPELL_UPDATE_COOLDOWN")
         HealBot:UnregisterEvent("SPELL_UPDATE_CHARGES")
         HealBot:UnregisterEvent("RAID_TARGET_UPDATE")
-        if HEALBOT_GAME_VERSION>10 then
-            HealBot:UnregisterEvent("LEARNED_SPELL_IN_SKILL_LINE")
-        elseif HEALBOT_GAME_VERSION>2 then
-            HealBot:UnregisterEvent("LEARNED_SPELL_IN_TAB")
-        end
+        HealBot_UnregisterEvent("LEARNED_SPELL_IN_SKILL_LINE")
+        HealBot_UnregisterEvent("LEARNED_SPELL_IN_TAB")
         HealBot:UnregisterEvent("PLAYER_LEVEL_UP");
         HealBot:UnregisterEvent("UNIT_SPELLCAST_SENT");
         HealBot:UnregisterEvent("INSPECT_READY");
