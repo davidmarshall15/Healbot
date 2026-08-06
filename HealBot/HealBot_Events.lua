@@ -846,6 +846,7 @@ end
 function HealBot_Events_SpellCD()
       --HealBot_setCall("HealBot_Events_SpellCD")
     if HealBot_Data["TIPBUTTON"] then HealBot_setTooltipUpdateNow() end
+    HealBot_Check_PendingCooldowns()
     if HealBot_Events_luVars["pluginMyCooldowns"] then
         HealBot_Plugin_MyCooldowns_PlayerUpdateAll()
     end
