@@ -2505,9 +2505,10 @@ end
 function HealBot_Aura_UpdateUnitBuffsV9(button, selfOnly)
       --HealBot_setCall("HealBot_Aura_UpdateUnitBuffsV9", button)
     if UnitExists(button.unit) then
-        HealBot_Aura_UpdateUnitBuffsV9Aura(button, selfOnly, "HELPFUL")
         if HealBot_Util_isMidnight(true) then
             HealBot_Aura_UpdateUnitBuffsV9Aura(button, selfOnly, "RAID_IN_COMBAT")
+        else
+            HealBot_Aura_UpdateUnitBuffsV9Aura(button, selfOnly, "HELPFUL")
         end
     end
 end
