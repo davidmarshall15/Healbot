@@ -1313,22 +1313,26 @@ local uuUnitClassEN="XXXX"
 function HealBot_SetGuidData(button)
     _, uuUnitClassEN=UnitClass(button.unit);
     if uuUnitClassEN then
-        button.status.classknown=true
-        button.text.classtrim=strsub(uuUnitClassEN,1,4)
-        button.text.r,button.text.g,button.text.b=HealBot_Action_ClassColour(button.unit, button.text.classtrim)
-        if HealBot_Panel_RaidPetUnitButtonCheck(button.unit) then
-            guName=HealBot_customTempUserName[button.guid] or UnitName(button.unit) or false
-            if guName and guName~=HEALBOT_WORDS_UNKNOWN then
-                button.name=guName
-                HealBot_Action_SetGuidData(button, "CLASSKNOWN", true)
-                HealBot_Action_SetGuidData(button, "PLAYER", button.player)
-                HealBot_Action_SetGuidData(button, "ISPLAYER", button.isplayer)
-                HealBot_Action_SetGuidData(button, "CLASSTRIM", button.text.classtrim)
-                HealBot_Action_SetGuidData(button, "CLASSR", button.text.r)
-                HealBot_Action_SetGuidData(button, "CLASSG", button.text.g)
-                HealBot_Action_SetGuidData(button, "CLASSB", button.text.b)
-                HealBot_Action_SetGuidData(button, "NAME", guName)
+        if not HealBot_issecretvalue(uuUnitClassEN) then
+            button.status.classknown=true
+            button.text.classtrim=strsub(uuUnitClassEN,1,4)
+            button.text.r,button.text.g,button.text.b=HealBot_Action_ClassColour(button.unit, button.text.classtrim)
+            if HealBot_Panel_RaidPetUnitButtonCheck(button.unit) then
+                guName=HealBot_customTempUserName[button.guid] or UnitName(button.unit) or false
+                if guName and guName~=HEALBOT_WORDS_UNKNOWN then
+                    button.name=guName
+                    HealBot_Action_SetGuidData(button, "CLASSKNOWN", true)
+                    HealBot_Action_SetGuidData(button, "PLAYER", button.player)
+                    HealBot_Action_SetGuidData(button, "ISPLAYER", button.isplayer)
+                    HealBot_Action_SetGuidData(button, "CLASSTRIM", button.text.classtrim)
+                    HealBot_Action_SetGuidData(button, "CLASSR", button.text.r)
+                    HealBot_Action_SetGuidData(button, "CLASSG", button.text.g)
+                    HealBot_Action_SetGuidData(button, "CLASSB", button.text.b)
+                    HealBot_Action_SetGuidData(button, "NAME", guName)
+                end
             end
+        else
+            button.status.classknown=false
         end
     elseif button.isplayer then
         button.status.classknown=false
@@ -5578,7 +5582,7 @@ end
 
 function HealBot_QueueClearGUID(button)
       --HealBot_setCall("HealBot_QueueClearGUID", button)
-    if HealBot_issecretvalue(button.guid) or string.len(button.guid)>12 then
+    if not HealBot_issecretvalue(button.guid) and string.len(button.guid)>12 then
         HealBot_ClearGUIDQueue[button.id]=button.guid
     end
 end

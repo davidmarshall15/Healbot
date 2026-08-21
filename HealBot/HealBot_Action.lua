@@ -6576,14 +6576,16 @@ function HealBot_Action_SetHealButton(unit,guid,frame,unitType,duplicate,role,pr
                 end
                 if not hButton.status.events then HealBot_Action_RegisterUnitEvents(hButton) end
             end
-            if unitType<10 then
-                HealBot_Panel_setButtonpGUID(hButton)
-                hbShouldHealSomePrivateFrames[frame]=true
-            elseif unitType<20 then
-                HealBot_Panel_setButtonGUID(hButton)
-                hbShouldHealSomePlayerFrames[frame]=true
-            elseif unitType<30 then
-                HealBot_Panel_setButtonPetGUID(hButton)
+            if not HealBot_issecretvalue(unit) and not HealBot_issecretvalue(unit) then
+                if unitType<10 then
+                    HealBot_Panel_setButtonpGUID(hButton, unit)
+                    hbShouldHealSomePrivateFrames[frame]=true
+                elseif unitType<20 then
+                    HealBot_Panel_setButtonGUID(hButton, unit)
+                    hbShouldHealSomePlayerFrames[frame]=true
+                elseif unitType<30 then
+                    HealBot_Panel_setButtonPetGUID(hButton, unit)
+                end
             end
             if hButton.skinreset or hButton.enemyreset or hButton.icon.reset or hButton.indreset or hButton.auxreset or hButton.text.reset then
                 HealBot_Skins_ResetSkin("bar",hButton)

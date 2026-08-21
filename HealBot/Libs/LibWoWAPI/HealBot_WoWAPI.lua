@@ -128,6 +128,7 @@ local HealBot_WoWAPI_PickupSpell=PickupSpell
 local HealBot_WoWAPI_GetSpellTexture=GetSpellTexture
 local HealBot_WoWAPI_GetSpellPowerCost=GetSpellPowerCost
 local HealBot_WoWAPI_IsHelpfulSpell=IsHelpfulSpell
+local HealBot_WoWAPI_IsHarmfulSpell=IsHarmfulSpell
 local HealBot_WoWAPI_IsSpellInRange=IsSpellInRange
 
 function HealBot_WoWAPI_SetC_Spell()
@@ -164,15 +165,10 @@ function HealBot_WoWAPI_SetC_Spell()
         HealBot_WoWAPI_PickupSpell=C_Spell.PickupSpell or PickupSpell
         HealBot_WoWAPI_GetSpellTexture=C_Spell.GetSpellTexture or GetSpellTexture
         HealBot_WoWAPI_GetSpellPowerCost=C_Spell.GetSpellPowerCost or GetSpellPowerCost
-        HealBot_WoWAPI_IsHelpfulSpell=C_Spell.IsHelpfulSpell or IsHelpfulSpell
+        HealBot_WoWAPI_IsHelpfulSpell=C_Spell.IsSpellHelpful or C_Spell.IsHelpfulSpell or IsHelpfulSpell
+        HealBot_WoWAPI_IsHarmfulSpell=C_Spell.IsSpellHarmful or C_Spell.IsHarmfulSpell or IsHarmfulSpell
         HealBot_WoWAPI_IsSpellInRange=C_Spell.IsSpellInRange or IsSpellInRange
 
-
-        local vMajor=string.split(".", select(1, GetBuildInfo()))
-        local vGameVersion=tonumber(vMajor)
-        if vGameVersion>10 then
-            HealBot_WoWAPI_IsHelpfulSpell=HealBot_WoWAPI_True
-        end
     end
 end
 
@@ -220,8 +216,20 @@ function HealBot_WoWAPI_SpellPowerCost(spellId)
     return HealBot_WoWAPI_GetSpellPowerCost(spellId or "X")
 end
 
-function HealBot_WoWAPI_HelpfulSpell(spellId)
-    return HealBot_WoWAPI_IsHelpfulSpell(spellId or "X")
+function HealBot_WoWAPI_HelpfulSpell(spellName, spellId)
+    if HEALBOT_GAME_VERSION>10 then
+        return HealBot_WoWAPI_IsHelpfulSpell(spellId or "X")
+    else
+        return HealBot_WoWAPI_IsHelpfulSpell(spellName or "X")
+    end
+end
+
+function HealBot_WoWAPI_HarmfulSpell(spellName, spellId)
+    if HEALBOT_GAME_VERSION>10 then
+        return HealBot_WoWAPI_IsHarmfulSpell(spellId or "X")
+    else
+        return HealBot_WoWAPI_IsHarmfulSpell(spellName or "X")
+    end
 end
 
 function HealBot_WoWAPI_SpellInRange(spellId, unit)

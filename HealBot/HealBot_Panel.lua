@@ -3914,16 +3914,16 @@ function HealBot_Panel_PetUnitGUID(unit)
     return hbPanel_dataPetGUIDs[unit]
 end
 
-function HealBot_Panel_setButtonGUID(button)
-    hbPanel_buttonGUIDs[button.unit]=button
+function HealBot_Panel_setButtonGUID(button, unit)
+    hbPanel_buttonGUIDs[unit]=button
 end
 
-function HealBot_Panel_setButtonpGUID(button)
-    hbPanel_buttonpGUIDs[button.unit]=button
+function HealBot_Panel_setButtonpGUID(button, unit)
+    hbPanel_buttonpGUIDs[unit]=button
 end
 
-function HealBot_Panel_setButtonPetGUID(button)
-    hbPanel_buttonPetGUIDs[button.unit]=button
+function HealBot_Panel_setButtonPetGUID(button, unit)
+    hbPanel_buttonPetGUIDs[unit]=button
 end
 
 function HealBot_Panel_RaidUnitDupButton(unit)

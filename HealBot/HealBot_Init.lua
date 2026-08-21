@@ -357,7 +357,7 @@ end
 
 function HealBot_Init_SetSpellRange(id, spellName, range)
     HealBot_Spell_IDs[id].range=range
-    if HealBot_WoWAPI_HelpfulSpell(spellName) then
+    if HealBot_WoWAPI_HelpfulSpell(spellName, id) then
         if range > rTarget["HEAL30MIN"] and range < rTarget["HEAL30MAX"] then
             HealBot_Init_SetRangeSpells("HEAL30", spellName, id)
             HealBot_Init_UpdateRangeTarget(id, range, sTarget, "HEAL30MIN", "HEAL30MAX")
@@ -365,7 +365,7 @@ function HealBot_Init_SetSpellRange(id, spellName, range)
             HealBot_Init_SetRangeSpells("HEAL", spellName, id)
             HealBot_Init_UpdateRangeTarget(id, range, nTarget, "HEALMIN", "HEALMAX")
         end
-    elseif IsHarmfulSpell(spellName) then
+    elseif HealBot_WoWAPI_HarmfulSpell(spellName, id) then
         if range > rTarget["HARM30MIN"] and range < rTarget["HARM30MAX"] then
             HealBot_Init_SetRangeSpells("HARM30", spellName, id)
             HealBot_Init_UpdateRangeTarget(id, range, sTarget, "HARM30MIN", "HARM30MAX")
