@@ -120,13 +120,53 @@ local HealBot_Tooltip_GCD=HealBot_Tooltip_GCDV1
 if HEALBOT_GAME_VERSION>3 then
     HealBot_Tooltip_GCD=HealBot_Tooltip_GCDV4
 end
+-- last READABLE cooldown per spell (start/duration are fixed once a cooldown
+-- begins). When combat seals the APIs, the countdown renders from here - the
+-- same numbers a tooltip that never left the bar keeps showing.
+local hbCDCache={}
 function HealBot_Tooltip_getSpellCD(button, validSpellName, isMacro)
       --HealBot_setCall("HealBot_Tooltip_getSpellCD")
     local z, x=0,0
     local gcd=0
-    if not HealBot_Util_isMidnight(false) and HealBot_Globals.Tooltip_IgnoreGCD then
-        gcd=HealBot_Tooltip_GCD()
-        z, x=HealBot_WoWAPI_SpellCooldown(validSpellName);
+    local hbCleanName=validSpellName
+    if HealBot_Globals.Tooltip_ShowCD or HealBot_Globals.Tooltip_IgnoreGCD then
+        -- Midnight: cooldown APIs can return secrets in combat and older code in
+        -- the call path boolean-tests them (immediate lua error, which wedges the
+        -- tooltip cache for the session) - pcall everything, treat failure as ready
+        local hbSealed=false
+        if HealBot_Globals.Tooltip_IgnoreGCD then
+            local hbOkG, hbG=pcall(HealBot_Tooltip_GCD)
+            if hbOkG and not HealBot_issecretvalue(hbG) and hbG then gcd=hbG end
+        end
+        local hbOkCD, hbZ, hbX=pcall(HealBot_WoWAPI_SpellCooldown, validSpellName)
+        if not hbOkCD or HealBot_issecretvalue(hbZ) or HealBot_issecretvalue(hbX) or hbZ==nil then
+            hbSealed=true -- error, secret, or a secret struct the wrapper swallowed
+        else
+            z, x=hbZ, hbX or 0
+        end
+        if HealBot_issecretvalue(gcd) then gcd=0 end
+        -- charge-based spells (Holy Words etc.): GetSpellCooldown only reports
+        -- the GCD - the real recharge lives in GetSpellCharges. Zero charges
+        -- left = treat the recharge as the cooldown; charges remaining = ready.
+        if x<=gcd and C_Spell and C_Spell.GetSpellCharges then
+            local hbOkC, hbCh=pcall(C_Spell.GetSpellCharges, hbCleanName)
+            if hbOkC and not HealBot_issecretvalue(hbCh) and hbCh
+            and not HealBot_issecretvalue(hbCh.currentCharges)
+            and not HealBot_issecretvalue(hbCh.cooldownStartTime)
+            and not HealBot_issecretvalue(hbCh.cooldownDuration) then
+                if hbCh.currentCharges==0 then
+                    z, x=hbCh.cooldownStartTime or 0, hbCh.cooldownDuration or 0
+                end
+            elseif not hbOkC or HealBot_issecretvalue(hbCh) then
+                hbSealed=true
+            end
+        end
+        if hbSealed then
+            local hbC=hbCDCache[hbCleanName]
+            if hbC and (hbC.z+hbC.x)>GetTime() then z, x=hbC.z, hbC.x end
+        else
+            hbCDCache[hbCleanName]={z=z, x=x}
+        end
     end
     if HealBot_Globals.Tooltip_ShowCD and x and x>gcd then
         z=HealBot_Util_Round(x-(GetTime()-z),0)
@@ -139,6 +179,13 @@ function HealBot_Tooltip_getSpellCD(button, validSpellName, isMacro)
         if z>0 then return validSpellName,1,0.2,0 end
     elseif not isMacro and (x or 1)>gcd then
         return validSpellName,1,0.2,0
+    end
+    -- off cooldown: still red when the spell is not castable right now (mana)
+    if not isMacro and C_Spell and C_Spell.IsSpellUsable then
+        local hbOk, hbUsable=pcall(C_Spell.IsSpellUsable, hbCleanName)
+        if hbOk and not HealBot_issecretvalue(hbUsable) and hbUsable==false then
+            return validSpellName,1,0.2,0
+        end
     end
     if isMacro then
         return validSpellName,0.5,1,0
