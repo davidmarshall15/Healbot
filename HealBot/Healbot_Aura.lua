@@ -2488,17 +2488,35 @@ function HealBot_Aura_UpdateUnitBuffsV2(button, selfOnly)
 end
 
 local uaAura={}
+-- Midnight/12.1: any comparison, boolean test, arithmetic or table-key use of a
+-- secret value is an immediate lua error. Only process an aura if every field
+-- the update funcs touch is readable; secret auras are skipped (Blizzard hides
+-- them from addons in combat/M+/PvP by design).
+local function HealBot_Aura_AuraDataIsUsable(aura)
+    if HealBot_issecretvalue(aura) or not aura then return false end
+    if HealBot_issecretvalue(aura.spellId) or HealBot_issecretvalue(aura.name)
+    or HealBot_issecretvalue(aura.dispelName) or HealBot_issecretvalue(aura.duration)
+    or HealBot_issecretvalue(aura.expirationTime) or HealBot_issecretvalue(aura.sourceUnit)
+    or HealBot_issecretvalue(aura.applications) or HealBot_issecretvalue(aura.icon)
+    or HealBot_issecretvalue(aura.isBossAura) then
+        return false
+    end
+    return true
+end
+
 function HealBot_Aura_UpdateUnitBuffsV9Alt(button, selfOnly, filter)
       --HealBot_setCall("HealBot_Aura_UpdateUnitBuffsV9Alt", button)
     uaZ=1
-    uaAura=C_UnitAuras.GetUnitAuras(button.unit, filter, 20, 0)
+    -- 12.1 live: index/slot aura access THROWS while auras are secret in combat
+    -- (even for "player", even with combat filters) - pcall, never call bare
+    local okA
+    okA, uaAura=pcall(C_UnitAuras.GetUnitAuras, button.unit, filter, 20, 3)
+    if not okA or HealBot_issecretvalue(uaAura) or not uaAura then return end
 	for _, uAura in ipairs(uaAura) do
-        if uAura.dispelName then
+        if HealBot_Aura_AuraDataIsUsable(uAura) and uAura.dispelName then
             uaName, uaTexture, uaCount, uaDebuffType, uaDuration, uaExpirationTime, uaUnitCaster, uaSpellId=
-            uaAura.name, uaAura.icon, uaAura.applications, uaAura.dispelName, uaAura.duration, uaAura.expirationTime, uaAura.sourceUnit, uaAura.spellId
-            if not HealBot_issecretvalue(uaSpellId) and not HealBot_issecretvalue(uaName) then
-                HealBot_Aura_UpdateUnitBuffsData(button, selfOnly, uaZ)
-            end
+            uAura.name, uAura.icon, uAura.applications, uAura.dispelName, uAura.duration, uAura.expirationTime, uAura.sourceUnit, uAura.spellId
+            HealBot_Aura_UpdateUnitBuffsData(button, selfOnly, uaZ)
             uaZ=uaZ+1
         end
     end
@@ -2508,11 +2526,12 @@ function HealBot_Aura_UpdateUnitBuffsV9Aura(button, selfOnly, filter)
       --HealBot_setCall("HealBot_Aura_UpdateUnitBuffsV9Aura", button)
     uaZ=1
     while true do
-        uaAura=C_UnitAuras.GetAuraDataByIndex(button.unit, uaZ, filter)
-        if not uaAura then break end
-        uaName, uaTexture, uaCount, uaDebuffType, uaDuration, uaExpirationTime, uaUnitCaster, uaSpellId=
-        uaAura.name, uaAura.icon, uaAura.applications, uaAura.dispelName, uaAura.duration, uaAura.expirationTime, uaAura.sourceUnit, uaAura.spellId
-        if not HealBot_issecretvalue(uaSpellId) and not HealBot_issecretvalue(uaName) then
+        local okA
+        okA, uaAura=pcall(C_UnitAuras.GetAuraDataByIndex, button.unit, uaZ, filter)
+        if not okA or HealBot_issecretvalue(uaAura) or not uaAura then break end
+        if HealBot_Aura_AuraDataIsUsable(uaAura) then
+            uaName, uaTexture, uaCount, uaDebuffType, uaDuration, uaExpirationTime, uaUnitCaster, uaSpellId=
+            uaAura.name, uaAura.icon, uaAura.applications, uaAura.dispelName, uaAura.duration, uaAura.expirationTime, uaAura.sourceUnit, uaAura.spellId
             HealBot_Aura_UpdateUnitBuffsData(button, selfOnly, uaZ)
         end
         uaZ=uaZ+1
@@ -2522,7 +2541,7 @@ function HealBot_Aura_UpdateUnitBuffsV9(button, selfOnly)
       --HealBot_setCall("HealBot_Aura_UpdateUnitBuffsV9", button)
     if UnitExists(button.unit) then
         if HealBot_Util_isMidnight(true) then
-           -- HealBot_Aura_UpdateUnitBuffsV9Alt(button, selfOnly, "HELPFUL|PLAYER|RAID_IN_COMBAT")
+            HealBot_Aura_UpdateUnitBuffsV9Aura(button, selfOnly, "RAID_IN_COMBAT")
         else
             HealBot_Aura_UpdateUnitBuffsV9Aura(button, selfOnly, "HELPFUL")
         end
@@ -2555,11 +2574,14 @@ function HealBot_Aura_PostUpdateUnitDebuffsData(button, spellID, spellName, debu
         if HealBot_Aura_CanDispel[spellID] == nil then
             local aSpellId=nil
             if HEALBOT_GAME_VERSION>8 then
+                local aDId=1 -- own index, uaZ belongs to the calling enumeration loop
                 while true do
-                    uaAura=C_UnitAuras.GetAuraDataByIndex(button.unit, uaZ, "RAID_PLAYER_DISPELLABLE")
-                    if not uaAura then break end
-                    HealBot_Aura_CanDispel[uaAura.spellId]=true
-                    uaZ=uaZ+1
+                    local okD, aDAura=pcall(C_UnitAuras.GetAuraDataByIndex, button.unit, aDId, "RAID_PLAYER_DISPELLABLE")
+                    if not okD or HealBot_issecretvalue(aDAura) or not aDAura then break end
+                    if not HealBot_issecretvalue(aDAura.spellId) then
+                        HealBot_Aura_CanDispel[aDAura.spellId]=true
+                    end
+                    aDId=aDId+1
                 end
             else
                 local aId=1
@@ -2700,14 +2722,16 @@ end
 function HealBot_Aura_UpdateUnitDebuffsV9Alt(button, selfOnly, filter)
       --HealBot_setCall("HealBot_Aura_UpdateUnitDebuffsV9Alt", button)
     uaZ=1
-    uaAura=C_UnitAuras.GetUnitAuras(button.unit, filter, 20, 3)
+    -- 12.1 live: index/slot aura access THROWS while auras are secret in combat
+    -- (even for "player", even with combat filters) - pcall, never call bare
+    local okA
+    okA, uaAura=pcall(C_UnitAuras.GetUnitAuras, button.unit, filter, 20, 3)
+    if not okA or HealBot_issecretvalue(uaAura) or not uaAura then return end
 	for _, uAura in ipairs(uaAura) do
-        if uAura.dispelName then
+        if HealBot_Aura_AuraDataIsUsable(uAura) and uAura.dispelName then
             uaName, uaTexture, uaCount, uaDebuffType, uaDuration, uaExpirationTime, uaUnitCaster, uaSpellId, uaIsBossDebuff=
             uAura.name, uAura.icon, uAura.applications, uAura.dispelName, uAura.duration, uAura.expirationTime, uAura.sourceUnit, uAura.spellId, uAura.isBossAura
-            if not HealBot_issecretvalue(uaSpellId) and not HealBot_issecretvalue(uaName) then
-                HealBot_Aura_UpdateUnitDebuffsData(button, selfOnly, uaZ)
-            end
+            HealBot_Aura_UpdateUnitDebuffsData(button, selfOnly, uaZ)
             uaZ=uaZ+1
         end
     end
@@ -2717,11 +2741,12 @@ function HealBot_Aura_UpdateUnitDebuffsV9Aura(button, selfOnly, filter)
       --HealBot_setCall("HealBot_Aura_UpdateUnitDebuffsV9Auras", button)
     uaZ=1
     while true do
-        uaAura=C_UnitAuras.GetAuraDataByIndex(button.unit, uaZ, filter)
-        if not uaAura then break end
-        uaName, uaTexture, uaCount, uaDebuffType, uaDuration, uaExpirationTime, uaUnitCaster, uaSpellId, uaIsBossDebuff=
-        uaAura.name, uaAura.icon, uaAura.applications, uaAura.dispelName, uaAura.duration, uaAura.expirationTime, uaAura.sourceUnit, uaAura.spellId, uaAura.isBossAura
-        if not HealBot_issecretvalue(uaSpellId) and not HealBot_issecretvalue(uaName) then
+        local okA
+        okA, uaAura=pcall(C_UnitAuras.GetAuraDataByIndex, button.unit, uaZ, filter)
+        if not okA or HealBot_issecretvalue(uaAura) or not uaAura then break end
+        if HealBot_Aura_AuraDataIsUsable(uaAura) then
+            uaName, uaTexture, uaCount, uaDebuffType, uaDuration, uaExpirationTime, uaUnitCaster, uaSpellId, uaIsBossDebuff=
+            uaAura.name, uaAura.icon, uaAura.applications, uaAura.dispelName, uaAura.duration, uaAura.expirationTime, uaAura.sourceUnit, uaAura.spellId, uaAura.isBossAura
             HealBot_Aura_UpdateUnitDebuffsData(button, selfOnly, uaZ)
         end
         uaZ=uaZ+1
@@ -2731,7 +2756,7 @@ end
 function HealBot_Aura_UpdateUnitDebuffsV9(button, selfOnly)
       --HealBot_setCall("HealBot_Aura_UpdateUnitDebuffsV9", button)
     if HealBot_Util_isMidnight(true) then
-       -- HealBot_Aura_UpdateUnitDebuffsV9Alt(button, selfOnly, "RAID_PLAYER_DISPELLABLE")
+        HealBot_Aura_UpdateUnitDebuffsV9Alt(button, selfOnly, "RAID_PLAYER_DISPELLABLE")
     else
         HealBot_Aura_UpdateUnitDebuffsV9Aura(button, selfOnly, "HARMFUL")
     end
