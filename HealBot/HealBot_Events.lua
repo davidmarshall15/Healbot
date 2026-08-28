@@ -177,8 +177,14 @@ function HealBot_Events_Combat_Log()
     end
 end
 
-function HealBot_Events_UpdateRange(button)
+function HealBot_Events_UpdateRange(button, unit, inRange)
       --HealBot_setCall("HealBot_Events_UpdateRange", button)
+    -- UNIT_IN_RANGE_UPDATE delivers (unit, inRange) - Blizzard's sanctioned
+    -- combat range signal. Keep the last readable payload for the moments the
+    -- polling APIs go secret (secrecy check FIRST: comparisons on secrets error).
+    if not HealBot_issecretvalue(inRange) and inRange~=nil and button.range then
+        button.range.eventIn=inRange
+    end
     button.range.nextcheck=0
 end
 
