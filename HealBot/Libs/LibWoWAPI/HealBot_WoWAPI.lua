@@ -94,6 +94,9 @@ end
 
 local function HealBot_WoWAPI_GetCooldownV11(spellId)
     hbInfo=GetSpellCooldown(spellId)
+    -- Midnight: the whole struct can be secret in combat; boolean-testing or
+    -- indexing it then is an immediate lua error
+    if HealBot_issecretvalue(hbInfo) then return nil end
     if hbInfo then
         return hbInfo.startTime, hbInfo.duration --, hbInfo.isEnabled, hbInfo.modRate
     end
@@ -110,6 +113,8 @@ end
 
 local function HealBot_WoWAPI_GetSpellChargesV11(spellId)
     hbInfo=GetSpellCharges(spellId)
+    -- Midnight: struct can be secret in combat (see GetCooldownV11)
+    if HealBot_issecretvalue(hbInfo) then return nil end
     if hbInfo then
         return hbInfo.currentCharges --, hbInfo.maxCharges
     end

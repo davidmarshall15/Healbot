@@ -117,6 +117,14 @@ end
 local sRange=0
 local function HealBot_Range_IsSpellInRange(button, spellName, limit, spellOnly)
     sRange=HealBot_WoWAPI_SpellInRange(spellName, button.unit)
+    if HealBot_issecretvalue(sRange) then
+        -- Midnight: spell range sealed right now. Use the last readable
+        -- UNIT_IN_RANGE_UPDATE payload (the sanctioned combat range signal,
+        -- captured in HealBot_Events_UpdateRange); with no payload yet assume
+        -- in range rather than false-flagging the whole roster red.
+        if button.range.eventIn == false then return 0 end
+        return 1
+    end
     if sRange then
         if type(sRange) ~= "number" then sRange=1 end
         if sRange == 1 and HealBot_Spell_Names[spellName] and HealBot_Spell_IDs[HealBot_Spell_Names[spellName]].range<35 then
@@ -165,7 +173,9 @@ end
 local inRange, checkedRange=false,false
 function HealBot_Range_Unit(unit, guid, limit)
     inRange, checkedRange=UnitInRange(unit)
-    if not HealBot_Util_isMidnight(false) and checkedRange then
+    -- Midnight: gate on the VALUES being secret, not the client version -
+    -- UnitInRange stays readable for player group members
+    if not HealBot_issecretvalue(checkedRange) and checkedRange and not HealBot_issecretvalue(inRange) then
         return inRange
     elseif not limit then
         if not UnitIsVisible(unit) or not HealBot_Range_UnitInPhase(unit, guid) then

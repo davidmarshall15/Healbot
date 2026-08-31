@@ -3231,13 +3231,31 @@ function HealBot_setRaidTargetChecked()
     end
 end
 
+-- last marker state per GUID, learned while readable (or secret-but-present out
+-- of combat); consulted in combat when the whole roster reads secret
+local hbRaidTargetSecretCache={}
 function HealBot_RaidTargetUpdate(button)
       --HealBot_setCall("HealBot_RaidTargetUpdate", button)
     if button.status.current<HealBot_Unit_Status["RESERVED"] and hbv_Skins_GetFrameBoolean("RaidIcon", "SHOW", button.frame) then
         local x=GetRaidTargetIndex(button.unit)
-        if not HealBot_Util_isMidnight(false) and x and hbRaidTargetIconsChecked[button.frame][x] then
+        local guidKey=nil
+        if not HealBot_issecretvalue(button.guid) then guidKey=button.guid end
+        if HealBot_issecretvalue(x) then
+            -- Midnight: secret index. Out of combat that means "marked, but which
+            -- marker is hidden" (NPC companions) -> show the star as a generic
+            -- badge. IN combat EVERY unit reads secret, so trust the last state
+            -- seen out of combat instead of badging the whole roster.
+            if HealBot_Data["UILOCK"] then
+                HealBot_Aura_RaidTargetUpdate(button, (guidKey and hbRaidTargetSecretCache[guidKey]) or 0)
+            else
+                if guidKey then hbRaidTargetSecretCache[guidKey]=1 end
+                HealBot_Aura_RaidTargetUpdate(button, 1)
+            end
+        elseif x and hbRaidTargetIconsChecked[button.frame][x] then
+            if guidKey then hbRaidTargetSecretCache[guidKey]=x end
             HealBot_Aura_RaidTargetUpdate(button, x)
         else
+            if guidKey then hbRaidTargetSecretCache[guidKey]=nil end
             HealBot_Aura_RaidTargetUpdate(button, 0)
         end
     else
