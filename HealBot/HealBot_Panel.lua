@@ -1,4 +1,3 @@
-local TempMaxH=0;
 local HealBot_TrackNames={};
 local HealBot_TrackPrivateNames={}
 local i={[1]=0,[2]=0,[3]=0,[4]=0,[5]=0,[6]=0,[7]=0,[8]=0,[9]=0,[10]=0}
@@ -2616,17 +2615,16 @@ function HealBot_Panel_sortOrder(unit, barOrder, mainSort)
             end
         elseif UnitExists(unit) then
             if hbv_Skins_GetFrameBoolean("BarSort", "OORLAST", hbCurrentFrame) and not HealBot_Range_UnitGUID(unit) then
-                vSubOrderKey=9999999-hlthMax
-            elseif not HealBot_issecretvalue(hlthMax) then
-                vSubOrderKey=0-hlthMax
-            else
-                vSubOrderKey=0-vSubOrderInc
-                vSubOrderInc=vSubOrderInc+1
+                if not HealBot_issecretvalue(hlthMax) then
+                    vSubOrderKey=0-hlthMax
+                else
+                    vSubOrderKey=0-vSubOrderInc
+                    vSubOrderInc=vSubOrderInc+1
+                end
             end
         else
             vSubOrderKey=99999999
         end
-        if UnitIsPlayer(unit) and not HealBot_issecretvalue(hlthMax) and hlthMax>TempMaxH then TempMaxH=hlthMax; end
     elseif barOrder == 5 then
         if UnitIsUnit(unit, "player") then
             if not mainSort and hbv_Skins_GetFrameBoolean("BarSort", "SUBPF", hbCurrentFrame) then
@@ -3688,7 +3686,6 @@ local vPetsWithPlayers,vVehicleWithPlayers,vTargetWithPlayers,vToTWithPlayers,vF
 local vActiveFrames={}
 function HealBot_Panel_PlayersChanged(preCombat)
       --HealBot_setCall("HealBot_Panel_PlayersChanged")
-    TempMaxH=9;
     HealBot_Data["PUNIT"]="player"
     if HealBot_Panel_luVars["cpCrash"] and HealBot_Panel_luVars["cpCrashType"] == "r" then
         nraid=HealBot_Panel_luVars["cpCrashNum"]
