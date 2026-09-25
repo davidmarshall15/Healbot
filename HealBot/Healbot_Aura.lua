@@ -1140,8 +1140,10 @@ function HealBot_Aura_CheckForMana(button)
 end
 
 local HealBot_Aura_GetItemCooldown=GetItemCooldown
-if C_Container then
-    HealBot_Aura_GetItemCooldown=C_Container.GetItemCooldown or GetItemCooldown
+if C_Item and C_Item.GetItemCooldown then
+    HealBot_Aura_GetItemCooldown=C_Item.GetItemCooldown
+elseif C_Container and C_Container.GetItemCooldown then
+    HealBot_Aura_GetItemCooldown=C_Container.GetItemCooldown
 end
 
 local buffWatchName=""

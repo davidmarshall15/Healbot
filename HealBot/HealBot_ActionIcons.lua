@@ -466,7 +466,7 @@ function HealBot_ActionIcons_OnMouseDown(self, button)
                 cursorIcon.info=actionIcons[self.frame][self.id].info
                 HealBot_ActionIcons_StoreConfig(self.frame, self.id)
                 if actionIcons[self.frame][self.id].infoType == "item" then
-                    PickupItem(actionIcons[self.frame][self.id].infoID)
+                    HealBot_WoWAPI_ItemPickup(actionIcons[self.frame][self.id].infoID)
                 elseif actionIcons[self.frame][self.id].infoType == "spell" then
                     HealBot_WoWAPI_SpellPickup(actionIcons[self.frame][self.id].infoID)
                 elseif actionIcons[self.frame][self.id].infoType == "macro" then
@@ -513,7 +513,7 @@ function HealBot_ActionIcons_CursorUpdateIcon(infoType, frame, id, info)
             cursorIcon.infoType=prevType
             cursorIcon.info=prevInfo
             if prevType == "item" then
-                PickupItem(prevID)
+                HealBot_WoWAPI_ItemPickup(prevID)
             elseif prevType == "spell" then
                 HealBot_WoWAPI_SpellPickup(prevID)
             elseif prevType == "macro" then
@@ -2634,7 +2634,7 @@ function HealBot_ActionIcons_SelfAbilityCD(spellName, frame, id)
     if actionIcons[frame][id].infoType == "spell" then
         sbStartTime, sbDuration=HealBot_WoWAPI_SpellCooldown(spellName)
     elseif actionIcons[frame][id].infoType == "item" and HEALBOT_GAME_VERSION>9 then
-        sbStartTime, sbDuration=GetItemCooldown(spellName)
+        sbStartTime, sbDuration=HealBot_WoWAPI_ItemCooldown(spellName)
     else
         sbStartTime, sbDuration=0,0
     end
@@ -2669,7 +2669,7 @@ function HealBot_ActionIcons_SelfCountText(frame, id)
     elseif actionIcons[frame][id].infoType == "spell" then
         actionIcons[frame][id].count=HealBot_WoWAPI_SpellCharges(actionIcons[frame][id].infoID) or HealBot_WoWAPI_SpellCount(actionIcons[frame][id].infoID) or 0
     elseif actionIcons[frame][id].infoType == "item" then
-        actionIcons[frame][id].count=GetItemCount(actionIcons[frame][id].infoID, nil, true) or 0
+        actionIcons[frame][id].count=HealBot_WoWAPI_ItemCount(actionIcons[frame][id].infoID, nil, true) or 0
     else
         actionIcons[frame][id].count=0
     end

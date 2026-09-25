@@ -333,6 +333,9 @@ local HealBot_WoWAPI_GetItemInfo=GetItemInfo
 local HealBot_WoWAPI_GetItemInfoInstant=GetItemInfoInstant
 local HealBot_WoWAPI_IsUsableItem=IsUsableItem
 local HealBot_WoWAPI_GetItemClassInfo=GetItemClassInfo
+local HealBot_WoWAPI_GetItemCooldown=GetItemCooldown
+local HealBot_WoWAPI_GetItemCount=GetItemCount
+local HealBot_WoWAPI_PickupItem=PickupItem
 
 function HealBot_WoWAPI_SetC_Item()
     if C_Item then
@@ -340,6 +343,9 @@ function HealBot_WoWAPI_SetC_Item()
         HealBot_WoWAPI_GetItemInfoInstant=C_Item.GetItemInfoInstant or GetItemInfoInstant
         HealBot_WoWAPI_IsUsableItem=C_Item.IsUsableItem or IsUsableItem
         HealBot_WoWAPI_GetItemClassInfo=C_Item.GetItemClassInfo or GetItemClassInfo
+        HealBot_WoWAPI_GetItemCooldown=C_Item.GetItemCooldown or GetItemCooldown
+        HealBot_WoWAPI_GetItemCount=C_Item.GetItemCount or GetItemCount
+        HealBot_WoWAPI_PickupItem=C_Item.PickupItem or PickupItem
     end
 end
 
@@ -357,6 +363,18 @@ end
 
 function HealBot_WoWAPI_ItemClassInfo(itemId)
     return HealBot_WoWAPI_GetItemClassInfo(itemId)
+end
+
+function HealBot_WoWAPI_ItemCooldown(itemId)
+    return HealBot_WoWAPI_GetItemCooldown(itemId)
+end
+
+function HealBot_WoWAPI_ItemCount(itemId, includeBank, includeUses)
+    return HealBot_WoWAPI_GetItemCount(itemId, includeBank, includeUses)
+end
+
+function HealBot_WoWAPI_ItemPickup(itemId)
+    return HealBot_WoWAPI_PickupItem(itemId)
 end
 
 

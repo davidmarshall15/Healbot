@@ -5098,7 +5098,7 @@ function HealBot_Action_UpdateLoadoutId()
         if configId and configId>0 then
             HealBot_Config.LastLoadout=configId
         else
-            HealBot_Config.LastLoadout=GetSpecialization() or 0
+            HealBot_Config.LastLoadout=C_SpecializationInfo.GetSpecialization(false) or 0
         end
     else
         HealBot_Config.LastLoadout=0
@@ -5442,10 +5442,10 @@ function HealBot_Action_GetCustomNameDialog(guid, isAdd, isPerm)
         hideOnEscape=1,
         timeout=0,
         OnShow=function(self)
-            getglobal(self:GetName().."EditBox"):SetText("");
+            _G[self:GetName().."EditBox"]:SetText("");
         end,
         OnAccept=function(self)
-              cName=getglobal(self:GetName().."EditBox"):GetText();
+              cName=_G[self:GetName().."EditBox"]:GetText();
               HealBot_Action_CustomName(cName)
         end,
     };

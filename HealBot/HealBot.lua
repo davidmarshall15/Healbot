@@ -2677,12 +2677,12 @@ function HealBot_GetTalentInfo(button)
     if button.player or (button.isplayer and UnitExists(button.unit) and UnitGUID(button.unit) == button.guid and not HealBot_Data["UILOCK"]) then
         if HEALBOT_GAME_VERSION>6 then
             if button.player then
-                i=GetSpecialization()
+                i=C_SpecializationInfo.GetSpecialization(false)
                 if i then
-                    _, s=GetSpecializationInfo(i,false,false)
+                    _, s=C_SpecializationInfo.GetSpecializationInfo(i,false)
                 end
             elseif button.isplayer and button.range.current>-1 then
-                i=GetInspectSpecialization(button.unit)
+                i=C_SpecializationInfo.GetInspectSpecialization(button.unit)
                 if i then
                     _, s=GetSpecializationInfoByID(i)
                 end
@@ -2892,7 +2892,7 @@ function HealBot_Timer_ZoneUpdate()
     local mapAreaID=C_Map.GetBestMapForUnit("player")
     local mapName=HEALBOT_WORD_OUTSIDE
     if mapAreaID and mapAreaID>0 then
-        mapName=C_Map.GetMapInfo(mapAreaID).name or mapName
+        mapName=(C_Map.GetMapInfo(mapAreaID) or {}).name or mapName
         HealBot_luVars["mapAreaID"]=mapAreaID
     elseif inType and inType == "arena" then
         mapName="Arena"

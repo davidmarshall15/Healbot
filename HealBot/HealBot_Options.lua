@@ -2051,9 +2051,9 @@ function HealBot_Options_InitBuffSpellsClassList(tClass)
             HBC_SACRED_SHIELD,
         }
         if HEALBOT_GAME_VERSION>5 then
-            local i=GetSpecialization()
+            local i=C_SpecializationInfo.GetSpecialization(false)
             local specID=0
-            if i then specID=GetSpecializationInfo(i,false,false) end
+            if i then specID=C_SpecializationInfo.GetSpecializationInfo(i,false) end
             if specID == 70 then
                 table.insert(Buff_Spells_List,HEALBOT_SEAL_OF_JUSTICE)
             end
@@ -13402,7 +13402,7 @@ function HealBot_Options_ButtonIcon_OnMouseDown(self, button, id)
         cursorIcon.infoType=self.infoType
         cursorIcon.info=self.info
         if self.infoType == "item" then
-            PickupItem(self.infoID)
+            HealBot_WoWAPI_ItemPickup(self.infoID)
             HealBot_Options_RightOnFrame(id)
             HealBot_Options_CursorUpdateIcon("nil", id)
         elseif self.infoType == "spell" then
@@ -13462,7 +13462,7 @@ function HealBot_Options_CursorUpdateIcon(infoType, id, info)
             cursorIcon.infoType=prevType
             cursorIcon.info=prevInfo
             if prevType == "item" then
-                PickupItem(prevID)
+                HealBot_WoWAPI_ItemPickup(prevID)
             elseif prevType == "spell" then
                 HealBot_WoWAPI_SpellPickup(prevID)
             elseif prevType == "macro" then

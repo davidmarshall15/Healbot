@@ -164,14 +164,14 @@ local function HealBot_Init_ManaCost(spellId, spellBookId, tipSet)
             HealBot_SetToolTip(HealBot_ScanTooltip)
             HealBot_ScanTooltip:SetSpellBookItem(spellBookId, BOOKTYPE_SPELL);
         end
-        local ttText=getglobal("HealBot_ScanTooltipTextLeft2");
+        local ttText=_G["HealBot_ScanTooltipTextLeft2"];
         if (ttText:GetText()) then
             local line=ttText:GetText();
             if line and not HealBot_issecretvalue(line) then
                 manaCost=tonumber((gsub(line, "%D", "")))
             end
             if manaCost == 0 then
-                ttText=getglobal("HealBot_ScanTooltipTextLeft3")
+                ttText=_G["HealBot_ScanTooltipTextLeft3"]
                 line=ttText:GetText()
                 if line and not HealBot_issecretvalue(line) then
                     manaCost=tonumber((gsub(line, "%D", "")))
@@ -191,14 +191,14 @@ local function HealBot_Init_Range(spellId, spellBookId, tipSet)
             HealBot_SetToolTip(HealBot_ScanTooltip)
             HealBot_ScanTooltip:SetSpellBookItem(spellBookId, BOOKTYPE_SPELL);
         end
-        local ttText=getglobal("HealBot_ScanTooltipTextRight2");
+        local ttText=_G["HealBot_ScanTooltipTextRight2"];
         if (ttText:GetText()) then
             local line=ttText:GetText();
             if line then
                 range=tonumber((gsub(line, "%D", "")))
             end
             if range == 0 then
-                ttText=getglobal("HealBot_ScanTooltipTextRight3")
+                ttText=_G["HealBot_ScanTooltipTextRight3"]
                 line=ttText:GetText()
                 if line then
                     range=tonumber((gsub(line, "%D", "")))

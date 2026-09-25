@@ -231,11 +231,11 @@ function HealBot_Lang_ptBR()
     HEALBOT_OPTIONS_HOTOFFBAR               = "Fora da barra";
 
     if HEALBOT_GAME_VERSION>7 then
-        HEALBOT_ZONE_AB                     = C_Map.GetMapInfo(93).name or "Bacia Arathi";
-        HEALBOT_ZONE_AV                     = C_Map.GetMapInfo(91).name or "Vale Alterac";
-        HEALBOT_ZONE_ES                     = C_Map.GetMapInfo(121).name or "Olho da Tormenta";
-        HEALBOT_ZONE_IC                     = C_Map.GetMapInfo(169).name or "Ilha da Conquista";
-        HEALBOT_ZONE_SA                     = C_Map.GetMapInfo(128).name or "Ba\195\173a dos Ancestrais";
+        HEALBOT_ZONE_AB                     = (C_Map.GetMapInfo(93) or {}).name or "Bacia Arathi";
+        HEALBOT_ZONE_AV                     = (C_Map.GetMapInfo(91) or {}).name or "Vale Alterac";
+        HEALBOT_ZONE_ES                     = (C_Map.GetMapInfo(121) or {}).name or "Olho da Tormenta";
+        HEALBOT_ZONE_IC                     = (C_Map.GetMapInfo(169) or {}).name or "Ilha da Conquista";
+        HEALBOT_ZONE_SA                     = (C_Map.GetMapInfo(128) or {}).name or "Ba\195\173a dos Ancestrais";
     else
         HEALBOT_ZONE_AB                     = "Bacia Arathi";
         HEALBOT_ZONE_AV                     = "Vale Alterac";

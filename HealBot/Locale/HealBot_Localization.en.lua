@@ -675,11 +675,11 @@ function HealBot_Lang_enALL()
     HEALBOT_OPTIONS_HOTOFFBAR              ="Off bar";
 
     if HEALBOT_GAME_VERSION>7 then
-        HEALBOT_ZONE_AB                    =C_Map.GetMapInfo(93).name or "Arathi Basin";
-        HEALBOT_ZONE_AV                    =C_Map.GetMapInfo(91).name or "Alterac Valley";
-        HEALBOT_ZONE_ES                    =C_Map.GetMapInfo(121).name or "Eye of the Storm";
-        HEALBOT_ZONE_IC                    =C_Map.GetMapInfo(169).name or "Isle of Conquest";
-        HEALBOT_ZONE_SA                    =C_Map.GetMapInfo(128).name or "Strand of the Ancients";
+        HEALBOT_ZONE_AB                    =(C_Map.GetMapInfo(93) or {}).name or "Arathi Basin";
+        HEALBOT_ZONE_AV                    =(C_Map.GetMapInfo(91) or {}).name or "Alterac Valley";
+        HEALBOT_ZONE_ES                    =(C_Map.GetMapInfo(121) or {}).name or "Eye of the Storm";
+        HEALBOT_ZONE_IC                    =(C_Map.GetMapInfo(169) or {}).name or "Isle of Conquest";
+        HEALBOT_ZONE_SA                    =(C_Map.GetMapInfo(128) or {}).name or "Strand of the Ancients";
     else
         HEALBOT_ZONE_AB                    ="Arathi Basin";
         HEALBOT_ZONE_AV                    ="Alterac Valley";
