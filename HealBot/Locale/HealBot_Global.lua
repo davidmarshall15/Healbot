@@ -22,7 +22,7 @@ HEALBOT_GAME_VERSION=tonumber(hbMajor)
 -- like a Classic client (build 1.60.x, interface 16001). Treat it as Mainline so the
 -- correct API paths and secret-value handling are used.
 HEALBOT_FOREVER=false
-if HEALBOT_GAME_VERSION==1 and (hbInterfaceVersion>=16000 or (issecretvalue~=nil and UnitHealthPercent~=nil)) then
+if HEALBOT_GAME_VERSION==1 and hbInterfaceVersion>=16000 then
     HEALBOT_FOREVER=true
     HEALBOT_GAME_VERSION=12
 end
