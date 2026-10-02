@@ -684,12 +684,11 @@ function HealBot_Init_Spells_Defaults()
                     --local sName, cRank=HealBot_WoWAPI_SpellBookItemName(s)
                     local sType, sId=HealBot_WoWAPI_SpellBookItemInfo(s)
                     if HEALBOT_GAME_VERSION>10 then
-                        iSpellName=HealBot_WoWAPI_SpellName(sId)
-                        iSpellRank=""
+                        iSpellName, iSpellRank=HealBot_WoWAPI_SpellName(sId)
                     else
                         iSpellName, iSpellRank=HealBot_WoWAPI_SpellBookItemName(s)
-                        if not iSpellRank then iSpellRank="" end
                     end
+                    if not iSpellRank then iSpellRank="" end
                     if not sType then sType="SPELL" end
                     HealBot_Init_CheckSpell(sType, s, sId, iSpellName, iSpellRank)
                 end

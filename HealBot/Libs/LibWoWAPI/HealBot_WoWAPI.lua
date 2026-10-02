@@ -59,7 +59,7 @@ end
 local function HealBot_WoWAPI_GetSpellNameV11(spellId)
     hbInfo=GetSpellName(spellId)
     if hbInfo then
-        return hbInfo.name
+        return hbInfo.name, hbInfo.rank
     end
     return nil
 end
