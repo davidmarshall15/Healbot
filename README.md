@@ -13,3 +13,10 @@ Installing and Updating
   - Copy the HealBot folders into your WoW Addons folder.
   - Logon to WoW as your main Healer.
   - As a priority you should open the options and configure spells, debuffs and buffs.
+
+Package checks
+--------------
+  - Requires Python 3 only; no running WoW client or additional packages needed.
+  - From the repository root, run: `python3 -B -m unittest discover -s tests -v`.
+  - Checks that supplied statusbar texture paths resolve to packaged files.
+  - On failure, the diagnostic names the texture and its declared path.
