@@ -20,7 +20,7 @@ HealBot_Supplied_Textures={
     [19]= {name="Flat", file=[[Interface\Addons\HealBot\Images\textures\Flat.tga]]},
     [20]= {name="Smooth v2", file=[[Interface\Addons\HealBot\Images\textures\Smoothv2.tga]]},
     [21]= {name="Outline", file=[[Interface\Addons\HealBot\Images\textures\Outline.tga]]},
-    [22]= {name="Armory", file=[[Interface\Addons\HealBot\Images\textures\textures\Armory.tga]]},
+    [22]= {name="Armory", file=[[Interface\Addons\HealBot\Images\textures\Armory.tga]]},
     [23]= {name="Button", file=[[Interface\Addons\HealBot\Images\textures\Button.tga]]},
     [24]= {name="Fourths", file=[[Interface\Addons\HealBot\Images\textures\Fourths.tga]]},
     [25]= {name="Fifths", file=[[Interface\Addons\HealBot\Images\textures\Fifths.tga]]},

@@ -1,11 +1,11 @@
-local hbInfo, _
+local hbInfo, hbInfo2, _
 HealBot_Spell_IDs={};
 HealBot_Spell_Names={};
 
 local CC_ScaleTo1000=nil
 local CC_ScaleTo100=nil
 local CC_ScaleColPct=nil
-local function HealBot_WoWAPI_SetCC_ScaleTo1000()
+local function HealBot_WoWAPI_SetC_Curve()
     if C_CurveUtil then 
         if not CC_ScaleTo100 then 
             CC_ScaleTo100 = C_CurveUtil.CreateCurve();
@@ -33,8 +33,12 @@ local function HealBot_WoWAPI_True()
     return true
 end
 
+local function HealBot_WoWAPI_Nothing()
+    return ""
+end
+
 function HealBot_WoWAPI_SetAll()
-    HealBot_WoWAPI_SetCC_ScaleTo1000()
+    HealBot_WoWAPI_SetC_Curve()
     HealBot_WoWAPI_SetC_Spell()
     HealBot_WoWAPI_SetC_SpellBook()
     HealBot_WoWAPI_SetC_Item()
@@ -47,6 +51,7 @@ end
 -- C_Spell
 local GetSpellInfo=GetSpellInfo
 local GetSpellName=GetSpellInfo
+local GetSpellSubtext=HealBot_WoWAPI_Nothing
 local GetSpellId=GetSpellInfo
 local GetSpellCooldown=GetSpellCooldown
 local GetSpellCount=GetSpellCount
@@ -56,10 +61,19 @@ local function HealBot_WoWAPI_GetSpellNameV1(spellId)
     return GetSpellName(spellId)
 end
 
+local function HealBot_WoWAPI_GetSpellNameV1f(spellId)
+    hbInfo=GetSpellName(spellId)
+    if hbInfo then
+        hbInfo2=GetSpellSubtext(spellId)
+        return hbInfo.name, hbInfo2
+    end
+    return nil
+end
+
 local function HealBot_WoWAPI_GetSpellNameV11(spellId)
     hbInfo=GetSpellName(spellId)
     if hbInfo then
-        return hbInfo.name, hbInfo.rank
+        return hbInfo.name
     end
     return nil
 end
@@ -138,18 +152,21 @@ local HealBot_WoWAPI_IsSpellInRange=IsSpellInRange
 
 function HealBot_WoWAPI_SetC_Spell()
     if C_Spell then
-        if C_Spell.GetSpellName then
-            HealBot_WoWAPI_GetSpellName=HealBot_WoWAPI_GetSpellNameV11
-           -- GetSpellName=C_Spell.GetSpellName
-            GetSpellName=C_Spell.GetSpellInfo
+        if C_Spell.GetSpellSubtext then
+            GetSpellSubtext=C_Spell.GetSpellSubtext
         end
         if C_Spell.GetSpellIDForSpellIdentifier then
             HealBot_WoWAPI_GetSpellId=HealBot_WoWAPI_GetSpellIdV11
             GetSpellId=C_Spell.GetSpellIDForSpellIdentifier
         end
         if C_Spell.GetSpellInfo then
+            HealBot_WoWAPI_GetSpellName=HealBot_WoWAPI_GetSpellNameV11
             HealBot_WoWAPI_GetSpellInfo=HealBot_WoWAPI_GetInfoV11
             GetSpellInfo=C_Spell.GetSpellInfo
+            GetSpellName=C_Spell.GetSpellInfo
+            if HEALBOT_FOREVER then
+                HealBot_WoWAPI_GetSpellName=HealBot_WoWAPI_GetSpellNameV1f
+            end
         end
         if C_Spell.GetSpellCooldown then
             HealBot_WoWAPI_GetSpellCooldown=HealBot_WoWAPI_GetCooldownV11
