@@ -1843,7 +1843,7 @@ function HealBot_ActionIcons_UpdateActiveFrame(frame, active)
 end
 
 local nRange=40
-if HEALBOT_GAME_VERSION>10 then
+if HEALBOT_CLIENT_VERSION>10 then
     nRange=46
 end
 

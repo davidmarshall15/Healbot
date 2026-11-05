@@ -1,3 +1,7 @@
+-- Forever can select the Vanilla TOC, but cannot use combat-log heal prediction.
+local _, _, _, interfaceVersion = GetBuildInfo()
+if interfaceVersion >= 16000 and interfaceVersion < 17000 then return end
+
 local major = "LibHealComm-4.0"
 local minor = 109
 assert(LibStub, format("%s requires LibStub.", major))

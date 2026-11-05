@@ -38,6 +38,7 @@ Libs\LibMedia\HealBot_Media.lua
 Libs\LibRange\HealBot_Range.lua
 
 Locale\HealBot_Global.lua
+HealBot_Forever.lua
 Locale\HealBot_Localization.en.lua
 Libs\HealBot_Libs.lua
 HealBot_Vars.lua
@@ -59,3 +60,4 @@ HealBot_Options.xml
 HealBot.xml
 HealBot_Action.xml
 HealBot_CombatAuras.lua
+HealBot_ForeverFrames.lua

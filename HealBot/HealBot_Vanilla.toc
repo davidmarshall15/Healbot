@@ -1,4 +1,4 @@
-## Interface: 11509
+## Interface: 11509, 16001
 ## Title: HealBot
 ## Author: Strife
 ## Notes: Add multiple frames with customisable bars for healing, decursing, buffing, ressing, range checking and aggro tracking
@@ -39,6 +39,7 @@ Libs\LibMedia\HealBot_Media.lua
 Libs\LibRange\HealBot_Range.lua
 
 Locale\HealBot_Global.lua
+HealBot_Forever.lua
 Locale\HealBot_Localization.en.lua
 Libs\HealBot_Libs.lua
 HealBot_Vars.lua
@@ -59,3 +60,5 @@ Locale\HealBot_Localization.tw.lua
 HealBot_Options.xml
 HealBot.xml
 HealBot_Action.xml
+HealBot_CombatAuras.lua
+HealBot_ForeverFrames.lua
