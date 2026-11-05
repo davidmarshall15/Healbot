@@ -1440,6 +1440,7 @@ local hbHealsInColourFuncs={[2]=HealBot_Action_HealsInColourHealth,
                             [8]=HealBot_Action_HealsInColourRoleHlthMix}
 function HealBot_Action_UpdateHealsInButton(button)
       --HealBot_setCall("HealBot_Action_UpdateHealsInButton", button)
+    if HealBot_Forever_UpdateIncomingHeals and HealBot_Forever_UpdateIncomingHeals(button) then return end
     if HealBot_issecretvalue(button.health.current) or HealBot_issecretvalue(button.health.max) then
         -- Secret health: use percentage-based approach, skip raw arithmetic
         button.health.inhptc=button.health.hpct
@@ -2241,7 +2242,7 @@ function HealBot_Action_setEnabled(button, enabled, a)
         button.status.alpha=a
         HealBot_Aux_UpdBar(button)
         HealBot_Aura_Update_AllIcons(button)
-        if button.health.incoming>0 then HealBot_Action_UpdateHealsInButton(button) end
+        if HEALBOT_FOREVER or button.health.incoming>0 then HealBot_Action_UpdateHealsInButton(button) end
         if button.health.absorbs>0 then HealBot_Action_UpdateAbsorbsButton(button) end
     end
 end
@@ -2909,7 +2910,7 @@ function HealBot_Action_UpdateHealthButton(button, hlthevent)
         else
             HealBot_Action_setFluid_BarButtons(button)
         end
-        if button.health.incoming>0 then HealBot_Action_UpdateHealsInButton(button) end
+        if HEALBOT_FOREVER or button.health.incoming>0 then HealBot_Action_UpdateHealsInButton(button) end
         if button.health.absorbs>0 then HealBot_Action_UpdateAbsorbsButton(button) end
     end
 end
@@ -4532,7 +4533,7 @@ function HealBot_Action_UnregisterUnitEvents(button)
     button:UnregisterEvent("UNIT_TARGETABLE_CHANGED")
     button:UnregisterEvent("UNIT_PORTRAIT_UPDATE")
     button:UnregisterEvent("UNIT_MODEL_CHANGED")
-    if HEALBOT_GAME_VERSION == 1 then
+    if HEALBOT_CLIENT_VERSION == 1 then
         button:UnregisterEvent("PLAYER_TARGET_SET_ATTACKING")
     end
     button:UnregisterEvent("UNIT_TARGET")
@@ -4544,15 +4545,15 @@ function HealBot_Action_UnregisterUnitEvents(button)
     button:UnregisterEvent("UNIT_DISTANCE_CHECK_UPDATE")
     button:UnregisterEvent("UNIT_IN_RANGE_UPDATE")
     button:UnregisterEvent("INCOMING_RESURRECT_CHANGED")
-    if HEALBOT_GAME_VERSION>5 then
+    if HEALBOT_CLIENT_VERSION>5 then
         button:UnregisterEvent("UNIT_ABSORB_AMOUNT_CHANGED")
         button:UnregisterEvent("UNIT_HEAL_ABSORB_AMOUNT_CHANGED")
         button:UnregisterEvent("UNIT_AREA_CHANGED")
     end
-    if HEALBOT_GAME_VERSION>8 then
+    if HEALBOT_CLIENT_VERSION>8 then
         button:UnregisterEvent("UNIT_POWER_POINT_CHARGE")
     end
-    if HEALBOT_GAME_VERSION>3 then
+    if HEALBOT_CLIENT_VERSION>3 then
         button:UnregisterEvent("UNIT_HEALTH")
         button:UnregisterEvent("PLAYER_SPECIALIZATION_CHANGED")
     else
@@ -4606,12 +4607,12 @@ function HealBot_Action_RegisterUnitEvents(button)
         button:RegisterUnitEvent("UNIT_DISTANCE_CHECK_UPDATE", button.unit)
         button:RegisterUnitEvent("UNIT_IN_RANGE_UPDATE", button.unit)
         button:RegisterUnitEvent("INCOMING_RESURRECT_CHANGED", button.unit)
-        if HEALBOT_GAME_VERSION>5 then
+        if HEALBOT_CLIENT_VERSION>5 then
             button:RegisterUnitEvent("UNIT_ABSORB_AMOUNT_CHANGED", button.unit)
             button:RegisterUnitEvent("UNIT_HEAL_ABSORB_AMOUNT_CHANGED", button.unit)
             button:RegisterUnitEvent("UNIT_AREA_CHANGED", button.unit)
         end
-        if HEALBOT_GAME_VERSION>3 then
+        if HEALBOT_CLIENT_VERSION>3 then
             button:RegisterUnitEvent("UNIT_HEALTH", button.unit)
             button:RegisterUnitEvent("PLAYER_SPECIALIZATION_CHANGED", button.unit)
         else
@@ -4620,10 +4621,10 @@ function HealBot_Action_RegisterUnitEvents(button)
         button:RegisterUnitEvent("UNIT_CONNECTION", button.unit)
         button:RegisterUnitEvent("PARTY_MEMBER_ENABLE", button.unit)
         button:RegisterUnitEvent("PARTY_MEMBER_DISABLE", button.unit)
-        if HEALBOT_GAME_VERSION == 1 and HealBot_Action_luVars["regAggro"] then
+        if HEALBOT_CLIENT_VERSION == 1 and HealBot_Action_luVars["regAggro"] then
             button:RegisterUnitEvent("PLAYER_TARGET_SET_ATTACKING", button.unit)
         end
-        if HEALBOT_GAME_VERSION>8 then
+        if HEALBOT_CLIENT_VERSION>8 then
             button:RegisterUnitEvent("UNIT_POWER_POINT_CHARGE", button.unit)
         end
         if button.isplayer then

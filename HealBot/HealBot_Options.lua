@@ -22294,7 +22294,7 @@ local function HealBot_Returned_Colours(R, G, B, A, preset)
   --R, G, B=ColorPickerFrame:GetColorRGB(); -- added by Diacono
   --A=OpacitySliderFrame:GetValue();
     if A and not preset then
-        if HEALBOT_GAME_VERSION<10 then A=1-A; end
+        if HEALBOT_CLIENT_VERSION<10 then A=1-A; end
         A=HealBot_Util_Round(A,2)
     end
     R,G,B=HealBot_Util_ReturnedRGB(R, G, B)
@@ -24068,7 +24068,7 @@ function HealBot_UseColourPick(R, G, B, A)
         ColorPickerFrame:Hide();
     elseif A then
         ColorPickerFrame.hasOpacity=true;
-        if HEALBOT_GAME_VERSION<10 then
+        if HEALBOT_CLIENT_VERSION<10 then
             --if HEALBOT_GAME_VERSION == 3 then
             --    ColorPickerFrame.func=function() local lR,lG,lB=ColorPickerFrame:GetColorRGB(); local lA=OpacitySliderFrame:GetValue(); HealBot_Returned_Colours(lR,lG,lB,lA); end;
             --else
@@ -24091,7 +24091,7 @@ function HealBot_UseColourPick(R, G, B, A)
         ColorPickerFrame:Show();
     else
         ColorPickerFrame.hasOpacity=false;
-        if HEALBOT_GAME_VERSION<10 then
+        if HEALBOT_CLIENT_VERSION<10 then
             --if HEALBOT_GAME_VERSION == 3 then
             --    ColorPickerFrame.func=function() HealBot_Returned_Colours(ColorPickerFrame:GetColorRGB()); end;
             --else
@@ -24107,7 +24107,7 @@ function HealBot_UseColourPick(R, G, B, A)
         ColorPickerFrame:SetPoint("TOPLEFT","HealBot_Options","TOPRIGHT",0,-152);
         ColorPickerFrame:Show();
     end
-    if HEALBOT_GAME_VERSION<10 then
+    if HEALBOT_CLIENT_VERSION<10 then
         return ColorPickerFrame:GetColorRGB();
     else
         return ColorPickerFrame.Content.ColorPicker:GetColorRGB();

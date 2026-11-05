@@ -239,7 +239,7 @@ function HealBot_WoWAPI_SpellPowerCost(spellId)
 end
 
 function HealBot_WoWAPI_HelpfulSpell(spellName, spellId)
-    if HEALBOT_GAME_VERSION>10 then
+    if HEALBOT_CLIENT_VERSION>10 then
         return HealBot_WoWAPI_IsHelpfulSpell(spellId or "X")
     else
         return HealBot_WoWAPI_IsHelpfulSpell(spellName or "X")
@@ -247,7 +247,7 @@ function HealBot_WoWAPI_HelpfulSpell(spellName, spellId)
 end
 
 function HealBot_WoWAPI_HarmfulSpell(spellName, spellId)
-    if HEALBOT_GAME_VERSION>10 then
+    if HEALBOT_CLIENT_VERSION>10 then
         return HealBot_WoWAPI_IsHarmfulSpell(spellId or "X")
     else
         return HealBot_WoWAPI_IsHarmfulSpell(spellName or "X")
@@ -298,11 +298,7 @@ local function HealBot_WoWAPI_GetSpellBookItemNameV1(index)
 end
 
 local function HealBot_WoWAPI_GetSpellBookItemNameV11(index)
-    hbInfo=GetSpellBookItemName(index, Enum.SpellBookSpellBank.Player)
-    if hbInfo then
-        return hbInfo.spellName, hbInfo.spellSubName
-    end
-    return nil
+    return GetSpellBookItemName(index, Enum.SpellBookSpellBank.Player)
 end
 
 local HealBot_WoWAPI_GetNumSpellTabs=GetNumSpellTabs
@@ -342,6 +338,14 @@ end
 
 function HealBot_WoWAPI_SpellBookItemName(index)
     return HealBot_WoWAPI_GetSpellBookItemName(index)
+end
+
+function HealBot_WoWAPI_SetSpellBookTooltip(tooltip, index)
+    if HEALBOT_CLIENT_VERSION>10 then
+        tooltip:SetSpellBookItem(index, Enum.SpellBookSpellBank.Player)
+    else
+        tooltip:SetSpellBookItem(index, BOOKTYPE_SPELL)
+    end
 end
 
 

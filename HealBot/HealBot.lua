@@ -1081,7 +1081,7 @@ function HealBot_UnitMana(button)
     if button.status.current<HealBot_Unit_Status["DEAD"] then
         hbPowerCurrent, hbPowerMax, button.mana.pct, button.mana.hpct=HealBot_WoWAPI_UnitMana(button.unit, button.mana.type)
         if HealBot_Util_isMidnight(false) or button.mana.current~=hbPowerCurrent or button.mana.max~=hbPowerMax then
-            if not HealBot_Data["UILOCK"] and HEALBOT_GAME_VERSION<5 and button.isplayer and not button.player and (hbPowerMax>(button.mana.max*1.25) or hbPowerMax<(button.mana.max*0.75)) then
+            if not HealBot_Data["UILOCK"] and HEALBOT_CLIENT_VERSION<5 and button.isplayer and not button.player and (hbPowerMax>(button.mana.max*1.25) or hbPowerMax<(button.mana.max*0.75)) then
                 HealBot_Events_SpecChange(button)
             end
             button.mana.lowcheck=true
@@ -1727,6 +1727,10 @@ end
 function HealBot_Register_Events()
       --HealBot_setCall("HealBot_Register_Events")
     if HealBot_Config.DisabledNow == 0 then
+        if HEALBOT_FOREVER then
+            HealBot_RegisterEvent("PLAYER_TALENT_UPDATE")
+            HealBot_RegisterEvent("TRAIT_CONFIG_UPDATED")
+        end
         if HEALBOT_GAME_VERSION>1 then
             HealBot:RegisterEvent("PLAYER_FOCUS_CHANGED");
         end
@@ -1734,7 +1738,7 @@ function HealBot_Register_Events()
             HealBot:RegisterEvent("UNIT_ENTERED_VEHICLE");
             HealBot:RegisterEvent("UNIT_EXITED_VEHICLE");
         end
-        if HEALBOT_GAME_VERSION<4 then
+        if HEALBOT_CLIENT_VERSION<4 then
             -- Dual spec is no longer Wrath only, Classic Era and TBC Anniversary
             -- also swap talent groups, so watch for it on every classic flavour
             HealBot_RegisterEvent("ACTIVE_TALENT_GROUP_CHANGED")
@@ -1881,7 +1885,7 @@ end
 
 function HealBot_UnRegister_Events()
       --HealBot_setCall("HealBot_UnRegister_Events")
-    if HEALBOT_GAME_VERSION<12 then
+    if HEALBOT_CLIENT_VERSION<12 then
         if HealBot_Config.DisabledNow == 1 then
             if HEALBOT_GAME_VERSION>1 then
                 HealBot:UnregisterEvent("PLAYER_FOCUS_CHANGED");
@@ -2080,7 +2084,7 @@ function HealBot_HealsInAmountV4(button)
       --HealBot_setCall("HealBot_HealsInAmountV4", button)
     if button.status.current<HealBot_Unit_Status["DEAD"] then
         hiuHealAmount=UnitGetIncomingHeals(button.unit) or 0
-        if HEALBOT_GAME_VERSION < 12 and hiuHealAmount>HealBot_luVars["BonusMinInHeal"] then
+        if not HEALBOT_MIDNIGHT and hiuHealAmount>HealBot_luVars["BonusMinInHeal"] then
             hiuHealAmount=hiuHealAmount+HealBot_luVars["BonusHealing"]
         end
     else
@@ -2089,7 +2093,7 @@ function HealBot_HealsInAmountV4(button)
 end
 
 local HealBot_HealsInAmount=HealBot_HealsInAmountV4
-if HEALBOT_GAME_VERSION<4 and libCHC then
+if HEALBOT_CLIENT_VERSION<4 and libCHC then
     HealBot_HealsInAmount=HealBot_HealsInAmountV1
 end
 
@@ -2117,6 +2121,7 @@ function HealBot_HealsInUpdate(button)
         HealBot_OverHeal(button)
         HealBot_Aux_UpdateHealInBar(button)
     end
+    if HealBot_Forever_UpdateIncomingHeals then HealBot_Forever_UpdateIncomingHeals(button) end
 end
 
 function HealBotClassic_HealsInDoUpdate(button)
@@ -2174,7 +2179,7 @@ function HealBot_AbsorbsAmountV6(button)
 end
 
 local HealBot_AbsorbsAmount=HealBot_AbsorbsAmountV1
-if HEALBOT_GAME_VERSION>5 then
+if HEALBOT_CLIENT_VERSION>5 then
     HealBot_AbsorbsAmount=HealBot_AbsorbsAmountV6
 end
 
@@ -2509,7 +2514,9 @@ function HealBot_SetPlayerData()
         else
             HealBot_Timers_Set("INIT","SetPlayerData",true)
         end
-        if HEALBOT_GAME_VERSION>9 then
+        if HEALBOT_MIDNIGHT then
+            HealBot_luVars["BonusHealing"]=0
+        elseif HEALBOT_GAME_VERSION>9 then
             HealBot_luVars["BonusHealing"]=GetSpellBonusHealing()
         else
             HealBot_luVars["BonusHealing"]=ceil(GetSpellBonusHealing()*0.5)
@@ -2674,15 +2681,19 @@ end
 function HealBot_GetTalentInfo(button)
       --HealBot_setCall("HealBot_GetTalentInfo", button)
     local i,s=nil,nil
+    local GetSpecialization=GetSpecialization or (C_SpecializationInfo and C_SpecializationInfo.GetSpecialization)
+    local GetSpecializationInfo=GetSpecializationInfo or (C_SpecializationInfo and C_SpecializationInfo.GetSpecializationInfo)
+    local GetInspectSpecialization=GetInspectSpecialization or (C_SpecializationInfo and C_SpecializationInfo.GetInspectSpecialization)
+    local GetSpecializationInfoByID=GetSpecializationInfoByID or (C_SpecializationInfo and C_SpecializationInfo.GetSpecializationInfoByID)
     if button.player or (button.isplayer and UnitExists(button.unit) and UnitGUID(button.unit) == button.guid and not HealBot_Data["UILOCK"]) then
-        if HEALBOT_GAME_VERSION>6 then
-            if button.player then
-                i=C_SpecializationInfo.GetSpecialization(false)
+        if HEALBOT_CLIENT_VERSION>6 then
+            if button.player and GetSpecialization and GetSpecializationInfo then
+                i=GetSpecialization()
                 if i then
-                    _, s=C_SpecializationInfo.GetSpecializationInfo(i,false)
+                    _, s=GetSpecializationInfo(i,false)
                 end
-            elseif button.isplayer and button.range.current>-1 then
-                i=C_SpecializationInfo.GetInspectSpecialization(button.unit)
+            elseif not button.player and button.isplayer and button.range.current>-1 and GetInspectSpecialization and GetSpecializationInfoByID then
+                i=GetInspectSpecialization(button.unit)
                 if i then
                     _, s=GetSpecializationInfoByID(i)
                 end
@@ -2885,7 +2896,7 @@ function HealBot_Timer_ZoneUpdate()
             hbv_Auras_Save_Debuffs()
         end
     end
-    if HEALBOT_GAME_VERSION<5 then
+    if HEALBOT_CLIENT_VERSION<5 then
         HealBot_Aura_SetBossHealth(inInst)
     end
 
@@ -4468,7 +4479,7 @@ end
 
 function HealBot_Register_IncHeals(callback)
       --HealBot_setCall("HealBot_Register_IncHeals")
-    if HEALBOT_GAME_VERSION<4 then
+    if HEALBOT_CLIENT_VERSION<4 then
         if libCHC then 
             if not HealBot_luVars["LibCHCLoaded"] then
                 libCHC.RegisterCallback(HEALBOT_HEALBOT, "HealComm_HealStarted",

@@ -13,24 +13,14 @@ end
 
 HEALBOT_ABOUT_URL="healbot.dpm15.net"
 
-local hbBuildVersion, hbBuildNumber, hbBuildDate, hbInterfaceVersion=GetBuildInfo()
-hbInterfaceVersion=tonumber(hbInterfaceVersion) or 0
-local hbMajor=string.split(".", hbBuildVersion)
-HEALBOT_GAME_VERSION=tonumber(hbMajor)
+local vVersion, _, _, vInterface=GetBuildInfo()
+local vMajor=string.split(".", vVersion)
+HEALBOT_GAME_VERSION=tonumber(vMajor)
 
--- WoW: Forever (game type "camelot") runs the Mainline 12.1.5 API but is versioned
--- like a Classic client (build 1.60.x, interface 16001). Treat it as Mainline so the
--- correct API paths and secret-value handling are used.
-HEALBOT_FOREVER=false
-if HEALBOT_GAME_VERSION==1 and hbInterfaceVersion>=16000 then
-    HEALBOT_FOREVER=true
-    HEALBOT_GAME_VERSION=12
-end
-
-HEALBOT_MIDNIGHT=false
-if HEALBOT_GAME_VERSION>11 then
-    HEALBOT_MIDNIGHT=true
-end
+-- Forever has Classic content, but uses the modern client API and secret values.
+HEALBOT_FOREVER=tonumber(vInterface)>=16000 and tonumber(vInterface)<17000
+HEALBOT_CLIENT_VERSION=HEALBOT_FOREVER and 12 or HEALBOT_GAME_VERSION
+HEALBOT_MIDNIGHT=HEALBOT_CLIENT_VERSION>11
 
 HealBot_issecretvalue = issecretvalue or function() return false end
 

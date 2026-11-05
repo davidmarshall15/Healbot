@@ -2551,7 +2551,7 @@ function HealBot_Aura_UpdateUnitBuffsV9(button, selfOnly)
 end
 
 local HealBot_Aura_UpdateUnitBuffs=HealBot_Aura_UpdateUnitBuffsV2
-if HEALBOT_GAME_VERSION>8 then
+if HEALBOT_CLIENT_VERSION>8 then
     HealBot_Aura_UpdateUnitBuffs=HealBot_Aura_UpdateUnitBuffsV9
 elseif HEALBOT_GAME_VERSION<2 then
     HealBot_Aura_UpdateUnitBuffs=HealBot_Aura_UpdateUnitBuffsV1
@@ -2575,7 +2575,7 @@ function HealBot_Aura_PostUpdateUnitDebuffsData(button, spellID, spellName, debu
         end
         if HealBot_Aura_CanDispel[spellID] == nil then
             local aSpellId=nil
-            if HEALBOT_GAME_VERSION>8 then
+            if HEALBOT_CLIENT_VERSION>8 then
                 local aDId=1 -- own index, uaZ belongs to the calling enumeration loop
                 while true do
                     local okD, aDAura=pcall(C_UnitAuras.GetAuraDataByIndex, button.unit, aDId, "RAID_PLAYER_DISPELLABLE")
@@ -2765,7 +2765,7 @@ function HealBot_Aura_UpdateUnitDebuffsV9(button, selfOnly)
 end
 
 local HealBot_Aura_UpdateUnitDebuffs=HealBot_Aura_UpdateUnitDebuffsV2
-if HEALBOT_GAME_VERSION>8 then
+if HEALBOT_CLIENT_VERSION>8 then
     HealBot_Aura_UpdateUnitDebuffs=HealBot_Aura_UpdateUnitDebuffsV9
 elseif HEALBOT_GAME_VERSION>4 then
     HealBot_Aura_UpdateUnitDebuffs=HealBot_Aura_UpdateUnitDebuffsV5
@@ -2980,6 +2980,10 @@ function HealBot_Aura_UnitDebuffsUpdateWhenActive(button)
 end
 
 local debuffBarCol,debuffIconIndex=0,0
+function HealBot_Aura_DebuffsEnabled()
+    return debuffCheck
+end
+
 function HealBot_Aura_CheckUnitDebuffs(button, selfOnly)
       --HealBot_setCall("HealBot_Aura_CheckUnitDebuffs", button)
     if debuffCheck and not button.special.unit and button.status.current<HealBot_Unit_Status["DEAD"] then
@@ -4308,7 +4312,8 @@ function HealBot_Aura_InitData()
                                       }
             end
             
-            if HEALBOT_GAME_VERSION<3 then
+            -- Legacy shield estimates depend on the client API, not Classic content.
+            if HEALBOT_CLIENT_VERSION<3 then
                 classicAbsorbBonusV1["DEFAULT"]=ceil(GetSpellBonusHealing()*0.3)
                 classicAbsorbBonusV1[HealBot_Data["PGUID"]]=classicAbsorbBonusV1["DEFAULT"]
                 HealBot_Classic_Absorbs={[HealBot_WoWAPI_SpellInfo(HEALBOT_POWER_WORD_SHIELD) or "Power Word: Shield"]={[17]=48,
@@ -4349,7 +4354,7 @@ function HealBot_Aura_InitData()
                 HealBot_Classic_AbsorbsV1Track[HealBot_WoWAPI_SpellInfo(HEALBOT_POWER_WORD_SHIELD) or "Power Word: Shield"]=0
                 HealBot_Classic_AbsorbsV1Track[(HealBot_WoWAPI_SpellInfo(HEALBOT_ICE_BARRIER) or "Ice Barrier")]=0
                 HealBot_Classic_AbsorbsV1Track[(HealBot_WoWAPI_SpellInfo(HBC_MANA_SHIELD) or "Mana Shield")]=0
-            else
+            elseif HEALBOT_CLIENT_VERSION<6 then
                 if HealBot_Config.ClassicAbsorbsFilter == 1 then
                     HealBot_Classic_Absorbs={[(HealBot_WoWAPI_SpellName(76669) or "Illuminated Healing")]=true}
                 else

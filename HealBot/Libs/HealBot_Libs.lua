@@ -22,7 +22,7 @@ function HealBot_Libs_LDBIcon()
 end
 
 function HealBot_Libs_CHC()
-    if HEALBOT_GAME_VERSION<4 then
+    if HEALBOT_CLIENT_VERSION<4 then
         libCHC=libCHC or (LibStub and LibStub("LibHealComm-4.0", true))
     end
     return libCHC

@@ -59,6 +59,8 @@ end
 
 function HealBot_Init_TalentLookupImproved(callback)
       --HealBot_setCall("HealBot_Init_TalentLookupImproved")
+    -- Classic talent positions do not describe Forever's talent trees.
+    if HEALBOT_FOREVER then return end
     if HEALBOT_GAME_VERSION>9 then
         local pattern=false
         local improved=false
@@ -162,7 +164,7 @@ local function HealBot_Init_ManaCost(spellId, spellBookId, tipSet)
     if not HealBot_Util_isMidnight(true) and spellBookId and manaCost == 0 then
         if not tipSet then
             HealBot_SetToolTip(HealBot_ScanTooltip)
-            HealBot_ScanTooltip:SetSpellBookItem(spellBookId, BOOKTYPE_SPELL);
+            HealBot_WoWAPI_SetSpellBookTooltip(HealBot_ScanTooltip, spellBookId)
         end
         local ttText=_G["HealBot_ScanTooltipTextLeft2"];
         if (ttText:GetText()) then
@@ -189,7 +191,7 @@ local function HealBot_Init_Range(spellId, spellBookId, tipSet)
     if not HealBot_Util_isMidnight(false) and spellBookId then
         if not tipSet then
             HealBot_SetToolTip(HealBot_ScanTooltip)
-            HealBot_ScanTooltip:SetSpellBookItem(spellBookId, BOOKTYPE_SPELL);
+            HealBot_WoWAPI_SetSpellBookTooltip(HealBot_ScanTooltip, spellBookId)
         end
         local ttText=_G["HealBot_ScanTooltipTextRight2"];
         if (ttText:GetText()) then
@@ -350,7 +352,7 @@ local function HealBot_Init_UpdateRangeTarget(spellId, range, target, minKey, ma
 end
 
 local sTarget,nTarget=30,40
-if HEALBOT_GAME_VERSION>10 then
+if HEALBOT_CLIENT_VERSION>10 then
     sTarget=34
     nTarget=46
 end
@@ -388,11 +390,7 @@ function HealBot_Init_FindSpellRangeCast(id, spellName, spellBookId, cRank)
 
     if spellBookId then
         HealBot_SetToolTip(HealBot_ScanTooltip);
-        if HEALBOT_GAME_VERSION>10 then
-            HealBot_ScanTooltip:SetSpellBookItem(spellBookId, Enum.SpellBookSpellBank.Player)
-        else
-            HealBot_ScanTooltip:SetSpellBookItem(spellBookId, BOOKTYPE_SPELL)
-        end
+        HealBot_WoWAPI_SetSpellBookTooltip(HealBot_ScanTooltip, spellBookId)
     end
     if HealBot_Data["PCLASSTRIM"] == "PRIE" then
         if spellName == HEALBOT_PURIFY then
