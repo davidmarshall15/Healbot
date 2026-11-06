@@ -39,6 +39,8 @@ try {
     if ($LASTEXITCODE -ne 0) { throw 'Compatibility tests failed.' }
     & lua tests/forever_frames.lua
     if ($LASTEXITCODE -ne 0) { throw 'Forever frame tests failed.' }
+    & lua tests/opacity.lua
+    if ($LASTEXITCODE -ne 0) { throw 'Opacity regression tests failed.' }
 } finally {
     Pop-Location
 }

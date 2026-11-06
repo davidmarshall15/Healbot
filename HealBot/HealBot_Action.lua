@@ -3916,8 +3916,8 @@ function HealBot_Action_ResetUnitButtonOpacity(button)
     HealBot_Action_EmergBarCheck(button, true)
     HealBot_Aux_UpdBar(button)
     HealBot_RefreshUnit(button)
-    if button.health.incoming>0 then HealBot_Action_UpdateHealsInButton(button) end
-    if button.health.absorbs>0 then HealBot_Action_UpdateAbsorbsButton(button) end
+    if HEALBOT_FOREVER or (not HealBot_issecretvalue(button.health.incoming) and button.health.incoming>0) then HealBot_Action_UpdateHealsInButton(button) end
+    if not HealBot_issecretvalue(button.health.absorbs) and button.health.absorbs>0 then HealBot_Action_UpdateAbsorbsButton(button) end
     HealBot_Aura_Update_AllIcons(button)
     HealBot_Events_PowerIndicators(button)
     HealBot_Action_CheckUnitLowMana(button)
