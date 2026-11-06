@@ -52,7 +52,7 @@ function HealBot_Forever_UpdateIncomingHeals(button)
     bar:SetMinMaxValues(0, calculator:GetMaximumHealth())
     local amount=calculator:GetIncomingHeals()
     bar:SetValue(amount)
-
+    button.health.incoming=amount
     if mode==3 then
         HealBot_Action_HealsInColourClass(button)
     elseif mode==4 then

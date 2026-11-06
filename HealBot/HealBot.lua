@@ -2101,27 +2101,31 @@ local hiuIsSecret=false
 function HealBot_HealsInUpdate(button)
       --HealBot_setCall("HealBot_HealsInUpdate", button)
     button.health.updinheal=false
-    HealBot_HealsInAmount(button)
-    hiuIsSecret = HealBot_issecretvalue(hiuHealAmount) or HealBot_issecretvalue(button.health.incoming)
-    if not hiuIsSecret and hiuHealAmount>0 and button.range.current>0 then
-        if button.health.incoming~=hiuHealAmount then
-            button.health.incoming=hiuHealAmount
-            HealBot_Action_UpdateHealsInButton(button)
-            HealBot_Text_setInHealAbsorbsText(button)
+    if HealBot_Forever_UpdateIncomingHeals then
+        HealBot_Forever_UpdateIncomingHeals(button)
+    else
+        HealBot_HealsInAmount(button)
+        hiuIsSecret = HealBot_issecretvalue(hiuHealAmount) or HealBot_issecretvalue(button.health.incoming)
+        if not hiuIsSecret and hiuHealAmount>0 and button.range.current>0 then
+            if button.health.incoming~=hiuHealAmount then
+                button.health.incoming=hiuHealAmount
+                HealBot_Action_UpdateHealsInButton(button)
+               -- HealBot_Text_setInHealAbsorbsText(button)
+            end
+        elseif hiuIsSecret or button.health.incoming>0 or button.gref["InHeal"]:GetValue()>0 then
+            button.health.incoming=0
+            button.gref["InHeal"]:SetValue(0)
+            button.health.inheala=0
+            HealBot_Action_UpdateInHealStatusBarColor(button)
+           -- HealBot_Text_setInHealAbsorbsText(button)
         end
-    elseif hiuIsSecret or button.health.incoming>0 or button.gref["InHeal"]:GetValue()>0 then
-        button.health.incoming=0
-        button.gref["InHeal"]:SetValue(0)
-        button.health.inheala=0
-        HealBot_Action_UpdateInHealStatusBarColor(button)
-        HealBot_Text_setInHealAbsorbsText(button)
+        if not hiuIsSecret and button.health.auxincoming~=hiuHealAmount then
+            button.health.auxincoming=hiuHealAmount
+            HealBot_OverHeal(button)
+            HealBot_Aux_UpdateHealInBar(button)
+        end
     end
-    if not hiuIsSecret and button.health.auxincoming~=hiuHealAmount then
-        button.health.auxincoming=hiuHealAmount
-        HealBot_OverHeal(button)
-        HealBot_Aux_UpdateHealInBar(button)
-    end
-    if HealBot_Forever_UpdateIncomingHeals then HealBot_Forever_UpdateIncomingHeals(button) end
+    HealBot_Text_setInHealAbsorbsText(button)
 end
 
 function HealBotClassic_HealsInDoUpdate(button)
