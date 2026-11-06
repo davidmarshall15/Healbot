@@ -52,7 +52,13 @@ function HealBot_Forever_UpdateIncomingHeals(button)
     bar:SetMinMaxValues(0, calculator:GetMaximumHealth())
     local amount=calculator:GetIncomingHeals()
     bar:SetValue(amount)
-    button.health.incoming=amount
+    -- Only the native bar can consume secret amounts. Legacy consumers compare
+    -- this cache and perform arithmetic, so keep their value readable.
+    if HealBot_issecretvalue(amount) then
+        button.health.incoming=0
+    else
+        button.health.incoming=amount
+    end
     if mode==3 then
         HealBot_Action_HealsInColourClass(button)
     elseif mode==4 then
