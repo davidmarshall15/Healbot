@@ -1257,7 +1257,9 @@ function HealBot_Action_EmergBarCheck(button, force)
                 end
 			else
                 prevState=erButton.state
-                if button.health.pct<hbv_Skins_GetFrameVar("Emerg", "CRITICAL", button.frame) then
+                if HealBot_issecretvalue(button.health.pct) then
+                    erButton.state=0
+                elseif button.health.pct<hbv_Skins_GetFrameVar("Emerg", "CRITICAL", button.frame) then
                     erButton.state=4
                 elseif button.health.pct<hbv_Skins_GetFrameVar("Emerg", "INJURED", button.frame) then
                     erButton.state=3
@@ -1441,9 +1443,10 @@ local hbHealsInColourFuncs={[2]=HealBot_Action_HealsInColourHealth,
 function HealBot_Action_UpdateHealsInButton(button)
       --HealBot_setCall("HealBot_Action_UpdateHealsInButton", button)
     if HealBot_Forever_UpdateIncomingHeals and HealBot_Forever_UpdateIncomingHeals(button) then return end
-    if HealBot_issecretvalue(button.health.current) or HealBot_issecretvalue(button.health.max) then
-        -- Secret health: use percentage-based approach, skip raw arithmetic
-        button.health.inhptc=button.health.hpct
+    if HealBot_issecretvalue(button.health.current) or HealBot_issecretvalue(button.health.max) or
+       HealBot_issecretvalue(button.health.incoming) then
+        -- The legacy prediction cannot calculate a total from protected inputs.
+        button.health.inhptc=0
         button.health.inheala=0
         if not HealBot_Action_luVars["FluidInUse"] then
             button.gref["InHeal"]:SetValue(0)
@@ -1555,7 +1558,9 @@ function HealBot_Action_AbsorbsColourRoleHlthMix(button)
 end
 
 function HealBot_Action_OverShield(button)
-    if HealBot_Data["UILOCK"] and not HealBot_issecretvalue(button.health.current) and button.health.absorbs>5 and hbv_Skins_GetFrameBoolean("BarIACol", "OSHIELD", button.frame) and (button.health.absorbs+button.health.current) > button.health.max then
+    if HealBot_Data["UILOCK"] and not HealBot_issecretvalue(button.health.current) and
+       not HealBot_issecretvalue(button.health.max) and not HealBot_issecretvalue(button.health.absorbs) and
+       button.health.absorbs>5 and hbv_Skins_GetFrameBoolean("BarIACol", "OSHIELD", button.frame) and (button.health.absorbs+button.health.current) > button.health.max then
         button.gref["Shield"]:SetStatusBarColor(button.health.absorbr,button.health.absorbg,button.health.absorbb, 1)
     else
         button.gref["Shield"]:SetStatusBarColor(0,0,0,0)
@@ -1571,9 +1576,10 @@ local hbAbsorbsColourFuncs={[2]=HealBot_Action_AbsorbsColourHealth,
                             [8]=HealBot_Action_AbsorbsColourRoleHlthMix}
 function HealBot_Action_UpdateAbsorbsButton(button)
       --HealBot_setCall("HealBot_Action_UpdateAbsorbsButton", button)
-    if HealBot_issecretvalue(button.health.current) or HealBot_issecretvalue(button.health.max) then
-        -- Secret health: skip raw arithmetic
-        button.health.abptc=button.health.hpct
+    if HealBot_issecretvalue(button.health.current) or HealBot_issecretvalue(button.health.max) or
+       HealBot_issecretvalue(button.health.absorbs) or HealBot_issecretvalue(button.health.incoming) then
+        -- Keep the hidden legacy bar and its smoothing target readable.
+        button.health.abptc=0
         button.health.absorba=0
         if not HealBot_Action_luVars["FluidInUse"] then
             button.gref["Absorb"]:SetValue(0)
@@ -1787,7 +1793,7 @@ end
 local dAlpha=1
 function HealBot_Action_BackgroundBorderColourAdaptiveOverheals(button)
       --HealBot_setCall("HealBot_Action_BackgroundBorderColourAdaptiveOverheals", button)
-    if HealBot_issecretvalue(button.health.max) or button.health.max == 0 then 
+    if HealBot_issecretvalue(button.health.overheal) or HealBot_issecretvalue(button.health.max) or button.health.max == 0 then
         dAlpha=0 
     else
         dAlpha=(button.health.overheal/button.health.max)*10 
@@ -1801,7 +1807,7 @@ end
 
 function HealBot_Action_BackgroundBorderColourAdaptiveAbsorbs(button)
       --HealBot_setCall("HealBot_Action_BackgroundBorderColourAdaptiveAbsorbs", button)
-    if HealBot_issecretvalue(button.health.max) or button.health.max == 0 then 
+    if HealBot_issecretvalue(button.health.absorbs) or HealBot_issecretvalue(button.health.max) or button.health.max == 0 then
         dAlpha=0 
     else
         dAlpha=(button.health.absorbs/button.health.max)*10
@@ -1886,7 +1892,7 @@ end
 
 function HealBot_Action_AdaptiveOverhealsUpdate(button)
       --HealBot_setCall("HealBot_Action_AdaptiveOverhealsUpdate", button)
-    if hbAdaptive["Overheals"] and button.status.current<HealBot_Unit_Status["DC"] and not HealBot_issecretvalue(button.health.max) and button.health.max>0 and (button.health.overheal/button.health.max)>0.025 then
+    if hbAdaptive["Overheals"] and button.status.current<HealBot_Unit_Status["DC"] and not HealBot_issecretvalue(button.health.overheal) and not HealBot_issecretvalue(button.health.max) and button.health.max>0 and (button.health.overheal/button.health.max)>0.025 then
         if hbAdaptiveOrderName["Overheals"]<=button.adaptive.current then
             button.adaptive.current=hbAdaptiveOrderName["Overheals"]
             HealBot_Action_UpdateBackground(button)
@@ -1899,7 +1905,7 @@ end
 
 function HealBot_Action_AdaptiveAbsorbsUpdate(button)
       --HealBot_setCall("HealBot_Action_AdaptiveAbsorbsUpdate", button)
-    if hbAdaptive["Absorbs"] and button.status.current<HealBot_Unit_Status["DC"] and not HealBot_issecretvalue(button.health.max) and button.health.max>0 and (button.health.absorbs/button.health.max)>0.025 then
+    if hbAdaptive["Absorbs"] and button.status.current<HealBot_Unit_Status["DC"] and not HealBot_issecretvalue(button.health.absorbs) and not HealBot_issecretvalue(button.health.max) and button.health.max>0 and (button.health.absorbs/button.health.max)>0.025 then
         if hbAdaptiveOrderName["Absorbs"]<=button.adaptive.current then
             button.adaptive.current=hbAdaptiveOrderName["Absorbs"]
             HealBot_Action_UpdateBackground(button)
@@ -2117,7 +2123,7 @@ end
 local dAlpha=1
 function HealBot_Action_BackgroundColourAdaptiveOverheals(button)
       --HealBot_setCall("HealBot_Action_BackgroundColourAdaptiveOverheals", button)
-    if HealBot_issecretvalue(button.health.max) or button.health.max == 0 then 
+    if HealBot_issecretvalue(button.health.overheal) or HealBot_issecretvalue(button.health.max) or button.health.max == 0 then
         dAlpha=0 
     else
         dAlpha=(button.health.overheal/button.health.max)*10 
@@ -2131,7 +2137,7 @@ end
 
 function HealBot_Action_BackgroundColourAdaptiveAbsorbs(button)
       --HealBot_setCall("HealBot_Action_BackgroundColourAdaptiveAbsorbs", button)
-    if HealBot_issecretvalue(button.health.max) or button.health.max == 0 then 
+    if HealBot_issecretvalue(button.health.absorbs) or HealBot_issecretvalue(button.health.max) or button.health.max == 0 then
         dAlpha=0 
     else
         dAlpha=(button.health.absorbs/button.health.max)*10
@@ -2242,8 +2248,8 @@ function HealBot_Action_setEnabled(button, enabled, a)
         button.status.alpha=a
         HealBot_Aux_UpdBar(button)
         HealBot_Aura_Update_AllIcons(button)
-        if HEALBOT_FOREVER or button.health.incoming>0 then HealBot_Action_UpdateHealsInButton(button) end
-        if button.health.absorbs>0 then HealBot_Action_UpdateAbsorbsButton(button) end
+        if HEALBOT_FOREVER or HealBot_issecretvalue(button.health.incoming) or button.health.incoming>0 then HealBot_Action_UpdateHealsInButton(button) end
+        if HealBot_issecretvalue(button.health.absorbs) or button.health.absorbs>0 then HealBot_Action_UpdateAbsorbsButton(button) end
     end
 end
 
@@ -2910,8 +2916,8 @@ function HealBot_Action_UpdateHealthButton(button, hlthevent)
         else
             HealBot_Action_setFluid_BarButtons(button)
         end
-        if HEALBOT_FOREVER or button.health.incoming>0 then HealBot_Action_UpdateHealsInButton(button) end
-        if button.health.absorbs>0 then HealBot_Action_UpdateAbsorbsButton(button) end
+        if HEALBOT_FOREVER or HealBot_issecretvalue(button.health.incoming) or button.health.incoming>0 then HealBot_Action_UpdateHealsInButton(button) end
+        if HealBot_issecretvalue(button.health.absorbs) or button.health.absorbs>0 then HealBot_Action_UpdateAbsorbsButton(button) end
     end
 end
 
@@ -3916,8 +3922,8 @@ function HealBot_Action_ResetUnitButtonOpacity(button)
     HealBot_Action_EmergBarCheck(button, true)
     HealBot_Aux_UpdBar(button)
     HealBot_RefreshUnit(button)
-    if button.health.incoming>0 then HealBot_Action_UpdateHealsInButton(button) end
-    if button.health.absorbs>0 then HealBot_Action_UpdateAbsorbsButton(button) end
+    if HEALBOT_FOREVER or (not HealBot_issecretvalue(button.health.incoming) and button.health.incoming>0) then HealBot_Action_UpdateHealsInButton(button) end
+    if not HealBot_issecretvalue(button.health.absorbs) and button.health.absorbs>0 then HealBot_Action_UpdateAbsorbsButton(button) end
     HealBot_Aura_Update_AllIcons(button)
     HealBot_Events_PowerIndicators(button)
     HealBot_Action_CheckUnitLowMana(button)

@@ -74,6 +74,7 @@ local function frame()
 end
 
 env.HEALBOT_FOREVER=true
+env.HealBot_issecretvalue=function(value) return rawequal(value,secret) end
 env.InCombatLockdown=function() return combat end
 env.CreateFrame=function(kind)
     assert(not combat,"created a frame in combat")
@@ -240,7 +241,6 @@ local source=handle:read("*a"):gsub("\r\n","\n")
 handle:close()
 local handler=assert(source:match("(local hiuIsSecret=false.-)\nfunction HealBotClassic_HealsInDoUpdate"))
 local chunk=assert(loadstring("local hiuHealAmount\nlocal function HealBot_HealsInAmount() hiuHealAmount=_incomingAmount end\n"..handler))
-env.HealBot_issecretvalue=function(value) return rawequal(value,secret) end
 env.HealBot_Action_UpdateHealsInButton=env.HealBot_Forever_UpdateIncomingHeals
 env.HealBot_Action_UpdateInHealStatusBarColor=function() end
 env.HealBot_Text_setInHealAbsorbsText=function() end
@@ -257,10 +257,12 @@ env._incomingAmount=250
 amount=250
 env.HealBot_HealsInUpdate(b)
 eq(bar.value,250,"real heal event renders readable prediction")
+eq(b.health.incoming,250,"readable prediction remains available to legacy consumers")
 env._incomingAmount=0
 amount=0
 env.HealBot_HealsInUpdate(b)
 eq(bar.value,0,"real heal event clears prediction on interruption")
+eq(b.health.incoming,0,"legacy prediction clears on interruption")
 
 env.CreateUnitHealPredictionCalculator=nil
 local unsupported=button("party4")

@@ -701,7 +701,7 @@ function HealBot_Action_DoRefreshTooltip()
             local maxmana=xButton.mana.max
             powerCols.r,powerCols.g,powerCols.b=xButton.mana.r+0.34,xButton.mana.g+0.34,xButton.mana.b+0.34
 
-            if HEALBOT_GAME_VERSION < 12 and hlth>maxhlth then hlth=maxhlth end
+            if not HealBot_issecretvalue(hlth) and not HealBot_issecretvalue(maxhlth) and hlth>maxhlth then hlth=maxhlth end
 
             local UnitOffline=HealBot_Action_GetTimeOffline(xButton); --added by Diacono
             local UnitTag=xButton.text.tag
@@ -879,7 +879,7 @@ function HealBot_Action_DoRefreshTooltip()
                                     end
                                 else
                                     local mPct=xButton.mana.pct
-                                    if HEALBOT_GAME_VERSION < 12 then
+                                    if HEALBOT_CLIENT_VERSION < 12 then
                                         mana=HealBot_Util_ReadNumber(mana)
                                         maxmana=HealBot_Util_ReadNumber(maxmana)
                                     end
