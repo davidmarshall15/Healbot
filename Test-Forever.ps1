@@ -41,6 +41,8 @@ try {
     if ($LASTEXITCODE -ne 0) { throw 'Forever frame tests failed.' }
     & lua tests/opacity.lua
     if ($LASTEXITCODE -ne 0) { throw 'Opacity regression tests failed.' }
+    & lua tests/tooltip.lua
+    if ($LASTEXITCODE -ne 0) { throw 'Tooltip regression tests failed.' }
 } finally {
     Pop-Location
 }
