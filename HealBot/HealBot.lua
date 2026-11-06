@@ -2196,7 +2196,7 @@ function HealBot_AbsorbsUpdate(button)
     if not abuIsSecret and button.range.current>0 and abuAbsorbAmount>0 then
         if button.health.absorbs~=abuAbsorbAmount then
             button.health.absorbs=abuAbsorbAmount
-            if not abuIsSecret and button.health.max>0 then
+            if not HealBot_issecretvalue(button.health.max) and button.health.max>0 then
                 button.health.absorbspctc=floor((button.health.absorbs/button.health.max)*1000)
             else
                 button.health.absorbspctc=0

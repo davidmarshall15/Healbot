@@ -7,6 +7,7 @@ lua tests/compatibility.lua
 lua tests/forever_frames.lua
 lua tests/opacity.lua
 lua tests/tooltip.lua
+lua tests/secret_values.lua
 ```
 
 On Windows, the following also checks addon Lua syntax and TOC/XML references:
@@ -26,6 +27,10 @@ inspection; they do not reproduce the client's security system.
 The opacity and tooltip suites execute the corresponding real refresh functions
 with mock client data. Tooltip cases cover protected current/max health and mana,
 hidden health, readable health clamping, and legacy versus modern formatting.
+The mixed-value suite independently protects the health, healing, absorb and
+overheal inputs to shield, prediction, emergency and adaptive-colour functions.
+It checks both conservative fallbacks and readable-value behaviour, including
+hidden smoothing targets and the native Forever prediction path.
 
 ## In-game verification still required
 
