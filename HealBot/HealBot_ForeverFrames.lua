@@ -12,9 +12,11 @@ local function CreateIncomingBar(button)
     bar:EnableMouse(false)
     bar:Hide()
     button.foreverIncoming={bar=bar, calculator=calculator}
+    if HealBot_Forever_CreatePrediction then HealBot_Forever_CreatePrediction(button) end
 end
 
 function HealBot_Forever_UpdateIncomingHeals(button)
+    if HealBot_Forever_UpdatePrediction and HealBot_Forever_UpdatePrediction(button) then return true end
     local incoming=button.foreverIncoming
     if not incoming then return false end
     local bar=incoming.bar
@@ -164,7 +166,12 @@ local function Attach(button)
         button.gref.txt[key]:SetParent(button.gref["Top"])
         button.gref.txt[key]:SetDrawLayer("OVERLAY")
     end
-    if not button.foreverIncoming then CreateIncomingBar(button) end
+    if not button.foreverIncoming then
+        CreateIncomingBar(button)
+    elseif HealBot_Forever_CreatePrediction then
+        -- Retry interrupted prediction setup only on the out-of-combat path.
+        HealBot_Forever_CreatePrediction(button)
+    end
     if not button.foreverDebuffs and not auraError then
         local overlays={}
         local ok, err=pcall(function()
@@ -189,6 +196,13 @@ end
 local function Detach(button)
     active[button]=nil
     if button.foreverIncoming then button.foreverIncoming.bar:Hide() end
+    if button.foreverIncoming and button.foreverIncoming.absorb then
+        button.foreverIncoming.visible=false
+        button.foreverIncoming.absorb:Hide()
+        HealBot_Forever_UpdateOverShield(button)
+        HealBot_Aux_ClearHealInBar(button)
+        HealBot_Aux_ClearAbsorbBar(button)
+    end
     if button.foreverDebuffs then
         for _, container in pairs(button.foreverDebuffs) do
             container:Hide()
@@ -203,6 +217,14 @@ local function UpdateAll()
         HealBot_Forever_UpdateDebuffOverlay(button)
     end
 end
+
+hooksecurefunc("hbv_Skins_SetFrameVar", function(_, section, _, frame)
+    if section=="BarIACol" then
+        for button in pairs(active) do
+            if button.frame==frame then HealBot_Forever_UpdateIncomingHeals(button) end
+        end
+    end
+end)
 
 hooksecurefunc("HealBot_Action_RegisterUnitEvents", Attach)
 hooksecurefunc("HealBot_Action_UnregisterUnitEvents", Detach)

@@ -1558,6 +1558,7 @@ function HealBot_Action_AbsorbsColourRoleHlthMix(button)
 end
 
 function HealBot_Action_OverShield(button)
+    if HealBot_Forever_UpdateOverShield and HealBot_Forever_UpdateOverShield(button) then return end
     if HealBot_Data["UILOCK"] and not HealBot_issecretvalue(button.health.current) and
        not HealBot_issecretvalue(button.health.max) and not HealBot_issecretvalue(button.health.absorbs) and
        button.health.absorbs>5 and hbv_Skins_GetFrameBoolean("BarIACol", "OSHIELD", button.frame) and (button.health.absorbs+button.health.current) > button.health.max then
@@ -1576,6 +1577,7 @@ local hbAbsorbsColourFuncs={[2]=HealBot_Action_AbsorbsColourHealth,
                             [8]=HealBot_Action_AbsorbsColourRoleHlthMix}
 function HealBot_Action_UpdateAbsorbsButton(button)
       --HealBot_setCall("HealBot_Action_UpdateAbsorbsButton", button)
+    if HealBot_Forever_UpdateAbsorbs and HealBot_Forever_UpdateAbsorbs(button) then return end
     if HealBot_issecretvalue(button.health.current) or HealBot_issecretvalue(button.health.max) or
        HealBot_issecretvalue(button.health.absorbs) or HealBot_issecretvalue(button.health.incoming) then
         -- Keep the hidden legacy bar and its smoothing target readable.
@@ -4516,6 +4518,7 @@ end
 function HealBot_Action_UnregisterUnitEvents(button)
       --HealBot_setCall("HealBot_Action_UnregisterUnitEvents", button)
     button.status.events=false
+    button.range.eventIn=nil
     button:UnregisterEvent("UNIT_AURA")
     button:UnregisterEvent("UNIT_INVENTORY_CHANGED")
     button:UnregisterEvent("UNIT_MAXHEALTH")
@@ -4590,6 +4593,7 @@ end
 function HealBot_Action_RegisterUnitEvents(button)
       --HealBot_setCall("HealBot_Action_RegisterUnitEvents", button)
     button.status.events=true
+    button.range.eventIn=nil
     button:RegisterUnitEvent("UNIT_PHASE", button.unit)
     button:RegisterUnitEvent("UNIT_NAME_UPDATE", button.unit)
     button:RegisterUnitEvent("UNIT_CLASSIFICATION_CHANGED", button.unit)
@@ -5296,6 +5300,13 @@ function HealBot_Action_GetSpell(cType, cKey)
                     cSpellText=HealBot_Spells_KnownByID(sID)
                     vSpellIcon=HealBot_WoWAPI_SpellTexture(sID)
                     vSpellText=cSpellText or vSpellText
+                    -- Buffs keep a base name in the ID cache. Retain the saved
+                    -- ranked name only when the current spellbook maps it to
+                    -- this exact ID, so bindings and macros keep that rank.
+                    if HEALBOT_GAME_VERSION<3 and not HealBot_Globals.NoRanks and
+                       sID and sName and HealBot_Spell_Names[sName]==sID then
+                        vSpellText=sName
+                    end
                     vSpellType="spell"
                     vSpellID=sID
                     if HEALBOT_GAME_VERSION == 1 and string.find(vSpellText," Rune Ability") then
@@ -7882,7 +7893,11 @@ function HealBot_Action_ButtonPreClick(self,mButton,button)
     usedSmartCast=false;
     if not HealBot_Data["UILOCK"] and button and self.id<999 and UnitExists(button.unit) and not UnitIsEnemy("player",button.unit) then
         HealBot_setLuVars("TargetUnitID", button.unit)
-        if mButton == "LeftButton" and HealBot_Globals.SmartCast and not IsModifierKeyDown() then
+        -- An explicit Target binding must not be replaced by an out-of-combat
+        -- SmartCast buff, cure or resurrection (including emergency buttons).
+        local helpButton=self:GetAttribute("helpbutton1")
+        local clickType=helpButton and self:GetAttribute("type-"..helpButton) or self:GetAttribute("type1")
+        if mButton == "LeftButton" and clickType~="target" and HealBot_Globals.SmartCast and not IsModifierKeyDown() then
             HealBot_Action_UseSmartCast(self,button)
         end
     end
@@ -7938,6 +7953,9 @@ function HealBot_Action_ButtonRegisterForClicks(button)
         button.regClicks=false
     else
         button:EnableMouse(true)
+        -- SecureActionButtonTemplate must use the same edge we register here,
+        -- independently of Blizzard's global ActionButtonUseKeyDown setting.
+        button:SetAttribute("useOnKeyDown", HealBot_Config_Spells.ButtonCastMethod == 1)
         if HealBot_Config_Spells.ButtonCastMethod == 1 then
             button:RegisterForClicks("AnyDown");
         else

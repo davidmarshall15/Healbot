@@ -4,7 +4,9 @@
   <Script file="HealBot_ActionIcons.lua" />
   <Script file="HealBot_Timers.lua" />
 
-  <Button name="HealBotButtonSecureTemplate" virtual="true" inherits="SecureUnitButtonTemplate,SecureHandlerEnterLeaveTemplate,SecureHandlerShowHideTemplate">
+  <!-- HealBot owns these click bindings. SecureUnitButtonTemplate consults
+       Blizzard click bindings first and can discard modified Target actions. -->
+  <Button name="HealBotButtonSecureTemplate" virtual="true" inherits="SecureActionButtonTemplate,SecureHandlerEnterLeaveTemplate,SecureHandlerShowHideTemplate">
     <Size>
       <AbsDimension x="95" y="18" />
     </Size>
@@ -1297,7 +1299,7 @@
     </Anchors>
   </Button>
 
-   <Button name="HealingButtonTemplateEmerg" virtual="true" inherits="SecureUnitButtonTemplate,SecureHandlerEnterLeaveTemplate,SecureHandlerShowHideTemplate">
+   <Button name="HealingButtonTemplateEmerg" virtual="true" inherits="SecureActionButtonTemplate,SecureHandlerEnterLeaveTemplate,SecureHandlerShowHideTemplate">
     <Size>
       <AbsDimension x="128" y="18" />
     </Size>

@@ -9,8 +9,8 @@
 -- factory, MIT-style open source - github.com/DanderBot/DandersFrames.)
 --
 -- This module puts two such rows on every HealBot player bar:
---   * HoTs you cast   filter "HELPFUL|PLAYER"  right side, grows left
---   * Debuffs         filter "HARMFUL"         left side, grows right
+--   * HoTs you cast   filter "HELPFUL|PLAYER"  buff icon-set 1 placement
+--   * Debuffs         filter "HARMFUL"         debuff icon-set 1 placement
 -- Rows are HIDDEN out of combat (HealBot's own icon engine still works there)
 -- and SHOWN in combat, where HealBot's engine is blind.
 --
@@ -40,6 +40,7 @@ local function HBCA_Defaults()
     if type(HealBot_Globals)~="table" then return nil end
     if HealBot_Globals.CombatAurasOn==nil       then HealBot_Globals.CombatAurasOn=true end
     if HealBot_Globals.CombatAurasSize==nil     then HealBot_Globals.CombatAurasSize=12 end
+    if HealBot_Globals.CombatAurasMatchSkinSize==nil then HealBot_Globals.CombatAurasMatchSkinSize=true end
     if HealBot_Globals.CombatAurasHots==nil     then HealBot_Globals.CombatAurasHots=4 end
     if HealBot_Globals.CombatAurasDebuffs==nil  then HealBot_Globals.CombatAurasDebuffs=3 end
     if HealBot_Globals.CombatAurasNums==nil     then HealBot_Globals.CombatAurasNums=false end
@@ -102,18 +103,59 @@ local function HBCA_MakeInit(size)
     end
 end
 
-local function HBCA_Layout(size)
+local function HBCA_Layout(size, spacing)
     return { elementWidth=size, elementHeight=size,
-             elementSpacing=1, lineSpacing=1, groupSpacing=0,   -- 68914+
-             elementSpacingX=1, elementSpacingY=1, gapX=0 }     -- pre-68914 twins
+             elementSpacing=spacing, lineSpacing=spacing, groupSpacing=0,   -- 68914+
+             elementSpacingX=spacing, elementSpacingY=spacing, gapX=0 }     -- pre-68914 twins
 end
 
--- Build one container on a HealBot button. side="hot" (right, grows left) or
--- "db" (left, grows right). Out-of-combat only; caller gates.
-local function HBCA_BuildOne(button, side)
+-- Read only ordinary HealBot skin geometry, never native aura button data.
+-- Copy the first icon's anchor so offsets, inside/outside placement and the
+-- selected corner match out of combat, even when that icon is hidden.
+local function HBCA_SkinLayout(button, side)
+    local hot=side=="hot"
+    local point=hot and "BOTTOMRIGHT" or "BOTTOMLEFT"
+    local layout={point=point, relative=button, relativePoint=point,
+                  x=hot and -1 or 1, y=1, spacing=1, double=false}
+    local icon=button.gref and button.gref.icon and button.gref.icon[hot and 1 or 51]
+    local g=HBCA_Defaults()
+    if g and g.CombatAurasMatchSkinSize and icon and icon.GetWidth then
+        local size=icon:GetWidth()
+        if size and size>0 then layout.size=size end
+    end
+    if icon and icon.GetPoint then
+        local p, relative, rp, x, y=icon:GetPoint(1)
+        if p then
+            layout.point=p
+            layout.relative=relative or button
+            layout.relativePoint=rp or p
+            layout.x=x or 0
+            layout.y=y or 0
+        end
+    end
+    if type(hbv_Skins_GetIconVar)=="function" then
+        layout.spacing=hbv_Skins_GetIconVar(hot and "BICONSPACER" or "DICONSPACER", button.frame, 1) or 1
+    end
+    if type(hbv_Skins_GetIconBoolean)=="function" then
+        layout.double=hbv_Skins_GetIconBoolean(hot and "BUFFDOUBLE" or "DEBUFFDOUBLE", button.frame, 1) or false
+    end
+    return layout
+end
+
+local function HBCA_SameLayout(a, b)
+    if not a then return false end
+    if a.size~=b.size then return false end
+    for key, value in pairs(b) do
+        if a[key]~=value then return false end
+    end
+    return true
+end
+
+-- Build one container on a HealBot button. Out-of-combat only; caller gates.
+local function HBCA_BuildOne(button, side, placement)
     local g=HBCA_Defaults()
     if not g then return nil end
-    local size=g.CombatAurasSize or 16
+    local size=placement.size or g.CombatAurasSize or 12
     local filter=(side=="hot") and "HELPFUL|PLAYER" or "HARMFUL"
     local maxN=(side=="hot") and (g.CombatAurasHots or 4) or (g.CombatAurasDebuffs or 3)
     if maxN<1 then return nil end
@@ -121,22 +163,20 @@ local function HBCA_BuildOne(button, side)
     if not ok or not c then return nil end
     pcall(function()
         c:ClearAllPoints()
-        -- Grow INWARD from the bar edge, single line, never wrap (no
-        -- SetFlowLayoutMaximumLineSize call: nil = no-wrap). Growth direction
-        -- names resolve against AnchorUtil.FlowDirection (per DandersFrames).
-        local growH
-        if side=="hot" then
-            c:SetPoint("RIGHT", button, "RIGHT", -1, 0)
-            if c.SetFlowLayoutAnchorPoint then pcall(c.SetFlowLayoutAnchorPoint, c, "TOPRIGHT") end
-            growH="Left"
-        else
-            c:SetPoint("LEFT", button, "LEFT", 1, 0)
-            if c.SetFlowLayoutAnchorPoint then pcall(c.SetFlowLayoutAnchorPoint, c, "TOPLEFT") end
-            growH="Right"
-        end
+        c:SetPoint(placement.point, placement.relative, placement.relativePoint, placement.x, placement.y)
+        if c.SetFlowLayoutAnchorPoint then c:SetFlowLayoutAnchorPoint(placement.point) end
+        local growH=string.find(placement.point, "RIGHT") and "Left" or "Right"
+        local growV=string.find(placement.point, "BOTTOM") and "Up" or "Down"
         if c.SetFlowLayoutGrowthDirection and AnchorUtil and AnchorUtil.FlowDirection then
-            local h, v=AnchorUtil.FlowDirection[growH], AnchorUtil.FlowDirection["Down"]
+            local h, v=AnchorUtil.FlowDirection[growH], AnchorUtil.FlowDirection[growV]
             if h~=nil and v~=nil then pcall(c.SetFlowLayoutGrowthDirection, c, h, v) end
+        end
+        -- HealBot's double layout fills a column of two, then grows across.
+        if c.SetFlowLayoutAxis and AnchorUtil and AnchorUtil.FlowLayoutAxis then
+            c:SetFlowLayoutAxis(AnchorUtil.FlowLayoutAxis[placement.double and "Vertical" or "Horizontal"])
+            if c.SetFlowLayoutMaximumLineSize then
+                c:SetFlowLayoutMaximumLineSize(placement.double and (size*2+placement.spacing) or nil)
+            end
         end
         c:SetFrameLevel((button:GetFrameLevel() or 1)+25)
         if c.SetMouseClickEnabled then pcall(c.SetMouseClickEnabled, c, false) end
@@ -152,7 +192,7 @@ local function HBCA_BuildOne(button, side)
     end
     local okG=pcall(function()
         c:AddAuraGroup("hbca"..side, filter,
-            { maxFrameCount=maxN, initializeFrame=HBCA_MakeInit(size), layout=HBCA_Layout(size),
+            { maxFrameCount=maxN, initializeFrame=HBCA_MakeInit(size), layout=HBCA_Layout(size, placement.spacing),
               candidateFilters=cf })
     end)
     if not okG then pcall(function() c:Hide() end) return nil end
@@ -169,6 +209,27 @@ local function HBCA_HideButton(button)
     if a.db then pcall(function() a.db:Hide() end) end
 end
 
+-- Retarget only rows that exist. Reuse native widgets during combat; if the
+-- client rejects a unit change, never display auras belonging to the old unit.
+local function HBCA_SetButtonShown(button, show)
+    local a=attached[button]
+    if not a then return end
+    local vis=not not (show and HBCA_Enabled() and button.unit and button.frame and button.frame<10 and
+                       button.status and button.status.events and button:IsShown())
+    if vis and button.unit~=a.unit then
+        local okH=not a.hot or pcall(a.hot.SetUnit, a.hot, button.unit)
+        local okD=not a.db or pcall(a.db.SetUnit, a.db, button.unit)
+        if okH and okD then
+            a.unit=button.unit
+        else
+            vis=false
+            deferred[button]=true
+        end
+    end
+    if a.hot then pcall(function() a.hot:SetShown(vis); if vis and a.hot.UpdateAllAuras then a.hot:UpdateAllAuras() end end) end
+    if a.db then pcall(function() a.db:SetShown(vis); if vis and a.db.UpdateAllAuras then a.db:UpdateAllAuras() end end) end
+end
+
 -- Tear down = hide + forget. Container groups are add-only, so a filter/size
 -- change abandons the old container (hidden containers are dormant) and builds
 -- a fresh one. Cheap enough at settings-change frequency.
@@ -178,15 +239,30 @@ local function HBCA_DropButton(button)
 end
 
 local function HBCA_Attach(button)
-    if not button or not button.unit or not button.frame or button.frame>=10 then return end
+    if not button then return end
+    if not button.unit or not button.frame or button.frame>=10 or not button.status or not button.status.events then
+        deferred[button]=nil
+        HBCA_HideButton(button)
+        return
+    end
     known[button]=true
     if not HBCA_Enabled() then return end
-    if InCombatLockdown() or not HBCA_Probe() then
+    if InCombatLockdown() then
+        deferred[button]=true
+        HBCA_SetButtonShown(button, true)
+        return
+    end
+    if not HBCA_Probe() then
         if supported~=false then deferred[button]=true end
         return
     end
     deferred[button]=nil
     local a=attached[button]
+    local hotLayout, dbLayout=HBCA_SkinLayout(button, "hot"), HBCA_SkinLayout(button, "db")
+    if a and (not HBCA_SameLayout(a.hotLayout, hotLayout) or not HBCA_SameLayout(a.dbLayout, dbLayout)) then
+        HBCA_DropButton(button)
+        a=nil
+    end
     if a and a.unit==button.unit then return end
     if a then
         -- unit retarget on standing containers
@@ -198,7 +274,8 @@ local function HBCA_Attach(button)
         end
         HBCA_DropButton(button)
     end
-    attached[button]={ hot=HBCA_BuildOne(button, "hot"), db=HBCA_BuildOne(button, "db"), unit=button.unit }
+    attached[button]={ hot=HBCA_BuildOne(button, "hot", hotLayout), db=HBCA_BuildOne(button, "db", dbLayout),
+                       hotLayout=hotLayout, dbLayout=dbLayout, unit=button.unit }
 end
 
 local function HBCA_AttachDeferred()
@@ -210,19 +287,8 @@ local function HBCA_AttachDeferred()
 end
 
 local function HBCA_SetAllShown(show)
-    for button, a in pairs(attached) do
-        -- resync unit before revealing; a mismatch we cannot fix stays hidden
-        local mismatch=false
-        if show and button.unit~=a.unit then
-            if pcall(function() a.hot:SetUnit(button.unit); a.db:SetUnit(button.unit) end) then
-                a.unit=button.unit
-            else
-                mismatch=true
-            end
-        end
-        local vis=show and not mismatch and HBCA_Enabled() and button:IsShown()
-        if a.hot then pcall(function() a.hot:SetShown(vis); if vis and a.hot.UpdateAllAuras then a.hot:UpdateAllAuras() end end) end
-        if a.db then pcall(function() a.db:SetShown(vis); if vis and a.db.UpdateAllAuras then a.db:UpdateAllAuras() end end) end
+    for button in pairs(attached) do
+        HBCA_SetButtonShown(button, show)
     end
 end
 
@@ -263,6 +329,9 @@ if type(hooksecurefunc)=="function" then
     hooksecurefunc("HealBot_Action_UnregisterUnitEvents", function(button)
         pcall(HBCA_HideButton, button)
     end)
+    hooksecurefunc("HealBot_Skins_ResetSkin", function(barType, button)
+        if barType=="bar" and known[button] then pcall(HBCA_Attach, button) end
+    end)
 end
 
 -- ---------- slash ----------
@@ -277,12 +346,17 @@ SlashCmdList["HBCOMBATAURAS"]=function(msg)
     if cmd=="on" then
         g.CombatAurasOn=true
         HBCA_DropAll()
-        say("on - icons appear in combat (Blizzard-driven; HoTs right, debuffs left)")
+        say("on - icons appear in combat (Blizzard-driven; follows buff/debuff icon-set 1 placement)")
     elseif cmd=="off" then
         g.CombatAurasOn=false
         HBCA_SetAllShown(false)
         say("off")
+    elseif cmd=="size" and arg=="skin" then
+        g.CombatAurasMatchSkinSize=true
+        HBCA_DropAll()
+        say("icon size follows the skin (rebuilds out of combat)")
     elseif cmd=="size" and tonumber(arg) then
+        g.CombatAurasMatchSkinSize=false
         g.CombatAurasSize=math.max(8, math.min(40, tonumber(arg)))
         HBCA_DropAll()
         say("icon size "..g.CombatAurasSize.." (rebuilds out of combat)")
@@ -361,6 +435,7 @@ SlashCmdList["HBCOMBATAURAS"]=function(msg)
             .."  maxdur="..(g.CombatAurasMaxDur or 120).."s"
             .."  nums="..tostring(g.CombatAurasNums).."  bars="..n
             .."  supported="..tostring(supported))
-        say("usage: /hbca on|off | size N | hots N | debuffs N | maxdur N | nums")
+        say("size mode: "..(g.CombatAurasMatchSkinSize and "skin" or "manual"))
+        say("usage: /hbca on|off | size skin|N | hots N | debuffs N | maxdur N | nums")
     end
 end

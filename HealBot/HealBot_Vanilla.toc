@@ -62,3 +62,4 @@ HealBot.xml
 HealBot_Action.xml
 HealBot_CombatAuras.lua
 HealBot_ForeverFrames.lua
+HealBot_ForeverPrediction.lua

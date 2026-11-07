@@ -43,7 +43,7 @@ function HealBot_Aux_setInHealAbsorbMax()
         HealBot_Globals.InHealDiv=HealBot_Globals.InHealDiv*10
         HealBot_Globals.HealAbsorbsDiv=HealBot_Globals.HealAbsorbsDiv*10
     end
-    if maxHlth and maxHlth>1 then
+    if maxHlth and not HealBot_issecretvalue(maxHlth) and maxHlth>1 then
         HealBot_Aux_luVars["AbsorbMax"]=ceil((maxHlth/(HealBot_Globals.AbsorbDiv/10))/10)
         HealBot_Aux_luVars["InHealMax"]=ceil((maxHlth/(HealBot_Globals.InHealDiv/10))/10)
         HealBot_Aux_luVars["HealAbsorbsMax"]=ceil((maxHlth/(HealBot_Globals.HealAbsorbsDiv/10))/10)
@@ -87,6 +87,10 @@ end
 
 local function HealBot_Aux_clearBar(button, id)
       --HealBot_setCall("HealBot_Aux_clearBar", button)
+    if button.aux[id]["NATIVEPREDICTION"] then
+        button.gref.aux[id]:SetMinMaxValues(0,1000)
+        button.aux[id]["NATIVEPREDICTION"]=nil
+    end
     button.aux[id]["CLEAR"]=false
     button.aux[id]["FLASH"]=false
     button.aux[id]["STATIC"]=false
@@ -147,8 +151,22 @@ local function HealBot_Aux_VerticalText(text)
     return vText
 end
 
-local function HealBot_Aux_setBar(button, id, value, isFluid, text, endTime, CastIsChan, colSet)
+local function HealBot_Aux_setBar(button, id, value, isFluid, text, endTime, CastIsChan, colSet, nativeMaximum)
       --HealBot_setCall("HealBot_Aux_setBar", button)
+    if nativeMaximum then
+        button.aux[id]["NATIVEPREDICTION"]=true
+        button.aux[id]["FLUID"]=-1
+        button.aux[id]["FLUIDTEXT"]=-1
+        button.aux[id]["TIMED"]=-1
+        button.aux[id]["TIMEDH2L"]=-1
+        button.aux[id]["TIMEDL2H"]=-1
+        button.aux[id]["ISFLUID"]=false
+        button.gref.aux[id]:SetMinMaxValues(0,nativeMaximum)
+    elseif button.aux[id]["NATIVEPREDICTION"] then
+        button.aux[id]["NATIVEPREDICTION"]=nil
+        button.gref.aux[id]:SetMinMaxValues(0,1000)
+        button.gref.aux[id]:SetValue(0)
+    end
     button.aux[id]["CLEAR"]=false
     if not colSet then
         if hbv_Aux_GetBarVar("COLOUR", button.frame, id) == 2 then
@@ -961,7 +979,43 @@ local function HealBot_Aux_SetAuxHlth10(button)
     end
 end
 
+local function HealBot_Aux_UpdateNativePrediction(button, id, absorbs)
+    if not HEALBOT_FOREVER then return false end
+    local getAmount=absorbs and UnitGetTotalAbsorbs or UnitGetIncomingHeals
+    if not getAmount then return false end
+    if not button.status.events or not button.status.enabled or button.frame>=10 or
+       button.status.current>=HealBot_Unit_Status["DEAD"] then
+        HealBot_Aux_clearBar(button,id)
+        return true
+    end
+    local amount=getAmount(button.unit) or 0
+    if not HealBot_issecretvalue(amount) and amount<=0 then
+        HealBot_Aux_clearBar(button,id)
+        return true
+    end
+    local prefix=absorbs and "absorb" or "inheal"
+    if hbv_Aux_GetBarVar("COLOUR",button.frame,id)==1 then
+        button.aux[id]["R"],button.aux[id]["G"],button.aux[id]["B"]=
+            button.health[prefix.."r"],button.health[prefix.."g"],button.health[prefix.."b"]
+    end
+    -- The existing formatter/vertical-text path inspects values. Keep it for
+    -- readable amounts only; protected bar values go directly to StatusBar.
+    local text=false
+    if not HealBot_issecretvalue(amount) and hbv_Aux_GetBarBoolean("TEXT",button.frame,id) then
+        text=HealBot_Text_shortHealTxt(amount,button.frame,hbAuxTextMaxChars[button.frame][id])
+        if hbv_Aux_GetBarTextVar("COLTYPE",button.frame,id)==1 then
+            -- Copy without doing arithmetic on potentially protected colours.
+            button.auxtxt[id]["R"],button.auxtxt[id]["G"],button.auxtxt[id]["B"]=
+                button.health[prefix.."r"],button.health[prefix.."g"],button.health[prefix.."b"]
+        end
+    end
+    local maximum=HealBot_Aux_luVars[absorbs and "AbsorbMax" or "InHealMax"]
+    HealBot_Aux_setBar(button,id,amount,false,text,nil,nil,nil,maximum)
+    return true
+end
+
 local function HealBot_Aux_UpdateAbsorbBarById(button, id)
+    if HealBot_Aux_UpdateNativePrediction(button,id,true) then return end
     if button.status.current<HealBot_Unit_Status["DEAD"] and button.health.auxabsorbs>0 then
         if hbv_Aux_GetBarVar("COLOUR", button.frame, id) == 1 then
             button.aux[id]["R"]=button.health.absorbr
@@ -1012,6 +1066,7 @@ local function HealBot_Aux_SetAuxHealIn10(button)
 end
 
 local function HealBot_Aux_UpdateHealInBarById(button, id)
+    if HealBot_Aux_UpdateNativePrediction(button,id,false) then return end
     if button.status.current<HealBot_Unit_Status["DEAD"] and button.health.auxincoming>0 then
         if hbv_Aux_GetBarVar("COLOUR", button.frame, id) == 1 then
             button.aux[id]["R"]=button.health.inhealr

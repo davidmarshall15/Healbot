@@ -2101,9 +2101,7 @@ local hiuIsSecret=false
 function HealBot_HealsInUpdate(button)
       --HealBot_setCall("HealBot_HealsInUpdate", button)
     button.health.updinheal=false
-    if HealBot_Forever_UpdateIncomingHeals then
-        HealBot_Forever_UpdateIncomingHeals(button)
-    else
+    if not (HealBot_Forever_UpdateIncomingHeals and HealBot_Forever_UpdateIncomingHeals(button)) then
         HealBot_HealsInAmount(button)
         hiuIsSecret = HealBot_issecretvalue(hiuHealAmount) or HealBot_issecretvalue(button.health.incoming)
         if not hiuIsSecret and hiuHealAmount>0 and button.range.current>0 then
@@ -2191,6 +2189,10 @@ local abuIsSecret=false
 function HealBot_AbsorbsUpdate(button)
       --HealBot_setCall("HealBot_AbsorbsUpdate", button)
     button.health.updabsorb=false
+    if HealBot_Forever_UpdateAbsorbs and HealBot_Forever_UpdateAbsorbs(button) then
+        HealBot_Text_setInHealAbsorbsText(button)
+        return
+    end
     HealBot_AbsorbsAmount(button)
     abuIsSecret = HealBot_issecretvalue(abuAbsorbAmount) or HealBot_issecretvalue(button.health.absorbs)
     if not abuIsSecret and button.range.current>0 and abuAbsorbAmount>0 then

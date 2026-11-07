@@ -793,12 +793,21 @@ end
 function HealBot_Text_DoSetHealthText(button, IgnoreInHeals, force)
       --HealBot_setCall("HealBot_Text_DoSetHealthText", button)
     if HealBot_Util_isMidnight(false) then
-        if hbv_Skins_GetFrameVar("BarText", "HLTHTYPE", button.framecol) == 1 then
+        local healthType=hbv_Skins_GetFrameVar("BarText", "HLTHTYPE", button.framecol)
+        if healthType == 1 then
             button.text.healthcomplete=hbNumFormats["SurroundLeft"][button.framecol] .. button.health.current .. hbNumFormats["SurroundRight"][button.framecol]
-        elseif hbNumFormats["Places"][button.frame] < 1 or hbNumFormats["Places"][button.frame] > 2 then
-            button.text.healthcomplete=hbNumFormats["SurroundLeft"][button.framecol] .. format("%i%%",button.health.cpct) .. hbNumFormats["SurroundRight"][button.framecol]
-        else
-            button.text.healthcomplete=hbNumFormats["SurroundLeft"][button.framecol] .. format("%."..hbNumFormats["Places"][button.frame].."f%%",button.health.cpct) .. hbNumFormats["SurroundRight"][button.framecol]
+        end
+        if healthType ~= 1 or hbv_Skins_GetFrameBoolean("BarText", "HLTHINCPTC", button.framecol) then
+            local places=hbNumFormats["Places"][button.framecol]
+            local percentFormat=(places>=1 and places<=2) and ("%."..places.."f%%") or "%i%%"
+            local percentText=hbNumFormats["SurroundLeft"][button.framecol] .. format(percentFormat,button.health.cpct) .. hbNumFormats["SurroundRight"][button.framecol]
+            -- Native formatting/concatenation propagates secret values. Branch
+            -- only on skin settings, never on health or the resulting text.
+            if healthType == 1 then
+                button.text.healthcomplete=button.text.healthcomplete .. "  " .. percentText
+            else
+                button.text.healthcomplete=percentText
+            end
         end
         button.text.healthupdate=true
         HealBot_Text_UpdateText(button)
