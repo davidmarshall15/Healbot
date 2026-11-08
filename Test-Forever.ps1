@@ -43,8 +43,20 @@ try {
     if ($LASTEXITCODE -ne 0) { throw 'Opacity regression tests failed.' }
     & lua tests/tooltip.lua
     if ($LASTEXITCODE -ne 0) { throw 'Tooltip regression tests failed.' }
+    & lua tests/health_text.lua
+    if ($LASTEXITCODE -ne 0) { throw 'Health text regression tests failed.' }
     & lua tests/secret_values.lua
     if ($LASTEXITCODE -ne 0) { throw 'Mixed secret-value regression tests failed.' }
+    & lua tests/prediction.lua
+    if ($LASTEXITCODE -ne 0) { throw 'Native prediction regression tests failed.' }
+    & lua tests/target_binding.lua
+    if ($LASTEXITCODE -ne 0) { throw 'Target binding regression tests failed.' }
+    & lua tests/modified_target.lua
+    if ($LASTEXITCODE -ne 0) { throw 'Modified Target dispatch regression tests failed.' }
+    & lua tests/rank_range.lua
+    if ($LASTEXITCODE -ne 0) { throw 'Spell rank/range regression tests failed.' }
+    & lua tests/combat_auras.lua
+    if ($LASTEXITCODE -ne 0) { throw 'Combat aura layout regression tests failed.' }
 } finally {
     Pop-Location
 }

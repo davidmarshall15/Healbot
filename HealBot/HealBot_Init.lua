@@ -485,6 +485,11 @@ function HealBot_Init_Spells_addSpell(spellId, spellName, spellBookId, cRank)
             local rank=tonumber(string.match(cRank, "%d+")) or 0
             if HealBot_Ranks[spellName]<rank then HealBot_Ranks[spellName]=rank end
             if HealBot_Buff_Names[spellName] then
+                -- Keep base-name buff lookups, but resolve an explicit rank to
+                -- its own spell ID when saving/reloading a click assignment.
+                if HEALBOT_GAME_VERSION<3 and rank>0 then
+                    HealBot_Spell_Names[spellName.."("..cRank..")"]=spellId
+                end
                 if not HealBot_Buff_Ranks[spellName] then
                     HealBot_Buff_Ranks[spellName]={}
                     HealBot_Buff_Ranks[spellName][0]=1

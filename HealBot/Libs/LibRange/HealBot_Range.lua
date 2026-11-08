@@ -131,7 +131,7 @@ local function HealBot_Range_IsSpellInRange(button, spellName, limit, spellOnly)
             sRange=2
         end
         return sRange
-    elseif not spellOnly and HealBot_Range_Unit(button.unit, button.guid, limit) then
+    elseif sRange==nil and not spellOnly and HealBot_Range_Unit(button.unit, button.guid, limit, button.range.eventIn) then
         return 1
     end
     return 0
@@ -171,11 +171,12 @@ function HealBot_Range_InteractDistance(unit, range)
 end
 
 local inRange, checkedRange=false,false
-function HealBot_Range_Unit(unit, guid, limit)
+function HealBot_Range_Unit(unit, guid, limit, eventIn)
     inRange, checkedRange=UnitInRange(unit)
     -- Midnight: gate on the VALUES being secret, not the client version -
     -- UnitInRange stays readable for player group members
-    if not HealBot_issecretvalue(checkedRange) and checkedRange and not HealBot_issecretvalue(inRange) then
+    if not HealBot_issecretvalue(checkedRange) and checkedRange and
+       not HealBot_issecretvalue(inRange) and inRange~=nil then
         return inRange
     elseif not limit then
         if not UnitIsVisible(unit) or not HealBot_Range_UnitInPhase(unit, guid) then
@@ -183,6 +184,11 @@ function HealBot_Range_Unit(unit, guid, limit)
         elseif HealBot_Range_InteractDistance(unit, 1) then
             return true
         end
+    end
+    -- An unavailable query is not an out-of-range result. The unit event can
+    -- still be readable in combat; never override a readable query with it.
+    if not HealBot_issecretvalue(eventIn) and type(eventIn)=="boolean" then
+        return eventIn
     end
     return false
 end
@@ -202,7 +208,7 @@ function HealBot_Range_UnitCurrent(button, spellName)
         uRange=2
     elseif spellName and HealBot_Spell_Names[spellName] then
         uRange=HealBot_Range_IsSpellInRange(button, spellName, true)
-    elseif HealBot_Range_Unit(button.unit, button.guid, true) then
+    elseif HealBot_Range_Unit(button.unit, button.guid, true, button.range.eventIn) then
         uRange=1
     else
         uRange=0
