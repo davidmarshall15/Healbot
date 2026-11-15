@@ -15,7 +15,7 @@ local function build(name, raid, width, height, columns)
     row("Frame~0~s~f~1", 'SCALE=1,PADDING=2,BACKA=0,BORDERA=0')
     row("FrameAlias~0~s~f~1", 'SHOW="false"')
     row("HeadBar~0~s~f~1", 'SHOW="false"')
-    row("Icons~0~s~f~1", 'SHOWROLE="true",CLASSEN="true",CLASSSCALE=0.3,CLASSANCHOR=3,RCEN="true",RCSCALE=0.35,RCANCHOR=4')
+    row("Icons~0~s~f~1", 'SHOWCLASS="true",SHOWROLE="true",SHOWMTONLY="false",CLASSEN="true",CLASSSCALE=0.3,CLASSANCHOR=3,RCEN="true",RCSCALE=0.35,RCANCHOR=4')
     row("Emerg~0~s~f~1", 'USE="false"')
     local names={"Main tanks","Self","Group","Private List","Healers","Raid","Private Focus","Private Focus ToT","Vehicle","Pets","Target","Target of Target","Focus","Target of Focus","Enemy"}
     for id,label in ipairs(names) do

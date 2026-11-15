@@ -15,6 +15,15 @@ Blizzard compact-frame skins
   - Combat timer overrides can be reset to the skin preference with `/hbca nums skin`.
 
 
+Role icons on HealBot frames
+---------------------------
+  - Open Skins > Frames > Icons > Extras > Class / Role and select the frame to configure.
+  - Enable Show role (Mostra ruolo). This also enables the shared class/role icon slot.
+  - Disable Only show tanks to show tank, healer and DPS icons. Enable Always enabled to keep the icon visible on healthy bars.
+  - Use Position, Anchor, Scale and the horizontal/vertical offsets in the same panel to place the icon.
+  - The Blizzard Forever presets include visible role icons by default on new imports. For an already imported skin, enable Show Class and Show role in the panel above; no reimport is required.
+  - Role icons use the same slot as class icons. Turning off Show role returns to the class icon; turning off Show Class hides the slot.
+
 Installing and Updating
 -----------------------
   - Completely log off WoW

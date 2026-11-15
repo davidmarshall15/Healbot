@@ -8852,7 +8852,14 @@ end
 
 function HealBot_Options_ShowRoleIcon_OnClick(self)
       --HealBot_setCall("HealBot_Options_ShowRoleIcon_OnClick")
-    if hbv_Skins_GetFrameBoolean("Icons", "SHOWROLE", hb_lVars["Frame"])~=self:GetChecked() then
+    local changed=hbv_Skins_GetFrameBoolean("Icons", "SHOWROLE", hb_lVars["Frame"])~=self:GetChecked()
+    -- Selecting a role should not silently leave the shared class/role slot hidden.
+    if self:GetChecked() and not hbv_Skins_GetFrameBoolean("Icons", "SHOWCLASS", hb_lVars["Frame"]) then
+        hbv_Skins_SetFrameVar(true, "Icons", "SHOWCLASS", hb_lVars["Frame"])
+        HealBot_Options_ShowClassIcon:SetChecked(true)
+        changed=true
+    end
+    if changed then
         hbv_Skins_SetFrameVar(self:GetChecked(), "Icons", "SHOWROLE", hb_lVars["Frame"])
         if HealBot_Action_FrameIsVisible(hb_lVars["Frame"]) then 
             if hb_lVars["TestBarsOn"] then
