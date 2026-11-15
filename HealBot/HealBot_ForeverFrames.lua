@@ -170,7 +170,8 @@ function HealBot_Forever_UpdateDebuffOverlay(button)
     if not overlays then return end
     local cures=HealBot_Config_Cures
     local barMode=HealBot_Globals.CustomDebuffsShowBarCol.DEFAULT or 4
-    local enabled=button.status.events and button.foreverDebuffUnit==button.unit and InCombatLockdown() and
+    local persistent=HealBot_Globals.CombatAurasPersistDebuffs~=false
+    local enabled=button.status.events and button.foreverDebuffUnit==button.unit and (InCombatLockdown() or persistent) and
         HealBot_Aura_DebuffsEnabled() and cures.CDCshownHB and
         (barMode==3 or barMode==4) and not button.special.unit and
         button.status.current<HealBot_Unit_Status["PLUGINBARCOL"] and

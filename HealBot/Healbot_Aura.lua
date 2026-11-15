@@ -344,6 +344,10 @@ end
 local dbAlphaNextUpdate, dbDurNextUpdate, dbiconAlpha=0,0,0
 function HealBot_Aura_DoUpdateDebuffIcon(button, iconData, index, timer, lastSpellId, srcTimer)
       --HealBot_setCall("HealBot_Aura_DoUpdateDebuffIcon", button, nil, nil, true)
+    if index>=51 and index<=56 and HealBot_CombatAuras_UsesNativeDebuffs and HealBot_CombatAuras_UsesNativeDebuffs(button) then
+        HealBot_Aura_RemoveIcon(button, index)
+        return
+    end
     if iconData.current and lastSpellId == iconData.spellId then
         dbAlphaNextUpdate=999
         dbDurNextUpdate=999
@@ -426,6 +430,10 @@ local hbGlowSpellName,hbGlowIdx="",1
 local customDebuffPriority=hbv_GetStatic("cDebuff")
 function HealBot_Aura_UpdateDebuffIcon(button, iconData, index, timer, spellId)
       --HealBot_setCall("HealBot_Aura_UpdateDebuffIcon", button, nil, nil, true)
+    if index>=51 and index<=56 and HealBot_CombatAuras_UsesNativeDebuffs and HealBot_CombatAuras_UsesNativeDebuffs(button) then
+        HealBot_Aura_RemoveIcon(button, index)
+        return
+    end
     HealBot_Aura_DoUpdateDebuffIcon(button, iconData, index, timer, spellId, false)
     if HealBot_AuraDebuffCache[spellId] then
         hbGlowSpellName=HealBot_AuraDebuffCache[spellId]["name"] or "x"

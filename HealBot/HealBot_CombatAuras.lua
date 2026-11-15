@@ -11,8 +11,8 @@
 -- This module puts two such rows on every HealBot player bar:
 --   * HoTs you cast   filter "HELPFUL|PLAYER"  buff icon-set 1 placement
 --   * Debuffs         filter "HARMFUL"         debuff icon-set 1 placement
--- Rows are HIDDEN out of combat (HealBot's own icon engine still works there)
--- and SHOWN in combat, where HealBot's engine is blind.
+-- HoTs use HealBot's own icon engine out of combat. On Forever, the native
+-- debuff row stays active so remaining DoTs do not disappear at combat exit.
 --
 -- Hard rules learned from DandersFrames (proven live on 12.1):
 --   * NEVER create or SetEnabled a container in combat - hard client error
@@ -43,6 +43,9 @@ local function HBCA_Defaults()
     if HealBot_Globals.CombatAurasMatchSkinSize==nil then HealBot_Globals.CombatAurasMatchSkinSize=true end
     if HealBot_Globals.CombatAurasHots==nil     then HealBot_Globals.CombatAurasHots=4 end
     if HealBot_Globals.CombatAurasDebuffs==nil  then HealBot_Globals.CombatAurasDebuffs=3 end
+    if HealBot_Globals.CombatAurasPersistDebuffs==nil then
+        HealBot_Globals.CombatAurasPersistDebuffs=not not HEALBOT_FOREVER
+    end
     -- Migrate the old false default to skin settings; retain an enabled override.
     if HealBot_Globals.CombatAurasNumsFollowSkin==nil then
         HealBot_Globals.CombatAurasNumsFollowSkin=not HealBot_Globals.CombatAurasNums
@@ -205,10 +208,38 @@ local function HBCA_BuildOne(button, side, placement)
               candidateFilters=cf })
     end)
     if not okG then pcall(function() c:Hide() end) return nil end
-    pcall(function() c:SetEnabled(true) end)   -- LAST - gates aura-event registration
-    c:SetShown(inCombat)
-    if inCombat then pcall(function() if c.UpdateAllAuras then c:UpdateAllAuras() end end) end
+    local okE=pcall(function() c:SetEnabled(true) end) -- LAST - gates aura-event registration
+    if not okE then c:Hide(); return nil end
+    c:Hide() -- visibility is applied after the container is attached
     return c
+end
+
+-- Only icon-set 1 belongs to this row. Keep HealBot's debuff scanning, cure
+-- warnings and custom icon sets 2/3; suppress overlapping legacy artwork.
+function HealBot_CombatAuras_UsesNativeDebuffs(button)
+    local a=attached[button]
+    return not not (a and a.nativeDebuffs and a.unit==button.unit and
+                    button.status and button.status.events)
+end
+
+local function HBCA_SetNativeDebuffs(button, active)
+    local a=attached[button]
+    active=not not active
+    if not a or active==(not not a.nativeDebuffs) then return end
+    a.nativeDebuffs=active
+    if active then
+        if HealBot_Aura_RemoveIcon then
+            for i=51,56 do
+                if button.gref and button.gref.icon and button.gref.icon[i] then
+                    HealBot_Aura_RemoveIcon(button, i)
+                end
+            end
+        end
+    elseif button.status and button.status.events and button.aura and button.aura.debuff then
+        -- Restore the ordinary icons even if no new UNIT_AURA event arrives.
+        button.aura.debuff.update=true
+        if HealBot_Events_UnitDebuff then HealBot_Events_UnitDebuff(button) end
+    end
 end
 
 local function HBCA_HideButton(button)
@@ -216,6 +247,7 @@ local function HBCA_HideButton(button)
     if not a then return end
     if a.hot then pcall(function() a.hot:Hide() end) end
     if a.db then pcall(function() a.db:Hide() end) end
+    HBCA_SetNativeDebuffs(button, false)
 end
 
 -- Retarget only rows that exist. Reuse native widgets during combat; if the
@@ -223,7 +255,9 @@ end
 local function HBCA_SetButtonShown(button, show)
     local a=attached[button]
     if not a then return end
-    local vis=not not (show and HBCA_Enabled() and button.unit and button.frame and button.frame<10 and
+    local g=HBCA_Defaults()
+    local persist=g and g.CombatAurasPersistDebuffs
+    local vis=not not ((show or persist) and HBCA_Enabled() and button.unit and button.frame and button.frame<10 and
                        button.status and button.status.events and button:IsShown())
     if vis and button.unit~=a.unit then
         local okH=not a.hot or pcall(a.hot.SetUnit, a.hot, button.unit)
@@ -235,10 +269,15 @@ local function HBCA_SetButtonShown(button, show)
             deferred[button]=true
         end
     end
-    local hotVis=vis and (not HealBot_Aura_BuffsEnabled or HealBot_Aura_BuffsEnabled())
+    local hotVis=vis and show and (not HealBot_Aura_BuffsEnabled or HealBot_Aura_BuffsEnabled())
     local dbVis=vis and (not HealBot_Aura_DebuffsEnabled or HealBot_Aura_DebuffsEnabled())
     if a.hot then pcall(function() a.hot:SetShown(hotVis); if hotVis and a.hot.UpdateAllAuras then a.hot:UpdateAllAuras() end end) end
-    if a.db then pcall(function() a.db:SetShown(dbVis); if dbVis and a.db.UpdateAllAuras then a.db:UpdateAllAuras() end end) end
+    local dbOK=false
+    if a.db then
+        dbOK=pcall(function() a.db:SetShown(dbVis); if dbVis and a.db.UpdateAllAuras then a.db:UpdateAllAuras() end end)
+        if not dbOK then pcall(a.db.Hide, a.db) end
+    end
+    HBCA_SetNativeDebuffs(button, persist and dbVis and dbOK)
 end
 
 -- Tear down = hide + forget. Container groups are add-only, so a filter/size
@@ -274,19 +313,24 @@ local function HBCA_Attach(button)
         HBCA_DropButton(button)
         a=nil
     end
-    if a and a.unit==button.unit then return end
+    if a and a.unit==button.unit then
+        HBCA_SetButtonShown(button, inCombat)
+        return
+    end
     if a then
         -- unit retarget on standing containers
         local okH=a.hot and pcall(function() a.hot:SetUnit(button.unit) end)
         local okD=a.db and pcall(function() a.db:SetUnit(button.unit) end)
         if okH~=false and okD~=false then
             a.unit=button.unit
+            HBCA_SetButtonShown(button, inCombat)
             return
         end
         HBCA_DropButton(button)
     end
     attached[button]={ hot=HBCA_BuildOne(button, "hot", hotLayout), db=HBCA_BuildOne(button, "db", dbLayout),
                        hotLayout=hotLayout, dbLayout=dbLayout, unit=button.unit }
+    HBCA_SetButtonShown(button, inCombat)
 end
 
 local function HBCA_AttachDeferred()
@@ -362,11 +406,18 @@ SlashCmdList["HBCOMBATAURAS"]=function(msg)
     if cmd=="on" then
         g.CombatAurasOn=true
         HBCA_DropAll()
-        say("on - icons appear in combat (Blizzard-driven; follows buff/debuff icon-set 1 placement)")
+        say("on - native icons follow buff/debuff icon-set 1; persistent debuffs="..tostring(g.CombatAurasPersistDebuffs))
     elseif cmd=="off" then
         g.CombatAurasOn=false
         HBCA_SetAllShown(false)
         say("off")
+    elseif cmd=="persist" and (arg=="on" or arg=="off") then
+        g.CombatAurasPersistDebuffs=arg=="on"
+        HBCA_SetAllShown(inCombat)
+        if HealBot_Forever_UpdateDebuffOverlay then
+            for button in pairs(known) do HealBot_Forever_UpdateDebuffOverlay(button) end
+        end
+        say("debuffs outside combat "..arg)
     elseif cmd=="size" and arg=="skin" then
         g.CombatAurasMatchSkinSize=true
         HBCA_DropAll()
@@ -454,8 +505,9 @@ SlashCmdList["HBCOMBATAURAS"]=function(msg)
             .."  hots="..(g.CombatAurasHots or 4).."  debuffs="..(g.CombatAurasDebuffs or 3)
             .."  maxdur="..(g.CombatAurasMaxDur or 120).."s"
             .."  nums="..(g.CombatAurasNumsFollowSkin and "skin" or tostring(g.CombatAurasNums)).."  bars="..n
+            .."  persist="..tostring(g.CombatAurasPersistDebuffs)
             .."  supported="..tostring(supported))
         say("size mode: "..(g.CombatAurasMatchSkinSize and "skin" or "manual"))
-        say("usage: /hbca on|off | size skin|N | hots N | debuffs N | maxdur N | nums skin|on|off")
+        say("usage: /hbca on|off | persist on|off | size skin|N | hots N | debuffs N | maxdur N | nums skin|on|off")
     end
 end

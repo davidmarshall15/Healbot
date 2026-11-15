@@ -146,7 +146,7 @@ eq(bar.max,secret,"protected maximum passed directly to native bar")
 eq(bar.point[3],"TOPRIGHT","prediction starts at end of health")
 eq(bar.color[4],0.8*0.9,"prediction honors skin opacity")
 eq(b.gref.InHeal.value,0,"legacy prediction cleared")
-eq(b.foreverDebuffs.all.shown,false,"out-of-combat debuffs use existing engine")
+eq(b.foreverDebuffs.all.shown,true,"Forever debuff tint works outside combat by default")
 eq(b.foreverDebuffs.dispel.filter,"HARMFUL|RAID","native dispellable filter")
 eq(b.foreverDebuffs.all.options.maxFrameCount,1,"one native debuff selected")
 eq(b.foreverDebuffs.all.aura.dispel.options.customDispelColorMap.Magic.g,0.6,"configured debuff color")
@@ -217,7 +217,17 @@ combat=false
 eventFrame.callback(nil,"PLAYER_REGEN_ENABLED")
 eq(deferred.foreverIncoming~=nil,true,"deferred frame created after combat")
 eq(deferred.gref.txt.text:GetParent(),deferred.gref.Top,"deferred name moved above debuff tint")
-eq(b.foreverDebuffs.dispel.shown,false,"combat exit removes native tint")
+eq(b.foreverDebuffs.dispel.shown,true,"remaining debuffs retain tint after combat")
+env.HealBot_Globals.CombatAurasPersistDebuffs=false
+env.HealBot_Forever_UpdateDebuffOverlay(b)
+eq(b.foreverDebuffs.dispel.shown,false,"persistence opt-out restores legacy tint outside combat")
+env.HealBot_Globals.CombatAurasPersistDebuffs=true
+env.HealBot_Forever_UpdateDebuffOverlay(b)
+eq(b.foreverDebuffs.dispel.shown,true,"persistence can be restored outside combat")
+monitoring=false
+env.HealBot_Forever_UpdateDebuffOverlay(b)
+eq(b.foreverDebuffs.dispel.shown,false,"persistent tint honors disabled monitoring")
+monitoring=true
 hooks.HealBot_Action_UnregisterUnitEvents(b)
 eq(bar.shown,false,"unregister hides prediction")
 b.unit="party3"

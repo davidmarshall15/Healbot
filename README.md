@@ -24,6 +24,13 @@ Role icons on HealBot frames
   - The Blizzard Forever presets include visible role icons by default on new imports. For an already imported skin, enable Show Class and Show role in the panel above; no reimport is required.
   - Role icons use the same slot as class icons. Turning off Show role returns to the class icon; turning off Show Class hides the slot.
 
+Debuffs after combat on Forever
+-------------------------------
+  - Native debuff icons and configured bar colours remain active outside combat, including DoTs left over from a fight. The client updates them when auras expire or are removed.
+  - The first debuff icon row uses the same harmful-aura filter and icon limit as in combat, including debuffs you cannot dispel. HealBot's cure warnings and custom icon sets 2/3 retain their own settings.
+  - This is enabled by default on Forever. Use `/hbca persist off` for the previous out-of-combat filtering, or `/hbca persist on` to restore it.
+  - Debuff monitoring, bar-colour settings and `/hbca off` still control their respective displays. If native icons are unavailable, HealBot keeps its normal icon renderer.
+
 Installing and Updating
 -----------------------
   - Completely log off WoW
