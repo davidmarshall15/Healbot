@@ -75,7 +75,10 @@ local function calc()
     function c:SetIncomingHealClampMode() end
     function c:SetIncomingHealOverflowPercent() end
     function c:SetDamageAbsorbClampMode(m) self.clamp=m end
-    function c:SetPredictedValues(v) self.values=v end
+    function c:SetPredictedValues(v)
+        for _,value in pairs(v) do assert(not protected(value), "SetPredictedValues rejects secret fields") end
+        self.values=v
+    end
     function c:GetMaximumHealth() return self.values.healthMax end
     function c:GetMissingHealth()
         local v=self.values
@@ -109,7 +112,7 @@ local function calc()
 end
 env.CreateUnitHealPredictionCalculator=calc
 local values={health=secret(40),healthMax=secret(100),totalIncomingHeals=secret(20),totalDamageAbsorbs=secret(15)}
-env.UnitGetDetailedHealPrediction=function(_,_,c) c:SetPredictedValues(values) end
+env.UnitGetDetailedHealPrediction=function(_,_,c) c.values=values end
 env.UnitGetIncomingHeals=function() return values.totalIncomingHeals end
 env.UnitGetTotalAbsorbs=function() return values.totalDamageAbsorbs end
 local function frame()
@@ -206,7 +209,7 @@ eq(p.absorbOverlay.tint[3],1,"light-blue overlay blue")
 eq(p.bar.value,20,"secret incoming")
 eq(p.absorb.value,15,"secret absorbs")
 eq(p.absorb.point[2],p.bar:GetStatusBarTexture(),"absorbs follow incoming")
-eq(p.bar.color[1],1,"60% future health injured red")
+eq(p.bar.color[1],0,"secret prediction uses configured normal red")
 eq(p.bar.color[2],1,"60% future health injured green")
 eq(p.absorb.color[1],0,"shield fill stays cerulean despite injured health")
 eq(b.health.incoming,0,"readable legacy incoming")
@@ -221,7 +224,7 @@ env.HealBot_Forever_UpdatePrediction(b)
 eq(curveCount,count,"curves reused")
 values.health=secret(5);values.totalIncomingHeals=secret(10)
 env.HealBot_Forever_UpdatePrediction(b)
-eq(p.bar.color[2],0,"critical colour")
+eq(p.bar.color[2],1,"secret prediction retains stable normal green")
 values.health=secret(80);values.totalIncomingHeals=secret(30)
 env.HealBot_Forever_UpdatePrediction(b)
 eq(p.bar.value,20,"heals clamp to missing health")
@@ -237,7 +240,7 @@ eq(p.bar.color[1],0.8,"class colour")
 skin.IC=4;env.HealBot_Forever_UpdatePrediction(b)
 eq(p.bar.color[1],0.2,"role colour")
 skin.IC=5;env.HealBot_Forever_UpdatePrediction(b)
-eq(p.bar.color[1],0,"future-health green despite current 80%")
+eq(p.bar.color[1],0.3,"protected future-health mode uses current health colour")
 skin.IC=1;env.HealBot_Forever_UpdatePrediction(b)
 eq(p.bar.shown,false,"incoming disabled")
 eq(p.absorb.value,15,"absorbs ignore invisible incoming")
@@ -307,7 +310,7 @@ eq(p.absorb.color[1],0,"shield fill stays cerulean on enemy frames")
 b.status.hostile=false
 skin.IIT=0.25;skin.ICT=0.25;values.health=secret(15);values.totalIncomingHeals=secret(10)
 env.HealBot_Forever_UpdatePrediction(b)
-eq(p.bar.color[2],0,"equal thresholds at boundary use critical")
+eq(p.bar.color[2],1,"secret prediction does not inspect threshold boundary")
 values.health=secret(20);env.HealBot_Forever_UpdatePrediction(b)
 eq(p.bar.color[1],0.4,"equal thresholds above boundary use normal")
 b.status.current=20;env.HealBot_Forever_UpdatePrediction(b)

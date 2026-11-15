@@ -89,6 +89,20 @@ local function PredictionColour(button,kind,mode)
     local functions=kind=="I" and "HealBot_Action_HealsInColour" or "HealBot_Action_AbsorbsColour"
     if (mode==5 or mode==6) and C_CurveUtil and C_CurveUtil.CreateColorCurve then
         local remaining=calculator:GetMaximumDamageAbsorbs()
+        -- SetPredictedValues is not a secret-value sink in addon execution.
+        -- Keep native bar amounts, but use a stable colour when health is sealed.
+        if HealBot_issecretvalue(remaining) or HealBot_issecretvalue(calculator:GetMaximumHealth()) or
+           (kind=="A" and HealBot_issecretvalue(calculator:GetDamageAbsorbs())) then
+            if mode==6 then
+                local suffix=button.status.hostile and "E" or ""
+                for _, component in ipairs({"r","g","b"}) do
+                    button.health[prefix..component]=hbv_Skins_GetFrameVar("BarIACol",kind..string.upper(component)..suffix,button.frame)
+                end
+            else
+                _G[functions.."Health"](button)
+            end
+            return
+        end
         if kind=="A" then
             local amount=calculator:GetDamageAbsorbs()
             incoming.remainingCalculator:SetPredictedValues({health=amount,healthMax=remaining})

@@ -19,11 +19,15 @@ end
 local f=assert(io.open("HealBot/HealBot_Text.lua","rb"))
 local source=f:read("*a"):gsub("\r\n","\n"); f:close()
 local formatter=assert(source:match("(function HealBot_Text_DoSetHealthText%([^\n]+.-)\nfunction "))
-local function run(health,percent,include,places,healthType)
+local function run(health,percent,include,places,healthType,missing)
     local updates=0
-    local button={frame=1,framecol=2,health={current=health,cpct=percent},text={}}
+    local button={unit="party1",frame=1,framecol=2,health={current=health,cpct=percent},text={}}
     local env=setmetatable({
         HealBot_Util_isMidnight=function() return true end,
+        UnitHealthMissing=missing and function(unit,predicted)
+            assert(unit=="party1" and predicted==false)
+            return missing
+        end,
         hbNumFormats={SurroundLeft={[2]="("},SurroundRight={[2]=")"},Places={[1]=0,[2]=places}},
         hbv_Skins_GetFrameVar=function(section,key,frame)
             assert(section=="BarText" and key=="HLTHTYPE" and frame==2)
@@ -52,6 +56,9 @@ eq(run(500,50.25,true,2,1),"(500)  (50.25%)","two decimals from selected text fr
 eq(run(500,50,true,3,1),"(500)  (50%)","unsupported precision uses integer")
 eq(run(500,50,true,0,3),"(50%)","percentage mode does not duplicate text")
 eq(run(500,50,false,0,2),"(50%)","existing modern deficit fallback preserved")
+eq(run(500,50,false,0,2,secret(500)),"(-500)","protected missing health uses native deficit")
+eq(run(500,50,true,0,2,secret(500)),"(-500)  (50%)","deficit can include percentage")
+eq(run(1000,100,false,0,2,secret(0)),"(-0)","zero deficit remains protected")
 for _,values in ipairs({{secret(500),50},{500,secret(50)},{secret(500),secret(50)}}) do
     local text=run(values[1],values[2],true,0,1)
     eq(text,"(500)  (50%)","both fields survive protected values")
