@@ -43,7 +43,10 @@ local function HBCA_Defaults()
     if HealBot_Globals.CombatAurasMatchSkinSize==nil then HealBot_Globals.CombatAurasMatchSkinSize=true end
     if HealBot_Globals.CombatAurasHots==nil     then HealBot_Globals.CombatAurasHots=4 end
     if HealBot_Globals.CombatAurasDebuffs==nil  then HealBot_Globals.CombatAurasDebuffs=3 end
-    if HealBot_Globals.CombatAurasNums==nil     then HealBot_Globals.CombatAurasNums=false end
+    -- Migrate the old false default to skin settings; retain an enabled override.
+    if HealBot_Globals.CombatAurasNumsFollowSkin==nil then
+        HealBot_Globals.CombatAurasNumsFollowSkin=not HealBot_Globals.CombatAurasNums
+    end
     -- HoT row: hide buffs whose TOTAL duration exceeds this (seconds); also hides
     -- permanent auras. Keeps hour-long raid buffs off the bars. 0 = show all.
     if HealBot_Globals.CombatAurasMaxDur==nil   then HealBot_Globals.CombatAurasMaxDur=120 end
@@ -69,7 +72,7 @@ end
 -- Style one Blizzard-created button: click-through (clicks must reach the heal
 -- bar beneath), our own icon Texture + Cooldown, bound via the native inbound
 -- setters so Blizzard paints the secret aura into them.
-local function HBCA_MakeInit(size)
+local function HBCA_MakeInit(size, numbers)
     return function(btn)
         pcall(function()
             if not btn then return end
@@ -87,9 +90,8 @@ local function HBCA_MakeInit(size)
                 cd:SetDrawEdge(false)
                 btn.hbcaCD=cd
             end
-            local g=HBCA_Defaults()
             if btn.hbcaCD and btn.hbcaCD.SetHideCountdownNumbers then
-                btn.hbcaCD:SetHideCountdownNumbers(not (g and g.CombatAurasNums))
+                btn.hbcaCD:SetHideCountdownNumbers(not numbers)
             end
             if btn.SetIcon and not btn.hbcaBoundIcon then
                 btn.hbcaBoundIcon=true
@@ -119,6 +121,11 @@ local function HBCA_SkinLayout(button, side)
                   x=hot and -1 or 1, y=1, spacing=1, double=false}
     local icon=button.gref and button.gref.icon and button.gref.icon[hot and 1 or 51]
     local g=HBCA_Defaults()
+    layout.numbers=g and g.CombatAurasNums
+    if g and g.CombatAurasNumsFollowSkin then
+        layout.numbers=type(hbv_Skins_GetIconTextBoolean)=="function" and
+            hbv_Skins_GetIconTextBoolean(hot and "BUFFSDUR" or "DBSDUR", button.frame, 1) or false
+    end
     if g and g.CombatAurasMatchSkinSize and icon and icon.GetWidth then
         local size=icon:GetWidth()
         if size and size>0 then layout.size=size end
@@ -184,15 +191,17 @@ local function HBCA_BuildOne(button, side, placement)
     end)
     local okU=pcall(function() c:SetUnit(button.unit) end)
     if not okU then pcall(function() c:Hide() end) return nil end
-    local cf=nil
+    local cf=side=="hot" and HealBot_Aura_NativeBuffExclusions and
+        {excludeSpellIDs=HealBot_Aura_NativeBuffExclusions()} or nil
     if side=="hot" and (g.CombatAurasMaxDur or 0)>0 then
         -- native candidate filter: seconds of TOTAL duration; finite cap also
         -- rejects permanent auras (technique per DandersFrames)
-        cf={ maxDuration=g.CombatAurasMaxDur }
+        cf=cf or {}
+        cf.maxDuration=g.CombatAurasMaxDur
     end
     local okG=pcall(function()
         c:AddAuraGroup("hbca"..side, filter,
-            { maxFrameCount=maxN, initializeFrame=HBCA_MakeInit(size), layout=HBCA_Layout(size, placement.spacing),
+            { maxFrameCount=maxN, initializeFrame=HBCA_MakeInit(size, placement.numbers), layout=HBCA_Layout(size, placement.spacing),
               candidateFilters=cf })
     end)
     if not okG then pcall(function() c:Hide() end) return nil end
@@ -226,8 +235,10 @@ local function HBCA_SetButtonShown(button, show)
             deferred[button]=true
         end
     end
-    if a.hot then pcall(function() a.hot:SetShown(vis); if vis and a.hot.UpdateAllAuras then a.hot:UpdateAllAuras() end end) end
-    if a.db then pcall(function() a.db:SetShown(vis); if vis and a.db.UpdateAllAuras then a.db:UpdateAllAuras() end end) end
+    local hotVis=vis and (not HealBot_Aura_BuffsEnabled or HealBot_Aura_BuffsEnabled())
+    local dbVis=vis and (not HealBot_Aura_DebuffsEnabled or HealBot_Aura_DebuffsEnabled())
+    if a.hot then pcall(function() a.hot:SetShown(hotVis); if hotVis and a.hot.UpdateAllAuras then a.hot:UpdateAllAuras() end end) end
+    if a.db then pcall(function() a.db:SetShown(dbVis); if dbVis and a.db.UpdateAllAuras then a.db:UpdateAllAuras() end end) end
 end
 
 -- Tear down = hide + forget. Container groups are add-only, so a filter/size
@@ -323,6 +334,11 @@ end)
 -- Buttons announce their unit binding through these two; hooksecurefunc keeps
 -- us clear of HealBot's own call paths.
 if type(hooksecurefunc)=="function" then
+    hooksecurefunc("HealBot_Aura_setCustomBuffFilterDisabled", HBCA_DropAll)
+    hooksecurefunc("HealBot_Aura_setLuVars", function(key)
+        if key=="mapName" then HBCA_DropAll() end
+    end)
+    hooksecurefunc("HealBot_Aura_SetAuraCheckFlags", function() HBCA_SetAllShown(inCombat) end)
     hooksecurefunc("HealBot_Action_RegisterUnitEvents", function(button)
         pcall(HBCA_Attach, button)
     end)
@@ -369,9 +385,13 @@ SlashCmdList["HBCOMBATAURAS"]=function(msg)
         HBCA_DropAll()
         say("max debuff icons "..g.CombatAurasDebuffs.." (rebuilds out of combat)")
     elseif cmd=="nums" then
-        g.CombatAurasNums=not g.CombatAurasNums
+        g.CombatAurasNumsFollowSkin=arg=="skin"
+        if arg=="skin" then g.CombatAurasNums=nil
+        elseif arg=="on" then g.CombatAurasNums=true
+        elseif arg=="off" then g.CombatAurasNums=false
+        else g.CombatAurasNums=not g.CombatAurasNums end
         HBCA_DropAll()
-        say("countdown numbers "..(g.CombatAurasNums and "on" or "off").." (rebuilds out of combat)")
+        say("countdown numbers "..(g.CombatAurasNums==nil and "skin" or (g.CombatAurasNums and "on" or "off")).." (rebuilds out of combat)")
     elseif cmd=="rt" then
         -- diagnostic: what does the raid-marker chain see for each bar?
         local function scan(t, label)
@@ -433,9 +453,9 @@ SlashCmdList["HBCOMBATAURAS"]=function(msg)
         say((g.CombatAurasOn and "on" or "off").."  size="..(g.CombatAurasSize or 12)
             .."  hots="..(g.CombatAurasHots or 4).."  debuffs="..(g.CombatAurasDebuffs or 3)
             .."  maxdur="..(g.CombatAurasMaxDur or 120).."s"
-            .."  nums="..tostring(g.CombatAurasNums).."  bars="..n
+            .."  nums="..(g.CombatAurasNumsFollowSkin and "skin" or tostring(g.CombatAurasNums)).."  bars="..n
             .."  supported="..tostring(supported))
         say("size mode: "..(g.CombatAurasMatchSkinSize and "skin" or "manual"))
-        say("usage: /hbca on|off | size skin|N | hots N | debuffs N | maxdur N | nums")
+        say("usage: /hbca on|off | size skin|N | hots N | debuffs N | maxdur N | nums skin|on|off")
     end
 end

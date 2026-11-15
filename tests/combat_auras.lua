@@ -39,19 +39,22 @@ local function frame(kind,parent)
                  SetMouseClickEnabled=self.SetMouseClickEnabled,SetMouseMotionEnabled=self.SetMouseMotionEnabled}
         options.initializeFrame(b); self.auraButton=b
     end
-    f.SetAllPoints=noop; f.SetReverse=noop; f.SetDrawEdge=noop; f.SetHideCountdownNumbers=noop
+    f.SetAllPoints=noop; f.SetReverse=noop; f.SetDrawEdge=noop
+    function f:SetHideCountdownNumbers(v) self.hideNumbers=v end
     if kind=="AuraContainer" then containers[#containers+1]=f end
     return f
 end
 local double=false
 local spacing=3
 local env=setmetatable({
-    HEALBOT_MIDNIGHT=true, HealBot_Globals={}, SlashCmdList={},
+    HEALBOT_MIDNIGHT=true, HealBot_Globals={CombatAurasNums=false}, SlashCmdList={},
     InCombatLockdown=function() return combat end,
     CreateFrame=function(kind,_,parent) return frame(kind,parent) end,
     hooksecurefunc=function(name,fn) hooks[name]=fn end,
     hbv_Skins_GetIconVar=function() return spacing end,
     hbv_Skins_GetIconBoolean=function() return double end,
+    hbv_Skins_GetIconTextBoolean=function(key) return key=="BUFFSDUR" end,
+    HealBot_Aura_NativeBuffExclusions=function() return {[12345]=true} end,
     AnchorUtil={FlowDirection={Left=-1,Right=1,Up=1,Down=-1},FlowLayoutAxis={Horizontal=0,Vertical=1}},
     pcall=function(fn,...)
         local ok,result=pcall(fn,...)
@@ -92,6 +95,9 @@ eq(hot.options.layout.elementWidth,12,"existing combat size retained")
 eq(hot.filter,"HELPFUL|PLAYER","HoT filter retained")
 eq(db.filter,"HARMFUL","debuff filter retained")
 eq(hot.options.candidateFilters.maxDuration,120,"duration filter retained")
+eq(hot.options.candidateFilters.excludeSpellIDs[12345],true,"disabled buff passed to native filter")
+eq(hot.auraButton.hbcaCD.hideNumbers,false,"buff timer follows skin")
+eq(db.auraButton.hbcaCD.hideNumbers,true,"debuff timer independently follows skin")
 eq(hot.auraButton.click,false,"aura icons pass clicks through")
 eq(hot.click,false,"container passes clicks through")
 eq(hot.shown,false,"combat icons hidden outside combat")
@@ -210,4 +216,21 @@ eq(current.unit,"party2","failed combat retarget retries after combat")
 combat=true; fire("PLAYER_REGEN_DISABLED")
 eq(current.shown,true,"recovered row returns next combat")
 eq(#errors,1,"no unexpected API errors during recovery")
+combat=false
+env.SlashCmdList.HBCOMBATAURAS("nums off")
+eq(latest("hot").auraButton.hbcaCD.hideNumbers,true,"explicit off overrides skin")
+env.SlashCmdList.HBCOMBATAURAS("nums skin")
+eq(latest("hot").auraButton.hbcaCD.hideNumbers,false,"skin mode restores buff timer")
+env.SlashCmdList.HBCOMBATAURAS("debuffs 3")
+combat=true; fire("PLAYER_REGEN_DISABLED")
+env.HealBot_Aura_BuffsEnabled=function() return false end
+env.HealBot_Aura_DebuffsEnabled=function() return false end
+hooks.HealBot_Aura_SetAuraCheckFlags()
+eq(latest("hot").shown,false,"disabled monitoring hides native buffs")
+eq(latest("db").shown,false,"disabled monitoring hides native debuffs")
+env.HealBot_Aura_BuffsEnabled=function() return true end
+env.HealBot_Aura_DebuffsEnabled=function() return true end
+hooks.HealBot_Aura_SetAuraCheckFlags()
+eq(latest("hot").shown,true,"reenabled monitoring restores native buffs")
+eq(latest("db").shown,true,"reenabled monitoring restores native debuffs")
 print("PASS: "..passed.." combat aura layout assertions (mock native widgets)")
