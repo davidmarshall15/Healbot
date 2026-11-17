@@ -646,6 +646,21 @@ function HealBot_Tooltip_setPlayerPowerCols(r,g,b)
     playerPowerCols.r,playerPowerCols.g,playerPowerCols.b=r+0.34,g+0.34,b+0.34
 end
 
+HEALBOT_TOOLTIP_YOUR_MANA=HEALBOT_TOOLTIP_YOUR_MANA or "Your mana"
+function HealBot_Tooltip_PlayerManaLine(unit)
+      --HealBot_setCall("HealBot_Tooltip_PlayerManaLine")
+    if UnitIsUnit(unit, "player") then return end
+    local mana, maxMana=UnitPower("player", 0), UnitPowerMax("player", 0)
+    if not mana or not maxMana then return end
+    if HealBot_issecretvalue(mana) or HealBot_issecretvalue(maxMana) then
+        -- Protected values can still be concatenated into native tooltip text
+        HealBot_Tooltip_SetLine(HEALBOT_TOOLTIP_YOUR_MANA,playerPowerCols.r,playerPowerCols.g,playerPowerCols.b,1,mana.."/"..maxMana,playerPowerCols.r,playerPowerCols.g,playerPowerCols.b,1)
+    elseif maxMana>0 then
+        HealBot_Tooltip_SetLine(HEALBOT_TOOLTIP_YOUR_MANA,playerPowerCols.r,playerPowerCols.g,playerPowerCols.b,1,
+            mana.."/"..maxMana..format(" (%i%%)",floor((mana/maxMana)*100)),playerPowerCols.r,playerPowerCols.g,playerPowerCols.b,1)
+    end
+end
+
 function HealBot_Action_setSpellInfo(button)
     if HealBot_Action_ValidComboTypes(HealBot_Data["TIPTYPE"]) then
         local bId, bName, sName, sType, sDisplayName, bR, bG, bB
@@ -898,6 +913,7 @@ function HealBot_Action_DoRefreshTooltip()
                                     end
                                 end
                             end
+                            HealBot_Tooltip_PlayerManaLine(xUnit)
                         end
                     end
 
