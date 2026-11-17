@@ -57,6 +57,8 @@ try {
     if ($LASTEXITCODE -ne 0) { throw 'Spell rank/range regression tests failed.' }
     & lua tests/combat_auras.lua
     if ($LASTEXITCODE -ne 0) { throw 'Combat aura layout regression tests failed.' }
+    & lua tests/heal_amount.lua
+    if ($LASTEXITCODE -ne 0) { throw 'Tooltip heal amount regression tests failed.' }
 } finally {
     Pop-Location
 }

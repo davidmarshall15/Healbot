@@ -381,14 +381,37 @@ local HealBot_Tooltip_PowerDesc={[0]="Mana",
                                  [8]="Eclipse",
                                  [9]="Holy Power"}
 
+local HealBot_Tooltip_GetSpellDesc=(C_Spell and C_Spell.GetSpellDescription) or GetSpellDescription
+function HealBot_Tooltip_SpellHealAmount(spellId)
+      --HealBot_setCall("HealBot_Tooltip_SpellHealAmount")
+    if not HealBot_Tooltip_GetSpellDesc or type(spellId)~="number" then return "" end
+    local desc=HealBot_Tooltip_GetSpellDesc(spellId)
+    if not desc or HealBot_issecretvalue(desc) or desc == "" then
+        if C_Spell and C_Spell.RequestLoadSpellData then C_Spell.RequestLoadSpellData(spellId) end
+        return ""
+    end
+    local lDesc=string.lower(desc)
+    if string.find(lDesc, "absorb") then
+        local amount=string.match(lDesc, "absorb%a* (%d[%d,]*)") or string.match(desc, "(%d[%d,]*) damage")
+        if amount then return amount.." absorb  " end
+    elseif string.find(lDesc, "heal[^t]") or string.find(lDesc, "heal$") then
+        local minHeal, maxHeal=string.match(desc, "(%d[%d,]*) to (%d[%d,]*)")
+        if minHeal then return minHeal.."-"..maxHeal.." heal  " end
+        local amount=string.match(desc, "for (%d[%d,]*)") or string.match(desc, "of (%d[%d,]*) damage")
+        if amount then return amount.." heal  " end
+    end
+    return ""
+end
+
 function HealBot_Tooltip_SpellSummary(spellName, spellType)
       --HealBot_setCall("HealBot_Tooltip_SpellSummary")
     local ret_val="  "
     if HealBot_Spell_Names[spellName] then
+        local healAmount=HealBot_Tooltip_SpellHealAmount(HealBot_Spell_Names[spellName])
         if HealBot_Data["POWERTYPE"] == 0 and HealBot_Spell_IDs[HealBot_Spell_Names[spellName]].Mana<HealBot_Tooltip_Power then
-            ret_val=" -  "..HealBot_Spell_IDs[HealBot_Spell_Names[spellName]].Mana.." Power"
+            ret_val=" -  "..healAmount..HealBot_Spell_IDs[HealBot_Spell_Names[spellName]].Mana.." Power"
         else
-            ret_val=" -  "..HealBot_Spell_IDs[HealBot_Spell_Names[spellName]].Mana.." "..HealBot_Tooltip_PowerDesc[HealBot_Data["POWERTYPE"]]
+            ret_val=" -  "..healAmount..HealBot_Spell_IDs[HealBot_Spell_Names[spellName]].Mana.." "..HealBot_Tooltip_PowerDesc[HealBot_Data["POWERTYPE"]]
         end
     else
         ret_val=" - "..spellType
