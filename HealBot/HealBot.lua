@@ -691,7 +691,7 @@ function HealBot_SlashCmd(cmd)
         elseif (HBcmd == "ricons") then
             HealBot_Reset_Icons()
         elseif (HBcmd == "gcd") then
-            HealBot_GCD_Toggle()
+            HealBot_GCD_Toggle(x)
         elseif (HBcmd == "tma") then
             HealBot_Options_ToggleMainAssist()
         elseif (HBcmd == "cs") then
