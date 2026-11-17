@@ -652,13 +652,25 @@ function HealBot_Tooltip_PlayerManaLine(unit)
     if UnitIsUnit(unit, "player") then return end
     local mana, maxMana=UnitPower("player", 0), UnitPowerMax("player", 0)
     if not mana or not maxMana then return end
+    local pct
     if HealBot_issecretvalue(mana) or HealBot_issecretvalue(maxMana) then
-        -- Protected values can still be concatenated into native tooltip text
-        HealBot_Tooltip_SetLine(HEALBOT_TOOLTIP_YOUR_MANA,playerPowerCols.r,playerPowerCols.g,playerPowerCols.b,1,mana.."/"..maxMana,playerPowerCols.r,playerPowerCols.g,playerPowerCols.b,1)
+        -- Protected values can still be concatenated into native tooltip text, and
+        -- UnitPowerPercent gives a percentage that can be displayed without reading it
+        if UnitPowerPercent then
+            local ok, _, _, protectedPct=pcall(HealBot_WoWAPI_UnitMana, "player", 0)
+            if ok then pct=protectedPct end
+        end
     elseif maxMana>0 then
-        HealBot_Tooltip_SetLine(HEALBOT_TOOLTIP_YOUR_MANA,playerPowerCols.r,playerPowerCols.g,playerPowerCols.b,1,
-            mana.."/"..maxMana..format(" (%i%%)",floor((mana/maxMana)*100)),playerPowerCols.r,playerPowerCols.g,playerPowerCols.b,1)
+        pct=floor((mana/maxMana)*100)
+    else
+        return
     end
+    local text=mana.."/"..maxMana
+    if pct then
+        local ok, pctText=pcall(format, " (%i%%)", pct)
+        if ok then text=text..pctText end
+    end
+    HealBot_Tooltip_SetLine(HEALBOT_TOOLTIP_YOUR_MANA,playerPowerCols.r,playerPowerCols.g,playerPowerCols.b,1,text,playerPowerCols.r,playerPowerCols.g,playerPowerCols.b,1)
 end
 
 function HealBot_Action_setSpellInfo(button)
