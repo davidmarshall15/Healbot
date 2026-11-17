@@ -299,6 +299,7 @@ function HealBot_Data_InitVars()
         Tooltip_ShowDebuffIconInfo=true,
         Tooltip_MaxButtons=5,
         Tooltip_IgnoreGCD=false,
+        ShowGCDSweep=false,
         Tooltip_Scale=1,
         Tooltip_Alpha=1,
         Tooltip_HeaderFont=HealBot_Supplied_Fonts[14].name,
