@@ -893,8 +893,10 @@ function HealBot_Action_DoRefreshTooltip()
                                 if not mana or HealBot_issecretvalue(maxmana) or (maxmana and maxmana == 0) then
                                     if xButton.aggro.threatpct>0 then
                                         HealBot_Tooltip_SetLine(HEALBOT_WORD_THREAT.." "..xButton.aggro.threatpct.."%",1,0.1,0.1,1,UnitTag,xButton.text.sr,xButton.text.sg,xButton.text.sb,1)
-                                        local threatvalue=HealBot_Util_ReadNumber(xButton.aggro.threatvalue)
-                                        HealBot_Tooltip_SetLine(xButton.aggro.mobname.." ("..threatvalue..")",1,0.1,0.1,1,UnitTag,xButton.text.sr,xButton.text.sg,xButton.text.sb,1)
+                                        if string.len(xButton.aggro.mobname or "")>0 then
+                                            local threatvalue=HealBot_Util_ReadNumber(xButton.aggro.threatvalue)
+                                            HealBot_Tooltip_SetLine(xButton.aggro.mobname.." ("..threatvalue..")",1,0.1,0.1,1,UnitTag,xButton.text.sr,xButton.text.sg,xButton.text.sb,1)
+                                        end
                                     elseif HealBot_Tooltip_luVars["uGroup"]>0 then
                                         HealBot_Tooltip_SetLine(HEALBOT_SORTBY_GROUP.." "..HealBot_Tooltip_luVars["uGroup"],1,1,1,1,UnitTag,xButton.text.sr,xButton.text.sg,xButton.text.sb,1)
                                     elseif string.len(UnitTag)>0 then
@@ -916,8 +918,10 @@ function HealBot_Action_DoRefreshTooltip()
                                         end
                                     else
                                         HealBot_Tooltip_SetLine(HEALBOT_WORD_THREAT.." "..xButton.aggro.threatpct.."%",1,0.1,0.1,1,mana.."/"..maxmana..format(" (%i%%)",mPct),powerCols.r,powerCols.g,powerCols.b,1)
-                                        local threatvalue=HealBot_Util_ReadNumber(xButton.aggro.threatvalue)
-                                        HealBot_Tooltip_SetLine(xButton.aggro.mobname.." ("..threatvalue..")",1,0.1,0.1,1," ",UnitTag,xButton.text.sr,xButton.text.sg,xButton.text.sb,1)
+                                        if string.len(xButton.aggro.mobname or "")>0 then
+                                            local threatvalue=HealBot_Util_ReadNumber(xButton.aggro.threatvalue)
+                                            HealBot_Tooltip_SetLine(xButton.aggro.mobname.." ("..threatvalue..")",1,0.1,0.1,1," ",UnitTag,xButton.text.sr,xButton.text.sg,xButton.text.sb,1)
+                                        end
                                     end
                                 end
                             end
