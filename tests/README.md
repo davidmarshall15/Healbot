@@ -14,7 +14,7 @@ lua tests/target_binding.lua
 lua tests/modified_target.lua
 lua tests/rank_range.lua
 lua tests/combat_auras.lua
-lua tests/heal_amount.lua
+lua tests/gcd.lua
 ```
 
 On Windows, the following also checks addon Lua syntax and TOC/XML references:
