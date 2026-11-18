@@ -381,14 +381,37 @@ local HealBot_Tooltip_PowerDesc={[0]="Mana",
                                  [8]="Eclipse",
                                  [9]="Holy Power"}
 
+local HealBot_Tooltip_GetSpellDesc=(C_Spell and C_Spell.GetSpellDescription) or GetSpellDescription
+function HealBot_Tooltip_SpellHealAmount(spellId)
+      --HealBot_setCall("HealBot_Tooltip_SpellHealAmount")
+    if not HealBot_Tooltip_GetSpellDesc or type(spellId)~="number" then return "" end
+    local desc=HealBot_Tooltip_GetSpellDesc(spellId)
+    if not desc or HealBot_issecretvalue(desc) or desc == "" then
+        if C_Spell and C_Spell.RequestLoadSpellData then C_Spell.RequestLoadSpellData(spellId) end
+        return ""
+    end
+    local lDesc=string.lower(desc)
+    if string.find(lDesc, "absorb") then
+        local amount=string.match(lDesc, "absorb%a* (%d[%d,]*)") or string.match(desc, "(%d[%d,]*) damage")
+        if amount then return amount.." absorb  " end
+    elseif string.find(lDesc, "heal[^t]") or string.find(lDesc, "heal$") then
+        local minHeal, maxHeal=string.match(desc, "(%d[%d,]*) to (%d[%d,]*)")
+        if minHeal then return minHeal.."-"..maxHeal.." heal  " end
+        local amount=string.match(desc, "for (%d[%d,]*)") or string.match(desc, "of (%d[%d,]*) damage")
+        if amount then return amount.." heal  " end
+    end
+    return ""
+end
+
 function HealBot_Tooltip_SpellSummary(spellName, spellType)
       --HealBot_setCall("HealBot_Tooltip_SpellSummary")
     local ret_val="  "
     if HealBot_Spell_Names[spellName] then
+        local healAmount=HealBot_Tooltip_SpellHealAmount(HealBot_Spell_Names[spellName])
         if HealBot_Data["POWERTYPE"] == 0 and HealBot_Spell_IDs[HealBot_Spell_Names[spellName]].Mana<HealBot_Tooltip_Power then
-            ret_val=" -  "..HealBot_Spell_IDs[HealBot_Spell_Names[spellName]].Mana.." Power"
+            ret_val=" -  "..healAmount..HealBot_Spell_IDs[HealBot_Spell_Names[spellName]].Mana.." Power"
         else
-            ret_val=" -  "..HealBot_Spell_IDs[HealBot_Spell_Names[spellName]].Mana.." "..HealBot_Tooltip_PowerDesc[HealBot_Data["POWERTYPE"]]
+            ret_val=" -  "..healAmount..HealBot_Spell_IDs[HealBot_Spell_Names[spellName]].Mana.." "..HealBot_Tooltip_PowerDesc[HealBot_Data["POWERTYPE"]]
         end
     else
         ret_val=" - "..spellType
@@ -870,8 +893,10 @@ function HealBot_Action_DoRefreshTooltip()
                                 if not mana or HealBot_issecretvalue(maxmana) or (maxmana and maxmana == 0) then
                                     if xButton.aggro.threatpct>0 then
                                         HealBot_Tooltip_SetLine(HEALBOT_WORD_THREAT.." "..xButton.aggro.threatpct.."%",1,0.1,0.1,1,UnitTag,xButton.text.sr,xButton.text.sg,xButton.text.sb,1)
-                                        local threatvalue=HealBot_Util_ReadNumber(xButton.aggro.threatvalue)
-                                        HealBot_Tooltip_SetLine(xButton.aggro.mobname.." ("..threatvalue..")",1,0.1,0.1,1,UnitTag,xButton.text.sr,xButton.text.sg,xButton.text.sb,1)
+                                        if string.len(xButton.aggro.mobname or "")>0 then
+                                            local threatvalue=HealBot_Util_ReadNumber(xButton.aggro.threatvalue)
+                                            HealBot_Tooltip_SetLine(xButton.aggro.mobname.." ("..threatvalue..")",1,0.1,0.1,1,UnitTag,xButton.text.sr,xButton.text.sg,xButton.text.sb,1)
+                                        end
                                     elseif HealBot_Tooltip_luVars["uGroup"]>0 then
                                         HealBot_Tooltip_SetLine(HEALBOT_SORTBY_GROUP.." "..HealBot_Tooltip_luVars["uGroup"],1,1,1,1,UnitTag,xButton.text.sr,xButton.text.sg,xButton.text.sb,1)
                                     elseif string.len(UnitTag)>0 then
@@ -893,8 +918,10 @@ function HealBot_Action_DoRefreshTooltip()
                                         end
                                     else
                                         HealBot_Tooltip_SetLine(HEALBOT_WORD_THREAT.." "..xButton.aggro.threatpct.."%",1,0.1,0.1,1,mana.."/"..maxmana..format(" (%i%%)",mPct),powerCols.r,powerCols.g,powerCols.b,1)
-                                        local threatvalue=HealBot_Util_ReadNumber(xButton.aggro.threatvalue)
-                                        HealBot_Tooltip_SetLine(xButton.aggro.mobname.." ("..threatvalue..")",1,0.1,0.1,1," ",UnitTag,xButton.text.sr,xButton.text.sg,xButton.text.sb,1)
+                                        if string.len(xButton.aggro.mobname or "")>0 then
+                                            local threatvalue=HealBot_Util_ReadNumber(xButton.aggro.threatvalue)
+                                            HealBot_Tooltip_SetLine(xButton.aggro.mobname.." ("..threatvalue..")",1,0.1,0.1,1," ",UnitTag,xButton.text.sr,xButton.text.sg,xButton.text.sb,1)
+                                        end
                                     end
                                 end
                             end
