@@ -14,16 +14,16 @@ local source=file:read("*a"):gsub("\r\n","\n")
 file:close()
 local refresh=assert(source:match("(function HealBot_Action_DoRefreshTooltip%(%).-)\nfunction HealBot_Action_RefreshTooltip"))
 local function noop() end
-local function run(game,client,health,maxHealth,mana,maxMana,showHealth)
+local function run(game,client,health,maxHealth,mana,maxMana,showHealth,aggro)
     local lines,reads={},{}
     local shown=false
     local button={unit="player",guid="test",frame=1,level=20,role=0,rank=0,
         health={current=health,max=maxHealth,cpct=50,rcol=1,gcol=1},
         mana={current=mana,max=maxMana,pct=50,r=1,g=1,b=1},
         text={nameonly="Test",tag="",r=1,g=1,b=1},
-        aura={debuff={},buff={}},aggro={threatpct=0},status={}}
+        aura={debuff={},buff={}},aggro=aggro or {threatpct=0},status={}}
     local env=setmetatable({
-        HEALBOT_GAME_VERSION=game,HEALBOT_CLIENT_VERSION=client,
+        HEALBOT_GAME_VERSION=game,HEALBOT_CLIENT_VERSION=client,HEALBOT_WORD_THREAT="Threat",
         HealBot_Globals={ShowTooltip=true,Tooltip_ShowTarget=true,
             Tooltip_ShowHealth=showHealth,Tooltip_ShowMana=true},
         HealBot_Data={TIPBUTTON=button,TIPTYPE="Enabled",UILOCK=false},
@@ -61,7 +61,7 @@ local function run(game,client,health,maxHealth,mana,maxMana,showHealth)
         if line.left=="Zone" then healthLine=line.right end
         if line.left==" " and line.right then manaLine=line.right end
     end
-    return healthLine,manaLine,reads
+    return healthLine,manaLine,reads,lines
 end
 
 for _,case in ipairs({
@@ -100,4 +100,19 @@ h,m,reads=run(12,12,secret,100,secret,200,true)
 eq(h,secret,"retail secret health reaches native text")
 eq(m,secret,"retail secret mana reaches native text")
 eq(#reads,0,"retail skips legacy numeric formatting")
+
+-- Midnight/Forever threat has no mob name or value; don't add an empty " (0)" line
+local function threatLines(lines)
+    local count=0
+    for _,line in ipairs(lines) do
+        if type(line.left)=="string" and line.left:find("%(") then count=count+1 end
+    end
+    return count
+end
+for _,case in ipairs({{100,200},{secret,secret}}) do
+    local _,_,_,lines=run(1,12,50,100,case[1],case[2],true,{threatpct=100,threatvalue=0,mobname=""})
+    eq(threatLines(lines),0,"no mob threat line without a mob name")
+    _,_,_,lines=run(1,12,50,100,case[1],case[2],true,{threatpct=100,threatvalue=500,mobname="Boar"})
+    eq(threatLines(lines),1,"mob threat line kept when the mob is known")
+end
 print("PASS: "..passed.." tooltip regression assertions (mock APIs)")

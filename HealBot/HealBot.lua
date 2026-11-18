@@ -690,6 +690,8 @@ function HealBot_SlashCmd(cmd)
             HealBot_Reset_Buffs()
         elseif (HBcmd == "ricons") then
             HealBot_Reset_Icons()
+        elseif (HBcmd == "gcd") then
+            HealBot_GCD_Toggle(x)
         elseif (HBcmd == "tma") then
             HealBot_Options_ToggleMainAssist()
         elseif (HBcmd == "cs") then
@@ -4604,9 +4606,16 @@ function HealBot_CalcThreat(button)
             end
             if not UnitThreatData["status"] then UnitThreatData["status"]=0 end
         else
-            UnitThreatData["status"]=UnitThreatSituation(button.unit) or 0
+            UnitThreatData["tmpstatus"]=UnitThreatSituation(button.unit)
+            if HealBot_issecretvalue(UnitThreatData["tmpstatus"]) then UnitThreatData["tmpstatus"]=0 end
+            UnitThreatData["status"]=UnitThreatData["tmpstatus"] or 0
             if UnitThreatData["status"]>0 then
-                UnitThreatData["threatpct"]=button.aggro.threatpct
+                -- No detailed threat pct here, so derive one from the status, otherwise the pct checks below reset status to 0
+                if UnitThreatData["status"]>1 then
+                    UnitThreatData["threatpct"]=100
+                else
+                    UnitThreatData["threatpct"]=HealBot_Globals.aggro2pct
+                end
                 UnitThreatData["threatvalue"]=button.aggro.threatvalue
                 UnitThreatData["threatname"]=button.aggro.mobname or ""
             end
