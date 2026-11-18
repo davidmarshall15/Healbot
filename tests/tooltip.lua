@@ -38,6 +38,7 @@ local function run(game,client,health,maxHealth,mana,maxMana,showHealth,aggro)
         HealBot_Action_GetTimeOffline=function() return nil end,
         HealBot_ToolTip_SetTooltipPos=noop,
         HealBot_ToolTip_ShowHoT=noop,
+        HealBot_Tooltip_PlayerManaLine=noop,
         HealBot_Tooltip_Show=function() shown=true end,
         HealBot_Tooltip_SetLine=function(left,lr,lg,lb,la,right)
             lines[#lines+1]={left=left,right=right}
