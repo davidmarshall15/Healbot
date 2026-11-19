@@ -2604,6 +2604,7 @@ function HealBot_VariablesLoaded()
             HealBot_Config_Cures[key]=val;
         end
     end);
+    HealBot_InitForeverAuraSettings()
     HealBot_Action_SetCustomClassCols(2)
     HealBot_Timers_Set("OOC","LoadAurasBuffs")
     HealBot_Timers_Set("OOC","LoadAurasDebuffs")
@@ -3586,6 +3587,14 @@ end
 function HealBot_SetUnitDisconnectChange(button, state)
       --HealBot_setCall("HealBot_SetUnitDisconnectChange", button)
     HealBot_Action_setState(button, state)
+    if HEALBOT_FOREVER then
+        if state==HealBot_Unit_Status["DC"] then
+            HealBot_Aura_RemoveBuffIcons(button)
+        else
+            button.aura.buff.update=true
+            HealBot_Aura_MarkCheckBuffsTime(button)
+        end
+    end
     HealBot_Text_setNameTag(button)
     button.status.slowupdate=true
     button.status.change=true
@@ -4566,17 +4575,19 @@ function HealBot_CalcThreat(button)
       --HealBot_setCall("HealBot_CalcThreat", button)
     UnitThreatData["threatpct"],UnitThreatData["status"],UnitThreatData["threatvalue"],ctEnemyUnit,UnitThreatData["threatname"]=0,0,0,false,""
     if button.status.current<HealBot_Unit_Status["DEAD"] and UnitIsFriend("player",button.unit) then
-        ctTankUnit=HealBot_Panel_PlayerUnitGUID(HealBot_luVars["TankGUID1"])
-        if HealBot_ValidLivingEnemy(button.unit, button.unit.."target") then
-            ctEnemyUnit=button.unit.."target"
-        elseif ctTankUnit and HealBot_ValidLivingEnemy(ctTankUnit, ctTankUnit.."target") then
-            ctEnemyUnit=ctTankUnit.."target"
-        elseif HealBot_ValidLivingEnemy(button.unit, "boss1") then
-            ctEnemyUnit="boss1"
-        elseif HealBot_ValidLivingEnemy(button.unit, "boss2") then
-            ctEnemyUnit="boss2"
-        elseif HealBot_ValidLivingEnemy("player", "target") then
-            ctEnemyUnit="playertarget"
+        if not HEALBOT_FOREVER then
+            ctTankUnit=HealBot_Panel_PlayerUnitGUID(HealBot_luVars["TankGUID1"])
+            if HealBot_ValidLivingEnemy(button.unit, button.unit.."target") then
+                ctEnemyUnit=button.unit.."target"
+            elseif ctTankUnit and HealBot_ValidLivingEnemy(ctTankUnit, ctTankUnit.."target") then
+                ctEnemyUnit=ctTankUnit.."target"
+            elseif HealBot_ValidLivingEnemy(button.unit, "boss1") then
+                ctEnemyUnit="boss1"
+            elseif HealBot_ValidLivingEnemy(button.unit, "boss2") then
+                ctEnemyUnit="boss2"
+            elseif HealBot_ValidLivingEnemy("player", "target") then
+                ctEnemyUnit="playertarget"
+            end
         end
         if not HealBot_Util_isMidnight(false) and ctEnemyUnit then
             _, UnitThreatData["tmpstatus"], UnitThreatData["tmppct"], _, UnitThreatData["tmpvalue"]=UnitDetailedThreatSituation(button.unit, ctEnemyUnit)
@@ -4605,6 +4616,13 @@ function HealBot_CalcThreat(button)
                 HealBot_Plugin_Threat_UpdateMobRT(UnitThreatData["threatname"], (GetRaidTargetIndex(ctEnemyUnit) or 0))
             end
             if not UnitThreatData["status"] then UnitThreatData["status"]=0 end
+        elseif HEALBOT_FOREVER then
+            local threat=UnitThreatSituation(button.unit)
+            if not HealBot_issecretvalue(threat) and threat then
+                -- The client reports primary targets at levels 2 and 3.
+                -- HealBot reserves level 3 for its red Border Hazard.
+                UnitThreatData["status"]=threat>=2 and 3 or threat
+            end
         else
             UnitThreatData["tmpstatus"]=UnitThreatSituation(button.unit)
             if HealBot_issecretvalue(UnitThreatData["tmpstatus"]) then UnitThreatData["tmpstatus"]=0 end
@@ -4620,7 +4638,9 @@ function HealBot_CalcThreat(button)
                 UnitThreatData["threatname"]=button.aggro.mobname or ""
             end
         end
-        if UnitThreatData["threatpct"]>=HealBot_Globals.aggro3pct or button.aggro.targeted>HealBot_TimeNow then
+        if HEALBOT_FOREVER then
+            if button.aggro.targeted>HealBot_TimeNow then UnitThreatData["status"]=3 end
+        elseif UnitThreatData["threatpct"]>=HealBot_Globals.aggro3pct or button.aggro.targeted>HealBot_TimeNow then
             UnitThreatData["status"]=3
             if UnitThreatData["threatpct"]>100 then UnitThreatData["threatpct"]=100 end
         elseif UnitThreatData["threatpct"]>=HealBot_Globals.aggro2pct then

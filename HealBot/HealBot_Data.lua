@@ -244,6 +244,67 @@ HealBot_HealGroupsTrans={ [HEALBOT_OPTIONS_SELFHEALS_en]=HEALBOT_OPTIONS_SELFHEA
                             }
 HealBot_GlobalsDefaults={}
 
+local foreverBuffIconRanks={
+    [588]={588,7128,602,1006,10951,10952}, -- Inner Fire
+    [586]={586,9578,9579,9592,10941,10942}, -- Fade
+    [14752]={14752,14818,14819,27841,25312,27681,32999}, -- Divine Spirit and Prayer of Spirit
+    [976]={976,10957,10958,27683}, -- Shadow Protection and Prayer of Shadow Protection
+}
+local foreverBuffIconBase={}
+for base,ranks in pairs(foreverBuffIconRanks) do
+    for _,id in ipairs(ranks) do foreverBuffIconBase[id]=base end
+end
+
+function HealBot_BuffIconSetKey(id)
+    return (HEALBOT_FOREVER and foreverBuffIconBase[id]) or id
+end
+
+function HealBot_InitForeverAuraSettings()
+    if not HEALBOT_FOREVER then return end
+    local priest=HealBot_Globals.WatchHoT.PRIE or {}
+    HealBot_Globals.WatchHoT.PRIE=priest
+    if not HealBot_Globals.ForeverAuraSettingsV13 then
+        local id=1229451 -- Boosted Rest
+        local name=HealBot_WoWAPI_SpellName(id)
+        local debuffs=HealBot_Globals.CustomDebuffs
+        if debuffs[id]==nil and (not name or debuffs[name]==nil) then
+            debuffs[id]=HealBot_GlobalsDefaults.CustomDebuffs[id]
+            HealBot_Globals.Custom_Debuff_Categories[id]=HealBot_GlobalsDefaults.Custom_Debuff_Categories[id]
+            HealBot_Globals.CustomDebuffsShowBarCol[id]=HealBot_GlobalsDefaults.CustomDebuffsShowBarCol[id]
+        end
+        local fadeName=HealBot_WoWAPI_SpellName(586)
+        if priest[586]==nil and (not fadeName or priest[fadeName]==nil) then
+            priest[586]=HealBot_GlobalsDefaults.WatchHoT.PRIE[586]
+        end
+        HealBot_Globals.ForeverAuraSettingsV13=true
+    end
+    if not HealBot_Globals.ForeverAuraSettingsV27 then
+        local abolishName=HealBot_WoWAPI_SpellName(552)
+        if priest[552]==nil and (not abolishName or priest[abolishName]==nil) then
+            priest[552]=HealBot_GlobalsDefaults.WatchHoT.PRIE[552]
+        end
+        HealBot_Globals.ForeverAuraSettingsV27=true
+    end
+    if HealBot_Globals.ForeverAuraSettingsV14 then return end
+    local fearWardName=HealBot_WoWAPI_SpellName(6346)
+    if priest[6346]==nil and (not fearWardName or priest[fearWardName]==nil) then
+        priest[6346]=HealBot_GlobalsDefaults.WatchHoT.PRIE[6346]
+    end
+    local sets=HealBot_Globals.CustomBuffsIconSet
+    for base,ranks in pairs(foreverBuffIconRanks) do
+        local selected=sets[base]
+        local spellName=HealBot_WoWAPI_SpellName(base)
+        if selected==nil and spellName then selected=sets[spellName] end
+        for i=#ranks,2,-1 do
+            local rank=ranks[i]
+            if selected==nil then selected=sets[rank] end
+            sets[rank]=nil
+        end
+        sets[base]=selected
+    end
+    HealBot_Globals.ForeverAuraSettingsV14=true
+end
+
 function HealBot_Data_InitVars()
     HealBot_GlobalsDefaults={
         LastVersionSkinUpdate=HealBot_Global_InitVersion(),
@@ -660,6 +721,15 @@ function HealBot_Data_InitVars()
             },
         },
     };
+    if HEALBOT_FOREVER then
+        local boostedRest=1229451
+        HealBot_GlobalsDefaults.CustomDebuffs[boostedRest]=10
+        HealBot_GlobalsDefaults.Custom_Debuff_Categories[boostedRest]=2
+        HealBot_GlobalsDefaults.CustomDebuffsShowBarCol[boostedRest]=3
+        for _, id in ipairs({1243,588,14751,14752,976,586,6346,552}) do
+            HealBot_GlobalsDefaults.WatchHoT.PRIE[id]=1
+        end
+    end
     if HEALBOT_GAME_VERSION<3 then
         HealBot_GlobalsDefaults.TalentInspect=false
     end

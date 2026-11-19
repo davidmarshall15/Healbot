@@ -1708,6 +1708,19 @@ function HealBot_Skins_ResetHealGroups(SkinName)
    }
 end
 
+function HealBot_Skins_GetAuthor(skinName)
+    local authors=Healbot_Config_Skins.Author
+    local author=authors[skinName]
+    if HEALBOT_FOREVER and (author==nil or author=="Monti of Terenas") then
+        local name=skinName:lower():gsub("[%s_-]","")
+        if name:match("^oldnastylady") then
+            author="MindTrik"
+            authors[skinName]=author
+        end
+    end
+    return author
+end
+
 function HealBot_Skins_Check_Skin(SkinName)
     HealBot_Skins_Check_Aux(SkinName)
       --HealBot_setCall("HealBot_Skins_Check_Skin")
@@ -1848,7 +1861,9 @@ function HealBot_Skins_Check_Skin(SkinName)
     if Healbot_Config_Skins.Aggro then Healbot_Config_Skins.Aggro=nil end
     if Healbot_Config_Skins.Highlight then Healbot_Config_Skins.Highlight=nil end
 
-    if Healbot_Config_Skins.Author[SkinName] == nil then Healbot_Config_Skins.Author[SkinName]="Monti of Terenas" end
+    if not HealBot_Skins_GetAuthor(SkinName) then
+        Healbot_Config_Skins.Author[SkinName]="Monti of Terenas"
+    end
     if Healbot_Config_Skins.DuplicateBars[SkinName] == nil then Healbot_Config_Skins.DuplicateBars[SkinName]=false end
     if Healbot_Config_Skins.DupBarsPrivList[SkinName] == nil then Healbot_Config_Skins.DupBarsPrivList[SkinName]=true end
 

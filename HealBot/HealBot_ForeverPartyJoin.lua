@@ -422,6 +422,14 @@ for _,event in ipairs({"PLAYER_LOGIN","PLAYER_REGEN_ENABLED","GROUP_ROSTER_UPDAT
     events:RegisterEvent(event)
 end
 events:SetScript("OnEvent",function(_,event)
+    if event=="PLAYER_LOGIN" and HealBot_Options_ForeverPartyJoin then
+        local checkbox=HealBot_Options_ForeverPartyJoin
+        HealBot_Options_SetText(checkbox,"Show new party and raid members during combat")
+        local labelWidth=checkbox.Text:GetStringWidth()
+        checkbox:SetPoint("TOP",checkbox:GetParent(),"TOP",-labelWidth/2,-267)
+        checkbox:SetChecked(HealBot_Globals.ForeverPartyJoin~=false)
+        checkbox:Show()
+    end
     if event=="PLAYER_SPECIALIZATION_CHANGED" then bindingGeneration=bindingGeneration+1 end
     if InCombatLockdown() then
         if event=="GROUP_ROSTER_UPDATE" then
@@ -450,9 +458,13 @@ hooksecurefunc("HealBot_Aura_SetAuraCheckFlags",function()
         if HealBot_Forever_UpdateArrivalAuras then HealBot_Forever_UpdateArrivalAuras(row) end
     end
 end)
+hooksecurefunc("HealBot_Forever_RefreshBuffExclusions",QueueSkinSync)
 
 function HealBot_Forever_SetPartyJoinEnabled(enabled)
     HealBot_Globals.ForeverPartyJoin=enabled
+    if HealBot_Options_ForeverPartyJoin then
+        HealBot_Options_ForeverPartyJoin:SetChecked(enabled)
+    end
     QueueSync()
     print("HealBot combat party arrivals "..(enabled and "on" or "off")..(InCombatLockdown() and " (after combat)." or "."))
 end
