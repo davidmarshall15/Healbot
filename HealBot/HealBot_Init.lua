@@ -43,14 +43,14 @@ function HealBot_Init_ClassicHealSpellMaxRank(sName)
 end
 
 local function EnumerateTooltipLines_helper(pattern, ...)
-    local region=nil
+    if HealBot_issecretvalue(pattern) or type(pattern)~="string" then return false end
     for i=1, select("#", ...) do
-        region=select(i, ...)
+        local region=select(i, ...)
         if region and region:GetObjectType() == "FontString" then
-            if region:GetText() then
-                if string.find(region:GetText(), pattern) then
-                    return true
-                end
+            local text=region:GetText()
+            -- Tooltip text can be secret during combat. Inspect only public strings.
+            if not HealBot_issecretvalue(text) and type(text)=="string" then
+                if string.find(text, pattern) then return true end
             end
         end
     end

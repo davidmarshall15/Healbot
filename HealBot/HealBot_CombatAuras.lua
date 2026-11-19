@@ -69,7 +69,7 @@ end
 -- Style one Blizzard-created button: click-through (clicks must reach the heal
 -- bar beneath), our own icon Texture + Cooldown, bound via the native inbound
 -- setters so Blizzard paints the secret aura into them.
-local function HBCA_MakeInit(size)
+local function HBCA_MakeInit(size, skin)
     return function(btn)
         pcall(function()
             if not btn then return end
@@ -79,7 +79,8 @@ local function HBCA_MakeInit(size)
             if not btn.hbcaIcon then
                 local t=btn:CreateTexture(nil, "ARTWORK")
                 t:SetAllPoints(btn)
-                t:SetTexCoord(0.08, 0.92, 0.08, 0.92)
+                local zoom=skin and skin.zoom or 0.08
+                t:SetTexCoord(zoom, 1-zoom, zoom, 1-zoom)
                 btn.hbcaIcon=t
                 local cd=CreateFrame("Cooldown", nil, btn, "CooldownFrameTemplate")
                 cd:SetAllPoints(btn)
@@ -89,7 +90,21 @@ local function HBCA_MakeInit(size)
             end
             local g=HBCA_Defaults()
             if btn.hbcaCD and btn.hbcaCD.SetHideCountdownNumbers then
-                btn.hbcaCD:SetHideCountdownNumbers(not (g and g.CombatAurasNums))
+                local showNumbers=g and g.CombatAurasNums and (not skin or skin.showDuration)
+                btn.hbcaCD:SetHideCountdownNumbers(not showNumbers)
+                if skin and showNumbers and btn.hbcaCD.GetCountdownFontString then
+                    local countdown=btn.hbcaCD:GetCountdownFontString()
+                    if countdown then
+                        HealBot_Media_UpdateFont(countdown, skin.font, skin.fontSize, skin.fontOutline, "Arrival buff duration")
+                    end
+                end
+            end
+            if skin and skin.showCount and btn.SetApplicationCount and not btn.hbcaCount then
+                local count=btn:CreateFontString(nil, "OVERLAY", "GameFontNormal")
+                count:SetPoint("BOTTOMRIGHT", btn, "BOTTOMRIGHT")
+                HealBot_Media_UpdateFont(count, skin.font, skin.fontSize, skin.fontOutline, "Arrival buff count")
+                btn:SetApplicationCount(count, {})
+                btn.hbcaCount=count
             end
             if btn.SetIcon and not btn.hbcaBoundIcon then
                 btn.hbcaBoundIcon=true
@@ -158,6 +173,7 @@ local function HBCA_BuildOne(button, side, placement)
     local size=placement.size or g.CombatAurasSize or 12
     local filter=(side=="hot") and "HELPFUL|PLAYER" or "HARMFUL"
     local maxN=(side=="hot") and (g.CombatAurasHots or 4) or (g.CombatAurasDebuffs or 3)
+    maxN=placement.limit or maxN
     if maxN<1 then return nil end
     local ok, c=pcall(CreateFrame, "AuraContainer", nil, button, "CustomAuraContainerTemplate")
     if not ok or not c then return nil end
@@ -192,7 +208,7 @@ local function HBCA_BuildOne(button, side, placement)
     end
     local okG=pcall(function()
         c:AddAuraGroup("hbca"..side, filter,
-            { maxFrameCount=maxN, initializeFrame=HBCA_MakeInit(size), layout=HBCA_Layout(size, placement.spacing),
+            { maxFrameCount=maxN, initializeFrame=HBCA_MakeInit(size, placement.skin), layout=HBCA_Layout(size, placement.spacing),
               candidateFilters=cf })
     end)
     if not okG then pcall(function() c:Hide() end) return nil end
@@ -200,6 +216,48 @@ local function HBCA_BuildOne(button, side, placement)
     c:SetShown(inCombat)
     if inCombat then pcall(function() if c.UpdateAllAuras then c:UpdateAllAuras() end end) end
     return c
+end
+
+-- Reserve rows use the native buff container and anchor to the active skin.
+function HealBot_Forever_SkinArrivalAuras(row, donor)
+    if InCombatLockdown() or not HBCA_Enabled() or not HBCA_Probe() then return end
+    local icon=donor.gref.icon[1]
+    local x,y=icon:GetCenter()
+    local cx,cy=donor.gref.Bar:GetCenter()
+    if not x or not y or not cx or not cy then return end
+
+    local layout=HBCA_SkinLayout(donor, "hot")
+    local point=layout.point
+    local dx=point:find("RIGHT") and icon:GetWidth()/2 or (point:find("LEFT") and -icon:GetWidth()/2 or 0)
+    local dy=point:find("TOP") and icon:GetHeight()/2 or (point:find("BOTTOM") and -icon:GetHeight()/2 or 0)
+    layout.relative=row.healthBar
+    layout.relativePoint="CENTER"
+    layout.x,layout.y=x-cx+dx,y-cy+dy
+    layout.limit=hbv_Skins_GetIconVar("MAXBICONS", row.frame, 1)
+    layout.skin={
+        zoom=hbv_Skins_GetIconVar("BZOOM", row.frame, 1),
+        font=hbv_Skins_GetIconTextVar("BUFFFONT", row.frame, 1),
+        fontSize=hbv_Skins_GetIconTextVar("BUFFHEIGHT", row.frame, 1),
+        fontOutline=hbv_Skins_GetIconTextVar("BUFFOUTLINE", row.frame, 1),
+        showCount=hbv_Skins_GetIconTextBoolean("BUFFSCNT", row.frame, 1),
+        showDuration=hbv_Skins_GetIconTextBoolean("BUFFSDUR", row.frame, 1),
+    }
+    local previous=row.arrivalAuraLayout
+    if previous and HBCA_SameLayout(previous.skin, layout.skin) and HBCA_SameLayout(layout.skin, previous.skin) then
+        layout.skin=previous.skin
+        if HBCA_SameLayout(previous, layout) and HBCA_SameLayout(layout, previous) then return end
+    end
+    if row.arrivalBuffs then row.arrivalBuffs:Hide() end
+    row.arrivalBuffs=HBCA_BuildOne(row, "hot", layout)
+    row.arrivalAuraLayout=row.arrivalBuffs and layout or nil
+end
+
+function HealBot_Forever_UpdateArrivalAuras(row)
+    if not row.arrivalBuffs then return end
+    local buffs=HealBot_Config_Buffs
+    local show=HBCA_Enabled() and buffs and buffs.BuffWatch and buffs.BuffWatchInCombat
+        and UnitExists(row.unit) and UnitIsConnected(row.unit)
+    row.arrivalBuffs:SetShown(not not show)
 end
 
 local function HBCA_HideButton(button)
