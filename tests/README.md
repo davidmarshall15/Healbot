@@ -29,7 +29,9 @@ forwarding, LibHealComm isolation, and player/aura refresh during level changes.
 The frame suite exercises native incoming-heal rendering, horizontal/vertical and
 reverse bars, opacity and unit changes, combat debuff filters, text layering and
 frame lifecycle using mock APIs. Secret-value sentinels reject arithmetic and
-inspection; they do not reproduce the client's security system.
+inspection. The prediction suite also models the untainted-only rule for
+`SetPredictedValues`, rejecting secret arguments passed from addon code. The
+mocks still do not reproduce the client's full security system.
 
 The opacity and tooltip suites execute the corresponding real refresh functions
 with mock client data. Tooltip cases cover protected current/max health and mana,
@@ -46,9 +48,11 @@ hidden smoothing targets and the native Forever prediction path.
 The prediction suite loads the actual frame and auxiliary modules with opaque
 values propagated by mock native calculators. It covers absorb clamping,
 overflow, auxiliary totals, colour thresholds, live colour changes and cleanup.
+The native shield bar always stays cerulean; the predicted-health colour for
+absorbs only feeds the auxiliary absorb bar and legacy colour consumers.
 Its texture setup uses Blizzard's actual address-mode helper from
 `fixtures/forever_texture_util.lua`, which rejects invalid enum arguments.
-It also checks incomplete overlays/calculators, failures during initialization,
+It also checks incomplete overlays, failures during initialization,
 continued incoming-heal rendering, and out-of-combat recovery without rebuilding
 complete renderers or creating frames during combat.
 The Target suite checks that SmartCast preserves explicit Target bindings on

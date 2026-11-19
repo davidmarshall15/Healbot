@@ -11,8 +11,7 @@ local function Readable(value)
 end
 
 local function PredictionReady(incoming)
-    return incoming and incoming.calculator and incoming.absorb and incoming.absorbOverlay and
-           incoming.colourCalculator and incoming.remainingCalculator
+    return incoming and incoming.calculator and incoming.absorb and incoming.absorbOverlay
 end
 
 function HealBot_Forever_CreatePrediction(button)
@@ -37,13 +36,9 @@ function HealBot_Forever_CreatePrediction(button)
     overlay:SetAllPoints(fill)
     overlay:SetBlendMode("BLEND")
     overlay:SetVertexColor(128/255,216/255,1)
-    local colourCalculator=CreateUnitHealPredictionCalculator()
-    local remainingCalculator=CreateUnitHealPredictionCalculator()
     if incoming.absorb then incoming.absorb:Hide() end
     incoming.absorb=absorb
     incoming.absorbOverlay=overlay
-    incoming.colourCalculator=colourCalculator
-    incoming.remainingCalculator=remainingCalculator
     return true
 end
 
@@ -61,55 +56,42 @@ local function PredictionCurve(button, kind, mode)
     local entry=colourCurves[key]
     if entry and entry.signature==signature then return entry.curve end
     local curve=C_CurveUtil.CreateColorCurve()
+    -- UnitHealthPercent passes the predicted health fraction (1 = full), so the
+    -- old missing-health thresholds are mirrored here. The tiny offset keeps a
+    -- threshold value in the lower band, matching the old step behaviour.
+    local step=0.0001
     if mode==6 then
         curve:SetType(Enum.LuaCurveType.Step)
-        -- The input is the fraction still missing after prediction. Only skin
-        -- thresholds are subtracted in Lua; health arithmetic stays native.
-        curve:AddPoint(0,CreateColor(values[4],values[5],values[6]))
+        local critical=CreateColor(values[10],values[11],values[12])
+        curve:AddPoint(0,critical)
         if values[2]>values[3] then
-            curve:AddPoint(1-values[2],CreateColor(values[7],values[8],values[9]))
+            curve:AddPoint(math.min(1,values[3]+step),CreateColor(values[7],values[8],values[9]))
+            curve:AddPoint(math.min(1,values[2]+step),CreateColor(values[4],values[5],values[6]))
+        else
+            curve:AddPoint(math.min(1,values[3]+step),CreateColor(values[4],values[5],values[6]))
         end
-        curve:AddPoint(1-values[3],CreateColor(values[10],values[11],values[12]))
+        curve:AddPoint(1,CreateColor(values[4],values[5],values[6]))
     else
         curve:SetType(Enum.LuaCurveType.Linear)
-        curve:AddPoint(0,CreateColor(0,1,0))
-        curve:AddPoint(0.02,CreateColor(0,1,0))
-        curve:AddPoint(0.35,CreateColor(1,1,0))
-        curve:AddPoint(0.69,CreateColor(1,0,0))
-        curve:AddPoint(1,CreateColor(1,0,0))
+        curve:AddPoint(0,CreateColor(1,0,0))
+        curve:AddPoint(0.31,CreateColor(1,0,0))
+        curve:AddPoint(0.65,CreateColor(1,1,0))
+        curve:AddPoint(0.98,CreateColor(0,1,0))
+        curve:AddPoint(1,CreateColor(0,1,0))
     end
     colourCurves[key]={signature=signature,curve=curve}
     return curve
 end
 
--- Curve based colouring. SetPredictedValues refuses secret values when called
--- from addon code, so this runs inside pcall and the caller falls back to the
--- plain colour functions if the client rejects it.
-local function CurveColour(button,kind,mode,prefix)
-    local incoming=button.foreverIncoming
-    local calculator=incoming.calculator
-    local remaining=calculator:GetMaximumDamageAbsorbs()
-    if kind=="A" then
-        local amount=calculator:GetDamageAbsorbs()
-        incoming.remainingCalculator:SetPredictedValues({health=amount,healthMax=remaining})
-        remaining=incoming.remainingCalculator:GetMissingHealth()
-    end
-    incoming.colourCalculator:SetPredictedValues({health=remaining,healthMax=calculator:GetMaximumHealth()})
-    local color=incoming.colourCalculator:EvaluateCurrentHealthPercent(PredictionCurve(button,kind,mode))
-    button.health[prefix.."r"],button.health[prefix.."g"],button.health[prefix.."b"]=color:GetRGB()
-end
-
 local function PredictionColour(button,kind,mode)
-    local incoming=button.foreverIncoming
-    local calculator=incoming.calculator
     local prefix=kind=="I" and "inheal" or "absorb"
     local functions=kind=="I" and "HealBot_Action_HealsInColour" or "HealBot_Action_AbsorbsColour"
-    local curveOk=false
-    if (mode==5 or mode==6) and C_CurveUtil and C_CurveUtil.CreateColorCurve then
-        curveOk=pcall(CurveColour,button,kind,mode,prefix)
-    end
-    if curveOk then
-        -- colours already set by CurveColour
+    if (mode==5 or mode==6) and C_CurveUtil and C_CurveUtil.CreateColorCurve and UnitHealthPercent then
+        -- UnitHealthPercent evaluates the protected predicted-health value inside
+        -- the client. Feeding those secrets back through SetPredictedValues from
+        -- addon code is untainted-only and caused the reported Lua error.
+        local color=UnitHealthPercent(button.unit,true,PredictionCurve(button,kind,mode))
+        button.health[prefix.."r"],button.health[prefix.."g"],button.health[prefix.."b"]=color:GetRGB()
     elseif mode==6 then
         local suffix=button.status.hostile and "E" or ""
         for _, component in ipairs({"r","g","b"}) do
@@ -196,6 +178,8 @@ function HealBot_Forever_UpdatePrediction(button)
     local absorbAmount=calculator:GetDamageAbsorbs()
     button.health.absorbs=Readable(calculator:GetTotalDamageAbsorbs())
     button.health.auxabsorbs=button.health.absorbs
+    -- The native shield bar always uses the cerulean fill set below. The colour
+    -- state here feeds the auxiliary absorb bar and legacy colour consumers.
     PredictionColour(button,"A",absorbMode)
     local anchor=mode>1 and incoming.bar:GetStatusBarTexture() or button.gref["Bar"]:GetStatusBarTexture()
     PositionPrediction(button,incoming.absorb,anchor,button.gref["Absorb"]:GetFrameLevel())
