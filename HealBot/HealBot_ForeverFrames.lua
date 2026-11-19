@@ -94,7 +94,7 @@ local function DebuffColors()
     return colors
 end
 
-local function CreateDebuffOverlay(button, filter)
+local function CreateDebuffOverlay(button, filter, types)
     local container=CreateFrame("AuraContainer", nil, button, "CustomAuraContainerTemplate")
     container:Hide()
     container:SetPoint("TOPLEFT", button.gref["Bar"], "TOPLEFT")
@@ -106,7 +106,7 @@ local function CreateDebuffOverlay(button, filter)
         container:AddAuraGroup("debuffColor", filter, {
             maxFrameCount=1,
             sortMethod=AuraContainerSortMethod.UnitFrameDebuff,
-            candidateFilters={includeDispelTypes={Magic=true, Curse=true, Disease=true, Poison=true, Bleed=true}},
+            candidateFilters={includeDispelTypes=types},
             initializeFrame=function(frame)
                 frame:SetSize(1,1)
                 frame:SetMouseClickEnabled(false)
@@ -137,8 +137,9 @@ function HealBot_Forever_UpdateDebuffOverlay(button)
     if not overlays then return end
     local cures=HealBot_Config_Cures
     local barMode=HealBot_Globals.CustomDebuffsShowBarCol.DEFAULT or 4
-    local enabled=button.status.events and button.foreverDebuffUnit==button.unit and InCombatLockdown() and
-        HealBot_Aura_DebuffsEnabled() and cures.CDCshownHB and
+    local enabled=button.status.events and not button.foreverDebuffDirty
+        and button.foreverDebuffUnit==button.unit and InCombatLockdown()
+        and HealBot_Forever_DebuffsEnabled() and cures.CDCshownHB and
         (barMode==3 or barMode==4) and not button.special.unit and
         button.status.current<HealBot_Unit_Status["PLUGINBARCOL"] and
         HealBot_Range_WarnInRange(button, nil, cures.WarnRange_Bar)
@@ -150,6 +151,37 @@ function HealBot_Forever_UpdateDebuffOverlay(button)
         container:SetShown(show)
         if show and not container.foreverShown then container:UpdateAllAuras() end
         container.foreverShown=show
+    end
+end
+
+local function RefreshDebuffOverlays(button)
+    local types, signature=HealBot_Forever_GetDebuffTypes()
+    if InCombatLockdown() then
+        button.foreverDebuffDirty=button.foreverDebuffSignature~=signature
+        return
+    end
+    if button.foreverDebuffSignature~=signature then
+        for _, container in pairs(button.foreverDebuffs or {}) do container:Hide() end
+        button.foreverDebuffs=nil
+        button.foreverDebuffSignature=signature
+    end
+    button.foreverDebuffDirty=false
+    if signature~="" and not button.foreverDebuffs and not auraError then
+        local overlays={}
+        local ok, err=pcall(function()
+            overlays.all=CreateDebuffOverlay(button, "HARMFUL", types)
+            overlays.dispel=CreateDebuffOverlay(button, "HARMFUL|RAID", types)
+        end)
+        if ok then
+            button.foreverDebuffs=overlays
+        else
+            for _, container in pairs(overlays) do container:Hide() end
+            auraError=tostring(err)
+        end
+    end
+    if button.foreverDebuffs then
+        for _, container in pairs(button.foreverDebuffs) do container:SetUnit(button.unit) end
+        button.foreverDebuffUnit=button.unit
     end
 end
 
@@ -172,23 +204,7 @@ local function Attach(button)
         -- Retry interrupted prediction setup only on the out-of-combat path.
         HealBot_Forever_CreatePrediction(button)
     end
-    if not button.foreverDebuffs and not auraError then
-        local overlays={}
-        local ok, err=pcall(function()
-            overlays.all=CreateDebuffOverlay(button, "HARMFUL")
-            overlays.dispel=CreateDebuffOverlay(button, "HARMFUL|RAID")
-        end)
-        if ok then
-            button.foreverDebuffs=overlays
-        else
-            for _, container in pairs(overlays) do container:Hide() end
-            auraError=tostring(err)
-        end
-    end
-    if button.foreverDebuffs then
-        for _, container in pairs(button.foreverDebuffs) do container:SetUnit(button.unit) end
-        button.foreverDebuffUnit=button.unit
-    end
+    RefreshDebuffOverlays(button)
     HealBot_Forever_UpdateIncomingHeals(button)
     HealBot_Forever_UpdateDebuffOverlay(button)
 end
@@ -230,6 +246,12 @@ hooksecurefunc("HealBot_Action_RegisterUnitEvents", Attach)
 hooksecurefunc("HealBot_Action_UnregisterUnitEvents", Detach)
 hooksecurefunc("HealBot_Action_UpdateHealthButton", HealBot_Forever_UpdateDebuffOverlay)
 hooksecurefunc("HealBot_Aura_SetAuraCheckFlags", UpdateAll)
+hooksecurefunc("HealBot_Options_Debuff_Reset", function()
+    for button in pairs(active) do
+        RefreshDebuffOverlays(button)
+        HealBot_Forever_UpdateDebuffOverlay(button)
+    end
+end)
 hooksecurefunc("HealBot_Skins_ResetSkin", function(_, button)
     if active[button] then
         HealBot_Forever_UpdateIncomingHeals(button)

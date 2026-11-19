@@ -82,21 +82,34 @@ local function PredictionCurve(button, kind, mode)
     return curve
 end
 
+-- Curve based colouring. SetPredictedValues refuses secret values when called
+-- from addon code, so this runs inside pcall and the caller falls back to the
+-- plain colour functions if the client rejects it.
+local function CurveColour(button,kind,mode,prefix)
+    local incoming=button.foreverIncoming
+    local calculator=incoming.calculator
+    local remaining=calculator:GetMaximumDamageAbsorbs()
+    if kind=="A" then
+        local amount=calculator:GetDamageAbsorbs()
+        incoming.remainingCalculator:SetPredictedValues({health=amount,healthMax=remaining})
+        remaining=incoming.remainingCalculator:GetMissingHealth()
+    end
+    incoming.colourCalculator:SetPredictedValues({health=remaining,healthMax=calculator:GetMaximumHealth()})
+    local color=incoming.colourCalculator:EvaluateCurrentHealthPercent(PredictionCurve(button,kind,mode))
+    button.health[prefix.."r"],button.health[prefix.."g"],button.health[prefix.."b"]=color:GetRGB()
+end
+
 local function PredictionColour(button,kind,mode)
     local incoming=button.foreverIncoming
     local calculator=incoming.calculator
     local prefix=kind=="I" and "inheal" or "absorb"
     local functions=kind=="I" and "HealBot_Action_HealsInColour" or "HealBot_Action_AbsorbsColour"
+    local curveOk=false
     if (mode==5 or mode==6) and C_CurveUtil and C_CurveUtil.CreateColorCurve then
-        local remaining=calculator:GetMaximumDamageAbsorbs()
-        if kind=="A" then
-            local amount=calculator:GetDamageAbsorbs()
-            incoming.remainingCalculator:SetPredictedValues({health=amount,healthMax=remaining})
-            remaining=incoming.remainingCalculator:GetMissingHealth()
-        end
-        incoming.colourCalculator:SetPredictedValues({health=remaining,healthMax=calculator:GetMaximumHealth()})
-        local color=incoming.colourCalculator:EvaluateCurrentHealthPercent(PredictionCurve(button,kind,mode))
-        button.health[prefix.."r"],button.health[prefix.."g"],button.health[prefix.."b"]=color:GetRGB()
+        curveOk=pcall(CurveColour,button,kind,mode,prefix)
+    end
+    if curveOk then
+        -- colours already set by CurveColour
     elseif mode==6 then
         local suffix=button.status.hostile and "E" or ""
         for _, component in ipairs({"r","g","b"}) do

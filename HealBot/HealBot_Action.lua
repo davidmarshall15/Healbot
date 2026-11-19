@@ -640,6 +640,7 @@ function HealBot_Action_DisableBorderHazardAggro(button)
       --HealBot_setCall("HealBot_Action_DisableBorderHazardAggro", button)
     if button.hazard.aggro then
         button.hazard.aggro=false
+        if button.hazard.hlthdrop or button.hazard.plugin or button.hazard.debuff then return end
         if button.hazard.buff then
             HealBot_Action_UpdateHazardBordersColoursNew(button, button.aura.buff.r, button.aura.buff.g, button.aura.buff.b)
         else
@@ -6049,6 +6050,21 @@ function HealBot_Action_DoSetButtonAttrib(button,cType,j,unit,HB_prefix,buttonTy
                 button:SetAttribute(HB_prefix.."spell-"..sType..j, sName);
                 HealBot_Action_UpdateAttribsMinReset(button, HB_prefix, cType, j, 2)
             end
+        elseif string.sub(sName,1,1)=="/" then
+            -- Raw macro text typed directly in the spell box, e.g. /target mouseover
+            local mText=sName
+            if string.find(mText,"hbtargetpet") then
+                local pet=HealBot_UnitPet(button.unit)
+                if pet and UnitExists(pet) then
+                    mText=string.gsub(mText,"hbtargetpet",pet)
+                end
+            end
+            mText=string.gsub(mText,"hbtargettargettarget",unit.."targettarget")
+            mText=string.gsub(mText,"hbtargettarget",unit.."target")
+            mText=string.gsub(mText,"hbtarget",unit)
+            button:SetAttribute(HB_prefix..buttonType..j, nil);
+            button:SetAttribute(HB_prefix.."type"..j,"macro")
+            button:SetAttribute(HB_prefix.."macrotext"..j, mText)
         elseif mId ~= 0 then
             local _,_,mText=GetMacroInfo(mId)
             if string.find(mText,"hbtargetpet") then
