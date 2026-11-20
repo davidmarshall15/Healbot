@@ -73,6 +73,8 @@ local function frame()
     return f
 end
 
+env.HealBot_Forever_GetDebuffTypes=function() return {}, "all" end
+env.HealBot_Forever_DebuffsEnabled=function() return monitoring~=false end
 env.HEALBOT_FOREVER=true
 env.HealBot_issecretvalue=function(value) return rawequal(value,secret) end
 env.InCombatLockdown=function() return combat end

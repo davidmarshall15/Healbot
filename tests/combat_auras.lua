@@ -70,12 +70,21 @@ local env=setmetatable({
 }, {__index=_G})
 setfenv(assert(loadstring(read("HealBot/HealBot_CombatAuras.lua"))),env)()
 local function fire(name) events[name].onEvent(events[name],name) end
+local buttons={}
 local function button()
     local b={unit="party1",frame=1,status={events=true},gref={icon={}},GetFrameLevel=function() return 5 end,IsShown=function() return true end}
     local hot={"TOPRIGHT",b,"TOPRIGHT",-4,7}
     local db={"BOTTOMRIGHT",b,"BOTTOMLEFT",-6,-3}
-    b.gref.icon[1]={GetPoint=function() return unpack(hot) end}
-    b.gref.icon[51]={GetPoint=function() return unpack(db) end}
+    b.gref.icon[1]={GetWidth=function() return 12 end,GetPoint=function() return unpack(hot) end}
+    b.gref.icon[51]={GetWidth=function() return 12 end,GetPoint=function() return unpack(db) end}
+for i=1,12 do
+ b.gref.icon[i]=b.gref.icon[i] or {}
+ b.gref.icon[i].SetShown=noop
+end
+b.gref.iconf=setmetatable({}, {__index=function() return {SetShown=noop,SetFrameLevel=noop,SetAlpha=noop,SetText=noop} end})
+b.gref.txt={expire=setmetatable({},getmetatable(b.gref.iconf)),count=setmetatable({},getmetatable(b.gref.iconf))}
+b.gref.indicator={selfcast=b.gref.iconf}
+    buttons[#buttons+1]=b
     return b,hot,db
 end
 fire("PLAYER_LOGIN")
@@ -243,6 +252,22 @@ eq(latest("db").shown,true,"reenabled monitoring restores native debuffs")
 -- new UNIT_AURA event or a readable Lua scan at the combat boundary.
 combat=false; fire("PLAYER_REGEN_ENABLED")
 eq(latest("db").shown,false,"other clients retain combat-only default")
+env.UnitClass=function() return "Mage","MAGE" end
+env.UnitIsConnected=function() return true end
+env.HealBot_Forever_BuffsEnabled=function() return env.HealBot_Aura_BuffsEnabled() end
+env.HealBot_Forever_DebuffsEnabled=function() return env.HealBot_Aura_DebuffsEnabled() end
+env.HealBot_Forever_GetDebuffTypes=function() return {}, "all" end
+env.hbv_Skins_GetIconTextVar=function() end
+env.hbv_Skins_GetFrameBoolean=function() return false end
+for _,b in ipairs(buttons) do
+for i=1,12 do
+ b.gref.icon[i]=b.gref.icon[i] or {}
+ b.gref.icon[i].SetShown=noop
+end
+b.gref.iconf=setmetatable({}, {__index=function() return {SetShown=noop,SetFrameLevel=noop,SetAlpha=noop,SetText=noop} end})
+b.gref.txt={expire=setmetatable({},getmetatable(b.gref.iconf)),count=setmetatable({},getmetatable(b.gref.iconf))}
+b.gref.indicator={selfcast=b.gref.iconf}
+end
 env.HEALBOT_FOREVER=true
 env.HealBot_Globals.CombatAurasPersistDebuffs=nil
 env.SlashCmdList.HBCOMBATAURAS("status")
@@ -253,7 +278,7 @@ eq(env.HealBot_Globals.CombatAurasPersistDebuffs,true,"Forever defaults to persi
 b.id=1; b.status.alpha=1
 b.aura={debuff={update=false}}; b.icon={debuff={count={1,0,0}}}
 b.glow={icon={}}
-b.gref.iconf={}; b.gref.txt={expire={},count={}}
+-- Preserve the mock buff regions.
 env.HealBot_UnitDebuffIcons={[b.id]={}}
 env.HealBot_Aura_prevIconCount={DEBUFF={6,2,2}}
 env.HealBot_AuraDebuffCache={}
@@ -290,7 +315,7 @@ end
 hooks.HealBot_Aura_SetAuraCheckFlags()
 db=latest("db"); hot=latest("hot")
 eq(db.shown,true,"existing harmful auras display outside combat")
-eq(hot.shown,false,"HoTs still use normal out-of-combat renderer")
+eq(hot.shown,true,"Forever native buffs remain visible outside combat")
 eq(env.HealBot_CombatAuras_UsesNativeDebuffs(b),true,"native row owns icon-set 1")
 eq(b.gref.icon[51].alpha,0,"legacy texture hidden on takeover")
 eq(b.gref.txt.expire[51].alpha,0,"legacy countdown hidden on takeover")
@@ -316,7 +341,7 @@ eq(db.shown,true,"remaining DoTs stay visible after combat")
 eq(db.enabled,true,"native aura event processing stays enabled for removal and expiry")
 eq(refreshes,2,"both transitions refresh native contents without UNIT_AURA")
 eq(#containers,count,"combat transitions reuse existing containers")
-eq(hot.shown,false,"HoT row hides after combat")
+eq(hot.shown,true,"Forever native buffs persist after combat")
 
 env.HealBot_Aura_DebuffsEnabled=function() return false end
 hooks.HealBot_Aura_SetAuraCheckFlags()
@@ -378,5 +403,8 @@ count=#containers
 hooks.HealBot_Action_RegisterUnitEvents(lateButton)
 eq(#containers,count,"persistent row never creates protected widgets in combat")
 combat=false; fire("PLAYER_REGEN_ENABLED")
-eq(containers[#containers].shown,true,"deferred debuffs appear immediately after combat")
+local lateDebuff
+for _,c in ipairs(containers) do if c.parent==lateButton and c.key=="hbcadb" then lateDebuff=c end end
+eq(lateDebuff.shown,true,"deferred debuffs appear immediately after combat")
 print("PASS: "..passed.." combat aura layout assertions (mock native widgets)")
+

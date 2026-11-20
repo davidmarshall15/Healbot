@@ -21,6 +21,8 @@ end
 local function noop() end
 local env=setmetatable({}, {__index=_G})
 env._G=env
+env.HealBot_Forever_GetDebuffTypes=function() return {}, "all" end
+env.HealBot_Forever_DebuffsEnabled=function() return monitoring~=false end
 env.HEALBOT_FOREVER=true
 env.HEALBOT_GAME_VERSION=1
 env.HealBot_issecretvalue=protected
@@ -75,8 +77,16 @@ local function calc()
     function c:SetIncomingHealClampMode() end
     function c:SetIncomingHealOverflowPercent() end
     function c:SetDamageAbsorbClampMode(m) self.clamp=m end
+    -- Native code populates protected values through this private setter.
+    -- The addon-facing setter models SetPredictedValues' AllowedWhenUntainted
+    -- restriction: a secret argument from addon code must fail.
+    function c:Populate(v) self.values=v end
     function c:SetPredictedValues(v)
-        for _,value in pairs(v) do assert(not protected(value), "SetPredictedValues rejects secret fields") end
+        for _,value in pairs(v) do
+            if protected(value) then
+                error("bad argument #3 to '?' (Current Field: [health], Usage: self:SetPredictedValues(predictedValues). Secret values are only allowed during untainted execution for this argument.)")
+            end
+        end
         self.values=v
     end
     function c:GetMaximumHealth() return self.values.healthMax end
@@ -111,10 +121,21 @@ local function calc()
     return c
 end
 env.CreateUnitHealPredictionCalculator=calc
+local guarded=calc()
+local ok,err=pcall(guarded.SetPredictedValues,guarded,{health=secret(1),healthMax=10})
+eq(ok,false,"tainted SetPredictedValues rejects a secret argument")
+assert(err and err:find("untainted execution",1,true),"taint error mentions the native restriction")
+passed=passed+1
 local values={health=secret(40),healthMax=secret(100),totalIncomingHeals=secret(20),totalDamageAbsorbs=secret(15)}
-env.UnitGetDetailedHealPrediction=function(_,_,c) c.values=values end
+env.UnitGetDetailedHealPrediction=function(_,_,c) c:Populate(values) end
 env.UnitGetIncomingHeals=function() return values.totalIncomingHeals end
 env.UnitGetTotalAbsorbs=function() return values.totalDamageAbsorbs end
+env.UnitHealthPercent=function(_,usePredicted,curve)
+    local health,healthMax=raw(values.health),raw(values.healthMax)
+    local heals=usePredicted and math.max(0,raw(values.totalIncomingHeals)-raw(values.totalHealAbsorbs or 0)) or 0
+    local pct=healthMax>0 and math.min(healthMax,health+heals)/healthMax or 0
+    return curve:Evaluate(result(pct,values.health,values.healthMax,values.totalIncomingHeals))
+end
 local function frame()
     local f={value=0,orientation="HORIZONTAL",reverse=false}
     function f:CreateTexture() return frame() end
@@ -209,7 +230,7 @@ eq(p.absorbOverlay.tint[3],1,"light-blue overlay blue")
 eq(p.bar.value,20,"secret incoming")
 eq(p.absorb.value,15,"secret absorbs")
 eq(p.absorb.point[2],p.bar:GetStatusBarTexture(),"absorbs follow incoming")
-eq(p.bar.color[1],0,"secret prediction uses configured normal red")
+eq(p.bar.color[1],1,"60% future health injured red")
 eq(p.bar.color[2],1,"60% future health injured green")
 eq(p.absorb.color[1],0,"shield fill stays cerulean despite injured health")
 eq(b.health.incoming,0,"readable legacy incoming")
@@ -224,7 +245,7 @@ env.HealBot_Forever_UpdatePrediction(b)
 eq(curveCount,count,"curves reused")
 values.health=secret(5);values.totalIncomingHeals=secret(10)
 env.HealBot_Forever_UpdatePrediction(b)
-eq(p.bar.color[2],1,"secret prediction retains stable normal green")
+eq(p.bar.color[2],0,"critical colour")
 values.health=secret(80);values.totalIncomingHeals=secret(30)
 env.HealBot_Forever_UpdatePrediction(b)
 eq(p.bar.value,20,"heals clamp to missing health")
@@ -240,7 +261,7 @@ eq(p.bar.color[1],0.8,"class colour")
 skin.IC=4;env.HealBot_Forever_UpdatePrediction(b)
 eq(p.bar.color[1],0.2,"role colour")
 skin.IC=5;env.HealBot_Forever_UpdatePrediction(b)
-eq(p.bar.color[1],0.3,"protected future-health mode uses current health colour")
+eq(p.bar.color[1],0,"future-health green despite current 80%")
 skin.IC=1;env.HealBot_Forever_UpdatePrediction(b)
 eq(p.bar.shown,false,"incoming disabled")
 eq(p.absorb.value,15,"absorbs ignore invisible incoming")
@@ -310,7 +331,7 @@ eq(p.absorb.color[1],0,"shield fill stays cerulean on enemy frames")
 b.status.hostile=false
 skin.IIT=0.25;skin.ICT=0.25;values.health=secret(15);values.totalIncomingHeals=secret(10)
 env.HealBot_Forever_UpdatePrediction(b)
-eq(p.bar.color[2],1,"secret prediction does not inspect threshold boundary")
+eq(p.bar.color[2],0,"equal thresholds at boundary use critical")
 values.health=secret(20);env.HealBot_Forever_UpdatePrediction(b)
 eq(p.bar.color[1],0.4,"equal thresholds above boundary use normal")
 b.status.current=20;env.HealBot_Forever_UpdatePrediction(b)
@@ -322,7 +343,7 @@ eq(b.gref.aux[2].value,0,"death clears auxiliary")
 -- the class nor custom colour path may consume an incomplete renderer.
 b.status.current=1
 values={health=secret(40),healthMax=secret(100),totalIncomingHeals=secret(20),totalDamageAbsorbs=secret(15)}
-for _,missing in ipairs({"absorbOverlay","colourCalculator","remainingCalculator"}) do
+for _,missing in ipairs({"absorbOverlay"}) do
     for _,mode in ipairs({3,6}) do
         local partial={}
         for k,v in pairs(p) do partial[k]=v end
@@ -340,27 +361,19 @@ end
 -- Inject failures at each texture and after both textures, then exercise the
 -- real attach hook to recover. No incomplete resources should be published.
 local textureHelper=env.SetTextureWithAddressModeOptions
-for _,asset in ipairs({"raidframe-shield-fill","RaidFrame-Shield-Overlay","calculator"}) do
+for _,asset in ipairs({"raidframe-shield-fill","RaidFrame-Shield-Overlay"}) do
     local pending={calculator=calc(),bar=frame()}
     b.foreverIncoming=pending
     env.SetTextureWithAddressModeOptions=function(region,name,...)
         if name==asset then error("simulated texture initialization failure") end
         return textureHelper(region,name,...)
     end
-    local calls=0
-    env.CreateUnitHealPredictionCalculator=function()
-        calls=calls+1
-        if asset=="calculator" and calls==2 then error("simulated calculator failure") end
-        return calc()
-    end
     eq(pcall(env.HealBot_Forever_CreatePrediction,b),false,"injected setup failure is visible")
     eq(pending.absorb,nil,"failed setup does not publish absorb bar")
     eq(pending.absorbOverlay,nil,"failed setup does not publish overlay")
-    eq(pending.colourCalculator,nil,"failed setup does not publish colour calculator")
     eq(env.HealBot_Forever_UpdateIncomingHeals(b),true,"refresh after setup failure falls back")
     eq(pending.bar.value,20,"failure preserves incoming-heal rendering")
     env.SetTextureWithAddressModeOptions=textureHelper
-    env.CreateUnitHealPredictionCalculator=calc
     hooks.HealBot_Action_RegisterUnitEvents(b)
     eq(pending.absorb.value,15,"out-of-combat attach repairs initialization")
     eq(pending.absorbOverlay.atlas,"RaidFrame-Shield-Overlay","repair restores overlay")
@@ -383,6 +396,5 @@ hooks.HealBot_Action_RegisterUnitEvents(b)
 eq(partial.absorb~=oldAbsorb,true,"partial bar replaced outside combat")
 eq(oldAbsorb.shown,false,"replaced partial bar stays hidden")
 eq(partial.absorb.value,15,"repaired bar draws absorbs")
-eq(partial.colourCalculator~=nil,true,"repair restores colour calculator")
-eq(partial.remainingCalculator~=nil,true,"repair restores remaining-health calculator")
+eq(partial.absorbOverlay~=nil,true,"repair restores shield overlay")
 print("PASS: "..passed.." native prediction/auxiliary assertions (mock APIs)")

@@ -408,10 +408,6 @@ function HealBot_Media_UpdateType(mType, frame, auxId)
             HealBot_Options_UpdateMediaFont(HealBot_Options_StateFontName,hbv_Skins_GetFrameVar("BarText", "SFONT", frame))
             HealBot_Options_UpdateMediaFont(HealBot_Options_ActionIconsFontName,hbv_ActionIcons_GetVars("FONT", frame))
             HealBot_Options_UpdateMediaFont(HealBot_Options_ActionIconsFontCountName,hbv_ActionIcons_GetVars("FONTCOUNT", frame))
-            for z=1,3 do
-                HealBot_Options_UpdateMediaFont(HealBot_BarButtonIconBuffFont,hbv_Skins_GetIconTextVar("BUFFFONT", frame, z))
-                HealBot_Options_UpdateMediaFont(HealBot_BarButtonIconFont, hbv_Skins_GetIconTextVar("DBFONT", frame, z))
-            end
             HealBot_Options_UpdateMediaFont(HealBot_Options_FontName, hbv_Skins_GetFrameVar("BarText", "FONT", frame))
         else
             HealBot_Options_val_OnLoad(HealBot_Options_WarningSound,HEALBOT_OPTIONS_SOUND,1,#HealBot_Sounds,1,2)

@@ -43,14 +43,14 @@ function HealBot_Init_ClassicHealSpellMaxRank(sName)
 end
 
 local function EnumerateTooltipLines_helper(pattern, ...)
-    local region=nil
+    if HealBot_issecretvalue(pattern) or type(pattern)~="string" then return false end
     for i=1, select("#", ...) do
-        region=select(i, ...)
+        local region=select(i, ...)
         if region and region:GetObjectType() == "FontString" then
-            if region:GetText() then
-                if string.find(region:GetText(), pattern) then
-                    return true
-                end
+            local text=region:GetText()
+            -- Tooltip text can be secret during combat. Inspect only public strings.
+            if not HealBot_issecretvalue(text) and type(text)=="string" then
+                if string.find(text, pattern) then return true end
             end
         end
     end
@@ -627,6 +627,10 @@ local iSpellName, iSpellRank
 local function HealBot_Init_CheckSpell(sType, s, sId, iSpellName, iSpellRank)
     --if sType then
         if sType == "SPELL" then
+            if HEALBOT_FOREVER and (sId==401859 or sId==1240826 or sId==1240827) then
+                if iSpellName then HealBot_Init_Spells_addSpell(sId,iSpellName,s) end
+                return
+            end
             if iSpellName and not HealBot_WoWAPI_IsSpellPassive(sId) and HealBot_Spells_KnownByName(iSpellName) and not string.find(iSpellName," Rune Ability") then -- and (string.len(iSpellRank)<1 or string.find(iSpellRank,"Rank"))
                 HealBot_Init_Spells_addSpell(sId, iSpellName, s, iSpellRank)
             end
@@ -642,6 +646,26 @@ local function HealBot_Init_CheckSpell(sType, s, sId, iSpellName, iSpellRank)
             end
         end
     --end
+end
+
+local function HealBot_Init_ForeverMendingRanks()
+    if not HEALBOT_FOREVER or HealBot_Data["PCLASSTRIM"]~="PRIE" then return end
+    for rank, spellID in ipairs({401859,1240826,1240827}) do
+        if HealBot_Spell_IDs[spellID] or (IsSpellKnown and IsSpellKnown(spellID)) then
+            local name=HealBot_WoWAPI_SpellName(spellID)
+            if name then
+                local rankedName=name..HEALBOT_RANK[rank]
+                if not HealBot_Spell_IDs[spellID] then
+                    HealBot_Init_FindSpellRangeCast(spellID,name,nil,nil)
+                end
+                if HealBot_Spell_IDs[spellID] then
+                    HealBot_Spell_IDs[spellID].name=rankedName
+                    HealBot_Spell_Names[rankedName]=spellID
+                    HealBot_Spell_Names[name]=spellID
+                end
+            end
+        end
+    end
 end
 
 function HealBot_Init_Spells_Defaults()
@@ -712,6 +736,7 @@ function HealBot_Init_Spells_Defaults()
             HealBot_Init_Spells_CataPriest(HBC_HOLY_WORD_SERENITY, HEALBOT_SPELL_HOLYWORDSERENITY, 135937)
             HealBot_Init_Spells_CataPriest(HEALBOT_HOLY_WORD_SANCTUARY, HEALBOT_SPELL_HOLYWORDSANCTUARY, 237541)
         end
+        HealBot_Init_ForeverMendingRanks()
         if HealBot_Spell_Ranges["HEAL30"] and HealBot_Spell_Ranges["HEAL30"]~="Set" then
             HealBot_Range_InitSpell("HEAL30", HealBot_Spell_Ranges["HEAL30"])
         end
