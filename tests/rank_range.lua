@@ -72,6 +72,20 @@ env.HealBot_Config_Spells.EnabledKeyCombo.Left="S:102^Buff(Rank 1)"
 env.HealBot_Action_ClearSpellCache()
 eq(env.HealBot_Action_GetSpell("ENABLED","Left"),"Buff","mismatched saved name cannot override ID")
 env.HealBot_Globals.NoRanks=true
+-- All physical mouse buttons must carry the same explicit rank, including
+-- the reported middle-click Shield rank 6 case.
+env.HealBot_Spell_IDs[6066]={}
+env.HealBot_Globals.NoRanks=false
+env.HealBot_Init_Spells_addSpell(6066,"Power Word: Shield",nil,"Rank 6")
+for _,mouse in ipairs({{"Left",1},{"Right",2},{"Middle",3}}) do
+    env.HealBot_Action_SetSpell("ENABLED",mouse[1],"Power Word: Shield(Rank 6)")
+    env.HealBot_Action_ClearSpellCache()
+    local shield=env.HealBot_Action_GetSpell("ENABLED",mouse[1])
+    eq(shield,"Power Word: Shield(Rank 6)","shield rank saved for "..mouse[1])
+    env.HealBot_Action_DoSetButtonAttrib(button,"Enabled",mouse[2],"party1","","helpbutton",shield,false,false,false,false,"heal")
+    eq(button.attrs["spell-heal"..mouse[2]],shield,"shield rank reaches "..mouse[1])
+end
+env.HealBot_Globals.NoRanks=true
 env.HealBot_Action_ClearSpellCache()
 eq(env.HealBot_Action_GetSpell("EMERG","Left"),"Buff","NoRanks setting retained")
 env.HealBot_Spell_IDs[103]={}

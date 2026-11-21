@@ -9,6 +9,7 @@ local env=setmetatable({
     HealBot_Spells_KnownByName=function() return true end,
     HealBot_Action_SmartCast=function() return "Buff" end,
     UnitExists=function() return true end,UnitIsEnemy=function() return false end,
+    UnitLevel=function() return 60 end, HealBot_issecretvalue=function() return false end,
     IsModifierKeyDown=function() return false end,HealBot_setLuVars=function() end,
 }, {__index=_G})
 for _,name in ipairs({"HealBot_Action_DoSetButtonAttrib","HealBot_Action_UseSmartCast",

@@ -500,6 +500,10 @@ end
 
 function HealBot_Timers_InitSpells()
       --HealBot_setCall("HealBot_Timers_InitSpells")
+    if HEALBOT_FOREVER and InCombatLockdown() then
+        HealBot_Timers_Set("OOC","InitLoadSpells")
+        return
+    end
     HealBot_Timers_Set("INIT","InitSpells")
     HealBot_Timers_Set("INIT","SpellsLoaded")
 end
@@ -1044,6 +1048,7 @@ local hbTimerFuncs={["INIT"]={
                         ["ActionIconsUnitChecks"]=HealBot_ActionIcons_UnitChecks,
                         ["ActionIconsInitFrames"]=HealBot_ActionIcons_InitFrames,
                         ["PostCombatSetAttribs"]=HealBot_ActionIcons_PostCombatSetAttribs,
+                        ["InitLoadSpells"]=HealBot_Timers_InitSpells,
                         ["PostCombatClearAttribs"]=HealBot_ActionIcons_PostCombatClearAttribs,
                         ["UpdateTargetMyFriend"]=HealBot_ActionIcons_UpdateTargetMyFriend,
                         ["ActionIconsBindRecheck"]=HealBot_Options_ActionIconsBindRecheck,

@@ -3,6 +3,39 @@ if not HEALBOT_FOREVER then return end
 local active={}
 local auraError
 
+-- Target tokens can point at a different unit without changing the secure
+-- button's unit attribute. Refresh display data without a GUID-based rebuild.
+function HealBot_Forever_RefreshTarget(button)
+    if not InCombatLockdown() then return end
+    local unit=button.unit
+    if unit~="target" and unit~="targettarget" and unit~="focus" then return end
+    button.health.updhlth=false
+    button.mana.update=false
+    if not UnitExists(unit) then
+        button.name=""
+        button.health.current,button.health.max,button.health.pct,button.health.cpct,button.health.hpct=0,0,0,0,0
+        button.text.namecomplete=""
+        button.text.healthcomplete=""
+        button.gref.txt.text:SetText("")
+        button.gref.txt.text2:SetText("")
+        button.gref.Bar:SetValue(0)
+        button.mana.current,button.mana.max,button.mana.pct,button.mana.hpct=0,0,0,0
+        HealBot_Aux_setPowerBars(button)
+        return
+    end
+    button.name=UnitName(unit)
+    button.text.namecomplete=button.name
+    button.gref.txt.text:SetText(button.name)
+    button.health.current,button.health.max,button.health.pct,button.health.cpct,
+        button.health.hpct,button.health.rcol,button.health.gcol=HealBot_WoWAPI_UnitHealth(unit)
+    button.gref.Bar:SetValue(button.health.hpct)
+    HealBot_Text_DoSetHealthText(button, false, true)
+    HealBot_Action_setButtonManaBarCol(button)
+    button.mana.current,button.mana.max,button.mana.pct,button.mana.hpct=
+        HealBot_WoWAPI_UnitMana(unit, button.mana.type)
+    HealBot_Aux_setPowerBars(button)
+end
+
 local function CreateIncomingBar(button)
     if not CreateUnitHealPredictionCalculator or not UnitGetDetailedHealPrediction then return end
     local calculator=CreateUnitHealPredictionCalculator()
@@ -138,7 +171,7 @@ function HealBot_Forever_UpdateDebuffOverlay(button)
     local cures=HealBot_Config_Cures
     local barMode=HealBot_Globals.CustomDebuffsShowBarCol.DEFAULT or 4
     local enabled=button.status.events and not button.foreverDebuffDirty
-        and button.foreverDebuffUnit==button.unit and InCombatLockdown()
+        and button.foreverDebuffUnit==button.unit and (InCombatLockdown() or HealBot_Globals.CombatAurasPersistDebuffs~=false)
         and HealBot_Forever_DebuffsEnabled() and cures.CDCshownHB and
         (barMode==3 or barMode==4) and not button.special.unit and
         button.status.current<HealBot_Unit_Status["PLUGINBARCOL"] and
@@ -262,7 +295,14 @@ end)
 local events=CreateFrame("Frame")
 events:RegisterEvent("PLAYER_REGEN_DISABLED")
 events:RegisterEvent("PLAYER_REGEN_ENABLED")
+events:RegisterEvent("PLAYER_TARGET_CHANGED")
+events:RegisterEvent("PLAYER_FOCUS_CHANGED")
+events:RegisterEvent("UNIT_TARGET")
 events:SetScript("OnEvent", function(_, event)
+    if event=="PLAYER_TARGET_CHANGED" or event=="PLAYER_FOCUS_CHANGED" or event=="UNIT_TARGET" then
+        for button in pairs(active) do HealBot_Forever_RefreshTarget(button) end
+        return
+    end
     if event=="PLAYER_REGEN_ENABLED" then
         for button in pairs(active) do Attach(button) end
     else

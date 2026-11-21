@@ -194,17 +194,15 @@ local function HealBot_Init_Range(spellId, spellBookId, tipSet)
             HealBot_WoWAPI_SetSpellBookTooltip(HealBot_ScanTooltip, spellBookId)
         end
         local ttText=_G["HealBot_ScanTooltipTextRight2"];
-        if (ttText:GetText()) then
-            local line=ttText:GetText();
-            if line then
+        local line=ttText:GetText()
+        if not HealBot_issecretvalue(line) and line then
+            range=tonumber((gsub(line, "%D", "")))
+        end
+        if range == 0 then
+            ttText=_G["HealBot_ScanTooltipTextRight3"]
+            line=ttText:GetText()
+            if not HealBot_issecretvalue(line) and line then
                 range=tonumber((gsub(line, "%D", "")))
-            end
-            if range == 0 then
-                ttText=_G["HealBot_ScanTooltipTextRight3"]
-                line=ttText:GetText()
-                if line then
-                    range=tonumber((gsub(line, "%D", "")))
-                end
             end
         end
     end
@@ -670,6 +668,12 @@ end
 
 function HealBot_Init_Spells_Defaults()
       --HealBot_setCall("HealBot_Init_Spells_Defaults")
+    -- Equipment/level changes can reach this after combat starts, including
+    -- through an already queued INIT timer. Keep the working cache intact.
+    if HEALBOT_FOREVER and InCombatLockdown() then
+        HealBot_Timers_Set("OOC","InitLoadSpells")
+        return false
+    end
     if HealBot_Data["PCLASSTRIM"] then
         for x,_ in pairs(HealBot_Spell_IDs) do
             HealBot_Spell_IDs[x]=nil

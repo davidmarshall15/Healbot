@@ -267,6 +267,15 @@ local HealBot_ExtraSkinImages={[0]=[[Interface\AddOns\HealBot_ExtraSkins\Images\
 local HealBot_ExtraSkinData={}
 local HealBot_ExtraSkinDesc={}
 
+function HealBot_ExtraSkins_AddSkin(name, category, description, data)
+    local id=#HealBot_ExtraSkinNames+1
+    HealBot_ExtraSkinNames[id]=name
+    HealBot_ExtraSkinCats[id]=category
+    HealBot_ExtraSkinDesc[id]=description
+    HealBot_ExtraSkinData[id]=data
+    HealBot_ExtraSkinImages[id]=HealBot_ExtraSkinImages[0]
+end
+
 
 function HealBot_ExtraSkins_retNames(id)
       --HealBot_setCall("HealBot_ExtraSkins_retNames")

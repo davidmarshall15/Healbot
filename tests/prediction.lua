@@ -21,6 +21,8 @@ end
 local function noop() end
 local env=setmetatable({}, {__index=_G})
 env._G=env
+env.HealBot_Forever_GetDebuffTypes=function() return {}, "all" end
+env.HealBot_Forever_DebuffsEnabled=function() return monitoring~=false end
 env.HEALBOT_FOREVER=true
 env.HEALBOT_GAME_VERSION=1
 env.HealBot_issecretvalue=protected
@@ -238,6 +240,24 @@ eq(b.gref.aux[2].value,15,"raw absorb auxiliary")
 eq(b.gref.aux[1].maximum,3000,"configured auxiliary scale")
 eq(b.aux[1].FLUID,-1,"no protected smoothing target")
 eq(b.gref.auxtxt[1].text,"","protected text is not formatted")
+-- Equipment/level changes can reattach existing frames while health and maximum
+-- health become protected in combat. Exercise the same hook as the report.
+env.InCombatLockdown=function() return true end
+local combatFrames=createdFrames
+for _,mode in ipairs({5,6}) do
+    skin.IC=mode;skin.AC=mode
+    for _,maximum in ipairs({120,150}) do
+        values.health=secret(50);values.healthMax=secret(maximum)
+        hooks.HealBot_Action_RegisterUnitEvents(b)
+        eq(p.bar.maximum,maximum,"combat reattach updates protected maximum health")
+        eq(p.bar.value,20,"combat reattach preserves incoming heals")
+        eq(p.absorb.value,15,"combat reattach preserves absorbs")
+        eq(createdFrames,combatFrames,"combat reattach reuses existing frames")
+    end
+end
+env.InCombatLockdown=function() return false end
+skin.IC=6;skin.AC=6
+values.health=secret(40);values.healthMax=secret(100)
 local count=curveCount
 env.HealBot_Forever_UpdatePrediction(b)
 eq(curveCount,count,"curves reused")
