@@ -36,4 +36,24 @@ Added regression checks for combat exit without an aura event, initial out-of-co
 
 ## Publication
 
-Local branch created. Personal repository and PR are not created yet. The available GitHub connector identifies Cappe93 but has no repository creation/fork tool; GitHub CLI is not on PATH. Upstream origin is unchanged.
+Changes are prepared on `fix/forever-reported-bugs` for review against upstream `master`. In-game checks listed above remain necessary; automated tests use mocked client APIs.
+
+## Follow-up: November 16–20 reports after merging 26.11.20
+
+| Report | Finding / action |
+| --- | --- |
+| Health format ignored; Delta always 100% | Native `UnitHealthMissing(unit, false)` was already present in this branch. Current and missing health still bypassed the selected number format. Both now use native abbreviation with public precision settings; Include percent, surrounding characters and the minus sign remain. Protected zero still displays -0. |
+| `SetPredictedValues` exceptions (two screenshots) | Master now uses `UnitHealthPercent` for prediction colours; the prediction module no longer calls `SetPredictedValues`. The existing regression rejects addon calls with protected fields and passes. No additional prediction change needed here. |
+| Renew absent | The current native priest filter includes all listed Renew ranks and routes rank variants to the selected icon set. New tests cover this and visibility outside combat. No missing-Renew defect reproduced by these mocks; aura selection and actual spell IDs still need client confirmation. |
+| Buff icons/text clutter; settings ineffective | Confirmed: the first native row ignored skin Max icons, including zero. It now obeys that limit within the slash-command cap and rebuilds/defer-rebuilds on changes. Duration/count settings are tested independently. The redundant Weakened Soul row is omitted when the persistent harmful row already includes it. |
+| Long/world/profession buffs appear | Master deliberately changed the default duration cap to zero. `/hbca maxdur 120` restores a finite filter and excludes permanent buffs. Priest rows additionally use the existing priest whitelist; other classes retain their own buffs. Fixed stale exclusion filters for non-priest classes when configuration or zone exclusions change. |
+| Target on left-click prevents SmartCast buffs | This branch explicitly preserves Target instead of letting SmartCast replace it; existing normal/emergency/modified Target tests pass. Kept that behaviour. Workaround: use a healing-spell binding for unmodified left-click and Target on another button/modifier. |
+
+Native abbreviation support and its secret-value contract were checked against
+[Forever Localization API](https://github.com/Gethe/wow-ui-source/blob/forever/Interface/AddOns/Blizzard_APIDocumentationGenerated/LocalizationDocumentation.lua)
+and the [breakpoint schema](https://github.com/Gethe/wow-ui-source/blob/forever/Interface/AddOns/Blizzard_APIDocumentationGenerated/LocalizationSharedDocumentation.lua).
+Only public format settings determine the breakpoints; health values and native
+formatted output are forwarded without Lua arithmetic, comparisons or parsing.
+The mock abbreviation sink does not certify native rounding/localization or taint.
+Verify health/Delta formats in the German client, Renew in/out of combat, and
+buff duration/count/limit changes in game before treating the reports as closed.

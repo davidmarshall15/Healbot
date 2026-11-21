@@ -14,6 +14,8 @@ lua tests/target_binding.lua
 lua tests/modified_target.lua
 lua tests/rank_range.lua
 lua tests/combat_auras.lua
+lua tests/forever_buffs.lua
+lua tests/native_aura_options.lua
 lua tests/reported_bugs.lua
 lua tests/player_mana.lua
 ```
@@ -41,6 +43,22 @@ The health-text suite covers the modern Include percent setting, independent
 protected HP/percentage values, precision from the selected text frame, and
 unchanged HP-only/percentage-only modes. Mock native formatting propagates
 protected text while Lua arithmetic and inspection are rejected.
+It also covers native current/deficit abbreviations at all selectable precisions,
+automatic precision, small values, narrow bars, lowercase suffixes, localized
+output propagation and safe fallback when the native abbreviation API is absent.
+The locale mock verifies forwarding, not the client's actual German typography.
+
+The Forever buff suite loads the native aura module with Forever enabled from
+startup, so its settings hooks run. It covers Renew ranks and icon-set routing,
+skin limits (including zero), per-set duration/count settings, long-buff filtering,
+non-priest exclusion changes, deferred setup in combat and avoiding a duplicate
+Weakened Soul row when the persistent harmful-aura row already includes it.
+The native-aura options suite executes the actual UI callbacks, XML tab click and
+panel router with mock widgets, using the real shared settings setter. It checks
+UI/slash synchronization, reopening, timer modes, validation, language changes,
+dependent controls, unsupported clients and global versus per-frame navigation.
+The buff suite also verifies that the UI setter defers row creation in combat.
+Native WoW widget layout still requires an in-game visual check.
 The mixed-value suite independently protects the health, healing, absorb and
 overheal inputs to shield, prediction, emergency and adaptive-colour functions.
 It checks both conservative fallbacks and readable-value behaviour, including

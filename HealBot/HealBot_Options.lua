@@ -25456,6 +25456,7 @@ function HealBot_Options_SetTheme(caller)
     HealBot_Options_Content_InnerPanel(_G["HealBot_Options_SkinsFrameIconsDebuff"], 0.5)
     HealBot_Options_Content_InnerPanel(_G["HealBot_Options_SkinsFrameIconsBuff"], 0.5)
     HealBot_Options_Content_InnerPanel(_G["HealBot_Options_SkinsFrameIconsExtra"], 0.5)
+    HealBot_Options_Content_InnerPanel(_G["HealBot_Options_SkinsFrameIconsNative"], 0.5)
     HealBot_Options_Content_InnerPanel(_G["HealBot_Options_SkinsFrameIconsDebuffGeneral"], 0.5)
     HealBot_Options_Content_InnerPanel(_G["HealBot_Options_SkinsFrameIconsDebuffText"], 0.5)
     HealBot_Options_Content_InnerPanel(_G["HealBot_Options_SkinsFrameIconsBuffGeneral"], 0.5)
@@ -25615,6 +25616,7 @@ function HealBot_Options_SetTheme(caller)
     HealBot_Options_InnerContent_Colour(_G["HealBot_Options_SkinsFrameIconsDebuffb"],_G["HealBot_Options_SkinsFrameIconsDebuffbTxt"],false)
     HealBot_Options_InnerContent_Colour(_G["HealBot_Options_SkinsFrameIconsBuffb"],_G["HealBot_Options_SkinsFrameIconsBuffbTxt"],false)
     HealBot_Options_InnerContent_Colour(_G["HealBot_Options_SkinsFrameIconsExtrab"],_G["HealBot_Options_SkinsFrameIconsExtrabTxt"],false)
+    HealBot_Options_InnerContent_Colour(_G["HealBot_Options_SkinsFrameIconsNativeb"],_G["HealBot_Options_SkinsFrameIconsNativebTxt"],false)
     HealBot_Options_InnerContent_Colour(_G[hb_lVars["CurrentSkinsIconsPanelButton"]],
                                         _G[hb_lVars["CurrentSkinsIconsPanelButton"].."Txt"],true)
     HealBot_Options_InnerContent_Colour(_G["HealBot_Options_SkinsFrameIconsDebuffGeneralb"],_G["HealBot_Options_SkinsFrameIconsDebuffGeneralbTxt"],false)
@@ -25707,6 +25709,7 @@ end
 hb_lVars["hbrCode"]=""
 function HealBot_Options_Lang(region, msgchat)
       --HealBot_setCall("HealBot_Options_Lang")
+    HealBot_Options_NativeAuras_SetLanguage(region)
     if region~=hb_lVars["hbrCode"] then
         hb_lVars["hbrCode"]=region
         if region == "ptBR" then
@@ -30213,6 +30216,7 @@ local HealBot_Options_TabFuncs={
                                 ["SkinsFramesIconsDebuffsGeneral"]=HealBot_Options_SkinsFramesIconsDebuffsGeneralTab,
                                 ["SkinsFramesIconsDebuffsText"]=HealBot_Options_SkinsFramesIconsDebuffsTextTab,
                                 ["SkinsFramesIconsBuffsGeneral"]=HealBot_Options_SkinsFramesIconsBuffsGeneralTab,
+                                ["SkinsFramesIconsNative"]=HealBot_Options_SkinsFramesIconsNativeTab,
                                 ["SkinsFramesIconsBuffsText"]=HealBot_Options_SkinsFramesIconsBuffsTextTab,
                                 ["SkinsFramesIconsExtrasClass"]=HealBot_Options_SkinsFramesIconsExtrasClassTab,
                                 ["SkinsFramesIconsExtrasRank"]=HealBot_Options_SkinsFramesIconsExtrasRankTab,
@@ -31424,7 +31428,7 @@ function HealBot_Options_InitCopyTabs()
             g=_G["HealBot_Options_CopyTab21"]
         end
     end
-    g:SetChecked(true)
+    if g then g:SetChecked(true) end
 
     local i=0
     for x=1,10 do
@@ -31473,7 +31477,10 @@ function HealBot_Options_ShowSkinsPanel(frameName, hbFrameID)
     if hbCurSkinSubFrameID == 1008 or hbCurSkinSubFrameID>1009 then
         g:Show()
         g=_G["HealBot_Options_ApplyTab2Frames"]
-        if hbCurSkinSubFrameID ~= 1015 then
+        if hbCurSkinSubFrameID == 1014 and hb_lVars["CurrentSkinsIconsPanel"] == "HealBot_Options_SkinsFrameIconsNative" then
+            HealBot_Options_FramesSelFrame:Hide()
+            g:Hide()
+        elseif hbCurSkinSubFrameID ~= 1015 then
             g:Show()
         else
             g:Hide()
@@ -31740,6 +31747,9 @@ function HealBot_Options_ShowIconPanel(frameName, buttonName, tab, isParent)
                                         _G[hb_lVars["CurrentSkinsIconsPanelButton"].."Txt"],false)
     hb_lVars["CurrentSkinsIconsPanel"]=frameName
     hb_lVars["CurrentSkinsIconsPanelButton"]=buttonName
+    local perFrame=frameName~="HealBot_Options_SkinsFrameIconsNative"
+    HealBot_Options_ObjectsShowHide("HealBot_Options_FramesSelFrame",perFrame)
+    HealBot_Options_ObjectsShowHide("HealBot_Options_ApplyTab2Frames",perFrame)
     HealBot_Options_InnerContent_Colour(_G[hb_lVars["CurrentSkinsIconsPanelButton"]],
                                         _G[hb_lVars["CurrentSkinsIconsPanelButton"].."Txt"],true)
 end

@@ -55,8 +55,14 @@ try {
     if ($LASTEXITCODE -ne 0) { throw 'Modified Target dispatch regression tests failed.' }
     & lua tests/rank_range.lua
     if ($LASTEXITCODE -ne 0) { throw 'Spell rank/range regression tests failed.' }
+    & lua tests/spell_refresh.lua
+    if ($LASTEXITCODE -ne 0) { throw 'Combat spell refresh regression tests failed.' }
     & lua tests/combat_auras.lua
     if ($LASTEXITCODE -ne 0) { throw 'Combat aura layout regression tests failed.' }
+    & lua tests/forever_buffs.lua
+    if ($LASTEXITCODE -ne 0) { throw 'Forever buff settings regression tests failed.' }
+    & lua tests/native_aura_options.lua
+    if ($LASTEXITCODE -ne 0) { throw 'Native aura options regression tests failed.' }
     & lua tests/reported_bugs.lua
     if ($LASTEXITCODE -ne 0) { throw 'Reported bug regression tests failed.' }
     foreach ($suite in @('aggro', 'gcd', 'heal_amount')) {

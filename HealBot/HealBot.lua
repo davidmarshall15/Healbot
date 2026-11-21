@@ -5353,7 +5353,7 @@ end
 
 function HealBot_InitSpells()
       --HealBot_setCall("HealBot_InitSpells")
-    HealBot_Init_Spells_Defaults();
+    if HealBot_Init_Spells_Defaults() == false then return end
     HealBot_Options_InitDebuffTypes()
     HealBot_Timers_Set("PLAYER","InitSmartCast",true)
 end

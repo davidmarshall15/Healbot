@@ -75,7 +75,17 @@ local buffFilters, buffSignature
 local function HBCA_PriestFilters(g)
     if not HEALBOT_FOREVER then return end
     local _, class=UnitClass("player")
-    if class~="PRIEST" then return end
+    if class~="PRIEST" then
+        local excluded=HealBot_Aura_NativeBuffExclusions and HealBot_Aura_NativeBuffExclusions() or {}
+        local signature={}
+        for id in pairs(excluded) do signature[#signature+1]=id end
+        table.sort(signature)
+        local key="exclusions:"..table.concat(signature,",")
+        if key==buffSignature then return buffFilters,false end
+        buffSignature=key
+        buffFilters={{excludeSpellIDs=excluded}}
+        return buffFilters,true
+    end
     local sets=g.CustomBuffsIconSet or {}
     local include={{},{},{}}
     local moved, signature={},{}
@@ -289,6 +299,9 @@ local function HBCA_SkinLayout(button, side, set)
         layout.double=hbv_Skins_GetIconBoolean(hot and "BUFFDOUBLE" or "DEBUFFDOUBLE", button.frame, set) or false
     end
     if HEALBOT_FOREVER then
+        -- The first native row must obey the same icon limit as its skin,
+        -- including zero. Extra buff sets already use their own limits.
+        layout.limit=hbv_Skins_GetIconVar(hot and "MAXBICONS" or "MAXDICONS",button.frame,set)
         local prefix=hot and "BUFF" or "DB"
         layout.font=hbv_Skins_GetIconTextVar(prefix.."FONT",button.frame,set)
         layout.fontSize=hbv_Skins_GetIconTextVar(prefix.."HEIGHT",button.frame,set)
@@ -333,7 +346,7 @@ local function HBCA_BuildOne(button, side, placement, set, spellFilter)
     if side=="weakenedSoul" then
         maxN=1
     elseif placement.limit~=nil then
-        maxN=placement.limit
+        maxN=(set==1) and math.min(maxN,placement.limit) or placement.limit
     end
     if maxN<1 then return nil end
     local ok, c=pcall(CreateFrame, "AuraContainer", nil, button, "CustomAuraContainerTemplate")
@@ -640,7 +653,8 @@ local function HBCA_Attach(button)
         db=HBCA_BuildOne(button,"db",dbLayout,1,dbFilter)
     end
     local weakenedSoul
-    if HEALBOT_FOREVER then
+    if HEALBOT_FOREVER and not HBCA_Defaults().CombatAurasPersistDebuffs and
+       (dbLayout.limit==nil or dbLayout.limit>0) then
         local layout={}
         for key,value in pairs(dbLayout) do layout[key]=value end
         local size=layout.size or HBCA_Defaults().CombatAurasSize
@@ -751,6 +765,12 @@ if type(hooksecurefunc)=="function" then
                 if button.frame==frame then pcall(HBCA_Attach,button) end
             end
         end)
+        hooksecurefunc("hbv_Skins_SetIconVar", function(_, key, frame)
+            if key~="MAXBICONS" and key~="MAXDICONS" then return end
+            for button in pairs(known) do
+                if button.frame==frame then pcall(HBCA_Attach,button) end
+            end
+        end)
         hooksecurefunc("HealBot_Aura_ConfigClassHoT", function()
             local g=HBCA_Defaults()
             if not g then return end
@@ -777,6 +797,58 @@ end
 
 -- ---------- slash ----------
 
+-- UI and slash commands share validation, persistence and native-row lifecycle.
+function HealBot_CombatAuras_GetOptions()
+    return HBCA_Defaults()
+end
+
+function HealBot_CombatAuras_SetOption(option, value)
+    local g=HBCA_Defaults()
+    if not g then return false end
+    local key, changed
+    local booleans={enabled="CombatAurasOn",persist="CombatAurasPersistDebuffs",
+        priest="CombatAurasPriestOnly",skinSize="CombatAurasMatchSkinSize"}
+    local numeric={size={"CombatAurasSize",8,40},hots={"CombatAurasHots",0,8},
+        debuffs={"CombatAurasDebuffs",0,8},maxdur={"CombatAurasMaxDur",0,3600}}
+    if booleans[option] then
+        if type(value)~="boolean" then return false end
+        key=booleans[option]
+    elseif numeric[option] then
+        local spec=numeric[option]
+        value=tonumber(value)
+        if not value or value~=value then return false end
+        value=math.floor(math.max(spec[2],math.min(spec[3],value)))
+        key=spec[1]
+        if option=="size" then
+            changed=g.CombatAurasMatchSkinSize
+            g.CombatAurasMatchSkinSize=false
+        end
+    elseif option=="nums" then
+        if value~="skin" and value~="on" and value~="off" then return false end
+        local follow=value=="skin"
+        local numbers=value=="on"
+        if follow then numbers=nil end
+        changed=g.CombatAurasNumsFollowSkin~=follow or g.CombatAurasNums~=numbers
+        g.CombatAurasNumsFollowSkin=follow
+        g.CombatAurasNums=numbers
+    else
+        return false
+    end
+    if key then
+        changed=changed or g[key]~=value
+        g[key]=value
+    end
+    if changed then
+        if option=="enabled" and not value then HBCA_SetAllShown(false)
+        else HBCA_DropAll() end
+        if option=="persist" and HealBot_Forever_UpdateDebuffOverlay then
+            for button in pairs(known) do HealBot_Forever_UpdateDebuffOverlay(button) end
+        end
+    end
+    if HealBot_Options_NativeAuras_Refresh then HealBot_Options_NativeAuras_Refresh() end
+    return true
+end
+
 SLASH_HBCOMBATAURAS1="/hbca"
 SlashCmdList["HBCOMBATAURAS"]=function(msg)
     local g=HBCA_Defaults()
@@ -785,48 +857,32 @@ SlashCmdList["HBCOMBATAURAS"]=function(msg)
     local cmd, arg=string.match(msg, "^(%S*)%s*(%S*)")
     local function say(t) print("|cff00ff88HealBot CombatAuras:|r "..t) end
     if cmd=="on" then
-        g.CombatAurasOn=true
-        HBCA_DropAll()
+        HealBot_CombatAuras_SetOption("enabled",true)
         say(HEALBOT_FOREVER and "on - buffs always visible; debuffs in combat" or "on - icons appear in combat")
     elseif cmd=="priest" and (arg=="on" or arg=="off") then
-        g.CombatAurasPriestOnly=arg=="on"
-        HBCA_DropAll()
+        HealBot_CombatAuras_SetOption("priest",arg=="on")
         say("priest spell filter "..arg.." (rebuilds out of combat)")
     elseif cmd=="off" then
-        g.CombatAurasOn=false
-        HBCA_SetAllShown(false)
+        HealBot_CombatAuras_SetOption("enabled",false)
         say("off")
     elseif cmd=="persist" and (arg=="on" or arg=="off") then
-        g.CombatAurasPersistDebuffs=arg=="on"
-        HBCA_SetAllShown(inCombat)
-        if HealBot_Forever_UpdateDebuffOverlay then
-            for button in pairs(known) do HealBot_Forever_UpdateDebuffOverlay(button) end
-        end
+        HealBot_CombatAuras_SetOption("persist",arg=="on")
         say("debuffs outside combat "..arg)
     elseif cmd=="size" and arg=="skin" then
-        g.CombatAurasMatchSkinSize=true
-        HBCA_DropAll()
+        HealBot_CombatAuras_SetOption("skinSize",true)
         say("icon size follows the skin (rebuilds out of combat)")
     elseif cmd=="size" and tonumber(arg) then
-        g.CombatAurasMatchSkinSize=false
-        g.CombatAurasSize=math.max(8, math.min(40, tonumber(arg)))
-        HBCA_DropAll()
+        HealBot_CombatAuras_SetOption("size",arg)
         say("icon size "..g.CombatAurasSize.." (rebuilds out of combat)")
     elseif cmd=="hots" and tonumber(arg) then
-        g.CombatAurasHots=math.max(0, math.min(8, tonumber(arg)))
-        HBCA_DropAll()
+        HealBot_CombatAuras_SetOption("hots",arg)
         say("max HoT icons "..g.CombatAurasHots.." (rebuilds out of combat)")
     elseif cmd=="debuffs" and tonumber(arg) then
-        g.CombatAurasDebuffs=math.max(0, math.min(8, tonumber(arg)))
-        HBCA_DropAll()
+        HealBot_CombatAuras_SetOption("debuffs",arg)
         say("max debuff icons "..g.CombatAurasDebuffs.." (rebuilds out of combat)")
     elseif cmd=="nums" then
-        g.CombatAurasNumsFollowSkin=arg=="skin"
-        if arg=="skin" then g.CombatAurasNums=nil
-        elseif arg=="on" then g.CombatAurasNums=true
-        elseif arg=="off" then g.CombatAurasNums=false
-        else g.CombatAurasNums=not g.CombatAurasNums end
-        HBCA_DropAll()
+        if arg~="skin" and arg~="on" and arg~="off" then arg=g.CombatAurasNums and "off" or "on" end
+        HealBot_CombatAuras_SetOption("nums",arg)
         say("countdown numbers "..(g.CombatAurasNums==nil and "skin" or (g.CombatAurasNums and "on" or "off")).." (rebuilds out of combat)")
     elseif cmd=="rt" then
         -- diagnostic: what does the raid-marker chain see for each bar?
@@ -880,8 +936,7 @@ SlashCmdList["HBCOMBATAURAS"]=function(msg)
         scan(HealBot_Unit_Button, "player")
         scan(HealBot_Private_Button, "npc")
     elseif cmd=="maxdur" and tonumber(arg) then
-        g.CombatAurasMaxDur=math.max(0, math.min(3600, tonumber(arg)))
-        HBCA_DropAll()
+        HealBot_CombatAuras_SetOption("maxdur",arg)
         say("HoT row hides buffs longer than "..g.CombatAurasMaxDur.."s (0 = show all; rebuilds out of combat)")
     else
         local n, hots, debuffs=0,0,0

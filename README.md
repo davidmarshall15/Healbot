@@ -12,7 +12,7 @@ Blizzard compact-frame skins
   - Select Blizzard Forever - Party under Group, Raid 10 under Small Raid, or Raid 40 under Large Raid, then click Import.
   - These presets use class colours, Blizzard raid-bar textures, dark borders, a power bar and corner auras. They retain HealBot click-casting.
   - They are visual approximations, not replacements for Blizzard's entire UI. Existing Blizzard frames remain visible; hide them separately in HealBot's skin settings if desired.
-  - Combat timer overrides can be reset to the skin preference with `/hbca nums skin`.
+  - Reset combat timer overrides in Skins > Frames > Icons > Native auras: set Countdown numbers to Follow skin.
 
 
 Role icons on HealBot frames
@@ -28,8 +28,19 @@ Debuffs after combat on Forever
 -------------------------------
   - Native debuff icons and configured bar colours remain active outside combat, including DoTs left over from a fight. The client updates them when auras expire or are removed.
   - The first debuff icon row uses the same harmful-aura filter and icon limit as in combat, including debuffs you cannot dispel. HealBot's cure warnings and custom icon sets 2/3 retain their own settings.
-  - This is enabled by default on Forever. Use `/hbca persist off` for the previous out-of-combat filtering, or `/hbca persist on` to restore it.
-  - Debuff monitoring, bar-colour settings and `/hbca off` still control their respective displays. If native icons are unavailable, HealBot keeps its normal icon renderer.
+  - This is enabled by default on Forever. In Skins > Frames > Icons > Native auras, toggle Keep debuffs visible outside combat to change it.
+  - Debuff monitoring, bar-colour settings and Enable native buff and debuff icons still control their respective displays. If native icons are unavailable, HealBot keeps its normal icon renderer.
+
+Health text and buff settings on Forever
+---------------------------------------
+  - Current health and Deficit use the selected number format, including K/M abbreviations and Auto. Deficit uses the client's missing-health API and keeps the minus sign; at full health it can display -0. Include percent remains an independent setting.
+  - Open Skins > Frames > Icons > Native auras (Aure native in Italian). These options apply globally to all frames and skins, so this tab does not show the frame selector or Copy to frames controls.
+  - Native buff rows stay visible outside combat. Their first-row count follows the skin's Max icons and the global Buff icon cap; zero disables the row. Debuffs likewise respect Max icons and Debuff icon cap.
+  - Countdown numbers offers Follow skin, Always show and Always hide. With Follow skin selected, use Duration in the relevant Buffs/Debuffs > Text tab; Count controls stack text independently.
+  - Maximum buff duration is in seconds: 120 excludes buffs longer than two minutes and permanent buffs; 0 means no limit, the 26.11.20 default.
+  - Use skin icon size follows each frame's skin. Uncheck it to select a global Icon size. The Priest spell filter is available for priests on Forever.
+  - Settings save automatically. Changes requiring new icons are deferred until combat ends. UI and `/hbca` commands share the same saved settings and stay synchronized; commands remain optional shortcuts.
+  - An explicit Target binding takes priority over SmartCast in this branch. To use SmartCast's out-of-combat buff/cure/resurrection selection, bind a healing spell to unmodified left-click and move Target to a modifier or another button.
 
 Installing and Updating
 -----------------------
