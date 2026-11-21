@@ -790,20 +790,59 @@ function HealBot_Text_ConcatHealthText(button)
     end
 end
 
+-- AbbreviateNumbers is a native secret-value sink on modern clients. Build
+-- breakpoints from public settings only; never divide or inspect health here.
+-- Schema: Blizzard_APIDocumentationGenerated/LocalizationSharedDocumentation.lua
+local hbNativeHealthFormats={}
+local function HealBot_Text_NativeHealthNumber(amount, frame)
+    local places=hbNumFormats["Places"][frame]
+    if places<0 or not AbbreviateNumbers then return format("%d",amount) end
+    local maxChars=hbBarHealthTextLen[frame]
+    if maxChars and maxChars>0 and maxChars<5 then places=0 end
+    local lower=HealBot_Globals.UseLowerNumSuffix
+    local key=places..(lower and "lower" or "upper")
+    local options=hbNativeHealthFormats[key]
+    if not options then
+        local data={}
+        local suffixes=lower and {"t","b","m","k"} or {"T","B","M","K"}
+        for i, magnitude in ipairs({1e12,1e9,1e6,1e3}) do
+            local function add(threshold, precision)
+                local fraction=10^precision
+                data[#data+1]={breakpoint=threshold, abbreviation=suffixes[i],
+                    abbreviationIsGlobal=false, significandDivisor=magnitude/fraction,
+                    fractionDivisor=fraction}
+            end
+            if places>3 then
+                add(magnitude*100,0)
+                add(magnitude*10,1)
+                add(magnitude,2)
+            else
+                add(magnitude,places)
+            end
+        end
+        options={breakpointData=data}
+        hbNativeHealthFormats[key]=options
+    end
+    return AbbreviateNumbers(amount,options)
+end
+
 function HealBot_Text_DoSetHealthText(button, IgnoreInHeals, force)
       --HealBot_setCall("HealBot_Text_DoSetHealthText", button)
     if HealBot_Util_isMidnight(false) then
         local healthType=hbv_Skins_GetFrameVar("BarText", "HLTHTYPE", button.framecol)
+        local missingHealth=healthType==2 and UnitHealthMissing and button.unit
         if healthType == 1 then
-            button.text.healthcomplete=hbNumFormats["SurroundLeft"][button.framecol] .. button.health.current .. hbNumFormats["SurroundRight"][button.framecol]
+            button.text.healthcomplete=hbNumFormats["SurroundLeft"][button.framecol] .. HealBot_Text_NativeHealthNumber(button.health.current,button.framecol) .. hbNumFormats["SurroundRight"][button.framecol]
+        elseif missingHealth then
+            button.text.healthcomplete=hbNumFormats["SurroundLeft"][button.framecol] .. "-" .. HealBot_Text_NativeHealthNumber(UnitHealthMissing(button.unit, false),button.framecol) .. hbNumFormats["SurroundRight"][button.framecol]
         end
-        if healthType ~= 1 or hbv_Skins_GetFrameBoolean("BarText", "HLTHINCPTC", button.framecol) then
+        if (healthType ~= 1 and not missingHealth) or hbv_Skins_GetFrameBoolean("BarText", "HLTHINCPTC", button.framecol) then
             local places=hbNumFormats["Places"][button.framecol]
             local percentFormat=(places>=1 and places<=2) and ("%."..places.."f%%") or "%i%%"
             local percentText=hbNumFormats["SurroundLeft"][button.framecol] .. format(percentFormat,button.health.cpct) .. hbNumFormats["SurroundRight"][button.framecol]
             -- Native formatting/concatenation propagates secret values. Branch
             -- only on skin settings, never on health or the resulting text.
-            if healthType == 1 then
+            if healthType == 1 or missingHealth then
                 button.text.healthcomplete=button.text.healthcomplete .. "  " .. percentText
             else
                 button.text.healthcomplete=percentText
