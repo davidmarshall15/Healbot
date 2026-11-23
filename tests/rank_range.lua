@@ -38,7 +38,8 @@ extract(env,read("HealBot/HealBot_Init.lua"),{"HealBot_Init_Spells_addSpell","He
 extract(env,read("HealBot/Libs/LibSpells/HealBot_Spells.lua"),{"HealBot_Spells_KnownByID","HealBot_Spells_KnownByName"})
 local action=read("HealBot/HealBot_Action.lua")
 for key in action:gmatch("HEALBOT_[A-Z_]+") do if env[key]==nil then env[key]=key end end
-extract(env,action,{"HealBot_Action_ClearSpellCache","HealBot_Action_SetSpell","HealBot_Action_GetSpell",
+extract(env,action,{"HealBot_Action_IsUnrankedName","HealBot_Action_UsesRanks","HealBot_Action_HighestRankID",
+    "HealBot_Action_ClearSpellCache","HealBot_Action_SetSpell","HealBot_Action_GetSpell",
     "HealBot_Action_DoSetButtonAttrib","HealBot_Action_AlterSpell2Macro"})
 for _,entry in ipairs({{101,"Buff","Rank 1"},{102,"Buff","Rank 2"},{201,"Heal","Rank 1"}}) do
     env.HealBot_Spell_IDs[entry[1]]={}

@@ -13,6 +13,7 @@ lua tests/prediction.lua
 lua tests/target_binding.lua
 lua tests/modified_target.lua
 lua tests/rank_range.lua
+lua tests/unranked_spells.lua
 lua tests/combat_auras.lua
 lua tests/forever_buffs.lua
 lua tests/native_aura_options.lua
@@ -85,7 +86,11 @@ global click bindings and the global key-down CVar. Engine calls are mocked;
 this does not simulate client taint or perform an actual TargetUnit call.
 The rank/range suite checks explicit buff ranks through saving, reloading,
 secure attributes and macros, plus readable range events when polling is
-unavailable and cache cleanup when unit buttons are reused. The combat-aura
+unavailable and cache cleanup when unit buttons are reused. The unranked-spell
+suite checks that a spell typed without a rank ("Flash Heal") casts the highest
+known rank, follows a newly learned rank without a rebind, and stays unranked
+in the options spell boxes across their save-on-change round trip, while an
+explicit rank, rankless spells, NoRanks and modern clients are unchanged. The combat-aura
 suite checks skin anchors, offsets, spacing, double layouts, click-through
 widgets, unit changes and deferred setup while combat is active. It also covers
 disabled rows during unit changes, inactive buttons across combat transitions,
@@ -125,6 +130,9 @@ override, and `/hbca nums skin` to restore skin settings.
   bars outside combat, then check that ordinary healing still uses SmartCast.
 - Bind a lower-rank buff with SmartCast disabled, reload, and check both its
   displayed rank and the actual cast. Repeat with Target enabled on the binding.
+- Type a ranked heal without its rank (e.g. Flash Heal); check the spell box
+  keeps the plain name after reopening the options and that the highest rank is
+  cast. Learn a new rank and check it is used without rebinding.
 - With nearby group members in combat, compare range fading with `/hbca range`;
   also check a genuinely distant player and a reassigned group slot.
 - Enter/leave combat with icons at different corners, outside the bar, and in

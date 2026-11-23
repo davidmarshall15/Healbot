@@ -13465,7 +13465,7 @@ function HealBot_Options_CursorUpdateIcon(infoType, id, info)
             object=_G["HealBot_Options_Button"..id]
             if infoType == "spell" or infoType == "item" then
                 HealBot_Action_SetSpell(cType, HealBot_Action_GetCombo(modifier, HealBot_Options_ComboClass_Button(id)), info)
-                info=HealBot_Action_GetSpell(cType, HealBot_Action_GetCombo(modifier, HealBot_Options_ComboClass_Button(id)))
+                info=HealBot_Action_GetSpellDisplay(cType, HealBot_Action_GetCombo(modifier, HealBot_Options_ComboClass_Button(id)))
             else
                 info=GetMacroInfo(info)
             end
@@ -13553,11 +13553,11 @@ function HealBot_Options_ComboClass_Text()
     local modifier=HealBot_Options_ComboButton_ModifierKey(HealBot_Options_ComboButtons_Modifier)
     HealBot_Action_ClearSpellCache(cType)
 
-    HealBot_Options_Button1:SetText(HealBot_Action_GetSpell(cType, HealBot_Action_GetCombo(modifier, HealBot_Options_ComboClass_Button(1))) or "")
-    HealBot_Options_Button2:SetText(HealBot_Action_GetSpell(cType, HealBot_Action_GetCombo(modifier, HealBot_Options_ComboClass_Button(2))) or "")
-    HealBot_Options_Button3:SetText(HealBot_Action_GetSpell(cType, HealBot_Action_GetCombo(modifier, HealBot_Options_ComboClass_Button(3))) or "")
-    HealBot_Options_Button4:SetText(HealBot_Action_GetSpell(cType, HealBot_Action_GetCombo(modifier, HealBot_Options_ComboClass_Button(4))) or "")
-    HealBot_Options_Button5:SetText(HealBot_Action_GetSpell(cType, HealBot_Action_GetCombo(modifier, HealBot_Options_ComboClass_Button(5))) or "")
+    HealBot_Options_Button1:SetText(HealBot_Action_GetSpellDisplay(cType, HealBot_Action_GetCombo(modifier, HealBot_Options_ComboClass_Button(1))) or "")
+    HealBot_Options_Button2:SetText(HealBot_Action_GetSpellDisplay(cType, HealBot_Action_GetCombo(modifier, HealBot_Options_ComboClass_Button(2))) or "")
+    HealBot_Options_Button3:SetText(HealBot_Action_GetSpellDisplay(cType, HealBot_Action_GetCombo(modifier, HealBot_Options_ComboClass_Button(3))) or "")
+    HealBot_Options_Button4:SetText(HealBot_Action_GetSpellDisplay(cType, HealBot_Action_GetCombo(modifier, HealBot_Options_ComboClass_Button(4))) or "")
+    HealBot_Options_Button5:SetText(HealBot_Action_GetSpellDisplay(cType, HealBot_Action_GetCombo(modifier, HealBot_Options_ComboClass_Button(5))) or "")
 
     for x=1,5 do
         HealBot_Options_ComboClass_SetIcon(x, cType, HealBot_Action_GetCombo(modifier, HealBot_Options_ComboClass_Button(x)))
@@ -24885,7 +24885,7 @@ function HealBot_Options_SpellsCheckTextValid()
         local modifier=HealBot_Options_ComboButton_ModifierKey(HealBot_Options_ComboButtons_Modifier)
         local g,s
         for x=1,5 do
-            s=HealBot_Action_GetSpell(cType, HealBot_Action_GetCombo(modifier, HealBot_Options_ComboClass_Button(x)))
+            s=HealBot_Action_GetSpellDisplay(cType, HealBot_Action_GetCombo(modifier, HealBot_Options_ComboClass_Button(x)))
             if s then
                 g=_G["HealBot_Options_Button"..x]
                 g:SetText("")
