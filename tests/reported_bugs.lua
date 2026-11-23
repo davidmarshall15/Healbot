@@ -68,7 +68,7 @@ local a=setmetatable({
     HealBot_Aura_UpdateUnitBuffsData=function() end,
     HealBot_Util_isMidnight=function() return combat end,
 }, {__index=_G})
-extract(a,"HealBot/HealBot_Aura.lua",{"HealBot_Aura_UpdateUnitBuffsV9Aura","HealBot_Aura_CheckGeneralBuff","HealBot_Aura_NativeBuffExclusions","HealBot_Aura_RefreshAfterCombat"})
+extract(a,"HealBot/Healbot_Aura.lua",{"HealBot_Aura_UpdateUnitBuffsV9Aura","HealBot_Aura_CheckGeneralBuff","HealBot_Aura_NativeBuffExclusions","HealBot_Aura_RefreshAfterCombat"})
 local ab={unit="party1",aura={buff={}}}
 entries={secret};a.HealBot_Aura_UpdateUnitBuffsV9Aura(ab,false,"HELPFUL")
 eq(ab.aura.buff.scanIncomplete,true,"sealed aura marks incomplete scan")
