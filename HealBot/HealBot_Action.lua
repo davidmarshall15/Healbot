@@ -5251,6 +5251,58 @@ function HealBot_Action_ClearSpellCache(cType, cKey)
 end
 
 local vSpellText,cSpellText,vSpellIcon,vSpellType,vSpellID=nil,nil,nil
+
+-- Classic ranks: a spell saved without a rank ("S:2061^Flash Heal") always
+-- resolves to the highest rank in the spellbook, so learning a new rank does
+-- not need a rebind. A name saved with a rank ("Flash Heal(Rank 2)") keeps it.
+local function HealBot_Action_IsUnrankedName(sName)
+    return sName and HealBot_Text_Len(sName)>0 and not string.find(sName, "(", 1, true)
+end
+
+local function HealBot_Action_UsesRanks()
+    return HEALBOT_GAME_VERSION<3 and not HealBot_Globals.NoRanks
+end
+
+local function HealBot_Action_HighestRankID(sName)
+    local prefix=sName.."("
+    local pLen=string.len(prefix)
+    local bestID, bestRank
+    for rName, rID in pairs(HealBot_Spell_Names) do
+        if string.sub(rName, 1, pLen) == prefix then
+            local rank=tonumber(string.match(rName, "(%d+)%)$"))
+            if rank and (not bestRank or rank>bestRank) then
+                bestRank, bestID=rank, rID
+            end
+        end
+    end
+    return bestID
+end
+
+-- Text for the options spell boxes. The boxes save whatever they show when
+-- their text changes, so an unranked saved name is shown unranked; showing the
+-- resolved "Flash Heal(Rank 3)" would lock that rank in on the next refresh.
+function HealBot_Action_GetSpellDisplay(cType, cKey)
+    local raw
+    if cType == "ENABLED" then
+        raw=HealBot_Config_Spells.EnabledKeyCombo[cKey]
+    elseif cType == "ENEMY" then
+        raw=HealBot_Config_Spells.EnemyKeyCombo[cKey]
+    elseif cType == "EMERG" then
+        raw=HealBot_Config_Spells.EmergKeyCombo[cKey]
+    else
+        raw=HealBot_Globals.IconKeyCombo[cKey]
+    end
+    if raw and HealBot_Action_UsesRanks() then
+        local sType,sID=string.split(":", raw)
+        local sName
+        if sID then sID,sName=string.split("^", sID) end
+        if sType == "S" and HealBot_Action_IsUnrankedName(sName) and HealBot_Action_HighestRankID(sName) then
+            return sName
+        end
+    end
+    return (HealBot_Action_GetSpell(cType, cKey))
+end
+
 function HealBot_Action_GetSpell(cType, cKey)
       --HealBot_setCall("HealBot_Action_GetSpell", nil, nil, nil, true)
     vSpellText=HealBot_Action_SpellCache[cType]["NAME"][cKey]
@@ -5298,6 +5350,9 @@ function HealBot_Action_GetSpell(cType, cKey)
                         end
                     end
                     sID=tonumber(sID)
+                    if HealBot_Action_UsesRanks() and HealBot_Action_IsUnrankedName(sName) then
+                        sID=HealBot_Action_HighestRankID(sName) or sID
+                    end
                     cSpellText=HealBot_Spells_KnownByID(sID)
                     vSpellIcon=HealBot_WoWAPI_SpellTexture(sID)
                     vSpellText=cSpellText or vSpellText

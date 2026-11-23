@@ -55,6 +55,8 @@ try {
     if ($LASTEXITCODE -ne 0) { throw 'Modified Target dispatch regression tests failed.' }
     & lua tests/rank_range.lua
     if ($LASTEXITCODE -ne 0) { throw 'Spell rank/range regression tests failed.' }
+    & lua tests/unranked_spells.lua
+    if ($LASTEXITCODE -ne 0) { throw 'Unranked spell regression tests failed.' }
     & lua tests/spell_refresh.lua
     if ($LASTEXITCODE -ne 0) { throw 'Combat spell refresh regression tests failed.' }
     & lua tests/combat_auras.lua
