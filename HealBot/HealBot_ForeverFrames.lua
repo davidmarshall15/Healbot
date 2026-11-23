@@ -169,10 +169,9 @@ function HealBot_Forever_UpdateDebuffOverlay(button)
     local overlays=button.foreverDebuffs
     if not overlays then return end
     local inCombat=InCombatLockdown()
-    if not inCombat and HealBot_Globals.CombatAurasPersistDebuffs~=false
-        and button.foreverDebuffHandoff==button.unit and button.status.events and not button.foreverDebuffDirty then
-        return
-    end
+    -- Keep the native tint through the legacy handoff, but always re-evaluate
+    -- monitoring, range and visibility settings. A handoff is not permission
+    -- to keep a disabled overlay visible until another aura scan occurs.
     local cures=HealBot_Config_Cures
     local barMode=HealBot_Globals.CustomDebuffsShowBarCol.DEFAULT or 4
     local enabled=button.status.events and not button.foreverDebuffDirty
