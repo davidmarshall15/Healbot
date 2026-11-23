@@ -382,7 +382,14 @@ local function SkinExtras(row, donor)
 end
 
 local function Sync()
-    if InCombatLockdown() or not HealBot_Globals then return end
+    if InCombatLockdown() then return end
+    -- Login callbacks can run before core media and skin initialization finish.
+    if not HealBot_Globals or not HealBot_retLuVars("Loaded") or
+       not HealBot_Media_retLuVars("Registered") or not Healbot_Config_Skins or
+       not Healbot_Config_Skins.HealGroups or
+       not Healbot_Config_Skins.HealGroups[Healbot_Config_Skins.Current_Skin] then
+        return false
+    end
     local enabled=HealBot_Globals.ForeverPartyJoin~=false
     if enabled then
         local inRaid=IsInRaid()
@@ -450,10 +457,15 @@ end
 local function QueueSync()
     if refreshQueued then return end
     refreshQueued=true
-    C_Timer.After(0,function()
+    local function TrySync()
         refreshQueued=false
-        Sync()
-    end)
+        if Sync()==false then
+            -- Keep one startup retry; combat resumes via PLAYER_REGEN_ENABLED.
+            refreshQueued=true
+            C_Timer.After(0.5,TrySync)
+        end
+    end
+    C_Timer.After(0,TrySync)
 end
 
 local events=CreateFrame("Frame")
