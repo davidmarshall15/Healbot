@@ -991,28 +991,74 @@ end
 local hbCustomDebuffsCastBy={}
 local hbCustomDebuffsDisabled={}
 
-local debuffIconIdx,debuffIconPrio=0,0
+function HealBot_Aura_GetDebuffIconPreference(spellID, inCombat)
+    local rules=HealBot_Globals and HealBot_Globals.DebuffIconVisibility
+    local rule=rules and rules[spellID]
+    if rule then return rule[inCombat and "combat" or "rest"] end
+end
+
+function HealBot_Aura_GetHiddenDebuffIcons(inCombat)
+    local hidden={}
+    local state=inCombat and "combat" or "rest"
+    local rules=HealBot_Globals and HealBot_Globals.DebuffIconVisibility
+    for spellID,rule in pairs(rules or {}) do
+        if rule[state]==false then hidden[spellID]=true end
+    end
+    return hidden
+end
+
+function HealBot_Aura_RefreshDebuffIconVisibility()
+    HealBot_Timers_Set("AURA","CheckDebuffs")
+end
+
+function HealBot_Aura_SetDebuffIconPreference(spellID, inCombat, value)
+    if type(spellID)~="number" or spellID<1
+        or (value~=nil and type(value)~="boolean")
+        or HealBot_Aura_GetDebuffIconPreference(spellID,inCombat)==value then return end
+    local rules=HealBot_Globals.DebuffIconVisibility or {}
+    HealBot_Globals.DebuffIconVisibility=rules
+    local rule=rules[spellID] or {}
+    rule[inCombat and "combat" or "rest"]=value
+    if next(rule) then
+        rules[spellID]=rule
+    else
+        rules[spellID]=nil
+    end
+    if inCombat and HealBot_Forever_RefreshDebuffIconPreferences then
+        HealBot_Forever_RefreshDebuffIconPreferences()
+    end
+    HealBot_Aura_RefreshDebuffIconVisibility()
+end
+
+local debuffWarningSlot,debuffIconPrio=0,0
 local function HealBot_Aura_SortDebuffIconSet(button, iconSet, sIndex)
       --HealBot_setCall("HealBot_Aura_SortDebuffIconSet", button)
-    button.icon.debuff.count[iconSet]=#debuffSort[iconSet]
-    if button.icon.debuff.count[iconSet]>0 then
-        table.sort(debuffSort[iconSet])
-        if button.icon.debuff.count[iconSet]>hbv_Skins_GetIconVar("MAXDICONS", button.frame, iconSet) then
-            button.icon.debuff.count[iconSet]=hbv_Skins_GetIconVar("MAXDICONS", button.frame, iconSet)
+    local ordered=debuffSort[iconSet]
+    local limit=hbv_Skins_GetIconVar("MAXDICONS",button.frame,iconSet)
+    local inCombat=InCombatLockdown()
+    local count=0
+    table.sort(ordered)
+    for _,uid in ipairs(ordered) do
+        local aura=HealBot_AuraDebuffXRef[uid]
+        local spellID=aura.spellID
+        local priority=HealBot_AuraDebuffCache[spellID].priority
+        -- The same normally tracked debuff wins the warning even when its icon is hidden.
+        if not aura.iconOnly and priority<debuffIconPrio then
+            debuffWarningSlot=aura.slot
+            debuffIconPrio=priority
         end
-        for j=1, button.icon.debuff.count[iconSet], 1 do
-            HealBot_Aura_CacheDebuffIcon(button, sIndex+j, HealBot_AuraDebuffXRef[debuffSort[iconSet][j]]["spellID"], HealBot_AuraDebuffXRef[debuffSort[iconSet][j]]["slot"])
-        end
-        if HealBot_AuraDebuffCache[HealBot_AuraDebuffXRef[debuffSort[iconSet][1]]["spellID"]]["priority"]<debuffIconPrio then
-            debuffIconIdx=sIndex+1
-            debuffIconPrio=HealBot_AuraDebuffCache[HealBot_AuraDebuffXRef[debuffSort[iconSet][1]]["spellID"]]["priority"]
+        if count<limit and (spellID~=6788 or not button.hbcaNativeDebuffs)
+            and HealBot_Aura_GetDebuffIconPreference(spellID,inCombat)~=false then
+            count=count+1
+            HealBot_Aura_CacheDebuffIcon(button,sIndex+count,spellID,aura.slot)
         end
     end
+    button.icon.debuff.count[iconSet]=count
 end
 
 function HealBot_Aura_SortDebuffIcons(button)
       --HealBot_setCall("HealBot_Aura_SortDebuffIcons", button)
-    debuffIconIdx,debuffIconPrio=0,21
+    debuffWarningSlot,debuffIconPrio=0,21
     if hbv_Skins_GetIconVar("MAXDICONS", button.frame, 1)>0 then
         HealBot_Aura_SortDebuffIconSet(button, 1, 50)
     end
@@ -1022,7 +1068,7 @@ function HealBot_Aura_SortDebuffIcons(button)
     if hbv_Skins_GetIconVar("MAXDICONS", button.frame, 3)>0 then
         HealBot_Aura_SortDebuffIconSet(button, 3, 58)
     end
-    return debuffIconIdx
+    return debuffWarningSlot
 end
 
 function HealBot_Aura_CacheBuffIcon(button, id, spellId, slot)
@@ -1293,6 +1339,10 @@ function HealBot_Aura_CustomBuffDisabled(spellId, name)
         or (byName and (byName[zone] or byName.ALL)))
 end
 
+function HealBot_Aura_CustomBuffCaster(spellId, name)
+    return HealBot_Watch_HoT[spellId] or (name and HealBot_Watch_HoT[name])
+end
+
 -- Build native exclusions from configuration/cache only, never combat aura data.
 function HealBot_Aura_NativeBuffExclusions()
     local excluded={}
@@ -1490,18 +1540,32 @@ function HealBot_Aura_CheckCurCustomDebuff(button, canBeAlways)
     end
 end
 
-function HealBot_Aura_setDebuffXRefUID(uid, spellID, slot)
+function HealBot_Aura_setDebuffXRefUID(uid, spellID, slot, iconOnly)
     if not HealBot_AuraDebuffXRef[uid] then HealBot_AuraDebuffXRef[uid]={} end
     HealBot_AuraDebuffXRef[uid]["spellID"]=spellID
     HealBot_AuraDebuffXRef[uid]["slot"]=slot
+    HealBot_AuraDebuffXRef[uid].iconOnly=iconOnly
     table.insert(debuffSort[HealBot_Aura_IconSet[spellID]],uid)
+end
+
+function HealBot_Aura_CustomDebuffDisabled(spellID, spellName)
+    local byID,byName=hbCustomDebuffsDisabled[spellID],hbCustomDebuffsDisabled[spellName]
+    local zone=hb_lVars["mapName"]
+    return (byID and (byID[zone] or byID.ALL)) or (byName and (byName[zone] or byName.ALL))
+end
+
+function HealBot_Forever_WatchesWeakenedSoul()
+    local id=6788
+    local name=HealBot_WoWAPI_SpellName(id)
+    if HealBot_issecretvalue(name) then name=nil end
+    local custom=HealBot_Globals.CustomDebuffs
+    return not not (custom and (custom[id] or custom[name]) and not HealBot_Aura_CustomDebuffDisabled(id,name))
 end
 
 function HealBot_Aura_CheckCurDebuff(button)
       --HealBot_setCall("HealBot_Aura_CheckCurDebuff", button)
     debuffIsCurrent, cDebuffPrio=true, 20
-    if (hbCustomDebuffsDisabled[uaDebuffData[button.id][uaDebuffSlot].spellId] and (hbCustomDebuffsDisabled[uaDebuffData[button.id][uaDebuffSlot].spellId][hb_lVars["mapName"]] or hbCustomDebuffsDisabled[uaDebuffData[button.id][uaDebuffSlot].spellId]["ALL"])) or
-       (hbCustomDebuffsDisabled[uaDebuffData[button.id][uaDebuffSlot].name] and (hbCustomDebuffsDisabled[uaDebuffData[button.id][uaDebuffSlot].name][hb_lVars["mapName"]] or hbCustomDebuffsDisabled[uaDebuffData[button.id][uaDebuffSlot].name]["ALL"])) then
+    if HealBot_Aura_CustomDebuffDisabled(uaDebuffData[button.id][uaDebuffSlot].spellId,uaDebuffData[button.id][uaDebuffSlot].name) then
         debuffIsCurrent=false
     elseif HealBot_AuraDebuffCache[uaDebuffData[button.id][uaDebuffSlot].spellId]["typePrio"]>HealBot_AuraDebuffCache[uaDebuffData[button.id][uaDebuffSlot].spellId]["customPrio"] and HealBot_AuraDebuffCache[uaDebuffData[button.id][uaDebuffSlot].spellId]["customPrio"]<21 then
         HealBot_Aura_CheckCurCustomDebuff(button, true)
@@ -1679,7 +1743,7 @@ function HealBot_Aura_IsCureSpell(button)
     end
 end
 
-function HealBot_Aura_DebuffWarnings(button, debuffName, force, debuffIconIndex)
+function HealBot_Aura_DebuffWarnings(button, debuffName, force, debuffIconIndex, expirationTime)
         --HealBot_setCall("HealBot_Aura_DebuffWarnings", button)
     if button.aura.debuff.name~=debuffName or force then
         button.aura.debuff.name=debuffName
@@ -1720,7 +1784,7 @@ function HealBot_Aura_DebuffWarnings(button, debuffName, force, debuffIconIndex)
         end
         if debuffWarnings and (not HealBot_Aura_WarningFilter[button.unit][button.aura.debuff.name] or HealBot_Aura_WarningFilter[button.unit][button.aura.debuff.name]<HealBot_TimeNow) then
             if debuffIconIndex == 0 then debuffIconIndex=51 end
-            HealBot_Aura_WarningFilter[button.unit][button.aura.debuff.name]=HealBot_UnitDebuffIcons[button.id][debuffIconIndex]["expirationTime"]
+            HealBot_Aura_WarningFilter[button.unit][button.aura.debuff.name]=expirationTime or HealBot_UnitDebuffIcons[button.id][debuffIconIndex]["expirationTime"]
             if HealBot_Config_Cures.ShowDebuffWarning and (button.aura.debuff.dispellable or not HealBot_Config_Cures.ShowDebuffWarningDispelOnly) then
                 if HealBot_Range_WarnInRange(button, button.aura.debuff.curespell, HealBot_Config_Cures.WarnRange_Screen) and type(button.aura.debuff.name) == "string" then
                     UIErrorsFrame:AddMessage(button.text.nameonly.." suffers from "..button.aura.debuff.name, 
@@ -2107,7 +2171,15 @@ local HealBot_UnusedSelfDebuffs={}
 local HealBot_UnusedDebuffs={}
 function HealBot_Aura_CheckUnitDebuff(button)
       --HealBot_setCall("HealBot_Aura_CheckUnitDebuff", button)
-    if not uaDebuffData[button.id][uaDebuffSlot].isCurrent then
+    local debuff=uaDebuffData[button.id][uaDebuffSlot]
+    local spellID=debuff.spellId
+    if debuff.iconOnly then
+        if HealBot_Aura_GetDebuffIconPreference(spellID,InCombatLockdown())==true then
+            HealBot_Aura_setDebuffXRefUID("z"..spellID..":"..uaDebuffSlot,spellID,uaDebuffSlot,true)
+        end
+        return
+    end
+    if not debuff.isCurrent then
         uaIsCurrent=HealBot_Aura_CheckCurDebuff(button)
         if uaIsCurrent and (hbDebuffOnCD[uaDebuffData[button.id][uaDebuffSlot].debuffType] or 0)<(HealBot_TimeNow+2) then
             uaDebuffData[button.id][uaDebuffSlot].isCurrent=true
@@ -2116,11 +2188,12 @@ function HealBot_Aura_CheckUnitDebuff(button)
         uaIsCurrent=true
     end
     if uaIsCurrent then
-        HealBot_Aura_setDebuffXRefUID(HealBot_AuraDebuffCache[uaDebuffData[button.id][uaDebuffSlot].spellId]["pid"]..uaDebuffSlot, uaDebuffData[button.id][uaDebuffSlot].spellId, uaDebuffSlot)
-        if not button.aura.debuff.temp.active or button.aura.debuff.temp.priority>HealBot_AuraDebuffCache[uaDebuffData[button.id][uaDebuffSlot].spellId]["priority"] then
+        HealBot_Aura_setDebuffXRefUID(HealBot_AuraDebuffCache[spellID].pid..uaDebuffSlot,spellID,uaDebuffSlot)
+        if not button.aura.debuff.temp.active or button.aura.debuff.temp.priority>HealBot_AuraDebuffCache[spellID].priority then
             button.aura.debuff.temp.active=true
-            button.aura.debuff.temp.id=uaDebuffData[button.id][uaDebuffSlot].spellId
-            button.aura.debuff.temp.priority=HealBot_AuraDebuffCache[uaDebuffData[button.id][uaDebuffSlot].spellId]["priority"]
+            button.aura.debuff.temp.id=spellID
+            button.aura.debuff.temp.priority=HealBot_AuraDebuffCache[spellID].priority
+            button.aura.debuff.temp.expirationTime=debuff.expirationTime
         end
     elseif uaDebuffData[button.id][uaDebuffSlot].sourceUnitIsPlayer then
         HealBot_UnusedSelfDebuffs[uaDebuffData[button.id][uaDebuffSlot].spellId]=true
@@ -2129,6 +2202,11 @@ function HealBot_Aura_CheckUnitDebuff(button)
             HealBot_UnusedDebuffs[uaDebuffData[button.id][uaDebuffSlot].spellId]="1:"..HealBot_Aura_UnusedAuraInfo(uaDebuffData[button.id][uaDebuffSlot].sourceUnit)
         else
             HealBot_UnusedDebuffs[uaDebuffData[button.id][uaDebuffSlot].spellId]="2:"..HealBot_Aura_UnusedAuraInfo(uaDebuffData[button.id][uaDebuffSlot].sourceUnit)
+        end
+    end
+    if not uaIsCurrent then
+        if HealBot_Aura_GetDebuffIconPreference(spellID,InCombatLockdown())==true then
+            HealBot_Aura_setDebuffXRefUID("z"..spellID..":"..uaDebuffSlot,spellID,uaDebuffSlot,true)
         end
     end
 end
@@ -2674,7 +2752,7 @@ local function HealBot_Aura_FilterUnitDebuffs(button, selfOnly)
 end
 
 --BleedList[32407]="Strange Aura"
-local function HealBot_Aura_UpdateUnitDebuffsData(button, selfOnly, gSlot)
+local function HealBot_Aura_UpdateUnitDebuffsData(button, selfOnly, gSlot, iconOnly)
       --HealBot_setCall("HealBot_Aura_UpdateUnitDebuffsData", button)
     if uaExpirationTime then
         HealBot_Aura_PostUpdateInitDebuffsCache(uaSpellId, uaName)
@@ -2714,12 +2792,15 @@ local function HealBot_Aura_UpdateUnitDebuffsData(button, selfOnly, gSlot)
             uaDebuffData[button.id][uaSlot].expirationTime=uaExpirationTime
             uaDebuffData[button.id].lastslot=uaSlot
             uaDebuffData[button.id][uaSlot].gSlot=gSlot
+            uaDebuffData[button.id][uaSlot].iconOnly=iconOnly
             HealBot_Aura_PostUpdateUnitDebuffsData(button, uaSpellId, uaName, uaDebuffData[button.id][uaSlot].debuffType)
         end
-        HealBot_UnitDebuffCurrent[button.unit][uaName]=uaSpellId
-        HealBot_AuraDebuffCache[uaSpellId].count=uaCount
-        HealBot_AuraDebuffCache[uaSpellId].sourceUnitIsPlayer=uaUnitIsPlayer
-        if UnitIsEnemy(uaUnitCaster, "player") then hbv_Auras_SetData("DEBUFFS", uaSpellId) end
+        if not iconOnly then
+            HealBot_UnitDebuffCurrent[button.unit][uaName]=uaSpellId
+            HealBot_AuraDebuffCache[uaSpellId].count=uaCount
+            HealBot_AuraDebuffCache[uaSpellId].sourceUnitIsPlayer=uaUnitIsPlayer
+            if UnitIsEnemy(uaUnitCaster, "player") then hbv_Auras_SetData("DEBUFFS", uaSpellId) end
+        end
     end
 end
 
@@ -2796,34 +2877,44 @@ function HealBot_Aura_UpdateUnitDebuffsV9Aura(button, selfOnly, filter)
     end
 end
 
-function HealBot_Aura_UpdateForeverWeakenedSoul(button,selfOnly)
-    local id=6788
-    local name=HealBot_WoWAPI_SpellName(id)
-    if HealBot_issecretvalue(name) or not name or HealBot_UnitDebuffCurrent[button.unit][name] then return end
-    local aura
-    if C_UnitAuras.GetAuraDataBySpellName then
-        local ok,result=pcall(C_UnitAuras.GetAuraDataBySpellName,button.unit,name,"HARMFUL")
-        if ok and HealBot_Aura_AuraDataIsUsable(result) and result.spellId==id then aura=result end
+function HealBot_Aura_GetTrackedDebuffIconSet(button, spellId)
+    local name=HealBot_WoWAPI_SpellName(spellId)
+    if HealBot_issecretvalue(name) then name=nil end
+    local zone=hb_lVars["mapName"]
+    local byId=hbCustomDebuffsDisabled[spellId]
+    local byName=hbCustomDebuffsDisabled[name]
+    if (byId and (byId[zone] or byId["ALL"])) or
+       (byName and (byName[zone] or byName["ALL"])) then
+        return nil
     end
-    if not aura and HealBot_Forever_GetShieldLockout then
-        local start,duration=HealBot_Forever_GetShieldLockout(button)
-        if start then
-            aura={spellId=id,name=name,icon=HealBot_WoWAPI_SpellTexture(id),applications=0,
-                  duration=duration,expirationTime=start+duration,sourceUnit="player"}
+    local filter=HealBot_DebuffFilter[spellId] or HealBot_DebuffFilter[name]
+    if filter and not hbAuraFilterFuncs[filter](button) then return nil end
+    return HealBot_DebuffIconSet[spellId] or HealBot_DebuffIconSet[name] or 1
+end
+
+function HealBot_Aura_UpdateExplicitCombatDebuffs(button, selfOnly)
+    local lookup=C_UnitAuras and C_UnitAuras.GetUnitAuraBySpellID
+    if not lookup then return end
+    for spellID,rule in pairs(HealBot_Globals.DebuffIconVisibility or {}) do
+        if rule.combat==true then
+            local ok,aura=pcall(lookup,button.unit,spellID)
+            if ok and HealBot_Aura_AuraDataIsUsable(aura)
+                and not HealBot_issecretvalue(aura.isHarmful) and aura.isHarmful
+                and HealBot_UnitDebuffCurrent[button.unit][aura.name]~=spellID then
+                uaName,uaTexture,uaCount,uaDebuffType,uaDuration,uaExpirationTime,uaUnitCaster,uaSpellId,uaIsBossDebuff=
+                    aura.name,aura.icon,aura.applications,aura.dispelName,aura.duration,aura.expirationTime,
+                    aura.sourceUnit,aura.spellId,aura.isBossAura
+                HealBot_Aura_UpdateUnitDebuffsData(button,selfOnly,0,true)
+            end
         end
     end
-    if not aura or not aura.icon then return end
-    uaName,uaTexture,uaCount,uaDebuffType,uaDuration,uaExpirationTime,uaUnitCaster,uaSpellId,uaIsBossDebuff=
-        aura.name,aura.icon,aura.applications or 0,aura.dispelName,aura.duration,aura.expirationTime,
-        aura.sourceUnit,aura.spellId,aura.isBossAura
-    HealBot_Aura_UpdateUnitDebuffsData(button,selfOnly,0)
 end
 
 function HealBot_Aura_UpdateUnitDebuffsV9(button, selfOnly)
       --HealBot_setCall("HealBot_Aura_UpdateUnitDebuffsV9", button)
-    if HealBot_Util_isMidnight(true) then
+    if HealBot_Util_isMidnight(true) and (not HEALBOT_FOREVER or InCombatLockdown()) then
         HealBot_Aura_UpdateUnitDebuffsV9Alt(button, selfOnly, "RAID_PLAYER_DISPELLABLE")
-        if HEALBOT_FOREVER then HealBot_Aura_UpdateForeverWeakenedSoul(button,selfOnly) end
+        if HEALBOT_FOREVER then HealBot_Aura_UpdateExplicitCombatDebuffs(button,selfOnly) end
     else
         HealBot_Aura_UpdateUnitDebuffsV9Aura(button, selfOnly, "HARMFUL")
     end
@@ -3049,7 +3140,7 @@ function HealBot_Aura_UnitDebuffsUpdateWhenActive(button)
     end
 end
 
-local debuffBarCol,debuffIconIndex=0,0
+local debuffBarCol=0
 function HealBot_Aura_BuffsEnabled()
     return buffCheck
 end
@@ -3129,14 +3220,18 @@ function HealBot_Aura_CheckUnitDebuffs(button, selfOnly)
             end
         end
 
-        debuffIconIndex=HealBot_Aura_SortDebuffIcons(button)
+        local warningSlot=HealBot_Aura_SortDebuffIcons(button)
+        local expirationTime
         HealBot_Aura_CheckUnitDebuffIcons(button)
-        if debuffIconIndex>0 then
-            button.aura.debuff.id=HealBot_UnitDebuffIcons[button.id][debuffIconIndex]["spellId"]
+        if warningSlot>0 then
+            local debuff=uaDebuffData[button.id][warningSlot]
+            button.aura.debuff.id=debuff.spellId
             button.aura.debuff.priority=HealBot_AuraDebuffCache[button.aura.debuff.id]["priority"]
+            expirationTime=debuff.expirationTime
         elseif button.aura.debuff.temp.active then
             button.aura.debuff.id=button.aura.debuff.temp.id
             button.aura.debuff.priority=button.aura.debuff.temp.priority
+            expirationTime=button.aura.debuff.temp.expirationTime
         else
             button.aura.debuff.id=0
         end
@@ -3157,7 +3252,7 @@ function HealBot_Aura_CheckUnitDebuffs(button, selfOnly)
                 button.aura.debuff.name="needUpdate"
                 button.aura.debuff.type=HealBot_AuraDebuffCache[button.aura.debuff.id]["debuffType"]
             end
-            HealBot_Aura_DebuffWarnings(button, HealBot_AuraDebuffCache[button.aura.debuff.id]["name"], false, debuffIconIndex)
+            HealBot_Aura_DebuffWarnings(button, HealBot_AuraDebuffCache[button.aura.debuff.id]["name"], false, 0, expirationTime)
         else
             HealBot_Aura_ClearDebuff(button)
         end
@@ -3861,16 +3956,6 @@ local function HealBot_Aura_ConfigBuffFilter(id, sName, filter)
 end
 
 function HealBot_Aura_ConfigClassHoT()
-    if HEALBOT_FOREVER and not HealBot_Globals.ForeverPriestCustomBuffs then
-        local priest=HealBot_Globals.WatchHoT.PRIE
-        if priest then
-            for _, id in ipairs({1243,588,14751,14752,976}) do
-                local name=HealBot_WoWAPI_SpellName(id)
-                if priest[id]==nil and (not name or priest[name]==nil) then priest[id]=1 end
-            end
-            HealBot_Globals.ForeverPriestCustomBuffs=true
-        end
-    end
       --HealBot_setCall("HealBot_configClassHoT")
     for id,_ in pairs(HealBot_Watch_HoT) do
         HealBot_Watch_HoT[id]=nil

@@ -79,6 +79,8 @@ local function PaintPower(row)
     end
 end
 
+local incomingColourModes={[3]=2,[4]=3,[6]=4,[7]=5,[8]=6}
+
 local function Paint(row)
     local unit=row.unit
     if not frame or not UnitExists(unit) then return end
@@ -100,6 +102,22 @@ local function Paint(row)
     end
     local r,g,b=SkinColour("BarCol","HLTH","H")
     row.healthBar:SetStatusBarColor(r,g,b,Get("BarCol",outOfRange and "ORA" or "HA"))
+    local incoming=row.incomingBar
+    if incoming then
+        local mode=Get("BarIACol","IC")
+        if mode>=2 then
+            local calculator=row.incomingCalculator
+            UnitGetDetailedHealPrediction(unit,"player",calculator)
+            incoming:SetMinMaxValues(0,calculator:GetMaximumHealth())
+            incoming:SetValue(calculator:GetIncomingHeals())
+            local ir,ig,ib=Colour(incomingColourModes[mode] or 1,"BarIACol","I",pct,red,green,cr,cg,cb,rr,rg,rb)
+            local alpha=Get("BarIACol","IA")
+            incoming:SetStatusBarColor(ir,ig,ib,outOfRange and alpha/3 or alpha)
+            incoming:Show()
+        else
+            incoming:Hide()
+        end
+    end
     r,g,b=SkinColour("BarCol","BACK","B")
     row.background:SetVertexColor(r,g,b,Get("BarCol","BA"))
     local borderMode=Get("BarCol","BORDER")
@@ -155,6 +173,17 @@ local function ApplySkin()
         bar:GetStatusBarTexture():SetHorizTile(false)
         row.background:SetTexture(bar:GetStatusBarTexture():GetTexture())
         bar:SetOrientation(Get("HealBar","OFIX")==1 and "HORIZONTAL" or "VERTICAL")
+        local incoming=row.incomingBar
+        if incoming then
+            local vertical=bar:GetOrientation()=="VERTICAL"
+            incoming:SetSize(width,height)
+            incoming:SetOrientation(bar:GetOrientation())
+            incoming:ClearAllPoints()
+            incoming:SetPoint(vertical and "BOTTOMLEFT" or "TOPLEFT",
+                              bar:GetStatusBarTexture(),vertical and "TOPLEFT" or "TOPRIGHT")
+            HealBot_Media_UpdateTexture(incoming,texture,"Forever party incoming heals")
+            incoming:GetStatusBarTexture():SetHorizTile(false)
+        end
         local borderSize=math.ceil(Get("BarCol","BOUT")*scale)
         if borderSize>0 then
             row.border:SetBackdrop({edgeFile=[[Interface\Buttons\WHITE8X8]],edgeSize=borderSize})
@@ -267,6 +296,17 @@ local function CreateRow(mode,index)
     bar:SetAllPoints()
     bar:EnableMouse(false)
     row.healthBar=bar
+    if CreateUnitHealPredictionCalculator and UnitGetDetailedHealPrediction then
+        local calculator=CreateUnitHealPredictionCalculator()
+        calculator:SetIncomingHealClampMode(Enum.UnitIncomingHealClampMode.MissingHealth)
+        calculator:SetIncomingHealOverflowPercent(1)
+        row.incomingCalculator=calculator
+        row.incomingBar=CreateFrame("StatusBar",nil,row)
+        row.incomingBar:EnableMouse(false)
+        row.incomingBar:SetFrameLevel(bar:GetFrameLevel())
+        row.incomingBar:Hide()
+        row:RegisterUnitEvent("UNIT_HEAL_PREDICTION",row.unit)
+    end
     row.background=bar:CreateTexture(nil,"BACKGROUND")
     row.background:SetAllPoints()
     row.border=CreateFrame("Frame",nil,bar,"BackdropTemplate")

@@ -168,16 +168,22 @@ end
 function HealBot_Forever_UpdateDebuffOverlay(button)
     local overlays=button.foreverDebuffs
     if not overlays then return end
+    local inCombat=InCombatLockdown()
+    if not inCombat and HealBot_Globals.CombatAurasPersistDebuffs~=false
+        and button.foreverDebuffHandoff==button.unit and button.status.events and not button.foreverDebuffDirty then
+        return
+    end
     local cures=HealBot_Config_Cures
     local barMode=HealBot_Globals.CustomDebuffsShowBarCol.DEFAULT or 4
     local enabled=button.status.events and not button.foreverDebuffDirty
-        and button.foreverDebuffUnit==button.unit and (InCombatLockdown() or HealBot_Globals.CombatAurasPersistDebuffs~=false)
+        and button.foreverDebuffUnit==button.unit and (inCombat or HealBot_Globals.CombatAurasPersistDebuffs~=false)
         and HealBot_Forever_DebuffsEnabled() and cures.CDCshownHB and
         (barMode==3 or barMode==4) and not button.special.unit and
         button.status.current<HealBot_Unit_Status["PLUGINBARCOL"] and
         HealBot_Range_WarnInRange(button, nil, cures.WarnRange_Bar)
     local dispelOnly=cures.CDCshownHBDispelOnly or cures.IgnoreCannotDispell
     local selected=dispelOnly and "dispel" or "all"
+    button.foreverDebuffHandoff=enabled and button.unit or nil
     for key, container in pairs(overlays) do
         local show=not not (enabled and key==selected)
         container:SetAlpha(button.status.alpha)
@@ -244,6 +250,7 @@ end
 
 local function Detach(button)
     active[button]=nil
+    button.foreverDebuffHandoff=nil
     if button.foreverIncoming then button.foreverIncoming.bar:Hide() end
     if button.foreverIncoming and button.foreverIncoming.absorb then
         button.foreverIncoming.visible=false
@@ -278,6 +285,12 @@ end)
 hooksecurefunc("HealBot_Action_RegisterUnitEvents", Attach)
 hooksecurefunc("HealBot_Action_UnregisterUnitEvents", Detach)
 hooksecurefunc("HealBot_Action_UpdateHealthButton", HealBot_Forever_UpdateDebuffOverlay)
+hooksecurefunc("HealBot_Aura_CheckUnitDebuffs",function(button)
+    if button.foreverDebuffHandoff and not InCombatLockdown() then
+        button.foreverDebuffHandoff=nil
+        HealBot_Forever_UpdateDebuffOverlay(button)
+    end
+end)
 hooksecurefunc("HealBot_Aura_SetAuraCheckFlags", UpdateAll)
 hooksecurefunc("HealBot_Options_Debuff_Reset", function()
     for button in pairs(active) do
@@ -304,7 +317,13 @@ events:SetScript("OnEvent", function(_, event)
         return
     end
     if event=="PLAYER_REGEN_ENABLED" then
-        for button in pairs(active) do Attach(button) end
+        for button in pairs(active) do
+            Attach(button)
+            if button.foreverDebuffHandoff==button.unit then
+                button.aura.debuff.update=true
+                HealBot_Events_UnitDebuff(button)
+            end
+        end
     else
         UpdateAll()
     end
