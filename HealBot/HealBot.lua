@@ -423,17 +423,30 @@ function HealBot_TogglePanel(HBpanel, sound)
 end
 
 
+local hbPendingFrameStops={}
+local hbFrameMoveEvents=CreateFrame("Frame")
+
 function HealBot_StartMoving(HBframe, frame)
       --HealBot_setCall("HealBot_StartMoving")
+    -- Protected frame movement is forbidden in combat on every client.
+    if InCombatLockdown() then return false end
     if not HBframe.isMoving then
         HBframe:StartMoving();
         HBframe.isMoving=true;
         if frame and hbv_Skins_GetBoolean("General", "STICKYFRAME") and frame>1 then HealBot_luVars["MovingFrame"]=frame end
     end
+    return true
 end
 
 function HealBot_StopMoving(HBframe,frame)
       --HealBot_setCall("HealBot_StopMoving")
+    -- Combat can begin between mouse-down and mouse-up, including option drags.
+    if InCombatLockdown() then
+        hbPendingFrameStops[HBframe]=frame or false
+        hbFrameMoveEvents:RegisterEvent("PLAYER_REGEN_ENABLED")
+        return
+    end
+    hbPendingFrameStops[HBframe]=nil
     if ( HBframe.isMoving ) then
         HBframe:StopMovingOrSizing();
         HBframe.isMoving=false;
@@ -447,6 +460,16 @@ function HealBot_StopMoving(HBframe,frame)
         HealBot_Action_setPoint(frame, true)
     end
 end
+
+hbFrameMoveEvents:SetScript("OnEvent", function(self)
+    if InCombatLockdown() then return end
+    for HBframe, frame in pairs(hbPendingFrameStops) do
+        HealBot_StopMoving(HBframe, frame or nil)
+    end
+    if not next(hbPendingFrameStops) then
+        self:UnregisterEvent("PLAYER_REGEN_ENABLED")
+    end
+end)
 
 function HealBot_CheckFrameHorizontal(frame, aType)
     local Hcenter=GetScreenWidth()/2

@@ -34,6 +34,8 @@ local function frame(kind,parent)
         self.enabled=v
     end
     function f:SetShown(v) self.shown=v end
+    function f:Show() self.shown=true end
+    function f:IsShown() return self.shown end
     function f:Hide() self.shown=false end
     f.UpdateAllAuras=noop
     function f:RegisterEvent(name) events[name]=self end
@@ -154,8 +156,9 @@ eq(replacement.shown,false,"rebuilt icons hidden outside combat")
 count=#containers; b.unit="party2"
 hooks.HealBot_Action_RegisterUnitEvents(b)
 eq(#containers,count,"unit change reuses same layout")
-eq(replacement.unit,"party2","unit change retargets container")
+eq(replacement.unit,"party1","hidden out-of-combat row waits to retarget until visible")
 combat=true; fire("PLAYER_REGEN_DISABLED")
+eq(replacement.unit,"party2","row retargets before becoming visible in combat")
 hooks.HealBot_Action_UnregisterUnitEvents(b)
 eq(replacement.shown,false,"unregistered button hidden")
 eq(#errors,0,"no swallowed API errors or protected setup calls")
@@ -226,8 +229,9 @@ eq(current.shown,false,"failed retarget hides old unit's auras")
 eq(#errors,1,"retarget failure is contained")
 current.SetUnit=setUnit
 combat=false; fire("PLAYER_REGEN_ENABLED")
-eq(current.unit,"party2","failed combat retarget retries after combat")
+eq(current.unit,"party1","failed retarget keeps hidden old binding until row becomes visible")
 combat=true; fire("PLAYER_REGEN_DISABLED")
+eq(current.unit,"party2","failed combat retarget retries before next visible combat")
 eq(current.shown,true,"recovered row returns next combat")
 eq(#errors,1,"no unexpected API errors during recovery")
 combat=false
@@ -273,6 +277,12 @@ env.HealBot_Globals.CombatAurasPersistDebuffs=nil
 env.SlashCmdList.HBCOMBATAURAS("status")
 eq(env.HealBot_Globals.CombatAurasPersistDebuffs,true,"Forever defaults to persistent debuffs")
 
+-- Explicit persistence on other supported clients still owns the legacy row.
+-- Forever now uses the legacy icons outside combat; its distinct visibility
+-- contract is covered by native_buff_casters.lua rather than asserting a stale
+-- always-native Forever policy here.
+env.HEALBOT_FOREVER=false
+
 -- Load the actual legacy render/removal functions to exercise duplicates and
 -- restoration, including timer callbacks that were queued before takeover.
 b.id=1; b.status.alpha=1
@@ -315,7 +325,7 @@ end
 hooks.HealBot_Aura_SetAuraCheckFlags()
 db=latest("db"); hot=latest("hot")
 eq(db.shown,true,"existing harmful auras display outside combat")
-eq(hot.shown,true,"Forever native buffs remain visible outside combat")
+eq(hot.shown,true,"explicit persistent native mode keeps buffs visible outside combat")
 eq(env.HealBot_CombatAuras_UsesNativeDebuffs(b),true,"native row owns icon-set 1")
 eq(b.gref.icon[51].alpha,0,"legacy texture hidden on takeover")
 eq(b.gref.txt.expire[51].alpha,0,"legacy countdown hidden on takeover")
@@ -339,9 +349,9 @@ eq(db.shown,true,"same debuff row enters combat")
 combat=false; fire("PLAYER_REGEN_ENABLED")
 eq(db.shown,true,"remaining DoTs stay visible after combat")
 eq(db.enabled,true,"native aura event processing stays enabled for removal and expiry")
-eq(refreshes,2,"both transitions refresh native contents without UNIT_AURA")
+eq(refreshes,0,"already-visible native row does not repeat content refresh at combat boundaries")
 eq(#containers,count,"combat transitions reuse existing containers")
-eq(hot.shown,true,"Forever native buffs persist after combat")
+eq(hot.shown,true,"explicit persistent native mode keeps buffs after combat")
 
 env.HealBot_Aura_DebuffsEnabled=function() return false end
 hooks.HealBot_Aura_SetAuraCheckFlags()

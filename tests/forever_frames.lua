@@ -10,6 +10,7 @@ local secret=setmetatable({}, {__add=forbidden,__sub=forbidden,__mul=forbidden,
 local hooks={}
 local combat=false
 local monitoring=true
+local inRange=true
 local mode=6
 local amount=secret
 local maximum=secret
@@ -105,7 +106,8 @@ env.HealBot_Config_Cures={CDCshownHB=true,CDCBarColour={Magic={R=0.2,G=0.6,B=1}}
 env.HealBot_Globals={CustomDebuffsShowBarCol={DEFAULT=4},CombatAurasOn=false}
 env.CreateColor=function(r,g,b) return {r=r,g=g,b=b} end
 env.HealBot_Aura_DebuffsEnabled=function() return monitoring end
-env.HealBot_Range_WarnInRange=function() return true end
+env.HealBot_Range_WarnInRange=function() return inRange end
+env.HealBot_Events_UnitDebuff=function(button) button.debuffQueued=true end
 env.hbv_Skins_GetFrameVar=function(_,key)
     return ({IC=mode,IA=0.8,IR=0.1,IG=1,IB=0.3,TEXTURE="test"})[key]
 end
@@ -125,7 +127,7 @@ loadAddon("HealBot/HealBot_ForeverFrames.lua")
 local function button(unit)
     local b={unit=unit,frame=1,framecol=1,gref={Bar=frame(),InHeal=frame(),Top=frame(),txt={}},
         status={events=true,enabled=true,current=5,alpha=0.9},range={current=1},
-        health={current=secret,max=secret},special={unit=false}}
+        health={current=secret,max=secret},special={unit=false},aura={debuff={}}}
     b.gref.Bar.level=24
     b.gref.InHeal.level=23
     b.gref.Top.level=50
@@ -230,6 +232,29 @@ monitoring=false
 env.HealBot_Forever_UpdateDebuffOverlay(b)
 eq(b.foreverDebuffs.dispel.shown,false,"persistent tint honors disabled monitoring")
 monitoring=true
+env.HealBot_Config_Cures.CDCshownHB=false
+env.HealBot_Forever_UpdateDebuffOverlay(b)
+eq(b.foreverDebuffs.dispel.shown,false,"outside-combat handoff honors coloring disabled")
+env.HealBot_Config_Cures.CDCshownHB=true
+env.HealBot_Config_Cures.CDCshownHBDispelOnly=false
+env.HealBot_Forever_UpdateDebuffOverlay(b)
+eq(b.foreverDebuffs.all.shown,true,"outside-combat handoff can select all debuffs")
+eq(b.foreverDebuffs.dispel.shown,false,"outside-combat old selection is hidden")
+b.status.alpha=0.4
+env.HealBot_Forever_UpdateDebuffOverlay(b)
+eq(b.foreverDebuffs.all.alpha,0.4,"outside-combat opacity changes reach persistent tint")
+inRange=false
+env.HealBot_Forever_UpdateDebuffOverlay(b)
+eq(b.foreverDebuffs.all.shown,false,"outside-combat range gate hides tint")
+inRange=true; b.status.current=20
+env.HealBot_Forever_UpdateDebuffOverlay(b)
+eq(b.foreverDebuffs.all.shown,false,"outside-combat death gate hides tint")
+b.status.current=5; b.special.unit=true
+env.HealBot_Forever_UpdateDebuffOverlay(b)
+eq(b.foreverDebuffs.all.shown,false,"outside-combat special-unit gate hides tint")
+b.special.unit=false; env.HealBot_Config_Cures.CDCshownHBDispelOnly=true
+env.HealBot_Forever_UpdateDebuffOverlay(b)
+eq(b.foreverDebuffs.dispel.shown,true,"outside-combat gates recover without a new aura event")
 hooks.HealBot_Action_UnregisterUnitEvents(b)
 eq(bar.shown,false,"unregister hides prediction")
 b.unit="party3"

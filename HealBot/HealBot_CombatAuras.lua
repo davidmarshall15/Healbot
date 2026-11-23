@@ -91,45 +91,148 @@ local buffStart={1,9,11}
 local buffEnd={8,10,12}
 local debuffStart={51,57,59}
 local buffFilters, buffSignature
+local function HBCA_PublicBuffValue(value)
+    return not HealBot_issecretvalue or not HealBot_issecretvalue(value)
+end
+local function HBCA_BuffID(value)
+    return HBCA_PublicBuffValue(value) and type(value)=="number" and value>0
+        and value<math.huge and value==math.floor(value)
+end
+local function HBCA_BuffName(value)
+    return HBCA_PublicBuffValue(value) and type(value)=="string" and value~=""
+end
+local function HBCA_BuffSetting(mapping,key)
+    if type(mapping)~="table" or not (HBCA_BuffID(key) or HBCA_BuffName(key)) then return end
+    local value=mapping[key]
+    if HBCA_PublicBuffValue(value) then return value end
+end
 local function HBCA_ConfiguredBuffFilters(g)
     if not HEALBOT_FOREVER then return end
     local _, class=UnitClass("player")
-    if class~="PRIEST" and g.CombatAurasPriestOnly==true then
-        local excluded=HealBot_Aura_NativeBuffExclusions and HealBot_Aura_NativeBuffExclusions() or {}
-        local signature={}
-        for id in pairs(excluded) do signature[#signature+1]=id end
-        table.sort(signature)
-        local key="exclusions:"..table.concat(signature,",")
-        if key==buffSignature then return buffFilters,false end
-        buffSignature=key
-        buffFilters={{excludeSpellIDs=excluded}}
-        return buffFilters,true
-    end
+    local broad=class~="PRIEST" and g.CombatAurasPriestOnly==true
     local sets=g.CustomBuffsIconSet or {}
-    local candidates={}
-    for id in pairs(knownBuffIDs) do candidates[id]=true end
-    for _, spells in pairs(g.WatchHoT or {}) do
-        for spell in pairs(spells) do
-            local id=type(spell)=="number" and spell or HealBot_WoWAPI_SpellId(spell)
-            if type(id)=="number" and id>0 then candidates[id]=true end
+    local methods=g.CustomBuffIDMethod or {}
+    local effective=type(HealBot_Watch_HoT)=="table" and HealBot_Watch_HoT or {}
+    local candidates,names,registrations={},{},{}
+    local exact,families,variants={},{},{}
+    local function AddCandidate(id)
+        if HBCA_BuffID(id) then candidates[id]=true end
+    end
+    local function PublicCall(fn,...)
+        if type(fn)~="function" then return end
+        local ok,value=pcall(fn,...)
+        if ok and HBCA_PublicBuffValue(value) then return value end
+    end
+    local function Name(id)
+        if names[id]~=nil then return names[id] or nil end
+        local name=PublicCall(HealBot_WoWAPI_SpellName,id)
+        if not HBCA_BuffName(name) then
+            local cache=HealBot_AuraBuffCache and HealBot_AuraBuffCache[id]
+            if HBCA_PublicBuffValue(cache) and type(cache)=="table" and HBCA_BuffName(cache.name) then name=cache.name end
+        end
+        names[id]=HBCA_BuffName(name) and name or false
+        return names[id] or nil
+    end
+    local function Canonical(id)
+        local key=PublicCall(HealBot_BuffIconSetKey,id)
+        return (HBCA_BuffID(key) or HBCA_BuffName(key)) and key or id
+    end
+    local function Family(id)
+        return buffFamily[id] or Canonical(id)
+    end
+    local function FirstSetting(mapping,...)
+        for index=1,select("#",...) do
+            local value=HBCA_BuffSetting(mapping,select(index,...))
+            if value~=nil then return value end
         end
     end
-    local include={{},{},{}}
+    local function Disabled(id,name)
+        local ok,value=pcall(HealBot_Aura_CustomBuffDisabled,id,name)
+        return not ok or not HBCA_PublicBuffValue(value) or not not value
+    end
+    local function Caster(value)
+        if value==1 or value=="S" then return "S" end
+        if value==2 or value=="C" then return "C" end
+        return "A"
+    end
+    for id in pairs(knownBuffIDs) do AddCandidate(id) end
+    -- These are public configuration caches, not live/protected aura queries.
+    for id in pairs(HealBot_Spell_IDs or {}) do AddCandidate(id) end
+    for id in pairs(HealBot_AuraBuffCache or {}) do AddCandidate(id) end
+    for _, spells in pairs(g.WatchHoT or {}) do
+        if HBCA_PublicBuffValue(spells) and type(spells)=="table" then
+            for spell,value in pairs(spells) do
+                if HBCA_PublicBuffValue(value) and value~=false and (HBCA_BuffID(spell) or HBCA_BuffName(spell)) then
+                    local id=HBCA_BuffID(spell) and spell or PublicCall(HealBot_WoWAPI_SpellId,spell)
+                    if not HBCA_BuffID(id) then id=nil end
+                    local name=HBCA_BuffName(spell) and spell or id and Name(id)
+                    local method=FirstSetting(methods,spell,id,name)==1 and 1 or 2
+                    local registration={id=id,name=name,entry=spell,method=method,caster=Caster(value)}
+                    registration.route=FirstSetting(sets,id and Canonical(id),id,spell,name)
+                    registrations[#registrations+1]=registration
+                    AddCandidate(id)
+                end
+            end
+        end
+    end
+    table.sort(registrations,function(a,b)
+        local aid,bid=a.id or math.huge,b.id or math.huge
+        if aid~=bid then return aid<bid end
+        if a.method~=b.method then return a.method<b.method end
+        if type(a.entry)~=type(b.entry) then return type(a.entry)=="number" end
+        if tostring(a.entry)~=tostring(b.entry) then return tostring(a.entry)<tostring(b.entry) end
+        return a.caster<b.caster
+    end)
+    for _,registration in ipairs(registrations) do
+        if registration.id and not exact[registration.id] then exact[registration.id]=registration end
+        if registration.method~=1 then
+            if registration.name and not families[registration.name] then families[registration.name]=registration end
+            local family=registration.id and Family(registration.id)
+            if family and not variants[family] then variants[family]=registration end
+        end
+    end
+    local include,selfIDs,everyoneIDs={{},{},{}},{{},{},{}},{{},{},{}}
+    local excluded={}
+    if broad and type(HealBot_Aura_NativeBuffExclusions)=="function" then
+        for id,disabled in pairs(HealBot_Aura_NativeBuffExclusions() or {}) do
+            if disabled and HBCA_BuffID(id) then excluded[id]=true; AddCandidate(id) end
+        end
+    end
     local signature={}
     for id in pairs(candidates) do
-        local name=HealBot_WoWAPI_SpellName(id)
-        local base=buffFamily[id] or HealBot_BuffIconSetKey(id)
-        local caster=HealBot_Aura_CustomBuffCaster(id,name)
-        if not caster and base~=id then
-            caster=HealBot_Aura_CustomBuffCaster(base,HealBot_WoWAPI_SpellName(base))
-        end
-        if caster and not HealBot_Aura_CustomBuffDisabled(id,name)
-            and not HealBot_Aura_CustomBuffDisabled(base,HealBot_WoWAPI_SpellName(base)) then
-            local set=sets[HealBot_BuffIconSetKey(id)] or sets[base] or sets[name] or 1
+        local name=Name(id)
+        local registration=exact[id] or (name and families[name]) or variants[Family(id)]
+        local disabled=excluded[id] or Disabled(id,name)
+        if broad and disabled then excluded[id]=true end
+        if registration and not disabled and not (registration.method~=1 and Disabled(registration.id,registration.name)) then
+            -- Admission follows the configured identify method above. Caster
+            -- precedence matches the legacy name-first resolved WatchHoT table.
+            local caster=HBCA_BuffSetting(effective,name) or HBCA_BuffSetting(effective,id)
+            if caster~="S" and caster~="C" and caster~="A" then
+                caster=PublicCall(HealBot_Aura_CustomBuffCaster,id,name)
+            end
+            if caster~="S" and caster~="C" and caster~="A" then caster=registration.caster end
+            local set=FirstSetting(sets,Canonical(id),id) or registration.route or HBCA_BuffSetting(sets,name) or 1
             if set~=2 and set~=3 then set=1 end
             include[set][id]=true
-            signature[#signature+1]=id..":"..set
+            if caster=="A" then everyoneIDs[set][id]=true else selfIDs[set][id]=true end
+            signature[#signature+1]=id..":"..set..":"..caster
         end
+    end
+    local ownExcluded={}
+    local allExcluded={}
+    if broad then
+        for id in pairs(excluded) do ownExcluded[id]=true; allExcluded[id]=true end
+        for set=1,3 do
+            for id in pairs(include[set]) do
+                if set~=1 then ownExcluded[id]=true; allExcluded[id]=true
+                elseif everyoneIDs[set][id] then ownExcluded[id]=true end
+            end
+        end
+        signature[#signature+1]="broad"
+        for id in pairs(excluded) do signature[#signature+1]="exclude:"..id end
+    else
+        signature[#signature+1]="configured"
     end
     table.sort(signature)
     local key=table.concat(signature,",")
@@ -137,8 +240,15 @@ local function HBCA_ConfiguredBuffFilters(g)
     buffSignature=key
     buffFilters={}
     for set=1,3 do
-        if next(include[set]) then
+        if set==1 or next(include[set]) then
             buffFilters[set]={includeSpellIDs=include[set]}
+            buffFilters[set].selfSpellFilter={includeSpellIDs=selfIDs[set]}
+            buffFilters[set].everyoneSpellFilter={includeSpellIDs=everyoneIDs[set]}
+            if set==1 and broad then
+                buffFilters[set].includeSpellIDs=nil
+                buffFilters[set].excludeSpellIDs=allExcluded
+                buffFilters[set].selfSpellFilter={excludeSpellIDs=ownExcluded}
+            end
         end
     end
     return buffFilters, true
@@ -427,6 +537,64 @@ local function HBCA_WeakenedSoulLayout(button, g, dbLayout)
     return layout
 end
 
+local helpfulGroup="hbcahot"
+local everyoneGroup="hbcahotEveryone"
+local arrivalDonors=setmetatable({}, {__mode="k"})
+
+local function HBCA_CopyFilter(source)
+    local copy={}
+    for key,value in pairs(source or {}) do
+        if type(value)=="table" then
+            local values={}
+            for id,enabled in pairs(value) do values[id]=enabled end
+            copy[key]=values
+        else
+            copy[key]=value
+        end
+    end
+    return copy
+end
+
+local function HBCA_BuffRowPolicy(spellFilter, g, limit)
+    local own=HBCA_CopyFilter(spellFilter and spellFilter.selfSpellFilter
+        or spellFilter or {includeSpellIDs={}})
+    local everyone=HBCA_CopyFilter(spellFilter and spellFilter.everyoneSpellFilter
+        or {includeSpellIDs={}})
+    -- These are addon settings, not aura identities/counts from native widgets.
+    own.selfSpellFilter,own.everyoneSpellFilter,own.casterSignature=nil,nil,nil
+    local duration=(g.CombatAurasMaxDur or 0)>0 and g.CombatAurasMaxDur or nil
+    own.maxDuration,everyone.maxDuration=duration,duration
+    local hasOwn=own.includeSpellIDs==nil or next(own.includeSpellIDs)~=nil
+    local hasEveryone=next(everyone.includeSpellIDs or {})~=nil
+    local ownLimit,everyoneLimit=0,0
+    if hasOwn and hasEveryone then
+        -- Blizzard caps each group separately. Reserve shares of the existing
+        -- row limit rather than doubling it or reading forbidden frame counts.
+        everyoneLimit=math.ceil(limit/2)
+        ownLimit=limit-everyoneLimit
+    elseif hasEveryone then everyoneLimit=limit
+    elseif hasOwn then ownLimit=limit end
+    return own,everyone,ownLimit,everyoneLimit,hasOwn or hasEveryone
+end
+
+local function HBCA_UpdateBuffRow(row, spellFilter, g)
+    if not row or not row.hbcaBuffLimit then return false end
+    local own,everyone,ownLimit,everyoneLimit,wanted=HBCA_BuffRowPolicy(spellFilter,g,row.hbcaBuffLimit)
+    local ok,err=pcall(function()
+        -- Clear old memberships first: moving a spell between scopes must not
+        -- expose a stale broad filter or temporarily duplicate an own cast.
+        row:SetAuraGroupCandidateFilters(helpfulGroup,{includeSpellIDs={}})
+        row:SetAuraGroupCandidateFilters(everyoneGroup,{includeSpellIDs={}})
+        row:SetAuraGroupMaxFrameCount(helpfulGroup,ownLimit)
+        row:SetAuraGroupMaxFrameCount(everyoneGroup,everyoneLimit)
+        row:SetAuraGroupCandidateFilters(helpfulGroup,own)
+        row:SetAuraGroupCandidateFilters(everyoneGroup,everyone)
+    end)
+    if not ok then lastError=tostring(err); return false end
+    row.hbcaHasBuffs=wanted
+    return true
+end
+
 -- Build one container on a HealBot button. Out-of-combat only; caller gates.
 local function HBCA_BuildOne(button, side, placement, set, spellFilter)
     local g=HBCA_Defaults()
@@ -486,9 +654,26 @@ local function HBCA_BuildOne(button, side, placement, set, spellFilter)
     local initializeFrame=HBCA_MakeInit(size, placement, showNumbers)
     local ready, err=pcall(function()
         c:SetUnit(button.unit)
-        c:AddAuraGroup("hbca"..side, filter,
-            { maxFrameCount=maxN, initializeFrame=initializeFrame,
-              layout=HBCA_Layout(size, placement.spacing), candidateFilters=cf })
+        if side=="hot" and HEALBOT_FOREVER then
+            assert(type(c.SetAuraGroupCandidateFilters)=="function" and
+                type(c.SetAuraGroupMaxFrameCount)=="function","native buff filter updates unavailable")
+            local own,everyone,ownLimit,everyoneLimit,wanted=HBCA_BuffRowPolicy(spellFilter,g,maxN)
+            c:AddAuraGroup(helpfulGroup,"HELPFUL|PLAYER",
+                {maxFrameCount=ownLimit, initializeFrame=initializeFrame,
+                 layout=HBCA_Layout(size,placement.spacing),candidateFilters=own})
+            local everyonePlacement={}
+            for key,value in pairs(placement) do everyonePlacement[key]=value end
+            -- An Everyone row can show other casters; never paint a fixed Self marker.
+            everyonePlacement.markerTexture=nil
+            c:AddAuraGroup(everyoneGroup,"HELPFUL",
+                {maxFrameCount=everyoneLimit,initializeFrame=HBCA_MakeInit(size,everyonePlacement,showNumbers),
+                 layout=HBCA_Layout(size,placement.spacing),candidateFilters=everyone})
+            c.hbcaBuffLimit,c.hbcaHasBuffs=maxN,wanted
+        else
+            c:AddAuraGroup("hbca"..side, filter,
+                { maxFrameCount=maxN, initializeFrame=initializeFrame,
+                  layout=HBCA_Layout(size, placement.spacing), candidateFilters=cf })
+        end
         c:SetEnabled(true)
     end)
     if not ready then
@@ -540,6 +725,7 @@ end
 
 -- Reserve rows use the same native icon factory and filters as normal bars.
 function HealBot_Forever_SkinArrivalAuras(row, donor)
+    arrivalDonors[row]=donor
     if InCombatLockdown() then return end
     if not HBCA_Enabled() then
         for _, item in ipairs(row.arrivalAuras or {}) do item.container:Hide() end
@@ -550,8 +736,9 @@ function HealBot_Forever_SkinArrivalAuras(row, donor)
     local starts={1,9,11}
     local cx,cy=donor.gref.Bar:GetCenter()
     if not cx or not cy then return end
+    key[#key+1]="hots:"..tostring(HBCA_Defaults().CombatAurasHots)
     for set=1,3 do
-        if (not filters and set==1) or (filters and filters[set]) then
+        if HEALBOT_FOREVER or (not filters and set==1) or (filters and filters[set]) then
             local source=donor.gref.icon[starts[set]]
             local x,y=source:GetCenter()
             if x and y then
@@ -564,7 +751,6 @@ function HealBot_Forever_SkinArrivalAuras(row, donor)
                 layout.x,layout.y=x-cx+dx,y-cy+dy
                 layout.limit=hbv_Skins_GetIconVar("MAXBICONS",row.frame,set)
                 plans[#plans+1]={layout=layout,set=set,filter=filters and filters[set]}
-                key[#key+1]=tostring(filters and filters[set])
                 local fields={}
                 for field,value in pairs(layout) do fields[#fields+1]=field.."="..tostring(value) end
                 table.sort(fields)
@@ -573,20 +759,25 @@ function HealBot_Forever_SkinArrivalAuras(row, donor)
         end
     end
     key=table.concat(key,";")
-    if row.arrivalAuraKey==key then return end
+    if row.arrivalAuraKey==key then
+        for _,item in ipairs(row.arrivalAuras or {}) do
+            if HEALBOT_FOREVER then HBCA_UpdateBuffRow(item.container,filters and filters[item.set],HBCA_Defaults()) end
+        end
+        return
+    end
     row.arrivalAuraKey=key
     for _, item in ipairs(row.arrivalAuras or {}) do item.container:Hide() end
     row.arrivalAuras={}
     for _,plan in ipairs(plans) do
         local container=HBCA_BuildOne(row,"hot",plan.layout,plan.set,plan.filter)
-        if container then row.arrivalAuras[#row.arrivalAuras+1]={container=container} end
+        if container then row.arrivalAuras[#row.arrivalAuras+1]={container=container,set=plan.set} end
     end
 end
 
 function HealBot_Forever_UpdateArrivalAuras(row)
     local show=HBCA_Enabled() and UnitExists(row.unit) and UnitIsConnected(row.unit) and HealBot_Forever_BuffsEnabled()
     for _, item in ipairs(row.arrivalAuras or {}) do
-        item.container:SetShown(not not show)
+        item.container:SetShown(not not (show and item.container.hbcaHasBuffs~=false))
     end
 end
 
@@ -811,10 +1002,10 @@ local function HBCA_SetButtonShown(button, show)
     end
     local buffsEnabled=(not HealBot_Aura_BuffsEnabled or HealBot_Aura_BuffsEnabled()) and (not HEALBOT_FOREVER or HealBot_Forever_BuffsEnabled())
     local hotVisible=not not (vis and buffsEnabled and not a.buffDirty and (not HEALBOT_FOREVER or inCombat))
-    local hotShown=a.hot and HBCA_SetBuffRowShown(a.hot,hotVisible,retargeted)
+    local hotShown=a.hot and HBCA_SetBuffRowShown(a.hot,hotVisible and a.hot.hbcaHasBuffs~=false,retargeted)
     HBCA_SetLegacyBuffsShown(button, buffsEnabled and not hotShown)
     for set,row in pairs(a.extra) do
-        local rowShown=HBCA_SetBuffRowShown(row,hotVisible,retargeted)
+        local rowShown=HBCA_SetBuffRowShown(row,hotVisible and row.hbcaHasBuffs~=false,retargeted)
         HBCA_SetLegacyBuffsShown(button,buffsEnabled and not rowShown,set)
     end
     local dbShown=vis and (not HealBot_Aura_DebuffsEnabled or HealBot_Aura_DebuffsEnabled()) and (inCombat or HBCA_Defaults().CombatAurasPersistDebuffs)
@@ -841,6 +1032,24 @@ local function HBCA_DropButton(button)
     HBCA_HideButton(button)
     attached[button]=nil
     button.foreverShieldLockoutIcon=nil
+end
+
+local function HBCA_UpdateButtonBuffRows(button, rows, filters)
+    local complete=true
+    for set=1,3 do
+        local row=set==1 and rows.hot or rows.extra[set]
+        if row then
+            if not HBCA_UpdateBuffRow(row,filters and filters[set],HBCA_Defaults()) then complete=false end
+        elseif (set==1 and (rows.hotLayout.limit or 0)>0 and HBCA_Defaults().CombatAurasHots>0)
+            or (set>1 and rows.extraLayouts[set] and (rows.extraLayouts[set].limit or 0)>0) then
+            complete=false
+        end
+    end
+    if complete then rows.filters=filters end
+    -- A pending structural rebuild must not hide other usable prepared rows.
+    rows.buffDirty=false
+    if not complete then deferred[button]=true end
+    return complete
 end
 
 local function HBCA_Attach(button)
@@ -879,21 +1088,23 @@ local function HBCA_Attach(button)
     end
     local extraLayouts={}
     for set=2,3 do
-        if filters and filters[set] then
+        if HEALBOT_FOREVER or (filters and filters[set]) then
             local layout=HBCA_SkinLayout(button,"hot",set)
             layout.limit=hbv_Skins_GetIconVar("MAXBICONS",button.frame,set) or 2
             extraLayouts[set]=layout
         end
     end
     if a then
-        local same=a.filters==filters and HBCA_SameLayout(a.hotLayout,hotLayout)
+        local same=(HEALBOT_FOREVER or a.filters==filters) and HBCA_SameLayout(a.hotLayout,hotLayout)
             and HBCA_SameLayout(a.dbLayout,dbLayout)
             and (weakenedSoulLayout and HBCA_SameLayout(a.weakenedSoulLayout,weakenedSoulLayout)
                 or not weakenedSoulLayout and not a.weakenedSoulLayout)
         for set=2,3 do
-            if extraLayouts[set] and not HBCA_SameLayout(a.extraLayouts[set],extraLayouts[set]) then same=false end
+            if (extraLayouts[set]~=nil)~=(a.extraLayouts[set]~=nil)
+                or (extraLayouts[set] and not HBCA_SameLayout(a.extraLayouts[set],extraLayouts[set])) then same=false end
         end
         if same then
+            if HEALBOT_FOREVER then HBCA_UpdateButtonBuffRows(button,a,filters) end
             a.buffDirty=false
             a.dbDirty=false
             HBCA_SetButtonShown(button, inCombat or HEALBOT_FOREVER)
@@ -902,7 +1113,7 @@ local function HBCA_Attach(button)
         HBCA_DropButton(button)
     end
     local hot
-    if not filters or filters[1] then
+    if HEALBOT_FOREVER or not filters or filters[1] then
         hot=HBCA_BuildOne(button,"hot",hotLayout,1,filters and filters[1])
     end
     local db,dbAfterShield
@@ -923,7 +1134,7 @@ local function HBCA_Attach(button)
        db=db, dbAfterShield=dbAfterShield, extra={}, extraLayouts=extraLayouts,
        hotLayout=hotLayout, dbLayout=dbLayout, filters=filters, unit=button.unit}
     for set,layout in pairs(extraLayouts) do
-        a.extra[set]=HBCA_BuildOne(button,"hot",layout,set,filters[set])
+        a.extra[set]=HBCA_BuildOne(button,"hot",layout,set,filters and filters[set])
     end
     if HEALBOT_FOREVER and HealBot_Forever_GetShieldLockout then
         a.shieldLockout=HBCA_CreateShieldLockout(button)
@@ -954,6 +1165,36 @@ local function HBCA_DropAll()
     -- re-attach everything we have ever seen (builds run now or at next regen)
     for button in pairs(known) do deferred[button]=true end
     HBCA_AttachDeferred()
+    if not InCombatLockdown() then
+        for row,donor in pairs(arrivalDonors) do
+            HealBot_Forever_SkinArrivalAuras(row,donor)
+            HealBot_Forever_UpdateArrivalAuras(row)
+        end
+    end
+end
+
+local function HBCA_RefreshBuffRows()
+    local g=HBCA_Defaults()
+    if not HEALBOT_FOREVER or not g then return end
+    local filters=HBCA_ConfiguredBuffFilters(g)
+    local combat=InCombatLockdown()
+    local canUpdate=not combat or (HealBot_Config_Buffs and HealBot_Config_Buffs.BuffCustomWatchInCombat==true)
+    for button,rows in pairs(attached) do
+        if rows.filters~=filters then
+            if canUpdate then HBCA_UpdateButtonBuffRows(button,rows,filters)
+            else deferred[button]=true end
+        end
+        HBCA_SetButtonShown(button,true)
+    end
+    if canUpdate then
+        for row,donor in pairs(arrivalDonors) do
+            if not combat then HealBot_Forever_SkinArrivalAuras(row,donor) end
+            for _,item in ipairs(row.arrivalAuras or {}) do
+                if item.set then HBCA_UpdateBuffRow(item.container,filters and filters[item.set],g) end
+            end
+            HealBot_Forever_UpdateArrivalAuras(row)
+        end
+    end
 end
 
 function HealBot_Forever_SetWeakenedSoulNativeEnabled(enabled)
@@ -1019,19 +1260,7 @@ if type(hooksecurefunc)=="function" then
             pcall(HBCA_SetButtonShown, button, true)
         end)
         function HealBot_Forever_RefreshBuffExclusions()
-            local g=HBCA_Defaults()
-            if not g then return end
-            local _, changed=HBCA_ConfiguredBuffFilters(g)
-            if not changed then return end
-            if InCombatLockdown() then
-                for button, rows in pairs(attached) do
-                    rows.buffDirty=true
-                    deferred[button]=true
-                    HBCA_SetButtonShown(button, true)
-                end
-            else
-                HBCA_DropAll()
-            end
+            HBCA_RefreshBuffRows()
         end
         hooksecurefunc("HealBot_Options_EnableDisableBuffBtn_OnClick", function()
             HealBot_Aura_setCustomBuffFilterDisabled()
@@ -1050,7 +1279,7 @@ if type(hooksecurefunc)=="function" then
             for button in pairs(attached) do pcall(HBCA_Attach,button) end
         end)
         hooksecurefunc("HealBot_Aura_SetAuraCheckFlags", function()
-            for button in pairs(attached) do pcall(HBCA_SetButtonShown,button,true) end
+            HBCA_RefreshBuffRows()
         end)
         hooksecurefunc("HealBot_Options_Debuff_Reset", function()
             local _, signature=HealBot_Forever_GetDebuffTypes()
@@ -1076,16 +1305,7 @@ if type(hooksecurefunc)=="function" then
             end
         end)
         hooksecurefunc("HealBot_Aura_ConfigClassHoT", function()
-            local g=HBCA_Defaults()
-            if not g then return end
-            local _, changed=HBCA_ConfiguredBuffFilters(g)
-            if changed and HBCA_Enabled() then
-                if InCombatLockdown() then
-                    for button in pairs(known) do deferred[button]=true end
-                else
-                    HBCA_DropAll()
-                end
-            end
+            HBCA_RefreshBuffRows()
         end)
     end
     hooksecurefunc("HealBot_Action_RegisterUnitEvents", function(button)

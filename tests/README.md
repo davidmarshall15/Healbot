@@ -14,8 +14,13 @@ lua tests/target_binding.lua
 lua tests/modified_target.lua
 lua tests/rank_range.lua
 lua tests/unranked_spells.lua
+lua tests/spell_refresh.lua
 lua tests/combat_auras.lua
 lua tests/forever_buffs.lua
+lua tests/native_buff_matching.lua
+lua tests/native_buff_casters.lua
+lua tests/movement_safety.lua
+lua tests/party_startup.lua
 lua tests/native_aura_options.lua
 lua tests/reported_bugs.lua
 lua tests/player_mana.lua
@@ -50,10 +55,41 @@ output propagation and safe fallback when the native abbreviation API is absent.
 The locale mock verifies forwarding, not the client's actual German typography.
 
 The Forever buff suite loads the native aura module with Forever enabled from
-startup, so its settings hooks run. It covers Renew ranks and icon-set routing,
-skin limits (including zero), per-set duration/count settings, long-buff filtering,
-non-priest exclusion changes, deferred setup in combat and avoiding a duplicate
-Weakened Soul row when the persistent harmful-aura row already includes it.
+startup, so its settings hooks run. It covers configured Renew ranks and icon-set
+routing, skin limits (including zero), per-set duration/count styling, long-buff
+filtering, non-priest broad-mode exclusions and the shared settings setter.
+Native helpful icons stay hidden outside combat while the legacy renderer owns
+the display; existing groups are reused for custom filter changes during combat.
+Structural skin/size/duration UI changes still defer protected setup until combat
+ends.
+
+The native buff matching suite executes the actual configuration helpers with
+public settings/caches. It covers Self/Everyone scopes, ID-only versus name/rank
+matching, independent rank exclusions, all nine classes, manual ALL/zone rules,
+icon-set routing, public spell-cache candidates and deterministic signatures.
+The native caster suite loads the whole module with mock native widgets. It
+checks disjoint Self/Everyone groups, no duplicate own casts, shared odd/even icon
+limits, immediate custom enable/disable and caster changes in combat, the Also in
+combat gate, prepared empty rows, reserved arrival icon sets, zero skin limits,
+all-class behavior and matching icon/countdown/count styling. It rejects native
+aura-frame inspection, new frames/groups and container enabling during combat.
+Mixed caster groups reserve half the existing limit for Everyone (rounded up)
+and the rest for Self; unused reserved slots cannot be borrowed. At a limit of
+one, Everyone gets the single slot. My Class keeps conservative player-only
+native behavior because no exact native source-class selector is exposed.
+
+The frame suite also guards outside-combat debuff tint updates after a handoff:
+monitoring, coloring, selected dispel mode, opacity, death, range and special-unit
+changes must be applied without waiting for another aura event. The combat-aura
+suite retains native/legacy takeover tests for explicit persistent mode on other
+supported clients; it does not impose an obsolete always-native Forever icon
+policy. Hidden rows retarget before their next visible display.
+
+The movement safety suite runs protected frame drag/stop paths through combat
+transitions and prevents geometry changes until the deferred stop succeeds. The
+party startup suite checks delayed media/core readiness, missing settings, late
+startup events, load coalescing and combat deferral using the real media helpers.
+
 The native-aura options suite executes the actual UI callbacks, XML tab click and
 panel router with mock widgets, using the real shared settings setter. It checks
 UI/slash synchronization, reopening, timer modes, validation, language changes,
@@ -151,6 +187,20 @@ override, and `/hbca nums skin` to restore skin settings.
 - Leave combat with a persistent debuff and without a new aura event; verify the
   normal icon engine repopulates. Check no false rebuff alert while aura reads
   are restricted, then verify genuinely missing buffs after a readable scan.
+- Configure Renew or Rejuvenation as Everyone and have a second healer cast it;
+  verify it appears in combat. Switch back to Self and verify only your casts
+  remain. Repeat for another class and a reserved arrival row.
+- Enable/disable a custom buff during combat with Also in combat checked; verify
+  the existing icons update immediately without unrelated buffs or timer clusters.
+  Repeat with the option off and check the change after leaving combat.
+- Configure two ranks as ID only; disable one and verify the other remains
+  visible. Check name matching still includes the selected spell family.
+- Toggle debuff bar coloring, monitoring and dispellable-only mode outside combat;
+  check the tint changes immediately while names and health text stay on top.
+- Attempt a HealBot drag in combat, then end combat before releasing it; verify
+  the frame does not remain stuck to the mouse and can be moved afterward.
+- Reload with party/arrival bars enabled; verify there is no nil media error while
+  the skin and media libraries initialize.
 - Disable the XP buff globally and per instance, then enter combat; verify the
   native row honours its configured spell ID. Native filters still obey client
   restrictions; they do not restore arbitrary Lua filtering of protected auras.

@@ -8137,7 +8137,7 @@ end
 local modKey=1 -- Not Locked
 function HealBot_Action_IsFrameLocked(frame)
       --HealBot_setCall("HealBot_Action_IsFrameLocked")
-    if HEALBOT_GAME_VERSION>1 and HealBot_Data["UILOCK"] then
+    if InCombatLockdown() or (HEALBOT_GAME_VERSION>1 and HealBot_Data["UILOCK"]) then
         return true
     else
         modKey=1 -- Not Locked
@@ -8163,9 +8163,11 @@ end
 
 function HealBot_Action_LockFrame(self)
       --HealBot_setCall("HealBot_Action_LockFrame", self)
+    if InCombatLockdown() then return end
     if not HealBot_Action_IsFrameLocked(self.id) then
-        HealBot_Action_luVars["FrameMoving"]=self
-        HealBot_StartMoving(self, self.id);
+        if HealBot_StartMoving(self, self.id) then
+            HealBot_Action_luVars["FrameMoving"]=self
+        end
     elseif hbv_Skins_GetBoolean("General", "STICKYFRAME") and self.id>1 then
         if hbv_Skins_GetFrameBoolean("StickyFrames", "STUCK", self.id) and
            HealBot_Action_FrameIsVisible(hbv_Skins_GetFrameVar("StickyFrames", "STUCKTO", self.id)) then
