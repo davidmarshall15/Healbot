@@ -13746,7 +13746,8 @@ hb_lVars["SkinsMacrosComboID"]=0
 function HealBot_Options_UpdateMacrosList()
       --HealBot_setCall("HealBot_Options_UpdateMacrosList")
     local numglobal,numperchar=GetNumMacros();
-    local totalMacros=numglobal+numperchar
+    -- Character macros start after the 120 account slots when the client omits the global.
+    local accountMacroSlots=MAX_ACCOUNT_MACROS or 120
     local hbMacroName=nil
     local macroList={}
     for x,_ in pairs(HealBot_Options_NoDuplcates) do
@@ -13759,7 +13760,7 @@ function HealBot_Options_UpdateMacrosList()
             table.insert(macroList,hbMacroName)
         end
     end
-    for j=MAX_ACCOUNT_MACROS+1, numperchar+MAX_ACCOUNT_MACROS, 1 do
+    for j=accountMacroSlots+1, numperchar+accountMacroSlots, 1 do
         hbMacroName=GetMacroInfo(j)
         if hbMacroName and not HealBot_Options_NoDuplcates[hbMacroName] then
             HealBot_Options_NoDuplcates[hbMacroName]=true
@@ -29524,6 +29525,124 @@ function HealBot_Options_DebuffsGeneralTab(tab)
     end
 end
 
+local debuffIconOptionsGerman=GetLocale()=="deDE"
+local debuffIconOptions=debuffIconOptionsGerman and {
+    combat="Symbol im Kampf",
+    outOfCombat="Symbol außerhalb des Kampfes",
+    default="Standard",
+    show="Anzeigen",
+    hide="Ausblenden",
+    selectDebuff="Wähle einen persönlichen Debuff mit Zauber-ID.",
+    help="Standard verwendet die bestehende Einstellung. Die Auswahl gilt nur für das kleine Symbol.",
+    combatHelp="Bei geschützten Debuffs bestimmt WoW, welche Symbole im Kampf einzeln gefiltert werden können.",
+    native="Geschwächte Seele im Kampf (nativ)",
+    nativeHelp="Verwendet WoWs native Anzeige im Kampf für Geschwächte Seele, auch von anderen Priestern. Dabei können weitere Debuffs erscheinen.",
+} or {
+    combat="Icon in combat",
+    outOfCombat="Icon out of combat",
+    default="Default",
+    show="Show",
+    hide="Hide",
+    selectDebuff="Select a custom debuff with a spell ID.",
+    help="Default follows the existing settings. This choice affects only the small icon.",
+    combatHelp="WoW determines which protected debuff icons can be filtered individually in combat.",
+    native="Weakened Soul in combat (native)",
+    nativeHelp="Uses WoW's native combat display for Weakened Soul, including from other priests. Additional debuffs may appear.",
+}
+local debuffIconChoices={
+    {label=debuffIconOptions.default},
+    {label=debuffIconOptions.show,value=true},
+    {label=debuffIconOptions.hide,value=false},
+}
+
+local function HealBot_Options_CustomDebuffIconSpellID()
+    local selected=hb_lVars["CDebuffcustomSpellID"]
+    local category=hb_lVars["CDebuffCatID"]
+    if not selected or category<=1 then return end
+    local spellID=tonumber(selected)
+    if not spellID then
+        local _, _, _, _, _, _, resolvedID=HealBot_WoWAPI_SpellInfo(selected)
+        spellID=resolvedID
+    end
+    if not spellID or spellID<=0 then return end
+    local custom=HealBot_Globals.CustomDebuffs
+    local categories=HealBot_Globals.Custom_Debuff_Categories
+    if custom[selected] and categories[selected]==category then return spellID end
+    local name=HealBot_WoWAPI_SpellName(spellID)
+    if name and custom[name] and categories[name]==category then return spellID end
+end
+
+local function HealBot_Options_UpdateDebuffIconPreference(menu)
+    local spellID=HealBot_Options_CustomDebuffIconSpellID()
+    local canEdit=spellID and HealBot_Aura_GetDebuffIconPreference and HealBot_Aura_SetDebuffIconPreference
+    local value
+    if canEdit then
+        value=HealBot_Aura_GetDebuffIconPreference(spellID,menu==HealBot_Options_DebuffIconInCombat)
+        UIDropDownMenu_EnableDropDown(menu)
+    else
+        UIDropDownMenu_DisableDropDown(menu)
+    end
+    for _, choice in ipairs(debuffIconChoices) do
+        if choice.value==value then
+            UIDropDownMenu_SetText(menu,choice.label)
+            break
+        end
+    end
+end
+
+function HealBot_Options_DebuffIconPreference_DropDown(menu, level)
+    local spellID=HealBot_Options_CustomDebuffIconSpellID()
+    if not spellID or not HealBot_Aura_GetDebuffIconPreference or not HealBot_Aura_SetDebuffIconPreference then return end
+    local inCombat=menu==HealBot_Options_DebuffIconInCombat
+    local value=HealBot_Aura_GetDebuffIconPreference(spellID,inCombat)
+    for _, choice in ipairs(debuffIconChoices) do
+        local info=UIDropDownMenu_CreateInfo()
+        info.text=choice.label
+        info.checked=choice.value==value
+        info.func=function()
+            if spellID~=HealBot_Options_CustomDebuffIconSpellID() then return end
+            HealBot_Aura_SetDebuffIconPreference(spellID,inCombat,choice.value)
+            HealBot_Options_UpdateDebuffIconPreference(menu)
+        end
+        UIDropDownMenu_AddButton(info,level)
+    end
+end
+
+function HealBot_Options_DebuffIconPreferenceTooltip(menu, show)
+    if not show then
+        GameTooltip:Hide()
+        return
+    end
+    local inCombat=menu==HealBot_Options_DebuffIconInCombat
+    GameTooltip:SetOwner(menu,"ANCHOR_RIGHT")
+    GameTooltip:SetText(inCombat and debuffIconOptions.combat or debuffIconOptions.outOfCombat)
+    if HealBot_Options_CustomDebuffIconSpellID() then
+        GameTooltip:AddLine(debuffIconOptions.help,1,1,1,true)
+        if inCombat then GameTooltip:AddLine(debuffIconOptions.combatHelp,1,1,1,true) end
+    else
+        GameTooltip:AddLine(debuffIconOptions.selectDebuff,1,1,1,true)
+    end
+    GameTooltip:Show()
+end
+
+function HealBot_Options_WeakenedSoulNative_OnClick(self)
+    if HealBot_Forever_SetWeakenedSoulNativeEnabled then
+        HealBot_Forever_SetWeakenedSoulNativeEnabled(not not self:GetChecked())
+    end
+    self:SetChecked(HealBot_Globals.CombatAurasNativeWeakenedSoul)
+end
+
+function HealBot_Options_WeakenedSoulNativeTooltip(self, show)
+    if not show then
+        GameTooltip:Hide()
+        return
+    end
+    GameTooltip:SetOwner(self,"ANCHOR_RIGHT")
+    GameTooltip:SetText(debuffIconOptions.native)
+    GameTooltip:AddLine(debuffIconOptions.nativeHelp,1,1,1,true)
+    GameTooltip:Show()
+end
+
 function HealBot_Options_DebuffsCustomTab(tab)
       --HealBot_setCall("HealBot_Options_DebuffsCustomTab")
     if not HealBot_Options_TabRunOnce[tab] then
@@ -29540,6 +29659,11 @@ function HealBot_Options_DebuffsCustomTab(tab)
         HealBot_Options_SetLabel("HealBot_Options_CDCIconGlowTxtC",HEALBOT_SKIN_ICONGLOW)
         HealBot_Options_SetLabel("HealBot_Options_CDCIconSetTxt", HEALBOT_SKIN_ICONSET)
         HealBot_Options_SetLabel("HealBot_Options_CDCIconSetTxtC",HEALBOT_SKIN_ICONSET)
+        HealBot_Options_DebuffIconInCombat.initialize=HealBot_Options_DebuffIconPreference_DropDown
+        HealBot_Options_DebuffIconOutOfCombat.initialize=HealBot_Options_DebuffIconPreference_DropDown
+        HealBot_Options_SetLabel("HealBot_Options_DebuffIconInCombatLabel",debuffIconOptions.combat)
+        HealBot_Options_SetLabel("HealBot_Options_DebuffIconOutOfCombatLabel",debuffIconOptions.outOfCombat)
+        HealBot_Options_SetText(HealBot_Options_WeakenedSoulNative,debuffIconOptions.native)
         HealBot_Options_CDCAllDisease:SetChecked(HealBot_Config_Cures.HealBot_Custom_Debuffs_All[HEALBOT_DISEASE_en])
         HealBot_Options_SetText(HealBot_Options_CDCAllDisease,HEALBOT_OPTIONS_CUSTOM_ALLDISEASE)
         HealBot_Options_CDCAllMagic:SetChecked(HealBot_Config_Cures.HealBot_Custom_Debuffs_All[HEALBOT_MAGIC_en])
@@ -29618,6 +29742,14 @@ function HealBot_Options_DebuffsCustomTab(tab)
     UIDropDownMenu_SetText(HealBot_Options_CDCIDMethod, HealBot_Options_Class_HoTctlIDMethod_List[(HealBot_Globals.CustomDebuffIDMethod[hb_lVars["CDebuffcustomSpellID"]] or 2)])
     HealBot_Options_SetEnableDisableCDBtn()
     HealBot_Options_CDebuffTag:SetText(HealBot_Globals.CDCTag[hb_lVars["CDebuffcustomSpellID"]] or "")
+    HealBot_Options_UpdateDebuffIconPreference(HealBot_Options_DebuffIconInCombat)
+    HealBot_Options_UpdateDebuffIconPreference(HealBot_Options_DebuffIconOutOfCombat)
+    if HEALBOT_FOREVER and HealBot_Forever_SetWeakenedSoulNativeEnabled then
+        HealBot_Options_WeakenedSoulNative:SetChecked(HealBot_Globals.CombatAurasNativeWeakenedSoul)
+        HealBot_Options_WeakenedSoulNative:Show()
+    else
+        HealBot_Options_WeakenedSoulNative:Hide()
+    end
     HealBot_SetCDCBarColours()
 end
 

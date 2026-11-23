@@ -261,35 +261,7 @@ end
 
 function HealBot_InitForeverAuraSettings()
     if not HEALBOT_FOREVER then return end
-    local priest=HealBot_Globals.WatchHoT.PRIE or {}
-    HealBot_Globals.WatchHoT.PRIE=priest
-    if not HealBot_Globals.ForeverAuraSettingsV13 then
-        local id=1229451 -- Boosted Rest
-        local name=HealBot_WoWAPI_SpellName(id)
-        local debuffs=HealBot_Globals.CustomDebuffs
-        if debuffs[id]==nil and (not name or debuffs[name]==nil) then
-            debuffs[id]=HealBot_GlobalsDefaults.CustomDebuffs[id]
-            HealBot_Globals.Custom_Debuff_Categories[id]=HealBot_GlobalsDefaults.Custom_Debuff_Categories[id]
-            HealBot_Globals.CustomDebuffsShowBarCol[id]=HealBot_GlobalsDefaults.CustomDebuffsShowBarCol[id]
-        end
-        local fadeName=HealBot_WoWAPI_SpellName(586)
-        if priest[586]==nil and (not fadeName or priest[fadeName]==nil) then
-            priest[586]=HealBot_GlobalsDefaults.WatchHoT.PRIE[586]
-        end
-        HealBot_Globals.ForeverAuraSettingsV13=true
-    end
-    if not HealBot_Globals.ForeverAuraSettingsV27 then
-        local abolishName=HealBot_WoWAPI_SpellName(552)
-        if priest[552]==nil and (not abolishName or priest[abolishName]==nil) then
-            priest[552]=HealBot_GlobalsDefaults.WatchHoT.PRIE[552]
-        end
-        HealBot_Globals.ForeverAuraSettingsV27=true
-    end
     if HealBot_Globals.ForeverAuraSettingsV14 then return end
-    local fearWardName=HealBot_WoWAPI_SpellName(6346)
-    if priest[6346]==nil and (not fearWardName or priest[fearWardName]==nil) then
-        priest[6346]=HealBot_GlobalsDefaults.WatchHoT.PRIE[6346]
-    end
     local sets=HealBot_Globals.CustomBuffsIconSet
     for base,ranks in pairs(foreverBuffIconRanks) do
         local selected=sets[base]
@@ -721,15 +693,6 @@ function HealBot_Data_InitVars()
             },
         },
     };
-    if HEALBOT_FOREVER then
-        local boostedRest=1229451
-        HealBot_GlobalsDefaults.CustomDebuffs[boostedRest]=10
-        HealBot_GlobalsDefaults.Custom_Debuff_Categories[boostedRest]=2
-        HealBot_GlobalsDefaults.CustomDebuffsShowBarCol[boostedRest]=3
-        for _, id in ipairs({1243,588,14751,14752,976,586,6346,552}) do
-            HealBot_GlobalsDefaults.WatchHoT.PRIE[id]=1
-        end
-    end
     if HEALBOT_GAME_VERSION<3 then
         HealBot_GlobalsDefaults.TalentInspect=false
     end

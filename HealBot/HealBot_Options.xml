@@ -76,6 +76,22 @@
 			</Layer>
 		</Layers>
     </CheckButton>
+    <Frame name="HealBot_DebuffIconPreferenceTemplate" virtual="true" inherits="UIDropDownMenuTemplate" enableMouse="true">
+      <Layers>
+        <Layer level="BACKGROUND">
+          <FontString name="$parentLabel" inherits="GameFontNormal">
+            <Anchors>
+              <Anchor point="RIGHT" relativePoint="LEFT" x="7" y="3"/>
+            </Anchors>
+          </FontString>
+        </Layer>
+      </Layers>
+      <Scripts>
+        <OnLoad>HealBot_Options_UIDropDownMenu_OnLoad(self, 100)</OnLoad>
+        <OnEnter>HealBot_Options_DebuffIconPreferenceTooltip(self, true)</OnEnter>
+        <OnLeave>HealBot_Options_DebuffIconPreferenceTooltip(self, false)</OnLeave>
+      </Scripts>
+    </Frame>
     <Slider name="HealBot_Options_SliderTemplate" inherits="OptionsSliderTemplate" virtual="true">
         <Size>
           <AbsDimension x="240" y="16" />
@@ -34243,7 +34259,7 @@
                     <Anchors>
                       <Anchor point="TOPLEFT" relativeTo="HealBot_Options_CDebuffTxt1" relativePoint="BOTTOMLEFT">
                         <Offset>
-                          <AbsDimension x="-35" y="-85"/>
+                          <AbsDimension x="-35" y="-72"/>
                         </Offset>
                       </Anchor>
                     </Anchors>
@@ -34446,6 +34462,26 @@
                       <OnLeave>HealBot_Options_Show_Help("PRESETCOLS",false)</OnLeave>
                     </Scripts>
                   </Button>
+                  <Frame name="HealBot_Options_DebuffIconInCombat" inherits="HealBot_DebuffIconPreferenceTemplate">
+                    <Anchors>
+                      <Anchor point="TOPLEFT" x="132" y="-235"/>
+                    </Anchors>
+                  </Frame>
+                  <Frame name="HealBot_Options_DebuffIconOutOfCombat" inherits="HealBot_DebuffIconPreferenceTemplate">
+                    <Anchors>
+                      <Anchor point="TOPLEFT" x="425" y="-235"/>
+                    </Anchors>
+                  </Frame>
+                  <CheckButton name="HealBot_Options_WeakenedSoulNative" inherits="HealBotUIPanelCheckButton" hidden="true">
+                    <Anchors>
+                      <Anchor point="TOPRIGHT" x="-262" y="-59"/>
+                    </Anchors>
+                    <Scripts>
+                      <OnClick>HealBot_Options_WeakenedSoulNative_OnClick(self)</OnClick>
+                      <OnEnter>HealBot_Options_WeakenedSoulNativeTooltip(self, true)</OnEnter>
+                      <OnLeave>HealBot_Options_WeakenedSoulNativeTooltip(self, false)</OnLeave>
+                    </Scripts>
+                  </CheckButton>
                   <Frame name="HealBot_Options_DebuffSort" inherits="UIDropDownMenuTemplate">
                     <Layers>
                       <Layer level="BACKGROUND">

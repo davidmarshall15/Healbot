@@ -3016,7 +3016,7 @@ function HealBot_Panel_petHeals(preCombat)
         for j=1,nraid do
             vPetUnit="raidpet"..j;
             vPetPlayerUnit="raid"..j;
-            if UnitExists(vPetUnit) and hbPanel_dataPetUnits[vPetUnit] and not HealBot_UnitUsingVehicle(vPetPlayerUnit) then
+            if UnitExists(vPetPlayerUnit) and UnitExists(vPetUnit) and hbPanel_dataPetUnits[vPetUnit] and not HealBot_UnitUsingVehicle(vPetPlayerUnit) then
                 HealBot_Panel_addUnit(vPetUnit, hbv_GetUnitType(HEALBOT_PET), hbPanel_dataPetUnits[vPetUnit], false)
             elseif preCombat and hbv_Skins_GetBoolean("Healing", "MYPETINCOMBAT") and UnitIsUnit(vPetPlayerUnit, "player") then
                 HealBot_Panel_addUnit(vPetUnit, hbv_GetUnitType(HEALBOT_PET), vPetUnit, false)
@@ -3048,7 +3048,7 @@ function HealBot_Panel_petHeals(preCombat)
         for j=1,4 do
             vPetUnit="partypet"..j;
             vPetPlayerUnit="party"..j;
-            if UnitExists(vPetUnit) and hbPanel_dataPetUnits[vPetUnit] and not HealBot_UnitUsingVehicle(vPetPlayerUnit) then
+            if UnitExists(vPetPlayerUnit) and UnitExists(vPetUnit) and hbPanel_dataPetUnits[vPetUnit] and not HealBot_UnitUsingVehicle(vPetPlayerUnit) then
                 HealBot_Panel_addUnit(vPetUnit, hbv_GetUnitType(HEALBOT_PET), hbPanel_dataPetUnits[vPetUnit], false)
             end
         end

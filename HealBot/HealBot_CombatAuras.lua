@@ -24,6 +24,7 @@
 --   * Filter change = rebuild; unit change = SetUnit (pcall, hide on failure).
 --
 -- Slash: /hbca  (on | off | size N | hots N | debuffs N | nums | status)
+-- Forever test mode: /hbca ws native|off
 -- ============================================================
 
 local pcall, type, pairs, ipairs = pcall, type, pairs, ipairs
@@ -38,8 +39,11 @@ local known={}               -- every button ever handed to us; survives DropAll
 local inCombat=InCombatLockdown() or false
 
 -- Buff aura spell IDs, including lower ranks and triggered auras.
-local priestBuffIDs={}
+local knownBuffIDs={}
 for _, id in ipairs({
+    408514,16177,29206, -- Earth Shield, Ancestral Fortitude, Healing Way
+    1044,6940,20216,425600, -- Freedom, Sacrifice, Divine Favor, Horn of Lordaeron
+    408120,409824, -- Wild Growth and Lifebloom
     139,6074,6075,6076,6077,6078,10927,10928,10929,25315,7001, -- Renew and Lightwell Renew
     1243,1244,1245,2791,10937,10938,21562,21564,25389,25392, -- Fortitude
     17,592,600,3747,6065,6066,10898,10899,10900,10901, -- Power Word: Shield
@@ -56,70 +60,73 @@ for _, id in ipairs({
     1277462,1277634,1277638,1277639,1277640, -- Contingency Plan ward
     1277463,1277464,1277465,1277467,1277466, -- Contingency Plan absorb
     1277456,1277457,1277458,1277459,1277460, -- Contingency Plan HoT
-}) do priestBuffIDs[id]=true end
+}) do knownBuffIDs[id]=true end
 
 -- Route rank and group variants with their corresponding entry in Custom Buffs.
 local buffFamily={}
 for base, ranks in pairs({
+    [1310911]={1311590,1311595,1310909,1311593,1311597}, -- Light's Vigil and its friendly aura
+    [408521]={1239242,1239243}, -- Riptide
+    [19740]={19834,19835,19836,19837,19838,25291,25782,25916}, -- Might
+    [19742]={19850,19852,19853,19854,25290,25894,25918}, -- Wisdom
+    [19977]={19978,19979,25890}, -- Light
+    [20217]={25898}, -- Kings
+    [20911]={20912,20913,20914,25899}, -- Sanctuary
+    [1022]={5599,10278}, -- Protection
+    [774]={1058,1430,2090,2091,3627,8910,9839,9840,9841,25299}, -- Rejuvenation
+    [8936]={8938,8939,8940,8941,9750,9856,9857,9858}, -- Regrowth
     [1243]={1244,1245,2791,10937,10938,21562,21564,25389,25392},
     [588]={7128,602,1006,10951,10952},
     [139]={6074,6075,6076,6077,6078,10927,10928,10929,25315},
     [17]={592,600,3747,6065,6066,10898,10899,10900,10901},
 }) do
-    for _, id in ipairs(ranks) do buffFamily[id]=base end
+    knownBuffIDs[base]=true
+    for _, id in ipairs(ranks) do
+        buffFamily[id]=base
+        knownBuffIDs[id]=true
+    end
 end
 
 local buffStart={1,9,11}
 local buffEnd={8,10,12}
+local debuffStart={51,57,59}
 local buffFilters, buffSignature
-local function HBCA_PriestFilters(g)
+local function HBCA_ConfiguredBuffFilters(g)
     if not HEALBOT_FOREVER then return end
-    local _, class=UnitClass("player")
-    if class~="PRIEST" then return end
     local sets=g.CustomBuffsIconSet or {}
+    local candidates={}
+    for id in pairs(knownBuffIDs) do candidates[id]=true end
+    for _, spells in pairs(g.WatchHoT or {}) do
+        for spell in pairs(spells) do
+            local id=type(spell)=="number" and spell or HealBot_WoWAPI_SpellId(spell)
+            if type(id)=="number" and id>0 then candidates[id]=true end
+        end
+    end
     local include={{},{},{}}
-    local moved, signature={},{}
-    local excluded={}
-    for id in pairs(priestBuffIDs) do
-        local set=sets[HealBot_BuffIconSetKey(id)] or sets[buffFamily[id]] or 1
-        if set~=2 and set~=3 then set=1 end
-        include[set][id]=true
-        if set>1 then
-            moved[id]=true
+    local signature={}
+    for id in pairs(candidates) do
+        local name=HealBot_WoWAPI_SpellName(id)
+        local base=buffFamily[id] or HealBot_BuffIconSetKey(id)
+        local caster=HealBot_Aura_CustomBuffCaster(id,name)
+        if not caster and base~=id then
+            caster=HealBot_Aura_CustomBuffCaster(base,HealBot_WoWAPI_SpellName(base))
+        end
+        if caster and not HealBot_Aura_CustomBuffDisabled(id,name)
+            and not HealBot_Aura_CustomBuffDisabled(base,HealBot_WoWAPI_SpellName(base)) then
+            local set=sets[HealBot_BuffIconSetKey(id)] or sets[base] or sets[name] or 1
+            if set~=2 and set~=3 then set=1 end
+            include[set][id]=true
             signature[#signature+1]=id..":"..set
         end
     end
-    -- Share the legacy renderer's ID/name and zone exclusion rules.
-    local candidates={}
-    for id in pairs(priestBuffIDs) do candidates[id]=true end
-    for id in pairs(g.IgnoreCustomBuff or {}) do
-        if type(id)=="number" then candidates[id]=true end
-    end
-    for id in pairs(candidates) do
-        if HealBot_Aura_CustomBuffDisabled(id, HealBot_WoWAPI_SpellName(id)) then
-            excluded[id]=true
-            signature[#signature+1]="disabled:"..id
-        end
-    end
     table.sort(signature)
-    local key=tostring(g.CombatAurasPriestOnly~=false)..":"..table.concat(signature,",")
+    local key=table.concat(signature,",")
     if key==buffSignature then return buffFilters, false end
     buffSignature=key
     buffFilters={}
-    if g.CombatAurasPriestOnly~=false then
-        buffFilters[1]={includeSpellIDs=include[1]}
-    elseif next(moved) then
-        buffFilters[1]={excludeSpellIDs=moved}
-    end
-    for set=2,3 do
-        if next(include[set]) then buffFilters[set]={includeSpellIDs=include[set]} end
-    end
     for set=1,3 do
-        buffFilters[set]=buffFilters[set] or (set==1 and {} or nil)
-        if buffFilters[set] then
-            local omit=buffFilters[set].excludeSpellIDs or {}
-            for id in pairs(excluded) do omit[id]=true end
-            if next(omit) then buffFilters[set].excludeSpellIDs=omit end
+        if next(include[set]) then
+            buffFilters[set]={includeSpellIDs=include[set]}
         end
     end
     return buffFilters, true
@@ -132,25 +139,11 @@ local function HBCA_Defaults()
     if HealBot_Globals.CombatAurasMatchSkinSize==nil then HealBot_Globals.CombatAurasMatchSkinSize=true end
     if HealBot_Globals.CombatAurasHots==nil     then HealBot_Globals.CombatAurasHots=4 end
     if HealBot_Globals.CombatAurasDebuffs==nil  then HealBot_Globals.CombatAurasDebuffs=3 end
-    -- Enable countdowns once for existing Forever profiles as well as new ones.
-    -- Later changes made with /hbca nums remain saved.
-    if HEALBOT_FOREVER and not HealBot_Globals.CombatAurasNumsMigrated then
-        HealBot_Globals.CombatAurasNums=true
-        HealBot_Globals.CombatAurasNumsMigrated=true
-    elseif HealBot_Globals.CombatAurasNums==nil then
+    if HealBot_Globals.CombatAurasNums==nil then
         HealBot_Globals.CombatAurasNums=not not HEALBOT_FOREVER
     end
-    -- Forever includes long buffs such as Fortitude by default.
-    -- Migrate the old default once so later /hbca maxdur changes are kept.
-    local defaultMaxDur=HEALBOT_FOREVER and 0 or 120
-    if HEALBOT_FOREVER and not HealBot_Globals.CombatAurasDurationMigrated then
-        if HealBot_Globals.CombatAurasMaxDur==120 then
-            HealBot_Globals.CombatAurasMaxDur=defaultMaxDur
-        end
-        HealBot_Globals.CombatAurasDurationMigrated=true
-    end
     if HealBot_Globals.CombatAurasMaxDur==nil then
-        HealBot_Globals.CombatAurasMaxDur=defaultMaxDur
+        HealBot_Globals.CombatAurasMaxDur=HEALBOT_FOREVER and 0 or 120
     end
     return HealBot_Globals
 end
@@ -158,6 +151,47 @@ end
 local function HBCA_Enabled()
     local g=HBCA_Defaults()
     return g and g.CombatAurasOn and HEALBOT_MIDNIGHT
+end
+
+local weakenedSoulSpellID=6788
+local weakenedSoulCandidates={
+    excludeDispelTypes={Magic=true, Curse=true, Disease=true, Poison=true, Bleed=true, Enrage=true},
+    maxDuration=15,
+    isBossOrRoleAura=false,
+    isFromPlayerOrPlayerPet=true,
+}
+
+local function HBCA_WeakenedSoulMode(g)
+    if not HEALBOT_FOREVER or not g.CombatAurasNativeWeakenedSoul then return false end
+    local neverSecret=Enum and Enum.SecrecyLevel and Enum.SecrecyLevel.NeverSecret
+    if neverSecret~=nil and C_Secrets and C_Secrets.GetSpellAuraSecrecy then
+        local ok, secrecy=pcall(C_Secrets.GetSpellAuraSecrecy,weakenedSoulSpellID)
+        if ok and not HealBot_issecretvalue(secrecy) and secrecy==neverSecret then return "exact" end
+    end
+    return "properties"
+end
+
+local function HBCA_WeakenedSoulWanted()
+    local g=HBCA_Defaults()
+    if not g or not g.CombatAurasNativeWeakenedSoul then return false end
+    local choice
+    if type(HealBot_Aura_GetDebuffIconPreference)=="function" then
+        choice=HealBot_Aura_GetDebuffIconPreference(weakenedSoulSpellID,true)
+    end
+    return choice==true or (choice~=false and HealBot_Forever_WatchesWeakenedSoul())
+end
+
+local function HBCA_DebuffExclusions()
+    local excluded={ [weakenedSoulSpellID]=true }
+    if type(HealBot_Aura_GetHiddenDebuffIcons)=="function" then
+        for spellID, hidden in pairs(HealBot_Aura_GetHiddenDebuffIcons(true) or {}) do
+            if type(spellID)=="number" and hidden then excluded[spellID]=true end
+        end
+    end
+    local ids={}
+    for spellID in pairs(excluded) do ids[#ids+1]=spellID end
+    table.sort(ids)
+    return excluded, table.concat(ids,",")
 end
 
 -- One-time capability probe. Must never run in combat: probing creates a live
@@ -169,6 +203,18 @@ local function HBCA_Probe()
     supported=(ok and f and type(f.AddAuraGroup)=="function") or false
     if ok and f then f:Hide() end
     return supported
+end
+
+local function HBCA_StyleAuraText(text, icon, size, placement, isCount)
+    local point=isCount and "TOPLEFT" or "BOTTOMRIGHT"
+    local fontLimit=math.max(1,math.floor(size*(isCount and 0.45 or 0.40)))
+    local fontSize=math.min(placement.fontSize or 9,fontLimit)
+    text:ClearAllPoints()
+    text:SetPoint(point,icon,point,0,0)
+    text:SetWidth(size)
+    text:SetJustifyH(isCount and "LEFT" or "RIGHT")
+    text:SetWordWrap(false)
+    HealBot_Media_UpdateFont(text,placement.font,fontSize,placement.fontOutline,"Combat aura text")
 end
 
 -- Style one Blizzard-created button: click-through (clicks must reach the heal
@@ -216,11 +262,10 @@ local function HBCA_MakeInit(size, placement, showNumbers)
                 local cd=btn.hbcaCD
                 local countdown=cd and cd.GetCountdownFontString and cd:GetCountdownFontString()
                 if countdown then
-                    HealBot_Media_UpdateFont(countdown,placement.font,placement.fontSize,placement.fontOutline,"Aura duration")
+                    pcall(HBCA_StyleAuraText,countdown,btn,size,placement,false)
                 elseif btn.SetDurationText and not btn.hbcaDuration then
                     local duration=btn:CreateFontString(nil,"OVERLAY","GameFontNormal")
-                    duration:SetPoint("CENTER",btn,"CENTER")
-                    HealBot_Media_UpdateFont(duration,placement.font,placement.fontSize,placement.fontOutline,"Aura duration")
+                    HBCA_StyleAuraText(duration,btn,size,placement,false)
                     local bound=pcall(btn.SetDurationText,btn,duration,{})
                     if bound then
                         btn.hbcaDuration=duration
@@ -230,8 +275,7 @@ local function HBCA_MakeInit(size, placement, showNumbers)
             end
             if placement.font and placement.showCount and btn.SetApplicationCount and not btn.hbcaCount then
                 local count=btn:CreateFontString(nil,"OVERLAY","GameFontNormal")
-                count:SetPoint("BOTTOMRIGHT",btn,"BOTTOMRIGHT",0,0)
-                HealBot_Media_UpdateFont(count,placement.font,placement.fontSize,placement.fontOutline,"Aura count")
+                HBCA_StyleAuraText(count,btn,size,placement,true)
                 btn:SetApplicationCount(count,{})
                 btn.hbcaCount=count
             end
@@ -255,7 +299,7 @@ local function HBCA_SkinLayout(button, side, set)
     local point=hot and "BOTTOMRIGHT" or "BOTTOMLEFT"
     local layout={point=point, relative=button, relativePoint=point,
                   x=hot and -1 or 1, y=1, spacing=1, double=false, zoom=0.08}
-    local icon=button.gref and button.gref.icon and button.gref.icon[hot and buffStart[set] or 51]
+    local icon=button.gref and button.gref.icon and button.gref.icon[hot and buffStart[set] or debuffStart[set]]
     local g=HBCA_Defaults()
     if icon and icon.GetPoint then
         local p, relative, rp, x, y=icon:GetPoint(1)
@@ -310,9 +354,50 @@ end
 local function HBCA_SameLayout(a, b)
     if not a or a.size~=b.size or a.markerTexture~=b.markerTexture then return false end
     for key, value in pairs(b) do
-        if key~="dispelTypes" and a[key]~=value then return false end
+        if key~="dispelTypes" and key~="excludedSpellIDs" and a[key]~=value then return false end
     end
     return true
+end
+
+local function HBCA_WeakenedSoulLayout(button, g, dbLayout)
+    local mode=HBCA_WeakenedSoulMode(g)
+    if not mode or g.CombatAurasDebuffs<1 then return end
+
+    local sets=g.CustomDebuffsIconSet or {}
+    local name=HealBot_WoWAPI_SpellName(weakenedSoulSpellID)
+    if HealBot_issecretvalue(name) then name=nil end
+    local set=sets[weakenedSoulSpellID] or sets[name]
+    if set~=2 and set~=3 then set=1 end
+    local limit=hbv_Skins_GetIconVar("MAXDICONS",button.frame,set) or 0
+    if limit<1 then return end
+
+    local layout=HBCA_SkinLayout(button,"db",set)
+    layout.weakenedSoulMode=mode
+    layout.iconSet=set
+    local sharesMain=set==1 or (layout.point==dbLayout.point and layout.relative==dbLayout.relative
+        and layout.relativePoint==dbLayout.relativePoint and layout.x==dbLayout.x and layout.y==dbLayout.y)
+    local rowLayout, rowSet, occupied=layout,set,0
+    if sharesMain then
+        rowLayout,rowSet=dbLayout,1
+        occupied=hbv_Skins_GetIconVar("MAXDICONS",button.frame,1) or 0
+        if dbLayout.dispelSignature~="" then occupied=math.max(occupied,g.CombatAurasDebuffs) end
+    else
+        for spellID, assigned in pairs(sets) do
+            if assigned==set and spellID~=weakenedSoulSpellID and spellID~=name then
+                occupied=limit
+                break
+            end
+        end
+    end
+    if occupied>0 then
+        -- Leave room for regular icons along the selected row's horizontal growth.
+        local icon=button.gref and button.gref.icon and button.gref.icon[debuffStart[rowSet]]
+        local width=math.max(rowLayout.size or g.CombatAurasSize,icon and icon:GetWidth() or 0)
+        local columns=math.ceil(occupied/(rowLayout.double and 2 or 1))
+        local direction=rowLayout.point:find("RIGHT",1,true) and -1 or 1
+        layout.x=layout.x+direction*columns*(width+rowLayout.spacing)
+    end
+    return layout
 end
 
 -- Build one container on a HealBot button. Out-of-combat only; caller gates.
@@ -322,9 +407,7 @@ local function HBCA_BuildOne(button, side, placement, set, spellFilter)
     local size=placement.size or g.CombatAurasSize or 12
     local filter=(side=="hot") and "HELPFUL|PLAYER" or "HARMFUL"
     local maxN=(side=="hot") and (g.CombatAurasHots or 4) or (g.CombatAurasDebuffs or 3)
-    if side=="weakenedSoul" then
-        maxN=1
-    elseif placement.limit~=nil then
+    if placement.limit~=nil then
         maxN=placement.limit
     end
     if maxN<1 then return nil end
@@ -370,10 +453,11 @@ local function HBCA_BuildOne(button, side, placement, set, spellFilter)
         cf.excludeSpellIDs=spellFilter.excludeSpellIDs
     end
     local showNumbers=g.CombatAurasNums and placement.showDuration~=false
+    local initializeFrame=HBCA_MakeInit(size, placement, showNumbers)
     local ready, err=pcall(function()
         c:SetUnit(button.unit)
         c:AddAuraGroup("hbca"..side, filter,
-            { maxFrameCount=maxN, initializeFrame=HBCA_MakeInit(size, placement, showNumbers),
+            { maxFrameCount=maxN, initializeFrame=initializeFrame,
               layout=HBCA_Layout(size, placement.spacing), candidateFilters=cf })
         c:SetEnabled(true)
     end)
@@ -385,6 +469,45 @@ local function HBCA_BuildOne(button, side, placement, set, spellFilter)
     return c
 end
 
+local function HBCA_BuildWeakenedSoulSlot(button, layout)
+    local g=HBCA_Defaults()
+    local size=layout.size or g.CombatAurasSize
+    local initialize=HBCA_MakeInit(size,layout,g.CombatAurasNums and layout.showDuration~=false)
+    local container
+    local ok, err=pcall(function()
+        container=CreateFrame("AuraContainer",nil,button,"CustomAuraContainerTemplate")
+        container:Hide()
+        container:SetSize(size,size)
+        container:SetPoint(layout.point,layout.relative,layout.relativePoint,
+            layout.x,layout.y)
+        container:SetFrameLevel((button:GetFrameLevel() or 1)+25)
+        if container.SetMouseClickEnabled then container:SetMouseClickEnabled(false) end
+        if container.SetMouseMotionEnabled then container:SetMouseMotionEnabled(false) end
+        container:SetUnit(button.unit)
+        -- The native slot draws the matched aura's own icon and remaining time.
+        -- Only NeverSecret harmful auras support identity filters on allies.
+        local candidates=weakenedSoulCandidates
+        if layout.weakenedSoulMode=="exact" then
+            candidates={includeSpellIDs={ [weakenedSoulSpellID]=true }}
+        end
+        container:AddAuraSlot("hbcaweakenedSoul","HARMFUL",{
+            candidateFilters=candidates,
+            initializeFrame=function(auraButton)
+                auraButton:ClearAllPoints()
+                auraButton:SetPoint("CENTER",container,"CENTER")
+                initialize(auraButton)
+            end,
+        })
+        container:SetEnabled(true)
+    end)
+    if not ok then
+        if container then pcall(container.Hide,container) end
+        lastError=tostring(err)
+        return nil
+    end
+    return container
+end
+
 -- Reserve rows use the same native icon factory and filters as normal bars.
 function HealBot_Forever_SkinArrivalAuras(row, donor)
     if InCombatLockdown() then return end
@@ -393,12 +516,12 @@ function HealBot_Forever_SkinArrivalAuras(row, donor)
         return
     end
     local plans,key={},{}
-    local filters=HBCA_PriestFilters(HBCA_Defaults())
+    local filters=HBCA_ConfiguredBuffFilters(HBCA_Defaults())
     local starts={1,9,11}
     local cx,cy=donor.gref.Bar:GetCenter()
     if not cx or not cy then return end
     for set=1,3 do
-        if set==1 or (filters and filters[set]) then
+        if (not filters and set==1) or (filters and filters[set]) then
             local source=donor.gref.icon[starts[set]]
             local x,y=source:GetCenter()
             if x and y then
@@ -454,37 +577,174 @@ local function HBCA_SetLegacyBuffsShown(button, shown, set)
     end
 end
 
+-- Both anchors are configured out of combat. Only visibility changes in combat.
+local function HBCA_ShowDebuffRow(a, reserve)
+    local row
+    if a.dbShown then row=(reserve and a.dbAfterShield) or a.db end
+    if row==a.visibleDebuffRow then return end
+    if a.visibleDebuffRow then a.visibleDebuffRow:Hide() end
+    a.visibleDebuffRow=row
+    if row then
+        row:Show()
+        if row.UpdateAllAuras then row:UpdateAllAuras() end
+    end
+end
+
+local function HBCA_SetNativeSlotShown(button,a,show)
+    local row=a.weakenedSoul
+    if row then
+        show=not not show
+        local ok,err=pcall(function()
+            local refresh=not button.hbcaNativeDebuffs
+            if show and a.weakenedSoulUnit~=button.unit then
+                row:SetUnit(button.unit)
+                a.weakenedSoulUnit=button.unit
+                refresh=true
+            end
+            if refresh or not show then row:SetShown(show) end
+            if show and refresh and row.UpdateAllAuras then row:UpdateAllAuras() end
+        end)
+        if not ok then
+            lastError=tostring(err)
+            pcall(row.Hide,row)
+        end
+        show=ok and show
+    else
+        show=false
+    end
+    if (button.hbcaNativeDebuffs or false)~=show then
+        button.hbcaNativeDebuffs=show
+        if button.aura and button.aura.debuff then
+            button.aura.debuff.update=true
+            HealBot_Timers_Set("AURA","CheckDebuffs")
+        end
+    end
+    return show
+end
+
+local function HBCA_RefreshShieldLockout(button)
+    local a=attached[button]
+    local icon=a and a.shieldLockout
+    if not a then return end
+    if HBCA_SetNativeSlotShown(button,a,a.shieldLockoutVisible and a.unit==button.unit
+            and InCombatLockdown() and HBCA_WeakenedSoulWanted()) then
+        HBCA_ShowDebuffRow(a,false)
+        if icon then icon:Hide() end
+        return
+    end
+    if not icon then return end
+    local start,duration
+    if a.shieldLockoutVisible and a.unit==button.unit and InCombatLockdown()
+        and HealBot_Aura_GetDebuffIconPreference(6788,true)~=false then
+        start,duration=HealBot_Forever_GetShieldLockout(button)
+    end
+    local set=start and HealBot_Aura_GetTrackedDebuffIconSet(button,6788)
+    local slots=set and hbv_Skins_GetIconVar("MAXDICONS",button.frame,set)
+    if not slots or slots<1 then
+        HBCA_ShowDebuffRow(a,false)
+        icon:Hide()
+        return
+    end
+    HBCA_ShowDebuffRow(a,set==1)
+    local debuffs=button.icon and button.icon.debuff
+    if set==1 and a.dbAfterShield then
+        slots=0
+    elseif set==1 and a.db then
+        slots=HBCA_Defaults().CombatAurasDebuffs or 3
+    else
+        slots=debuffs and debuffs.count and debuffs.count[set] or 0
+    end
+    local layout=HBCA_SkinLayout(button,"db",set)
+    layout.slots=slots
+    local g=HBCA_Defaults()
+    layout.showDuration=g.CombatAurasNums and layout.showDuration
+    if not HBCA_SameLayout(icon.layout,layout) then
+        local size=layout.size or g.CombatAurasSize or 12
+        local stride=size+layout.spacing
+        local xDirection=layout.point:find("RIGHT",1,true) and -1 or 1
+        local yDirection=layout.point:find("BOTTOM",1,true) and 1 or -1
+        local column=layout.double and math.floor(slots/2) or slots
+        local line=layout.double and slots%2 or 0
+        icon:SetSize(size,size)
+        icon:ClearAllPoints()
+        icon:SetPoint(layout.point,layout.relative,layout.relativePoint,
+                      layout.x+column*stride*xDirection,layout.y+line*stride*yDirection)
+        icon.texture:SetTexCoord(layout.zoom,1-layout.zoom,layout.zoom,1-layout.zoom)
+        if icon.cooldown.SetHideCountdownNumbers then
+            icon.cooldown:SetHideCountdownNumbers(not layout.showDuration)
+        end
+        local countdown=icon.cooldown.GetCountdownFontString and icon.cooldown:GetCountdownFontString()
+        if countdown and layout.font then
+            pcall(HBCA_StyleAuraText,countdown,icon,size,layout,false)
+        end
+        icon.layout=layout
+    end
+    if icon.start~=start then
+        icon.cooldown:SetCooldown(start,duration)
+        icon.start=start
+    end
+    icon:Show()
+end
+
+local function HBCA_CreateShieldLockout(button)
+    local icon=CreateFrame("Frame",nil,button)
+    icon:SetFrameLevel(button:GetFrameLevel()+26)
+    icon.texture=icon:CreateTexture(nil,"ARTWORK")
+    icon.texture:SetAllPoints()
+    icon.texture:SetTexture(HealBot_WoWAPI_SpellTexture(6788))
+    icon.cooldown=CreateFrame("Cooldown",nil,icon,"CooldownFrameTemplate")
+    icon.cooldown:SetAllPoints()
+    icon.cooldown:SetDrawEdge(false)
+    icon:Hide()
+    return icon
+end
+
 local function HBCA_HideButton(button)
     local a=attached[button]
     if not a then return end
-    if a.hot then pcall(function() a.hot:Hide() end) end
-    if a.db then pcall(function() a.db:Hide() end) end
+    if a.hot then pcall(function() a.hot:Hide() end); a.hot.hbcaShown=false end
     a.dbShown=false
-    if a.weakenedSoul then pcall(a.weakenedSoul.Hide,a.weakenedSoul) end
-    a.weakenedSoulShown=false
+    HBCA_ShowDebuffRow(a,false)
+    a.shieldLockoutVisible=false
+    HBCA_SetNativeSlotShown(button,a,false)
+    if a.shieldLockout then a.shieldLockout:Hide() end
     HBCA_SetLegacyBuffsShown(button, true)
     for set,row in pairs(a.extra) do
         row:Hide()
+        row.hbcaShown=false
         HBCA_SetLegacyBuffsShown(button, true, set)
     end
 end
 
 -- Retarget only rows that exist. Reuse native widgets during combat; if the
 -- client rejects a unit change, never display auras belonging to the old unit.
+local function HBCA_SetBuffRowShown(row, shown, refresh)
+    local ok=pcall(function()
+        local wasShown=row.hbcaShown
+        if wasShown~=shown then
+            row:SetShown(shown)
+            row.hbcaShown=shown
+        end
+        if shown and (not wasShown or refresh) and row.UpdateAllAuras then row:UpdateAllAuras() end
+    end)
+    return ok and shown
+end
+
 local function HBCA_SetButtonShown(button, show)
     local a=attached[button]
     if not a then return end
     local vis=not not (show and HBCA_Enabled() and button.unit and button.frame and button.frame<10 and
                        button.status and button.status.events and (HEALBOT_FOREVER or button:IsShown()))
     if HEALBOT_FOREVER and vis and not UnitIsConnected(button.unit) then vis=false end
-    if vis and button.unit~=a.unit then
+    local retargeted=vis and button.unit~=a.unit
+    if retargeted then
         local okH=not a.hot or pcall(a.hot.SetUnit, a.hot, button.unit)
         local okD=not a.db or pcall(a.db.SetUnit, a.db, button.unit)
+        local okShifted=not a.dbAfterShield or pcall(a.dbAfterShield.SetUnit,a.dbAfterShield,button.unit)
         for _, row in pairs(a.extra) do
             if not pcall(row.SetUnit,row,button.unit) then okH=false end
         end
-        local okW=not a.weakenedSoul or pcall(a.weakenedSoul.SetUnit,a.weakenedSoul,button.unit)
-        if okH and okD and okW then
+        if okH and okD and okShifted then
             a.unit=button.unit
         else
             vis=false
@@ -492,44 +752,24 @@ local function HBCA_SetButtonShown(button, show)
         end
     end
     local buffsEnabled=not HEALBOT_FOREVER or HealBot_Forever_BuffsEnabled()
-    local hotVisible=not not (vis and buffsEnabled and not a.buffDirty)
-    local hotShown=false
-    if a.hot then
-        local ok=pcall(function()
-            a.hot:SetShown(hotVisible)
-            if hotVisible and a.hot.UpdateAllAuras then a.hot:UpdateAllAuras() end
-        end)
-        hotShown=ok and hotVisible
-    end
+    local hotVisible=not not (vis and buffsEnabled and not a.buffDirty and (not HEALBOT_FOREVER or inCombat))
+    local hotShown=a.hot and HBCA_SetBuffRowShown(a.hot,hotVisible,retargeted)
     HBCA_SetLegacyBuffsShown(button, buffsEnabled and not hotShown)
     for set,row in pairs(a.extra) do
-        local ok=pcall(function()
-            row:SetShown(hotVisible)
-            if hotVisible and row.UpdateAllAuras then row:UpdateAllAuras() end
-        end)
-        HBCA_SetLegacyBuffsShown(button, buffsEnabled and not (ok and hotVisible), set)
-    end
-    if a.weakenedSoul then
-        local showShieldLockout=vis and inCombat
-        local ok=pcall(function()
-            a.weakenedSoul:SetShown(showShieldLockout)
-            if showShieldLockout and not a.weakenedSoulShown and a.weakenedSoul.UpdateAllAuras then
-                a.weakenedSoul:UpdateAllAuras()
-            end
-        end)
-        a.weakenedSoulShown=ok and showShieldLockout
+        local rowShown=HBCA_SetBuffRowShown(row,hotVisible,retargeted)
+        HBCA_SetLegacyBuffsShown(button,buffsEnabled and not rowShown,set)
     end
     local dbShown=vis and inCombat
     if HEALBOT_FOREVER then
         dbShown=dbShown and not a.dbDirty and HealBot_Forever_DebuffsEnabled()
     end
     dbShown=not not dbShown
-    if a.db then
-        pcall(function()
-            a.db:SetShown(dbShown)
-            if dbShown and not a.dbShown and a.db.UpdateAllAuras then a.db:UpdateAllAuras() end
-        end)
-        a.dbShown=dbShown
+    a.dbShown=dbShown
+    a.shieldLockoutVisible=dbShown
+    if a.shieldLockout or a.weakenedSoul then
+        HBCA_RefreshShieldLockout(button)
+    else
+        HBCA_ShowDebuffRow(a,false)
     end
 end
 
@@ -539,6 +779,7 @@ end
 local function HBCA_DropButton(button)
     HBCA_HideButton(button)
     attached[button]=nil
+    button.foreverShieldLockoutIcon=nil
 end
 
 local function HBCA_Attach(button)
@@ -563,13 +804,17 @@ local function HBCA_Attach(button)
         return
     end
     deferred[button]=nil
-    local filters=HBCA_PriestFilters(HBCA_Defaults())
+    local g=HBCA_Defaults()
+    local filters=HBCA_ConfiguredBuffFilters(g)
     local a=attached[button]
     local hotLayout, dbLayout=HBCA_SkinLayout(button, "hot"), HBCA_SkinLayout(button, "db")
+    local weakenedSoulLayout
     if HEALBOT_FOREVER then
         local types, signature=HealBot_Forever_GetDebuffTypes()
         dbLayout.dispelSignature=signature
         dbLayout.dispelTypes=types
+        dbLayout.excludedSpellIDs, dbLayout.exclusionSignature=HBCA_DebuffExclusions()
+        weakenedSoulLayout=HBCA_WeakenedSoulLayout(button,g,dbLayout)
     end
     local extraLayouts={}
     for set=2,3 do
@@ -582,6 +827,8 @@ local function HBCA_Attach(button)
     if a then
         local same=a.filters==filters and HBCA_SameLayout(a.hotLayout,hotLayout)
             and HBCA_SameLayout(a.dbLayout,dbLayout)
+            and (weakenedSoulLayout and HBCA_SameLayout(a.weakenedSoulLayout,weakenedSoulLayout)
+                or not weakenedSoulLayout and not a.weakenedSoulLayout)
         for set=2,3 do
             if extraLayouts[set] and not HBCA_SameLayout(a.extraLayouts[set],extraLayouts[set]) then same=false end
         end
@@ -593,27 +840,33 @@ local function HBCA_Attach(button)
         end
         HBCA_DropButton(button)
     end
-    local hot=HBCA_BuildOne(button,"hot",hotLayout,1,filters and filters[1])
-    local db
+    local hot
+    if not filters or filters[1] then
+        hot=HBCA_BuildOne(button,"hot",hotLayout,1,filters and filters[1])
+    end
+    local db,dbAfterShield
     if not HEALBOT_FOREVER or dbLayout.dispelSignature~="" then
-        local dbFilter=HEALBOT_FOREVER and {includeDispelTypes=dbLayout.dispelTypes,excludeSpellIDs={[6788]=true}} or nil
+        local dbFilter=HEALBOT_FOREVER and {includeDispelTypes=dbLayout.dispelTypes,excludeSpellIDs=dbLayout.excludedSpellIDs} or nil
         db=HBCA_BuildOne(button,"db",dbLayout,1,dbFilter)
+        if db and HEALBOT_FOREVER and HealBot_Forever_GetShieldLockout and select(2,UnitClass("player"))=="PRIEST" then
+            local shifted={}
+            for key,value in pairs(dbLayout) do shifted[key]=value end
+            local size=shifted.size or HBCA_Defaults().CombatAurasSize or 12
+            local direction=shifted.point:find("RIGHT",1,true) and -1 or 1
+            shifted.x=shifted.x+(size+shifted.spacing)*direction
+            dbAfterShield=HBCA_BuildOne(button,"db",shifted,1,dbFilter)
+        end
     end
-    local weakenedSoul
-    if HEALBOT_FOREVER then
-        local layout={}
-        for key,value in pairs(dbLayout) do layout[key]=value end
-        local size=layout.size or HBCA_Defaults().CombatAurasSize
-        local direction=layout.point:find("BOTTOM",1,true) and -1 or 1
-        layout.y=layout.y+direction*(size+layout.spacing)
-        layout.double=false
-        weakenedSoul=HBCA_BuildOne(button,"weakenedSoul",layout,1,{includeSpellIDs={[6788]=true}})
-    end
-    a={hot=hot, weakenedSoul=weakenedSoul,
-       db=db, extra={}, extraLayouts=extraLayouts,
+    local slot=weakenedSoulLayout and HBCA_BuildWeakenedSoulSlot(button,weakenedSoulLayout)
+    a={hot=hot, weakenedSoul=slot, weakenedSoulUnit=button.unit, weakenedSoulLayout=weakenedSoulLayout,
+       db=db, dbAfterShield=dbAfterShield, extra={}, extraLayouts=extraLayouts,
        hotLayout=hotLayout, dbLayout=dbLayout, filters=filters, unit=button.unit}
     for set,layout in pairs(extraLayouts) do
         a.extra[set]=HBCA_BuildOne(button,"hot",layout,set,filters[set])
+    end
+    if HEALBOT_FOREVER and HealBot_Forever_GetShieldLockout then
+        a.shieldLockout=HBCA_CreateShieldLockout(button)
+        button.foreverShieldLockoutIcon=a.shieldLockout
     end
     attached[button]=a
     if inCombat or HEALBOT_FOREVER then HBCA_SetButtonShown(button, true) end
@@ -634,11 +887,36 @@ local function HBCA_SetAllShown(show)
 end
 
 local function HBCA_DropAll()
-    for button in pairs(attached) do HBCA_HideButton(button) end
+    for button in pairs(attached) do HBCA_DropButton(button) end
     attached={}
     deferred={}
     -- re-attach everything we have ever seen (builds run now or at next regen)
     for button in pairs(known) do deferred[button]=true end
+    HBCA_AttachDeferred()
+end
+
+function HealBot_Forever_SetWeakenedSoulNativeEnabled(enabled)
+    local g=HBCA_Defaults()
+    if not HEALBOT_FOREVER or not g then return false end
+    enabled=not not enabled
+    if (g.CombatAurasNativeWeakenedSoul or false)==enabled then return true end
+    g.CombatAurasNativeWeakenedSoul=enabled
+    for button in pairs(known) do deferred[button]=true end
+    if InCombatLockdown() then
+        HBCA_SetAllShown(true)
+    else
+        HBCA_AttachDeferred()
+    end
+    return true
+end
+
+function HealBot_Forever_RefreshDebuffIconPreferences()
+    if not HEALBOT_FOREVER or not HBCA_Enabled() then return end
+    local _, signature=HBCA_DebuffExclusions()
+    for button, rows in pairs(attached) do
+        if rows.dbLayout.exclusionSignature~=signature then deferred[button]=true end
+    end
+    HBCA_SetAllShown(true)
     HBCA_AttachDeferred()
 end
 
@@ -652,10 +930,16 @@ ev:SetScript("OnEvent", function(_, event)
     if event=="PLAYER_REGEN_DISABLED" then
         inCombat=true
         if HBCA_Enabled() then HBCA_SetAllShown(true) end
+        if HEALBOT_FOREVER and HealBot_Aura_RefreshDebuffIconVisibility then
+            HealBot_Aura_RefreshDebuffIconVisibility()
+        end
     elseif event=="PLAYER_REGEN_ENABLED" then
         inCombat=false
         HBCA_SetAllShown(HEALBOT_FOREVER)
         HBCA_AttachDeferred()
+        if HEALBOT_FOREVER and HealBot_Aura_RefreshDebuffIconVisibility then
+            HealBot_Aura_RefreshDebuffIconVisibility()
+        end
     elseif event=="PLAYER_LOGIN" then
         if HEALBOT_MIDNIGHT then HBCA_Probe() end
     end
@@ -665,13 +949,14 @@ end)
 -- us clear of HealBot's own call paths.
 if type(hooksecurefunc)=="function" then
     if HEALBOT_FOREVER then
+        hooksecurefunc("HealBot_Aura_CheckUnitDebuffs",HBCA_RefreshShieldLockout)
         hooksecurefunc("HealBot_SetUnitDisconnectChange", function(button)
             pcall(HBCA_SetButtonShown, button, true)
         end)
         function HealBot_Forever_RefreshBuffExclusions()
             local g=HBCA_Defaults()
             if not g then return end
-            local _, changed=HBCA_PriestFilters(g)
+            local _, changed=HBCA_ConfiguredBuffFilters(g)
             if not changed then return end
             if InCombatLockdown() then
                 for button, rows in pairs(attached) do
@@ -687,7 +972,17 @@ if type(hooksecurefunc)=="function" then
             HealBot_Aura_setCustomBuffFilterDisabled()
         end)
         hooksecurefunc("HealBot_Aura_setLuVars", function(key)
-            if key=="mapName" then HealBot_Forever_RefreshBuffExclusions() end
+            if key=="mapName" then
+                HealBot_Forever_RefreshBuffExclusions()
+                HealBot_Forever_RefreshDebuffIconPreferences()
+            end
+        end)
+        hooksecurefunc("HealBot_Aura_setCustomDebuffFilterDisabled",HealBot_Forever_RefreshDebuffIconPreferences)
+        hooksecurefunc("HealBot_Options_setDebuffPriority",HealBot_Forever_RefreshDebuffIconPreferences)
+        hooksecurefunc("HealBot_Aura_ConfigDebuffs",function()
+            local g=HBCA_Defaults()
+            if not g or not g.CombatAurasNativeWeakenedSoul then return end
+            for button in pairs(attached) do pcall(HBCA_Attach,button) end
         end)
         hooksecurefunc("HealBot_Aura_SetAuraCheckFlags", function()
             for button in pairs(attached) do pcall(HBCA_SetButtonShown,button,true) end
@@ -702,7 +997,9 @@ if type(hooksecurefunc)=="function" then
             end
         end)
         hooksecurefunc("hbv_Skins_SetIconTextVar", function(_, key, frame)
-            if key~="BUFFSCNT" and key~="BUFFSDUR" and key~="DBSCNT" and key~="DBSDUR" then return end
+            if key~="BUFFSCNT" and key~="BUFFSDUR" and key~="DBSCNT" and key~="DBSDUR"
+                and key~="BUFFFONT" and key~="BUFFHEIGHT" and key~="BUFFOUTLINE"
+                and key~="DBFONT" and key~="DBHEIGHT" and key~="DBOUTLINE" then return end
             for button in pairs(known) do
                 if button.frame==frame then pcall(HBCA_Attach,button) end
             end
@@ -710,7 +1007,7 @@ if type(hooksecurefunc)=="function" then
         hooksecurefunc("HealBot_Aura_ConfigClassHoT", function()
             local g=HBCA_Defaults()
             if not g then return end
-            local _, changed=HBCA_PriestFilters(g)
+            local _, changed=HBCA_ConfiguredBuffFilters(g)
             if changed and HBCA_Enabled() then
                 if InCombatLockdown() then
                     for button in pairs(known) do deferred[button]=true end
@@ -743,11 +1040,14 @@ SlashCmdList["HBCOMBATAURAS"]=function(msg)
     if cmd=="on" then
         g.CombatAurasOn=true
         HBCA_DropAll()
-        say(HEALBOT_FOREVER and "on - buffs always visible; debuffs in combat" or "on - icons appear in combat")
-    elseif cmd=="priest" and (arg=="on" or arg=="off") then
-        g.CombatAurasPriestOnly=arg=="on"
-        HBCA_DropAll()
-        say("priest spell filter "..arg.." (rebuilds out of combat)")
+        say(HEALBOT_FOREVER and "on - buffs and debuffs in combat" or "on - icons appear in combat")
+    elseif cmd=="ws" and HEALBOT_FOREVER and (arg=="native" or arg=="off") then
+        if InCombatLockdown() then
+            say("change Weakened Soul mode outside combat")
+            return
+        end
+        HealBot_Forever_SetWeakenedSoulNativeEnabled(arg=="native")
+        say("native Weakened Soul: "..(HBCA_WeakenedSoulMode(g) or "off"))
     elseif cmd=="off" then
         g.CombatAurasOn=false
         HBCA_SetAllShown(false)
@@ -829,11 +1129,13 @@ SlashCmdList["HBCOMBATAURAS"]=function(msg)
         HBCA_DropAll()
         say("HoT row hides buffs longer than "..g.CombatAurasMaxDur.."s (0 = show all; rebuilds out of combat)")
     else
-        local n, hots, debuffs=0,0,0
-        for _, row in pairs(attached) do
+        local n, hots, debuffs, testRows, activeTestRows=0,0,0,0,0
+        for button, row in pairs(attached) do
             n=n+1
             if row.hot then hots=hots+1 end
             if row.db then debuffs=debuffs+1 end
+            if row.weakenedSoul then testRows=testRows+1 end
+            if button.hbcaNativeDebuffs then activeTestRows=activeTestRows+1 end
         end
         say((g.CombatAurasOn and "on" or "off").."  size="..(g.CombatAurasSize or 12)
             .."  hots="..(g.CombatAurasHots or 4).."  debuffs="..(g.CombatAurasDebuffs or 3)
@@ -842,6 +1144,11 @@ SlashCmdList["HBCOMBATAURAS"]=function(msg)
             .."  native rows="..hots.."/"..debuffs.."  supported="..tostring(supported))
         if lastError then say("last native aura error: "..lastError) end
         say("size mode: "..(g.CombatAurasMatchSkinSize and "skin" or "manual"))
+        if HEALBOT_FOREVER then
+            say("Weakened Soul indicator: "..(HBCA_WeakenedSoulMode(g) or "off")
+                .."  monitored="..tostring(HBCA_WeakenedSoulWanted())
+                .."  native slots="..testRows.."  active="..activeTestRows.."  /hbca ws native|off")
+        end
         say("usage: /hbca on|off | size skin|N | hots N | debuffs N | maxdur N | nums")
     end
 end

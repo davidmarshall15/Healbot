@@ -49,6 +49,7 @@ function HealBot_Spells_Reset(pClassTrim)
     HealBot_Config_Spells.EnabledAvoidBlueCursor={}
     HealBot_Config_Spells.EnemyAvoidBlueCursor={}
     HealBot_Config_Spells.EmergAvoidBlueCursor={}
+    if HEALBOT_FOREVER then return end
     local bandage=HealBot_GetBandageType() or ""
     local x=""
     if pClassTrim == "DRUI" then
