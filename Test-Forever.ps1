@@ -63,10 +63,18 @@ try {
     if ($LASTEXITCODE -ne 0) { throw 'Combat aura layout regression tests failed.' }
     & lua tests/forever_buffs.lua
     if ($LASTEXITCODE -ne 0) { throw 'Forever buff settings regression tests failed.' }
+    & lua tests/native_buff_matching.lua
+    if ($LASTEXITCODE -ne 0) { throw 'Native buff matching regression tests failed.' }
+    & lua tests/native_buff_casters.lua
+    if ($LASTEXITCODE -ne 0) { throw 'Native buff caster regression tests failed.' }
     & lua tests/native_aura_options.lua
     if ($LASTEXITCODE -ne 0) { throw 'Native aura options regression tests failed.' }
     & lua tests/reported_bugs.lua
     if ($LASTEXITCODE -ne 0) { throw 'Reported bug regression tests failed.' }
+    & lua tests/movement_safety.lua
+    if ($LASTEXITCODE -ne 0) { throw 'Protected movement regression tests failed.' }
+    & lua tests/party_startup.lua
+    if ($LASTEXITCODE -ne 0) { throw 'Party startup/media regression tests failed.' }
     foreach ($suite in @('aggro', 'gcd', 'heal_amount')) {
         & lua "tests/$suite.lua"
         if ($LASTEXITCODE -ne 0) { throw "$suite regression tests failed." }
