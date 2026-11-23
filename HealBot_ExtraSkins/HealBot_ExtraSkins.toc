@@ -7,4 +7,5 @@
 ## IconTexture: Interface\AddOns\HealBot\Images\HealBot.tga
 
 HealBot_ExtraSkins.lua
+BlizzardForever.lua
 

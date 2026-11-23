@@ -14,6 +14,9 @@ lua tests/target_binding.lua
 lua tests/modified_target.lua
 lua tests/rank_range.lua
 lua tests/combat_auras.lua
+lua tests/forever_buffs.lua
+lua tests/native_aura_options.lua
+lua tests/reported_bugs.lua
 lua tests/player_mana.lua
 ```
 
@@ -40,6 +43,22 @@ The health-text suite covers the modern Include percent setting, independent
 protected HP/percentage values, precision from the selected text frame, and
 unchanged HP-only/percentage-only modes. Mock native formatting propagates
 protected text while Lua arithmetic and inspection are rejected.
+It also covers native current/deficit abbreviations at all selectable precisions,
+automatic precision, small values, narrow bars, lowercase suffixes, localized
+output propagation and safe fallback when the native abbreviation API is absent.
+The locale mock verifies forwarding, not the client's actual German typography.
+
+The Forever buff suite loads the native aura module with Forever enabled from
+startup, so its settings hooks run. It covers Renew ranks and icon-set routing,
+skin limits (including zero), per-set duration/count settings, long-buff filtering,
+non-priest exclusion changes, deferred setup in combat and avoiding a duplicate
+Weakened Soul row when the persistent harmful-aura row already includes it.
+The native-aura options suite executes the actual UI callbacks, XML tab click and
+panel router with mock widgets, using the real shared settings setter. It checks
+UI/slash synchronization, reopening, timer modes, validation, language changes,
+dependent controls, unsupported clients and global versus per-frame navigation.
+The buff suite also verifies that the UI setter defers row creation in combat.
+Native WoW widget layout still requires an in-game visual check.
 The mixed-value suite independently protects the health, healing, absorb and
 overheal inputs to shield, prediction, emergency and adaptive-colour functions.
 It checks both conservative fallbacks and readable-value behaviour, including
@@ -75,6 +94,19 @@ native retarget failure without showing auras for the previous unit.
 
 ## In-game verification still required
 
+The reported-bug suite covers combat target/focus display changes, clearing and
+reacquiring targets, secret names/health/power, health and power event dispatch,
+incomplete aura scans, post-combat cache invalidation, native buff exclusions,
+and SmartCast using the current recipient's level rather than a cached level.
+The rank suite also checks Shield rank 6 on left, right and middle buttons.
+Combat aura tests cover separate skin timer preferences, legacy-default migration,
+explicit timer overrides and monitoring toggles.
+
+Native countdowns now follow icon-set 1's buff/debuff timer settings by default.
+The old `CombatAurasNums=false` default migrates to skin settings; an existing
+true override is retained. Use `/hbca nums off` or `/hbca nums on` for an explicit
+override, and `/hbca nums skin` to restore skin settings.
+
 - Cast a timed heal on an injured unit with incoming-heal colour enabled; check
   the prediction while health changes, at full health and when the cast stops.
 - Check horizontal, vertical and reverse-fill bars, range fading and skin changes.
@@ -102,6 +134,18 @@ native retarget failure without showing auras for the previous unit.
 - Enable Include percent with Current health; verify both values update together
   in and out of combat, including the selected decimal precision.
 - Verify other supported clients retain their existing behaviour.
+- Switch between hostile/friendly, dead/alive targets and different power types
+  during combat, clear the target, then acquire another. Check name, health and
+  power immediately and on subsequent unit events. Repeat for focus and target
+  of target. This refresh updates existing frames only: select the skin's
+  always-reserve-target-in-combat option if a target must appear after entering
+  combat without one. It does not create protected buttons during combat.
+- Leave combat with a persistent debuff and without a new aura event; verify the
+  normal icon engine repopulates. Check no false rebuff alert while aura reads
+  are restricted, then verify genuinely missing buffs after a readable scan.
+- Disable the XP buff globally and per instance, then enter combat; verify the
+  native row honours its configured spell ID. Native filters still obey client
+  restrictions; they do not restore arbitrary Lua filtering of protected auras.
 
 The implementation renders native incoming-heal amounts without Lua arithmetic.
 It does not restore numerical prediction text for secret values. Combat debuff

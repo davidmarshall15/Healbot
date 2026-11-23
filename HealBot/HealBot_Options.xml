@@ -3,6 +3,7 @@
     xsi:schemaLocation="http://www.blizzard.com/wow/ui/ ..\FrameXML\UI.xsd">
   <Script file="HealBot_Comms.lua" />
   <Script file="HealBot_Share.lua" />
+  <Script file="HealBot_Options_NativeAuras.lua" />
   <Script file="HealBot_Options.lua" />
   
     <ScrollFrame name="HealBotUIPanelScrollFrameCodeTemplate" virtual="true">
@@ -25603,12 +25604,12 @@
                 <Frames>
                   <StatusBar name="HealBot_Options_SkinsFrameIconsDebuffb">
                     <Size>
-                      <AbsDimension x="175" y="24"/>
+                      <AbsDimension x="135" y="24"/>
                     </Size>
                     <Anchors>
                       <Anchor point="TOP">
                         <Offset>
-                          <AbsDimension x="-190" y="-12"/>
+                          <AbsDimension x="-210" y="-12"/>
                         </Offset>
                       </Anchor>
                     </Anchors>
@@ -25632,12 +25633,12 @@
                   </StatusBar>
                   <StatusBar name="HealBot_Options_SkinsFrameIconsBuffb">
                     <Size>
-                      <AbsDimension x="175" y="24"/>
+                      <AbsDimension x="135" y="24"/>
                     </Size>
                     <Anchors>
                       <Anchor point="TOP">
                         <Offset>
-                          <AbsDimension x="0" y="-12"/>
+                          <AbsDimension x="-70" y="-12"/>
                         </Offset>
                       </Anchor>
                     </Anchors>
@@ -25661,12 +25662,12 @@
                   </StatusBar>
                   <StatusBar name="HealBot_Options_SkinsFrameIconsExtrab">
                     <Size>
-                      <AbsDimension x="175" y="24"/>
+                      <AbsDimension x="135" y="24"/>
                     </Size>
                     <Anchors>
                       <Anchor point="TOP">
                         <Offset>
-                          <AbsDimension x="190" y="-12"/>
+                          <AbsDimension x="70" y="-12"/>
                         </Offset>
                       </Anchor>
                     </Anchors>
@@ -25688,6 +25689,29 @@
                     <BarTexture file="Interface\AddOns\HealBot\Images\textures\tukuibar.tga"/>
                     <BarColor r="0.2" g="0.2" b="0.2"/>
                   </StatusBar>
+                  <StatusBar name="HealBot_Options_SkinsFrameIconsNativeb">
+                    <Size x="135" y="24"/>
+                    <Anchors><Anchor point="TOP" x="210" y="-12"/></Anchors>
+                    <Layers><Layer level="OVERLAY">
+                      <FontString name="HealBot_Options_SkinsFrameIconsNativebTxt" inherits="GameFontNormal" text="Native auras">
+                        <Anchors><Anchor point="CENTER"/></Anchors>
+                      </FontString>
+                    </Layer></Layers>
+                    <Scripts>
+                      <OnLoad>self:SetMinMaxValues(0,100); self:SetValue(100);</OnLoad>
+                      <OnMouseDown>HealBot_Options_ShowIconPanel("HealBot_Options_SkinsFrameIconsNative", "HealBot_Options_SkinsFrameIconsNativeb", "SkinsFramesIconsNative")</OnMouseDown>
+                    </Scripts>
+                    <BarTexture file="Interface\AddOns\HealBot\Images\textures\tukuibar.tga"/>
+                    <BarColor r="0.2" g="0.2" b="0.2"/>
+                  </StatusBar>
+                  <Frame name="HealBot_Options_SkinsFrameIconsNative" hidden="true" inherits="BackdropTemplate">
+                    <Size y="495"/>
+                    <Anchors>
+                      <Anchor point="TOPLEFT" x="0" y="-45"/>
+                      <Anchor point="TOPRIGHT" x="0" y="-45"/>
+                    </Anchors>
+                    <Scripts><OnShow>HealBot_Options_NativeAuras_Refresh()</OnShow></Scripts>
+                  </Frame>
                   <Frame name="HealBot_Options_SkinsFrameIconsDebuff" inherits="BackdropTemplate">
                     <Size>
                       <AbsDimension y="495"/>

@@ -7687,7 +7687,11 @@ function HealBot_Action_UseSmartCast(self,button)
         end
         if castAsSpell then
             if HEALBOT_GAME_VERSION<4 then
-                uLevel=button.level
+                -- A reused party/target button may still cache its previous
+                -- occupant's level. SmartCast runs outside combat; query the
+                -- actual recipient before choosing a lower rank.
+                uLevel=UnitLevel(button.unit)
+                if HealBot_issecretvalue(uLevel) then uLevel=nil end
                 if uLevel and uLevel>0 and HealBot_Data["PCLASSTRIM"] then
                     if HealBot_Data["PCLASSTRIM"] == "PRIE" then
                         if sName == HealBot_WoWAPI_SpellName(HBC_POWER_WORD_FORTITUDE) then

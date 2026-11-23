@@ -344,6 +344,10 @@ end
 local dbAlphaNextUpdate, dbDurNextUpdate, dbiconAlpha=0,0,0
 function HealBot_Aura_DoUpdateDebuffIcon(button, iconData, index, timer, lastSpellId, srcTimer)
       --HealBot_setCall("HealBot_Aura_DoUpdateDebuffIcon", button, nil, nil, true)
+    if index>=51 and index<=56 and HealBot_CombatAuras_UsesNativeDebuffs and HealBot_CombatAuras_UsesNativeDebuffs(button) then
+        HealBot_Aura_RemoveIcon(button, index)
+        return
+    end
     if iconData.current and lastSpellId == iconData.spellId then
         dbAlphaNextUpdate=999
         dbDurNextUpdate=999
@@ -426,6 +430,10 @@ local hbGlowSpellName,hbGlowIdx="",1
 local customDebuffPriority=hbv_GetStatic("cDebuff")
 function HealBot_Aura_UpdateDebuffIcon(button, iconData, index, timer, spellId)
       --HealBot_setCall("HealBot_Aura_UpdateDebuffIcon", button, nil, nil, true)
+    if index>=51 and index<=56 and HealBot_CombatAuras_UsesNativeDebuffs and HealBot_CombatAuras_UsesNativeDebuffs(button) then
+        HealBot_Aura_RemoveIcon(button, index)
+        return
+    end
     HealBot_Aura_DoUpdateDebuffIcon(button, iconData, index, timer, spellId, false)
     if HealBot_AuraDebuffCache[spellId] then
         hbGlowSpellName=HealBot_AuraDebuffCache[spellId]["name"] or "x"
@@ -1196,6 +1204,8 @@ local buffWatchName=""
 local PlayerBuffsList={}
 function HealBot_Aura_CheckGeneralBuff(button)
       --HealBot_setCall("HealBot_Aura_CheckGeneralBuff", button)
+    -- An incomplete/protected scan is not evidence that a buff is missing.
+    if HealBot_Util_isMidnight(true) or button.aura.buff.scanIncomplete then return end
     PlayerBuffsList=button.aura.buff.recheck
     for bName,nexttime in pairs (PlayerBuffsList) do
         if not PlayerBuffs[bName] then
@@ -1331,6 +1341,19 @@ end
 
 function HealBot_Aura_CustomBuffCaster(spellId, name)
     return HealBot_Watch_HoT[spellId] or (name and HealBot_Watch_HoT[name])
+end
+
+-- Build native exclusions from configuration/cache only, never combat aura data.
+function HealBot_Aura_NativeBuffExclusions()
+    local excluded={}
+    for id, instances in pairs(HealBot_Globals.IgnoreCustomBuff) do
+        if type(id)=="number" and (instances.ALL or instances[hb_lVars["mapName"]]) then excluded[id]=true end
+    end
+    for id, data in pairs(HealBot_AuraBuffCache) do
+        local disabled=hbCustomBuffsDisabled[data.name]
+        if disabled and (disabled.ALL or disabled[hb_lVars["mapName"]]) then excluded[id]=true end
+    end
+    return excluded
 end
 
 local scbUnitClassEN, scbWatchHoT="XXXX", false
@@ -2615,15 +2638,22 @@ end
 
 function HealBot_Aura_UpdateUnitBuffsV9Aura(button, selfOnly, filter)
       --HealBot_setCall("HealBot_Aura_UpdateUnitBuffsV9Aura", button)
+    button.aura.buff.scanIncomplete=false
     uaZ=1
     while true do
         local okA
         okA, uaAura=pcall(C_UnitAuras.GetAuraDataByIndex, button.unit, uaZ, filter)
-        if not okA or HealBot_issecretvalue(uaAura) or not uaAura then break end
+        if not okA or HealBot_issecretvalue(uaAura) then
+            button.aura.buff.scanIncomplete=true
+            break
+        end
+        if not uaAura then break end
         if HealBot_Aura_AuraDataIsUsable(uaAura) then
             uaName, uaTexture, uaCount, uaDebuffType, uaDuration, uaExpirationTime, uaUnitCaster, uaSpellId=
             uaAura.name, uaAura.icon, uaAura.applications, uaAura.dispelName, uaAura.duration, uaAura.expirationTime, uaAura.sourceUnit, uaAura.spellId
             HealBot_Aura_UpdateUnitBuffsData(button, selfOnly, uaZ)
+        else
+            button.aura.buff.scanIncomplete=true
         end
         uaZ=uaZ+1
     end
@@ -2989,6 +3019,7 @@ function HealBot_Aura_CheckUnitBuffs(button, selfOnly)
                 end
             end
         end
+        if button.aura.buff.scanIncomplete then button.aura.buff.update=true end
         for z=1,3 do
             HealBot_Aura_prevIconCount["BUFF"][z]=button.icon.buff.count[z]
             for x,_ in pairs(buffSort[z]) do
@@ -3110,6 +3141,10 @@ function HealBot_Aura_UnitDebuffsUpdateWhenActive(button)
 end
 
 local debuffBarCol=0
+function HealBot_Aura_BuffsEnabled()
+    return buffCheck
+end
+
 -- Native buff rows follow the same monitoring flags as the legacy aura scan.
 function HealBot_Forever_BuffsEnabled()
     local buffs=HealBot_Config_Buffs
@@ -3233,6 +3268,19 @@ function HealBot_Aura_CheckUnitAuras(button, debuff, selfOnly)
             HealBot_Aura_CheckUnitDebuffs(button, selfOnly)
         else
             HealBot_Aura_CheckUnitBuffs(button, selfOnly)
+        end
+    end
+end
+
+function HealBot_Aura_RefreshAfterCombat()
+    -- Run after HealBot's own lock is cleared, not merely after the client
+    -- regen event: the aura readers choose their filters using that lock.
+    for _,button in pairs(HealBot_Buttons) do
+        if button.status.events then
+            button.aura.buff.update=true
+            button.aura.debuff.update=true
+            HealBot_Events_UnitBuff(button)
+            HealBot_Events_UnitDebuff(button)
         end
     end
 end

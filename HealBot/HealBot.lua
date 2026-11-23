@@ -1078,6 +1078,11 @@ end
 local hbPowerCurrent, hbPowerMax, pLowManaDrinkNeed=0,0,false
 function HealBot_UnitMana(button)
       --HealBot_setCall("HealBot_UnitMana", button)
+    if HEALBOT_FOREVER and InCombatLockdown() and HealBot_Forever_RefreshTarget and
+       (button.unit=="target" or button.unit=="targettarget" or button.unit=="focus") then
+        HealBot_Forever_RefreshTarget(button)
+        return
+    end
     button.mana.update=false
     if button.mana.change then HealBot_Action_setButtonManaBarCol(button) end
     if button.status.current<HealBot_Unit_Status["DEAD"] then
@@ -3066,6 +3071,11 @@ local HealBot_Health80={
 local health,healthMax,healthIsSecret=0,0,false
 function HealBot_UnitHealth(button, force)
       --HealBot_setCall("HealBot_UnitHealth", button)
+    if HEALBOT_FOREVER and InCombatLockdown() and HealBot_Forever_RefreshTarget and
+       (button.unit=="target" or button.unit=="targettarget" or button.unit=="focus") then
+        HealBot_Forever_RefreshTarget(button)
+        return
+    end
     button.health.updhlth=false
     --button.health.nextcheck=HealBot_TimeNow+HealBot_luVars["healthCheckInterval"]
     if button.status.current<HealBot_Unit_Status["DC"] then
@@ -3540,6 +3550,7 @@ function HealBot_Not_Fighting()
     if not InCombatLockdown() then
         if HealBot_Data["UILOCK"] then
             HealBot_Data["UILOCK"]=false
+            if HEALBOT_MIDNIGHT then HealBot_Aura_RefreshAfterCombat() end
             HealBot_luVars["CheckAuraFlags"]=true
             HealBot_luVars["HealBot_RunTimers"]=true
             HealBot_luVars["HealBot_RunDelayTimers"]=true
@@ -5342,7 +5353,7 @@ end
 
 function HealBot_InitSpells()
       --HealBot_setCall("HealBot_InitSpells")
-    HealBot_Init_Spells_Defaults();
+    if HealBot_Init_Spells_Defaults() == false then return end
     HealBot_Options_InitDebuffTypes()
     HealBot_Timers_Set("PLAYER","InitSmartCast",true)
 end
