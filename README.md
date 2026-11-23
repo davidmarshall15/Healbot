@@ -35,12 +35,15 @@ Health text and buff settings on Forever
 ---------------------------------------
   - Current health and Deficit use the selected number format, including K/M abbreviations and Auto. Deficit uses the client's missing-health API and keeps the minus sign; at full health it can display -0. Include percent remains an independent setting.
   - Open Skins > Frames > Icons > Native auras (Aure native in Italian). These options apply globally to all frames and skins, so this tab does not show the frame selector or Copy to frames controls.
-  - Native buff rows stay visible outside combat. Their first-row count follows the skin's Max icons and the global Buff icon cap; zero disables the row. Debuffs likewise respect Max icons and Debuff icon cap.
+  - On Forever, ordinary bars use legacy buff icons outside combat and native buff rows in combat. Their first-row count follows the skin's Max icons and the global Buff icon cap; zero disables the row. Debuffs likewise respect Max icons and Debuff icon cap.
+  - Native Custom Buffs honor Self/Everyone through separate groups without duplicating your own casts. With both scopes configured, Everyone reserves half the existing icon slots (rounded up), and Self receives the rest; unused reserved slots cannot be borrowed. My Class keeps its existing player-only native limitation.
+  - ID-only custom buffs remain independent across ranks; name-mode matching includes public spellbook/cache families. With Also in combat enabled, custom selections and exclusions update prepared groups without rebuilding the row.
   - Countdown numbers offers Follow skin, Always show and Always hide. With Follow skin selected, use Duration in the relevant Buffs/Debuffs > Text tab; Count controls stack text independently.
   - Maximum buff duration is in seconds: 120 excludes buffs longer than two minutes and permanent buffs; 0 means no limit, the 26.11.20 default.
   - Use skin icon size follows each frame's skin. Uncheck it to select a global Icon size. The Priest spell filter is available for priests on Forever.
   - Settings save automatically. Changes requiring new icons are deferred until combat ends. UI and `/hbca` commands share the same saved settings and stay synchronized; commands remain optional shortcuts.
   - An explicit Target binding takes priority over SmartCast in this branch. To use SmartCast's out-of-combat buff/cure/resurrection selection, bind a healing spell to unmodified left-click and move Target to a modifier or another button.
+  - See [Forever frame and buff reliability](Docs/forever-frame-and-buff-reliability.md) for movement/startup behavior, caster limits and the in-game verification checklist.
 
 Installing and Updating
 -----------------------
