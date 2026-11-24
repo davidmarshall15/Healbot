@@ -702,18 +702,19 @@ function HealBot_Text_TextAggroColours(button)
     return tr,tg,tb
 end
 
-local vShortHealTxtIsK,vShortHealTxtAmount,vShortHealTxtSuffix,vShortHealTxtAbsNum=true,0,"",0
+local vShortHealTxtIsK,vShortHealTxtAmount,vShortHealTxtSuffix,vShortHealTxtAbsNum,vShortHealTxtSign=true,0,"",0,""
 local hbAbs=math.abs
 function HealBot_Text_shortHealTxt(amount, frame, maxChars)
       --HealBot_setCall("HealBot_Text_shortHealTxt")
     vShortHealTxtAbsNum=hbAbs(amount)
     if vShortHealTxtAbsNum>999 and hbNumFormats["Places"][frame]>-1 then
+        if amount<0 then vShortHealTxtSign="-" else vShortHealTxtSign="" end
         if maxChars>0 and maxChars<5 then
-            return HealBot_Util_ReadNumber(amount, 0)
+            return vShortHealTxtSign..HealBot_Util_ReadNumber(vShortHealTxtAbsNum, 0)
         elseif hbNumFormats["Places"][frame]<4 then 
-            return HealBot_Util_ReadNumber(amount,hbNumFormats["Places"][frame])
+            return vShortHealTxtSign..HealBot_Util_ReadNumber(vShortHealTxtAbsNum,hbNumFormats["Places"][frame])
         else
-            return HealBot_Util_ReadNumber(amount)
+            return vShortHealTxtSign..HealBot_Util_ReadNumber(vShortHealTxtAbsNum)
         end
     else
         return HealBot_Util_Round(amount, 0)
