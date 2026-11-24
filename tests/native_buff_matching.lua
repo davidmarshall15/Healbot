@@ -174,6 +174,15 @@ do
 end
 do
     local env,build=fixture();local g=env.HealBot_Globals
+    env.class="PALADIN"
+    eq(build()[1].includeSpellIDs~=nil,true,"unset priest filter keeps non-priest buffs restricted")
+    g.CombatAurasPriestOnly=false
+    eq(build()[1].includeSpellIDs~=nil,true,"disabled priest filter keeps non-priest buffs restricted")
+    g.CombatAurasPriestOnly=true
+    eq(build()[1].includeSpellIDs==nil,true,"enabled priest filter widens non-priest buffs")
+end
+do
+    local env,build=fixture();local g=env.HealBot_Globals
     local filters=build()
     eq(type(filters[1].includeSpellIDs),"table","restricted empty set is explicit")
     eq(next(filters[1].includeSpellIDs),nil,"restricted empty set does not display all buffs")
