@@ -22,6 +22,7 @@ local descriptions={
     [7]="Heals a friendly target for 1,234 to 1,456.",
     [8]="",
     [9]=secret,
+    [10]="Launches a volley of holy light at the target, causing 134 Holy damage to an enemy, or 134 healing to an ally instantly and every 1 sec for 2 sec.",
 }
 local requested
 local env=setmetatable({
@@ -45,6 +46,7 @@ eq(amount(7),"1,234-1,456 heal  ","thousands separators kept")
 eq(amount(8),"","empty description shows nothing")
 eq(requested,8,"empty description requests the spell data")
 eq(amount(9),"","secret description is not inspected")
+eq(amount(10),"134 x3 heal  ","Penance bolts, not the 2 sec duration")
 eq(amount("Flash Heal"),"","non-numeric spell id is ignored")
 
 env.HealBot_Spell_Names["Lesser Heal"]=1

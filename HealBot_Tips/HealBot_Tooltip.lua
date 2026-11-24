@@ -397,6 +397,9 @@ function HealBot_Tooltip_SpellHealAmount(spellId)
     elseif string.find(lDesc, "heal[^t]") or string.find(lDesc, "heal$") then
         local minHeal, maxHeal=string.match(desc, "(%d[%d,]*) to (%d[%d,]*)")
         if minHeal then return minHeal.."-"..maxHeal.." heal  " end
+        -- Penance: "X healing to an ally instantly and every 1 sec for 2 sec" is 3 bolts of X, not a heal for 2.
+        local each, every, over=string.match(desc, "(%d[%d,]*) healing to an ally instantly and every (%d+) sec for (%d+) sec")
+        if each then return each.." x"..(math.floor(tonumber(over)/tonumber(every))+1).." heal  " end
         local amount=string.match(desc, "for (%d[%d,]*)") or string.match(desc, "of (%d[%d,]*) damage")
         if amount then return amount.." heal  " end
     end
