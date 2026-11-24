@@ -82,6 +82,7 @@ end
 local g=env.HealBot_Globals
 eq(control("enabled").checked,true,"enabled default loaded")
 eq(control("persist").checked,true,"persistence default loaded")
+eq(control("priest").checked,false,"unset priest filter shows unchecked like its off behavior")
 eq(control("nums").text,"Follow skin","timer migration reflected")
 eq(control("size").enabled,false,"manual size disabled while following skin")
 eq(g.CombatAurasMaxDur,0,"opening panel does not overwrite duration")
@@ -111,6 +112,9 @@ selectTimer(1);eq(g.CombatAurasNumsFollowSkin,true,"dropdown restores skin mode"
 eq(g.CombatAurasNums,nil,"skin mode clears explicit override")
 click("persist",false);eq(g.CombatAurasPersistDebuffs,false,"UI disables persistence")
 click("priest",false);eq(g.CombatAurasPriestOnly,false,"UI disables priest filter")
+eq(control("priest").checked,false,"disabled priest filter shows unchecked")
+env.SlashCmdList.HBCOMBATAURAS("priest on")
+eq(control("priest").checked,true,"slash updates priest filter checkbox")
 env.SlashCmdList.HBCOMBATAURAS("persist on")
 eq(control("persist").checked,true,"slash updates persistence checkbox")
 env.SlashCmdList.HBCOMBATAURAS("nums off")

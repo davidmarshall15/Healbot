@@ -125,7 +125,7 @@ function HealBot_Options_NativeAuras_Refresh()
         control:SetAlpha(active and 1 or 0.5)
     end
     for key,value in pairs({enabled=not not g.CombatAurasOn,persist=not not g.CombatAurasPersistDebuffs,
-        priest=g.CombatAurasPriestOnly~=false,skinSize=not not g.CombatAurasMatchSkinSize}) do
+        priest=g.CombatAurasPriestOnly==true,skinSize=not not g.CombatAurasMatchSkinSize}) do
         local control=controls[key]
         HealBot_Options_SetText(control,L[key])
         control:SetChecked(value)
