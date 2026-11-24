@@ -81,6 +81,8 @@ try {
     }
     & lua tests/player_mana.lua
     if ($LASTEXITCODE -ne 0) { throw 'Player mana tooltip regression tests failed.' }
+    & lua tests/self_count.lua
+    if ($LASTEXITCODE -ne 0) { throw 'Self count text regression tests failed.' }
 } finally {
     Pop-Location
 }

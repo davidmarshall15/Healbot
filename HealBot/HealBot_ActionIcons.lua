@@ -2705,7 +2705,7 @@ function HealBot_ActionIcons_SelfCountTextUpdateAll()
     if #activeFramesIdx>0 then
         if not hb_lVars["SelfCountTextUpdate"] then
             hb_lVars["SelfCountTextUpdate"]=true
-            x=1,#activeFramesIdx do
+            for x=1,#activeFramesIdx do
                 C_Timer.After(x/40, function() HealBot_ActionIcons_SelfCountTextUpdateExisting(activeFramesIdx[x]) end)
             end
             C_Timer.After(0.25, function() HealBot_ActionIcons_setLuVars("SelfCountTextUpdate", false) end)
