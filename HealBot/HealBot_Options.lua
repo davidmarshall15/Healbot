@@ -24147,9 +24147,9 @@ function HealBot_Options_AdaptiveResetColour_OnClick(aType, override)
         HealBot_Globals.OverrideAdaptiveCol[aType].G=DefaultAdaptiveCol[aType].G
         HealBot_Globals.OverrideAdaptiveCol[aType].B=DefaultAdaptiveCol[aType].B
     else
-        HealBot_Skins_NilColVar("AdaptiveCol", aType, "R")
-        HealBot_Skins_NilColVar("AdaptiveCol", aType, "G")
-        HealBot_Skins_NilColVar("AdaptiveCol", aType, "B")
+        hbv_Skins_NilColVarSkin(Healbot_Config_Skins.Current_Skin, "AdaptiveCol", aType, "R")
+        hbv_Skins_NilColVarSkin(Healbot_Config_Skins.Current_Skin, "AdaptiveCol", aType, "G")
+        hbv_Skins_NilColVarSkin(Healbot_Config_Skins.Current_Skin, "AdaptiveCol", aType, "B")
     end
     HealBot_Timers_Set("LAST","AdaptiveColourUpdate")
 end
