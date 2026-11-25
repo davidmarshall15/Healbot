@@ -83,6 +83,8 @@ try {
     if ($LASTEXITCODE -ne 0) { throw 'Player mana tooltip regression tests failed.' }
     & lua tests/adaptive_reset.lua
     if ($LASTEXITCODE -ne 0) { throw 'Adaptive colour reset regression tests failed.' }
+    & lua tests/share_import_fail.lua
+    if ($LASTEXITCODE -ne 0) { throw 'Share import failure regression tests failed.' }
 } finally {
     Pop-Location
 }
