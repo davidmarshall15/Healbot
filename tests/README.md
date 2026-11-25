@@ -25,6 +25,7 @@ lua tests/native_aura_options.lua
 lua tests/reported_bugs.lua
 lua tests/player_mana.lua
 lua tests/adaptive_reset.lua
+lua tests/clear_aux_bars.lua
 ```
 
 On Windows, the following also checks addon Lua syntax and TOC/XML references:
