@@ -327,7 +327,7 @@ function HealBot_Share_LoadPresetCols(sIn)
         local alias,d=string.split("~", ssTab[e])
         local r,g,b,a=string.split(",", d)
         if not alias or not r or not g or not b or not a then
-            HealBot_Options_ImportFail("Preset Colours", "Data corruption")
+            HealBot_Share_ImportFail("Preset Colours", "Data corruption")
         else
             HealBot_Globals.PresetColoursAlias[x]=alias
             HealBot_Globals.PresetColours[x]["R"]=tonumber(r)
@@ -439,7 +439,7 @@ function HealBot_Share_LoadSpells(sIn)
         local ActionBarsCombo,Buttons_Button,KeyPress=string.split(",", c)
         local sName,sTar,sTrin1,sTrin2,AvoidBC=string.split(",", d)
         if not ActionBarsCombo or not Buttons_Button or not KeyPress or not sName then
-            HealBot_Options_ImportFail("Spells", "Data corruption")
+            HealBot_Share_ImportFail("Spells", "Data corruption")
         else
             ActionBarsCombo=tonumber(ActionBarsCombo)
             Buttons_Button=tonumber(Buttons_Button)
@@ -565,7 +565,7 @@ function HealBot_Share_LoadBuffs(sIn)
         local _,c,d=string.split("~", ssTab[e])
         local bId,prio,castby,show,r,g,b,idMethod,tag,iconSet,iconGlow,filter,i1,i2,i3,i4=string.split(",", d)
         if not c or not bId or not prio or not castby or not show or not r or not g or not b then
-            HealBot_Options_ImportFail("Buffs", "Data corruption - ensure it is exactly as the original file")
+            HealBot_Share_ImportFail("Buffs", "Data corruption - ensure it is exactly as the original file")
         else
             bId=tonumber(bId) or bId
             prio=tonumber(prio)
@@ -746,7 +746,7 @@ function HealBot_Share_LoadDebuffs(sIn)
         local _,c,d=string.split("~", ssTab[e])
         local dId,prio,castby,show,r,g,b,idMethod,tag,iconSet,iconGlow,filter,i1,i2,i3,i4=string.split(",", d)
         if not c or not dId or not prio or not castby or not show or not r or not g or not b then
-            HealBot_Options_ImportFail("Debuffs", "Data corruption - ensure it is exactly as the original file")
+            HealBot_Share_ImportFail("Debuffs", "Data corruption - ensure it is exactly as the original file")
         else
             c=tonumber(c)
             dId=tonumber(dId) or dId
