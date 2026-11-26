@@ -8,6 +8,7 @@ lua tests/forever_frames.lua
 lua tests/opacity.lua
 lua tests/tooltip.lua
 lua tests/health_text.lua
+lua tests/targeted_option.lua
 lua tests/secret_values.lua
 lua tests/prediction.lua
 lua tests/target_binding.lua

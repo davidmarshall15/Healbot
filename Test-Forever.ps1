@@ -45,6 +45,8 @@ try {
     if ($LASTEXITCODE -ne 0) { throw 'Tooltip regression tests failed.' }
     & lua tests/health_text.lua
     if ($LASTEXITCODE -ne 0) { throw 'Health text regression tests failed.' }
+    & lua tests/targeted_option.lua
+    if ($LASTEXITCODE -ne 0) { throw 'Targeted option regression tests failed.' }
     & lua tests/secret_values.lua
     if ($LASTEXITCODE -ne 0) { throw 'Mixed secret-value regression tests failed.' }
     & lua tests/prediction.lua

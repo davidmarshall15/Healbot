@@ -4576,7 +4576,7 @@ end
 function HealBot_UnitEnemyTargetUpdate(unit, guid)
     if HealBot_MobTarget[unit] and UnitExists(unit.."target") then
         aButton=HealBot_Panel_AllButton(unit.."target")
-        if aButton and not aButton.special.unit and hbv_Skins_GetFrameVar("BarAggro", "TARGETED", aButton.frame) then
+        if aButton and not aButton.special.unit and hbv_Skins_GetFrameBoolean("BarAggro", "TARGETED", aButton.frame) then
             if not hbv_Skins_GetFrameVar("BarAggro", "TARBOSSONLY", aButton.frame) or (HealBot_UnitClassification(unit) or "") == "Boss" then
                 if HealBot_MobTarget[unit] ~= aButton.unit then
                     if HealBot_Panel_AllUnitButtonCheck(unit) then
