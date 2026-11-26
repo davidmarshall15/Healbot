@@ -85,6 +85,10 @@ try {
     if ($LASTEXITCODE -ne 0) { throw 'Adaptive colour reset regression tests failed.' }
     & lua tests/share_import_fail.lua
     if ($LASTEXITCODE -ne 0) { throw 'Share import failure regression tests failed.' }
+    & lua tests/self_count.lua
+    if ($LASTEXITCODE -ne 0) { throw 'Self count text regression tests failed.' }
+    & lua tests/clear_aux_bars.lua
+    if ($LASTEXITCODE -ne 0) { throw 'Aux bar clearing regression tests failed.' }
 } finally {
     Pop-Location
 }
