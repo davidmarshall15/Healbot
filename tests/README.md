@@ -25,6 +25,7 @@ lua tests/party_startup.lua
 lua tests/native_aura_options.lua
 lua tests/reported_bugs.lua
 lua tests/player_mana.lua
+lua tests/damager_role.lua
 lua tests/adaptive_reset.lua
 lua tests/share_import_fail.lua
 lua tests/self_count.lua

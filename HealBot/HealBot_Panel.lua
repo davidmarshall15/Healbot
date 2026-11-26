@@ -259,7 +259,8 @@ function HealBot_Panel_DamagerRole(unit, guid, isPlayer)
                 hbRoleOnes[hbDPS].guid=guid
             end
             if (UnitPowerType(unit) or 1) == 0 then
-                local _, uuUnitClassEN=UnitClass(unit) or "X"
+                local _, uuUnitClassEN=UnitClass(unit)
+                uuUnitClassEN=uuUnitClassEN or "X"
                 local maxHealth=hlthMax
                 if hbClassCasterPrefBonus[uuUnitClassEN] then
                     maxHealth=maxHealth*hbClassCasterPrefBonus[uuUnitClassEN]

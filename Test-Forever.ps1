@@ -83,6 +83,8 @@ try {
     }
     & lua tests/player_mana.lua
     if ($LASTEXITCODE -ne 0) { throw 'Player mana tooltip regression tests failed.' }
+    & lua tests/damager_role.lua
+    if ($LASTEXITCODE -ne 0) { throw 'Damager role regression tests failed.' }
     & lua tests/adaptive_reset.lua
     if ($LASTEXITCODE -ne 0) { throw 'Adaptive colour reset regression tests failed.' }
     & lua tests/share_import_fail.lua
