@@ -167,7 +167,7 @@ local function frame()
     function f:SetTextColor(...) self.textColor={...} end
     for _,name in ipairs({"EnableMouse","ClearAllPoints","SetSize","SetFrameLevel","SetParent",
         "SetDrawLayer","SetMouseClickEnabled","SetMouseMotionEnabled","SetUnit","AddAuraGroup","SetEnabled",
-        "RegisterEvent","SetScript","SetAlpha","UpdateAllAuras"}) do f[name]=noop end
+        "RegisterEvent","RegisterUnitEvent","SetScript","SetAlpha","UpdateAllAuras"}) do f[name]=noop end
     return f
 end
 local createdFrames=0

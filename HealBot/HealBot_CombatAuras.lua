@@ -555,6 +555,18 @@ local function HBCA_CopyFilter(source)
     return copy
 end
 
+local function HBCA_BuffRowDuration(g)
+    return (g.CombatAurasMaxDur or 0)>0 and g.CombatAurasMaxDur or nil
+end
+
+local function HBCA_BuffRowPolicyCurrent(row, spellFilter, g)
+    local applied=row.hbcaBuffPolicy
+    -- ConfiguredBuffFilters retains its addon-owned filter tables until their
+    -- signature changes. This compares policy metadata, never native aura data.
+    return applied and applied.filter==spellFilter and applied.limit==row.hbcaBuffLimit
+        and applied.duration==HBCA_BuffRowDuration(g)
+end
+
 local function HBCA_BuffRowPolicy(spellFilter, g, limit)
     local own=HBCA_CopyFilter(spellFilter and spellFilter.selfSpellFilter
         or spellFilter or {includeSpellIDs={}})
@@ -562,7 +574,7 @@ local function HBCA_BuffRowPolicy(spellFilter, g, limit)
         or {includeSpellIDs={}})
     -- These are addon settings, not aura identities/counts from native widgets.
     own.selfSpellFilter,own.everyoneSpellFilter,own.casterSignature=nil,nil,nil
-    local duration=(g.CombatAurasMaxDur or 0)>0 and g.CombatAurasMaxDur or nil
+    local duration=HBCA_BuffRowDuration(g)
     own.maxDuration,everyone.maxDuration=duration,duration
     local hasOwn=own.includeSpellIDs==nil or next(own.includeSpellIDs)~=nil
     local hasEveryone=next(everyone.includeSpellIDs or {})~=nil
@@ -579,7 +591,11 @@ end
 
 local function HBCA_UpdateBuffRow(row, spellFilter, g)
     if not row or not row.hbcaBuffLimit then return false end
+    if HBCA_BuffRowPolicyCurrent(row,spellFilter,g) then return true end
     local own,everyone,ownLimit,everyoneLimit,wanted=HBCA_BuffRowPolicy(spellFilter,g,row.hbcaBuffLimit)
+    -- A setter may fail after clearing/changing only part of a row. Forget the
+    -- old success before any write so even reverting its settings must retry.
+    row.hbcaBuffPolicy=nil
     local ok,err=pcall(function()
         -- Clear old memberships first: moving a spell between scopes must not
         -- expose a stale broad filter or temporarily duplicate an own cast.
@@ -590,8 +606,14 @@ local function HBCA_UpdateBuffRow(row, spellFilter, g)
         row:SetAuraGroupCandidateFilters(helpfulGroup,own)
         row:SetAuraGroupCandidateFilters(everyoneGroup,everyone)
     end)
-    if not ok then lastError=tostring(err); return false end
+    if not ok then
+        lastError=tostring(err)
+        row.hbcaHasBuffs=false
+        if pcall(row.Hide,row) then row.hbcaShown=false end
+        return false
+    end
     row.hbcaHasBuffs=wanted
+    row.hbcaBuffPolicy={filter=spellFilter,limit=row.hbcaBuffLimit,duration=HBCA_BuffRowDuration(g)}
     return true
 end
 
@@ -669,6 +691,7 @@ local function HBCA_BuildOne(button, side, placement, set, spellFilter)
                 {maxFrameCount=everyoneLimit,initializeFrame=HBCA_MakeInit(size,everyonePlacement,showNumbers),
                  layout=HBCA_Layout(size,placement.spacing),candidateFilters=everyone})
             c.hbcaBuffLimit,c.hbcaHasBuffs=maxN,wanted
+            c.hbcaBuffPolicy={filter=spellFilter,limit=maxN,duration=HBCA_BuffRowDuration(g)}
         else
             c:AddAuraGroup("hbca"..side, filter,
                 { maxFrameCount=maxN, initializeFrame=initializeFrame,
@@ -1035,19 +1058,21 @@ local function HBCA_DropButton(button)
 end
 
 local function HBCA_UpdateButtonBuffRows(button, rows, filters)
-    local complete=true
+    local complete,failed=true,false
+    local g=HBCA_Defaults()
     for set=1,3 do
         local row=set==1 and rows.hot or rows.extra[set]
         if row then
-            if not HBCA_UpdateBuffRow(row,filters and filters[set],HBCA_Defaults()) then complete=false end
-        elseif (set==1 and (rows.hotLayout.limit or 0)>0 and HBCA_Defaults().CombatAurasHots>0)
+            if not HBCA_UpdateBuffRow(row,filters and filters[set],g) then complete,failed=false,true end
+        elseif (set==1 and (rows.hotLayout.limit or 0)>0 and g.CombatAurasHots>0)
             or (set>1 and rows.extraLayouts[set] and (rows.extraLayouts[set].limit or 0)>0) then
             complete=false
         end
     end
     if complete then rows.filters=filters end
-    -- A pending structural rebuild must not hide other usable prepared rows.
-    rows.buffDirty=false
+    -- Missing structural rows must not hide usable prepared rows. A failed
+    -- native write, however, leaves an unconfirmed partial policy until retry.
+    rows.buffDirty=failed
     if not complete then deferred[button]=true end
     return complete
 end
@@ -1105,7 +1130,7 @@ local function HBCA_Attach(button)
         end
         if same then
             if HEALBOT_FOREVER then HBCA_UpdateButtonBuffRows(button,a,filters) end
-            a.buffDirty=false
+            if not HEALBOT_FOREVER then a.buffDirty=false end
             a.dbDirty=false
             HBCA_SetButtonShown(button, inCombat or HEALBOT_FOREVER)
             return
@@ -1180,9 +1205,18 @@ local function HBCA_RefreshBuffRows()
     local combat=InCombatLockdown()
     local canUpdate=not combat or (HealBot_Config_Buffs and HealBot_Config_Buffs.BuffCustomWatchInCombat==true)
     for button,rows in pairs(attached) do
-        if rows.filters~=filters then
-            if canUpdate then HBCA_UpdateButtonBuffRows(button,rows,filters)
-            else deferred[button]=true end
+        if canUpdate then
+            -- The per-row success cache also covers duration changes and retries
+            -- after a partial write, even when the configured IDs are unchanged.
+            HBCA_UpdateButtonBuffRows(button,rows,filters)
+        else
+            for set=1,3 do
+                local row=set==1 and rows.hot or rows.extra[set]
+                if row and not HBCA_BuffRowPolicyCurrent(row,filters and filters[set],g) then
+                    deferred[button]=true
+                    break
+                end
+            end
         end
         HBCA_SetButtonShown(button,true)
     end
