@@ -1,10 +1,19 @@
 # Forever compatibility regression tests
 
+The target-event refresh and native-buff refresh suites count work performed by
+the real modules through mocked APIs. They cover dependency-filtered target
+events, unit-rebind cleanup, unchanged-policy reuse, combat setting changes,
+arrival rows, retargeting and failed native setter retries. Operation counts
+are not in-game FPS measurements. See
+[the performance investigation](../Docs/forever-refresh-performance.md) for
+before/after counts and the live follow-up checklist.
+
 Run from the repository root with Lua 5.1:
 
 ```sh
 lua tests/compatibility.lua
 lua tests/forever_frames.lua
+lua tests/target_event_refresh.lua
 lua tests/opacity.lua
 lua tests/tooltip.lua
 lua tests/health_text.lua
@@ -20,6 +29,7 @@ lua tests/combat_auras.lua
 lua tests/forever_buffs.lua
 lua tests/native_buff_matching.lua
 lua tests/native_buff_casters.lua
+lua tests/native_buff_refresh.lua
 lua tests/movement_safety.lua
 lua tests/party_startup.lua
 lua tests/native_aura_options.lua

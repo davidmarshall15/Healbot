@@ -39,6 +39,8 @@ try {
     if ($LASTEXITCODE -ne 0) { throw 'Compatibility tests failed.' }
     & lua tests/forever_frames.lua
     if ($LASTEXITCODE -ne 0) { throw 'Forever frame tests failed.' }
+    & lua tests/target_event_refresh.lua
+    if ($LASTEXITCODE -ne 0) { throw 'Target event refresh regression tests failed.' }
     & lua tests/opacity.lua
     if ($LASTEXITCODE -ne 0) { throw 'Opacity regression tests failed.' }
     & lua tests/tooltip.lua
@@ -69,6 +71,8 @@ try {
     if ($LASTEXITCODE -ne 0) { throw 'Native buff matching regression tests failed.' }
     & lua tests/native_buff_casters.lua
     if ($LASTEXITCODE -ne 0) { throw 'Native buff caster regression tests failed.' }
+    & lua tests/native_buff_refresh.lua
+    if ($LASTEXITCODE -ne 0) { throw 'Native buff refresh regression tests failed.' }
     & lua tests/native_aura_options.lua
     if ($LASTEXITCODE -ne 0) { throw 'Native aura options regression tests failed.' }
     & lua tests/reported_bugs.lua

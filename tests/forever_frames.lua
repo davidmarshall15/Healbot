@@ -70,6 +70,7 @@ local function frame()
     end
     function f:UpdateAllAuras() self.updates=(self.updates or 0)+1 end
     function f:RegisterEvent() end
+    function f:RegisterUnitEvent() end
     function f:SetScript(_,callback) self.callback=callback end
     return f
 end
