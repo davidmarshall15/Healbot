@@ -203,4 +203,19 @@ check("Absent skin configuration waits without touching frames",[=[
     tick()
     assert(calls.created==4 and calls.styled==1 and #pending==0)
 ]=])
+check("Each reserve sync shares a fresh aura batch", [=[
+    loaded=true; HealBot_Media_Register()
+    HealBot_Buttons={{frame=1,status={active=true},IsShown=function() return true end,gref={}}}
+    function UnitExists() return false end
+    function BindRow() end
+    local batches={}
+    function SkinExtras(row,donor,batch)
+        assert(type(batch)=="table" and donor==HealBot_Buttons[1])
+        batches[#batches+1]=batch
+    end
+    API.queue(); tick(); API.queue(); tick()
+    assert(#batches==8 and batches[1]~=batches[5])
+    for i=1,4 do assert(batches[i]==batches[1] and batches[i+4]==batches[5]) end
+]=])
+
 print("PASS: "..passed.." party startup scenarios (mock events, actual media helpers)")

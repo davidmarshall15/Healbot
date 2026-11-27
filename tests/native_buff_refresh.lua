@@ -253,4 +253,88 @@ d.resetCounts(); d.hook("HealBot_Skins_ResetSkin","bar",button)
 eq(d.counters.filters,0,"replacement row creation also seeds its policy cache")
 eq(d.counters.limits,0,"replacement budgets avoid the first redundant rewrite")
 
+-- Count lookups of one cache-only spell. The policy builder resolves its name
+-- once per full scan, regardless of how many spells match the configured rows.
+local function countScans(driver)
+    local counts={policy=0,exclusions=0}
+    local marker=990002
+    driver.env.HealBot_Spell_IDs[marker]={}
+    local spellName=driver.env.HealBot_WoWAPI_SpellName
+    driver.env.HealBot_WoWAPI_SpellName=function(id)
+        if id==marker then counts.policy=counts.policy+1 end
+        return spellName(id)
+    end
+    local exclusions=driver.env.HealBot_Aura_NativeBuffExclusions
+    driver.env.HealBot_Aura_NativeBuffExclusions=function()
+        counts.exclusions=counts.exclusions+1
+        return exclusions()
+    end
+    return counts
+end
+local multi=fixture()
+local scans=countScans(multi)
+multi.combat(true)
+local queued={}
+for i=1,40 do queued[i]=multi.button("raid"..i) end
+eq(scans.policy,0,"bar creation is deferred in combat")
+multi.combat(false)
+eq(scans.policy,1,"one configuration scan prepares 40 deferred raid bars")
+eq(scans.exclusions,0,"Forever caster rows skip the unused single-group exclusions")
+for _,bar in ipairs(queued) do
+    eq(otherCaster(multi.forSpell(bar,139),139),false,"deferred bar has its Self policy")
+end
+scans.policy=0
+for i=1,4 do
+    local reserve={unit="party"..i,frame=1,healthBar={},GetFrameLevel=function() return 5 end}
+    multi.env.HealBot_Forever_SkinArrivalAuras(reserve,queued[1])
+end
+eq(scans.policy,4,"standalone reserve refreshes each read fresh settings")
+multi.globals.WatchHoT.PRIE[139]=3
+scans.policy=0
+multi.hook("HealBot_Aura_ConfigClassHoT")
+eq(scans.policy,1,"ordinary and four reserve rows share one configuration scan")
+for _,bar in ipairs(queued) do
+    eq(otherCaster(multi.forSpell(bar,139),139),true,"next refresh applies changed caster settings")
+end
+
+local off=fixture()
+local hiddenScans=countScans(off)
+off.config.BuffWatch=false
+off.combat(true)
+local hiddenBars={}
+for i=1,40 do hiddenBars[i]=off.button("raid"..i) end
+off.combat(false)
+eq(hiddenScans.policy,0,"disabled monitoring skips policy scans for deferred bars")
+eq(hiddenScans.exclusions,0,"disabled monitoring skips exclusion scans during row creation")
+local donor=hiddenBars[1]
+local reserve={unit="party1",frame=1,healthBar={},GetFrameLevel=function() return 5 end}
+off.env.HealBot_Forever_SkinArrivalAuras(reserve,donor)
+off.combat(true)
+off.hook("HealBot_Aura_SetAuraCheckFlags")
+eq(hiddenScans.policy,0,"disabled monitoring skips scans on reserve setup and combat flag refresh")
+eq(#off.rows(donor),3,"disabled monitoring keeps all native buff rows prepared")
+local renew=off.rows(donor)[1]
+eq(renew.shown,false,"disabled monitoring hides the prepared buff row")
+local dispelRow
+for _,frame in ipairs(off.frames) do
+    if frame.parent==donor and frame.groups.hbcadb then dispelRow=frame; break end
+end
+eq(assert(dispelRow).shown,true,"debuff monitoring stays active with buffs disabled")
+local framesBeforeToggle=#off.frames
+off.globals.WatchHoT.PRIE[139]=3
+off.config.BuffWatch=true
+off.hook("HealBot_Aura_SetAuraCheckFlags")
+eq(hiddenScans.policy,1,"re-enabling in combat reads current settings once")
+eq(otherCaster(renew,139),true,"prepared raid row picks up caster changes made while disabled")
+eq(renew.shown,true,"raid row is visible after re-enabling in combat")
+local reserveRenew=reserve.arrivalAuras[1].container
+eq(otherCaster(reserveRenew,139),true,"prepared reserve row picks up the same caster change")
+eq(reserveRenew.shown,true,"reserve row is visible after re-enabling")
+off.config.BuffWatch=false
+off.hook("HealBot_Aura_SetAuraCheckFlags")
+eq(hiddenScans.policy,1,"disabling again skips the configuration scan")
+eq(renew.shown,false,"disabling again hides the raid row")
+eq(reserveRenew.shown,false,"disabling again hides the reserve row")
+eq(#off.frames,framesBeforeToggle,"both combat toggles reuse the prepared frames")
+
 print("PASS: "..passed.." native buff refresh assertions (mock native widgets; not an in-game test)")
