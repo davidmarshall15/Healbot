@@ -1,7 +1,25 @@
 if not HEALBOT_FOREVER then return end
 
 local active={}
+local targetButtons={target={},targettarget={},focus={}}
+local targetUnits={}
 local auraError
+
+local function IndexTargetButton(button)
+    local previous=targetUnits[button]
+    if previous then targetButtons[previous][button]=nil end
+    local unit=button.unit
+    if active[button] and button.frame<10 and targetButtons[unit] then
+        targetButtons[unit][button]=true
+        targetUnits[button]=unit
+    else
+        targetUnits[button]=nil
+    end
+end
+
+local function RefreshTargetButtons(unit)
+    for button in pairs(targetButtons[unit]) do HealBot_Forever_RefreshTarget(button) end
+end
 
 -- Target tokens can point at a different unit without changing the secure
 -- button's unit attribute. Refresh display data without a GUID-based rebuild.
@@ -224,8 +242,12 @@ local function RefreshDebuffOverlays(button)
 end
 
 local function Attach(button)
-    if button.frame>=10 then return end
+    if button.frame>=10 then
+        IndexTargetButton(button)
+        return
+    end
     active[button]=true
+    IndexTargetButton(button)
     if InCombatLockdown() then
         HealBot_Forever_UpdateIncomingHeals(button)
         HealBot_Forever_UpdateDebuffOverlay(button)
@@ -249,6 +271,7 @@ end
 
 local function Detach(button)
     active[button]=nil
+    IndexTargetButton(button)
     button.foreverDebuffHandoff=nil
     if button.foreverIncoming then button.foreverIncoming.bar:Hide() end
     if button.foreverIncoming and button.foreverIncoming.absorb then
@@ -283,6 +306,11 @@ end)
 
 hooksecurefunc("HealBot_Action_RegisterUnitEvents", Attach)
 hooksecurefunc("HealBot_Action_UnregisterUnitEvents", Detach)
+-- SetHealButton can rebind an already registered bar without re-registering
+-- events. This reset runs immediately after its unit token is assigned.
+hooksecurefunc("HealBot_Action_ResetrCallsUnit", function(button)
+    if active[button] then IndexTargetButton(button) end
+end)
 hooksecurefunc("HealBot_Action_UpdateHealthButton", HealBot_Forever_UpdateDebuffOverlay)
 hooksecurefunc("HealBot_Aura_CheckUnitDebuffs",function(button)
     if button.foreverDebuffHandoff and not InCombatLockdown() then
@@ -309,10 +337,20 @@ events:RegisterEvent("PLAYER_REGEN_DISABLED")
 events:RegisterEvent("PLAYER_REGEN_ENABLED")
 events:RegisterEvent("PLAYER_TARGET_CHANGED")
 events:RegisterEvent("PLAYER_FOCUS_CHANGED")
-events:RegisterEvent("UNIT_TARGET")
+-- Match the native target frame: let the client resolve target aliases before
+-- delivering target-of-target changes instead of inspecting event payloads.
+events:RegisterUnitEvent("UNIT_TARGET", "target")
 events:SetScript("OnEvent", function(_, event)
     if event=="PLAYER_TARGET_CHANGED" or event=="PLAYER_FOCUS_CHANGED" or event=="UNIT_TARGET" then
-        for button in pairs(active) do HealBot_Forever_RefreshTarget(button) end
+        if not InCombatLockdown() then return end
+        if event=="PLAYER_TARGET_CHANGED" then
+            RefreshTargetButtons("target")
+            RefreshTargetButtons("targettarget")
+        elseif event=="PLAYER_FOCUS_CHANGED" then
+            RefreshTargetButtons("focus")
+        else
+            RefreshTargetButtons("targettarget")
+        end
         return
     end
     if event=="PLAYER_REGEN_ENABLED" then
