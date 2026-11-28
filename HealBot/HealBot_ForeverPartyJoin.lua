@@ -605,43 +605,87 @@ local function FindSkinDonor()
     return fallback,fx,fy
 end
 
-local function SkinExtras(row, donor, auraContext, cx, cy)
-    row.frame=frame
-    row.skinPower=row.skinPower or {}
-    for _,entry in pairs(row.skinPower) do entry.bar:Hide() end
+local previousPowerStyles={}
+local powerStyleFields={"x","y","width","height","texture","orientation","reverse","r","g","b","alpha",
+    "alignment","textX","textY","font","fontHeight","outline","tr","tg","tb","ta"}
+
+local function SamePowerStyle(previous,style)
+    if not previous then return false end
+    for _,field in ipairs(powerStyleFields) do
+        local a,b=previous[field],style[field]
+        if secret(a) or secret(b) or a~=b then return false end
+    end
+    return true
+end
+
+-- A roster pass copies one donor to many empty slots. Share the actual
+-- rendered values, so a new donor or media change is picked up on the next pass.
+local function PowerStyles(donor,cx,cy)
+    local styles={}
     for id=1,9 do
         if hbv_Aux_GetBarVar("USE",frame,id)==4 then
             local source=donor.gref.aux[id]
-            local x,y=source:GetCenter()
-            if x and y then
-                local entry=row.skinPower[id]
-                if not entry then
-                    local bar=CreateFrame("StatusBar",nil,row)
-                    bar:EnableMouse(false)
-                    entry={bar=bar,text=bar:CreateFontString(nil,"OVERLAY")}
-                    row.skinPower[id]=entry
-                end
-                local bar,text=entry.bar,entry.text
-                bar:ClearAllPoints()
-                bar:SetPoint("CENTER",row.healthBar,"CENTER",x-cx,y-cy)
-                bar:SetSize(source:GetWidth(),source:GetHeight())
-                bar:SetStatusBarTexture(source:GetStatusBarTexture():GetTexture())
-                bar:SetOrientation(source:GetOrientation())
-                bar:SetReverseFill(source:GetReverseFill())
-                local r,g,b,alpha=source:GetStatusBarColor()
-                bar:SetStatusBarColor(r,g,b,alpha)
-                entry.alpha=alpha
-                text:ClearAllPoints()
-                local alignment=alignments[hbv_Aux_GetBarTextVar("ALIGN",frame,id)] or "CENTER"
+            local text=donor.gref.auxtxt[id]
+            local texture=source and source:GetStatusBarTexture()
+            local x,y
+            if texture then x,y=source:GetCenter() end
+            if x and y and text then
                 local scale=Get("Frame","SCALE")
-                text:SetPoint(alignment,bar,alignment,math.ceil(hbv_Aux_GetBarTextVar("HOFFSET",frame,id)*scale),math.ceil(hbv_Aux_GetBarTextVar("OFFSET",frame,id)*scale))
-                text:SetJustifyH(alignment)
-                text:SetWidth(bar:GetWidth())
-                HealBot_Media_UpdateFont(text,hbv_Aux_GetBarTextVar("FONT",frame,id),math.ceil(hbv_Aux_GetBarTextVar("HEIGHT",frame,id)*scale),hbv_Aux_GetBarTextVar("OUTLINE",frame,id),"Arrival power text")
-                local original=donor.gref.auxtxt[id]
-                text:SetTextColor(original:GetTextColor())
-                bar:Show()
+                local style={x=x-cx,y=y-cy,width=source:GetWidth(),height=source:GetHeight(),
+                    texture=texture:GetTexture(),orientation=source:GetOrientation(),reverse=source:GetReverseFill(),
+                    alignment=alignments[hbv_Aux_GetBarTextVar("ALIGN",frame,id)] or "CENTER",
+                    textX=math.ceil(hbv_Aux_GetBarTextVar("HOFFSET",frame,id)*scale),
+                    textY=math.ceil(hbv_Aux_GetBarTextVar("OFFSET",frame,id)*scale)}
+                style.r,style.g,style.b,style.alpha=source:GetStatusBarColor()
+                style.tr,style.tg,style.tb,style.ta=text:GetTextColor()
+                style.font,style.fontHeight,style.outline=HealBot_Media_ResolveFont(hbv_Aux_GetBarTextVar("FONT",frame,id),
+                    math.ceil(hbv_Aux_GetBarTextVar("HEIGHT",frame,id)*scale),hbv_Aux_GetBarTextVar("OUTLINE",frame,id))
+                styles[id]=SamePowerStyle(previousPowerStyles[id],style) and previousPowerStyles[id] or style
             end
+        end
+    end
+    previousPowerStyles=styles
+    return styles
+end
+
+local function SkinExtras(row, donor, auraContext, cx, cy)
+    row.frame=frame
+    row.skinPower=row.skinPower or {}
+    if not auraContext.powerStyles then auraContext.powerStyles=PowerStyles(donor,cx,cy) end
+    local styles=auraContext.powerStyles
+    for id,entry in pairs(row.skinPower) do
+        if not styles[id] and entry.shown then
+            entry.bar:Hide()
+            entry.shown,entry.style=false,nil
+        end
+    end
+    for id,style in pairs(styles) do
+        local entry=row.skinPower[id]
+        if not entry then
+            local bar=CreateFrame("StatusBar",nil,row)
+            bar:EnableMouse(false)
+            entry={bar=bar,text=bar:CreateFontString(nil,"OVERLAY")}
+            row.skinPower[id]=entry
+        end
+        if entry.style~=style or entry.anchor~=row.healthBar then
+            local bar,text=entry.bar,entry.text
+            entry.style=nil
+            bar:ClearAllPoints()
+            bar:SetPoint("CENTER",row.healthBar,"CENTER",style.x,style.y)
+            bar:SetSize(style.width,style.height)
+            bar:SetStatusBarTexture(style.texture)
+            bar:SetOrientation(style.orientation)
+            bar:SetReverseFill(style.reverse)
+            bar:SetStatusBarColor(style.r,style.g,style.b,style.alpha)
+            entry.alpha=style.alpha
+            text:ClearAllPoints()
+            text:SetPoint(style.alignment,bar,style.alignment,style.textX,style.textY)
+            text:SetJustifyH(style.alignment)
+            text:SetWidth(style.width)
+            local fontApplied=text:SetFont(style.font,style.fontHeight,style.outline)
+            text:SetTextColor(style.tr,style.tg,style.tb,style.ta)
+            if not entry.shown then bar:Show(); entry.shown=true end
+            if fontApplied then entry.style,entry.anchor=style,row.healthBar end
         end
     end
     if HealBot_Forever_SkinArrivalAuras then HealBot_Forever_SkinArrivalAuras(row,donor,auraContext) end
@@ -701,8 +745,8 @@ local function Sync()
             checkedDonor=true
         end
         if reserve and donor then
-            if not auraContext and HealBot_Forever_PrepareArrivalAuraContext then
-                auraContext=HealBot_Forever_PrepareArrivalAuraContext(true)
+            if not auraContext then
+                auraContext=HealBot_Forever_PrepareArrivalAuraContext and HealBot_Forever_PrepareArrivalAuraContext(true) or {}
             end
             SkinExtras(row,donor,auraContext,donorX,donorY)
         end
