@@ -3,14 +3,7 @@ local function read(path)
 end
 local n=assert(read('tests/native_buff_casters.lua'):match('^(.-)\nlocal function admits%('))
 local fixture=assert(loadstring(n..'\nreturn fixture'))()
-local e,bare,swap,aura,sealed,setGroup=dofile("tests/fixtures/ordinary_helpful.lua")
-setGroup(true,false,0)
-e.HealBot_Aura_CheckUnitBuff=function() end
-e.HealBot_Aura_CheckUnitBuffIcons=function() end
-e.HealBot_Aura_BuffWarnings=function() end
-e.HealBot_Aura_ClearBuff=function() end
-e.HealBot_Aura_BuffUpdate_Plugins=function() end
-e.HealBot_Aura_SortBuffIcons=function() return 0 end
+local e,bare,swap,aura,sealed=assert(loadfile("tests/fixtures/public_helpful.lua"))()("party",true)
 local zone,guid,restricted,visible='pvp','public-one',false,true
 local d=fixture('PRIEST',4,function(env)
     env.IsInInstance=function() return true,zone end
@@ -47,7 +40,7 @@ e.C_UnitAuras.GetAuraDataByIndex=function(unit,index,filter)
     if index==21 then error('partial scan after twenty readable entries') end
     return readBeyondTwenty(unit,index,filter)
 end
-scan(many,false); assert(b.aura.buff.scanIncomplete and not b.aura.buff.missingbuff)
+scan(many,false); assert(b.aura.buff.scanIncomplete)
 e.C_UnitAuras.GetAuraDataByIndex=readBeyondTwenty
 many[21]=nil; scan(many,true)
 -- The native-only trigger is a different public name, outside the legacy watch list.

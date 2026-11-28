@@ -76,7 +76,7 @@ for base, ranks in pairs({
     [1022]={5599,10278}, -- Protection
     [774]={1058,1430,2090,2091,3627,8910,9839,9840,9841,25299}, -- Rejuvenation
     [8936]={8938,8939,8940,8941,9750,9856,9857,9858}, -- Regrowth
-    [1243]={1244,1245,2791,10937,10938,21562,21564,25389,25392},
+    [1243]={1244,1245,2791,10937,10938,21562,21564,25389,25392,450086},
     [588]={7128,602,1006,10951,10952},
     [139]={6074,6075,6076,6077,6078,10927,10928,10929,25315},
     [17]={592,600,3747,6065,6066,10898,10899,10900,10901},
@@ -1592,7 +1592,13 @@ local function HBCA_UpdateDebuffRowPolicy(button,a,publicDispels)
     end
 end
 
-local function HBCA_InvalidateDebuffScan(button)
+local function HBCA_InvalidateUnitScans(button)
+    local buff=button.aura and button.aura.buff
+    if buff then
+        buff.publicGeneration=nil
+        buff.update=true
+        if button.status.events and HealBot_Events_UnitBuff then HealBot_Events_UnitBuff(button) end
+    end
     local state=button.aura and button.aura.debuff
     if not state then return end
     state.scanUnit=nil
@@ -1680,7 +1686,7 @@ local function HBCA_RefreshShieldLockout(button)
 end
 
 function HealBot_Forever_RebindDebuffScan(button)
-    HBCA_InvalidateDebuffScan(button)
+    HBCA_InvalidateUnitScans(button)
     HBCA_RefreshShieldLockout(button)
 end
 
@@ -2099,6 +2105,7 @@ function HealBot_Forever_RefreshDebuffIconPreferences()
     if not HEALBOT_FOREVER or not HBCA_Enabled() then return end
     HBCA_SetAllShown(true)
     HBCA_AttachDeferred()
+    return true
 end
 
 -- ---------- wiring ----------
@@ -2124,9 +2131,10 @@ ev:SetScript("OnEvent", function(_, event, spellID, success)
     if event~="PLAYER_LOGIN" then buffScanGeneration=buffScanGeneration+1 end
     if event=="PLAYER_REGEN_DISABLED" then
         inCombat=true
-        if HBCA_Enabled() then HBCA_SetAllShown(true) end
+        local nativeRefreshed=HBCA_Enabled()
+        if nativeRefreshed then HBCA_SetAllShown(true) end
         if HEALBOT_FOREVER and HealBot_Aura_RefreshDebuffIconVisibility then
-            HealBot_Aura_RefreshDebuffIconVisibility()
+            HealBot_Aura_RefreshDebuffIconVisibility(nativeRefreshed)
         end
     elseif event=="PLAYER_REGEN_ENABLED" then
         inCombat=false
@@ -2134,23 +2142,17 @@ ev:SetScript("OnEvent", function(_, event, spellID, success)
         HBCA_SetAllShown(HEALBOT_FOREVER)
         HBCA_AttachDeferred()
         if HEALBOT_FOREVER and HealBot_Aura_RefreshDebuffIconVisibility then
-            HealBot_Aura_RefreshDebuffIconVisibility()
+            HealBot_Aura_RefreshDebuffIconVisibility(true)
         end
     elseif event=="PLAYER_ENTERING_WORLD" or event=="ADDON_RESTRICTION_STATE_CHANGED" then
-        -- The same party/raid token can cross a visibility boundary while
-        -- personal combat stays unchanged. Re-evaluate its harmful scan too.
+        -- A visibility change can affect an existing bar even if it has no
+        -- native icon row. Queue the normal scanners when its evidence expires.
         if HEALBOT_FOREVER then
-            for button in pairs(known) do HBCA_InvalidateDebuffScan(button) end
-        end
-        HBCA_SetAllShown(HEALBOT_FOREVER or inCombat)
-        if HEALBOT_FOREVER and not InCombatLockdown() and HBCA_NativeBuffContext() and HealBot_Events_UnitBuff then
-            for button in pairs(attached) do
-                if button.status.events and button.aura and button.aura.buff then
-                    button.aura.buff.update=true
-                    HealBot_Events_UnitBuff(button)
-                end
+            for button in pairs(known) do
+                if button.status.events then HBCA_InvalidateUnitScans(button) end
             end
         end
+        HBCA_SetAllShown(HEALBOT_FOREVER or inCombat)
     elseif event=="PLAYER_LOGIN" then
         if HEALBOT_MIDNIGHT then HBCA_Probe() end
     end
@@ -2181,7 +2183,7 @@ if type(hooksecurefunc)=="function" then
         hooksecurefunc("HealBot_Aura_CheckUnitDebuffs",HBCA_RefreshShieldLockout)
         hooksecurefunc("HealBot_UpdateUnitGUIDChange",HealBot_Forever_RebindDebuffScan)
         hooksecurefunc("HealBot_SetUnitDisconnectChange", function(button)
-            HBCA_InvalidateDebuffScan(button)
+            HBCA_InvalidateUnitScans(button)
             pcall(HBCA_SetButtonShown, button, true)
         end)
         function HealBot_Forever_RefreshBuffExclusions()
@@ -2218,8 +2220,8 @@ if type(hooksecurefunc)=="function" then
             end
         end)
         hooksecurefunc("HealBot_Aura_setCustomDebuffFilterDisabled",HealBot_Forever_RefreshDebuffIconPreferences)
-        hooksecurefunc("HealBot_Aura_RefreshDebuffIconVisibility",function()
-            HBCA_SetAllShown(true)
+        hooksecurefunc("HealBot_Aura_RefreshDebuffIconVisibility",function(nativeRefreshed)
+            if nativeRefreshed~=true then HBCA_SetAllShown(true) end
         end)
         hooksecurefunc("HealBot_Options_setDebuffPriority",HealBot_Forever_RefreshDebuffIconPreferences)
         hooksecurefunc("HealBot_Aura_ConfigDebuffs",function()

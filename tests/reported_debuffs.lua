@@ -13,7 +13,9 @@ local events=read("HealBot/HealBot_Events.lua")
 local first=assert(events:find("local function ReadableAuraTable",1,true))
 local last=assert(events:find("function HealBot_Events_UnitManaUpdate",first,true))
 setfenv(assert(loadstring(events:sub(first,last-1))),e)()
-local selectors=assert(read("HealBot/Healbot_Aura.lua"):match("(do\n    local function casterMatches.-\nend)"))
+local source=read("HealBot/Healbot_Aura.lua")
+local selectors=assert(source:match("(function HealBot_Aura_CustomDebuffCasterMatches%b().-\nend)")).."\n"..
+    assert(source:match("(do\n    local function customBar.-\nend)"))
 setfenv(assert(loadstring(selectors)),e)()
 button.status,button.event,button.aura.buff,button.frame={events=true,unittype=1},{},{},1
 local now,guid,visible,connected=100,"Player-1",true,true
@@ -215,4 +217,156 @@ assert(state.reported.records[60].expirationTime==127 and duplicate.aura.debuff.
 e.HealBot_Forever_ShieldPerf=nil
 assert(drain()==6788)
 now=127; assert(partial()==nil,"an existing short debuff acquired a new shield timer")
+-- An exact aura may first become readable in the middle of combat, without
+-- a public UNIT_AURA add. The next restricted scan must retain that same
+-- timed instance for Everyone, including a shield cast by a different priest.
+combat(true); cast=nil; guid="A"
+local foreign=entry(6788,70,140)
+scan(nil,{}, {[6788]=foreign})
+assert(state.publicShield and state.reported and state.reported.records[70].sourceUnit=="party3",
+    "a targeted public observation of another priest's shield was discarded")
+assert(partial()==6788 and e.HealBot_Forever_GetPartialBarWarning(button,false,2)==nil)
+e.HealBot_SafeUnitIsUnit=function(a,b) return a==b end
+foreign.sourceUnit=secret
+scan(nil,{}, {[6788]=foreign})
+assert(state.reported.records[70].sourceUnit=="party3" and state.partialWarnings[1].source=="party3")
+assert(e.HealBot_Forever_GetPartialBarWarning(button,true)==nil,"a foreign shield passed the self-only policy")
+event({removedAuraInstanceIDs={70}}); assert(drain()==nil)
+
+local frost=entry(888,71,140)
+frost.icon=secret
+scan({frost},{}, {})
+assert(#state.partialWarnings==1 and e.HealBot_Forever_GetPartialBarWarning(button,false)==888)
+local wake=clock[#clock]
+assert(wake and wake.at==140 and partial()==888,"another caster's exact timed custom debuff did not survive an opaque scan")
+now=140; wake.run(); assert(drain()==nil,"partially readable aura failed to expire")
+
+local late=entry(888,72,150)
+scan({late},{},{}); assert(partial()==888)
+guid="B"; assert(partial()==nil,"a new occupant inherited a scan-only debuff")
+local invalid=entry(888,73,150); invalid.isHarmful=secret
+local private=entry(6788,74,150); private.spellId=secret
+local untimed=entry(888,75,150); untimed.expirationTime=secret
+scan({invalid,private,untimed,secret,inaccessible},{},{[6788]=entry(888,76,150)})
+assert(partial()==nil and not state.reported,"an unverified observation seeded a lasting warning")
+
+-- Group roster notifications can concern another member. A still-public
+-- GUID must prove the same recipient before carrying a timer across them.
+local pending=entry(6788,80,160)
+add(pending); assert(drain()==6788)
+e.HealBot_Events_ResetReportedAuraGeneration(true)
+assert(partial()==6788,"an unrelated roster notification erased the same public recipient's aura")
+local deadline=clock[#clock]; now=160; deadline.run(); assert(drain()==nil)
+for _,change in ipairs({"changed GUID","private GUID","disconnected","rebound","world"}) do
+    guid="original"; button.unit="party1"; connected=true
+    add(entry(888,81,180)); assert(drain()==888)
+    if change=="changed GUID" then guid="new"
+    elseif change=="private GUID" then guid=secret
+    elseif change=="disconnected" then connected=false
+    elseif change=="rebound" then button.unit="raid4" end
+    e.HealBot_Events_ResetReportedAuraGeneration(change~="world")
+    assert(not state.reported,change.." retained the old recipient")
+end
+
+-- Restricted GUIDs are common on battleground members. A public full name
+-- and realm can prove that this particular roster slot kept its recipient.
+local short,realm,player=nil,nil,true
+e.UnitFullName=function(unit) assert(unit==button.unit); return short,realm end
+e.UnitIsPlayer=function() return player end
+for _,case in ipairs({
+    {secret,secret,"Member","RealmA",true}, {"A",secret,"Member","RealmA",true},
+    {secret,"A","Member","RealmA",true}, {"A","B","Member","RealmA",false},
+    {secret,secret,"Member","RealmB",false}, {secret,secret,"Other","RealmA",false},
+    {secret,secret,"Member",nil,false}, {secret,secret,secret,"RealmA",false},
+    {secret,secret,"Member",secret,false}, {"A","A","Changed","RealmB",true},
+}) do
+    button.unit="raid6"; guid=case[1]; short,realm="Member","RealmA"; connected=true
+    add(entry(888,82,180)); assert(drain()==888)
+    guid,short,realm=case[2],case[3],case[4]
+    e.HealBot_Events_ResetReportedAuraGeneration(true)
+    assert((partial()==888)==case[5],"failed current roster-recipient check")
+    e.HealBot_Events_ResetReportedAuraGeneration()
+end
+guid=secret; short,realm="Member","RealmA"
+add(entry(888,82,180)); assert(drain()==888)
+player=false; e.HealBot_Events_ResetReportedAuraGeneration(true)
+assert(partial()==nil,"a non-player inherited a roster member's warning")
+player=true
+for _,value in ipairs({"",secret}) do
+    guid=secret; short,realm="Member",value
+    add(entry(888,82,180)); assert(drain()==888)
+    short,realm="Member","RealmA"; e.HealBot_Events_ResetReportedAuraGeneration(true)
+    assert(partial()==nil,"incomplete original identity survived a roster change")
+end
+e.UnitFullName=nil
+
+button.unit="party1"; guid="original"; connected=true; combat(true)
+local uncertain=entry(6788,92,180); uncertain.expirationTime=secret
+local refreshed=entry(6788,92,180)
+local reads=0
+e.C_UnitAuras.GetAuraDataByAuraInstanceID=function(_,id) reads=reads+1; assert(id==92); return refreshed end
+scan({uncertain},{},{})
+for i=1,40 do event({updatedAuraInstanceIDs={200+i}}) end
+assert(reads==0 and not state.reported)
+event({updatedAuraInstanceIDs={92}})
+assert(reads==1 and drain()==6788,"an update with the exact observed instance and now-public lifetime was lost")
+event({removedAuraInstanceIDs={92}}); assert(drain()==nil)
+for _,kind in ipairs({"wrong id","wrong instance","hidden","private time","already ended","infinite","nan","changed recipient","hidden GUID"}) do
+    guid="original"; refreshed=entry(6788,92,180)
+    scan({uncertain},{},{})
+    if kind=="wrong id" then refreshed.spellId=888
+    elseif kind=="wrong instance" then refreshed.auraInstanceID=93
+    elseif kind=="hidden" then refreshed=inaccessible
+    elseif kind=="private time" then refreshed.expirationTime=secret
+    elseif kind=="already ended" then refreshed.expirationTime=now
+    elseif kind=="infinite" then refreshed.expirationTime=math.huge
+    elseif kind=="nan" then refreshed.expirationTime=0/0
+    elseif kind=="changed recipient" then guid="replacement"
+    else guid=secret end
+    local before=reads
+    event({updatedAuraInstanceIDs={92}}); event({updatedAuraInstanceIDs={92}})
+    assert(reads<=before+1 and drain()==nil and not state.reported,kind.." certified an invalid update")
+end
+guid="original"; refreshed=entry(6788,92,180)
+for _,boundary in ipairs({{isFullUpdate=true},{removedAuraInstanceIDs={92}},{removedAuraInstanceIDs=secret}}) do
+    scan({uncertain},{},{})
+    local before=reads
+    event(boundary); event({updatedAuraInstanceIDs={92}})
+    assert(reads==before and drain()==nil,"old incomplete observation survived a mutation boundary")
+end
+scan({uncertain},{},{})
+local before=reads
+e.HealBot_Forever_DebuffsEnabled=function() return false end
+event({updatedAuraInstanceIDs={92}})
+assert(reads==before and drain()==nil,"a disabled monitor queried a changed instance")
+
+-- A complete application from one caster must not mask a different public
+-- instance of the same spell from the caster selected in the configuration.
+e.HealBot_Forever_DebuffsEnabled=function() return true end
+e.HEALBOT_OPTIONS_SELFHEALS="self"; e.castByListIndexed.self=2; e.hbCustomDebuffsCastBy[888]=2
+e.HEALBOT_CUSTOM_CASTBY_FRIEND="friend"; e.HEALBOT_CUSTOM_CASTBY_ENEMY="enemy"
+e.UnitIsFriend=function() return true end; e.UnitIsEnemy=function() return false end
+local other=entry(888,101,190)
+local mine=entry(888,102,185); mine.sourceUnit="player"; mine.icon=secret
+local function selected() return e.HealBot_Forever_GetPartialBarWarning(button,false) end
+for _,list in ipairs({{other,mine},{mine,other}}) do
+    scan(list,{},{})
+    assert(selected()==888,"another caster's readable instance blocked the configured caster")
+    assert(e.HealBot_Forever_GetPartialBarWarning(button,false,2)==nil,"instance evidence overrode a higher priority")
+end
+scan({other},{},{})
+assert(selected()==888,"event-retained application was hidden by the other caster's spell ID")
+local foreignSibling=entry(888,103,190)
+scan({foreignSibling,other},{},{})
+assert(selected()==888,"multiple readable siblings masked a separate configured instance")
+other.auraInstanceID=102
+scan({other},{},{})
+assert(selected()==nil,"same instance was processed again with an outdated caster")
+other.auraInstanceID=secret
+scan({other,mine},{},{})
+assert(selected()==nil,"two readings without distinct public instance identities asserted separate applications")
+other.auraInstanceID=101
+scan({other,mine},{},{})
+event({removedAuraInstanceIDs={102}}); scan({other},{},{})
+assert(selected()==nil,"removed occurrence was reintroduced by a sibling")
 print("PASS: verified custom harmful applications survive combat privacy changes and retire on expiry, removal, roster changes and authoritative scans")

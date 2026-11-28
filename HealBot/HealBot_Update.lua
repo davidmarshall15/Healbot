@@ -1180,6 +1180,7 @@ function HealBot_Update_AllAuras()
 end
 
 function HealBot_Update_AllBuffs()
+    if HealBot_Forever_RefreshReserveWarnings then HealBot_Forever_RefreshReserveWarnings("buff") end
       --HealBot_setCall("HealBot_Update_AllBuffs")
     for _,xButton in pairs(HealBot_Unit_Button) do
         HealBot_BuffSlowUpdate(xButton)
@@ -1199,6 +1200,7 @@ function HealBot_Update_AllBuffs()
 end
 
 function HealBot_Update_AllDebuffs()
+    if HealBot_Forever_RefreshReserveWarnings then HealBot_Forever_RefreshReserveWarnings("debuff") end
       --HealBot_setCall("HealBot_Update_AllDebuffs")
     for _,xButton in pairs(HealBot_Unit_Button) do
         HealBot_DebuffSlowUpdate(xButton)

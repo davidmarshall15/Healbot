@@ -229,7 +229,7 @@ end
 
 function HealBot_Events_RosterUpdate()
       --HealBot_setCall("HealBot_Events_RosterUpdate")
-    HealBot_Events_ResetReportedAuraGeneration()
+    HealBot_Events_ResetReportedAuraGeneration(true)
     HealBot_Timers_Set("OOC","PartyUpdateCheckSkin")
     HealBot_Events_PartyMembersChanged();
     if HEALBOT_FOREVER then HealBot_Events_PetsChanged() end
@@ -509,35 +509,63 @@ end
 local reportedAuraGeneration=0
 local reportedAuraButtons={}
 
-function HealBot_Events_ResetReportedAuraGeneration()
-    reportedAuraGeneration=reportedAuraGeneration+1
-    for button in pairs(reportedAuraButtons) do
-        reportedAuraButtons[button]=nil
-        if button.aura.debuff.reported then
-            button.aura.debuff.reported=nil
-            button.aura.debuff.update=true
-            HealBot_Events_UnitDebuff(button)
-        end
-    end
+local function RosterAuraName(unit)
+    if not UnitFullName or not UnitIsPlayer or (unit~="player" and not unit:match("^party%d+$") and not unit:match("^raid%d+$")) then return end
+    local player=UnitIsPlayer(unit)
+    if HealBot_issecretvalue(player) or player~=true then return end
+    local ok,name,realm=pcall(UnitFullName,unit)
+    if ok and not HealBot_issecretvalue(name) and type(name)=="string" and name~=""
+        and name~=UNKNOWNOBJECT and name~=UNKNOWN and name~=HEALBOT_WORDS_UNKNOWN
+        and not HealBot_issecretvalue(realm) and type(realm)=="string" and realm~="" then return name,realm end
 end
 
-local function ReportedAuraIdentity(button,cache)
+HealBot_Events_RosterAuraName=RosterAuraName
+
+local function ReportedAuraIdentity(button,cache,rosterChanged)
     if not button.status.events or button.frame>=10 then return end
     local unit=button.unit
     if cache and (cache.generation~=reportedAuraGeneration or cache.unit~=unit) then return end
     local visible,connected=UnitIsVisible(unit),UnitIsConnected(unit)
     if HealBot_issecretvalue(visible) or not visible or HealBot_issecretvalue(connected) or not connected then return end
     local guid=UnitGUID(unit)
-    if not HealBot_issecretvalue(guid) and type(guid)=="string" and guid~="" then
-        if cache then
-            if cache.guid and guid~=cache.guid then return end
-            cache.guid=guid
+    if HealBot_issecretvalue(guid) or type(guid)~="string" or guid=="" then guid=nil end
+    if cache then
+        if guid and cache.guid then
+            if guid==cache.guid then return true,guid end
+            return
         end
-        return true,guid
+        if rosterChanged or (guid and cache.name) then
+            -- One side lacks a GUID. Carry a verified application across a
+            -- roster change only when both sides supplied the full identity.
+            local name,realm=RosterAuraName(unit)
+            if rosterChanged and (not name or not cache.name) then return end
+            if name and cache.name and (name~=cache.name or realm~=cache.realm) then return end
+        end
+        if guid then cache.guid=guid end
     end
+    if guid then return true,guid end
     -- Roster slots remain associated with the delivered unit while its
     -- subscription and roster generation hold. Target/focus may change freely.
     return unit=="player" or unit:match("^party%d+$")~=nil or unit:match("^raid%d+$")~=nil
+end
+
+function HealBot_Events_ResetReportedAuraGeneration(keepSameRecipient)
+    local generation=reportedAuraGeneration+1
+    for button in pairs(reportedAuraButtons) do
+        local state=button.aura.debuff
+        local cache=state.reported
+        if keepSameRecipient and cache and ReportedAuraIdentity(button,cache,true) then
+            cache.generation=generation
+        else
+            reportedAuraButtons[button]=nil
+            if cache then
+                state.reported=nil
+                state.update=true
+                HealBot_Events_UnitDebuff(button)
+            end
+        end
+    end
+    reportedAuraGeneration=generation
 end
 
 function HealBot_Events_UnitStatus(button)
@@ -557,7 +585,7 @@ function HealBot_Events_UnitStatus(button)
     end
 end
 
-local function RememberReportedAura(button,aura,fromScan,previous)
+local function RememberReportedAura(button,aura,fromScan,previous,warning)
     if not HealBot_Config_Cures or not HealBot_Config_Cures.CDCshownHB then return end
     local tracked=HealBot_Globals.CustomDebuffs
     if not tracked or not next(tracked) then return end
@@ -575,41 +603,56 @@ local function RememberReportedAura(button,aura,fromScan,previous)
         if id~=6788 then return end
         dispel=nil
     end
-    if HealBot_issecretvalue(source) then source=previous and previous.sourceUnit end
+    local sourceHidden=HealBot_issecretvalue(source)
+    if sourceHidden then source=previous and previous.sourceUnit end
     if type(source)~="string" then source=nil end
     local expires=aura.expirationTime
-    if HealBot_issecretvalue(expires) or type(expires)~="number" or expires<=0 then
+    if HealBot_issecretvalue(expires) or type(expires)~="number" or not (expires>0 and expires<math.huge) then
         expires=previous and previous.expirationTime
     end
     -- On an instance update the next scan also reconciles an expired record
     -- with any estimate seeded by the original shield cast.
-    if fromScan and not expires or not previous and expires and expires<=GetTime() then return end
     local state=button.aura.debuff
     local cache=state.reported
+    if fromScan and not expires then
+        -- The live warning has exact public identity but no lifetime. Only a
+        -- subsequent update naming this very instance can complete the record.
+        if warning and not (cache and cache.records[instance]) and not HealBot_Aura_CustomDebuffDisabled(id,name) then
+            local _,guid=ReportedAuraIdentity(button)
+            if guid then
+                warning.instance,warning.guid,warning.generation=instance,guid,reportedAuraGeneration
+                state.awaitingReportedInstance=true
+            end
+        end
+        return
+    end
+    if not previous and expires and expires<=GetTime() then return end
     if cache and not ReportedAuraIdentity(button,cache) then state.reported=nil; cache=nil end
     if not cache then
         local valid,guid=ReportedAuraIdentity(button)
         if not valid then return end
         cache={unit=button.unit,guid=guid,generation=reportedAuraGeneration,records={}}
+        cache.name,cache.realm=RosterAuraName(button.unit)
         state.reported=cache
         reportedAuraButtons[button]=true
     end
     -- Copy the public warning fields. The event's original AuraData may
     -- contain restricted values and its accessibility can change in combat.
     local record=cache.records[instance] or {}
+    if sourceHidden and not source and record.spellId==id then source=record.sourceUnit end
     if id==6788 then record.firstSeen=record.firstSeen or (previous and previous.firstSeen) or GetTime() end
     record.spellId,record.auraInstanceID,record.name=id,instance,name
     record.isHarmful,record.sourceUnit,record.dispelName=true,source,dispel
     record.expirationTime=expires
     record.scan=cache.scan
     cache.records[instance]=record
-    return true
+    return record
 end
 
-function HealBot_Events_RememberScannedCustomDebuff(button,aura)
-    -- A timed public application observed before combat remains useful if a
-    -- later enumeration becomes restricted while UNIT_AURA stays subscribed.
-    RememberReportedAura(button,aura,true)
+function HealBot_Events_RememberScannedCustomDebuff(button,aura,warning)
+    -- A verified, timed application can be reported by a complete scan or
+    -- individually during combat while the rest of the unit's auras are opaque.
+    return RememberReportedAura(button,aura,true,nil,warning)
 end
 
 -- A delayed click only selects the unit to inspect. The filtered list still
@@ -764,10 +807,45 @@ local function ReconcileReportedInstances(button,list,updated)
     return true,removedShield
 end
 
+local function RecoverReportedUpdate(button,info)
+    local state=button.aura.debuff
+    if not state.partialWarnings or state.scanUnit~=button.unit or state.publicUnit
+        or not HealBot_Config_Cures.CDCshownHB or not C_UnitAuras.GetAuraDataByAuraInstanceID then return end
+    local updates=info.updatedAuraInstanceIDs
+    if not ReadableAuraTable(updates) or not EmptyAuraChanges(info.addedAuras) or not EmptyAuraChanges(info.removedAuraInstanceIDs) then return end
+    for _,warning in ipairs(state.partialWarnings) do
+        if warning.instance and warning.generation==reportedAuraGeneration then
+            for _,instance in ipairs(updates) do
+                if not HealBot_issecretvalue(instance) and instance==warning.instance then
+                    state.awaitingReportedInstance=nil
+                    if state.reported and state.reported.records[instance] then return end
+                    if HealBot_Forever_DebuffsEnabled and not HealBot_Forever_DebuffsEnabled() then return end
+                    local _,guid=ReportedAuraIdentity(button)
+                    if guid~=warning.guid or HealBot_Aura_CustomDebuffDisabled(warning.id,warning.name)
+                        or not HealBot_Aura_CustomDebuffSetting(HealBot_Globals.CustomDebuffs,warning.id,warning.name) then return end
+                    local mode=HealBot_Aura_CustomDebuffSetting(HealBot_Globals.CustomDebuffsShowBarCol,warning.id,warning.name) or 4
+                    if mode~=3 and mode~=4 then return end
+                    local ok,aura=pcall(C_UnitAuras.GetAuraDataByAuraInstanceID,button.unit,instance)
+                    if ok and ReadableAuraTable(aura) and not HealBot_issecretvalue(aura.auraInstanceID) and aura.auraInstanceID==instance
+                        and not HealBot_issecretvalue(aura.spellId) and aura.spellId==warning.id then
+                        RememberReportedAura(button,aura,true)
+                    end
+                    return true
+                end
+            end
+        end
+    end
+end
+
 local function AddedAuraSide(button,unit,info)
     local state=button.aura.debuff
     if HealBot_issecretvalue(unit) or unit~=button.unit or not ReadableAuraTable(info)
-        or HealBot_issecretvalue(info.isFullUpdate) or info.isFullUpdate then state.reported=nil; return end
+        or HealBot_issecretvalue(info.isFullUpdate) or info.isFullUpdate then
+        state.reported=nil
+        state.awaitingReportedInstance=nil
+        return
+    end
+    if state.awaitingReportedInstance and not EmptyAuraChanges(info.removedAuraInstanceIDs) then state.awaitingReportedInstance=nil end
     local removedShield
     local hadReported=state.reported~=nil
     if hadReported then
@@ -776,6 +854,7 @@ local function AddedAuraSide(button,unit,info)
         if not ok or not ReconcileReportedInstances(button,info.updatedAuraInstanceIDs,true) then state.reported=nil; return end
         if not next(state.reported.records) then state.reported=nil end
     end
+    if state.awaitingReportedInstance and RecoverReportedUpdate(button,info) then return end
     local added=info.addedAuras
     local single=ReadableAuraTable(added)
     if not single and not removedShield then return end
@@ -855,6 +934,7 @@ function HealBot_Events_UnitDebuff(button)
     if not button.event.debuff then
         button.event.debuff=true
         button.event.aura=true
+        if button.queueReserveScan and button.status.events then button.queueReserveScan() end
     end
 end
 

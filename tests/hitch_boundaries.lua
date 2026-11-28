@@ -38,6 +38,8 @@ env.HealBot_Panel_PositionBars=function() clock=clock+4 end
 env.HealBot_Panel_SetupBars=function() env.HealBot_Panel_PositionBars(); clock=clock+3 end
 env.HealBot_Panel_PlayersChanged=function() env.HealBot_Panel_SetupBars(); clock=clock+2 end
 env.HealBot_Panel_buildDataStore=function() clock=clock+1 end
+local updateCosts={HealBot_Update_ResetUnitOpacity=4,HealBot_Forever_UpdatePrediction=2,HealBot_ItemIdsInBag=3}
+for name,cost in pairs(updateCosts) do env[name]=function() clock=clock+cost end end
 env.HealBot_Panel_PartyChanged=function() env.HealBot_Panel_buildDataStore(); env.HealBot_Panel_PlayersChanged(); clock=clock+1 end
 local original=env.HealBot_Panel_PartyChanged
 local netReads=0
@@ -62,6 +64,7 @@ sampler:OnEvent("ADDON_LOADED","HealBot_Tips")
 assert(env.HealBot_Action_DoRefreshTooltip()=="drawn")
 sampler:OnEvent("PLAYER_TARGET_CHANGED")
 env.HealBot_Panel_PartyChanged()
+for name in pairs(updateCosts) do env[name]() end
 tick(160)
 assert(nativeReads==4)
 tick(99) -- the following and the second hitch share the native sample, one query set
@@ -78,6 +81,9 @@ assert(r.slowFrames==2 and #r.hitches==2 and h.boundary.wallMs==160)
 assert(h.boundary.heaviestName=="HealBot_Panel_PartyChanged" and h.boundary.heaviestMs==11)
 assert(h.boundary.tooltipPhases.HealBot_Action_DoRefreshTooltip.ms==2)
 assert(h.boundary.tooltipPhases.HealBot_Action_DoRefreshTooltip.calls==1)
+for name,cost in pairs(updateCosts) do
+    assert(h.boundary.updatePhases[name].ms==cost and h.boundary.updatePhases[name].calls==1)
+end
 assert(env.HealBot_Action_DoRefreshTooltip==drawTooltip)
 assert(h.boundary.partyPhases.HealBot_Panel_buildDataStore.ms==1 and h.boundary.partyPhases.HealBot_Panel_PlayersChanged.ms==9)
 assert(h.boundary.partyPhases.HealBot_Panel_SetupBars.ms==7 and h.boundary.partyPhases.HealBot_Panel_PositionBars.ms==4)

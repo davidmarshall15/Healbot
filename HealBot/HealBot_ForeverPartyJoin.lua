@@ -81,10 +81,179 @@ end
 
 local incomingColourModes={[3]=2,[4]=3,[6]=4,[7]=5,[8]=6}
 
-local function Paint(row,event)
+local function SelectWarning(row)
+    row.warningKind=nil
+    local button=row.warningButton
+    if button and button.status.events and not button.status.isdead then
+        local d,buff=button.aura.debuff,button.aura.buff
+        if d.name and (d.colbar==2 or d.colbar==3) and HealBot_Config_Cures.CDCshownHB
+            and (d.dispellable or not HealBot_Config_Cures.CDCshownHBDispelOnly)
+            and HealBot_Range_WarnInRange(button,d.curespell,HealBot_Config_Cures.WarnRange_Bar) then
+            row.warningKind="debuff"
+        elseif buff.name and not buff.missingbuff and (buff.colbar==2 or buff.colbar==3)
+            and HealBot_Config_Buffs.CBshownHB and not HealBot_Config_Buffs.CBshownHBMissingOnly
+            and HealBot_Range_WarnInRange(button,buff.name,HealBot_Config_Buffs.WarnRange_Bar) then
+            row.warningKind="buff"
+        end
+    end
+end
+
+local function ApplyHealthColour(row)
+    if not row.hasHealthColour then return end
+    local warning=row.warningKind and row.aura[row.warningKind]
+    if warning then row.healthBar:SetStatusBarColor(warning.r,warning.g,warning.b,row.barAlpha)
+    else row.healthBar:SetStatusBarColor(row.baseR,row.baseG,row.baseB,row.barAlpha) end
+end
+
+local function Public(value)
+    if not secret(value) then return value end
+end
+
+local function ResetWarnings(row)
+    local button=row.warningButton
+    if not button then return end
+    button.status.events=false
+    button.aura.buff={colbar=0,priority=99,recheck={},temp={}}
+    button.aura.debuff={colbar=0,priority=99,temp={}}
+    button.guid=nil
+    button.rosterName,button.rosterRealm=nil,nil
+    if row.warningTimer then row.warningTimer:Cancel(); row.warningTimer=nil end
+    row.warningDeadline=nil
+    row.warningKind=nil
+end
+
+local function QueueWarningScan(row)
+    if row.warningQueued then return end
+    row.warningQueued=true
+    C_Timer.After(0,function()
+        row.warningQueued=nil
+        local button=row.warningButton
+        if not button or not button.status.events or not row:IsVisible() then return end
+        -- Changes to either family can change which warning wins.
+        if button.event.buff then
+            button.event.buff=false
+            local suppressedDebuff=button.aura.buff.overdb
+            HealBot_Aura_CheckUnitBuffs(button)
+            if suppressedDebuff then button.event.debuff=true end
+        end
+        if button.event.debuff then
+            button.event.debuff=false
+            HealBot_Aura_CheckUnitDebuffs(button)
+        end
+        SelectWarning(row)
+        ApplyHealthColour(row)
+        local now=GetTime()
+        local deadline
+        local d=button.aura.debuff
+        if d.barOnly and d.id==6788 and HealBot_Forever_GetShieldLockout then
+            local start,duration=HealBot_Forever_GetShieldLockout(button)
+            if start and start+duration>now then deadline=start+duration end
+        end
+        if row.warningDeadline~=deadline then
+            if row.warningTimer then row.warningTimer:Cancel(); row.warningTimer=nil end
+            row.warningDeadline=deadline
+            if deadline then
+                row.warningTimer=C_Timer.NewTimer(deadline-now+0.05,function()
+                    row.warningTimer,row.warningDeadline=nil,nil
+                    button.aura.buff.update,button.aura.debuff.update=true,true
+                    button.event.buff,button.event.debuff=true,true
+                    QueueWarningScan(row)
+                end)
+            end
+        end
+    end)
+end
+
+local function RefreshWarnings(row,event,info)
+    if not HealBot_Aura_InitReserveWarnings then return end
+    local unit=row.unit
+    local button=row.warningButton
+    local guid=Public(UnitGUID(unit))
+    local name,realm
+    if not guid and HealBot_Events_RosterAuraName then name,realm=HealBot_Events_RosterAuraName(unit) end
+    if not button then
+        button={reserveWarnings=true,reserveBuffCurrent={},reserveDebuffCurrent={},unit=unit,
+            frame=row.frame or frame,isplayer=true,isgroupraid=true,special={},status={current=0},
+            event={},range={},health={current=0},mana={},text={},aura={},
+            icon={buff={count={0,0,0}},debuff={count={0,0,0}}}}
+        row.warningButton=button
+        row.aura=button.aura
+        button.queueReserveScan=function() QueueWarningScan(row) end
+        HealBot_Aura_InitReserveWarnings(button)
+        ResetWarnings(row)
+    elseif (guid and button.guid and guid~=button.guid) or event=="PLAYER_ENTERING_WORLD"
+        or (event=="GROUP_ROSTER_UPDATE" and not (guid and guid==button.guid)
+            and not (name and name==button.rosterName and realm==button.rosterRealm)) then
+        ResetWarnings(row)
+    end
+    if not Public(UnitIsConnected(unit)) or not Public(UnitIsVisible(unit)) then
+        ResetWarnings(row)
+        ApplyHealthColour(row)
+        return
+    end
+    local fresh=not button.status.events
+    button.frame=row.frame or frame
+    button.framecol=button.frame
+    if guid then button.guid=guid end
+    if name then button.rosterName,button.rosterRealm=name,realm end
+    button.status.events=true
+    button.status.isdead=Public(UnitIsDeadOrGhost(unit))
+    if fresh or event~="UNIT_AURA" then
+        local oldGroup,oldRole,oldPlayerGroup,oldTank=button.group,button.roletxt,button.playerGroup,button.rosterTank
+        button.player=Public(UnitIsUnit(unit,"player"))
+        button.roletxt=Public(UnitGroupRolesAssigned(unit))
+        if button.roletxt=="NONE" then button.roletxt=Public(HealBot_Panel_UnitRoleDefault(unit)) end
+        local _,class=UnitClass(unit)
+        class=Public(class)
+        button.text.classtrim=class and class:sub(1,4)
+        button.level=Public(UnitLevel(unit)) or 0
+        button.mana.type=Public(UnitPowerType(unit))
+        local _,_,pct=HealBot_WoWAPI_UnitMana(unit,button.mana.type)
+        button.mana.pct=pct
+        local index=tonumber(unit:match("^raid(%d+)$"))
+        if index then
+            local _,_,group=GetRaidRosterInfo(index)
+            button.group=Public(group)
+        else
+            button.group=HealBot_Data.PLAYERGROUP
+        end
+        button.playerGroup=HealBot_Data.PLAYERGROUP
+        button.rosterTank=Public(HealBot_Panel_IsTank(unit))
+        if not fresh and event=="GROUP_ROSTER_UPDATE" and oldGroup==button.group and oldRole==button.roletxt
+            and oldPlayerGroup==button.playerGroup and oldTank==button.rosterTank then return end
+    end
+    button.range.eventIn=row.eventInRange
+    button.range.current=row.outOfRange and 0 or 1
+    if event=="UNIT_AURA" and not fresh then
+        HealBot_Events_UnitAura(button,unit,info)
+    else
+        button.aura.buff.update,button.aura.debuff.update=true,true
+        button.event.buff,button.event.debuff=true,true
+        if event=="UNIT_AURA" then HealBot_Events_UnitAura(button,unit,info) end
+    end
+    QueueWarningScan(row)
+end
+
+function HealBot_Forever_RefreshReserveWarnings(side)
+    for _,row in ipairs(rows) do
+        if row:IsVisible() then
+            local button=row.warningButton
+            if button and button.status.events then
+                button.aura[side].update=true
+                button.event[side]=true
+                QueueWarningScan(row)
+            else
+                RefreshWarnings(row)
+            end
+        end
+    end
+end
+
+local function Paint(row,event,info)
     local unit=row.unit
     if not frame or not UnitExists(unit) then return end
     if event=="UNIT_AURA" or event=="UNIT_POWER_UPDATE" or event=="UNIT_MAXPOWER" or event=="UNIT_DISPLAYPOWER" then
+        if event=="UNIT_AURA" or event=="UNIT_DISPLAYPOWER" then RefreshWarnings(row,event,info) end
         if event~="UNIT_AURA" then PaintPower(row) end
         if HealBot_Forever_UpdateArrivalAuras then
             HealBot_Forever_UpdateArrivalAuras(row,event=="UNIT_AURA" or event=="UNIT_DISPLAYPOWER")
@@ -110,7 +279,10 @@ local function Paint(row,event)
     local r,g,b=SkinColour("BarCol","HLTH","H")
     local enabledAlpha=Get("BarCol","HA")
     local barAlpha=outOfRange and Get("BarCol","ORA") or enabledAlpha
-    row.healthBar:SetStatusBarColor(r,g,b,barAlpha)
+    row.baseR,row.baseG,row.baseB,row.barAlpha,row.outOfRange=r,g,b,barAlpha,outOfRange
+    row.hasHealthColour=true
+    if event~="UNIT_HEALTH" and event~="UNIT_MAXHEALTH" and event~="UNIT_HEAL_PREDICTION" then RefreshWarnings(row,event) end
+    ApplyHealthColour(row)
     if HealBot_Forever_SetArrivalIconOpacity then HealBot_Forever_SetArrivalIconOpacity(row,barAlpha,enabledAlpha) end
     local incoming=row.incomingBar
     if incoming then
@@ -337,12 +509,13 @@ local function CreateRow(mode,index)
     row.nameText=bar:CreateFontString(nil,"OVERLAY")
     row.healthText=bar:CreateFontString(nil,"OVERLAY")
     row:HookScript("OnShow",Paint)
-    for _,event in ipairs({"UNIT_HEALTH","UNIT_MAXHEALTH","UNIT_NAME_UPDATE","UNIT_IN_RANGE_UPDATE","UNIT_POWER_UPDATE","UNIT_MAXPOWER","UNIT_DISPLAYPOWER","UNIT_AURA","UNIT_CONNECTION"}) do
+    row:HookScript("OnHide",ResetWarnings)
+    for _,event in ipairs({"UNIT_HEALTH","UNIT_MAXHEALTH","UNIT_NAME_UPDATE","UNIT_IN_RANGE_UPDATE","UNIT_POWER_UPDATE","UNIT_MAXPOWER","UNIT_DISPLAYPOWER","UNIT_AURA","UNIT_CONNECTION","UNIT_FLAGS"}) do
         row:RegisterUnitEvent(event,row.unit)
     end
     row:SetScript("OnEvent",function(self,event,_,inRange)
         if event=="UNIT_IN_RANGE_UPDATE" and not secret(inRange) then self.eventInRange=inRange end
-        if self:IsVisible() then Paint(self,event) end
+        if self:IsVisible() then Paint(self,event,inRange) end
     end)
     return row
 end
@@ -513,7 +686,7 @@ end
 
 local events=CreateFrame("Frame")
 for _,event in ipairs({"PLAYER_LOGIN","PLAYER_REGEN_ENABLED","GROUP_ROSTER_UPDATE",
-    "PLAYER_ENTERING_WORLD","PLAYER_SPECIALIZATION_CHANGED"}) do
+    "PLAYER_ENTERING_WORLD","ADDON_RESTRICTION_STATE_CHANGED","PLAYER_SPECIALIZATION_CHANGED"}) do
     events:RegisterEvent(event)
 end
 events:SetScript("OnEvent",function(_,event)
@@ -527,8 +700,8 @@ events:SetScript("OnEvent",function(_,event)
     end
     if event=="PLAYER_SPECIALIZATION_CHANGED" then bindingGeneration=bindingGeneration+1 end
     if InCombatLockdown() then
-        if event=="GROUP_ROSTER_UPDATE" then
-            for _,row in ipairs(rows) do if row:IsVisible() then Paint(row) end end
+        if event=="GROUP_ROSTER_UPDATE" or event=="PLAYER_ENTERING_WORLD" or event=="ADDON_RESTRICTION_STATE_CHANGED" then
+            for _,row in ipairs(rows) do if row:IsVisible() then Paint(row,event) end end
         end
     else
         QueueSync()
@@ -558,11 +731,13 @@ hooksecurefunc("HealBot_Panel_SetupBars",QueueSync)
 hooksecurefunc("HealBot_Aura_SetAuraCheckFlags",function()
     for _,row in ipairs(rows) do
         if HealBot_Forever_UpdateArrivalAuras then HealBot_Forever_UpdateArrivalAuras(row) end
+        if row:IsVisible() then RefreshWarnings(row) end
     end
 end)
 local function RefreshReserveDebuffs()
     if InCombatLockdown() then
         if HealBot_Forever_RefreshArrivalDebuffPolicy then HealBot_Forever_RefreshArrivalDebuffPolicy() end
+        for _,row in ipairs(rows) do if row:IsVisible() then RefreshWarnings(row) end end
     else
         QueueSync()
     end
@@ -583,6 +758,12 @@ end
 
 function HealBot_Forever_VisitPartyPerfScopes(visit)
     Sync=visit("PartyJoin.Sync",Sync)
+end
+
+function HealBot_Forever_VisitReserveBars(visit)
+    for _,row in ipairs(rows) do
+        if row.reserve then visit(row) end
+    end
 end
 
 SLASH_HBFOREVERPARTYJOIN1="/hbpartyjoin"

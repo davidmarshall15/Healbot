@@ -89,12 +89,14 @@ local function reserve(set)
     end
 end
 local inRange,checked=false,true
-local rangeCode=assert(read("HealBot/HealBot_ForeverPartyJoin.lua"):match("(local inRange,checked=UnitInRange%(unit%).-)\n    local incoming=row.incomingBar"))
+local partyJoin=read("HealBot/HealBot_ForeverPartyJoin.lua")
+local rangeCode=assert(partyJoin:match("(local inRange,checked=UnitInRange%(unit%).-)\n    local incoming=row.incomingBar"))
+local healthColour=assert(partyJoin:match("(local function ApplyHealthColour%b().-\nend)"))
 local reserveEnv={UnitInRange=function() return inRange,checked end,
     Get=function(_,key) return ({HA=.9,ORA=.3,HLTH=1})[key] end,
     Colour=function() return 1,1,1 end,secret=function() return false end,
     HealBot_Forever_SetArrivalIconOpacity=e.HealBot_Forever_SetArrivalIconOpacity}
-local paint=setfenv(assert(loadstring("return function(row) local unit=row.unit "..rangeCode.." end")),reserveEnv)()
+local paint=setfenv(assert(loadstring(healthColour.."\nreturn function(row) local unit,event=row.unit,'UNIT_HEALTH' "..rangeCode.." end")),reserveEnv)()
 override.BUFFI15EN[1]=false; d.hook("hbv_Skins_SetIconVar",false,"BUFFI15EN",1,1)
 paint(row)
 eq(row.healthBar.barAlpha,.3)

@@ -1,6 +1,5 @@
 -- Scan full public lists through the normal roster handler and its real priority sorter.
-local e,make,put,aura,secret,setGroup=dofile("tests/fixtures/ordinary_helpful.lua")
-setGroup(true,false,0)
+local e,make,put=assert(loadfile("tests/fixtures/public_helpful.lua"))()("party")
 local g=e.HealBot_Globals
 g.WatchHoT={ALL={}}
 g.CustomBuffIDMethod={}; g.CustomBuffsIconSet={}; g.CustomBuffsIconGlow={}; g.CustomBuffsFilter={}

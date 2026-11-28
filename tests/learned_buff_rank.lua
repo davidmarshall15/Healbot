@@ -3,15 +3,8 @@ local function read(path)
 end
 local native=assert(read('tests/native_buff_casters.lua'):match('^(.-)\nlocal function admits%('))
 local fixture=assert(loadstring(native..'\nreturn fixture'))()
-local legacy,make,put,aura,_,setGroup=dofile("tests/fixtures/ordinary_helpful.lua")
-setGroup(true,false,0)
-legacy.HealBot_Aura_CheckUnitBuff=function() end
-legacy.HealBot_Aura_CheckUnitBuffIcons=function() end
-legacy.HealBot_Aura_BuffWarnings=function() end
-legacy.HealBot_Aura_ClearBuff=function() end
-legacy.HealBot_Aura_BuffUpdate_Plugins=function() end
-legacy.HealBot_Aura_SortBuffIcons=function() return 0 end
-local b=make('party2',1)
+local legacy,make,put,aura=assert(loadfile("tests/fixtures/public_helpful.lua"))()("party",true)
+local b=make("party2",1)
 local function scan(auras)
     put(auras); b.aura.buff.update=true; legacy.HealBot_Aura_CheckUnitBuffs(b,false)
 end

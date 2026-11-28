@@ -50,7 +50,7 @@ local function throwing() error('test failure') end
 e.HealBot_Timers_Set=throwing
 local party=read('HealBot/HealBot_ForeverPartyJoin.lua')
 local visitor=assert(party:match('(function HealBot_Forever_VisitPartyPerfScopes%b().-\nend)'))
-local runSync=setfenv(assert(loadstring('local Sync=...\n'..visitor..'\nreturn function(...) return Sync(...) end')),e)(original)
+local runSync=setfenv(assert(loadstring('local Sync,PrepareNextReserve,auraRemaining=...\n'..visitor..'\nreturn function(...) return Sync(...) end')),e)(original,original,0)
 local function runTimer(_,_,...) now=now+.020; return ... end
 e.HealBot_Timers_RunTimer=runTimer
 e.HealBot_UnitUpdateButton=original
@@ -107,7 +107,7 @@ for pass=1,2 do
     assert(e.HealBot_Action_setLuVars==original and e.HealBot_Timers_Set==throwing,'global wrappers not restored')
     e.HealBot_Forever_VisitAuraPerfScopes(function(name,fn) assert(fn==baseline[name],'local wrapper not restored'); return fn end)
     local report=d.globals.ForeverPerformanceReport
-    assert(report.revision=='1.9' and report.slowFrames==1,'report lost frame metrics')
+    assert(report.revision=='2.1' and report.slowFrames==1,'report lost frame metrics')
     local phases=report.hitches[1].boundary.partyPhases
     assert(phases.HealBot_Panel_MainSort.calls==1 and phases.HealBot_Action_SetHealButton.calls==1)
     assert(phases.HealBot_Action_CreateButton.ms>=phases.HealBot_Action_CreateNewButton.ms and
@@ -187,4 +187,84 @@ do
     bar.aura.debuff.id=1; env.HealBot_Action_UpdateDebuffButton(bar)
     assert(paints==1 and count.painted==1 and count.outOfRange==1 and count.paintBlocked==1)
 end
-print('PASS: detailed monitor captures local scopes, preserves nil varargs/returns and errors, restores locals/globals, and restarts without nested wrappers')
+do
+    local selected={unit="raid4",text={nameonly="Fixture Member"},status={events=true,current=4},range={current=1},
+        aura={buff={id=139,name="Renew",colbar=0},debuff={id=6788,colbar=2}}}
+    local opaque={}
+    e.HealBot_issecretvalue=function(v) return rawequal(v,opaque) end
+    selected.gref={Bar={GetStatusBarColor=function() return opaque,0,0 end}}
+    e.HealBot_Buttons={selected}
+    e.UnitIsUnit=function(unit,target) return unit=="raid4" and target=="target" end
+    local report=e.SlashCmdList.HEALBOTLIVEPERF
+    local first=#lines+1
+    report("unit")
+    assert(lines[first]:find("raid4") and lines[first+1]:find("6788") and lines[first]:find("139"))
+    e.UnitIsUnit=function() return opaque end
+    report("unit")
+    assert(lines[#lines]:find("1 active group bars"),"unmatched unit command returned no diagnostic")
+    report("unit raid4")
+    assert(lines[#lines]:find("6788"),"explicit raid slot did not work when target comparison was unavailable")
+    report("unit Fixture Member")
+    assert(lines[#lines]:find("6788"),"public player name failed to identify the group member")
+end
+do
+    local opaque={}
+    e.HealBot_issecretvalue=function(v) return rawequal(v,opaque) end
+    e.HealBot_Unit_Status={BUFFBARCOL=3,DEBUFFBARCOL=4}
+    e.UnitExists=function(unit) return unit~="raid6" end
+    e.UnitIsUnit=function(unit,slot)
+        if unit=="party1" then return opaque end
+        return unit=="player" and slot=="raid1"
+    end
+    local function button(unit,state,color)
+        local buff={id=0,r=.2,g=.4,b=.8}
+        local debuff={id=0,r=.2,g=.4,b=.8}
+        return {unit=unit,status={events=true,current=state},IsVisible=function() return true end,
+            aura={buff=buff,debuff=debuff},gref={Bar={GetStatusBarColor=function() return color,.4,.8 end}}}
+    end
+    local ordinary=button("raid1",3,.2)
+    ordinary.aura.buff.id,ordinary.aura.buff.name=139,"Renew"
+    local duplicate=button("player",0)
+    duplicate.status.events=false
+    local other=button("raid2",4,opaque)
+    other.aura.debuff.id=91
+    local hidden=button("raid4",0)
+    hidden.IsVisible=function() return false end
+    local late=button("raid3",4,.5)
+    late.aura.debuff.id=91
+    late.reserve=true
+    late.status=nil
+    late.warningKind="debuff"
+    late.healthBar=late.gref.Bar
+    late.gref=nil
+    local recycled=button("raid4",0)
+    recycled.aura.buff.id=139 -- Cleared reserve warnings can retain the previous ID.
+    recycled.reserve=true
+    local inactive=button("raid5",0)
+    local notOccupied=button("raid6",0)
+    notOccupied.reserve=true
+    e.HealBot_Buttons={ordinary,duplicate,other,hidden,button("party1",0)}
+    local visit=assert(party:match('(function HealBot_Forever_VisitReserveBars%b().-\nend)'))
+    setfenv(assert(loadstring('local rows=...\n'..visit)),e)({late,recycled,inactive,notOccupied})
+    instanceMode,instanceSize,homeMode,homeSize="raid",5,"party",3
+    cmd("raid")
+    local r=d.globals.ForeverRosterAuraReport
+    assert(r.kind=="instance raid" and r.covered==4 and r.size==5 and r.duplicates==1 and r.unresolved==1 and r.normalWithoutEvents==1)
+    assert(r.normal.bars==4 and r.normal.selectedBuffs==1)
+    assert(r.normal.selected==1 and r.normal.buffState==1 and r.normal.debuffState==1
+        and r.normal.paintMatches==1 and r.normal.paintReadable==1,"protected tint was compared or counted as readable")
+    assert(r.reserve.bars==2 and r.reserve.selectedBuffs==0
+        and r.reserve.selected==1 and r.reserve.debuffState==1 and r.reserve.paintReadable==1 and r.reserve.paintMatches==0)
+    assert(not sampler.shown,"snapshot unexpectedly turned on the profiler")
+    instanceMode,instanceSize,homeMode,homeSize=nil,0,"party",3
+    e.HealBot_Buttons={button("player",0),button("party1",0),button("party2",0)}
+    setfenv(assert(loadstring('local rows={}\n'..visit)),e)()
+    cmd("raid")
+    local p=d.globals.ForeverRosterAuraReport
+    assert(p.kind=="party" and p.size==3 and p.covered==3 and p.normal.bars==3 and p.reserve.bars==0)
+    homeMode,homeSize=nil,0
+    e.HealBot_Buttons={button("player",0)}
+    cmd("raid")
+    assert(d.globals.ForeverRosterAuraReport.kind=="solo" and d.globals.ForeverRosterAuraReport.covered==1)
+end
+print('PASS: timing and on-demand aura diagnostics cover normal and late-join bars across the roster')

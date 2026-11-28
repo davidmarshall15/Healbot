@@ -155,6 +155,22 @@ end
 
 function HealBot_Aura_ResetDebuffCache()
         --HealBot_setCall("HealBot_Aura_ResetDebuffCache")
+    -- Adding, deleting and reprioritizing custom debuffs all reach this
+    -- reset, including edits made without reopening the configuration panel.
+    hb_lVars.publicCustomDebuffIDs=nil
+    local owners={}
+    hb_lVars.customDebuffNameOwners=owners
+    local custom=HealBot_Globals.CustomDebuffs or {}
+    local methods=HealBot_Globals.CustomDebuffIDMethod or {}
+    for id,priority in pairs(custom) do
+        if type(id)=="number" and type(priority)=="number" and (methods[id] or 2)>1 then
+            local name=HealBot_WoWAPI_SpellName(id)
+            if not HealBot_issecretvalue(name) and type(name)=="string" then
+                local old=owners[name]
+                if not old or priority<custom[old] or (priority==custom[old] and id<old) then owners[name]=id end
+            end
+        end
+    end
     for spellId,_ in pairs(HealBot_AuraDebuffCache) do
         HealBot_AuraDebuffCache[spellId].always=false
         HealBot_AuraDebuffCache[spellId].isAuto=false
@@ -930,6 +946,16 @@ function HealBot_Aura_setUnitIcons(unit, guid)
     if not HealBot_Aura_WarningFilter[unit] then HealBot_Aura_WarningFilter[unit]={} end
 end
 
+-- A late join has native aura widgets and only needs the ordinary scanner's
+-- data records. Use the model itself as the key to isolate it from panel IDs.
+function HealBot_Aura_InitReserveWarnings(button)
+    button.id=button
+    uaBuffData[button]={lastslot=0}
+    uaDebuffData[button]={lastslot=0}
+    hbTextureUpdateId[button]={}
+    hbTextureUpdateTime[button]={}
+end
+
 function HealBot_Aura_AutoUpdateCustomDebuff(button, name, spellId)
       --HealBot_setCall("HealBot_Aura_AutoUpdateCustomDebuff", button)
     local x=HealBot_Globals.CustomDebuffs[name]
@@ -1014,7 +1040,8 @@ function HealBot_Aura_GetHiddenDebuffIcons(inCombat)
     return hidden
 end
 
-function HealBot_Aura_RefreshDebuffIconVisibility()
+-- The native visibility hook also refreshes every attached bar unless the caller already did so.
+function HealBot_Aura_RefreshDebuffIconVisibility(nativeRefreshed)
     HealBot_Timers_Set("AURA","CheckDebuffs")
 end
 
@@ -1031,10 +1058,8 @@ function HealBot_Aura_SetDebuffIconPreference(spellID, inCombat, value)
     else
         rules[spellID]=nil
     end
-    if HealBot_Forever_RefreshDebuffIconPreferences then
-        HealBot_Forever_RefreshDebuffIconPreferences()
-    end
-    HealBot_Aura_RefreshDebuffIconVisibility()
+    local nativeRefreshed=HealBot_Forever_RefreshDebuffIconPreferences and HealBot_Forever_RefreshDebuffIconPreferences()
+    HealBot_Aura_RefreshDebuffIconVisibility(nativeRefreshed)
 end
 
 local debuffWarningSlot,debuffIconPrio=0,0
@@ -1075,7 +1100,7 @@ local function HealBot_Aura_SortDebuffIconSet(button, iconSet, sIndex)
         if count<limit and (spellID~=6788 or not button.hbcaNativeDebuffs)
             and HealBot_Aura_GetDebuffIconPreference(spellID,inCombat)~=false then
             count=count+1
-            HealBot_Aura_CacheDebuffIcon(button,sIndex+offset+count,spellID,aura.slot)
+            if not button.reserveWarnings then HealBot_Aura_CacheDebuffIcon(button,sIndex+offset+count,spellID,aura.slot) end
             if state and state.publicDispels and state.publicDispels[spellID] then
                 state.visibleDispels=state.visibleDispels or {}
                 state.visibleDispels[spellID]=true
@@ -1469,38 +1494,50 @@ function HealBot_Aura_ShowCustomBuff(button)
     return false, false, HealBot_Config_Buffs.AutoBuff~=2 and HealBot_Config_Buffs.AutoBuff~=3
 end
 
-local buffIconIdx,buffIconPrio=0,0
+local function HealBot_Aura_BuffBarMode(id)
+    local cache=HealBot_AuraBuffCache[id]
+    local modes=HealBot_Globals.CustomBuffsShowBarCol
+    if cache.isAuto then return modes[HEALBOT_CUSTOM_CAT_CUSTOM_AUTOBUFFS] or 1 end
+    return modes[id] or modes[cache.name] or 1
+end
+
+local buffIconIdx,buffIconPrio,buffWarningID,buffWarningPrio=0,0,0,0
 function HealBot_Aura_SortBuffIconSet(button, iconSet, sIndex)
       --HealBot_setCall("HealBot_Aura_SortBuffIconSet", button)
-    button.icon.buff.count[iconSet]=#buffSort[iconSet]
-    if button.icon.buff.count[iconSet]>0 then
-        table.sort(buffSort[iconSet])
-        -- The legacy renderer only allocates two slots each for sets 2 and 3.
-        local maxIcons=hbv_Skins_GetIconVar("MAXBICONS", button.frame, iconSet)
-        button.icon.buff.count[iconSet]=math.min(button.icon.buff.count[iconSet], maxIcons, iconSet==1 and 8 or 2)
-        for j=1, button.icon.buff.count[iconSet], 1 do
-            HealBot_Aura_CacheBuffIcon(button, sIndex+j, HealBot_AuraBuffXRef[buffSort[iconSet][j]]["spellID"], HealBot_AuraBuffXRef[buffSort[iconSet][j]]["slot"])
+    local ordered=buffSort[iconSet]
+    local count=math.min(#ordered,hbv_Skins_GetIconVar("MAXBICONS",button.frame,iconSet),iconSet==1 and 8 or 2)
+    button.icon.buff.count[iconSet]=count
+    local winner
+    if count>0 then
+        table.sort(ordered)
+        winner=ordered[1]
+        for j=1,button.reserveWarnings and 0 or count do
+            local aura=HealBot_AuraBuffXRef[ordered[j]]
+            HealBot_Aura_CacheBuffIcon(button,sIndex+j,aura.spellID,aura.slot)
         end
-        if HealBot_AuraBuffCache[HealBot_AuraBuffXRef[buffSort[iconSet][1]]["spellID"]]["priority"]<buffIconPrio then
-            buffIconIdx=sIndex+1
-            buffIconPrio=HealBot_AuraBuffCache[HealBot_AuraBuffXRef[buffSort[iconSet][1]]["spellID"]]["priority"]
+    elseif HEALBOT_FOREVER and #ordered>0 then
+        -- An empty icon set can still supply an explicitly configured health
+        -- tint. Its existing priority keys suffice without sorting hidden icons.
+        for _,key in ipairs(ordered) do
+            local mode=HealBot_Aura_BuffBarMode(HealBot_AuraBuffXRef[key].spellID)
+            if (mode==3 or mode==4) and (not winner or key<winner) then winner=key end
         end
+    end
+    if winner then
+        local id=HealBot_AuraBuffXRef[winner].spellID
+        local priority=HealBot_AuraBuffCache[id].priority
+        if count>0 and priority<buffIconPrio then buffIconIdx,buffIconPrio=sIndex+1,priority end
+        if priority<buffWarningPrio then buffWarningID,buffWarningPrio=id,priority end
     end
 end
 
 function HealBot_Aura_SortBuffIcons(button)
       --HealBot_setCall("HealBot_Aura_SortBuffIcons", button)
-    buffIconIdx,buffIconPrio=0,21
-    if hbv_Skins_GetIconVar("MAXBICONS", button.frame, 1)>0 then
-        HealBot_Aura_SortBuffIconSet(button, 1, 0)
-    end
-    if hbv_Skins_GetIconVar("MAXBICONS", button.frame, 2)>0 then
-        HealBot_Aura_SortBuffIconSet(button, 2, 8)
-    end
-    if hbv_Skins_GetIconVar("MAXBICONS", button.frame, 3)>0 then
-        HealBot_Aura_SortBuffIconSet(button, 3, 10)
-    end
-    return buffIconIdx
+    buffIconIdx,buffIconPrio,buffWarningID,buffWarningPrio=0,21,0,21
+    HealBot_Aura_SortBuffIconSet(button, 1, 0)
+    HealBot_Aura_SortBuffIconSet(button, 2, 8)
+    HealBot_Aura_SortBuffIconSet(button, 3, 10)
+    return buffIconIdx,buffWarningID
 end
 
 local castByListIndexed={[HEALBOT_CUSTOM_CASTBY_EVERYONE]=1,
@@ -1559,35 +1596,37 @@ end
 
 local cureSpellCD, cureSpellName=0, ""
 local debuffIsCurrent, cDebuffPrio=true, 15
-local ccdbCasterID, ccdbUnitCasterID, ccdbCheckthis, ccdbAlways=0,1,false,false
+local ccdbCheckthis=false
 local ccdbWatchTarget={}
-function HealBot_Aura_CheckCurCustomDebuff(button, canBeAlways)
-      --HealBot_setCall("HealBot_Aura_CheckCurCustomDebuff", button)
-    ccdbCasterID=hbCustomDebuffsCastBy[uaDebuffData[button.id][uaDebuffSlot].spellId] or hbCustomDebuffsCastBy[uaDebuffData[button.id][uaDebuffSlot].name] or HealBot_Globals.CureCustomDefaultCastBy
-    if ccdbCasterID~=castByListIndexed[HEALBOT_CUSTOM_CASTBY_EVERYONE] then
-        if uaDebuffData[button.id][uaDebuffSlot].sourceUnitIsPlayer then
-            ccdbUnitCasterID=castByListIndexed[HEALBOT_OPTIONS_SELFHEALS]
-            if ccdbCasterID == castByListIndexed[HEALBOT_CUSTOM_CASTBY_FRIEND] then 
-                ccdbCasterID=castByListIndexed[HEALBOT_OPTIONS_SELFHEALS]
-            end
-        elseif UnitIsFriend("player",uaDebuffData[button.id][uaDebuffSlot].sourceUnit) then
-            ccdbUnitCasterID=castByListIndexed[HEALBOT_CUSTOM_CASTBY_FRIEND]
-        else
-            ccdbUnitCasterID=castByListIndexed[HEALBOT_CUSTOM_CASTBY_ENEMY]
-        end
-        if ccdbUnitCasterID == ccdbCasterID then 
-            HealBot_AuraDebuffCache[uaDebuffData[button.id][uaDebuffSlot].spellId]["debuffType"]=HEALBOT_CUSTOM_en
-            cDebuffPrio=HealBot_AuraDebuffCache[uaDebuffData[button.id][uaDebuffSlot].spellId]["customPrio"]
-        else
-            debuffIsCurrent=false
-        end
-    else
-        HealBot_AuraDebuffCache[uaDebuffData[button.id][uaDebuffSlot].spellId]["debuffType"]=HEALBOT_CUSTOM_en
-        cDebuffPrio=HealBot_AuraDebuffCache[uaDebuffData[button.id][uaDebuffSlot].spellId]["customPrio"]
-        if canBeAlways then
-            HealBot_AuraDebuffCache[uaDebuffData[button.id][uaDebuffSlot].spellId].always=true 
-        end
+
+function HealBot_Aura_CustomDebuffCasterMatches(source,rule,selfOnly,mine)
+    local everyone=rule==castByListIndexed[HEALBOT_CUSTOM_CASTBY_EVERYONE]
+    if everyone and not selfOnly then return true end
+    if HealBot_issecretvalue(source) or type(source)~="string" or source=="" or source=="nil" then return false end
+    if mine==nil then mine=source=="player" or HealBot_SafeUnitIsUnit(source,"player") end
+    if selfOnly and not mine then return false end
+    if everyone or rule==castByListIndexed[HEALBOT_OPTIONS_SELFHEALS] then return not not mine end
+    local reaction
+    if rule==castByListIndexed[HEALBOT_CUSTOM_CASTBY_FRIEND] then
+        if mine then return true end
+        reaction=UnitIsFriend("player",source)
+    elseif rule==castByListIndexed[HEALBOT_CUSTOM_CASTBY_ENEMY] and not mine then
+        reaction=UnitIsEnemy("player",source)
     end
+    return not HealBot_issecretvalue(reaction) and reaction==true
+end
+
+function HealBot_Aura_CheckCurCustomDebuff(button, canBeAlways)
+    local aura=uaDebuffData[button.id][uaDebuffSlot]
+    local rule=hbCustomDebuffsCastBy[aura.spellId] or hbCustomDebuffsCastBy[aura.name] or HealBot_Globals.CureCustomDefaultCastBy
+    if not HealBot_Aura_CustomDebuffCasterMatches(aura.sourceUnit,rule,false,aura.sourceUnitIsPlayer) then
+        debuffIsCurrent=false
+        return
+    end
+    local cache=HealBot_AuraDebuffCache[aura.spellId]
+    cache.debuffType=HEALBOT_CUSTOM_en
+    cDebuffPrio=cache.customPrio
+    if canBeAlways and rule==castByListIndexed[HEALBOT_CUSTOM_CASTBY_EVERYONE] then cache.always=true end
 end
 
 function HealBot_Aura_setDebuffXRefUID(uid, spellID, slot, iconOnly)
@@ -1744,6 +1783,11 @@ function HealBot_Aura_AuxClearAuraBuffBars(button)
 end
 
 function HealBot_Aura_BuffWarnings(button, buffName, force)
+    if button.reserveWarnings then
+        button.aura.buff.name=buffName
+        button.aura.buff.r,button.aura.buff.g,button.aura.buff.b=HealBot_Options_RetBuffRGB(button)
+        return
+    end
         --HealBot_setCall("HealBot_Aura_BuffWarnings", button)
     if button.aura.buff.name~=buffName or force then
         button.aura.buff.name=buffName
@@ -1825,6 +1869,12 @@ function HealBot_Aura_IsCureSpell(button)
 end
 
 function HealBot_Aura_DebuffWarnings(button, debuffName, force, debuffIconIndex, expirationTime, barOnly)
+    if button.reserveWarnings then
+        button.aura.debuff.name=debuffName
+        button.aura.debuff.r,button.aura.debuff.g,button.aura.debuff.b=HealBot_Options_RetDebuffRGB(button)
+        button.aura.debuff.curespell=HealBot_Options_retDebuffCureSpell(button.aura.debuff.type)
+        return
+    end
         --HealBot_setCall("HealBot_Aura_DebuffWarnings", button)
     if button.aura.debuff.name~=debuffName or force then
         -- Health, range and auxiliary-bar refreshes reuse the current warning.
@@ -2198,7 +2248,7 @@ function HealBot_Aura_CheckUnitBuff(button)
         else
             HealBot_Aura_CheckUnitGeneralBuff(button)
         end
-        if not HealBot_Watch_HoT[uaBuffData[button.id][uaBuffSlot].name] and not HealBot_Watch_HoT[uaBuffData[button.id][uaBuffSlot].spellId] then
+        if not button.reserveWarnings and not HealBot_Watch_HoT[uaBuffData[button.id][uaBuffSlot].name] and not HealBot_Watch_HoT[uaBuffData[button.id][uaBuffSlot].spellId] then
             if uaBuffData[button.id][uaBuffSlot].sourceUnitIsPlayer then
                 HealBot_UnusedSelfBuffs[uaBuffData[button.id][uaBuffSlot].spellId]=true
             elseif not HealBot_UnusedBuffs[uaBuffData[button.id][uaBuffSlot].spellId] then
@@ -2291,7 +2341,7 @@ function HealBot_Aura_CheckUnitDebuff(button)
         end
     elseif uaDebuffData[button.id][uaDebuffSlot].sourceUnitIsPlayer then
         HealBot_UnusedSelfDebuffs[uaDebuffData[button.id][uaDebuffSlot].spellId]=true
-    elseif not HealBot_UnusedDebuffs[uaDebuffData[button.id][uaDebuffSlot].spellId] then
+    elseif not button.reserveWarnings and not HealBot_UnusedDebuffs[uaDebuffData[button.id][uaDebuffSlot].spellId] then
         if UnitIsFriend("player",uaDebuffData[button.id][uaDebuffSlot].sourceUnit) then
             HealBot_UnusedDebuffs[uaDebuffData[button.id][uaDebuffSlot].spellId]="1:"..HealBot_Aura_UnusedAuraInfo(uaDebuffData[button.id][uaDebuffSlot].sourceUnit)
         else
@@ -2649,7 +2699,8 @@ local function HealBot_Aura_UpdateUnitBuffsData(button, selfOnly, gSlot)
             uaBuffData[button.id][uaSlot].gSlot=gSlot
             HealBot_Aura_PostUpdateUnitBuffsData(button, uaSpellId, uaName)
         end
-        HealBot_UnitBuffCurrent[button.unit][uaName]=uaSpellId
+        local current=button.reserveBuffCurrent or HealBot_UnitBuffCurrent[button.unit]
+        current[uaName]=uaSpellId
         HealBot_AuraBuffCache[uaSpellId].count=uaCount
         HealBot_AuraBuffCache[uaSpellId].sourceUnitIsPlayer=uaUnitIsPlayer
         if uaExpirationTime > 0 and button.isplayer and UnitIsFriend(uaUnitCaster, "player") then hbv_Auras_SetData("BUFFS", uaSpellId) end
@@ -2783,12 +2834,15 @@ function HealBot_Aura_UpdateUnitBuffsV9Aura(button, selfOnly, filter, generation
     while true do
         local okA
         okA, uaAura=pcall(C_UnitAuras.GetAuraDataByIndex, button.unit, uaZ, filter)
-        if not okA or HealBot_issecretvalue(uaAura) then
+        if not okA or HealBot_issecretvalue(uaAura) or (uaAura and (type(uaAura)~="table" or
+            (canaccesstable and not canaccesstable(uaAura)))) then
             button.aura.buff.scanIncomplete=true
             break
         end
         if not uaAura then break end
-        if HealBot_Aura_AuraDataIsUsable(uaAura) then
+        local name=uaAura.name
+        if HealBot_Aura_AuraDataIsUsable(uaAura) and (not HEALBOT_FOREVER or
+            (type(name)=="string" and type(uaAura.spellId)=="number" and type(uaAura.expirationTime)=="number")) then
             uaName, uaTexture, uaCount, uaDebuffType, uaDuration, uaExpirationTime, uaUnitCaster, uaSpellId=
             uaAura.name, uaAura.icon, uaAura.applications, uaAura.dispelName, uaAura.duration, uaAura.expirationTime, uaAura.sourceUnit, uaAura.spellId
             if generation and (not uaExpirationTime or not uaName or not uaSpellId
@@ -2959,7 +3013,8 @@ local function HealBot_Aura_UpdateUnitDebuffsData(button, selfOnly, gSlot, iconO
             HealBot_Aura_PostUpdateUnitDebuffsData(button, uaSpellId, uaName, uaDebuffData[button.id][uaSlot].debuffType)
         end
         if not iconOnly then
-            HealBot_UnitDebuffCurrent[button.unit][uaName]=uaSpellId
+            local current=button.reserveDebuffCurrent or HealBot_UnitDebuffCurrent[button.unit]
+            current[uaName]=uaSpellId
             HealBot_AuraDebuffCache[uaSpellId].count=uaCount
             HealBot_AuraDebuffCache[uaSpellId].sourceUnitIsPlayer=uaUnitIsPlayer
             if UnitIsEnemy(uaUnitCaster, "player") then hbv_Auras_SetData("DEBUFFS", uaSpellId) end
@@ -3065,6 +3120,30 @@ do
     -- A public spell ID can establish a custom bar warning even when the
     -- client withholds fields required to draw an icon or run its timer.
     local partialSpellNames={}
+    local function publicInstance(aura)
+        local id=aura.auraInstanceID
+        if not HealBot_issecretvalue(id) and type(id)=="number" then return id end
+    end
+
+    -- Most spells have a single occurrence. Allocate a set only when two
+    -- distinct instances of the same spell were fully read on this unit.
+    local function markRead(seen,aura)
+        local spell=aura.spellId
+        local old=seen[spell]
+        if old==true then return end
+        local instance=publicInstance(aura)
+        if not instance then seen[spell]=true
+        elseif not old then seen[spell]=instance
+        elseif type(old)=="table" then old[instance]=true
+        elseif old~=instance then seen[spell]={[old]=true,[instance]=true} end
+    end
+
+    local function distinctInstance(seen,instance)
+        if not instance or not seen or seen==true then return false end
+        if type(seen)=="number" then return seen~=instance end
+        return not seen[instance]
+    end
+
     local function notePartial(button,aura,expectedID,dispellable,fromEvent)
         if not HealBot_Config_Cures or not HealBot_Config_Cures.CDCshownHB then return end
         if HealBot_issecretvalue(aura) or type(aura)~="table" or (canaccesstable and not canaccesstable(aura)) then return end
@@ -3072,7 +3151,11 @@ do
         if HealBot_issecretvalue(id) or type(id)~="number" then return end
         if expectedID and id~=expectedID then return end
         if (expectedID or fromEvent) and (HealBot_issecretvalue(aura.isHarmful) or aura.isHarmful~=true) then return end
-        if fromEvent and button.aura.debuff.lookupSeen[id] then return end
+        local instance=publicInstance(aura)
+        if fromEvent then
+            local seen=button.aura.debuff.lookupSeen[id]
+            if seen and not distinctInstance(seen,instance) then return end
+        end
         local tracked=HealBot_Globals.CustomDebuffs
         if not tracked or not next(tracked) then return end
         local name=aura.name
@@ -3090,8 +3173,16 @@ do
         end
         local source=aura.sourceUnit
         if HealBot_issecretvalue(source) or type(source)~="string" then source=nil end
+        local warning={id=id,name=name,source=source,dispelType=dispelType,dispellable=dispellable,publicInstance=instance}
+        if not fromEvent and HealBot_Events_RememberScannedCustomDebuff then
+            local record=HealBot_Events_RememberScannedCustomDebuff(button,aura,warning)
+            if record then
+                warning.source=record.sourceUnit
+                record.warnedThisScan=true
+            end
+        end
         state.partialWarnings=state.partialWarnings or {}
-        state.partialWarnings[#state.partialWarnings+1]={id=id,name=name,source=source,dispelType=dispelType,dispellable=dispellable}
+        state.partialWarnings[#state.partialWarnings+1]=warning
     end
 
     local function apply(button,selfOnly,aura,index,dispellable)
@@ -3100,8 +3191,9 @@ do
             aura.sourceUnit,aura.spellId,aura.isBossAura
         -- The ordinary path decides caster, target, priority, icon override and bar color.
         HealBot_Aura_UpdateUnitDebuffsData(button,selfOnly,index,nil,dispellable)
+        if HealBot_Events_RememberScannedCustomDebuff then HealBot_Events_RememberScannedCustomDebuff(button,aura) end
         local state=button.aura.debuff
-        if state.lookupSeen then state.lookupSeen[aura.spellId]=true end
+        if state.lookupSeen then markRead(state.lookupSeen,aura) end
         if aura.spellId==6788 then state.publicShield=true end
         if state.collectDispels and aura.dispelName then
             state.publicDispels=state.publicDispels or {}
@@ -3165,78 +3257,101 @@ do
         return false
     end
 
-    local function lookupPublic(button,selfOnly,id,byName)
+    local function lookupPublic(button,selfOnly,id,name,byName)
         if button.aura.debuff.lookupSeen and button.aura.debuff.lookupSeen[id] then return end
         local ok,aura
-        if byName then ok,aura=pcall(C_UnitAuras.GetAuraDataBySpellName,button.unit,byName,"HARMFUL")
-        else ok,aura=pcall(C_UnitAuras.GetUnitAuraBySpellID,button.unit,id) end
-        if not ok or HealBot_issecretvalue(aura) or type(aura)~="table" then return end
+        if byName then
+            if not name then return end
+            aura=byName[name]
+            if aura==nil then
+                ok,aura=pcall(C_UnitAuras.GetAuraDataBySpellName,button.unit,name,"HARMFUL")
+                if not ok or HealBot_issecretvalue(aura) or type(aura)~="table" then aura=false end
+                byName[name]=aura
+            end
+            if not aura then return end
+        else
+            ok,aura=pcall(C_UnitAuras.GetUnitAuraBySpellID,button.unit,id)
+            if not ok or HealBot_issecretvalue(aura) or type(aura)~="table" then return end
+        end
         if not readable(aura) then
             notePartial(button,aura,id)
         elseif aura.spellId==id and not HealBot_issecretvalue(aura.isHarmful) and aura.isHarmful
-            and HealBot_UnitDebuffCurrent[button.unit][aura.name]~=aura.spellId then
+            and (button.reserveDebuffCurrent or HealBot_UnitDebuffCurrent[button.unit])[aura.name]~=aura.spellId then
             apply(button,selfOnly,aura,0)
         end
     end
 
-    local function lookupConditionalShield(button,selfOnly)
-        -- Base secrecy describes the spell across contexts. Only the current
-        -- predicate can authorize a conditional spell's exact lookup here.
-        local current=C_Secrets and C_Secrets.ShouldSpellAuraBeSecret
-        if not current or not HealBot_Config_Cures or not HealBot_Config_Cures.CDCshownHB then return end
-        local state=button.aura.debuff
-        if state.publicShield or (state.lookupSeen and state.lookupSeen[6788]) then return end
-        local name=partialSpellNames[6788] or HealBot_WoWAPI_SpellName(6788)
-        if HealBot_issecretvalue(name) or type(name)~="string" then return end
-        partialSpellNames[6788]=name
+    local function lookupConditionalBar(button,selfOnly,id,name,byName,current)
+        local seen=button.aura.debuff.lookupSeen
+        if seen and seen[id] then return end
         local globals=HealBot_Globals
-        if not globals.CustomDebuffs or not HealBot_Aura_CustomDebuffSetting(globals.CustomDebuffs,6788,name)
-            or HealBot_Aura_CustomDebuffDisabled(6788,name) then return end
-        local mode=HealBot_Aura_CustomDebuffSetting(globals.CustomDebuffsShowBarCol,6788,name) or 4
+        local mode=HealBot_Aura_CustomDebuffSetting(globals.CustomDebuffsShowBarCol,id,name) or 4
         if mode~=3 and mode~=4 then return end
-        local ok,hidden=pcall(current,6788)
+        local priority=HealBot_Aura_CustomDebuffSetting(globals.CustomDebuffs,id,name)
+        if type(priority)~="number" or priority>=21 or HealBot_Aura_CustomDebuffDisabled(id,name) then return end
+        local filter=HealBot_DebuffFilter and (HealBot_DebuffFilter[id] or HealBot_DebuffFilter[name])
+        if filter and not HealBot_Aura_BuffTargetMatches(button,filter) then return end
+        -- The base spell classification can be cached. The current verdict
+        -- must authorize this unit's exact read in the current context.
+        local ok,hidden=pcall(current,id)
         if ok and not HealBot_issecretvalue(hidden) and hidden==false then
-            if C_UnitAuras.GetUnitAuraBySpellID then lookupPublic(button,selfOnly,6788)
-            elseif C_UnitAuras.GetAuraDataBySpellName then lookupPublic(button,selfOnly,6788,name) end
+            lookupPublic(button,selfOnly,id,name,byName)
         end
     end
 
-    function HealBot_Aura_UpdateExplicitCombatDebuffs(button,selfOnly)
-        if not C_UnitAuras.GetUnitAuraBySpellID then
-            if C_UnitAuras.GetAuraDataBySpellName then lookupConditionalShield(button,selfOnly) end
-            return
-        end
-        local publicCustomDebuffIDs=hb_lVars.publicCustomDebuffIDs
-        if not publicCustomDebuffIDs then
-            publicCustomDebuffIDs={}
-            hb_lVars.publicCustomDebuffIDs=publicCustomDebuffIDs
-            local secrecy=C_Secrets and C_Secrets.GetSpellAuraSecrecy
-            local never=Enum and Enum.SecrecyLevel and Enum.SecrecyLevel.NeverSecret
-            if secrecy and never~=nil then
-                local function addPublic(id)
-                    if type(id)~="number" or publicCustomDebuffIDs[id] then return end
-                    local ok,value=pcall(secrecy,id)
-                    if ok and not HealBot_issecretvalue(value) and value==never then
-                        publicCustomDebuffIDs[id]=true
-                    end
-                end
-                for id in pairs(HealBot_Globals.CustomDebuffs or {}) do
-                    addPublic(id)
-                    if HealBot_Forever_VisitSpellNameIDs and (HealBot_Globals.CustomDebuffIDMethod[id] or 2)>1 then
-                        local name=type(id)=="number" and HealBot_WoWAPI_SpellName(id) or id
-                        HealBot_Forever_VisitSpellNameIDs(id,name,addPublic)
-                    end
+    local function configuredLookupIDs()
+        if hb_lVars.publicCustomDebuffIDs then return hb_lVars.publicCustomDebuffIDs,hb_lVars.conditionalCustomDebuffIDs end
+        local public,conditional,checked={},{},{}
+        local secrecy=C_Secrets and C_Secrets.GetSpellAuraSecrecy
+        local levels=Enum and Enum.SecrecyLevel
+        local function classify(id,name)
+            if type(id)~="number" or checked[id] then return end
+            checked[id]=true
+            if secrecy and levels then
+                local ok,value=pcall(secrecy,id)
+                if ok and not HealBot_issecretvalue(value) and value~=nil then
+                    if value==levels.NeverSecret then public[id]=name or false; return end
+                    if value==levels.AlwaysSecret then return end
                 end
             end
+            conditional[id]=name or false
         end
-        for id in pairs(publicCustomDebuffIDs) do lookupPublic(button,selfOnly,id) end
+        local methods=HealBot_Globals.CustomDebuffIDMethod or {}
+        for id in pairs(HealBot_Globals.CustomDebuffs or {}) do
+            local name=type(id)=="string" and id or (HealBot_WoWAPI_SpellName and HealBot_WoWAPI_SpellName(id))
+            if HealBot_issecretvalue(name) or type(name)~="string" then name=nil end
+            classify(id,name)
+            if name and HealBot_Forever_VisitSpellNameIDs and (methods[id] or 2)>1 then
+                HealBot_Forever_VisitSpellNameIDs(id,name,classify)
+            end
+        end
+        hb_lVars.publicCustomDebuffIDs,hb_lVars.conditionalCustomDebuffIDs=public,conditional
+        return public,conditional
+    end
+
+    function HealBot_Aura_UpdateExplicitCombatDebuffs(button,selfOnly)
+        local byName
+        if not C_UnitAuras.GetUnitAuraBySpellID then
+            if not C_UnitAuras.GetAuraDataBySpellName then return end
+            byName={}
+        end
+        local public,conditional=configuredLookupIDs()
+        for id,name in pairs(public) do lookupPublic(button,selfOnly,id,name,byName) end
         local context=InCombatLockdown() and "combat" or "rest"
-        for id,rule in pairs(HealBot_Globals.DebuffIconVisibility or {}) do
-            if rule[context]==true and not publicCustomDebuffIDs[id] then lookupPublic(button,selfOnly,id) end
+        local visibility=HealBot_Globals.DebuffIconVisibility or {}
+        if not byName then
+            for id,rule in pairs(visibility) do
+                if rule[context]==true and public[id]==nil then lookupPublic(button,selfOnly,id) end
+            end
         end
-        local shieldRule=HealBot_Globals.DebuffIconVisibility and HealBot_Globals.DebuffIconVisibility[6788]
-        if not publicCustomDebuffIDs[6788] and not (shieldRule and shieldRule[context]==true) then
-            lookupConditionalShield(button,selfOnly)
+        local current=C_Secrets and C_Secrets.ShouldSpellAuraBeSecret
+        if current and HealBot_Config_Cures and HealBot_Config_Cures.CDCshownHB then
+            for id,name in pairs(conditional) do
+                local rule=visibility[id]
+                if byName or not (rule and rule[context]==true) then
+                    lookupConditionalBar(button,selfOnly,id,name,byName,current)
+                end
+            end
         end
     end
 
@@ -3250,6 +3365,7 @@ do
         state.publicUnit=nil
         state.publicShield=nil
         state.partialWarnings=nil
+        state.awaitingReportedInstance=nil
         state.scanUnit=button.unit
         state.scanCombat=not not InCombatLockdown()
         local all=batch(button.unit,"HARMFUL")
@@ -3304,8 +3420,8 @@ do
                 end
             end
         end
-        local reported=HealBot_Events_GetReportedCustomDebuffs and HealBot_Events_GetReportedCustomDebuffs(button,complete)
         if complete then
+            if HealBot_Events_GetReportedCustomDebuffs then HealBot_Events_GetReportedCustomDebuffs(button,true) end
             state.publicUnit=button.unit
             local seen
             if removable and #removable>0 then
@@ -3314,10 +3430,8 @@ do
                     if readable(aura) then matchOccurrence(seen,aura,true) end
                 end
             end
-            local remember=HealBot_Config_Cures and HealBot_Config_Cures.CDCshownHB and HealBot_Events_RememberScannedCustomDebuff
             for index,aura in ipairs(all) do
                 apply(button,selfOnly,aura,index,seen and matchOccurrence(seen,aura,false) or false)
-                if remember then remember(button,aura) end
             end
             local removedShield=HealBot_Events_EndReportedDebuffScan and HealBot_Events_EndReportedDebuffScan(button)
             if not state.publicShield and HealBot_Forever_GetShieldLockout then
@@ -3356,9 +3470,11 @@ do
             end
         end
         HealBot_Aura_UpdateExplicitCombatDebuffs(button,selfOnly)
+        local reported=HealBot_Events_GetReportedCustomDebuffs and HealBot_Events_GetReportedCustomDebuffs(button,false)
         if reported then
             for _,aura in pairs(reported) do
-                notePartial(button,aura,nil,nil,true)
+                if aura.warnedThisScan then aura.warnedThisScan=nil
+                else notePartial(button,aura,nil,nil,true) end
             end
         end
         if counts then
@@ -3370,6 +3486,11 @@ do
             end
             if seenShield then counts.partialSeen=counts.partialSeen+1
             else counts.partialUnknown=counts.partialUnknown+1 end
+        end
+        if state.partialWarnings then
+            for _,warning in ipairs(state.partialWarnings) do
+                warning.separateInstance=distinctInstance(state.lookupSeen[warning.id],warning.publicInstance)
+            end
         end
         state.lookupSeen=nil
         state.collectDispels=nil
@@ -3440,7 +3561,7 @@ function HealBot_Aura_CheckUnitBuffOverDebuff(button, callerIsBuff)
     end
 end
 
-local buffBarCol,buffPrio,buffIconIndex=0,99,0
+local buffBarCol,buffPrio=0,99
 local function HealBot_Aura_InInstanceGroup()
     local category=LE_PARTY_CATEGORY_INSTANCE
     return category and ((IsInGroup and IsInGroup(category)) or (IsInRaid and IsInRaid(category)))
@@ -3455,18 +3576,20 @@ function HealBot_Aura_CheckUnitBuffs(button, selfOnly)
     if buffCheck and not button.special.unit and (not HEALBOT_FOREVER or UnitIsConnected(button.unit))
         and (not button.status.isdead or button.status.isspirit) then
         prevMissingbuff=button.aura.buff.missingbuff
+        local previousID,previousMode=button.aura.buff.id,button.aura.buff.colbar
         button.aura.buff.missingbuff=false
         button.aura.buff.priority=99
         button.aura.buff.colbar=0
         curBuffName=false;
 
-        if generalBuffs and HealBot_Data["PALIVE"] then
+        if not button.reserveWarnings and generalBuffs and HealBot_Data["PALIVE"] then
             if button.player then
                 onlyPlayers=true
             elseif HEALBOT_GAME_VERSION>3 then
                 onlyPlayers=button.isplayer or button.isgroupraid
             else
-                onlyPlayers=UnitIsFriend("player",button.unit)
+                local friendly=UnitIsFriend("player",button.unit)
+                onlyPlayers=not HealBot_issecretvalue(friendly) and friendly
             end
             if onlyPlayers then 
                 for x,_ in pairs(PlayerBuffs) do
@@ -3483,24 +3606,30 @@ function HealBot_Aura_CheckUnitBuffs(button, selfOnly)
 
         if button.aura.buff.update then
             button.aura.buff.publicRendered=false
-            if not HealBot_UnitBuffCurrent[button.unit] then
-                HealBot_UnitBuffCurrent[button.unit]={}
-                HealBot_UnitBuffTagsCurrent[button.unit]={}
-            end
-            for bName, _ in pairs(HealBot_UnitBuffCurrent[button.unit]) do
-                HealBot_UnitBuffCurrent[button.unit][bName]=false
+            if button.reserveWarnings then
+                wipe(button.reserveBuffCurrent)
+            else
+                if not HealBot_UnitBuffCurrent[button.unit] then
+                    HealBot_UnitBuffCurrent[button.unit]={}
+                    HealBot_UnitBuffTagsCurrent[button.unit]={}
+                end
+                for bName in pairs(HealBot_UnitBuffCurrent[button.unit]) do
+                    HealBot_UnitBuffCurrent[button.unit][bName]=false
+                end
             end
             button.aura.buff.update=false
             button.aura.buff.temp.active=false
             uaSlot=0
             uaBuffData[button.id].lastslot=0
             HealBot_Aura_UpdateUnitBuffs(button, selfOnly)
-            for bName, bID in pairs(HealBot_UnitBuffCurrent[button.unit]) do
-                if not HealBot_UnitBuffCurrent[button.unit][bName] then
-                    HealBot_UnitBuffCurrent[button.unit][bName]=nil
-                    HealBot_Aura_BuffUpdate_Plugins(button.guid, bName, HealBot_Globals.CustomBuffTag[HealBot_Aura_ID[bName]] or HealBot_BuffTagNames[bName], 0, false, button.unit)
-                else
-                    HealBot_Aura_BuffUpdate_Plugins(button.guid, bName, HealBot_Globals.CustomBuffTag[bID] or HealBot_BuffTagNames[bName], HealBot_AuraBuffCache[bID].count, true, HealBot_AuraBuffCache[bID].sourceUnitIsPlayer, button.unit)
+            if not button.reserveWarnings then
+                for bName, bID in pairs(HealBot_UnitBuffCurrent[button.unit]) do
+                    if not bID then
+                        HealBot_UnitBuffCurrent[button.unit][bName]=nil
+                        HealBot_Aura_BuffUpdate_Plugins(button.guid, bName, HealBot_Globals.CustomBuffTag[HealBot_Aura_ID[bName]] or HealBot_BuffTagNames[bName], 0, false, button.unit)
+                    else
+                        HealBot_Aura_BuffUpdate_Plugins(button.guid, bName, HealBot_Globals.CustomBuffTag[bID] or HealBot_BuffTagNames[bName], HealBot_AuraBuffCache[bID].count, true, HealBot_AuraBuffCache[bID].sourceUnitIsPlayer, button.unit)
+                    end
                 end
             end
         end
@@ -3521,26 +3650,21 @@ function HealBot_Aura_CheckUnitBuffs(button, selfOnly)
             if onlyPlayers then
                 HealBot_Aura_CheckGeneralBuff(button)
             end
-            buffIconIndex=HealBot_Aura_SortBuffIcons(button)
-            HealBot_Aura_CheckUnitBuffIcons(button)
+            local _,warningID=HealBot_Aura_SortBuffIcons(button)
+            if not button.reserveWarnings then HealBot_Aura_CheckUnitBuffIcons(button) end
 
             if not curBuffName then
-                if buffIconIndex>0 then
-                    button.aura.buff.id=HealBot_UnitBuffIcons[button.id][buffIconIndex]["spellId"]
-                    curBuffName=HealBot_AuraBuffCache[button.aura.buff.id]["name"]
-                    buffPrio=HealBot_AuraBuffCache[button.aura.buff.id]["priority"]
+                if warningID and warningID>0 then
+                    button.aura.buff.id=warningID
+                    curBuffName=HealBot_AuraBuffCache[warningID].name
+                    buffPrio=HealBot_AuraBuffCache[warningID].priority
                 elseif button.aura.buff.temp.active then
                     button.aura.buff.id=button.aura.buff.temp.id
                     curBuffName=button.aura.buff.temp.name
                     buffPrio=button.aura.buff.temp.priority
                 end
                 if curBuffName then
-                    if HealBot_AuraBuffCache[button.aura.buff.id].isAuto then
-                        buffBarCol=HealBot_Globals.CustomBuffsShowBarCol[HEALBOT_CUSTOM_CAT_CUSTOM_AUTOBUFFS] or 1
-                    else
-                        buffBarCol=HealBot_Globals.CustomBuffsShowBarCol[button.aura.buff.id] or 
-                                   HealBot_Globals.CustomBuffsShowBarCol[HealBot_AuraBuffCache[button.aura.buff.id]["name"]] or 1
-                    end
+                    buffBarCol=HealBot_Aura_BuffBarMode(button.aura.buff.id)
                     if buffBarCol>1 and button.aura.buff.colbar == 0 then
                         button.aura.buff.colbar=buffBarCol-1
                         button.aura.buff.priority=buffPrio
@@ -3551,7 +3675,8 @@ function HealBot_Aura_CheckUnitBuffs(button, selfOnly)
                 end
             end
             if curBuffName then               
-                if prevMissingbuff~=button.aura.buff.missingbuff or hb_lVars["updateAll"] then
+                if previousID~=button.aura.buff.id or previousMode~=button.aura.buff.colbar
+                    or prevMissingbuff~=button.aura.buff.missingbuff or hb_lVars["updateAll"] then
                     button.aura.buff.name="needUpdate"
                 end
                 HealBot_Aura_BuffWarnings(button, curBuffName)
@@ -3564,7 +3689,7 @@ function HealBot_Aura_CheckUnitBuffs(button, selfOnly)
     --    end
     else
         button.aura.buff.publicGeneration=nil
-        if HEALBOT_FOREVER and not UnitIsConnected(button.unit) then
+        if HEALBOT_FOREVER and not button.reserveWarnings and not UnitIsConnected(button.unit) then
             HealBot_Aura_RemoveBuffIcons(button)
         end
         button.aura.buff.missingbuff=false
@@ -3683,21 +3808,6 @@ function HealBot_Forever_DebuffsEnabled()
 end
 
 do
-    local function casterMatches(source,rule,selfOnly)
-        local everyone=rule==castByListIndexed[HEALBOT_CUSTOM_CASTBY_EVERYONE]
-        if everyone and not selfOnly then return true end
-        if not source then return false end
-        local mine=source=="player" or HealBot_SafeUnitIsUnit(source,"player")
-        if selfOnly and not mine then return false end
-        if everyone or rule==castByListIndexed[HEALBOT_OPTIONS_SELFHEALS] then return mine end
-        if mine then return rule==castByListIndexed[HEALBOT_CUSTOM_CASTBY_FRIEND] end
-        local friendly=UnitIsFriend("player",source)
-        if HealBot_issecretvalue(friendly) or type(friendly)~="boolean" then return false end
-        if friendly then return rule==castByListIndexed[HEALBOT_CUSTOM_CASTBY_FRIEND] end
-        local enemy=UnitIsEnemy("player",source)
-        return not HealBot_issecretvalue(enemy) and enemy and rule==castByListIndexed[HEALBOT_CUSTOM_CASTBY_ENEMY]
-    end
-
     local function customBar(button,selfOnly,id,name,source,dispelType,dispellable,currentPriority)
         if not name or HealBot_Aura_CustomDebuffDisabled(id,name) then return end
         local priority,typePriority=HealBot_Options_retDebuffPriority(id,name,dispelType or "nil")
@@ -3708,7 +3818,7 @@ do
         local filter=HealBot_DebuffFilter[id] or HealBot_DebuffFilter[name]
         if filter and not HealBot_Aura_BuffTargetMatches(button,filter) then return end
         local rule=hbCustomDebuffsCastBy[id] or hbCustomDebuffsCastBy[name] or HealBot_Globals.CureCustomDefaultCastBy
-        if casterMatches(source,rule,selfOnly) then return mode,priority end
+        if HealBot_Aura_CustomDebuffCasterMatches(source,rule,selfOnly) then return mode,priority end
     end
 
     function HealBot_Forever_GetPartialBarWarning(button,selfOnly,currentPriority)
@@ -3717,10 +3827,10 @@ do
         local id,name,mode,priority,dispellable
         local shieldSeen=state.publicShield
         if state.partialWarnings then
-            local current=HealBot_UnitDebuffCurrent[button.unit]
+            local current=button.reserveDebuffCurrent or HealBot_UnitDebuffCurrent[button.unit]
             for _,aura in ipairs(state.partialWarnings) do
                 if aura.id==6788 then shieldSeen=true end
-                if not current or current[aura.name]~=aura.id then
+                if aura.separateInstance or not current or current[aura.name]~=aura.id then
                     local m,p=customBar(button,selfOnly,aura.id,aura.name,aura.source,aura.dispelType,aura.dispellable,priority or currentPriority)
                     if m then id,name,mode,priority,dispellable=aura.id,aura.name,m,p,aura.dispellable end
                 end
@@ -3750,24 +3860,30 @@ function HealBot_Aura_CheckUnitDebuffs(button, selfOnly)
         end
         --button.aura.debuff.type=false
         if button.aura.debuff.update then
-            if not HealBot_UnitDebuffCurrent[button.unit] then 
-                HealBot_UnitDebuffCurrent[button.unit]={}
-                HealBot_UnitDebuffTagsCurrent[button.unit]={}
-            end
-            for dName, _ in pairs(HealBot_UnitDebuffCurrent[button.unit]) do
-                HealBot_UnitDebuffCurrent[button.unit][dName]=false
+            if button.reserveWarnings then
+                wipe(button.reserveDebuffCurrent)
+            else
+                if not HealBot_UnitDebuffCurrent[button.unit] then
+                    HealBot_UnitDebuffCurrent[button.unit]={}
+                    HealBot_UnitDebuffTagsCurrent[button.unit]={}
+                end
+                for dName in pairs(HealBot_UnitDebuffCurrent[button.unit]) do
+                    HealBot_UnitDebuffCurrent[button.unit][dName]=false
+                end
             end
             button.aura.debuff.update=false
             button.aura.debuff.temp.active=false
             uaSlot=0
             uaDebuffData[button.id].lastslot=0
             HealBot_Aura_UpdateUnitDebuffs(button, selfOnly)
-            for dName, dID in pairs(HealBot_UnitDebuffCurrent[button.unit]) do
-                if not HealBot_UnitDebuffCurrent[button.unit][dName] then
-                    HealBot_UnitDebuffCurrent[button.unit][dName]=nil
-                    HealBot_Aura_DebuffUpdate_Plugins(button.guid, dName, HealBot_Globals.CDCTag[HealBot_Aura_ID[dName]] or HealBot_DebuffTagNames[dName], 0, false, button.unit)
-                else
-                    HealBot_Aura_DebuffUpdate_Plugins(button.guid, dName, HealBot_Globals.CDCTag[dID] or HealBot_DebuffTagNames[dName], HealBot_AuraDebuffCache[dID].count, true, HealBot_AuraDebuffCache[dID].sourceUnitIsPlayer, button.unit)
+            if not button.reserveWarnings then
+                for dName, dID in pairs(HealBot_UnitDebuffCurrent[button.unit]) do
+                    if not dID then
+                        HealBot_UnitDebuffCurrent[button.unit][dName]=nil
+                        HealBot_Aura_DebuffUpdate_Plugins(button.guid, dName, HealBot_Globals.CDCTag[HealBot_Aura_ID[dName]] or HealBot_DebuffTagNames[dName], 0, false, button.unit)
+                    else
+                        HealBot_Aura_DebuffUpdate_Plugins(button.guid, dName, HealBot_Globals.CDCTag[dID] or HealBot_DebuffTagNames[dName], HealBot_AuraDebuffCache[dID].count, true, HealBot_AuraDebuffCache[dID].sourceUnitIsPlayer, button.unit)
+                    end
                 end
             end
         end
@@ -3787,7 +3903,7 @@ function HealBot_Aura_CheckUnitDebuffs(button, selfOnly)
         local warningSlot=HealBot_Aura_SortDebuffIcons(button)
         local oldID,oldDispel,oldMode=button.aura.debuff.id,button.aura.debuff.dispellable,button.aura.debuff.colbar
         local expirationTime,selected
-        HealBot_Aura_CheckUnitDebuffIcons(button)
+        if not button.reserveWarnings then HealBot_Aura_CheckUnitDebuffIcons(button) end
         if warningSlot>0 then
             selected=uaDebuffData[button.id][warningSlot]
             button.aura.debuff.id=selected.spellId
@@ -3817,7 +3933,7 @@ function HealBot_Aura_CheckUnitDebuffs(button, selfOnly)
                 end
             end
         end
-        if state.id>0 and HealBot_Panel_RaidPetUnitButtonCheck(button.unit) then
+        if state.id>0 and (button.reserveWarnings or HealBot_Panel_RaidPetUnitButtonCheck(button.unit)) then
             local warningType=HEALBOT_CUSTOM_en
             if barID then
                 debuffBarCol,state.dispellable=barMode,canDispel
@@ -3985,6 +4101,11 @@ function HealBot_Aura_SetAuraCheckFlags(debuffMounted, buffMounted, onTaxi, rest
 end
 
 function HealBot_Aura_ClearDebuff(button)
+    if button.reserveWarnings then
+        local state=button.aura.debuff
+        state.type,state.name,state.dispellable,state.colbar,state.curespell,state.id,state.priority=false,false,false,0,false,0,99
+        return
+    end
         --HealBot_setCall("HealBot_Aura_ClearDebuff", button)
     if button.aura.debuff.name then
         button.aura.debuff.type=false;
@@ -4012,6 +4133,11 @@ function HealBot_Aura_ClearDebuff(button)
 end
 
 function HealBot_Aura_ClearBuff(button)
+    if button.reserveWarnings then
+        local state=button.aura.buff
+        state.name,state.colbar,state.missingbuff,state.overdb=false,0,false,false
+        return
+    end
         --HealBot_setCall("HealBot_Aura_ClearBuff", button)
     if button.aura.buff.name then
         button.aura.buff.name=false
@@ -4623,7 +4749,6 @@ local function HealBot_Aura_ConfigDebuffFilter(id, sName, filter)
 end
 
 function HealBot_Aura_ConfigDebuffs()
-    hb_lVars.publicCustomDebuffIDs=nil
       --HealBot_setCall("HealBot_Aura_ConfigDebuffs")
     for id,_ in pairs(HealBot_DebuffIconGlow) do
         HealBot_DebuffIconGlow[id]=nil
@@ -4634,17 +4759,7 @@ function HealBot_Aura_ConfigDebuffs()
     for id,_ in pairs(HealBot_DebuffFilter) do
         HealBot_DebuffFilter[id]=nil
     end
-    local owners={}
-    hb_lVars.customDebuffNameOwners=owners
-    for id, priority in pairs(HealBot_Globals.CustomDebuffs) do
-        if type(id)=="number" and type(priority)=="number" and (HealBot_Globals.CustomDebuffIDMethod[id] or 2)>1 then
-            local name=HealBot_WoWAPI_SpellName(id)
-            if not HealBot_issecretvalue(name) and type(name)=="string" then
-                local old=owners[name]
-                if not old or priority<HealBot_Globals.CustomDebuffs[old]
-                    or (priority==HealBot_Globals.CustomDebuffs[old] and id<old) then owners[name]=id end
-            end
-        end
+    for id in pairs(HealBot_Globals.CustomDebuffs) do
         if HealBot_Globals.CustomDebuffsIconSet[id] then
             local sName=HealBot_WoWAPI_SpellName(id)
             HealBot_Aura_ConfigDebuffIconSetId(id, sName, HealBot_Globals.CustomDebuffsIconSet[id])

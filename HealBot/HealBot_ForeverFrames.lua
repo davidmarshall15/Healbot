@@ -492,7 +492,7 @@ end
 -- No native UI methods, aura data, settings or combat behavior are replaced.
 do
     local enabled = false
-    local timingRevision = "1.9"
+    local timingRevision = "2.1"
     local shieldCounts
     local started
     local stats = {}
@@ -512,19 +512,21 @@ do
     local function PublicText(value)
         if type(value)=="string" and not HealBot_issecretvalue(value) and value~="" then return value end
     end
-    local function RefreshRoster()
+    local function CurrentRoster()
         local category=LE_PARTY_CATEGORY_INSTANCE
         local instanceRaid=category and IsInRaid(category)
         local instanceGroup=instanceRaid or (category and IsInGroup(category))
         if not instanceGroup then category=LE_PARTY_CATEGORY_HOME end
         local raid=instanceRaid or (not instanceGroup and IsInRaid(category))
         if not raid and not instanceGroup and not IsInGroup(category) then
-            rosterType,rosterSize="solo",1
-            return
+            return "solo",1
         end
-        rosterType=(instanceGroup and "instance " or "")..(raid and "raid" or "party")
         local size=GetNumGroupMembers(category)
-        rosterSize=type(size)=="number" and not HealBot_issecretvalue(size) and size>0 and size or nil
+        return (instanceGroup and "instance " or "")..(raid and "raid" or "party"),
+            not HealBot_issecretvalue(size) and type(size)=="number" and size>0 and size or nil
+    end
+    local function RefreshRoster()
+        rosterType,rosterSize=CurrentRoster()
     end
     local function RefreshContext(_,event)
         if not event or event=="PLAYER_ENTERING_WORLD" or event=="ZONE_CHANGED_NEW_AREA" then
@@ -564,6 +566,8 @@ do
         HealBot_Skins_ResetSkin=true}
     local tooltipPhases={"HealBot_Action_DoRefreshTooltip","HealBot_Tooltip_DisplayIconTooltip",
         "HealBot_Tooltip_DisplayCompactIconTooltip"}
+    local updatePhases={HealBot_Update_ResetUnitOpacity=true,HealBot_Forever_UpdatePrediction=true,
+        HealBot_ItemIdsInBag=true}
     local function NativeSample(fn,...)
         if not fn then return end
         local ok,value=pcall(fn,...)
@@ -600,6 +604,9 @@ do
                 elseif record.tooltip then
                     sample.tooltipPhases=sample.tooltipPhases or {}
                     sample.tooltipPhases[record.name]={ms=record.frameTotal,calls=record.frameCalls,max=record.frameMax}
+                elseif updatePhases[record.name] then
+                    sample.updatePhases=sample.updatePhases or {}
+                    sample.updatePhases[record.name]={ms=record.frameTotal,calls=record.frameCalls,max=record.frameMax}
                 end
             end
         end
@@ -662,6 +669,7 @@ do
         "HealBot_UnitUpdateButton", "HealBot_UnitSlowUpdate", "HealBot_Update_Slow",
         "HealBot_Update_Final", "HealBot_Timers_Run", "HealBot_Timers_RunTimer"}
     for name in pairs(rosterPhases) do names[#names+1]=name end
+    for name in pairs(updatePhases) do names[#names+1]=name end
     local function Finish(record, before, priorBuildCalls, priorBuildMs, callContext, category, timer, ...)
         local elapsed = debugprofilestop() - before
         record.calls = record.calls + 1
@@ -786,13 +794,167 @@ do
         sampler:Show()
         print("HealBot timing "..timingRevision.." started. Use /hbperf report after the slowdown.")
     end
+    local function diagnosticValue(value)
+        if HealBot_issecretvalue(value) then return "unavailable" end
+        if value==nil then return "unknown" end
+        return tostring(value)
+    end
+    local function reportRaidButton(token)
+        local hover
+        local button
+        local named,ambiguous
+        local checked=0
+        for _,candidate in pairs(HealBot_Buttons or {}) do
+            local unit=candidate.unit
+            if candidate.aura and candidate.aura.buff and candidate.aura.debuff
+                and candidate.status and candidate.status.events and not HealBot_issecretvalue(unit) and type(unit)=="string"
+                and (unit=="player" or unit:match("^raid%d+$") or unit:match("^party%d+$")) then
+                checked=checked+1
+                if token==unit then button=candidate; break end
+                if token=="" then
+                    if candidate.mouseover then hover=candidate end
+                    local ok,same=pcall(UnitIsUnit,unit,"target")
+                    if ok and not HealBot_issecretvalue(same) and same then button=candidate; break end
+                else
+                    local label=candidate.text and candidate.text.nameonly
+                    if not HealBot_issecretvalue(label) and type(label)=="string" and label:lower()==token then
+                        if named and named.unit~=unit then ambiguous=true end
+                        named=candidate
+                    end
+                end
+            end
+        end
+        button=button or hover or (not ambiguous and named)
+        if not button then
+            print(string.format("HealBot could not match the selected unit. %d active group bars. Use /hbperf unit raid2 with the member's raid slot.",checked))
+            return
+        end
+        local buff,debuff=button.aura.buff,button.aura.debuff
+        print("HealBot "..button.unit.."  combat="..diagnosticValue(InCombatLockdown())
+            .."  selected buff ID="..diagnosticValue(PublicText(buff.name) and buff.id)
+            .."  buff bar mode="..diagnosticValue(buff.colbar)
+            .."  range="..diagnosticValue(button.range and button.range.current))
+        local shield=debuff.publicShield or false
+        for _,warning in ipairs(debuff.partialWarnings or {}) do
+            if warning.id==6788 then shield=true; break end
+        end
+        for _,record in pairs(debuff.reported and debuff.reported.records or {}) do
+            if record.spellId==6788 then shield=true; break end
+        end
+        print("HealBot "..button.unit.."  selected debuff ID="..diagnosticValue(debuff.id)
+            .."  debuff bar mode="..diagnosticValue(debuff.colbar)
+            .."  observed Weakened Soul="..diagnosticValue(shield)
+            .."  health bar state="..diagnosticValue(button.status.current))
+        local bar=button.gref and button.gref.Bar
+        if bar and bar.GetStatusBarColor then
+            local ok,r,g,b=pcall(bar.GetStatusBarColor,bar)
+            if ok and not HealBot_issecretvalue(r) and not HealBot_issecretvalue(g) and not HealBot_issecretvalue(b)
+                and type(r)=="number" and type(g)=="number" and type(b)=="number" then
+                print(string.format("HealBot health bar RGB %.3f / %.3f / %.3f",r,g,b))
+            end
+        end
+    end
+    local function publicNumber(value)
+        if not HealBot_issecretvalue(value) and type(value)=="number" then return value end
+    end
+    local function countPaint(stats,bar,policy)
+        if not bar or not bar.GetStatusBarColor or not policy then return end
+        local ok,r,g,b=pcall(bar.GetStatusBarColor,bar)
+        if not ok or not publicNumber(r) or not publicNumber(g) or not publicNumber(b)
+            or not publicNumber(policy.r) or not publicNumber(policy.g) or not publicNumber(policy.b) then return end
+        stats.paintReadable=stats.paintReadable+1
+        if math.abs(r-policy.r)<0.005 and math.abs(g-policy.g)<0.005 and math.abs(b-policy.b)<0.005 then
+            stats.paintMatches=stats.paintMatches+1
+        end
+    end
+    local function countAuraState(stats,button,bar)
+        stats.bars=stats.bars+1
+        local aura=button.aura
+        local buff,debuff=aura and aura.buff,aura and aura.debuff
+        if buff and PublicText(buff.name) then stats.selectedBuffs=stats.selectedBuffs+1 end
+        if debuff and publicNumber(debuff.id) and debuff.id>0 then stats.selected=stats.selected+1 end
+        local state=button and button.status and publicNumber(button.status.current)
+        if button.warningKind=="buff" or (state and state==HealBot_Unit_Status.BUFFBARCOL) then
+            stats.buffState=stats.buffState+1
+            countPaint(stats,bar,buff)
+        elseif button.warningKind=="debuff" or (state and state==HealBot_Unit_Status.DEBUFFBARCOL) then
+            stats.debuffState=stats.debuffState+1
+            countPaint(stats,bar,debuff)
+        end
+    end
+    local function reportRaid()
+        local kind,size=CurrentRoster()
+        local raid=kind:find("raid",1,true)
+        local slots,aliases={},{}
+        for i=1,math.min(size or 0,raid and 40 or 5) do
+            slots[raid and "raid"..i or (i==1 and "player" or "party"..(i-1))]=0
+        end
+        local function newCounts()
+            return {bars=0,selectedBuffs=0,selected=0,buffState=0,debuffState=0,paintMatches=0,paintReadable=0}
+        end
+        local instanceType=IsInInstance and PublicText(select(2,IsInInstance()))
+        local report={kind=kind,size=size,combat=InCombatLockdown(),normal=newCounts(),reserve=newCounts(),
+            instance=instanceType=="none" and "world" or instanceType,zone=GetRealZoneText and PublicText(GetRealZoneText()),
+            covered=0,duplicates=0,unresolved=0,normalWithoutEvents=0}
+        local function count(source,button)
+            local stats=report[source]
+            local unit=button.unit
+            if HealBot_issecretvalue(unit) or type(unit)~="string"
+                or (unit~="player" and not unit:match("^raid%d+$") and not unit:match("^party%d+$")) then return end
+            local visible=button:IsVisible()
+            if HealBot_issecretvalue(visible) or not visible then return end
+            local exists=UnitExists(unit)
+            if not HealBot_issecretvalue(exists) and not exists then return end
+            local slot=unit
+            if slots[slot]==nil then
+                if aliases[unit]==nil then
+                    aliases[unit]=false
+                    for key in pairs(slots) do
+                        local ok,same=pcall(UnitIsUnit,unit,key)
+                        if ok and not HealBot_issecretvalue(same) and same then aliases[unit]=key; break end
+                    end
+                end
+                slot=aliases[unit]
+            end
+            if slot then
+                if slots[slot]==0 then report.covered=report.covered+1 else report.duplicates=report.duplicates+1 end
+                slots[slot]=slots[slot]+1
+            else
+                report.unresolved=report.unresolved+1
+            end
+            if stats==report.normal and not (button.status and button.status.events) then
+                report.normalWithoutEvents=report.normalWithoutEvents+1
+            end
+            countAuraState(stats,button,button.healthBar or (button.gref and button.gref.Bar))
+        end
+        for _,button in pairs(HealBot_Buttons or {}) do
+            count("normal",button)
+        end
+        if HealBot_Forever_VisitReserveBars then
+            HealBot_Forever_VisitReserveBars(function(row) count("reserve",row) end)
+        end
+        if HealBot_Globals then HealBot_Globals.ForeverRosterAuraReport=report end
+        print(string.format("HealBot %s / %s / %s / %s: %d/%s roster slots have visible bars, %d duplicate bars, %d unresolved aliases, %d normal bars without events.",
+            report.instance or "unknown",report.zone or "unknown",kind,report.combat and "combat" or "out of combat",
+            report.covered,size or "?",report.duplicates,report.unresolved,report.normalWithoutEvents))
+        local function show(label,s)
+            print(string.format("%s %d bars: %d selected buffs, %d selected debuffs. Tint state: %d buff, %d debuff. Widget RGB matches %d/%d readable tints.",
+                label,s.bars,s.selectedBuffs,s.selected,s.buffState,s.debuffState,s.paintMatches,s.paintReadable))
+        end
+        show("Normal",report.normal)
+        show("Late-join",report.reserve)
+    end
     SLASH_HEALBOTLIVEPERF1 = "/hbperf"
     SlashCmdList.HEALBOTLIVEPERF = function(arg)
         arg = (arg or ""):lower():match("^%s*(.-)%s*$")
+        if arg=="raid" then reportRaid(); return end
+        if arg=="unit" then reportRaidButton(""); return end
+        local unit=arg:match("^unit%s+(.+)$")
+        if unit then reportRaidButton(unit); return end
         if arg == "on" then Start(); return end
         if arg == "off" then Stop(); print("HealBot timing stopped; original functions restored."); return end
         if arg ~= "report" or not started then
-            print("HealBot timing "..timingRevision..": /hbperf on, /hbperf report, /hbperf off.")
+            print("HealBot timing "..timingRevision..": /hbperf on, /hbperf report, /hbperf off, /hbperf raid, /hbperf unit.")
             return
         end
         local duration = GetTime() - started
@@ -809,8 +971,8 @@ do
             report.maxFrameRosterSize=contexts[maxFrameContext].rosterSize
         end
         if type(HealBot_Globals) == "table" then HealBot_Globals.ForeverPerformanceReport = report end
-        print(string.format("HealBot timing: %.1fs; %d frames; max frame %.1fms; frames >=40ms %d.",
-            duration, frames, maxFrameMs, slowFrames))
+        print(string.format("HealBot timing %s: %.1fs; %d frames; max frame %.1fms; frames >=40ms %d.",
+            timingRevision, duration, frames, maxFrameMs, slowFrames))
         print(string.format("Shield: %d sent, %d matched, %d unresolved target names, %d missing cast keys, %d rank mismatches, %d unpaired at success.",
             shieldCounts.sent,shieldCounts.matched,shieldCounts.targetMissing,shieldCounts.castKeyMissing,
             shieldCounts.rankMismatch,shieldCounts.unpaired))
@@ -826,7 +988,16 @@ do
             shieldCounts.partialUnknown,shieldCounts.completeMiss,shieldCounts.missAfterSeen,
             shieldCounts.selected,shieldCounts.suppressed,shieldCounts.painted,shieldCounts.outOfRange,shieldCounts.paintBlocked))
         if maxFrameContext then print("Longest frame observed in "..maxFrameContext..".") end
-        if hitches[1] then print("Saved the "..#hitches.." longest slow frames with surrounding addon CPU samples. HealBot phase times overlap.") end
+        if hitches[1] then
+            local boundary=hitches[1].boundary
+            if boundary.heaviestName then
+                print(string.format("Largest timed HealBot phase at the %.1fms frame boundary: %s, %.1fms across %d calls.",
+                    boundary.wallMs,boundary.heaviestName,boundary.heaviestMs,boundary.heaviestCalls))
+            else
+                print(string.format("No timed HealBot phase recorded at the %.1fms frame boundary.",boundary.wallMs))
+            end
+            print("Saved the "..#hitches.." longest slow frames with surrounding addon CPU samples. HealBot phase times overlap.")
+        end
         for index,entry in ipairs(stats) do
             if entry.calls>0 and (index<=6 or entry.scope or entry.name=="HealBot_Timers_RunTimer") then
                 local owner=entry.maxTimerName and (" ["..(entry.maxTimerCategory or "?").."/"..entry.maxTimerName.."]") or ""

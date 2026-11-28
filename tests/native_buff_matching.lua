@@ -193,4 +193,15 @@ do
         eq(contains(filters,99002,1,"everyoneSpellFilter"),true,"generic caster matching covers "..class)
     end
 end
+do
+    local env,build,names=fixture()
+    names[1243]="Power Word: Fortitude"
+    names[450086]="Prayer of Fortitude"
+    local g=env.HealBot_Globals
+    g.WatchHoT.ALL[1243]=3
+    g.CustomBuffsIconSet[1243]=2
+    eq(contains(build(),450086,2,"everyoneSpellFilter"),true,"group Fortitude variant follows configured single-target buff")
+    g.CustomBuffIDMethod[1243]=1
+    eq(contains(build(),450086,2),false,"strict Fortitude ID excludes group variants")
+end
 print("PASS: "..passed.." native buff matching assertions (real configuration helpers, public caches only)")

@@ -1,7 +1,6 @@
 -- Drive the ordinary helpful-aura scan and its persistent spell/slot caches.
-local e,make,put,aura,secret,setGroup=dofile("tests/fixtures/ordinary_helpful.lua")
-setGroup(true,false,0)
-local button=make('party2',1)
+local e,make,put,_,secret=assert(loadfile("tests/fixtures/public_helpful.lua"))()("party")
+local button=make("party2",1)
 local shown,classes={},{}
 local id,name=401863,'Prayer of Mending'
 local g=e.HealBot_Globals

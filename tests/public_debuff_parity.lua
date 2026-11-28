@@ -119,26 +119,80 @@ assert(not button.aura.debuff.publicUnit and seen[888]==1 and seen[301]==1,"inte
 combat,generallyRestricted=true,true
 e.C_UnitAuras.GetAuraDataByIndex=nil
 e.hb_lVars.publicCustomDebuffIDs=nil
-e.C_Secrets.GetSpellAuraSecrecy=function() return "conditional" end
+local forbearance,frostNova,frostRank,polymorph,polyRank=25771,122,865,118,12824
+local spellNames={[6788]="Test6788",[888]="Test888",[999]="Test999",[forbearance]="Forbearance",
+    [frostNova]="Frost Nova",[frostRank]="Frost Nova",[polymorph]="Polymorph",[polyRank]="Polymorph"}
+local globals=e.HealBot_Globals
+globals.CustomDebuffs[forbearance]=10; globals.CustomDebuffs[frostNova]=8; globals.CustomDebuffs[polymorph]=8
+globals.CustomDebuffIDMethod={[polymorph]=1}
+local expansions,baseChecks={},{}
+e.HealBot_Forever_VisitSpellNameIDs=function(id,name,visit)
+    expansions[id]=(expansions[id] or 0)+1
+    if id==frostNova then visit(frostRank,name)
+    elseif id==polymorph then visit(polyRank,name) end
+end
+e.Enum.SecrecyLevel.AlwaysSecret="always"
+e.C_Secrets.GetSpellAuraSecrecy=function(id)
+    baseChecks[id]=(baseChecks[id] or 0)+1
+    return id==999 and "always" or "conditional"
+end
 local currentlyHidden=false
-local checks=0
-e.C_Secrets.ShouldSpellAuraBeSecret=function(id) assert(id==6788);checks=checks+1;return currentlyHidden end
-e.HealBot_Globals.CustomDebuffsShowBarCol={[6788]=3}
-e.HealBot_WoWAPI_SpellName=function(id) assert(id==6788);return "Test6788" end
-e.HealBot_Aura_CustomDebuffDisabled=function() return false end
+local checks={}
+e.C_Secrets.ShouldSpellAuraBeSecret=function(id)
+    checks[id]=(checks[id] or 0)+1
+    return currentlyHidden
+end
+globals.CustomDebuffsShowBarCol={[6788]=3,[888]=1,[forbearance]=1,[frostNova]=3,[polymorph]=3}
+e.HealBot_WoWAPI_SpellName=function(id) return spellNames[id] end
+e.HealBot_AuraDebuffCache={}
+e.HealBot_Timers_Set=function() end
+local reset=assert(source:match("(function HealBot_Aura_ResetDebuffCache%b().-\nend)"))
+setfenv(assert(loadstring(reset)),e)()
+e.HealBot_Aura_ResetDebuffCache()
+local disabled={}
+e.HealBot_Aura_CustomDebuffDisabled=function(id) return disabled[id] end
 scan(nil,{}, {[6788]=shield})
-assert(queries[6788]==1 and not queries[888] and checks==1 and button.aura.debuff.partialWarnings[1].id==6788)
+assert(queries[6788]==1 and not queries[888] and checks[6788]==1 and button.aura.debuff.partialWarnings[1].id==6788)
+local function realAura(id)
+    local a=aura(id); a.name=spellNames[id]; return a
+end
+local frost,forbear=realAura(frostRank),realAura(forbearance)
+forbear.icon=secret
+globals.CustomDebuffsShowBarCol[forbearance]=3
+scan(nil,{}, {[frostRank]=frost,[forbearance]=forbear,[polyRank]=realAura(polyRank)})
+assert(seen[frostRank] and button.aura.debuff.partialWarnings and button.aura.debuff.partialWarnings[1].id==forbearance,
+    "a currently public Frost Nova rank or Forbearance did not reach the ordinary or partial warning path")
+assert(not checks[999] and not queries[999] and not queries[polyRank] and not expansions[polymorph],
+    "a permanently hidden or strict-ID rank was probed")
+scan({frost},{}, {[frostRank]=frost})
+assert(not queries[frostRank] and seen[frostRank]==1 and not button.aura.debuff.partialWarnings,
+    "broadly observed ranks were queried twice or removed auras persisted")
+assert(expansions[frostNova]==1 and baseChecks[frostRank]==1,"aura updates rebuilt rank or base secrecy policy")
+globals.CustomDebuffsShowBarCol[forbearance]=1
+disabled[frostRank]=true; disabled[polymorph]=true
+scan(nil,{}, {})
+assert(not queries[forbearance] and not queries[frostRank] and not queries[polymorph],
+    "disabled or icon-only health rules probed conditional identities")
+globals.CustomDebuffs[frostNova]=nil; globals.CustomDebuffs[frostRank]=6
+globals.CustomDebuffIDMethod[frostRank]=1; disabled[frostRank]=nil
+e.HealBot_Aura_ResetDebuffCache()
+scan(nil,{},{[frostNova]=realAura(frostNova),[frostRank]=frost})
+assert(seen[frostRank] and not queries[frostNova] and not e.hb_lVars.customDebuffNameOwners["Frost Nova"],
+    "custom-list reset retained a deleted name/rank rule")
+disabled[frostRank]=true
 scan(nil,{}, {[6788]=aura(6788)})
 assert(queries[6788]==1 and seen[6788]==1)
+local before=checks[6788]
 scan({aura(6788)},{}, {})
-assert(not queries[6788] and seen[6788]==1 and checks==2)
+assert(not queries[6788] and seen[6788]==1 and checks[6788]==before)
 for _,hidden in ipairs({true,secret}) do
     currentlyHidden=hidden
     scan(nil,{}, {[6788]=shield})
-    assert(not queries[6788] and not button.aura.debuff.partialWarnings)
+    assert(not queries[6788] and not queries[frostNova] and not button.aura.debuff.partialWarnings)
 end
 currentlyHidden=false
 e.C_UnitAuras.GetUnitAuraBySpellID=nil
+disabled[frostNova]=true
 e.C_UnitAuras.GetAuraDataBySpellName=function(unit,name,filter)
     assert(unit=="party1" and name=="Test6788" and filter=="HARMFUL")
     queries.name=(queries.name or 0)+1
@@ -151,6 +205,20 @@ assert(queries.name==1 and button.aura.debuff.partialWarnings[1].id==6788)
 e.HealBot_Globals.CustomDebuffsShowBarCol[6788]=1
 scan(nil,{}, {[6788]=shield})
 assert(not queries.name,"icon-only mode probed a conditional spell for a health tint")
+globals.CustomDebuffs[frostNova]=5
+e.HealBot_Aura_ResetDebuffCache()
+disabled[frostNova],disabled[frostRank]=nil,nil
+e.C_UnitAuras.GetAuraDataBySpellName=function(_,name)
+    queries[name]=(queries[name] or 0)+1
+    return byID[frostRank]
+end
+scan(nil,{}, {[frostRank]=frost})
+assert(queries["Frost Nova"]==1 and seen[frostRank]==1 and not seen[frostNova],
+    "name-only aura access repeated a rank lookup or reported the wrong ID")
+e.C_Secrets.ShouldSpellAuraBeSecret=function(id) return id==frostRank end
+scan(nil,{}, {[frostRank]=frost})
+assert(queries["Frost Nova"]==1 and not seen[frostRank] and not button.aura.debuff.partialWarnings,
+    "a public sibling name overrode a hidden rank's verdict")
 local eventAura=aura(888)
 e.HealBot_Events_GetReportedCustomDebuffs=function(_,complete)
     if complete then eventAura=nil elseif eventAura then return {[100]=eventAura} end

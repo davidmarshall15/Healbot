@@ -229,6 +229,14 @@ function HealBot_Range_UpdateUnit(button)
         if newRange~=button.range.current then
             oldRange=button.range.current
             button.range.current=newRange
+            -- A unit can phase or ride into view without gaining or losing an
+            -- aura. Re-read both families once when its visibility changes.
+            if HEALBOT_FOREVER and (oldRange<0)~=(newRange<0) and button.status.events
+                and not button.special.unit and HealBot_Panel_RaidPetUnitButtonCheck(button.unit) then
+                button.aura.buff.update=true
+                button.aura.debuff.update=true
+                HealBot_Events_CheckUnitAura(button)
+            end
             if button.status.dupid>0 and HealBot_Buttons[button.status.dupid].range.current~=button.range.current then
                 HealBot_Events_UpdateRange(HealBot_Buttons[button.status.dupid])
             end

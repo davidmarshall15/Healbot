@@ -49,13 +49,13 @@ local e=setmetatable({
 },{__index=_G})
 local code={}
 for _,name in ipairs({"AuraDataIsUsable","PostUpdateInitDebuffsCache","PostUpdateUnitDebuffsData","FilterUnitDebuffs","UpdateUnitDebuffsData",
-    "CheckCurCustomDebuff","CheckCurDebuff","CustomDebuffDisabled","CheckUnitDebuff","setDebuffXRefUID","GetDebuffIconPreference",
+    "CustomDebuffCasterMatches","CheckCurCustomDebuff","CheckCurDebuff","CustomDebuffDisabled","CheckUnitDebuff","setDebuffXRefUID","GetDebuffIconPreference",
     "CustomDebuffSetting","SortDebuffIconSet","SortDebuffIcons","UpdateUnitDebuffsV9","CheckUnitDebuffs","AutoUpdateCustomDebuff"}) do
     code[#code+1]=get("HealBot_Aura_"..name)
 end
 code[#code+1]=get("HealBot_Options_retDebuffPriority",options)
 code[#code+1]=get("HealBot_Forever_WatchesWeakenedSoul")
-code[#code+1]=assert(source:match("(do\n    local function casterMatches%b().-\nend)\n\nfunction HealBot_Aura_CheckUnitDebuffs"))
+code[#code+1]=assert(source:match("(do\n    local function customBar%b().-\nend)\n\nfunction HealBot_Aura_CheckUnitDebuffs"))
 code[#code+1]=assert(source:match("(do\n    local function public%(value%).-\nend)\n\nfunction HealBot_Aura_CheckCurDebuff"))
 code[#code+1]=assert(source:match("(do\n    local function readable%(aura%).-\nend)\n\nfunction HealBot_Aura_UpdateUnitDebuffsV9"))
 e.ForeverHarmfulBleeds=assert(loadstring("return "..assert(source:match("local ForeverHarmfulBleeds=HEALBOT_FOREVER and (%b{})"))))()
