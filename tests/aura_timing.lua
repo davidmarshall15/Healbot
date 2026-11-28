@@ -54,6 +54,10 @@ local runSync=setfenv(assert(loadstring('local Sync=...\n'..visitor..'\nreturn f
 local function runTimer(_,_,...) now=now+.020; return ... end
 e.HealBot_Timers_RunTimer=runTimer
 e.HealBot_UnitUpdateButton=original
+e.HealBot_Action_CreateNewButton=original
+e.HealBot_Action_CreateButton=function(...) return e.HealBot_Action_CreateNewButton(...) end
+e.HealBot_Action_SetHealButton=function(...) return e.HealBot_Action_CreateButton(...) end
+e.HealBot_Panel_MainSort=function(...) return e.HealBot_Action_SetHealButton(...) end
 local baseline={}
 e.HealBot_Forever_VisitAuraPerfScopes(function(name,fn) baseline[name]=fn; return fn end)
 local text=read('HealBot/HealBot_ForeverFrames.lua')
@@ -97,12 +101,20 @@ for pass=1,2 do
     d.skin.size=20+pass
     d.hook('HealBot_Aura_SetAuraCheckFlags')
     e.HealBot_Forever_SkinArrivalAuras(reserve,donor)
+    e.HealBot_Panel_MainSort()
     sampler:OnUpdate(.15)
     cmd('report')
     assert(e.HealBot_Action_setLuVars==original and e.HealBot_Timers_Set==throwing,'global wrappers not restored')
     e.HealBot_Forever_VisitAuraPerfScopes(function(name,fn) assert(fn==baseline[name],'local wrapper not restored'); return fn end)
     local report=d.globals.ForeverPerformanceReport
-    assert(report.revision=='1.8' and report.slowFrames==1,'report lost frame metrics')
+    assert(report.revision=='1.9' and report.slowFrames==1,'report lost frame metrics')
+    local phases=report.hitches[1].boundary.partyPhases
+    assert(phases.HealBot_Panel_MainSort.calls==1 and phases.HealBot_Action_SetHealButton.calls==1)
+    assert(phases.HealBot_Action_CreateButton.ms>=phases.HealBot_Action_CreateNewButton.ms and
+           phases.HealBot_Action_SetHealButton.ms>=phases.HealBot_Action_CreateButton.ms)
+    assert(phases['Aura.ConfiguredBuffFilters'].calls==2 and not phases['PartyJoin.Sync'],
+           'roster snapshot lost current-frame aura work or included work from an earlier frame')
+    assert(e.HealBot_Action_CreateNewButton==original,'roster probe still active when profiler stopped')
     assert(report.shield.directClick==3 and report.shield.clickMatched==2 and report.shield.auraMatched==1)
     assert(table.concat(lines,'\n'):find("Direct shield clicks: 3. Missing targets recovered by click: 2; by aura: 1.",1,true))
     assert(table.concat(lines,'\n'):find("Own debuffs found on clicked unit: 1.",1,true))

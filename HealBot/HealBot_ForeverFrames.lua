@@ -492,7 +492,7 @@ end
 -- No native UI methods, aura data, settings or combat behavior are replaced.
 do
     local enabled = false
-    local timingRevision = "1.8"
+    local timingRevision = "1.9"
     local shieldCounts
     local started
     local stats = {}
@@ -556,8 +556,12 @@ do
         if event=="PLAYER_ENTERING_WORLD" or event=="ZONE_CHANGED_NEW_AREA" or event=="GROUP_ROSTER_UPDATE"
             or event=="PLAYER_REGEN_ENABLED" or event=="PLAYER_REGEN_DISABLED" then RefreshContext(self,event) end
     end)
-    local phases={HealBot_Panel_buildDataStore=true,HealBot_Panel_PlayersChanged=true,
-        HealBot_Panel_SetupBars=true,HealBot_Panel_PositionBars=true}
+    -- These scopes nest: MainSort assigns members to buttons, and creating or
+    -- skinning a button can build aura containers. Preserve each inclusive cost.
+    local rosterPhases={HealBot_Panel_buildDataStore=true,HealBot_Panel_PlayersChanged=true,
+        HealBot_Panel_SetupBars=true,HealBot_Panel_PositionBars=true,HealBot_Panel_MainSort=true,
+        HealBot_Action_SetHealButton=true,HealBot_Action_CreateButton=true,HealBot_Action_CreateNewButton=true,
+        HealBot_Skins_ResetSkin=true}
     local tooltipPhases={"HealBot_Action_DoRefreshTooltip","HealBot_Tooltip_DisplayIconTooltip",
         "HealBot_Tooltip_DisplayCompactIconTooltip"}
     local function NativeSample(fn,...)
@@ -590,7 +594,7 @@ do
                 if not sample.heaviestMs or record.frameTotal>sample.heaviestMs then
                     sample.heaviestName,sample.heaviestMs,sample.heaviestCalls=record.name,record.frameTotal,record.frameCalls
                 end
-                if phases[record.name] then
+                if rosterPhases[record.name] or record.scope then
                     sample.partyPhases=sample.partyPhases or {}
                     sample.partyPhases[record.name]={ms=record.frameTotal,calls=record.frameCalls,max=record.frameMax}
                 elseif record.tooltip then
@@ -645,9 +649,8 @@ do
         if ms >= 40 then slowFrames=slowFrames+1; context.slowFrames=context.slowFrames+1 end
     end)
     local names = {"HealBot_PlayerTargetChanged", "HealBot_TargetChanged", "HealBot_UnitExists",
-        "HealBot_Panel_buildDataStore","HealBot_Panel_PlayersChanged","HealBot_Panel_SetupBars","HealBot_Panel_PositionBars",
         "HealBot_Panel_PartyChanged", "HealBot_Panel_EnemyTargetsWithPlayersSelfUpdate",
-        "HealBot_Skins_ResetSkin", "HealBot_Aura_SetAuraCheckFlags",
+        "HealBot_Aura_SetAuraCheckFlags",
         "HealBot_Aura_CheckUnitBuffs", "HealBot_Aura_CheckUnitDebuffs",
         "HealBot_Action_ResetrCallsUnit", "HealBot_Action_UpdateHealthButton",
         "HealBot_Forever_RefreshTarget", "HealBot_Forever_UpdateIncomingHeals",
@@ -658,6 +661,7 @@ do
         -- actual runtime calls made by its fast, slow and final passes.
         "HealBot_UnitUpdateButton", "HealBot_UnitSlowUpdate", "HealBot_Update_Slow",
         "HealBot_Update_Final", "HealBot_Timers_Run", "HealBot_Timers_RunTimer"}
+    for name in pairs(rosterPhases) do names[#names+1]=name end
     local function Finish(record, before, priorBuildCalls, priorBuildMs, callContext, category, timer, ...)
         local elapsed = debugprofilestop() - before
         record.calls = record.calls + 1
