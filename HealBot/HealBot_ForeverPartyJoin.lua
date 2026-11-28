@@ -586,42 +586,12 @@ local function BindRow(row)
     row.bindingGeneration=bindingGeneration
 end
 
-local function FindSkinDonor()
-    local groupToken="^"..rosterMode.."%d+$"
-    local fallback,fx,fy,liveFallback
-    for _,button in pairs(HealBot_Buttons or {}) do
-        if button.frame==frame and button.status.active and button:IsShown() and button.gref and button.gref.Bar then
-            local x,y=button.gref.Bar:GetCenter()
-            if x and y then
-                local unit=button.unit
-                local exists=unit and UnitExists(unit)
-                if exists and (unit=="player" or unit:match(groupToken)) then return button,x,y end
-                if not fallback or (exists and not liveFallback) then
-                    fallback,fx,fy,liveFallback=button,x,y,exists
-                end
-            end
-        end
-    end
-    return fallback,fx,fy
-end
-
-local previousPowerStyles={}
-local powerStyleFields={"x","y","width","height","texture","orientation","reverse","r","g","b","alpha",
-    "alignment","textX","textY","font","fontHeight","outline","tr","tg","tb","ta"}
-
-local function SamePowerStyle(previous,style)
-    if not previous then return false end
-    for _,field in ipairs(powerStyleFields) do
-        local a,b=previous[field],style[field]
-        if secret(a) or secret(b) or a~=b then return false end
-    end
-    return true
-end
-
--- A roster pass copies one donor to many empty slots. Share the actual
--- rendered values, so a new donor or media change is picked up on the next pass.
-local function PowerStyles(donor,cx,cy)
-    local styles={}
+local function SkinExtras(row, donor, auraBatch)
+    row.frame=frame
+    row.skinPower=row.skinPower or {}
+    for _,entry in pairs(row.skinPower) do entry.bar:Hide() end
+    local cx,cy=donor.gref.Bar:GetCenter()
+    if not cx or not cy then return end
     for id=1,9 do
         if hbv_Aux_GetBarVar("USE",frame,id)==4 then
             local source=donor.gref.aux[id]
@@ -644,110 +614,7 @@ local function PowerStyles(donor,cx,cy)
             end
         end
     end
-    previousPowerStyles=styles
-    return styles
-end
-
-local function SkinExtras(row, donor, context, cx, cy)
-    row.frame=frame
-    row.skinPower=row.skinPower or {}
-    if not context.powerStyles then context.powerStyles=PowerStyles(donor,cx,cy) end
-    local styles=context.powerStyles
-    for id,entry in pairs(row.skinPower) do
-        if not styles[id] and entry.shown then
-            entry.bar:Hide()
-            entry.shown,entry.style=false,nil
-        end
-    end
-    for id,style in pairs(styles) do
-        local entry=row.skinPower[id]
-        if not entry then
-            local bar=CreateFrame("StatusBar",nil,row)
-            bar:EnableMouse(false)
-            entry={bar=bar,text=bar:CreateFontString(nil,"OVERLAY")}
-            row.skinPower[id]=entry
-        end
-        if entry.style~=style or entry.anchor~=row.healthBar then
-            local bar,text=entry.bar,entry.text
-            entry.style=nil
-            bar:ClearAllPoints()
-            bar:SetPoint("CENTER",row.healthBar,"CENTER",style.x,style.y)
-            bar:SetSize(style.width,style.height)
-            bar:SetStatusBarTexture(style.texture)
-            bar:SetOrientation(style.orientation)
-            bar:SetReverseFill(style.reverse)
-            bar:SetStatusBarColor(style.r,style.g,style.b,style.alpha)
-            entry.alpha=style.alpha
-            text:ClearAllPoints()
-            text:SetPoint(style.alignment,bar,style.alignment,style.textX,style.textY)
-            text:SetJustifyH(style.alignment)
-            text:SetWidth(style.width)
-            local fontApplied=text:SetFont(style.font,style.fontHeight,style.outline)
-            text:SetTextColor(style.tr,style.tg,style.tb,style.ta)
-            if not entry.shown then bar:Show(); entry.shown=true end
-            if fontApplied then entry.style,entry.anchor=style,row.healthBar end
-        end
-    end
-end
-
--- Secure watches, click bindings and base artwork are ready in Sync. Native
--- aura templates for empty slots are substantially more expensive. Prepare one
--- member per rendered frame, starting with the next available roster slot.
-local auraWorker
-local auraRoster,auraDonor,auraContext
-local auraIndex,auraRemaining=1,0
-
-local function StopAuraPreparation()
-    auraDonor,auraContext=nil,nil
-    auraRemaining=0
-    if auraWorker then auraWorker:SetScript("OnUpdate",nil) end
-end
-
-local function PrepareNextReserve()
-    if InCombatLockdown() or HealBot_Globals.ForeverPartyJoin==false then
-        StopAuraPreparation()
-        return
-    end
-    if skinDirty then return end
-    if not auraDonor.status.active or not auraDonor:IsShown() or auraDonor.frame~=frame then
-        auraDonor=FindSkinDonor()
-        auraContext=nil
-        if not auraDonor then StopAuraPreparation(); return end
-    end
-    while auraRemaining>0 do
-        local row=rows[auraIndex]
-        auraIndex=auraIndex%#rows+1
-        auraRemaining=auraRemaining-1
-        if row.reserve and not UnitExists(row.unit) then
-            auraContext=auraContext or HealBot_Forever_PrepareArrivalAuraContext(true)
-            HealBot_Forever_SkinArrivalAuras(row,auraDonor,auraContext)
-            HealBot_Forever_UpdateArrivalAuras(row)
-            break
-        end
-    end
-    if auraRemaining==0 then
-        auraIndex=1
-        StopAuraPreparation()
-    end
-end
-
-local function QueueReserveAuras(donor)
-    if not donor or not HealBot_Forever_SkinArrivalAuras then
-        if auraRemaining>0 then StopAuraPreparation() end
-        return
-    end
-    -- Keep our place through repeated roster changes so later rows get a turn.
-    if auraRoster~=rows then auraIndex=1 end
-    auraRoster,auraDonor,auraContext=rows,donor,nil
-    if auraRemaining==0 then
-        auraWorker=auraWorker or CreateFrame("Frame")
-        auraWorker:SetScript("OnUpdate",PrepareNextReserve)
-    end
-    auraRemaining=#rows
-end
-
-function HealBot_Forever_UpdateQueuedArrivalFilters(filters)
-    if auraContext then auraContext.filters=filters end
+    if HealBot_Forever_SkinArrivalAuras then HealBot_Forever_SkinArrivalAuras(row,donor,auraBatch) end
 end
 
 local function Sync()
@@ -796,16 +663,10 @@ local function Sync()
     end
     local donor,donorX,donorY,checkedDonor
     bindingError=nil
-    local extraContext={}
+    local auraBatch={}
     for _,row in ipairs(rows) do
         local reserve=enabled and not UnitExists(row.unit)
-        if reserve and not checkedDonor then
-            donor,donorX,donorY=FindSkinDonor()
-            checkedDonor=true
-        end
-        if reserve and donor then
-            SkinExtras(row,donor,extraContext,donorX,donorY)
-        end
+        if reserve and donor then SkinExtras(row,donor,auraBatch) end
         if reserve and row.bindingGeneration~=bindingGeneration then
             local ok,err=pcall(BindRow,row)
             if not ok then
