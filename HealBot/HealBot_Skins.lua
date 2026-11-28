@@ -378,54 +378,37 @@ function HealBot_Skins_UpdateIconGlowSize(b, id)
     end
 end
 
-function HealBot_Skins_UpdateBuffIcon(b, id, set)
-    if hbv_Skins_GetIconBoolean("BUFFDOUBLE", b.frame, set) then
-        iScale=floor(((bheight*hbv_Skins_GetIconVar("BSCALE", b.frame, set))-2)*0.485)
-    else
-        iScale=(bheight*hbv_Skins_GetIconVar("BSCALE", b.frame, set))-2
+local function SkinIconSet(b, first, last, size, double, zoom, font, height, outline)
+    if double then size=floor(size*0.485) end
+    font,height,outline=HealBot_Media_ResolveFont(font,height,outline)
+    for id=first,last or first do
+        b.gref.icon[id]:SetSize(size,size)
+        b.gref.icon[id]:SetTexCoord(zoom,1-zoom,zoom,1-zoom)
+        b.gref.txt.expire[id]:SetFont(font,height,outline)
+        b.gref.txt.count[id]:SetFont(font,height,outline)
+        b.gref.iconf[id]:SetSize(size,size)
+        HealBot_Skins_UpdateIconGlowSize(b,id)
     end
-    iZoom=hbv_Skins_GetIconVar("BZOOM", b.frame, set)
-    b.gref.icon[id]:SetHeight(iScale);
-    b.gref.icon[id]:SetWidth(iScale);
-    b.gref.icon[id]:SetTexCoord(iZoom,1-iZoom,iZoom,1-iZoom)
-    HealBot_Media_UpdateFont(b.gref.txt.expire[id],
-                             hbv_Skins_GetIconTextVar("BUFFFONT", b.frame, set),
-                             hbv_Skins_GetIconTextVar("BUFFHEIGHT", b.frame, set),
-                             hbv_Skins_GetIconTextVar("BUFFOUTLINE", b.frame, set),
-                             "Skins_ResetSkin - IconSetsText")
-    HealBot_Media_UpdateFont(b.gref.txt.count[id],
-                             hbv_Skins_GetIconTextVar("BUFFFONT", b.frame, set),
-                             hbv_Skins_GetIconTextVar("BUFFHEIGHT", b.frame, set),
-                             hbv_Skins_GetIconTextVar("BUFFOUTLINE", b.frame, set),
-                             "Skins_ResetSkin - IconSetsText")
-    b.gref.iconf[id]:SetHeight(iScale)
-    b.gref.iconf[id]:SetWidth(iScale)
-    HealBot_Skins_UpdateIconGlowSize(b, id)
 end
 
-function HealBot_Skins_UpdateDebuffIcon(b, id, set)
-    if hbv_Skins_GetIconBoolean("DEBUFFDOUBLE", b.frame, set) then
-        iScale=floor(((bheight*hbv_Skins_GetIconVar("DSCALE", b.frame, set))-2)*0.485)
-    else
-        iScale=(bheight*hbv_Skins_GetIconVar("DSCALE", b.frame, set))-2
-    end
-    iZoom=hbv_Skins_GetIconVar("DZOOM", b.frame, set)
-    b.gref.icon[id]:SetHeight(iScale);
-    b.gref.icon[id]:SetWidth(iScale);
-    b.gref.icon[id]:SetTexCoord(iZoom,1-iZoom,iZoom,1-iZoom)
-    HealBot_Media_UpdateFont(b.gref.txt.expire[id],
-                             hbv_Skins_GetIconTextVar("DBFONT", b.frame, set),
-                             hbv_Skins_GetIconTextVar("DBHEIGHT", b.frame, set),
-                             hbv_Skins_GetIconTextVar("DBOUTLINE", b.frame, set),
-                             "Skins_ResetSkin - IconSetsText")
-    HealBot_Media_UpdateFont(b.gref.txt.count[id],
-                             hbv_Skins_GetIconTextVar("DBFONT", b.frame, set),
-                             hbv_Skins_GetIconTextVar("DBHEIGHT", b.frame, set),
-                             hbv_Skins_GetIconTextVar("DBOUTLINE", b.frame, set),
-                             "Skins_ResetSkin - IconSetsText")
-    b.gref.iconf[id]:SetHeight(iScale)
-    b.gref.iconf[id]:SetWidth(iScale)
-    HealBot_Skins_UpdateIconGlowSize(b, id)
+function HealBot_Skins_UpdateBuffIcon(b, first, set, last)
+    SkinIconSet(b, first, last,
+        bheight*hbv_Skins_GetIconVar("BSCALE",b.frame,set)-2,
+        hbv_Skins_GetIconBoolean("BUFFDOUBLE",b.frame,set),
+        hbv_Skins_GetIconVar("BZOOM",b.frame,set),
+        hbv_Skins_GetIconTextVar("BUFFFONT",b.frame,set),
+        hbv_Skins_GetIconTextVar("BUFFHEIGHT",b.frame,set),
+        hbv_Skins_GetIconTextVar("BUFFOUTLINE",b.frame,set))
+end
+
+function HealBot_Skins_UpdateDebuffIcon(b, first, set, last)
+    SkinIconSet(b, first, last,
+        bheight*hbv_Skins_GetIconVar("DSCALE",b.frame,set)-2,
+        hbv_Skins_GetIconBoolean("DEBUFFDOUBLE",b.frame,set),
+        hbv_Skins_GetIconVar("DZOOM",b.frame,set),
+        hbv_Skins_GetIconTextVar("DBFONT",b.frame,set),
+        hbv_Skins_GetIconTextVar("DBHEIGHT",b.frame,set),
+        hbv_Skins_GetIconTextVar("DBOUTLINE",b.frame,set))
 end
 
 local tmpHeightOffset=0
@@ -830,25 +813,12 @@ function HealBot_Skins_ResetSkin(barType,button,numcols)
         end
 
         if b.icon.reset then
-            for x=1,8 do
-                HealBot_Skins_UpdateBuffIcon(b, x, 1)
-            end
-            for x=9,10 do
-                HealBot_Skins_UpdateBuffIcon(b, x, 2)
-            end
-            for x=11,12 do
-                HealBot_Skins_UpdateBuffIcon(b, x, 3)
-            end
-
-            for x=51,56 do
-                HealBot_Skins_UpdateDebuffIcon(b, x, 1)
-            end
-            for x=57,58 do
-                HealBot_Skins_UpdateDebuffIcon(b, x, 2)
-            end
-            for x=59,60 do
-                HealBot_Skins_UpdateDebuffIcon(b, x, 3)
-            end
+            HealBot_Skins_UpdateBuffIcon(b,1,1,8)
+            HealBot_Skins_UpdateBuffIcon(b,9,2,10)
+            HealBot_Skins_UpdateBuffIcon(b,11,3,12)
+            HealBot_Skins_UpdateDebuffIcon(b,51,1,56)
+            HealBot_Skins_UpdateDebuffIcon(b,57,2,58)
+            HealBot_Skins_UpdateDebuffIcon(b,59,3,60)
 
             -- Buff IconSet 1
             HealBot_Skins_setIconAnchors(hbv_Skins_GetIconVar("BUFFONBAR", b.frame, 1),
