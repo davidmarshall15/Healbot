@@ -114,6 +114,54 @@ assert(button.aura.debuff.publicUnit=="party1" and seen[888]==1,"ordinary indexe
 e.C_UnitAuras.GetAuraDataByIndex=function(_,index) if index==1 then return aura(888) end; error("restricted") end
 scan(nil,{aura(301,"Magic")},{})
 assert(not button.aura.debuff.publicUnit and seen[888]==1 and seen[301]==1,"interrupted ordinary scan lost its public data")
+-- A conditional spell can be public now even when a dungeon restricts broad
+-- enumeration. No forced icon preference is present for this configured bar.
+combat,generallyRestricted=true,true
+e.C_UnitAuras.GetAuraDataByIndex=nil
+e.hb_lVars.publicCustomDebuffIDs=nil
+e.C_Secrets.GetSpellAuraSecrecy=function() return "conditional" end
+local currentlyHidden=false
+local checks=0
+e.C_Secrets.ShouldSpellAuraBeSecret=function(id) assert(id==6788);checks=checks+1;return currentlyHidden end
+e.HealBot_Globals.CustomDebuffsShowBarCol={[6788]=3}
+e.HealBot_WoWAPI_SpellName=function(id) assert(id==6788);return "Test6788" end
+e.HealBot_Aura_CustomDebuffDisabled=function() return false end
+scan(nil,{}, {[6788]=shield})
+assert(queries[6788]==1 and not queries[888] and checks==1 and button.aura.debuff.partialWarnings[1].id==6788)
+scan(nil,{}, {[6788]=aura(6788)})
+assert(queries[6788]==1 and seen[6788]==1)
+scan({aura(6788)},{}, {})
+assert(not queries[6788] and seen[6788]==1 and checks==2)
+for _,hidden in ipairs({true,secret}) do
+    currentlyHidden=hidden
+    scan(nil,{}, {[6788]=shield})
+    assert(not queries[6788] and not button.aura.debuff.partialWarnings)
+end
+currentlyHidden=false
+e.C_UnitAuras.GetUnitAuraBySpellID=nil
+e.C_UnitAuras.GetAuraDataBySpellName=function(unit,name,filter)
+    assert(unit=="party1" and name=="Test6788" and filter=="HARMFUL")
+    queries.name=(queries.name or 0)+1
+    return byID[6788]
+end
+scan(nil,{}, {[6788]=aura(98765)})
+assert(queries.name==1 and not seen[98765] and not button.aura.debuff.partialWarnings)
+scan(nil,{}, {[6788]=shield})
+assert(queries.name==1 and button.aura.debuff.partialWarnings[1].id==6788)
+e.HealBot_Globals.CustomDebuffsShowBarCol[6788]=1
+scan(nil,{}, {[6788]=shield})
+assert(not queries.name,"icon-only mode probed a conditional spell for a health tint")
+local eventAura=aura(888)
+e.HealBot_Events_GetReportedCustomDebuffs=function(_,complete)
+    if complete then eventAura=nil elseif eventAura then return {[100]=eventAura} end
+end
+scan(nil,{},{})
+assert(button.aura.debuff.partialWarnings[1].id==888 and not seen[888],"event-only ID lost its bar or painted an icon")
+generallyRestricted=false
+scan({},{},{})
+generallyRestricted=true
+scan(nil,{},{})
+assert(not button.aura.debuff.partialWarnings,"a completed scan failed to release a previous event-only warning")
 -- Exercise actual renderer ownership with the existing native widget fixture.
 local base=assert(read("tests/bg_weakened_soul.lua"):match("^(.-)local d=fixture"))
 local fixture=assert(loadstring(base.."return fixture"))()

@@ -256,4 +256,17 @@ assert(tint({shield})==shieldID and sounds==0)
 local observedShield={name=shieldName,spellId=shieldID,sourceUnit="player",duration=15,expirationTime=115,icon=14,applications=1}
 assert(tint({observedShield})==shieldID and sounds==1,"full observation following a bar-only warning lost the configured alert")
 assert(tint({observedShield})==shieldID and sounds==1,"steady observation repeated the configured alert")
+local counts={completeSeen=0,completeMiss=0,missAfterSeen=0,partialSeen=0,partialUnknown=0,selected=0,suppressed=0}
+e.HealBot_Forever_ShieldPerf=counts
+successfulCast=103
+restricted=false
+assert(tint({observedShield})==shieldID)
+assert(tint({})==0)
+restricted=true
+assert(tint({shield})==shieldID)
+assert(tint({other,shield})==otherID)
+assert(tint({})==0)
+assert(counts.completeSeen==1 and counts.completeMiss==1 and counts.missAfterSeen==1)
+assert(counts.partialSeen==2 and counts.partialUnknown==1)
+assert(counts.selected==2 and counts.suppressed==1)
 print(("PASS: %d unique spell IDs, %d class scopes, %d full policy runs; 2 sibling priority/order regressions"):format(#ids,#classes,applications))

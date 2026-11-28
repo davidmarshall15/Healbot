@@ -3063,12 +3063,14 @@ do
     -- A public spell ID can establish a custom bar warning even when the
     -- client withholds fields required to draw an icon or run its timer.
     local partialSpellNames={}
-    local function notePartial(button,aura,expectedID,dispellable)
+    local function notePartial(button,aura,expectedID,dispellable,fromEvent)
         if not HealBot_Config_Cures or not HealBot_Config_Cures.CDCshownHB then return end
         if HealBot_issecretvalue(aura) or type(aura)~="table" or (canaccesstable and not canaccesstable(aura)) then return end
         local id=aura.spellId
         if HealBot_issecretvalue(id) or type(id)~="number" then return end
-        if expectedID and (id~=expectedID or HealBot_issecretvalue(aura.isHarmful) or not aura.isHarmful) then return end
+        if expectedID and id~=expectedID then return end
+        if (expectedID or fromEvent) and (HealBot_issecretvalue(aura.isHarmful) or aura.isHarmful~=true) then return end
+        if fromEvent and button.aura.debuff.lookupSeen[id] then return end
         local tracked=HealBot_Globals.CustomDebuffs
         if not tracked or not next(tracked) then return end
         local name=aura.name
@@ -3161,9 +3163,11 @@ do
         return false
     end
 
-    local function lookupPublic(button,selfOnly,id)
+    local function lookupPublic(button,selfOnly,id,byName)
         if button.aura.debuff.lookupSeen and button.aura.debuff.lookupSeen[id] then return end
-        local ok,aura=pcall(C_UnitAuras.GetUnitAuraBySpellID,button.unit,id)
+        local ok,aura
+        if byName then ok,aura=pcall(C_UnitAuras.GetAuraDataBySpellName,button.unit,byName,"HARMFUL")
+        else ok,aura=pcall(C_UnitAuras.GetUnitAuraBySpellID,button.unit,id) end
         if not ok or HealBot_issecretvalue(aura) or type(aura)~="table" then return end
         if not readable(aura) then
             notePartial(button,aura,id)
@@ -3173,8 +3177,33 @@ do
         end
     end
 
+    local function lookupConditionalShield(button,selfOnly)
+        -- Base secrecy describes the spell across contexts. Only the current
+        -- predicate can authorize a conditional spell's exact lookup here.
+        local current=C_Secrets and C_Secrets.ShouldSpellAuraBeSecret
+        if not current or not HealBot_Config_Cures or not HealBot_Config_Cures.CDCshownHB then return end
+        local state=button.aura.debuff
+        if state.publicShield or (state.lookupSeen and state.lookupSeen[6788]) then return end
+        local name=partialSpellNames[6788] or HealBot_WoWAPI_SpellName(6788)
+        if HealBot_issecretvalue(name) or type(name)~="string" then return end
+        partialSpellNames[6788]=name
+        local globals=HealBot_Globals
+        if not globals.CustomDebuffs or not HealBot_Aura_CustomDebuffSetting(globals.CustomDebuffs,6788,name)
+            or HealBot_Aura_CustomDebuffDisabled(6788,name) then return end
+        local mode=HealBot_Aura_CustomDebuffSetting(globals.CustomDebuffsShowBarCol,6788,name) or 4
+        if mode~=3 and mode~=4 then return end
+        local ok,hidden=pcall(current,6788)
+        if ok and not HealBot_issecretvalue(hidden) and hidden==false then
+            if C_UnitAuras.GetUnitAuraBySpellID then lookupPublic(button,selfOnly,6788)
+            elseif C_UnitAuras.GetAuraDataBySpellName then lookupPublic(button,selfOnly,6788,name) end
+        end
+    end
+
     function HealBot_Aura_UpdateExplicitCombatDebuffs(button,selfOnly)
-        if not C_UnitAuras.GetUnitAuraBySpellID then return end
+        if not C_UnitAuras.GetUnitAuraBySpellID then
+            if C_UnitAuras.GetAuraDataBySpellName then lookupConditionalShield(button,selfOnly) end
+            return
+        end
         local publicCustomDebuffIDs=hb_lVars.publicCustomDebuffIDs
         if not publicCustomDebuffIDs then
             publicCustomDebuffIDs={}
@@ -3203,10 +3232,16 @@ do
         for id,rule in pairs(HealBot_Globals.DebuffIconVisibility or {}) do
             if rule[context]==true and not publicCustomDebuffIDs[id] then lookupPublic(button,selfOnly,id) end
         end
+        local shieldRule=HealBot_Globals.DebuffIconVisibility and HealBot_Globals.DebuffIconVisibility[6788]
+        if not publicCustomDebuffIDs[6788] and not (shieldRule and shieldRule[context]==true) then
+            lookupConditionalShield(button,selfOnly)
+        end
     end
 
     function HealBot_Aura_UpdateForeverDebuffs(button,selfOnly)
         local state=button.aura.debuff
+        local counts=HealBot_Forever_ShieldPerf
+        local previouslySeen=counts and state.scanUnit==button.unit and state.publicShield
         local previousDispels=state.publicDispels
         state.publicDispels=nil
         state.collectDispels=nil
@@ -3267,6 +3302,7 @@ do
                 end
             end
         end
+        local reported=HealBot_Events_GetReportedCustomDebuffs and HealBot_Events_GetReportedCustomDebuffs(button,complete)
         if complete then
             state.publicUnit=button.unit
             local seen
@@ -3276,11 +3312,24 @@ do
                     if readable(aura) then matchOccurrence(seen,aura,true) end
                 end
             end
+            local remember=HealBot_Config_Cures and HealBot_Config_Cures.CDCshownHB and HealBot_Events_RememberScannedCustomDebuff
             for index,aura in ipairs(all) do
                 apply(button,selfOnly,aura,index,seen and matchOccurrence(seen,aura,false) or false)
+                if remember then remember(button,aura) end
             end
+            local removedShield=HealBot_Events_EndReportedDebuffScan and HealBot_Events_EndReportedDebuffScan(button)
             if not state.publicShield and HealBot_Forever_GetShieldLockout then
                 state.shieldAbsentStart=HealBot_Forever_GetShieldLockout(button)
+                if HealBot_Forever_ConfirmShieldAbsent then
+                    HealBot_Forever_ConfirmShieldAbsent(button,state.shieldAbsentStart,removedShield)
+                end
+            end
+            if counts then
+                if state.publicShield then counts.completeSeen=counts.completeSeen+1
+                elseif state.shieldAbsentStart then
+                    counts.completeMiss=counts.completeMiss+1
+                    if previouslySeen then counts.missAfterSeen=counts.missAfterSeen+1 end
+                end
             end
             return
         end
@@ -3305,6 +3354,21 @@ do
             end
         end
         HealBot_Aura_UpdateExplicitCombatDebuffs(button,selfOnly)
+        if reported then
+            for _,aura in pairs(reported) do
+                notePartial(button,aura,nil,nil,true)
+            end
+        end
+        if counts then
+            local seenShield=state.publicShield or state.lookupSeen[6788]
+            if not seenShield and state.partialWarnings then
+                for _,partial in ipairs(state.partialWarnings) do
+                    if partial.id==6788 then seenShield=true; break end
+                end
+            end
+            if seenShield then counts.partialSeen=counts.partialSeen+1
+            else counts.partialUnknown=counts.partialUnknown+1 end
+        end
         state.lookupSeen=nil
         state.collectDispels=nil
         -- Retain identity for an unchanged public set so native groups need
@@ -3741,6 +3805,16 @@ function HealBot_Aura_CheckUnitDebuffs(button, selfOnly)
             barID,warningName,barMode,barPriority,canDispel=HealBot_Forever_GetPartialBarWarning(button,selfOnly,selected and state.priority)
         end
         if barID then state.id,state.priority=barID,barPriority end
+        local counts=HealBot_Forever_ShieldPerf
+        if counts then
+            if state.id==6788 then counts.selected=counts.selected+1
+            elseif state.publicShield then counts.suppressed=counts.suppressed+1
+            elseif state.partialWarnings then
+                for _,partial in ipairs(state.partialWarnings) do
+                    if partial.id==6788 then counts.suppressed=counts.suppressed+1; break end
+                end
+            end
+        end
         if state.id>0 and HealBot_Panel_RaidPetUnitButtonCheck(button.unit) then
             local warningType=HEALBOT_CUSTOM_en
             if barID then

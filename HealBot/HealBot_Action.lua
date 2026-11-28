@@ -2332,6 +2332,8 @@ end
 
 function HealBot_Action_UpdateDebuffButton(button)
       --HealBot_setCall("HealBot_Action_UpdateDebuffButton", button)
+    local shield=HealBot_Forever_ShieldPerf
+    if shield and button.aura.debuff.id~=6788 then shield=nil end
     button.status.refresh=false
     if hbAdaptive["Debuffs"] and button.aura.debuff.colbar>0 and button.aura.debuff.colbar<3 then
         if hbAdaptiveOrderName["Debuffs"]<button.adaptive.current then
@@ -2356,20 +2358,24 @@ function HealBot_Action_UpdateDebuffButton(button)
                 end
                 HealBot_Action_setEnabled(button, true, curAlpha)
                 HealBot_Action_UpdateHealthStatusBarColor(button)
+                if shield then shield.painted=shield.painted+1 end
                 if hbv_Skins_GetFrameBoolean("Emerg", "DEBUFFBARCOL", button.frame) then
                     HealBot_Action_EmergBarCheck(button)
                 end
                 HealBot_Action_UpdateBackground(button)
             else
+                if shield then shield.outOfRange=shield.outOfRange+1 end
                 HealBot_Action_setState(button, HealBot_Unit_Status["DEBUFFNOCOL"])
             end
         elseif button.aura.debuff.name and HealBot_Config_Cures.EnableBar then
+            if shield then shield.paintBlocked=shield.paintBlocked+1 end
             HealBot_Action_setState(button, HealBot_Unit_Status["DEBUFFNOCOL"])
         elseif button.status.current>HealBot_Unit_Status["BUFFBARCOL"] then 
             HealBot_Action_setState(button, HealBot_Unit_Status["CHECK"])
         end
         HealBot_Action_UpdateBuffButton(button)
     else
+        if shield then shield.paintBlocked=shield.paintBlocked+1 end
         HealBot_Action_UpdateHealthButton(button)
     end
 end
@@ -4518,6 +4524,7 @@ end
 
 function HealBot_Action_UnregisterUnitEvents(button)
       --HealBot_setCall("HealBot_Action_UnregisterUnitEvents", button)
+    if button.aura and button.aura.debuff then button.aura.debuff.reported=nil end
     button.status.events=false
     button.range.eventIn=nil
     button:UnregisterEvent("UNIT_AURA")
@@ -6620,6 +6627,7 @@ function HealBot_Action_SetHealButton(unit,guid,frame,unitType,duplicate,role,pr
                     hButton.special.unit=false
                 end
                 if HealBot_issecretvalue(guid) or HealBot_issecretvalue(hButton.guid) or hButton.unit~=unit or hButton.guid~=guid or hButton.reset then
+                    if hButton.aura and hButton.aura.debuff then hButton.aura.debuff.reported=nil end
                     if HealBot_Private_Button[unit] or HealBot_Unit_Button[unit] then
                         if UnitInRaid(unit) then
                             hButton.isgroupraid=true

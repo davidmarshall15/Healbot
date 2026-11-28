@@ -66,6 +66,8 @@ for pass=1,2 do
     homeMode,homeSize,instanceMode,instanceSize,rosterReads=nil,0,nil,0,0
     lines={}
     cmd('on')
+    assert(e.HealBot_Forever_ShieldPerf and e.HealBot_Forever_ShieldPerf.sent==0)
+    e.HealBot_Forever_ShieldPerf.sent=pass
     assert(sampler.shown and sampler.events.PLAYER_ENTERING_WORLD and sampler.events.PLAYER_REGEN_DISABLED)
     local syncCount,x,y,z=runSync(1,nil,3)
     assert(syncCount==3 and x==1 and y==nil and z==3)
@@ -94,7 +96,9 @@ for pass=1,2 do
     assert(e.HealBot_Action_setLuVars==original and e.HealBot_Timers_Set==throwing,'global wrappers not restored')
     e.HealBot_Forever_VisitAuraPerfScopes(function(name,fn) assert(fn==baseline[name],'local wrapper not restored'); return fn end)
     local report=d.globals.ForeverPerformanceReport
-    assert(report.revision=='1.5' and report.slowFrames==1,'report lost frame metrics')
+    assert(report.revision=='1.6' and report.slowFrames==1,'report lost frame metrics')
+    assert(report.shield.sent==pass and report.shield.partialUnknown==0 and not e.HealBot_Forever_ShieldPerf)
+    assert(table.concat(lines,'\n'):find('Shield: '..pass..' sent',1,true))
     assert(not sampler.shown and not next(sampler.events),'profiling events still subscribed after report')
     local bg='pvp / Arathi Basin / instance raid (40) / combat'
     local city='world / Ironforge / solo (1) / out of combat'
@@ -139,4 +143,26 @@ end
 cmd('on'); cmd('off')
 e.HealBot_Forever_VisitAuraPerfScopes(function(name,fn) assert(fn==baseline[name]); return fn end)
 assert(e.HealBot_Action_setLuVars==original)
+do
+    local count={painted=0,outOfRange=0,paintBlocked=0}
+    local inRange,paints=true,0
+    local noop=function() end
+    local env={HealBot_Forever_ShieldPerf=count,hbAdaptive={},hbAdaptiveOrderName={Debuffs=1},
+        HealBot_Unit_Status={PLUGINBARCOL=10,DEBUFFBARCOL=3,DEBUFFNOCOL=2,BUFFBARCOL=1},
+        HealBot_Config_Cures={CDCshownHB=true,EnableBar=true},
+        HealBot_Action_AdaptiveNextActive=noop,HealBot_Action_setState=noop,
+        HealBot_Aura_IsCureSpell=noop,HealBot_Range_WarnInRange=function() return inRange end,
+        HealBot_Action_BarColourAlpha=noop,hbv_Skins_GetFrameVar=noop,HealBot_Action_setEnabled=noop,
+        HealBot_Action_UpdateHealthStatusBarColor=function() paints=paints+1 end,
+        hbv_Skins_GetFrameBoolean=noop,HealBot_Action_UpdateBackground=noop,
+        HealBot_Action_UpdateBuffButton=noop,HealBot_Action_UpdateHealthButton=noop}
+    local action=assert(read('HealBot/HealBot_Action.lua'):match('(function HealBot_Action_UpdateDebuffButton%b().-\nend)'))
+    setfenv(assert(loadstring(action)),env)()
+    local bar={aura={debuff={id=6788,name='Weakened Soul',colbar=2,r=.45,g=0,b=.28}},status={current=0},range={current=1}}
+    env.HealBot_Action_UpdateDebuffButton(bar)
+    inRange=false; env.HealBot_Action_UpdateDebuffButton(bar)
+    bar.status.current=10; env.HealBot_Action_UpdateDebuffButton(bar)
+    bar.aura.debuff.id=1; env.HealBot_Action_UpdateDebuffButton(bar)
+    assert(paints==1 and count.painted==1 and count.outOfRange==1 and count.paintBlocked==1)
+end
 print('PASS: detailed monitor captures local scopes, preserves nil varargs/returns and errors, restores locals/globals, and restarts without nested wrappers')

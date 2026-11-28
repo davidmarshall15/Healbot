@@ -7,6 +7,7 @@ local buttonsByUnit={}
 local casts={}
 local renews={}
 local shieldCasts={}
+local unresolvedShield
 local shieldLockouts={}
 local shieldNameOnly={}
 local shieldRanks={[17]=true,[592]=true,[600]=true,[3747]=true,[6065]=true,
@@ -39,6 +40,7 @@ local function Disable()
     wipe(casts)
     wipe(renews)
     wipe(shieldCasts)
+    unresolvedShield=nil
     wipe(shieldLockouts)
     wipe(shieldNameOnly)
     wipe(mendingByUnit)
@@ -338,7 +340,7 @@ local function ResolveShieldTarget(name)
     return target
 end
 
-function HealBot_Forever_GetShieldLockout(button)
+local function ShieldRecord(button)
     if not next(shieldLockouts) or not PublicString(button.unit) then return end
     local guid=ShieldGUID(button.unit)
     local record=shieldLockouts[guid]
@@ -347,8 +349,35 @@ function HealBot_Forever_GetShieldLockout(button)
         local byName=guid and shieldNameOnly or shieldLockouts
         record=byName[name]
     end
-    if record and GetTime()<record.start+lockoutDuration then
-        return record.start,lockoutDuration
+    return record
+end
+
+function HealBot_Forever_GetShieldLockout(button)
+    local record=ShieldRecord(button)
+    if record and not record.absent and GetTime()<record.start+lockoutDuration then
+        return record.start,lockoutDuration,record.submitted
+    end
+end
+
+-- A complete, public harmful scan can establish that Divine Grace, Renewed
+-- Hope or another removal has already ended this particular application.
+function HealBot_Forever_ConfirmShieldAbsent(button,start,removedFirstSeen)
+    local pending=unresolvedShield
+    if pending and (not removedFirstSeen or pending.sentAt<=removedFirstSeen) then
+        local guid=ShieldGUID(button.unit)
+        local name=not guid and ShieldUnitName(button.unit) or nil
+        if guid or name then
+            pending.absence=pending.absence or {}
+            pending.absence[guid or name]=GetTime()
+            if pending.application and ShieldMatches(pending,guid,name) then unresolvedShield=nil end
+        end
+    end
+    if start then
+        local record=ShieldRecord(button)
+        if record and record.start==start and (removedFirstSeen and record.submitted<=removedFirstSeen
+            or not removedFirstSeen and record.corroborated) then
+            record.absent=true
+        end
     end
 end
 
@@ -368,43 +397,130 @@ local function RefreshShieldLockouts(target)
     end
 end
 
+local function StoreShieldCast(cast,start)
+    cast.start=start
+    if cast.guid then shieldLockouts[cast.guid]=cast end
+    if cast.name then
+        shieldLockouts[cast.name]=cast
+        shieldNameOnly[cast.name]=not cast.guid and cast or nil
+    end
+    RefreshShieldLockouts(cast)
+    C_Timer.After(math.max(0,start+lockoutDuration-GetTime()),function()
+        local removed=false
+        if cast.guid and shieldLockouts[cast.guid]==cast then shieldLockouts[cast.guid]=nil; removed=true end
+        if cast.name and shieldLockouts[cast.name]==cast then shieldLockouts[cast.name]=nil; removed=true end
+        if cast.name and shieldNameOnly[cast.name]==cast then shieldNameOnly[cast.name]=nil end
+        if removed then RefreshShieldLockouts(cast) end
+    end)
+end
+
+local function FinishObservedShield(cast)
+    if unresolvedShield~=cast or not cast.succeeded or not cast.application or cast.ambiguous then return end
+    unresolvedShield=nil
+    cast.corroborated=true
+    StoreShieldCast(cast,cast.application)
+end
+
+local function ReadableTable(value)
+    return not secret(value) and type(value)=="table" and (not canaccesstable or canaccesstable(value))
+end
+
+local function MatchOwnedShield(cast,unit,aura)
+    if not ReadableTable(aura) or secret(aura.spellId) or aura.spellId~=cast.spellID
+        or secret(aura.sourceUnit) or aura.sourceUnit~="player"
+        or secret(aura.isHelpful) or aura.isHelpful~=true then return end
+    local duration,expiry,rate=aura.duration,aura.expirationTime,aura.timeMod
+    if secret(duration) or type(duration)~="number" or not (duration>0)
+        or secret(expiry) or type(expiry)~="number" or secret(rate) or (rate and rate~=1) then return end
+    local start=expiry-duration
+    if not (start>=cast.sentAt-0.05 and start<=GetTime()+0.05 and expiry>GetTime()) then return end
+    local name,short,full=ShieldUnitName(unit)
+    if cast.sentName and cast.sentName~=short and cast.sentName~=full then return end
+    local guid=ShieldGUID(unit)
+    if not guid and not name then return end
+    local absent=cast.absence and (cast.absence[guid] or cast.absence[name])
+    if absent and absent>=start then return end
+    if cast.application and not ShieldMatches(cast,guid,name) then cast.ambiguous=true; return end
+    cast.guid,cast.name,cast.application=guid,name,start
+    FinishObservedShield(cast)
+end
+
+local function ObservePendingShield(unit,info)
+    local cast=unresolvedShield
+    if GetTime()>cast.sentAt+1.5 then unresolvedShield=nil; return end
+    if ReadableTable(info) then
+        if ReadableTable(info.addedAuras) then
+            for _,aura in ipairs(info.addedAuras) do MatchOwnedShield(cast,unit,aura) end
+        end
+        if not unresolvedShield or (not secret(info.isFullUpdate) and info.isFullUpdate==false
+            and not (ReadableTable(info.updatedAuraInstanceIDs) and #info.updatedAuraInstanceIDs>0)) then return end
+    end
+    if C_UnitAuras and C_UnitAuras.GetUnitAuraBySpellID then
+        -- A full update or replaced shield need not include its aura data.
+        -- Bound those exact queries during a burst of unrelated unit updates.
+        cast.lookups=cast.lookups or {}
+        local count=cast.lookups[unit] or 0
+        if count>=2 then return end
+        cast.lookups[unit]=count+1
+        local ok,aura=pcall(C_UnitAuras.GetUnitAuraBySpellID,unit,cast.spellID)
+        if ok then MatchOwnedShield(cast,unit,aura) end
+    end
+end
+
 local function TrackShieldCast(event,first,second,third)
+    local counts=HealBot_Forever_ShieldPerf
     if event=="UNIT_SPELLCAST_SENT" and PublicString(second) then shieldCasts[second]=nil end
     if event=="UNIT_SPELLCAST_SENT" and ShieldSpell(third) then
+        unresolvedShield=nil
+        if counts then counts.sent=counts.sent+1 end
         if PublicString(second) then
             local cast=ResolveShieldTarget(first)
+            if not cast then
+                if counts then counts.targetMissing=counts.targetMissing+1 end
+                if shieldRanks[third] then
+                    cast={sentAt=GetTime(),sentName=PublicString(first) and first or nil}
+                    unresolvedShield=cast
+                end
+            end
             if cast then
                 cast.spellID=third
+                cast.submitted=cast.sentAt or GetTime()
                 shieldCasts[second]=cast
-                C_Timer.After(5,function() if shieldCasts[second]==cast then shieldCasts[second]=nil end end)
+                C_Timer.After(5,function()
+                    if shieldCasts[second]==cast then shieldCasts[second]=nil end
+                    if unresolvedShield==cast then unresolvedShield=nil end
+                end)
             end
+        elseif counts then
+            counts.castKeyMissing=counts.castKeyMissing+1
         end
         clickedButton=nil
         return true
     end
-    if not PublicString(first) then return false end
-    local cast=shieldCasts[first]
-    if not cast then return false end
+    local cast=PublicString(first) and shieldCasts[first]
+    if not cast then
+        if counts and event=="UNIT_SPELLCAST_SUCCEEDED" and not secret(second) and shieldRanks[second] then counts.unpaired=counts.unpaired+1 end
+        return false
+    end
     if event=="UNIT_SPELLCAST_SUCCEEDED" then
         shieldCasts[first]=nil
+        if counts then
+            if secret(second) or second~=cast.spellID then counts.rankMismatch=counts.rankMismatch+1
+            elseif cast.sentAt then counts.unpaired=counts.unpaired+1
+            else counts.matched=counts.matched+1 end
+        end
         if not secret(second) and second==cast.spellID then
-            cast.start=GetTime()
-            if cast.guid then shieldLockouts[cast.guid]=cast end
-            if cast.name then
-                shieldLockouts[cast.name]=cast
-                shieldNameOnly[cast.name]=not cast.guid and cast or nil
+            if not cast.sentAt then StoreShieldCast(cast,GetTime())
+            elseif unresolvedShield==cast and GetTime()<=cast.sentAt+1.5 then
+                cast.succeeded=true
+                FinishObservedShield(cast)
             end
-            RefreshShieldLockouts(cast)
-            C_Timer.After(lockoutDuration,function()
-                local removed=false
-                if cast.guid and shieldLockouts[cast.guid]==cast then shieldLockouts[cast.guid]=nil; removed=true end
-                if cast.name and shieldLockouts[cast.name]==cast then shieldLockouts[cast.name]=nil; removed=true end
-                if cast.name and shieldNameOnly[cast.name]==cast then shieldNameOnly[cast.name]=nil end
-                if removed then RefreshShieldLockouts(cast) end
-            end)
+        elseif unresolvedShield==cast then
+            unresolvedShield=nil
         end
         return true
     elseif event=="UNIT_SPELLCAST_FAILED" or event=="UNIT_SPELLCAST_INTERRUPTED" or event=="UNIT_SPELLCAST_FAILED_QUIET" then
+        if unresolvedShield==cast then unresolvedShield=nil end
         shieldCasts[first]=nil
         return true
     end
@@ -494,14 +610,19 @@ local function Install()
     end
     pcall(events.RegisterUnitEvent,events,"UNIT_SPELLCAST_FAILED_QUIET","player")
     events:RegisterEvent("GROUP_ROSTER_UPDATE")
+    events:RegisterEvent("PLAYER_ENTERING_WORLD")
     events:RegisterEvent("UNIT_AURA")
     events:SetScript("OnEvent",function(_,event,unit,...)
         if event=="UNIT_AURA" then
+            if enabled and unresolvedShield and PublicString(unit) and buttonsByUnit[unit] then
+                Safe(ObservePendingShield,unit,...)
+            end
             if enabled and mendingAmount and not secret(unit) and buttonsByUnit[unit] then
                 Safe(RefreshMendingUnit,unit)
             end
             return
         end
+        if event=="PLAYER_ENTERING_WORLD" then unresolvedShield=nil; return end
         if event=="GROUP_ROSTER_UPDATE" then
             for unit in pairs(mendingByUnit) do Safe(RefreshMendingUnit,unit) end
             for target in pairs(renews) do
