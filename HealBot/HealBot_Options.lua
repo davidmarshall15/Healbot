@@ -29537,7 +29537,7 @@ local debuffIconOptions=debuffIconOptionsGerman and {
     help="Standard verwendet die bestehende Einstellung. Die Auswahl gilt nur für das kleine Symbol.",
     combatHelp="Bei geschützten Debuffs bestimmt WoW, welche Symbole im Kampf einzeln gefiltert werden können.",
     native="Geschwächte Seele im Kampf (nativ)",
-    nativeHelp="Verwendet WoWs native Anzeige im Kampf für Geschwächte Seele, auch von anderen Priestern. Dabei können weitere Debuffs erscheinen.",
+    nativeHelp="Zeigt im Kampf und auf Schlachtfeldern ein Symbol für Geschwächte Seele an. Wenn WoW die Zauber-ID verbirgt, können auch ähnliche Debuffs erscheinen. Für die Balkenfarbe kann HealBot in diesem Fall das Ziel und die Sperrzeit deines eigenen erfolgreichen Schildzaubers verwenden.",
 } or {
     combat="Icon in combat",
     outOfCombat="Icon out of combat",
@@ -29548,7 +29548,7 @@ local debuffIconOptions=debuffIconOptionsGerman and {
     help="Default follows the existing settings. This choice affects only the small icon.",
     combatHelp="WoW determines which protected debuff icons can be filtered individually in combat.",
     native="Native Weakened Soul indicator",
-    nativeHelp="Uses WoW's native display in combat and battlegrounds, including from other priests. When exact matching is restricted, additional matching debuffs may appear and the custom Weakened Soul bar color cannot be applied reliably.",
+    nativeHelp="Shows a Weakened Soul icon in combat and battlegrounds. When WoW hides the spell ID, similar debuffs can also show an icon. HealBot can still use the target and lockout time of your own successful shield cast for the bar color.",
 }
 local debuffIconChoices={
     {label=debuffIconOptions.default},

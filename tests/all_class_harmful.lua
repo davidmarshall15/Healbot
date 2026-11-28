@@ -54,6 +54,8 @@ for _,name in ipairs({"AuraDataIsUsable","PostUpdateInitDebuffsCache","PostUpdat
     code[#code+1]=get("HealBot_Aura_"..name)
 end
 code[#code+1]=get("HealBot_Options_retDebuffPriority",options)
+code[#code+1]=get("HealBot_Forever_WatchesWeakenedSoul")
+code[#code+1]=assert(source:match("(do\n    local function casterMatches%b().-\nend)\n\nfunction HealBot_Aura_CheckUnitDebuffs"))
 code[#code+1]=assert(source:match("(do\n    local function public%(value%).-\nend)\n\nfunction HealBot_Aura_CheckCurDebuff"))
 code[#code+1]=assert(source:match("(do\n    local function readable%(aura%).-\nend)\n\nfunction HealBot_Aura_UpdateUnitDebuffsV9"))
 e.ForeverHarmfulBleeds=assert(loadstring("return "..assert(source:match("local ForeverHarmfulBleeds=HEALBOT_FOREVER and (%b{})"))))()
@@ -194,4 +196,64 @@ for i=1,21 do
 end
 run(a,many,empty)
 assert(e.HealBot_AuraDebuffXRef["x031002:1"].spellID==1002 and e.HealBot_AuraDebuffXRef["x03100:21"].spellID==100)
+-- A configured warning can still color the health bar if only its identity
+-- is public. The remaining fields never enter the ordinary icon/plugin cache.
+local shieldID,otherID=6788,889900
+local shieldName,otherName="Weakened Soul","Another custom warning"
+local successfulCast
+e.HealBot_Forever_GetShieldLockout=function(unit) if unit==a and successfulCast then return successfulCast,15 end end
+e.HealBot_WoWAPI_SpellName=function(id) return id==shieldID and shieldName or otherName end
+e.HealBot_Config_Cures.CDCshownHB=true
+e.HealBot_Globals.CDCBarColour[shieldID]={R=.45,G=0,B=.28}
+e.HealBot_Globals.CDCBarColour[otherID]={R=.8,G=.1,B=.2}
+for k,p in pairs({[shieldID]=10,[otherID]=5}) do
+    e.HealBot_Globals.CustomDebuffs[k]=p;e.hbCustomDebuffPrio[k]=p
+    e.HealBot_Globals.CustomDebuffsShowBarCol[k]=3
+    e.HealBot_AuraDebuffCache[k]=nil
+end
+e.HEALBOT_OPTIONS_SELFHEALS="self";e.castByListIndexed.self=4
+local shield={name=shieldName,spellId=shieldID,expirationTime=secret,icon=secret,sourceUnit=secret}
+local other={name=otherName,spellId=otherID,expirationTime=secret}
+restricted=true
+local function tint(items)
+    local s=run(a,items,empty)
+    if s.id==shieldID then assert(s.r==.45 and s.g==0 and s.b==.28 and s.colbar==2) end
+    return s.id
+end
+assert(tint({shield})==shieldID and not next(paints))
+assert(tint({other,shield})==otherID and a.aura.debuff.r==.8 and not next(paints))
+e.hbCustomDebuffsCastBy[shieldID]=4
+assert(tint({shield})==0,"a secret caster passed the self-only custom filter")
+shield.sourceUnit="player"
+assert(tint({shield})==shieldID)
+successfulCast=101
+assert(tint({})==shieldID and not next(paints),"completed, target-matched shield cast lost bar-only warning")
+local publicOther={name=otherName,spellId=otherID,sourceUnit="player",duration=8,expirationTime=110,icon=12,applications=1}
+assert(tint({publicOther})==otherID,"cast-based warning displaced a higher-priority visible warning")
+assert(run(b,empty,empty).id==0,"cast colored another target")
+e.HealBot_Config_Cures.CDCshownHBDispelOnly=true
+assert(tint({})==0)
+e.HealBot_Config_Cures.CDCshownHBDispelOnly=false
+e.HealBot_Globals.CustomDebuffsShowBarCol[shieldID]=1
+assert(tint({})==0)
+e.HealBot_Globals.CustomDebuffsShowBarCol[shieldID]=3
+restricted=false
+assert(tint({publicOther})==otherID)
+restricted=true
+assert(tint({})==0,"complete removal did not supersede the earlier cast")
+successfulCast=102
+assert(tint({})==shieldID)
+successfulCast=nil
+assert(tint({})==0,"cast expiration left a stale bar warning")
+local sounds=0
+e.debuffWarnings=true
+e.HealBot_Aura_WarningFilter={[a.unit]={}}
+e.HealBot_Config_Cures.SoundDebuffWarning=true
+e.HealBot_Config_Cures.WarnRange_Sound=88
+e.HealBot_Range_WarnInRange=function(_,_,which) return which==88 end
+e.HealBot_Media_PlaySound=function() sounds=sounds+1 end
+assert(tint({shield})==shieldID and sounds==0)
+local observedShield={name=shieldName,spellId=shieldID,sourceUnit="player",duration=15,expirationTime=115,icon=14,applications=1}
+assert(tint({observedShield})==shieldID and sounds==1,"full observation following a bar-only warning lost the configured alert")
+assert(tint({observedShield})==shieldID and sounds==1,"steady observation repeated the configured alert")
 print(("PASS: %d unique spell IDs, %d class scopes, %d full policy runs; 2 sibling priority/order regressions"):format(#ids,#classes,applications))

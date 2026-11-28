@@ -7,6 +7,7 @@ end
 local source=read("HealBot/Healbot_Aura.lua")
 local operations=assert(source:match("(do\n    local function readable%(aura%).-\nend)\n\nfunction HealBot_Aura_UpdateUnitDebuffsV9"))
 local check=assert(source:match("(local function HealBot_Aura_AuraDataIsUsable%b().-\nend)"))
+local customSetting=assert(source:match("(function HealBot_Aura_CustomDebuffSetting%b().-\nend)"))
 local dispatch=assert(source:match("(function HealBot_Aura_UpdateUnitDebuffsV9%b().-\nend)"))
 local secret={}
 local inaccessible={}
@@ -15,7 +16,7 @@ local generallyRestricted=false
 local all,removable,byID
 local seen,queries
 local e=setmetatable({
-    HEALBOT_FOREVER=true, hb_lVars={},
+    HEALBOT_FOREVER=true, hb_lVars={},HealBot_Config_Cures={CDCshownHB=true},
     HealBot_Globals={CustomDebuffs={[6788]=10,[888]=8,[999]=12},DebuffIconVisibility={[990]={combat=true}}},
     C_Secrets={
         GetSpellAuraSecrecy=function(id) return id==999 and "always" or "never" end,
@@ -35,7 +36,7 @@ local e=setmetatable({
         GetUnitAuraBySpellID=function(_,id) queries[id]=(queries[id] or 0)+1; return byID[id] end,
     },
 },{__index=_G})
-setfenv(assert(loadstring(check.."\n"..operations.."\n"..dispatch)),e)()
+setfenv(assert(loadstring(check.."\n"..customSetting.."\n"..operations.."\n"..dispatch)),e)()
 e.HealBot_Aura_UpdateUnitDebuffsData=function(button,_,_,iconOnly)
     assert(not iconOnly,"readable debuff bypassed ordinary caster, color and priority policy")
     seen[e.uaSpellId]=(seen[e.uaSpellId] or 0)+1
@@ -65,12 +66,18 @@ scan({aura(777,"Magic"),partial,aura(888),aura(777,"Magic","party2"),inaccessibl
 assert(not button.aura.debuff.publicUnit and button.aura.debuff.publicShield)
 assert(seen[777]==2 and seen[888]==1 and seen[6788]==1 and seen[990]==1 and not seen[999])
 assert(queries.HARMFUL==1 and queries.RAID_PLAYER_DISPELLABLE==1 and not queries[999])
+assert(button.aura.debuff.partialWarnings[1].id==999)
 local observed=button.aura.debuff.publicDispels
 assert(observed[777] and not observed[888])
 scan({partial,aura(777,"Magic")},{aura(777,"Magic")},{})
 assert(rawequal(observed,button.aura.debuff.publicDispels),"unchanged public dispels invalidated the native row")
 scan(nil,{aura(301,"Magic")},{[6788]=partial,[888]=inaccessible,[990]=secret})
 assert(not button.aura.debuff.publicShield and seen[301]==1 and not seen[6788] and not seen[888])
+assert(not button.aura.debuff.partialWarnings,"mismatched or protected lookups claimed a custom warning")
+local shield=aura(6788)
+shield.icon=secret
+scan(nil,{}, {[6788]=shield})
+assert(button.aura.debuff.partialWarnings[1].id==6788 and not next(seen),"targeted public ID required private artwork")
 generallyRestricted=true
 scan({},nil,{[6788]=aura(6788)})
 assert(not button.aura.debuff.publicUnit and seen[6788]==1,"empty restricted response hid the native renderer")

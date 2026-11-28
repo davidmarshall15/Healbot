@@ -1824,7 +1824,7 @@ function HealBot_Aura_IsCureSpell(button)
     end
 end
 
-function HealBot_Aura_DebuffWarnings(button, debuffName, force, debuffIconIndex, expirationTime)
+function HealBot_Aura_DebuffWarnings(button, debuffName, force, debuffIconIndex, expirationTime, barOnly)
         --HealBot_setCall("HealBot_Aura_DebuffWarnings", button)
     if button.aura.debuff.name~=debuffName or force then
         button.aura.debuff.name=debuffName
@@ -1863,7 +1863,7 @@ function HealBot_Aura_DebuffWarnings(button, debuffName, force, debuffIconIndex,
         elseif button.hotbars.debuff then
             HealBot_Action_BarHotDisable(button, "DEBUFF")
         end
-        if debuffWarnings and (not HealBot_Aura_WarningFilter[button.unit][button.aura.debuff.name] or HealBot_Aura_WarningFilter[button.unit][button.aura.debuff.name]<HealBot_TimeNow) then
+        if not barOnly and debuffWarnings and (not HealBot_Aura_WarningFilter[button.unit][button.aura.debuff.name] or HealBot_Aura_WarningFilter[button.unit][button.aura.debuff.name]<HealBot_TimeNow) then
             if debuffIconIndex == 0 then debuffIconIndex=51 end
             HealBot_Aura_WarningFilter[button.unit][button.aura.debuff.name]=expirationTime or HealBot_UnitDebuffIcons[button.id][debuffIconIndex]["expirationTime"]
             if HealBot_Config_Cures.ShowDebuffWarning and (button.aura.debuff.dispellable or not HealBot_Config_Cures.ShowDebuffWarningDispelOnly) then
@@ -3060,6 +3060,36 @@ do
             and type(aura.name)=="string" and type(aura.expirationTime)=="number"
     end
 
+    -- A public spell ID can establish a custom bar warning even when the
+    -- client withholds fields required to draw an icon or run its timer.
+    local partialSpellNames={}
+    local function notePartial(button,aura,expectedID,dispellable)
+        if not HealBot_Config_Cures or not HealBot_Config_Cures.CDCshownHB then return end
+        if HealBot_issecretvalue(aura) or type(aura)~="table" or (canaccesstable and not canaccesstable(aura)) then return end
+        local id=aura.spellId
+        if HealBot_issecretvalue(id) or type(id)~="number" then return end
+        if expectedID and (id~=expectedID or HealBot_issecretvalue(aura.isHarmful) or not aura.isHarmful) then return end
+        local tracked=HealBot_Globals.CustomDebuffs
+        if not tracked or not next(tracked) then return end
+        local name=aura.name
+        if HealBot_issecretvalue(name) or type(name)~="string" then
+            name=partialSpellNames[id] or HealBot_WoWAPI_SpellName(id)
+            if HealBot_issecretvalue(name) or type(name)~="string" then return end
+            partialSpellNames[id]=name
+        end
+        if not HealBot_Aura_CustomDebuffSetting(tracked,id,name) then return end
+        local state=button.aura.debuff
+        local dispelType=aura.dispelName
+        if HealBot_issecretvalue(dispelType) then
+            if id~=6788 then return end
+            dispelType=nil
+        end
+        local source=aura.sourceUnit
+        if HealBot_issecretvalue(source) or type(source)~="string" then source=nil end
+        state.partialWarnings=state.partialWarnings or {}
+        state.partialWarnings[#state.partialWarnings+1]={id=id,name=name,source=source,dispelType=dispelType,dispellable=dispellable}
+    end
+
     local function apply(button,selfOnly,aura,index,dispellable)
         uaName,uaTexture,uaCount,uaDebuffType,uaDuration,uaExpirationTime,uaUnitCaster,uaSpellId,uaIsBossDebuff=
             aura.name,aura.icon,aura.applications,aura.dispelName,aura.duration,aura.expirationTime,
@@ -3134,7 +3164,10 @@ do
     local function lookupPublic(button,selfOnly,id)
         if button.aura.debuff.lookupSeen and button.aura.debuff.lookupSeen[id] then return end
         local ok,aura=pcall(C_UnitAuras.GetUnitAuraBySpellID,button.unit,id)
-        if ok and readable(aura) and aura.spellId==id and not HealBot_issecretvalue(aura.isHarmful) and aura.isHarmful
+        if not ok or HealBot_issecretvalue(aura) or type(aura)~="table" then return end
+        if not readable(aura) then
+            notePartial(button,aura,id)
+        elseif aura.spellId==id and not HealBot_issecretvalue(aura.isHarmful) and aura.isHarmful
             and HealBot_UnitDebuffCurrent[button.unit][aura.name]~=aura.spellId then
             apply(button,selfOnly,aura,0)
         end
@@ -3179,6 +3212,7 @@ do
         state.collectDispels=nil
         state.publicUnit=nil
         state.publicShield=nil
+        state.partialWarnings=nil
         state.scanUnit=button.unit
         state.scanCombat=not not InCombatLockdown()
         local all=batch(button.unit,"HARMFUL")
@@ -3245,6 +3279,9 @@ do
             for index,aura in ipairs(all) do
                 apply(button,selfOnly,aura,index,seen and matchOccurrence(seen,aura,false) or false)
             end
+            if not state.publicShield and HealBot_Forever_GetShieldLockout then
+                state.shieldAbsentStart=HealBot_Forever_GetShieldLockout(button)
+            end
             return
         end
         -- A restricted general query can coexist with public dispellable entries.
@@ -3256,11 +3293,15 @@ do
             if readable(aura) then
                 apply(button,selfOnly,aura,index,true)
                 if seen then matchOccurrence(seen,aura,true) end
+            else
+                notePartial(button,aura,nil,true)
             end
         end
         for index,aura in ipairs(all or {}) do
-            if readable(aura) and not (seen and matchOccurrence(seen,aura,false)) then
-                apply(button,selfOnly,aura,index)
+            if readable(aura) then
+                if not (seen and matchOccurrence(seen,aura,false)) then apply(button,selfOnly,aura,index) end
+            else
+                notePartial(button,aura)
             end
         end
         HealBot_Aura_UpdateExplicitCombatDebuffs(button,selfOnly)
@@ -3575,6 +3616,66 @@ function HealBot_Forever_DebuffsEnabled()
         and (not cures.DebuffWatchWhenGrouped or HealBot_Aura_IsGrouped())
 end
 
+do
+    local function casterMatches(source,rule,selfOnly)
+        local everyone=rule==castByListIndexed[HEALBOT_CUSTOM_CASTBY_EVERYONE]
+        if everyone and not selfOnly then return true end
+        if not source then return false end
+        local mine=source=="player" or HealBot_SafeUnitIsUnit(source,"player")
+        if selfOnly and not mine then return false end
+        if everyone or rule==castByListIndexed[HEALBOT_OPTIONS_SELFHEALS] then return mine end
+        if mine then return rule==castByListIndexed[HEALBOT_CUSTOM_CASTBY_FRIEND] end
+        local friendly=UnitIsFriend("player",source)
+        if HealBot_issecretvalue(friendly) or type(friendly)~="boolean" then return false end
+        if friendly then return rule==castByListIndexed[HEALBOT_CUSTOM_CASTBY_FRIEND] end
+        local enemy=UnitIsEnemy("player",source)
+        return not HealBot_issecretvalue(enemy) and enemy and rule==castByListIndexed[HEALBOT_CUSTOM_CASTBY_ENEMY]
+    end
+
+    local function customBar(button,selfOnly,id,name,source,dispelType,dispellable,currentPriority)
+        if not name or HealBot_Aura_CustomDebuffDisabled(id,name) then return end
+        local priority,typePriority=HealBot_Options_retDebuffPriority(id,name,dispelType or "nil")
+        if priority>=21 or priority>=typePriority or (currentPriority and priority>=currentPriority) then return end
+        if HealBot_Config_Cures.CDCshownHBDispelOnly and not dispellable then return end
+        local mode=HealBot_Aura_CustomDebuffSetting(HealBot_Globals.CustomDebuffsShowBarCol,id,name) or 4
+        if mode~=3 and mode~=4 then return end
+        local filter=HealBot_DebuffFilter[id] or HealBot_DebuffFilter[name]
+        if filter and not HealBot_Aura_BuffTargetMatches(button,filter) then return end
+        local rule=hbCustomDebuffsCastBy[id] or hbCustomDebuffsCastBy[name] or HealBot_Globals.CureCustomDefaultCastBy
+        if casterMatches(source,rule,selfOnly) then return mode,priority end
+    end
+
+    function HealBot_Forever_GetPartialBarWarning(button,selfOnly,currentPriority)
+        if not HealBot_Config_Cures.CDCshownHB then return end
+        local state=button.aura.debuff
+        local id,name,mode,priority,dispellable
+        local shieldSeen=state.publicShield
+        if state.partialWarnings then
+            local current=HealBot_UnitDebuffCurrent[button.unit]
+            for _,aura in ipairs(state.partialWarnings) do
+                if aura.id==6788 then shieldSeen=true end
+                if not current or current[aura.name]~=aura.id then
+                    local m,p=customBar(button,selfOnly,aura.id,aura.name,aura.source,aura.dispelType,aura.dispellable,priority or currentPriority)
+                    if m then id,name,mode,priority,dispellable=aura.id,aura.name,m,p,aura.dispellable end
+                end
+            end
+        end
+        -- Only the player's own completed, target-matched shield cast provides
+        -- a timer when spell identity is unavailable. A complete removal wins.
+        if not shieldSeen and HealBot_Forever_GetShieldLockout then
+            local start=HealBot_Forever_GetShieldLockout(button)
+            if start and start~=state.shieldAbsentStart and HealBot_Forever_WatchesWeakenedSoul() then
+                local shield=HealBot_WoWAPI_SpellName(6788)
+                if not HealBot_issecretvalue(shield) and type(shield)=="string" then
+                    local m,p=customBar(button,selfOnly,6788,shield,"player",nil,false,priority or currentPriority)
+                    if m then return 6788,shield,m,p,false end
+                end
+            end
+        end
+        return id,name,mode,priority,dispellable
+    end
+end
+
 function HealBot_Aura_CheckUnitDebuffs(button, selfOnly)
       --HealBot_setCall("HealBot_Aura_CheckUnitDebuffs", button)
     if debuffCheck and not button.special.unit and button.status.current<HealBot_Unit_Status["DEAD"] then
@@ -3634,31 +3735,45 @@ function HealBot_Aura_CheckUnitDebuffs(button, selfOnly)
         else
             button.aura.debuff.id=0
         end
-        if button.aura.debuff.id>0 and HealBot_Panel_RaidPetUnitButtonCheck(button.unit) then
-            local cache=HealBot_AuraDebuffCache[button.aura.debuff.id]
-            local automatic,warningType=cache.isAuto,cache.debuffType
-            if HEALBOT_FOREVER then automatic,warningType=selected.automatic,selected.warningType end
-            if automatic then
-                debuffBarCol=HealBot_Globals.CustomDebuffsShowBarCol[HEALBOT_CUSTOM_CAT_CUSTOM_AUTOMATIC] or 4
-            elseif warningType == HEALBOT_CUSTOM_en then
-                debuffBarCol=HealBot_Aura_CustomDebuffSetting(HealBot_Globals.CustomDebuffsShowBarCol,button.aura.debuff.id,cache.name) or 4
+        local state=button.aura.debuff
+        local barID,warningName,barMode,barPriority,canDispel
+        if HEALBOT_FOREVER and state.scanUnit==button.unit and not state.publicUnit and HealBot_Forever_GetPartialBarWarning then
+            barID,warningName,barMode,barPriority,canDispel=HealBot_Forever_GetPartialBarWarning(button,selfOnly,selected and state.priority)
+        end
+        if barID then state.id,state.priority=barID,barPriority end
+        if state.id>0 and HealBot_Panel_RaidPetUnitButtonCheck(button.unit) then
+            local warningType=HEALBOT_CUSTOM_en
+            if barID then
+                debuffBarCol,state.dispellable=barMode,canDispel
             else
-                debuffBarCol=HealBot_Globals.CustomDebuffsShowBarCol["DEFAULT"] or 4
-            end
-            if HEALBOT_FOREVER then
-                button.aura.debuff.dispellable=selected.dispellable
-            else
-                button.aura.debuff.dispellable=HealBot_Aura_CanDispel[button.aura.debuff.id]
+                local cache=HealBot_AuraDebuffCache[state.id]
+                local automatic=cache.isAuto
+                warningName,warningType=cache.name,cache.debuffType
+                if HEALBOT_FOREVER then automatic,warningType=selected.automatic,selected.warningType end
+                if automatic then
+                    debuffBarCol=HealBot_Globals.CustomDebuffsShowBarCol[HEALBOT_CUSTOM_CAT_CUSTOM_AUTOMATIC] or 4
+                elseif warningType == HEALBOT_CUSTOM_en then
+                    debuffBarCol=HealBot_Aura_CustomDebuffSetting(HealBot_Globals.CustomDebuffsShowBarCol,state.id,warningName) or 4
+                else
+                    debuffBarCol=HealBot_Globals.CustomDebuffsShowBarCol["DEFAULT"] or 4
+                end
+                if HEALBOT_FOREVER then
+                    state.dispellable=selected.dispellable
+                else
+                    state.dispellable=HealBot_Aura_CanDispel[state.id]
+                end
             end
             button.aura.debuff.colbar=debuffBarCol-1
             HealBot_Aura_CheckUnitBuffOverDebuff(button)
             if button.aura.debuff.type~=warningType or button.aura.debuff.bodupd or oldID~=button.aura.debuff.id
-                or oldDispel~=button.aura.debuff.dispellable or oldMode~=button.aura.debuff.colbar then
+                or oldDispel~=button.aura.debuff.dispellable or oldMode~=button.aura.debuff.colbar
+                or (state.barOnly and not barID) then
                 button.aura.debuff.bodupd=false
                 button.aura.debuff.name="needUpdate"
                 button.aura.debuff.type=warningType
             end
-            HealBot_Aura_DebuffWarnings(button, HealBot_AuraDebuffCache[button.aura.debuff.id]["name"], false, 0, expirationTime)
+            state.barOnly=barID~=nil
+            HealBot_Aura_DebuffWarnings(button, warningName, false, 0, expirationTime, barID~=nil)
         else
             HealBot_Aura_ClearDebuff(button)
         end

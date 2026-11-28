@@ -8,6 +8,7 @@ local casts={}
 local renews={}
 local shieldCasts={}
 local shieldLockouts={}
+local shieldNameOnly={}
 local shieldRanks={[17]=true,[592]=true,[600]=true,[3747]=true,[6065]=true,
     [6066]=true,[10898]=true,[10899]=true,[10900]=true,[10901]=true,[25217]=true,[25218]=true}
 local lockoutDuration=15
@@ -39,6 +40,7 @@ local function Disable()
     wipe(renews)
     wipe(shieldCasts)
     wipe(shieldLockouts)
+    wipe(shieldNameOnly)
     wipe(mendingByUnit)
     mendingAmount,mendingUntil=nil,nil
     channel=nil
@@ -293,23 +295,86 @@ local function ShieldSpell(spellID)
     return PublicString(name) and PublicString(shieldName) and name==shieldName
 end
 
+-- A cast can outlive the frame or raid slot that received it. Use only the
+-- current unit's public identity for the lockout used by debuff coloring.
+local function ShieldGUID(unit)
+    local ok,guid=pcall(UnitGUID,unit)
+    if ok and PublicString(guid) and guid~="nil" then return guid end
+end
+
+local function ShieldUnitName(unit)
+    local named,short,realm=pcall(UnitFullName,unit)
+    if not named or not PublicString(short) then return end
+    if secret(realm) then return nil,short end
+    if not realm or realm=="" then
+        local found,home=pcall(GetNormalizedRealmName)
+        if found and PublicString(home) then realm=home else realm=nil end
+    end
+    local full=PublicString(realm) and short.."-"..realm:gsub("%s","") or nil
+    local player,isPlayer=pcall(UnitIsPlayer,unit)
+    local nameKey=full and player and not secret(isPlayer) and isPlayer and "name:"..full or nil
+    return nameKey,short,full
+end
+
+local function ShieldMatches(target,guid,name)
+    if target.guid and guid then return target.guid==guid end
+    return name~=nil and target.name==name
+end
+
+local function ResolveShieldTarget(name)
+    if not PublicString(name) then return end
+    local character,realm=name:match("^([^-]+)%-(.+)$")
+    if realm then name=character.."-"..realm:gsub("%s","") end
+    local target
+    for unit in pairs(buttonsByUnit) do
+        local key,short,full=ShieldUnitName(unit)
+        if name==short or name==full then
+            local guid=ShieldGUID(unit)
+            if not (guid or key) or (target and not ShieldMatches(target,guid,key)) then return end
+            if not target then target={guid=guid,name=key}
+            else target.guid,target.name=target.guid or guid,target.name or key end
+        end
+    end
+    return target
+end
+
 function HealBot_Forever_GetShieldLockout(button)
-    local start=shieldLockouts[UnitIdentity(button)]
-    if start and GetTime()<start+lockoutDuration then return start,lockoutDuration end
+    if not next(shieldLockouts) or not PublicString(button.unit) then return end
+    local guid=ShieldGUID(button.unit)
+    local record=shieldLockouts[guid]
+    if not record and (not guid or next(shieldNameOnly)) then
+        local name=ShieldUnitName(button.unit)
+        local byName=guid and shieldNameOnly or shieldLockouts
+        record=byName[name]
+    end
+    if record and GetTime()<record.start+lockoutDuration then
+        return record.start,lockoutDuration
+    end
 end
 
 local function RefreshShieldLockouts(target)
-    for button in pairs(buttons) do
-        if button.event and UnitIdentity(button)==target then HealBot_Events_UnitDebuff(button) end
+    for unit,subscribed in pairs(buttonsByUnit) do
+        local guid=ShieldGUID(unit)
+        local name
+        if target.name and not (target.guid and guid) then name=ShieldUnitName(unit) end
+        if ShieldMatches(target,guid,name) then
+            for button in pairs(subscribed) do
+                if button.event and button.aura and button.aura.debuff then
+                    button.aura.debuff.update=true
+                    HealBot_Events_UnitDebuff(button)
+                end
+            end
+        end
     end
 end
 
 local function TrackShieldCast(event,first,second,third)
+    if event=="UNIT_SPELLCAST_SENT" and PublicString(second) then shieldCasts[second]=nil end
     if event=="UNIT_SPELLCAST_SENT" and ShieldSpell(third) then
         if PublicString(second) then
-            local identity=ResolveTarget(first)
-            if identity then
-                local cast={target=identity}
+            local cast=ResolveShieldTarget(first)
+            if cast then
+                cast.spellID=third
                 shieldCasts[second]=cast
                 C_Timer.After(5,function() if shieldCasts[second]==cast then shieldCasts[second]=nil end end)
             end
@@ -322,19 +387,24 @@ local function TrackShieldCast(event,first,second,third)
     if not cast then return false end
     if event=="UNIT_SPELLCAST_SUCCEEDED" then
         shieldCasts[first]=nil
-        if ShieldSpell(second) then
-            local start=GetTime()
-            shieldLockouts[cast.target]=start
-            RefreshShieldLockouts(cast.target)
+        if not secret(second) and second==cast.spellID then
+            cast.start=GetTime()
+            if cast.guid then shieldLockouts[cast.guid]=cast end
+            if cast.name then
+                shieldLockouts[cast.name]=cast
+                shieldNameOnly[cast.name]=not cast.guid and cast or nil
+            end
+            RefreshShieldLockouts(cast)
             C_Timer.After(lockoutDuration,function()
-                if shieldLockouts[cast.target]==start then
-                    shieldLockouts[cast.target]=nil
-                    RefreshShieldLockouts(cast.target)
-                end
+                local removed=false
+                if cast.guid and shieldLockouts[cast.guid]==cast then shieldLockouts[cast.guid]=nil; removed=true end
+                if cast.name and shieldLockouts[cast.name]==cast then shieldLockouts[cast.name]=nil; removed=true end
+                if cast.name and shieldNameOnly[cast.name]==cast then shieldNameOnly[cast.name]=nil end
+                if removed then RefreshShieldLockouts(cast) end
             end)
         end
         return true
-    elseif event=="UNIT_SPELLCAST_FAILED" or event=="UNIT_SPELLCAST_INTERRUPTED" then
+    elseif event=="UNIT_SPELLCAST_FAILED" or event=="UNIT_SPELLCAST_INTERRUPTED" or event=="UNIT_SPELLCAST_FAILED_QUIET" then
         shieldCasts[first]=nil
         return true
     end
@@ -422,6 +492,7 @@ local function Install()
         "UNIT_SPELLCAST_CHANNEL_STOP","UNIT_SPELLCAST_INTERRUPTED","UNIT_SPELLCAST_FAILED"}) do
         events:RegisterUnitEvent(event,"player")
     end
+    pcall(events.RegisterUnitEvent,events,"UNIT_SPELLCAST_FAILED_QUIET","player")
     events:RegisterEvent("GROUP_ROSTER_UPDATE")
     events:RegisterEvent("UNIT_AURA")
     events:SetScript("OnEvent",function(_,event,unit,...)
@@ -432,15 +503,6 @@ local function Install()
             return
         end
         if event=="GROUP_ROSTER_UPDATE" then
-            for target in pairs(shieldLockouts) do
-                if target:match("^unit:") then
-                    shieldLockouts[target]=nil
-                    RefreshShieldLockouts(target)
-                end
-            end
-            for id,cast in pairs(shieldCasts) do
-                if cast.target:match("^unit:") then shieldCasts[id]=nil end
-            end
             for unit in pairs(mendingByUnit) do Safe(RefreshMendingUnit,unit) end
             for target in pairs(renews) do
                 if target:match("^unit:") then renews[target]=nil; Refresh(target) end
