@@ -3624,7 +3624,9 @@ function HealBot_Action_setFrameHeader(f)
     end
 end
 
-local hbEventFuncs={["UNIT_AURA"]=HealBot_Events_UnitAura,
+local UnitButtonOnEvent
+do
+    local hbEventFuncs={["UNIT_AURA"]=HealBot_Events_UnitAura,
                     ["UNIT_HEALTH_FREQUENT"]=HealBot_UnitHealth,
                     ["UNIT_HEALTH"]=HealBot_UnitHealth,
                     ["UNIT_MAXHEALTH"]=HealBot_UnitHealth,
@@ -3666,10 +3668,17 @@ local hbEventFuncs={["UNIT_AURA"]=HealBot_Events_UnitAura,
                     ["INCOMING_RESURRECT_CHANGED"]=HealBot_Action_ResStateChanged,
                    }
 
-local hbEnemyEventFuncs={["UNIT_PHASE"]=HealBot_Events_UnitPhase,
+    local hbEnemyEventFuncs={["UNIT_PHASE"]=HealBot_Events_UnitPhase,
                          ["UNIT_NAME_UPDATE"]=HealBot_UnitExists,
                          ["UNIT_CLASSIFICATION_CHANGED"]=HealBot_Events_ClassificationChanged,
                    }
+
+    function UnitButtonOnEvent(button, event, ...)
+        local handlers=button.frame<10 and hbEventFuncs or hbEnemyEventFuncs
+        local handler=handlers[event]
+        if handler then handler(button,...) end
+    end
+end
 
 function HealBot_Action_SetStrata(preCombat)
     if preCombat then
@@ -6552,6 +6561,9 @@ function HealBot_Action_SetHealButton(unit,guid,frame,unitType,duplicate,role,pr
             HealBot_Add_RefreshList(hButton.id)
             hButton.gref["Back"]:ClearAllPoints()
             erButton=HealBot_Emerg_Button[hButton.id]
+            if hButton.frame>0 and (hButton.unit~=unit or (hButton.frame==10)~=(frame==10)) then
+                HealBot_Action_UnregisterUnitEvents(hButton)
+            end
             if hButton.frame~=frame or hButton.skin~=Healbot_Config_Skins.Current_Skin or HealBot_issecretvalue(guid) or HealBot_issecretvalue(hButton.guid) or hButton.guid~=guid then
                 hButton.icon.reset=true
                 hButton.text.reset=true
@@ -6664,11 +6676,6 @@ function HealBot_Action_SetHealButton(unit,guid,frame,unitType,duplicate,role,pr
                     erButton.unit=unit
                     HealBot_Aura_setUnitIcons(unit)
                     HealBot_Action_ResetrCallsUnit(hButton)
-                    if hButton.frame<10 then
-                        hButton:SetScript("OnEvent", function(self, event, arg1, arg2, arg3) hbEventFuncs[event](self, arg1, arg2, arg3) end)
-                    elseif hbEnemyEventFuncs[event] then
-                        hButton:SetScript("OnEvent", function(self, event, arg1, arg2, arg3) hbEnemyEventFuncs[event](self, arg1, arg2, arg3) end)
-                    end
                     if not UnitExists(unit) then
                         HealBot_UpdateUnitNotExists(hButton, true)
                     else
@@ -6687,7 +6694,10 @@ function HealBot_Action_SetHealButton(unit,guid,frame,unitType,duplicate,role,pr
                     HealBot_Action_SetAllButtonAttribs(hButton,"Enabled")
                     HealBot_Action_SetAllButtonAttribs(erButton,"Emerg")
                 end
-                if not hButton.status.events then HealBot_Action_RegisterUnitEvents(hButton) end
+                if not hButton.status.events then
+                    hButton:SetScript("OnEvent", UnitButtonOnEvent)
+                    HealBot_Action_RegisterUnitEvents(hButton)
+                end
             end
             if not HealBot_issecretvalue(unit) and not HealBot_issecretvalue(unit) then
                 if unitType<10 then
