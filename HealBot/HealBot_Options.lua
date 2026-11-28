@@ -21943,19 +21943,10 @@ function HealBot_Options_RetDebuffRGB(button)
         return HealBot_Config_Cures.CDCBarColour[button.aura.debuff.type].R or 1,
                HealBot_Config_Cures.CDCBarColour[button.aura.debuff.type].G or 0.25,
                HealBot_Config_Cures.CDCBarColour[button.aura.debuff.type].B or 0.25
-    elseif HealBot_Globals.CDCBarColour[button.aura.debuff.id] then
-        return HealBot_Globals.CDCBarColour[button.aura.debuff.id].R or 1,
-               HealBot_Globals.CDCBarColour[button.aura.debuff.id].G or 0.25,
-               HealBot_Globals.CDCBarColour[button.aura.debuff.id].B or 0.25
-    elseif HealBot_Globals.CDCBarColour[button.aura.debuff.name] then
-        return HealBot_Globals.CDCBarColour[button.aura.debuff.name].R or 1,
-               HealBot_Globals.CDCBarColour[button.aura.debuff.name].G or 0.25,
-               HealBot_Globals.CDCBarColour[button.aura.debuff.name].B or 0.25
-    else
-        return HealBot_Globals.CDCBarColour[customDebuffPriority].R or 1,
-               HealBot_Globals.CDCBarColour[customDebuffPriority].G or 0.25,
-               HealBot_Globals.CDCBarColour[customDebuffPriority].B or 0.25
     end
+    local color=HealBot_Aura_CustomDebuffSetting(HealBot_Globals.CDCBarColour,button.aura.debuff.id,button.aura.debuff.name)
+        or HealBot_Globals.CDCBarColour[customDebuffPriority]
+    return color.R or 1,color.G or 0.25,color.B or 0.25
 end
 
 function HealBot_Options_RetBuffRGB(button)
@@ -29546,7 +29537,7 @@ local debuffIconOptions=debuffIconOptionsGerman and {
     help="Standard verwendet die bestehende Einstellung. Die Auswahl gilt nur für das kleine Symbol.",
     combatHelp="Bei geschützten Debuffs bestimmt WoW, welche Symbole im Kampf einzeln gefiltert werden können.",
     native="Geschwächte Seele im Kampf (nativ)",
-    nativeHelp="Verwendet WoWs native Anzeige im Kampf für Geschwächte Seele, auch von anderen Priestern. Dabei können weitere Debuffs erscheinen.",
+    nativeHelp="Zeigt im Kampf und auf Schlachtfeldern ein Symbol für Geschwächte Seele an. Wenn WoW die Zauber-ID verbirgt, können auch ähnliche Debuffs erscheinen. Für die Balkenfarbe kann HealBot in diesem Fall das Ziel und die Sperrzeit deines eigenen erfolgreichen Schildzaubers verwenden.",
 } or {
     combat="Icon in combat",
     outOfCombat="Icon out of combat",
@@ -29556,8 +29547,8 @@ local debuffIconOptions=debuffIconOptionsGerman and {
     selectDebuff="Select a custom debuff with a spell ID.",
     help="Default follows the existing settings. This choice affects only the small icon.",
     combatHelp="WoW determines which protected debuff icons can be filtered individually in combat.",
-    native="Weakened Soul in combat (native)",
-    nativeHelp="Uses WoW's native combat display for Weakened Soul, including from other priests. Additional debuffs may appear.",
+    native="Native Weakened Soul indicator",
+    nativeHelp="Shows a Weakened Soul icon in combat and battlegrounds. When WoW hides the spell ID, similar debuffs can also show an icon. HealBot can still use the target and lockout time of your own successful shield cast for the bar color.",
 }
 local debuffIconChoices={
     {label=debuffIconOptions.default},

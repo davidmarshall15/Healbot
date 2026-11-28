@@ -239,8 +239,12 @@ function HealBot_Media_UpdateDefaultFont(object, height, outline, caller)
    -- HealBot_AddDebug("UpdateDefaultFont  Caller="..(caller or "nil"),"Media DefaultFont",true)
 end
 
+function HealBot_Media_ResolveFont(font, height, outline)
+    return LSM:Fetch('font', font), height, HealBot_Font_Outline[outline]
+end
+
 function HealBot_Media_UpdateFont(object, font, height, outline, caller)
-    object:SetFont(LSM:Fetch('font', font), height, HealBot_Font_Outline[outline])
+    object:SetFont(HealBot_Media_ResolveFont(font,height,outline))
    -- HealBot_AddDebug("LSM Fetch Font "..font.."  Caller="..(caller or "nil"),"Media Font",true)
 end
 

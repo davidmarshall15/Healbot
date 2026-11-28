@@ -35,68 +35,13 @@ try {
         }
     }
     Write-Output "TOC/XML references OK: $references."
-    & lua tests/compatibility.lua
-    if ($LASTEXITCODE -ne 0) { throw 'Compatibility tests failed.' }
-    & lua tests/forever_frames.lua
-    if ($LASTEXITCODE -ne 0) { throw 'Forever frame tests failed.' }
-    & lua tests/target_event_refresh.lua
-    if ($LASTEXITCODE -ne 0) { throw 'Target event refresh regression tests failed.' }
-    & lua tests/opacity.lua
-    if ($LASTEXITCODE -ne 0) { throw 'Opacity regression tests failed.' }
-    & lua tests/tooltip.lua
-    if ($LASTEXITCODE -ne 0) { throw 'Tooltip regression tests failed.' }
-    & lua tests/health_text.lua
-    if ($LASTEXITCODE -ne 0) { throw 'Health text regression tests failed.' }
-    & lua tests/targeted_option.lua
-    if ($LASTEXITCODE -ne 0) { throw 'Targeted option regression tests failed.' }
-    & lua tests/secret_values.lua
-    if ($LASTEXITCODE -ne 0) { throw 'Mixed secret-value regression tests failed.' }
-    & lua tests/prediction.lua
-    if ($LASTEXITCODE -ne 0) { throw 'Native prediction regression tests failed.' }
-    & lua tests/target_binding.lua
-    if ($LASTEXITCODE -ne 0) { throw 'Target binding regression tests failed.' }
-    & lua tests/modified_target.lua
-    if ($LASTEXITCODE -ne 0) { throw 'Modified Target dispatch regression tests failed.' }
-    & lua tests/rank_range.lua
-    if ($LASTEXITCODE -ne 0) { throw 'Spell rank/range regression tests failed.' }
-    & lua tests/unranked_spells.lua
-    if ($LASTEXITCODE -ne 0) { throw 'Unranked spell regression tests failed.' }
-    & lua tests/spell_refresh.lua
-    if ($LASTEXITCODE -ne 0) { throw 'Combat spell refresh regression tests failed.' }
-    & lua tests/combat_auras.lua
-    if ($LASTEXITCODE -ne 0) { throw 'Combat aura layout regression tests failed.' }
-    & lua tests/forever_buffs.lua
-    if ($LASTEXITCODE -ne 0) { throw 'Forever buff settings regression tests failed.' }
-    & lua tests/native_buff_matching.lua
-    if ($LASTEXITCODE -ne 0) { throw 'Native buff matching regression tests failed.' }
-    & lua tests/native_buff_casters.lua
-    if ($LASTEXITCODE -ne 0) { throw 'Native buff caster regression tests failed.' }
-    & lua tests/native_buff_refresh.lua
-    if ($LASTEXITCODE -ne 0) { throw 'Native buff refresh regression tests failed.' }
-    & lua tests/native_aura_options.lua
-    if ($LASTEXITCODE -ne 0) { throw 'Native aura options regression tests failed.' }
-    & lua tests/reported_bugs.lua
-    if ($LASTEXITCODE -ne 0) { throw 'Reported bug regression tests failed.' }
-    & lua tests/movement_safety.lua
-    if ($LASTEXITCODE -ne 0) { throw 'Protected movement regression tests failed.' }
-    & lua tests/party_startup.lua
-    if ($LASTEXITCODE -ne 0) { throw 'Party startup/media regression tests failed.' }
-    foreach ($suite in @('aggro', 'gcd', 'heal_amount')) {
-        & lua "tests/$suite.lua"
-        if ($LASTEXITCODE -ne 0) { throw "$suite regression tests failed." }
+    $suites = @(Get-ChildItem -LiteralPath tests -Filter *.lua -File |
+        Where-Object Name -ne 'syntax.lua' | Sort-Object Name)
+    foreach ($suite in $suites) {
+        & lua $suite.FullName
+        if ($LASTEXITCODE -ne 0) { throw "Regression suite failed: $($suite.Name)" }
     }
-    & lua tests/player_mana.lua
-    if ($LASTEXITCODE -ne 0) { throw 'Player mana tooltip regression tests failed.' }
-    & lua tests/damager_role.lua
-    if ($LASTEXITCODE -ne 0) { throw 'Damager role regression tests failed.' }
-    & lua tests/adaptive_reset.lua
-    if ($LASTEXITCODE -ne 0) { throw 'Adaptive colour reset regression tests failed.' }
-    & lua tests/share_import_fail.lua
-    if ($LASTEXITCODE -ne 0) { throw 'Share import failure regression tests failed.' }
-    & lua tests/self_count.lua
-    if ($LASTEXITCODE -ne 0) { throw 'Self count text regression tests failed.' }
-    & lua tests/clear_aux_bars.lua
-    if ($LASTEXITCODE -ne 0) { throw 'Aux bar clearing regression tests failed.' }
+    Write-Output "Lua regression suites passed: $($suites.Count)."
 } finally {
     Pop-Location
 }

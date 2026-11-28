@@ -1180,6 +1180,7 @@ function HealBot_Update_AllAuras()
 end
 
 function HealBot_Update_AllBuffs()
+    if HealBot_Forever_RefreshReserveWarnings then HealBot_Forever_RefreshReserveWarnings("buff") end
       --HealBot_setCall("HealBot_Update_AllBuffs")
     for _,xButton in pairs(HealBot_Unit_Button) do
         HealBot_BuffSlowUpdate(xButton)
@@ -1199,6 +1200,7 @@ function HealBot_Update_AllBuffs()
 end
 
 function HealBot_Update_AllDebuffs()
+    if HealBot_Forever_RefreshReserveWarnings then HealBot_Forever_RefreshReserveWarnings("debuff") end
       --HealBot_setCall("HealBot_Update_AllDebuffs")
     for _,xButton in pairs(HealBot_Unit_Button) do
         HealBot_DebuffSlowUpdate(xButton)
@@ -1357,33 +1359,21 @@ function HealBot_Update_DisableButtonIconsGlow()
     end
 end
 
-function HealBot_Update_ResetUnitOpacity()
-      --HealBot_setCall("HealBot_Update_ResetUnitOpacity")
-    for _,xButton in pairs(HealBot_Unit_Button) do
-        HealBot_Action_ResetUnitButtonOpacity(xButton)
+local function ResetButtonOpacities(buttons, changedFrames)
+    for _,button in pairs(buttons) do
+        if not changedFrames or changedFrames[button.frame] then HealBot_Action_ResetUnitButtonOpacity(button) end
     end
-    for _,xButton in pairs(HealBot_Private_Button) do
-        HealBot_Action_ResetUnitButtonOpacity(xButton)
-    end
-    for _,xButton in pairs(HealBot_Extra_Button) do
-        HealBot_Action_ResetUnitButtonOpacity(xButton)
-    end
-    for _,xButton in pairs(HealBot_Pet_Button) do
-        HealBot_Action_ResetUnitButtonOpacity(xButton)
-    end
-    for _,xButton in pairs(HealBot_Vehicle_Button) do
-        HealBot_Action_ResetUnitButtonOpacity(xButton)
-    end
-    for _,xButton in pairs(HealBot_Enemy_Button) do
-        HealBot_Action_ResetUnitButtonOpacity(xButton)
-    end
-    for xUnit,xButton in pairs(HealBot_UnitTarget_Button) do
-        HealBot_Action_ResetUnitButtonOpacity(xButton)
-    end
-    for xUnit,xButton in pairs(HealBot_PrivateTarget_Button) do
-        HealBot_Action_ResetUnitButtonOpacity(xButton)
-    end
-    --HealBot_Timers_Set("LAST","ResetUnitStatus")
+end
+
+function HealBot_Update_ResetUnitOpacity(changedFrames)
+    ResetButtonOpacities(HealBot_Unit_Button, changedFrames)
+    ResetButtonOpacities(HealBot_Private_Button, changedFrames)
+    ResetButtonOpacities(HealBot_Extra_Button, changedFrames)
+    ResetButtonOpacities(HealBot_Pet_Button, changedFrames)
+    ResetButtonOpacities(HealBot_Vehicle_Button, changedFrames)
+    ResetButtonOpacities(HealBot_Enemy_Button, changedFrames)
+    ResetButtonOpacities(HealBot_UnitTarget_Button, changedFrames)
+    ResetButtonOpacities(HealBot_PrivateTarget_Button, changedFrames)
 end
 
 function HealBot_Update_RegisterForClicks(button)

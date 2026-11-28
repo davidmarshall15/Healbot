@@ -112,4 +112,42 @@ local disabled=button(); env.HealBot_Action_luVars.TestBarsOn=true
 env.HealBot_Action_ButtonRegisterForClicks(disabled)
 eq(disabled.mouse,false,"test bars remain unclickable")
 eq(disabled.regClicks,false,"test bars are not registered")
+
+-- Use the same rank text, right mouse input and button release as the Stockade
+-- binding. Observe the real configured attributes, including emergency remaps.
+local clicked=assert(source:match("(local function ForeverClickedSpell.-function HealBot_Action_ForeverClickedSpell%b().-\nend)"))
+setfenv(assert(loadstring(clicked)),env)()
+local secret={}
+env.HealBot_issecretvalue=function(value) return value==secret end
+local rank="Power Word: Shield(Rank 3)"
+env.HealBot_Spells_KnownByName=function(s) return s==rank and 600 or nil end
+env.SecureButton_GetModifiedUnit=function(b,m) return env.SecureButton_GetModifiedAttribute(b,"unit",m) end
+local row=button()
+local owner={unit="party2"}
+local function observed() return env.HealBot_Action_ForeverClickedSpell(row,"RightButton",owner) end
+prefix=""
+env.HealBot_Config_Spells.ButtonCastMethod=2
+bind(row,2,"",rank)
+eq(observed(),600,"actual direct rank and clicked unit")
+bind(row,2,"ctrl-","Target"); prefix="ctrl-"
+eq(observed(),nil,"modified target action must not inherit shield")
+prefix=""
+row.attrs["unit-heal2"]="player"
+eq(observed(),nil,"remapped recipient disagrees with clicked party member")
+row.attrs["unit-heal2"]=nil
+row.attrs["type-heal2"]="macro"; row.attrs["macrotext-heal2"]="/cast [@player] "..rank
+eq(observed(),nil,"macro with a different recipient")
+row.attrs["type-heal2"]="spell"
+env.HealBot_Config_Spells.ButtonCastMethod=1; row.attrs.downbutton2="MiddleButton"
+eq(observed(),nil,"custom down-edge remap")
+row.attrs.downbutton2=nil
+eq(observed(),600,"ordinary click on press")
+env.UnitCanAssist=function() return secret end
+eq(observed(),nil,"undisclosed disposition")
+env.UnitCanAssist=function() return true end
+row.attrs["spell-heal2"]=secret
+eq(observed(),nil,"undisclosed spell")
+row.attrs["spell-heal2"]=rank
+env.SecureButton_GetModifiedUnit=function() error("denied") end
+eq(observed(),nil,"denied click observation leaves secure casting alone")
 print("PASS: "..passed.." modified Target dispatch assertions (Blizzard handler fixture, mock APIs)")

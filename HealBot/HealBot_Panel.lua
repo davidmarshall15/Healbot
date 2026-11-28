@@ -1053,10 +1053,10 @@ function HealBot_Panel_AnchorButton(button, backFrame, relButton, newColumn, chi
     end
 end
 
-function HealBot_Panel_UpdateHeadersOpacity()
+function HealBot_Panel_UpdateHeadersOpacity(changedFrames)
       --HealBot_setCall("HealBot_Panel_UpdateHeadersOpacity")
     for _,header in pairs(HealBot_Header_Frames) do
-        HealBot_Action_UpdateHeaderOpacity(header)
+        if not changedFrames or changedFrames[header.frame] then HealBot_Action_UpdateHeaderOpacity(header) end
     end
 end
 
@@ -3367,6 +3367,7 @@ function HealBot_Panel_selfHeals(preCombat)
 end
 
 local hbShowButtons={}
+local showBatch, showBatchTime
 function HealBot_Panel_ButtonHide(button)
     hbShowButtons[button.id]=nil
     button:Hide()
@@ -3384,12 +3385,8 @@ function HealBot_Panel_ButtonShow(button, incEmerg)
 end
 
 function HealBot_Panel_ButtonShowNow()
-    for id,incEmerg in pairs(hbShowButtons) do
-        if incEmerg == 1 then
-            HealBot_Panel_ButtonShow(HealBot_Buttons[id], false)
-        else
-            HealBot_Panel_ButtonShow(HealBot_Buttons[id], true)
-        end
+    for _, request in pairs(hbShowButtons) do
+        HealBot_Panel_ButtonShow(request.button, request.incEmerg)
     end
 end
 
@@ -3405,12 +3402,34 @@ function HealBot_Panel_UnitShow(button, incEmerg, preCombat)
     if preCombat then
         HealBot_Panel_ButtonShow(button, incEmerg)
     else
-        if incEmerg then
-            hbShowButtons[button.id]=2
-        else
-            hbShowButtons[button.id]=1
+        local request=hbShowButtons[button.id]
+        if request and request.button==button then
+            request.incEmerg=incEmerg
+            return
         end
-        C_Timer.After(0.125, function() HealBot_Panel_DoUnitShow(button, incEmerg) end)
+        -- Bars scheduled in the same UI frame share the same 125 ms deadline.
+        -- A hide, immediate show or replacement invalidates the old request.
+        local now=GetTime()
+        if not showBatch or showBatchTime~=now then
+            local batch={}
+            showBatch,showBatchTime=batch,now
+            C_Timer.After(0.125, function()
+                if showBatch==batch then showBatch=nil end
+                for _, pending in ipairs(batch) do
+                    local row=pending.button
+                    if hbShowButtons[row.id]==pending then
+                        local ok,err=pcall(HealBot_Panel_DoUnitShow,row,pending.incEmerg)
+                        if not ok then
+                            if hbShowButtons[row.id]==pending then hbShowButtons[row.id]=nil end
+                            pcall(geterrorhandler(),err)
+                        end
+                    end
+                end
+            end)
+        end
+        request={button=button,incEmerg=incEmerg}
+        hbShowButtons[button.id]=request
+        showBatch[#showBatch+1]=request
     end
 end
 
@@ -4265,24 +4284,23 @@ function HealBot_Panel_PrePartyChanged(preCombat, changeType)
             HealBot_Panel_buildDataStore(true, false)
         end
         HealBot_Panel_DoPartyChanged(preCombat, 6)
+        local groups=Healbot_Config_Skins.HealGroups[Healbot_Config_Skins.Current_Skin]
+        local targetFrame=groups[11].FRAME==8 or groups[12].FRAME==8
+        local focusFrame=groups[13].FRAME==9 or groups[14].FRAME==9
         if preCombat then
             if Healbot_Config_Skins.HealGroups[Healbot_Config_Skins.Current_Skin][9]["FRAME"] == 6 or Healbot_Config_Skins.HealGroups[Healbot_Config_Skins.Current_Skin][10]["FRAME"] == 7 then
                 HealBot_Panel_buildDataStore(false, true)
                 if Healbot_Config_Skins.HealGroups[Healbot_Config_Skins.Current_Skin][9]["FRAME"] == 6 then HealBot_Panel_DoPartyChanged(preCombat, 1) end
                 if Healbot_Config_Skins.HealGroups[Healbot_Config_Skins.Current_Skin][10]["FRAME"] == 7 then HealBot_Panel_DoPartyChanged(preCombat, 2) end
             end
-            if Healbot_Config_Skins.HealGroups[Healbot_Config_Skins.Current_Skin][11]["FRAME"] == 8 then HealBot_Panel_DoPartyChanged(preCombat, 3) end
-            if Healbot_Config_Skins.HealGroups[Healbot_Config_Skins.Current_Skin][12]["FRAME"] == 8 then HealBot_Panel_DoPartyChanged(preCombat, 3) end
-            if Healbot_Config_Skins.HealGroups[Healbot_Config_Skins.Current_Skin][13]["FRAME"] == 9 then HealBot_Panel_DoPartyChanged(preCombat, 4) end
-            if Healbot_Config_Skins.HealGroups[Healbot_Config_Skins.Current_Skin][14]["FRAME"] == 9 then HealBot_Panel_DoPartyChanged(preCombat, 4) end
+            if targetFrame then HealBot_Panel_DoPartyChanged(preCombat, 3) end
+            if focusFrame then HealBot_Panel_DoPartyChanged(preCombat, 4) end
             HealBot_Panel_DoPartyChanged(preCombat, 5)
         else
             if Healbot_Config_Skins.HealGroups[Healbot_Config_Skins.Current_Skin][9]["FRAME"] == 6 then HealBot_nextRecalcParty(1) end
             if Healbot_Config_Skins.HealGroups[Healbot_Config_Skins.Current_Skin][10]["FRAME"] == 7 then HealBot_nextRecalcParty(2) end
-            if Healbot_Config_Skins.HealGroups[Healbot_Config_Skins.Current_Skin][11]["FRAME"] == 8 then HealBot_nextRecalcParty(3) end
-            if Healbot_Config_Skins.HealGroups[Healbot_Config_Skins.Current_Skin][12]["FRAME"] == 8 then HealBot_nextRecalcParty(3) end
-            if Healbot_Config_Skins.HealGroups[Healbot_Config_Skins.Current_Skin][13]["FRAME"] == 9 then HealBot_nextRecalcParty(4) end
-            if Healbot_Config_Skins.HealGroups[Healbot_Config_Skins.Current_Skin][14]["FRAME"] == 9 then HealBot_nextRecalcParty(4) end
+            if targetFrame then HealBot_nextRecalcParty(3) end
+            if focusFrame then HealBot_nextRecalcParty(4) end
             HealBot_nextRecalcParty(5)
         end
     end

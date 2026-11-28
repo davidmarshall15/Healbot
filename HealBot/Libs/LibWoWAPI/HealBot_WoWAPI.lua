@@ -118,11 +118,11 @@ local function HealBot_WoWAPI_GetCooldownV11(spellId)
 end
 
 local function HealBot_WoWAPI_GetSpellChargesV1(spellId)
-    return GetSpellCharges(spellId)
+    if GetSpellCharges then return GetSpellCharges(spellId) end
 end
 
 local function HealBot_WoWAPI_GetSpellCountV1(spellId)
-    return GetSpellCount(spellId)
+    if GetSpellCount then return GetSpellCount(spellId) end
 end
 
 local function HealBot_WoWAPI_GetSpellChargesV11(spellId)
@@ -173,15 +173,10 @@ function HealBot_WoWAPI_SetC_Spell()
             GetSpellCooldown=C_Spell.GetSpellCooldown
         end
         if C_Spell.GetSpellCharges then
-            HealBot_WoWAPI_GetSpellCount=HealBot_WoWAPI_GetSpellChargesV11
             HealBot_WoWAPI_GetSpellCharges=HealBot_WoWAPI_GetSpellChargesV11
             GetSpellCharges=C_Spell.GetSpellCharges
         end
-        if C_Spell.GetSpellCount then
-            HealBot_WoWAPI_GetSpellCount=HealBot_WoWAPI_GetSpellChargesV11
-            HealBot_WoWAPI_GetSpellCharges=HealBot_WoWAPI_GetSpellChargesV11
-            GetSpellCharges=C_Spell.GetSpellCharges
-        end
+        HealBot_WoWAPI_GetSpellCount=C_Spell.GetSpellCastCount or C_Spell.GetSpellCount or HealBot_WoWAPI_GetSpellCountV1
         HealBot_WoWAPI_GetSpellLink=C_Spell.GetSpellLink or GetSpellLink
         HealBot_WoWAPI_IsPassiveSpell=C_Spell.IsSpellPassive or IsPassiveSpell
         HealBot_WoWAPI_PickupSpell=C_Spell.PickupSpell or PickupSpell
@@ -270,7 +265,7 @@ end
 local function HealBot_WoWAPI_GetSpellTabInfoV11(index)
     hbInfo=GetSpellTabInfo(index)
     if hbInfo then
-        return nil, nil, hbInfo.itemIndexOffset, hbInfo.numSpellBookItems, nil, 0 --hbInfo.isOffSpec
+        return nil, nil, hbInfo.itemIndexOffset, hbInfo.numSpellBookItems, nil, hbInfo.offSpecID or 0
     end
     return nil
 end
@@ -280,8 +275,14 @@ local function HealBot_WoWAPI_GetSpellBookItemInfoV1(index)
 end
 
 local SpellBookItemtypes={[1]="SPELL", [3]="SPELL", [4]="FLYOUT"}
-local function HealBot_WoWAPI_GetSpellBookItemInfoV11(index)
+local function HealBot_WoWAPI_GetSpellBookItemInfoV11(index, playerOnly)
     hbInfo=GetSpellBookItemInfo(index, Enum.SpellBookSpellBank.Player)
+    if playerOnly then
+        if not hbInfo or hbInfo.isOffSpec then return end
+        if hbInfo.itemType==1 then return "SPELL", hbInfo.spellID or hbInfo.actionID, hbInfo.isPassive end
+        if hbInfo.itemType==4 then return "FLYOUT", hbInfo.actionID end
+        return
+    end
     if hbInfo and hbInfo.itemType then
         return SpellBookItemtypes[hbInfo.itemType], hbInfo.actionID
     else
@@ -332,8 +333,8 @@ function HealBot_WoWAPI_SpellTabInfo(index)
     return HealBot_WoWAPI_GetSpellTabInfo(index)
 end
 
-function HealBot_WoWAPI_SpellBookItemInfo(index)
-    return HealBot_WoWAPI_GetSpellBookItemInfo(index)
+function HealBot_WoWAPI_SpellBookItemInfo(index, playerOnly)
+    return HealBot_WoWAPI_GetSpellBookItemInfo(index, playerOnly)
 end
 
 function HealBot_WoWAPI_SpellBookItemName(index)

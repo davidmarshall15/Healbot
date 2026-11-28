@@ -51,9 +51,9 @@ local function Colour(mode,category,prefix,pct,red,green,cr,cg,cb,rr,rg,rb)
 end
 
 local function PaintPower(row)
-    if not row.skinPower then return end
-    local power,maximum,percent=HealBot_WoWAPI_UnitMana(row.unit,UnitPowerType(row.unit))
+    if not row.skinPower or not next(row.skinPower) then return end
     local powerType,token=UnitPowerType(row.unit)
+    local power,maximum,percent=HealBot_WoWAPI_UnitMana(row.unit,powerType)
     local colour=not secret(token) and PowerBarColor[token] or nil
     colour=colour or PowerBarColor.MANA
     local role=UnitGroupRolesAssigned(row.unit)
@@ -81,9 +81,185 @@ end
 
 local incomingColourModes={[3]=2,[4]=3,[6]=4,[7]=5,[8]=6}
 
-local function Paint(row)
+local function SelectWarning(row)
+    row.warningKind=nil
+    local button=row.warningButton
+    if button and button.status.events and not button.status.isdead then
+        local d,buff=button.aura.debuff,button.aura.buff
+        if d.name and (d.colbar==2 or d.colbar==3) and HealBot_Config_Cures.CDCshownHB
+            and (d.dispellable or not HealBot_Config_Cures.CDCshownHBDispelOnly)
+            and HealBot_Range_WarnInRange(button,d.curespell,HealBot_Config_Cures.WarnRange_Bar) then
+            row.warningKind="debuff"
+        elseif buff.name and not buff.missingbuff and (buff.colbar==2 or buff.colbar==3)
+            and HealBot_Config_Buffs.CBshownHB and not HealBot_Config_Buffs.CBshownHBMissingOnly
+            and HealBot_Range_WarnInRange(button,buff.name,HealBot_Config_Buffs.WarnRange_Bar) then
+            row.warningKind="buff"
+        end
+    end
+end
+
+local function ApplyHealthColour(row)
+    if not row.hasHealthColour then return end
+    local warning=row.warningKind and row.aura[row.warningKind]
+    if warning then row.healthBar:SetStatusBarColor(warning.r,warning.g,warning.b,row.barAlpha)
+    else row.healthBar:SetStatusBarColor(row.baseR,row.baseG,row.baseB,row.barAlpha) end
+end
+
+local function Public(value)
+    if not secret(value) then return value end
+end
+
+local function ResetWarnings(row)
+    local button=row.warningButton
+    if not button then return end
+    button.status.events=false
+    button.aura.buff={colbar=0,priority=99,recheck={},temp={}}
+    button.aura.debuff={colbar=0,priority=99,temp={}}
+    button.guid=nil
+    button.rosterName,button.rosterRealm=nil,nil
+    if row.warningTimer then row.warningTimer:Cancel(); row.warningTimer=nil end
+    row.warningDeadline=nil
+    row.warningKind=nil
+end
+
+local function QueueWarningScan(row)
+    if row.warningQueued then return end
+    row.warningQueued=true
+    C_Timer.After(0,function()
+        row.warningQueued=nil
+        local button=row.warningButton
+        if not button or not button.status.events or not row:IsVisible() then return end
+        -- Changes to either family can change which warning wins.
+        if button.event.buff then
+            button.event.buff=false
+            local suppressedDebuff=button.aura.buff.overdb
+            HealBot_Aura_CheckUnitBuffs(button)
+            if suppressedDebuff then button.event.debuff=true end
+        end
+        if button.event.debuff then
+            button.event.debuff=false
+            HealBot_Aura_CheckUnitDebuffs(button)
+        end
+        SelectWarning(row)
+        ApplyHealthColour(row)
+        local now=GetTime()
+        local deadline
+        local d=button.aura.debuff
+        if d.barOnly and d.id==6788 and HealBot_Forever_GetShieldLockout then
+            local start,duration=HealBot_Forever_GetShieldLockout(button)
+            if start and start+duration>now then deadline=start+duration end
+        end
+        if row.warningDeadline~=deadline then
+            if row.warningTimer then row.warningTimer:Cancel(); row.warningTimer=nil end
+            row.warningDeadline=deadline
+            if deadline then
+                row.warningTimer=C_Timer.NewTimer(deadline-now+0.05,function()
+                    row.warningTimer,row.warningDeadline=nil,nil
+                    button.aura.buff.update,button.aura.debuff.update=true,true
+                    button.event.buff,button.event.debuff=true,true
+                    QueueWarningScan(row)
+                end)
+            end
+        end
+    end)
+end
+
+local function RefreshWarnings(row,event,info)
+    if not HealBot_Aura_InitReserveWarnings then return end
+    local unit=row.unit
+    local button=row.warningButton
+    local guid=Public(UnitGUID(unit))
+    local name,realm
+    if not guid and HealBot_Events_RosterAuraName then name,realm=HealBot_Events_RosterAuraName(unit) end
+    if not button then
+        button={reserveWarnings=true,reserveBuffCurrent={},reserveDebuffCurrent={},unit=unit,
+            frame=row.frame or frame,isplayer=true,isgroupraid=true,special={},status={current=0},
+            event={},range={},health={current=0},mana={},text={},aura={},
+            icon={buff={count={0,0,0}},debuff={count={0,0,0}}}}
+        row.warningButton=button
+        row.aura=button.aura
+        button.queueReserveScan=function() QueueWarningScan(row) end
+        HealBot_Aura_InitReserveWarnings(button)
+        ResetWarnings(row)
+    elseif (guid and button.guid and guid~=button.guid) or event=="PLAYER_ENTERING_WORLD"
+        or (event=="GROUP_ROSTER_UPDATE" and not (guid and guid==button.guid)
+            and not (name and name==button.rosterName and realm==button.rosterRealm)) then
+        ResetWarnings(row)
+    end
+    if not Public(UnitIsConnected(unit)) or not Public(UnitIsVisible(unit)) then
+        ResetWarnings(row)
+        ApplyHealthColour(row)
+        return
+    end
+    local fresh=not button.status.events
+    button.frame=row.frame or frame
+    button.framecol=button.frame
+    if guid then button.guid=guid end
+    if name then button.rosterName,button.rosterRealm=name,realm end
+    button.status.events=true
+    button.status.isdead=Public(UnitIsDeadOrGhost(unit))
+    if fresh or event~="UNIT_AURA" then
+        local oldGroup,oldRole,oldPlayerGroup,oldTank=button.group,button.roletxt,button.playerGroup,button.rosterTank
+        button.player=Public(UnitIsUnit(unit,"player"))
+        button.roletxt=Public(UnitGroupRolesAssigned(unit))
+        if button.roletxt=="NONE" then button.roletxt=Public(HealBot_Panel_UnitRoleDefault(unit)) end
+        local _,class=UnitClass(unit)
+        class=Public(class)
+        button.text.classtrim=class and class:sub(1,4)
+        button.level=Public(UnitLevel(unit)) or 0
+        button.mana.type=Public(UnitPowerType(unit))
+        local _,_,pct=HealBot_WoWAPI_UnitMana(unit,button.mana.type)
+        button.mana.pct=pct
+        local index=tonumber(unit:match("^raid(%d+)$"))
+        if index then
+            local _,_,group=GetRaidRosterInfo(index)
+            button.group=Public(group)
+        else
+            button.group=HealBot_Data.PLAYERGROUP
+        end
+        button.playerGroup=HealBot_Data.PLAYERGROUP
+        button.rosterTank=Public(HealBot_Panel_IsTank(unit))
+        if not fresh and event=="GROUP_ROSTER_UPDATE" and oldGroup==button.group and oldRole==button.roletxt
+            and oldPlayerGroup==button.playerGroup and oldTank==button.rosterTank then return end
+    end
+    button.range.eventIn=row.eventInRange
+    button.range.current=row.outOfRange and 0 or 1
+    if event=="UNIT_AURA" and not fresh then
+        HealBot_Events_UnitAura(button,unit,info)
+    else
+        button.aura.buff.update,button.aura.debuff.update=true,true
+        button.event.buff,button.event.debuff=true,true
+        if event=="UNIT_AURA" then HealBot_Events_UnitAura(button,unit,info) end
+    end
+    QueueWarningScan(row)
+end
+
+function HealBot_Forever_RefreshReserveWarnings(side)
+    for _,row in ipairs(rows) do
+        if row:IsVisible() then
+            local button=row.warningButton
+            if button and button.status.events then
+                button.aura[side].update=true
+                button.event[side]=true
+                QueueWarningScan(row)
+            else
+                RefreshWarnings(row)
+            end
+        end
+    end
+end
+
+local function Paint(row,event,info)
     local unit=row.unit
     if not frame or not UnitExists(unit) then return end
+    if event=="UNIT_AURA" or event=="UNIT_POWER_UPDATE" or event=="UNIT_MAXPOWER" or event=="UNIT_DISPLAYPOWER" then
+        if event=="UNIT_AURA" or event=="UNIT_DISPLAYPOWER" then RefreshWarnings(row,event,info) end
+        if event~="UNIT_AURA" then PaintPower(row) end
+        if HealBot_Forever_UpdateArrivalAuras then
+            HealBot_Forever_UpdateArrivalAuras(row,event=="UNIT_AURA" or event=="UNIT_DISPLAYPOWER")
+        end
+        return
+    end
     local health,maximum,pct,percent,_,red,green=HealBot_WoWAPI_UnitHealth(unit)
     row.healthBar:SetMinMaxValues(0,maximum)
     row.healthBar:SetValue(health)
@@ -101,7 +277,13 @@ local function Paint(row)
         return Colour(Get(category,key),category,prefix,pct,red,green,cr,cg,cb,rr,rg,rb)
     end
     local r,g,b=SkinColour("BarCol","HLTH","H")
-    row.healthBar:SetStatusBarColor(r,g,b,Get("BarCol",outOfRange and "ORA" or "HA"))
+    local enabledAlpha=Get("BarCol","HA")
+    local barAlpha=outOfRange and Get("BarCol","ORA") or enabledAlpha
+    row.baseR,row.baseG,row.baseB,row.barAlpha,row.outOfRange=r,g,b,barAlpha,outOfRange
+    row.hasHealthColour=true
+    if event~="UNIT_HEALTH" and event~="UNIT_MAXHEALTH" and event~="UNIT_HEAL_PREDICTION" then RefreshWarnings(row,event) end
+    ApplyHealthColour(row)
+    if HealBot_Forever_SetArrivalIconOpacity then HealBot_Forever_SetArrivalIconOpacity(row,barAlpha,enabledAlpha) end
     local incoming=row.incomingBar
     if incoming then
         local mode=Get("BarIACol","IC")
@@ -109,7 +291,9 @@ local function Paint(row)
             local calculator=row.incomingCalculator
             UnitGetDetailedHealPrediction(unit,"player",calculator)
             incoming:SetMinMaxValues(0,calculator:GetMaximumHealth())
-            incoming:SetValue(calculator:GetIncomingHeals())
+            -- The second result is a clamp flag, not a StatusBar interpolation mode.
+            local amount=calculator:GetIncomingHeals()
+            incoming:SetValue(amount)
             local ir,ig,ib=Colour(incomingColourModes[mode] or 1,"BarIACol","I",pct,red,green,cr,cg,cb,rr,rg,rb)
             local alpha=Get("BarIACol","IA")
             incoming:SetStatusBarColor(ir,ig,ib,outOfRange and alpha/3 or alpha)
@@ -153,7 +337,9 @@ local function Paint(row)
     end
     row.healthText:SetText(combined and showName and "" or healthText)
     PaintPower(row)
-    if HealBot_Forever_UpdateArrivalAuras then HealBot_Forever_UpdateArrivalAuras(row) end
+    if HealBot_Forever_UpdateArrivalAuras then
+        HealBot_Forever_UpdateArrivalAuras(row,event~="UNIT_HEALTH" and event~="UNIT_MAXHEALTH" and event~="UNIT_HEAL_PREDICTION")
+    end
 end
 
 local function SetTextPosition(text,bar,point,x,y)
@@ -210,6 +396,54 @@ local function ApplySkin()
 end
 
 -- Reserve places against the live grid while protected anchors can be changed.
+local function AnchorReserve(row,main,x,y)
+    if row:GetNumPoints()==1 then
+        local point,relative,relativePoint,oldX,oldY=row:GetPoint(1)
+        if point=="CENTER" and relative==main and relativePoint=="CENTER" and oldX==x and oldY==y then return end
+    end
+    row:ClearAllPoints()
+    row:SetPoint("CENTER",main,"CENTER",x,y)
+end
+
+local expandedPanel
+local backdropQueued=false
+local function SetBackdropBounds(main,left,top,right,bottom)
+    local art=main.hbArrivalBackdrop
+    if (art.joinLeft or 0)==left and (art.joinTop or 0)==top and
+        (art.joinRight or 0)==right and (art.joinBottom or 0)==bottom then return end
+    art.joinLeft,art.joinTop,art.joinRight,art.joinBottom=left,top,right,bottom
+    art:ClearAllPoints()
+    if left==0 and top==0 and right==0 and bottom==0 then
+        art:SetAllPoints(main)
+    else
+        art:SetPoint("TOPLEFT",main,"TOPLEFT",left,top)
+        art:SetPoint("BOTTOMRIGHT",main,"BOTTOMRIGHT",right,bottom)
+    end
+end
+
+local function UpdateBackdrop()
+    backdropQueued=false
+    local main=frame and _G["f"..frame.."_HealBot_Action"]
+    if expandedPanel and expandedPanel~=main then SetBackdropBounds(expandedPanel,0,0,0,0) end
+    expandedPanel=nil
+    if not main or not main.hbArrivalBackdrop then return end
+    local left,top,right,bottom=0,0,0,0
+    for _,row in ipairs(rows) do
+        if row.reserve and row.layoutPanel==main and row:IsVisible() then
+            left,top=math.min(left,row.joinLeft),math.max(top,row.joinTop)
+            right,bottom=math.max(right,row.joinRight),math.min(bottom,row.joinBottom)
+        end
+    end
+    SetBackdropBounds(main,left,top,right,bottom)
+    if left<0 or top>0 or right>0 or bottom<0 then expandedPanel=main end
+end
+
+local function QueueBackdrop(row)
+    if backdropQueued or not (expandedPanel or row and row.layoutPanel) then return end
+    backdropQueued=true
+    C_Timer.After(0,UpdateBackdrop)
+end
+
 local function PositionReservedRows()
     local main=_G["f"..frame.."_HealBot_Action"]
     if not main then return false end
@@ -221,8 +455,9 @@ local function PositionReservedRows()
     local horizontal=Get("Anchors","GROW")==1
     local scale=Get("Frame","SCALE")
     local width,height=rows[1]:GetWidth(),rows[1]:GetHeight()
-    local dx=width+math.ceil(Get("HealBar","CMARGIN")*scale)
-    local dy=height+math.ceil(Get("HealBar","RMARGIN")*scale)
+    local columnMargin=math.ceil(Get("HealBar","CMARGIN")*scale)
+    local rowMargin=math.ceil(Get("HealBar","RMARGIN")*scale)
+    local dx,dy=width+columnMargin,height+rowMargin
     local occupied={}
     local originX,originY
     for _,button in pairs(HealBot_Buttons or {}) do
@@ -235,8 +470,8 @@ local function PositionReservedRows()
                 occupied[#occupied+1]={x=x,y=y,width=w,height=h}
                 originX=originX and xDir*math.min(xDir*originX,xDir*x) or x
                 originY=originY and yDir*math.min(yDir*originY,yDir*y) or y
-                dx=math.max(dx,w+math.ceil(Get("HealBar","CMARGIN")*scale))
-                dy=math.max(dy,h+math.ceil(Get("HealBar","RMARGIN")*scale))
+                dx=math.max(dx,w+columnMargin)
+                dy=math.max(dy,h+rowMargin)
             end
         end
     end
@@ -256,6 +491,12 @@ local function PositionReservedRows()
     if usedAcross>1 then laneSize=usedAlong end
     laneSize=math.max(1,laneSize,usedAlong)
     local nextSlot=0
+    local ratio,w,h,halfWidth,halfHeight
+    if main.hbArrivalBackdrop then
+        ratio=rows[1]:GetEffectiveScale()/main:GetEffectiveScale()
+        w,h=(dx-columnMargin)*ratio/2+padding,(dy-rowMargin)*ratio/2+padding
+        halfWidth,halfHeight=main:GetWidth()/2,main:GetHeight()/2
+    end
     for _,row in ipairs(rows) do
         if not UnitExists(row.unit) then
             local x,y,free
@@ -274,8 +515,15 @@ local function PositionReservedRows()
                     end
                 end
             until free
-            row:ClearAllPoints()
-            row:SetPoint("CENTER",main,"CENTER",x-mainX,y-mainY)
+            AnchorReserve(row,main,x-mainX,y-mainY)
+            if ratio then
+                -- Anchors and dimensions below are prepared before lockdown.
+                -- Store offsets in the visual panel's coordinate system.
+                local cx,cy=(x-mainX)*ratio,(y-mainY)*ratio
+                row.joinLeft,row.joinRight=cx-w+halfWidth,cx+w-halfWidth
+                row.joinBottom,row.joinTop=cy-h+halfHeight,cy+h-halfHeight
+                row.layoutPanel=main
+            end
         end
     end
     return true
@@ -314,13 +562,14 @@ local function CreateRow(mode,index)
     row.border:SetAllPoints()
     row.nameText=bar:CreateFontString(nil,"OVERLAY")
     row.healthText=bar:CreateFontString(nil,"OVERLAY")
-    row:HookScript("OnShow",Paint)
-    for _,event in ipairs({"UNIT_HEALTH","UNIT_MAXHEALTH","UNIT_NAME_UPDATE","UNIT_IN_RANGE_UPDATE","UNIT_POWER_UPDATE","UNIT_MAXPOWER","UNIT_DISPLAYPOWER","UNIT_AURA","UNIT_CONNECTION"}) do
+    row:HookScript("OnShow",function(self) Paint(self); QueueBackdrop(self) end)
+    row:HookScript("OnHide",function(self) ResetWarnings(self); QueueBackdrop(self) end)
+    for _,event in ipairs({"UNIT_HEALTH","UNIT_MAXHEALTH","UNIT_NAME_UPDATE","UNIT_IN_RANGE_UPDATE","UNIT_POWER_UPDATE","UNIT_MAXPOWER","UNIT_DISPLAYPOWER","UNIT_AURA","UNIT_CONNECTION","UNIT_FLAGS"}) do
         row:RegisterUnitEvent(event,row.unit)
     end
     row:SetScript("OnEvent",function(self,event,_,inRange)
         if event=="UNIT_IN_RANGE_UPDATE" and not secret(inRange) then self.eventInRange=inRange end
-        if self:IsVisible() then Paint(self) end
+        if self:IsVisible() then Paint(self,event,inRange) end
     end)
     return row
 end
@@ -346,35 +595,22 @@ local function SkinExtras(row, donor, auraBatch)
     for id=1,9 do
         if hbv_Aux_GetBarVar("USE",frame,id)==4 then
             local source=donor.gref.aux[id]
-            local x,y=source:GetCenter()
-            if x and y then
-                local entry=row.skinPower[id]
-                if not entry then
-                    local bar=CreateFrame("StatusBar",nil,row)
-                    bar:EnableMouse(false)
-                    entry={bar=bar,text=bar:CreateFontString(nil,"OVERLAY")}
-                    row.skinPower[id]=entry
-                end
-                local bar,text=entry.bar,entry.text
-                bar:ClearAllPoints()
-                bar:SetPoint("CENTER",row.healthBar,"CENTER",x-cx,y-cy)
-                bar:SetSize(source:GetWidth(),source:GetHeight())
-                bar:SetStatusBarTexture(source:GetStatusBarTexture():GetTexture())
-                bar:SetOrientation(source:GetOrientation())
-                bar:SetReverseFill(source:GetReverseFill())
-                local r,g,b,alpha=source:GetStatusBarColor()
-                bar:SetStatusBarColor(r,g,b,alpha)
-                entry.alpha=alpha
-                text:ClearAllPoints()
-                local alignment=alignments[hbv_Aux_GetBarTextVar("ALIGN",frame,id)] or "CENTER"
+            local text=donor.gref.auxtxt[id]
+            local texture=source and source:GetStatusBarTexture()
+            local x,y
+            if texture then x,y=source:GetCenter() end
+            if x and y and text then
                 local scale=Get("Frame","SCALE")
-                text:SetPoint(alignment,bar,alignment,math.ceil(hbv_Aux_GetBarTextVar("HOFFSET",frame,id)*scale),math.ceil(hbv_Aux_GetBarTextVar("OFFSET",frame,id)*scale))
-                text:SetJustifyH(alignment)
-                text:SetWidth(bar:GetWidth())
-                HealBot_Media_UpdateFont(text,hbv_Aux_GetBarTextVar("FONT",frame,id),math.ceil(hbv_Aux_GetBarTextVar("HEIGHT",frame,id)*scale),hbv_Aux_GetBarTextVar("OUTLINE",frame,id),"Arrival power text")
-                local original=donor.gref.auxtxt[id]
-                text:SetTextColor(original:GetTextColor())
-                bar:Show()
+                local style={x=x-cx,y=y-cy,width=source:GetWidth(),height=source:GetHeight(),
+                    texture=texture:GetTexture(),orientation=source:GetOrientation(),reverse=source:GetReverseFill(),
+                    alignment=alignments[hbv_Aux_GetBarTextVar("ALIGN",frame,id)] or "CENTER",
+                    textX=math.ceil(hbv_Aux_GetBarTextVar("HOFFSET",frame,id)*scale),
+                    textY=math.ceil(hbv_Aux_GetBarTextVar("OFFSET",frame,id)*scale)}
+                style.r,style.g,style.b,style.alpha=source:GetStatusBarColor()
+                style.tr,style.tg,style.tb,style.ta=text:GetTextColor()
+                style.font,style.fontHeight,style.outline=HealBot_Media_ResolveFont(hbv_Aux_GetBarTextVar("FONT",frame,id),
+                    math.ceil(hbv_Aux_GetBarTextVar("HEIGHT",frame,id)*scale),hbv_Aux_GetBarTextVar("OUTLINE",frame,id))
+                styles[id]=SamePowerStyle(previousPowerStyles[id],style) and previousPowerStyles[id] or style
             end
         end
     end
@@ -425,13 +661,7 @@ local function Sync()
         end
         enabled=PositionReservedRows()
     end
-    local donor
-    for _,button in pairs(HealBot_Buttons or {}) do
-        if button.frame==frame and button.status.active and button:IsShown() and button.gref then
-            donor=button
-            break
-        end
-    end
+    local donor,donorX,donorY,checkedDonor
     bindingError=nil
     local auraBatch={}
     for _,row in ipairs(rows) do
@@ -453,6 +683,7 @@ local function Sync()
             row:Hide()
         end
     end
+    QueueReserveAuras(donor)
 end
 
 local function QueueSync()
@@ -469,9 +700,13 @@ local function QueueSync()
     C_Timer.After(0,TrySync)
 end
 
+function HealBot_Forever_QueueReserveAuraRefresh()
+    QueueSync()
+end
+
 local events=CreateFrame("Frame")
 for _,event in ipairs({"PLAYER_LOGIN","PLAYER_REGEN_ENABLED","GROUP_ROSTER_UPDATE",
-    "PLAYER_ENTERING_WORLD","PLAYER_SPECIALIZATION_CHANGED"}) do
+    "PLAYER_ENTERING_WORLD","ADDON_RESTRICTION_STATE_CHANGED","PLAYER_SPECIALIZATION_CHANGED"}) do
     events:RegisterEvent(event)
 end
 events:SetScript("OnEvent",function(_,event)
@@ -485,8 +720,8 @@ events:SetScript("OnEvent",function(_,event)
     end
     if event=="PLAYER_SPECIALIZATION_CHANGED" then bindingGeneration=bindingGeneration+1 end
     if InCombatLockdown() then
-        if event=="GROUP_ROSTER_UPDATE" then
-            for _,row in ipairs(rows) do if row:IsVisible() then Paint(row) end end
+        if event=="GROUP_ROSTER_UPDATE" or event=="PLAYER_ENTERING_WORLD" or event=="ADDON_RESTRICTION_STATE_CHANGED" then
+            for _,row in ipairs(rows) do if row:IsVisible() then Paint(row,event) end end
         end
     else
         QueueSync()
@@ -503,15 +738,34 @@ local function QueueSkinSync()
     QueueSync()
 end
 
+-- Buff watch/rank changes update prepared native groups in place. Only skin
+-- and layout changes need to restyle the reserve panel.
 hooksecurefunc("HealBot_Options_framesChanged",QueueSkinSync)
 hooksecurefunc("HealBot_Options_SetSkins",QueueSkinSync)
+hooksecurefunc("hbv_Skins_SetIconVar",function(_,key)
+    if key=="MAXBICONS" or key=="MAXDICONS" or key=="BICONSPACER" or key=="DICONSPACER"
+        or key=="BSCALE" or key=="DSCALE" or key=="BZOOM" or key=="DZOOM" then QueueSkinSync() end
+end)
+hooksecurefunc("hbv_Skins_SetIconTextVar",QueueSkinSync)
 hooksecurefunc("HealBot_Panel_SetupBars",QueueSync)
 hooksecurefunc("HealBot_Aura_SetAuraCheckFlags",function()
     for _,row in ipairs(rows) do
         if HealBot_Forever_UpdateArrivalAuras then HealBot_Forever_UpdateArrivalAuras(row) end
+        if row:IsVisible() then RefreshWarnings(row) end
     end
 end)
-hooksecurefunc("HealBot_Forever_RefreshBuffExclusions",QueueSkinSync)
+local function RefreshReserveDebuffs()
+    if InCombatLockdown() then
+        if HealBot_Forever_RefreshArrivalDebuffPolicy then HealBot_Forever_RefreshArrivalDebuffPolicy() end
+        for _,row in ipairs(rows) do if row:IsVisible() then RefreshWarnings(row) end end
+    else
+        QueueSync()
+    end
+end
+for _,name in ipairs({"HealBot_Forever_RefreshDebuffIconPreferences","HealBot_Forever_SetWeakenedSoulNativeEnabled",
+    "HealBot_Aura_ConfigDebuffs","HealBot_Options_Debuff_Reset"}) do
+    if type(_G[name])=="function" then hooksecurefunc(name,RefreshReserveDebuffs) end
+end
 
 function HealBot_Forever_SetPartyJoinEnabled(enabled)
     HealBot_Globals.ForeverPartyJoin=enabled
@@ -520,6 +774,18 @@ function HealBot_Forever_SetPartyJoinEnabled(enabled)
     end
     QueueSync()
     print("HealBot combat party arrivals "..(enabled and "on" or "off")..(InCombatLockdown() and " (after combat)." or "."))
+end
+
+function HealBot_Forever_VisitPartyPerfScopes(visit)
+    Sync=visit("PartyJoin.Sync",Sync)
+    PrepareNextReserve=visit("PartyJoin.PrepareReserve",PrepareNextReserve)
+    if auraRemaining>0 then auraWorker:SetScript("OnUpdate",PrepareNextReserve) end
+end
+
+function HealBot_Forever_VisitReserveBars(visit)
+    for _,row in ipairs(rows) do
+        if row.reserve then visit(row) end
+    end
 end
 
 SLASH_HBFOREVERPARTYJOIN1="/hbpartyjoin"

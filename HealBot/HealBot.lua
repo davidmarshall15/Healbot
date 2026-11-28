@@ -1103,7 +1103,7 @@ function HealBot_UnitMana(button)
       --HealBot_setCall("HealBot_UnitMana", button)
     if HEALBOT_FOREVER and InCombatLockdown() and HealBot_Forever_RefreshTarget and
        (button.unit=="target" or button.unit=="targettarget" or button.unit=="focus") then
-        HealBot_Forever_RefreshTarget(button)
+        HealBot_Forever_RefreshTarget(button,"power")
         return
     end
     button.mana.update=false
@@ -1340,29 +1340,30 @@ end
 
 local guName=false
 local uuUnitClassEN="XXXX"
-function HealBot_SetGuidData(button)
+function HealBot_SetGuidData(button, skipIdentityCache)
     _, uuUnitClassEN=UnitClass(button.unit);
-    if uuUnitClassEN then
-        if not HealBot_issecretvalue(uuUnitClassEN) then
-            button.status.classknown=true
-            button.text.classtrim=strsub(uuUnitClassEN,1,4)
-            button.text.r,button.text.g,button.text.b=HealBot_Action_ClassColour(button.unit, button.text.classtrim)
-            if HealBot_Panel_RaidPetUnitButtonCheck(button.unit) then
-                guName=HealBot_customTempUserName[button.guid] or UnitName(button.unit) or false
-                if guName and guName~=HEALBOT_WORDS_UNKNOWN then
-                    button.name=guName
-                    HealBot_Action_SetGuidData(button, "CLASSKNOWN", true)
-                    HealBot_Action_SetGuidData(button, "PLAYER", button.player)
-                    HealBot_Action_SetGuidData(button, "ISPLAYER", button.isplayer)
-                    HealBot_Action_SetGuidData(button, "CLASSTRIM", button.text.classtrim)
-                    HealBot_Action_SetGuidData(button, "CLASSR", button.text.r)
-                    HealBot_Action_SetGuidData(button, "CLASSG", button.text.g)
-                    HealBot_Action_SetGuidData(button, "CLASSB", button.text.b)
-                    HealBot_Action_SetGuidData(button, "NAME", guName)
-                end
+    if HealBot_issecretvalue(uuUnitClassEN) then
+        button.status.classknown=false
+    elseif uuUnitClassEN then
+        button.status.classknown=true
+        button.text.classtrim=strsub(uuUnitClassEN,1,4)
+        button.text.r,button.text.g,button.text.b=HealBot_Action_ClassColour(button.unit, button.text.classtrim)
+        if HealBot_Panel_RaidPetUnitButtonCheck(button.unit) then
+            local stableGUID=not HealBot_issecretvalue(button.guid) and button.guid and button.guid~=button.unit
+            guName=stableGUID and HealBot_customTempUserName[button.guid]
+            if not guName then guName=UnitName(button.unit) end
+            if not HealBot_issecretvalue(guName) and guName and guName~=HEALBOT_WORDS_UNKNOWN then
+                button.name=guName
+                if not stableGUID or skipIdentityCache then return end
+                HealBot_Action_SetGuidData(button, "CLASSKNOWN", true)
+                HealBot_Action_SetGuidData(button, "PLAYER", button.player)
+                HealBot_Action_SetGuidData(button, "ISPLAYER", button.isplayer)
+                HealBot_Action_SetGuidData(button, "CLASSTRIM", button.text.classtrim)
+                HealBot_Action_SetGuidData(button, "CLASSR", button.text.r)
+                HealBot_Action_SetGuidData(button, "CLASSG", button.text.g)
+                HealBot_Action_SetGuidData(button, "CLASSB", button.text.b)
+                HealBot_Action_SetGuidData(button, "NAME", guName)
             end
-        else
-            button.status.classknown=false
         end
     elseif button.isplayer then
         button.status.classknown=false
@@ -1372,11 +1373,12 @@ function HealBot_SetGuidData(button)
     end
 end
 
-local ucUnitIsPlayer=false
 function HealBot_UnitClass(button)
       --HealBot_setCall("HealBot_UnitClass", button)
-    if HealBot_Action_getGuidData(button.guid, "CLASSKNOWN") then
+    local stableGUID=not HealBot_issecretvalue(button.guid) and button.guid and button.guid~=button.unit
+    if stableGUID and HealBot_Action_getGuidData(button.guid, "CLASSKNOWN") then
         button.player=HealBot_Action_getGuidData(button.guid, "PLAYER")
+        if button.player then button.range.current=2 end
         button.isplayer=HealBot_Action_getGuidData(button.guid, "ISPLAYER")
         button.text.classtrim=HealBot_Action_getGuidData(button.guid, "CLASSTRIM")
         button.text.r=HealBot_Action_getGuidData(button.guid, "CLASSR")
@@ -1385,22 +1387,29 @@ function HealBot_UnitClass(button)
         button.name=HealBot_Action_getGuidData(button.guid, "NAME")
         button.status.classknown=true
     else
-        ucUnitIsPlayer=UnitIsUnit(button.unit, "player")
-        if HealBot_issecretvalue(ucUnitIsPlayer) then ucUnitIsPlayer=button.isplayer end
-        if ucUnitIsPlayer then
-            button.player=true
-            button.isplayer=true
-            button.range.current=2
-        else
-            button.player=false
-            if UnitIsPlayer(button.unit) then
-                button.isplayer=true
+        local cacheIdentity=stableGUID
+        local isSelf=button.unit=="player" or UnitIsUnit(button.unit, "player")
+        if HealBot_issecretvalue(isSelf) then
+            local playerGUID=HealBot_Data["PGUID"]
+            if stableGUID and not HealBot_issecretvalue(playerGUID) and playerGUID and playerGUID~="x" then
+                isSelf=button.guid==playerGUID
             else
-                button.isplayer=false
+                isSelf=false
+                cacheIdentity=false
             end
         end
+        local isHuman=isSelf or UnitIsPlayer(button.unit)
+        if HealBot_issecretvalue(isHuman) then
+            isHuman=false
+            cacheIdentity=false
+        end
+        button.player=isSelf and true or false
+        button.isplayer=isHuman and true or false
+        if button.player then
+            button.range.current=2
+        end
         button.name=false
-        HealBot_SetGuidData(button)
+        HealBot_SetGuidData(button, not cacheIdentity)
     end
 end
 
@@ -1575,146 +1584,163 @@ function HealBot_retItemIcon(name)
     return hbCacheItemIcons[name]
 end
 
-local function EnumerateTooltipLines_helper(pattern, ...)
-    local prevText,region=nil,nil
-    for i=1, select("#", ...) do
-        region=select(i, ...)
-        if region and region:GetObjectType() == "FontString" then
-            if region:GetText() then
-                if string.find(region:GetText(), pattern) then
-                    return prevText or region:GetText()
-                elseif not prevText then
-                    prevText=region:GetText()
+do
+local excludedItems={[82800]=true}
+local tooltipItems={}
+local itemNames={}
+local waitingForItem={}
+local inventory={slots={},food={},drink={},extra={}}
+local again=false
+local nextSlot
+local consumableClass=(Enum and Enum.ItemClass and Enum.ItemClass.Consumable) or 0
+
+local function ClearBagTable(t)
+    for k in pairs(t) do t[k]=nil end
+end
+
+local function CacheBagSlot(id,bag,slot)
+    local location=inventory.slots[id]
+    if not location then location={}; inventory.slots[id]=location end
+    location.bag,location.slot=bag,slot
+    if not itemNames[id] then
+        local name,_,_,_,_,itemType,_,_,_,icon,_,classID=HealBot_WoWAPI_ItemInfo(id)
+        if name and not classID and HealBot_WoWAPI_ItemInfoInstant then
+            classID=select(6,HealBot_WoWAPI_ItemInfoInstant(id))
+        end
+        if name and (type(classID)=="number" or itemType) then
+            itemNames[id]=name
+            hbCacheItemIcons[name]=icon
+            if classID==consumableClass or (not classID and itemType==HealBot_WoWAPI_ItemClassInfo(consumableClass)) then
+                HealBot_ConsumableItems[id]=name
+            end
+        else
+            waitingForItem[id]=true
+        end
+    end
+    if itemNames[id] then inventory.slots[itemNames[id]]=true end
+end
+
+local function ClassifyBagTooltip(...)
+    local first,food,drink,extra
+    for i=1,select("#",...) do
+        local region=select(i,...)
+        if region and region:GetObjectType()=="FontString" then
+            local line=region:GetText()
+            if HealBot_issecretvalue(line) then return end
+            if type(line)=="string" and line~="" then
+                first=first or line
+                food=food or string.find(line,HEALBOT_STRING_MATCH_WELLFED)
+                drink=drink or string.find(line,HEALBOT_STRING_MATCH_RESTOREMANA)
+                if not extra then
+                    for _,pattern in ipairs(HEALBOT_STRING_MATCH_EXTRABUFFS) do
+                        if string.find(line,pattern) then extra=true; break end
+                    end
                 end
             end
         end
     end
-    return false
+    if first then return first,food,drink,extra end
 end
 
-local hbBagScanExcludeItems={[82800]=true}
-local hbBagScanIncludeItems={}
-local hbCacheItemNames={}
-local function HealBot_IncludeScanItem(id, name, iType)
-      --HealBot_setCall("HealBot_IncludeScanItem")
-    if not hbBagScanIncludeItems[id] then hbBagScanIncludeItems[id]={} end
-    hbBagScanIncludeItems[id][iType]=name
-end
-
-local function HealBot_CacheItemIdsInBag(id, bag, slot)
-      --HealBot_setCall("HealBot_CacheItemIdsInBag")
-    HealBot_ItemsInBags[id]={}
-    HealBot_ItemsInBags[id].bag=bag
-    HealBot_ItemsInBags[id].slot=slot
-    if not hbCacheItemNames[id] then
-        local itemName, _, _, _, _, _, _, _, _, itemTexture, _, classID=HealBot_WoWAPI_ItemInfo(id)
-        if itemName then
-            hbCacheItemNames[id]=itemName
-            hbCacheItemIcons[itemName]=itemTexture
-            if HealBot_WoWAPI_ItemClassInfo(classID) == "Consumable" then
-                HealBot_ConsumableItems[id]=itemName
-            end
+local function ReadBagSlot(bag,slot)
+    local id=HealBot_GetContainerItemID(bag,slot)
+    if not id or id<=0 then return end
+    CacheBagSlot(id,bag,slot)
+    if excludedItems[id] or not HealBot_ConsumableItems[id] then return end
+    local kind=tooltipItems[id]
+    local visited=false
+    if not kind then
+        visited=true
+        HealBot_SetToolTip(HealBot_ScanTooltip)
+        HealBot_ScanTooltip:SetBagItem(bag,slot)
+        local name,food,drink,extra=ClassifyBagTooltip(HealBot_ScanTooltip:GetRegions())
+        if food or drink or extra then
+            kind={name=name,food=food,drink=drink,extra=extra}
+            tooltipItems[id]=kind
+        elseif name and HealBot_luVars["InvReady"] then
+            excludedItems[id]=true
         end
     end
-    if hbCacheItemNames[id] then
-        HealBot_ItemsInBags[hbCacheItemNames[id]]=true
+    if kind then
+        if kind.food then inventory.food[kind.name]=true end
+        if kind.drink then inventory.drink[kind.name]=true end
+        if kind.extra then inventory.extra[kind.name]=true end
     end
+    return visited
+end
+
+local function PublishBagTable(current,pending)
+    ClearBagTable(current)
+    for key,value in pairs(pending) do current[key]=value end
 end
 
 function HealBot_ItemIdsInBag(slot)
-      --HealBot_setCall("HealBot_ItemIdsInBag")
-    if slot<=HealBot_luVars["MaxBagSlots"] then
-        local itemId=HealBot_GetContainerItemID(HealBot_luVars["CurrentBag"],slot) or 0
-        if itemId>0 then
-            HealBot_CacheItemIdsInBag(itemId, HealBot_luVars["CurrentBag"], slot)
-            if not hbBagScanExcludeItems[itemId] then
-                if not hbBagScanIncludeItems[itemId] then
-                    HealBot_SetToolTip(HealBot_ScanTooltip)
-                    local itemText=""
-                    HealBot_ScanTooltip:SetBagItem(HealBot_luVars["CurrentBag"], slot)
-                    itemText=EnumerateTooltipLines_helper(HEALBOT_STRING_MATCH_WELLFED, HealBot_ScanTooltip:GetRegions())
-                    if itemText and HealBot_ConsumableItems[itemId] then
-                        HealBot_WellFedItems[itemText]=true
-                        HealBot_IncludeScanItem(itemId, itemText, "WellFed")
-                    end
-                    itemText=EnumerateTooltipLines_helper(HEALBOT_STRING_MATCH_RESTOREMANA, HealBot_ScanTooltip:GetRegions())
-                    if itemText and HealBot_ConsumableItems[itemId] then
-                        HealBot_ManaDrinkItems[itemText]=true
-                        HealBot_IncludeScanItem(itemId, itemText, "ManaDrink")
-                    end
-                    itemText=false
-                    for j=1, #HEALBOT_STRING_MATCH_EXTRABUFFS do
-                        if not itemText then
-                            itemText=EnumerateTooltipLines_helper(HEALBOT_STRING_MATCH_EXTRABUFFS[j], HealBot_ScanTooltip:GetRegions())
-                        end
-                    end
-                    if itemText and HealBot_ConsumableItems[itemId] then
-                        HealBot_BuffExtraItems[itemText]=true
-                        HealBot_IncludeScanItem(itemId, itemText, "Extra")
-                    end
-                    if not hbBagScanIncludeItems[itemId] and HealBot_luVars["InvReady"] then
-                        hbBagScanExcludeItems[itemId]=true
-                    end
-                else
-                    if hbBagScanIncludeItems[itemId]["WellFed"] then
-                        HealBot_WellFedItems[hbBagScanIncludeItems[itemId]["WellFed"]]=true
-                    end
-                    if hbBagScanIncludeItems[itemId]["ManaDrink"] then
-                        HealBot_ManaDrinkItems[hbBagScanIncludeItems[itemId]["ManaDrink"]]=true
-                    end
-                    if hbBagScanIncludeItems[itemId]["Extra"] then
-                        HealBot_BuffExtraItems[hbBagScanIncludeItems[itemId]["Extra"]]=true
-                    end
-                end
-            end
+    local visits=0
+    while slot<=HealBot_luVars["MaxBagSlots"] do
+        if ReadBagSlot(HealBot_luVars["CurrentBag"],slot) then visits=visits+1 end
+        slot=slot+1
+        if visits==2 and slot<=HealBot_luVars["MaxBagSlots"] then
+            nextSlot=slot
+            HealBot_Timers_Set("PLAYER","ScanNextBag",true)
+            return
         end
-        HealBot_ItemIdsInBag(slot+1)
-    elseif HealBot_luVars["CurrentBag"]<NUM_BAG_SLOTS then
+    end
+    if HealBot_luVars["CurrentBag"]<NUM_BAG_SLOTS then
         HealBot_Timers_Set("PLAYER","ScanNextBag",true)
+        return
+    end
+    PublishBagTable(HealBot_ItemsInBags,inventory.slots)
+    PublishBagTable(HealBot_WellFedItems,inventory.food)
+    PublishBagTable(HealBot_ManaDrinkItems,inventory.drink)
+    PublishBagTable(HealBot_BuffExtraItems,inventory.extra)
+    HealBot_luVars["BagsBeingScanned"]=false
+    if not HealBot_luVars["InvFirstRunDone"] then
+        HealBot_luVars["InvFirstRunDone"]=true
+        again=true
     else
-        HealBot_luVars["BagsBeingScanned"]=false
-        if not HealBot_luVars["InvFirstRunDone"] then
-            HealBot_luVars["InvFirstRunDone"]=true
-            HealBot_Timers_Set("PLAYER","InvChange",true)
-        else
-            HealBot_Options_SetBuffExtraItemText()
-            HealBot_luVars["BagsScanned"]=true
-            HealBot_Timers_Set("LAST","InitItemsData",true)
-            HealBot_Timers_Set("LAST","ExtraBuffsTabInvUp",true)
-            HealBot_Timers_Set("OOC","ActionIconsValidateItems",true)
-        end
+        HealBot_Options_SetBuffExtraItemText()
+        HealBot_luVars["BagsScanned"]=true
+        HealBot_Timers_Set("LAST","InitItemsData",true)
+        HealBot_Timers_Set("LAST","ExtraBuffsTabInvUp",true)
+        HealBot_Timers_Set("OOC","ActionIconsValidateItems",true)
+    end
+    if again then
+        again=false
+        HealBot_Timers_Set("PLAYER","InvChange",true)
     end
 end
 
 function HealBot_ItemIdsInNextBag()
-    HealBot_luVars["CurrentBag"]=HealBot_luVars["CurrentBag"]+1
-    HealBot_luVars["MaxBagSlots"]=HealBot_GetContainerNumSlots(HealBot_luVars["CurrentBag"])
-    HealBot_ItemIdsInBag(1)
+    local slot=nextSlot
+    nextSlot=nil
+    if not slot then
+        HealBot_luVars["CurrentBag"]=HealBot_luVars["CurrentBag"]+1
+        HealBot_luVars["MaxBagSlots"]=HealBot_GetContainerNumSlots(HealBot_luVars["CurrentBag"])
+    end
+    HealBot_ItemIdsInBag(slot or 1)
 end
 
 function HealBot_ItemIdsInBags()
-    if not HealBot_luVars["BagsBeingScanned"] then
-        HealBot_luVars["BagsScanned"]=false
-        HealBot_luVars["BagsBeingScanned"]=true
-      --HealBot_setCall("HealBot_retItemIdsInBag")
-        for x,_ in pairs(HealBot_ItemsInBags) do
-            HealBot_ItemsInBags[x]=nil;
-        end
-        for x,_ in pairs(HealBot_WellFedItems) do
-            HealBot_WellFedItems[x]=nil
-        end
-        for x,_ in pairs(HealBot_ManaDrinkItems) do
-            HealBot_ManaDrinkItems[x]=nil
-        end
-        for x,_ in pairs(HealBot_BuffExtraItems) do
-            HealBot_BuffExtraItems[x]=nil
-        end
-        HealBot_luVars["MaxBagSlots"]=HealBot_GetContainerNumSlots(0)
-        HealBot_luVars["CurrentBag"]=0
-        HealBot_ItemIdsInBag(1)
-    else
-        HealBot_Timers_Set("PLAYER","InvChange",true,true)
+    if HealBot_luVars["BagsBeingScanned"] then
+        again=true
+        return
     end
+    HealBot_luVars["BagsScanned"]=false
+    HealBot_luVars["BagsBeingScanned"]=true
+    for _,entries in pairs(inventory) do ClearBagTable(entries) end
+    ClearBagTable(waitingForItem)
+    nextSlot=nil
+    HealBot_luVars["CurrentBag"]=0
+    HealBot_luVars["MaxBagSlots"]=HealBot_GetContainerNumSlots(0)
+    HealBot_ItemIdsInBag(1)
+end
+
+function HealBot_BagItemDataLoaded(id,success)
+    if success and waitingForItem[id] then
+        waitingForItem[id]=nil
+        HealBot_Timers_Set("PLAYER","InvChange",true)
+    end
+end
 end
 
 function HealBot_InvReady()
@@ -1820,6 +1846,7 @@ function HealBot_Register_Events()
         HealBot:RegisterEvent("PLAYER_CONTROL_LOST");
         HealBot:RegisterEvent("PLAYER_UPDATE_RESTING");
         HealBot:RegisterEvent("BAG_UPDATE");
+        HealBot:RegisterUnitEvent("UNIT_INVENTORY_CHANGED","player")
         HealBot:RegisterEvent("DISPLAY_SIZE_CHANGED")
         HealBot:RegisterEvent("UI_SCALE_CHANGED")
         if not HealBot_Util_isMidnight(false) then
@@ -1952,6 +1979,7 @@ function HealBot_UnRegister_Events()
             HealBot:UnregisterEvent("PLAYER_CONTROL_LOST");
             HealBot:UnregisterEvent("PLAYER_UPDATE_RESTING");
             HealBot:UnregisterEvent("BAG_UPDATE");
+            HealBot:UnregisterEvent("UNIT_INVENTORY_CHANGED")
             HealBot:UnregisterEvent("PLAYER_EQUIPMENT_CHANGED");
         end
         if HEALBOT_GAME_VERSION>4 then
@@ -3096,7 +3124,7 @@ function HealBot_UnitHealth(button, force)
       --HealBot_setCall("HealBot_UnitHealth", button)
     if HEALBOT_FOREVER and InCombatLockdown() and HealBot_Forever_RefreshTarget and
        (button.unit=="target" or button.unit=="targettarget" or button.unit=="focus") then
-        HealBot_Forever_RefreshTarget(button)
+        HealBot_Forever_RefreshTarget(button,"health")
         return
     end
     button.health.updhlth=false
@@ -4191,10 +4219,11 @@ function HealBot_UnitUpdateButton(button)
                     HealBot_UnitUpdateAura(button)
                 else
                     button.special.aura=true
-                    HealBot_UnitHealth(button)
+                    local refreshed=HealBot_Forever_RefreshTarget and HealBot_Forever_RefreshTarget(button,"both")
+                    if not refreshed then HealBot_UnitHealth(button) end
                     HealBot_HealsInUpdate(button)
                     HealBot_AbsorbsUpdate(button)
-                    HealBot_UnitMana(button)
+                    if not refreshed then HealBot_UnitMana(button) end
                 end
             elseif button.event.aura then
                 button.event.aura=false
@@ -5714,6 +5743,7 @@ local hbEventFuncs={["UNIT_SPELLCAST_SENT"]=HealBot_Events_UnitSpellCastSent,
                     ["ZONE_CHANGED_INDOORS"]=HealBot_Events_SubZoneChange,
                     ["CHAT_MSG_ADDON"]=HealBot_Events_AddonMsg,
                     ["BAG_UPDATE"]=HealBot_Events_InvChange,
+                    ["UNIT_INVENTORY_CHANGED"]=HealBot_Events_InvChange,
                     ["PLAYER_EQUIPMENT_CHANGED"]=HealBot_Events_EquipmentChange,
                     ["PET_BATTLE_OPENING_START"]=HealBot_Events_PetBattleStart,
                     ["PET_BATTLE_OVER"]=HealBot_Events_PetBattleOver,

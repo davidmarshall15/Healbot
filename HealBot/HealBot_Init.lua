@@ -167,18 +167,14 @@ local function HealBot_Init_ManaCost(spellId, spellBookId, tipSet)
             HealBot_WoWAPI_SetSpellBookTooltip(HealBot_ScanTooltip, spellBookId)
         end
         local ttText=_G["HealBot_ScanTooltipTextLeft2"];
-        if (ttText:GetText()) then
-            local line=ttText:GetText();
-            if line and not HealBot_issecretvalue(line) then
-                manaCost=tonumber((gsub(line, "%D", "")))
-            end
-            if manaCost == 0 then
-                ttText=_G["HealBot_ScanTooltipTextLeft3"]
-                line=ttText:GetText()
-                if line and not HealBot_issecretvalue(line) then
-                    manaCost=tonumber((gsub(line, "%D", "")))
-                end
-            end
+        local line=ttText and ttText:GetText()
+        if not HealBot_issecretvalue(line) and line then
+            manaCost=tonumber((gsub(line,"%D","")))
+        end
+        if not manaCost or manaCost==0 then
+            ttText=_G["HealBot_ScanTooltipTextLeft3"]
+            line=ttText and ttText:GetText()
+            if not HealBot_issecretvalue(line) and line then manaCost=tonumber((gsub(line,"%D",""))) end
         end
     end
     if not manaCost or type(manaCost)~="number" then manaCost=0 end
@@ -194,13 +190,13 @@ local function HealBot_Init_Range(spellId, spellBookId, tipSet)
             HealBot_WoWAPI_SetSpellBookTooltip(HealBot_ScanTooltip, spellBookId)
         end
         local ttText=_G["HealBot_ScanTooltipTextRight2"];
-        local line=ttText:GetText()
+        local line=ttText and ttText:GetText()
         if not HealBot_issecretvalue(line) and line then
             range=tonumber((gsub(line, "%D", "")))
         end
-        if range == 0 then
+        if not range or range==0 then
             ttText=_G["HealBot_ScanTooltipTextRight3"]
-            line=ttText:GetText()
+            line=ttText and ttText:GetText()
             if not HealBot_issecretvalue(line) and line then
                 range=tonumber((gsub(line, "%D", "")))
             end
@@ -212,8 +208,15 @@ end
 
 local HealBot_Spell_Ranges={}
 local HealBot_Spell_RangesPref={}
+local rangeKeys={"HEAL30","HARM30","HEAL","HARM"}
+local function NewRangeTargets()
+    return {HEAL30MIN=25,HARM30MIN=25,HEALMIN=37,HARMMIN=37,
+            HEAL30MAX=38,HARM30MAX=38,HEALMAX=70,HARMMAX=70}
+end
+local rTarget=NewRangeTargets()
 local function HealBot_Init_Spell_RangesPref()
     HealBot_Spell_Ranges={}
+    rTarget=NewRangeTargets()
     if HealBot_Data["PCLASSTRIM"] == "DRUI" then
         HealBot_Spell_RangesPref[HEALBOT_WRATH]=true
         HealBot_Spell_RangesPref[HEALBOT_HURRICANE]=true
@@ -336,9 +339,6 @@ function HealBot_Init_SetRangeSpells(sType, spellName, spellId)
     end
 end
 
-local rTarget={["HEAL30MIN"]=25,["HARM30MIN"]=25,["HEALMIN"]=37,["HARMMIN"]=37,
-               ["HEAL30MAX"]=38,["HARM30MAX"]=38,["HEALMAX"]=70,["HARMMAX"]=70,}
-
 local function HealBot_Init_UpdateRangeTarget(spellId, range, target, minKey, maxKey)
     if HealBot_Spell_RangesPref[spellId] then
         if range <= target then
@@ -356,6 +356,7 @@ if HEALBOT_CLIENT_VERSION>10 then
 end
 
 function HealBot_Init_SetSpellRange(id, spellName, range)
+    if type(range)~="number" then range=0 end
     HealBot_Spell_IDs[id].range=range
     if HealBot_WoWAPI_HelpfulSpell(spellName, id) then
         if range > rTarget["HEAL30MIN"] and range < rTarget["HEAL30MAX"] then
@@ -378,13 +379,12 @@ end
 
 function HealBot_Init_FindSpellRangeCast(id, spellName, spellBookId, cRank)
       --HealBot_setCall("HealBot_Init_FindSpellRangeCast")
-    if ( not id ) then return false; end
+    if type(id)~="number" or id<=0 then return false end
 
     local spell, _, texture, msCast, _, hbRange=HealBot_WoWAPI_SpellInfo(id);
+    if type(spell)~="string" or spell=="" then return false end
+    if type(spellName)~="string" or spellName=="" then spellName=spell end
     local cooldown=GetSpellBaseCooldown(id)
-    
-    if ( not spell ) then return false; end
-    if not spellName then spellName=spell end
 
     if spellBookId then
         HealBot_SetToolTip(HealBot_ScanTooltip);
@@ -401,7 +401,7 @@ function HealBot_Init_FindSpellRangeCast(id, spellName, spellBookId, cRank)
     elseif HealBot_Data["PCLASSTRIM"] == "PALA" then
         if spellName == HEALBOT_CLEANSE then
             if HEALBOT_GAME_VERSION>9 then
-                if spellBookId and EnumerateTooltipLines_helper(HEALBOT_DISEASE, HealBot_ScanTooltip:GetRegions()) or EnumerateTooltipLines_helper(HEALBOT_POISON, HealBot_ScanTooltip:GetRegions()) then
+                if spellBookId and (EnumerateTooltipLines_helper(HEALBOT_DISEASE, HealBot_ScanTooltip:GetRegions()) or EnumerateTooltipLines_helper(HEALBOT_POISON, HealBot_ScanTooltip:GetRegions())) then
                     HealBot_Options_setLuVars("PaladinImprovedCleanse", true)
                 else
                     HealBot_Timers_Set("LAST","TalentsLookupImproved",true)
@@ -446,12 +446,12 @@ function HealBot_Init_FindSpellRangeCast(id, spellName, spellBookId, cRank)
         --HealBot_Timers_Set("LAST","TalentsLookupImproved",true)
     end
 
-    if hbRange == 0 then
+    if type(hbRange)~="number" or hbRange==0 then
         hbRange=HealBot_Init_Range(id, spellBookId, true)
     end
 
-    local hbCastTime=tonumber(msCast or 0);
-    local hbCooldown=tonumber(cooldown or 0);
+    local hbCastTime=tonumber(msCast) or 0
+    local hbCooldown=tonumber(cooldown) or 0
     if hbCastTime>999 then hbCastTime=HealBot_Util_Round(hbCastTime/1000,2) end
     if hbCooldown>999 then hbCooldown=HealBot_Util_Round(hbCooldown/1000,2) end
 
@@ -460,7 +460,7 @@ function HealBot_Init_FindSpellRangeCast(id, spellName, spellBookId, cRank)
     HealBot_Spell_IDs[id].Mana=HealBot_Init_ManaCost(id, spellBookId, true)
     HealBot_Spell_IDs[id].texture=texture
     HealBot_Spell_IDs[id].cooldown=hbCooldown
-    if cRank and string.len(cRank)>1 then
+    if type(cRank)=="string" and string.find(cRank,"%d") then
         HealBot_Init_SetSpellRange(id, spellName.."("..cRank..")", hbRange)
     else
         HealBot_Init_SetSpellRange(id, spellName, hbRange)
@@ -476,11 +476,16 @@ end
 local HealBot_Ranks={}
 function HealBot_Init_Spells_addSpell(spellId, spellName, spellBookId, cRank)
       --HealBot_setCall("HealBot_Init_Spells_addSpell")
+    if type(spellId)~="number" or spellId<=0 or type(spellName)~="string" or spellName=="" then return end
     if not skipSpells[spellName] then
-        HealBot_Init_FindSpellRangeCast(spellId, spellName, spellBookId, cRank)
-        if cRank and string.len(cRank)>1 and not HealBot_Globals.NoRanks then
+        if HealBot_Init_FindSpellRangeCast(spellId, spellName, spellBookId, cRank)==false or not HealBot_Spell_IDs[spellId] then return false end
+        local rank=type(cRank)=="string" and tonumber(string.match(cRank,"%d+")) or 0
+        local baseName=spellName
+        local previous=HealBot_Spell_IDs[HealBot_Spell_Names[baseName] or HealBot_KnownHeal_Names[baseName]]
+        local highest=not previous or rank>=(previous.bookRank or 0)
+        HealBot_Spell_IDs[spellId].bookRank=rank
+        if rank>0 and not HealBot_Globals.NoRanks then
             if not HealBot_Ranks[spellName] then HealBot_Ranks[spellName]=0 end
-            local rank=tonumber(string.match(cRank, "%d+")) or 0
             if HealBot_Ranks[spellName]<rank then HealBot_Ranks[spellName]=rank end
             if HealBot_Buff_Names[spellName] then
                 -- Keep base-name buff lookups, but resolve an explicit rank to
@@ -499,7 +504,7 @@ function HealBot_Init_Spells_addSpell(spellId, spellName, spellBookId, cRank)
                     end
                 end
             else
-                HealBot_KnownHeal_Names[spellName]=spellId
+                if highest then HealBot_KnownHeal_Names[spellName]=spellId end
                 if not HealBot_Spell_Ranks[spellName] then
                     HealBot_Spell_Ranks[spellName]={}
                     HealBot_Spell_Ranks[spellName][0]=1
@@ -516,7 +521,7 @@ function HealBot_Init_Spells_addSpell(spellId, spellName, spellBookId, cRank)
             end
         end
         HealBot_Spell_IDs[spellId].name=spellName
-        HealBot_Spell_Names[spellName]=spellId
+        if highest or spellName~=baseName then HealBot_Spell_Names[spellName]=spellId end
     end
 end
 
@@ -621,29 +626,32 @@ function HealBot_Init_Spells_CataPriest(spellID, spellName, spellTexture)
     HealBot_Init_SetSpellRange(spellID, spellName, hbRange)
 end
 
-local iSpellName, iSpellRank
-local function HealBot_Init_CheckSpell(sType, s, sId, iSpellName, iSpellRank)
-    --if sType then
-        if sType == "SPELL" then
-            if HEALBOT_FOREVER and (sId==401859 or sId==1240826 or sId==1240827) then
-                if iSpellName then HealBot_Init_Spells_addSpell(sId,iSpellName,s) end
-                return
-            end
-            if iSpellName and not HealBot_WoWAPI_IsSpellPassive(sId) and HealBot_Spells_KnownByName(iSpellName) and not string.find(iSpellName," Rune Ability") then -- and (string.len(iSpellRank)<1 or string.find(iSpellRank,"Rank"))
-                HealBot_Init_Spells_addSpell(sId, iSpellName, s, iSpellRank)
-            end
-        elseif sType == "FLYOUT" then
-            local _, _, numFlyoutSlots, flyoutKnown=GetFlyoutInfo(sId)
-            if flyoutKnown then
-                for f=1,numFlyoutSlots do
-                    local fId, _, fKnown, fName=GetFlyoutSlotInfo(sId, f)
-                    if fKnown and not HealBot_WoWAPI_IsSpellPassive(fId) and HealBot_Spells_KnownByName(fName) then
-                        HealBot_Init_Spells_addSpell(fId, fName, s, iSpellRank)
-                    end
+local function HealBot_Init_CheckSpell(sType,s,sId,iSpellName,iSpellRank,fromBook,bookPassive)
+    if type(sId)~="number" or sId<=0 then return end
+    if sType=="SPELL" then
+        if type(iSpellName)~="string" or iSpellName=="" then iSpellName=HealBot_WoWAPI_SpellName(sId) end
+        if type(iSpellName)~="string" or iSpellName=="" then return false end
+        if HEALBOT_FOREVER and (sId==401859 or sId==1240826 or sId==1240827) then
+            return HealBot_Init_Spells_addSpell(sId,iSpellName,s)
+        elseif not bookPassive and not HealBot_WoWAPI_IsSpellPassive(sId) and (HEALBOT_FOREVER and fromBook or HealBot_Spells_KnownByName(iSpellName)) and not string.find(iSpellName," Rune Ability") then
+            return HealBot_Init_Spells_addSpell(sId,iSpellName,s,iSpellRank)
+        end
+    elseif sType=="FLYOUT" and GetFlyoutInfo and GetFlyoutSlotInfo then
+        local _,_,numFlyoutSlots,flyoutKnown=GetFlyoutInfo(sId)
+        if flyoutKnown and type(numFlyoutSlots)=="number" then
+            local complete=true
+            for f=1,numFlyoutSlots do
+                local baseID,overrideID,fKnown,fName=GetFlyoutSlotInfo(sId,f)
+                local fId=type(overrideID)=="number" and overrideID>0 and overrideID or baseID
+                if fKnown and type(fId)=="number" and fId>0 then
+                    -- A flyout slot is not a child spell's tooltip or rank.
+                    local name,rank=HealBot_WoWAPI_SpellName(fId)
+                    if HealBot_Init_CheckSpell("SPELL",nil,fId,name or fName,rank,true)==false then complete=false end
                 end
             end
+            return complete
         end
-    --end
+    end
 end
 
 local function HealBot_Init_ForeverMendingRanks()
@@ -666,6 +674,16 @@ local function HealBot_Init_ForeverMendingRanks()
     end
 end
 
+local spellbookRetry
+local function RetryIncompleteSpellbook()
+    if spellbookRetry or not C_Timer or not C_Timer.After then return end
+    local pending={}
+    spellbookRetry=pending
+    C_Timer.After(1,function()
+        if spellbookRetry==pending then HealBot_Timers_Set("LAST","InitLoadSpells") end
+    end)
+end
+
 function HealBot_Init_Spells_Defaults()
       --HealBot_setCall("HealBot_Init_Spells_Defaults")
     -- Equipment/level changes can reach this after combat starts, including
@@ -675,6 +693,12 @@ function HealBot_Init_Spells_Defaults()
         return false
     end
     if HealBot_Data["PCLASSTRIM"] then
+        local nTabs=HealBot_WoWAPI_NumSpellTabs()
+        if type(nTabs)~="number" or nTabs<1 then
+            RetryIncompleteSpellbook()
+            return false
+        end
+        local complete=true
         for x,_ in pairs(HealBot_Spell_IDs) do
             HealBot_Spell_IDs[x]=nil
         end
@@ -697,7 +721,6 @@ function HealBot_Init_Spells_Defaults()
             HealBot_Ranks[x]=nil
         end
         HealBot_Init_Spell_RangesPref()
-        local nTabs=HealBot_WoWAPI_NumSpellTabs()
 
         local hbBufflist=HealBot_Options_InitBuffSpellsClassList(HealBot_Data["PCLASSTRIM"])
         for j=1, getn(hbBufflist), 1 do
@@ -710,21 +733,26 @@ function HealBot_Init_Spells_Defaults()
 
         for j=1,nTabs do
             local _, _, offset, numEntries, _, offspecID=HealBot_WoWAPI_SpellTabInfo(j)
-            if offspecID == 0 then
+            if (not offspecID or offspecID==0) and type(offset)=="number" and type(numEntries)=="number" then
                 for s=offset+1,offset+numEntries do
-                    --local sName, cRank=HealBot_WoWAPI_SpellBookItemName(s)
-                    local sType, sId=HealBot_WoWAPI_SpellBookItemInfo(s)
-                    if HEALBOT_GAME_VERSION>10 then
-                        iSpellName, iSpellRank=HealBot_WoWAPI_SpellName(sId)
-                    else
-                        iSpellName, iSpellRank=HealBot_WoWAPI_SpellBookItemName(s)
+                    local sType,sId,passive=HealBot_WoWAPI_SpellBookItemInfo(s,true)
+                    if sType=="SPELL" or sType=="FLYOUT" then
+                        local iSpellName,iSpellRank
+                        if sType=="SPELL" and type(sId)=="number" and sId>0 then
+                            if HEALBOT_GAME_VERSION>10 then
+                                iSpellName, iSpellRank=HealBot_WoWAPI_SpellName(sId)
+                            else
+                                iSpellName, iSpellRank=HealBot_WoWAPI_SpellBookItemName(s)
+                            end
+                        end
+                        if HealBot_Init_CheckSpell(sType,s,sId,iSpellName,iSpellRank,true,passive)==false then complete=false end
                     end
-                    if not iSpellRank then iSpellRank="" end
-                    if not sType then sType="SPELL" end
-                    HealBot_Init_CheckSpell(sType, s, sId, iSpellName, iSpellRank)
                 end
+            elseif not offspecID or offspecID==0 then
+                complete=false
             end
         end
+        if complete then spellbookRetry=nil else RetryIncompleteSpellbook() end
         if HEALBOT_GAME_VERSION>10 then 
             if HealBot_Data["PCLASSTRIM"] == "SHAM" then
                 HealBot_Init_CheckSpell("SPELL", nil, 77130, HEALBOT_PURIFY_SPIRIT, nil)
@@ -741,17 +769,13 @@ function HealBot_Init_Spells_Defaults()
             HealBot_Init_Spells_CataPriest(HEALBOT_HOLY_WORD_SANCTUARY, HEALBOT_SPELL_HOLYWORDSANCTUARY, 237541)
         end
         HealBot_Init_ForeverMendingRanks()
-        if HealBot_Spell_Ranges["HEAL30"] and HealBot_Spell_Ranges["HEAL30"]~="Set" then
-            HealBot_Range_InitSpell("HEAL30", HealBot_Spell_Ranges["HEAL30"])
-        end
-        if HealBot_Spell_Ranges["HARM30"] and HealBot_Spell_Ranges["HARM30"]~="Set" then
-            HealBot_Range_InitSpell("HARM30", HealBot_Spell_Ranges["HARM30"])
-        end
-        if HealBot_Spell_Ranges["HEAL"] and HealBot_Spell_Ranges["HEAL"]~="Set" then
-            HealBot_Range_InitSpell("HEAL", HealBot_Spell_Ranges["HEAL"])
-        end
-        if HealBot_Spell_Ranges["HARM"] and HealBot_Spell_Ranges["HARM"]~="Set" then
-            HealBot_Range_InitSpell("HARM", HealBot_Spell_Ranges["HARM"])
+        for _,key in ipairs(rangeKeys) do
+            local selected=HealBot_Spell_Ranges[key]
+            if selected~="Set" and (selected or complete) then
+                -- A complete book without a candidate releases the old spell
+                -- so Range_SetSpells can choose its normal item fallback.
+                HealBot_Range_InitSpell(key,selected)
+            end
         end
     else
         HealBot_SetPlayerData()
@@ -761,17 +785,19 @@ end
 
 function HealBot_Init_ClassicSpellRanks()
       --HealBot_setCall("HealBot_Init_ClassicSpellRanks")
+    local known=HEALBOT_FOREVER and ((C_SpellBook and C_SpellBook.IsSpellKnown) or IsSpellKnown)
     for hSpell,_ in pairs(HealBot_KnownHeal_Names) do
         if HealBot_Ranks[hSpell] and HealBot_Ranks[hSpell]>1 then
             for f=1, HealBot_Ranks[hSpell], 1 do
                 local sNameRank=HealBot_Init_retRank(hSpell, f) --hSpell.."(Rank "..f..")"
-                if sNameRank then
+                if sNameRank and not HealBot_Spell_Names[sNameRank] then
                     local _, _, _, _, _, _, spellId=HealBot_WoWAPI_SpellInfo(sNameRank)
-                    if spellId then
+                    if type(spellId)=="number" and spellId>0 and not HealBot_Spell_IDs[spellId]
+                        and (not HEALBOT_FOREVER or (known and known(spellId))) then
                         local _, _, texture, msCast, _, hbRange=HealBot_WoWAPI_SpellInfo(spellId);
                         local cooldown=GetSpellBaseCooldown(spellId)
-                        local hbCastTime=tonumber(msCast or 0);
-                        local hbCooldown=tonumber(cooldown or 0);
+                        local hbCastTime=tonumber(msCast) or 0
+                        local hbCooldown=tonumber(cooldown) or 0
                         if hbCastTime>999 then hbCastTime=HealBot_Util_Round(hbCastTime/1000,2) end
                         if hbCooldown>999 then hbCooldown=HealBot_Util_Round(hbCooldown/1000,2) end
 

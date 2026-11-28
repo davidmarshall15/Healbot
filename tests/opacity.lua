@@ -2,7 +2,7 @@
 local f=assert(io.open("HealBot/HealBot_Action.lua", "rb"))
 local source=f:read("*a"):gsub("\r\n", "\n")
 f:close()
-local code=assert(source:match("(function HealBot_Action_ResetUnitButtonOpacity%(button%).-)\nfunction HealBot_Action_ResetOpacity"))
+local code=assert(source:match("(function HealBot_Action_ResetUnitButtonOpacity%(button%).-\nend)"))
 local secret=setmetatable({}, {__lt=function() error("secret comparison") end})
 local passed=0
 for _, case in ipairs({

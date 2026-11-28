@@ -59,6 +59,7 @@ Locale\HealBot_Localization.tw.lua
 HealBot_Options.xml
 HealBot.xml
 HealBot_Action.xml
+HealBot_ForeverSpellNames.lua
 HealBot_CombatAuras.lua
 HealBot_ForeverFrames.lua
 HealBot_ForeverPrediction.lua

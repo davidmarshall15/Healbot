@@ -21,6 +21,7 @@ end
 local function noop() end
 local env=setmetatable({}, {__index=_G})
 env._G=env
+env.SlashCmdList={}
 env.HealBot_Forever_GetDebuffTypes=function() return {}, "all" end
 env.HealBot_Forever_DebuffsEnabled=function() return monitoring~=false end
 env.HEALBOT_FOREVER=true
@@ -218,6 +219,38 @@ env.HealBot_Aux_setInHealsAssigned("HEAL",1,1)
 env.HealBot_Aux_setInHealsAssigned("ABSORB",1,2)
 hooks.HealBot_Action_RegisterUnitEvents(b)
 local p=b.foreverIncoming
+do
+    local anchors,tiles=0,0
+    for _,bar in ipairs({p.bar,p.absorb}) do
+        bar.ClearAllPoints=function() anchors=anchors+1 end
+    end
+    p.bar.SetHorizTile=function() tiles=tiles+1 end
+    for i=1,100 do env.HealBot_Forever_UpdatePrediction(b) end
+    eq(anchors,0,"unchanged health events reuse both prediction layouts")
+    eq(tiles,0,"unchanged texture keeps its tiling")
+    local health=b.gref.Bar
+    health.GetWidth=function() return 90 end
+    env.HealBot_Forever_UpdatePrediction(b)
+    eq(anchors,2,"resize updates both layouts")
+    health.orientation,health.reverse="VERTICAL",true
+    env.HealBot_Forever_UpdatePrediction(b)
+    eq(p.bar.point[1],"TOPLEFT","reverse vertical growth")
+    eq(p.bar.point[3],"BOTTOMLEFT","reverse vertical relative point")
+    local anchor=frame()
+    health.GetStatusBarTexture=function() return anchor end
+    env.HealBot_Forever_UpdatePrediction(b)
+    eq(p.bar.point[2],anchor,"fill replacement reattaches incoming heals")
+    b.gref.Absorb.GetFrameLevel=function() return 30 end
+    local before=anchors
+    env.HealBot_Forever_UpdatePrediction(b)
+    eq(anchors,before+1,"absorb frame level change refreshes only its layout")
+    skin.TEXTURE="Second skin"
+    env.HealBot_Forever_UpdatePrediction(b)
+    eq(tiles,1,"texture replacement initializes tiling")
+    health.orientation,health.reverse="HORIZONTAL",false
+    health.GetStatusBarTexture=function(self) return self end
+    env.HealBot_Forever_UpdatePrediction(b)
+end
 eq(p.absorb.texture.atlas,"raidframe-shield-fill","shield fill atlas")
 eq(p.absorb.texture.addressU,"REPEAT","helper converts wrap enum horizontally")
 eq(p.absorb.texture.addressV,"REPEAT","helper converts wrap enum vertically")
