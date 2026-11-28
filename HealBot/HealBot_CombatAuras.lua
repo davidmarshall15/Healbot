@@ -92,7 +92,11 @@ local buffStart={1,9,11}
 local buffEnd={8,10,12}
 local debuffStart={51,57,59}
 local buffFilters, buffSignature
-local watchedRankNames
+local watchedRankNames,unresolvedPolicyIDs,unresolvedPolicyNames
+local policyInputs
+function HealBot_Forever_InvalidateBuffPolicy()
+    policyInputs=nil
+end
 local function HBCA_PublicBuffValue(value)
     return not HealBot_issecretvalue or not HealBot_issecretvalue(value)
 end
@@ -107,6 +111,41 @@ local function HBCA_BuffSetting(mapping,key)
     if type(mapping)~="table" or not (HBCA_BuffID(key) or HBCA_BuffName(key)) then return end
     local value=mapping[key]
     if HBCA_PublicBuffValue(value) then return value end
+end
+
+-- A bar binding does not change the spell policy. Keep a copy of the small
+-- set of user selections so in-place edits are visible without walking the
+-- spellbook, observed auras and all matching ranks on every bar or flag change.
+local policySettings={WatchHoT=true,CustomBuffsIconSet=false,CustomBuffIDMethod=false,
+                      CustomBuffsFilter=false,IgnoreCustomBuff=true}
+local function HBCA_MatchSettings(source,saved,nested,capture)
+    if type(source)~="table" or not HBCA_PublicBuffValue(source) then return saved==nil end
+    if type(saved)~="table" then return false end
+    local count=0
+    for key,value in pairs(source) do
+        if HBCA_PublicBuffValue(key) and HBCA_PublicBuffValue(value) then
+            count=count+1
+            if nested and type(value)=="table" then
+                if capture then saved[key]={} end
+                if not HBCA_MatchSettings(value,saved[key],false,capture) then return false end
+            elseif capture then saved[key]=value
+            elseif not rawequal(saved[key],value) then return false end
+        end
+    end
+    if capture then return true end
+    local previous=0
+    for _ in pairs(saved) do previous=previous+1 end
+    return count==previous
+end
+local function HBCA_PolicyInputs(g,capture)
+    if capture then policyInputs={owner=g,broad=g.CombatAurasPriestOnly}
+    elseif not policyInputs or policyInputs.owner~=g or policyInputs.broad~=g.CombatAurasPriestOnly then return false end
+    for key,nested in pairs(policySettings) do
+        local source=g[key]
+        if capture and type(source)=="table" and HBCA_PublicBuffValue(source) then policyInputs[key]={} end
+        if not HBCA_MatchSettings(source,policyInputs[key],nested,capture) then return false end
+    end
+    return true
 end
 -- Spell/rank/trigger relationships are public metadata. The same compiler
 -- handles every registered family; no live aura inspection is involved.
@@ -123,8 +162,9 @@ local function HBCA_ConfiguredBuffFilters(g)
     if not HEALBOT_FOREVER then return end
     if HealBot_Config_Buffs and HealBot_Config_Buffs.BuffWatch==false then
         -- Keep empty rows ready for combat toggles and stop watching for new ranks.
+        policyInputs=nil
         if buffSignature==false then return buffFilters, false end
-        watchedRankNames=nil
+        watchedRankNames,unresolvedPolicyIDs,unresolvedPolicyNames=nil,nil,nil
         buffSignature,buffFilters=false,{}
         return buffFilters, true
     end
@@ -134,6 +174,10 @@ local function HBCA_ConfiguredBuffFilters(g)
     local methods=g.CustomBuffIDMethod or {}
     local candidates,names,registrations={},{},{}
     local cachedNames,targetRules={},{}
+    local unresolvedIDs,unresolvedNames={},{}
+    local function Unresolved(key)
+        if type(key)=="number" then unresolvedIDs[key]=true else unresolvedNames[key]=true end
+    end
     local exact,families,variants={},{},{}
     local function AddCandidate(id)
         if HBCA_BuffID(id) then candidates[id]=true end
@@ -147,6 +191,7 @@ local function HBCA_ConfiguredBuffFilters(g)
         if names[id]~=nil then return names[id] or nil end
         local name=cachedNames[id] or PublicCall(HealBot_WoWAPI_SpellName,id)
         names[id]=HBCA_BuffName(name) and name or false
+        if not names[id] then unresolvedIDs[id]=true end
         return names[id] or nil
     end
     local function Canonical(id)
@@ -184,7 +229,10 @@ local function HBCA_ConfiguredBuffFilters(g)
             for spell,value in pairs(spells) do
                 if HBCA_PublicBuffValue(value) and value~=false and (HBCA_BuffID(spell) or HBCA_BuffName(spell)) then
                     local id=HBCA_BuffID(spell) and spell or PublicCall(HealBot_WoWAPI_SpellId,spell)
-                    if not HBCA_BuffID(id) then id=nil end
+                    if not HBCA_BuffID(id) then
+                        if HBCA_BuffName(spell) then unresolvedNames[spell]=true end
+                        id=nil
+                    end
                     local name=HBCA_BuffName(spell) and spell or id and Name(id)
                     local method=FirstSetting(methods,spell,id,name)==1 and 1 or 2
                     local registration={id=id,name=name,entry=spell,method=method,caster=Caster(value)}
@@ -211,7 +259,7 @@ local function HBCA_ConfiguredBuffFilters(g)
         if registration.id and not exact[registration.id] then exact[registration.id]=registration end
         if registration.method~=1 then
             if registration.name and HealBot_Forever_VisitSpellNameIDs then
-                HealBot_Forever_VisitSpellNameIDs(registration.id,registration.name,AddNameCandidate)
+                HealBot_Forever_VisitSpellNameIDs(registration.id,registration.name,AddNameCandidate,Unresolved)
             end
             if registration.name and not families[registration.name] then families[registration.name]=registration end
             local family=registration.id and Family(registration.id)
@@ -226,7 +274,7 @@ local function HBCA_ConfiguredBuffFilters(g)
     local include,selfIDs,everyoneIDs={{},{},{}},{{},{},{}},{{},{},{}}
     local excluded={}
     if broad and type(HealBot_Aura_NativeBuffExclusions)=="function" then
-        for id,disabled in pairs(HealBot_Aura_NativeBuffExclusions() or {}) do
+        for id,disabled in pairs(HealBot_Aura_NativeBuffExclusions(Unresolved) or {}) do
             if disabled and HBCA_BuffID(id) then excluded[id]=true; AddCandidate(id) end
         end
     end
@@ -276,8 +324,9 @@ local function HBCA_ConfiguredBuffFilters(g)
     end
     table.sort(signature)
     -- A newly observed public rank only matters when its name is watched.
-    watchedRankNames=families
+    watchedRankNames,unresolvedPolicyIDs,unresolvedPolicyNames=families,unresolvedIDs,unresolvedNames
     local key=table.concat(signature,",")
+    HBCA_PolicyInputs(g,true)
     if key==buffSignature then return buffFilters, false end
     buffSignature=key
     buffFilters={}
@@ -295,6 +344,12 @@ local function HBCA_ConfiguredBuffFilters(g)
         end
     end
     return buffFilters, true
+end
+
+local function HBCA_CurrentBuffFilters(g)
+    if HEALBOT_FOREVER and not (HealBot_Config_Buffs and HealBot_Config_Buffs.BuffWatch==false)
+        and HBCA_PolicyInputs(g,false) then return buffFilters end
+    return HBCA_ConfiguredBuffFilters(g)
 end
 
 local function HBCA_Defaults()
@@ -1229,7 +1284,7 @@ local function HBCA_SkinArrivalDebuffs(row,plans)
     for kind,item in pairs(items) do
         if not plans[kind] or plans[kind].key~=item.key then
             item.container:Hide()
-            pcall(item.container.SetEnabled,item.container,false)
+            RetireAuraContainer(item.container)
             items[kind]=nil
         end
     end
@@ -1490,7 +1545,7 @@ local function HBCA_SetNativeSlotShown(button,a,show)
         button.hbcaNativeDebuffs=show
         if button.aura and button.aura.debuff then
             button.aura.debuff.update=true
-            HealBot_Timers_Set("AURA","CheckDebuffs")
+            HealBot_DebuffSlowUpdate(button)
         end
     end
     return show
@@ -1843,11 +1898,14 @@ local function HBCA_Attach(button, context)
     deferred[button]=nil
     local g=HBCA_Defaults()
     local filters
-    if context and not context.needsFilters then
+    if context then
+        if context.needsFilters then
+            context.filters=HBCA_ConfiguredBuffFilters(g)
+            context.needsFilters=nil
+        end
         filters=context.filters
     else
-        filters=HBCA_ConfiguredBuffFilters(g)
-        if context then context.filters,context.needsFilters=filters,nil end
+        filters=HBCA_CurrentBuffFilters(g)
     end
     filters=HBCA_ButtonBuffFilters(button,filters)
     local a=attached[button]
@@ -1933,10 +1991,17 @@ local function HBCA_DropAll()
     end
 end
 
-local function HBCA_RefreshBuffRows()
+local function HBCA_RefreshBuffRows(reusePolicy)
     local g=HBCA_Defaults()
     if not HEALBOT_FOREVER or not g then return end
-    local filters=HBCA_ConfiguredBuffFilters(g)
+    if not HBCA_Enabled() or (not next(attached) and not next(arrivalDonors)) then
+        policyInputs=nil
+        watchedRankNames,unresolvedPolicyIDs,unresolvedPolicyNames=nil,nil,nil
+        return
+    end
+    local filters
+    if reusePolicy then filters=HBCA_CurrentBuffFilters(g)
+    else filters=HBCA_ConfiguredBuffFilters(g) end
     local combat=InCombatLockdown()
     local canUpdate=not combat or (HealBot_Config_Buffs and HealBot_Config_Buffs.BuffCustomWatchInCombat==true)
     for button,rows in pairs(attached) do
@@ -1968,6 +2033,17 @@ local function HBCA_RefreshBuffRows()
             HBCA_ShowArrivalAuras(row)
         end
     end
+end
+
+local rankRefreshQueued=false
+local function HBCA_QueueRankRefresh()
+    policyInputs=nil
+    if rankRefreshQueued or not C_Timer or not C_Timer.After then return end
+    rankRefreshQueued=true
+    C_Timer.After(0,function()
+        rankRefreshQueued=false
+        HealBot_Forever_RefreshBuffExclusions()
+    end)
 end
 
 -- Optional timing access; inactive unless /hbperf is explicitly started.
@@ -2008,8 +2084,19 @@ ev:RegisterEvent("PLAYER_LOGIN")
 ev:RegisterEvent("PLAYER_ENTERING_WORLD")
 ev:RegisterEvent("PLAYER_REGEN_DISABLED")
 ev:RegisterEvent("PLAYER_REGEN_ENABLED")
+if HEALBOT_FOREVER then pcall(ev.RegisterEvent,ev,"SPELL_DATA_LOAD_RESULT") end
 if HEALBOT_FOREVER and C_RestrictedActions then pcall(ev.RegisterEvent,ev,"ADDON_RESTRICTION_STATE_CHANGED") end
-ev:SetScript("OnEvent", function(_, event)
+ev:SetScript("OnEvent", function(_, event, spellID, success)
+    if event=="SPELL_DATA_LOAD_RESULT" then
+        if HBCA_PublicBuffValue(success) and success==true and HBCA_BuffID(spellID) and watchedRankNames and not rankRefreshQueued then
+            if unresolvedPolicyIDs[spellID] then HBCA_QueueRankRefresh()
+            elseif next(unresolvedPolicyNames) then
+                local name=HealBot_WoWAPI_SpellName(spellID)
+                if HBCA_BuffName(name) and unresolvedPolicyNames[name] then HBCA_QueueRankRefresh() end
+            end
+        end
+        return
+    end
     if event~="PLAYER_LOGIN" then buffScanGeneration=buffScanGeneration+1 end
     if event=="PLAYER_REGEN_DISABLED" then
         inCombat=true
@@ -2076,10 +2163,18 @@ if type(hooksecurefunc)=="function" then
         function HealBot_Forever_RefreshBuffExclusions()
             HBCA_RefreshBuffRows()
         end
-        local rankRefreshQueued=false
+        -- The spellbook rebuild clears and repopulates the same table, and
+        -- can complete on a later retry. Observe its finished contents.
+        if type(HealBot_Init_Spells_Defaults)=="function" then
+            hooksecurefunc("HealBot_Init_Spells_Defaults",function()
+                if not InCombatLockdown() then HBCA_RefreshBuffRows() end
+            end)
+        end
         function HealBot_Forever_ObserveBuffRank(id,name)
-            if rankRefreshQueued or not watchedRankNames or not watchedRankNames[name]
-                or not C_Timer or not C_Timer.After then return end
+            if rankRefreshQueued or not watchedRankNames then return end
+            local broad=buffFilters and buffFilters[1] and buffFilters[1].excludeSpellIDs
+            if broad and broad[id] then return end
+            if not watchedRankNames[name] and not (broad and HealBot_Aura_CustomBuffDisabled(id,name)) then return end
             for set=1,3 do
                 local row=buffFilters[set]
                 if row and ((row.includeSpellIDs and row.includeSpellIDs[id])
@@ -2087,11 +2182,7 @@ if type(hooksecurefunc)=="function" then
             end
             -- The public aura cache has just learned a watched rank. Let the
             -- scan finish, then compile all newly seen ranks in one pass.
-            rankRefreshQueued=true
-            C_Timer.After(0,function()
-                rankRefreshQueued=false
-                HealBot_Forever_RefreshBuffExclusions()
-            end)
+            HBCA_QueueRankRefresh()
         end
         hooksecurefunc("HealBot_Options_EnableDisableBuffBtn_OnClick", function()
             HealBot_Aura_setCustomBuffFilterDisabled()
@@ -2114,7 +2205,7 @@ if type(hooksecurefunc)=="function" then
             for button in pairs(attached) do pcall(HBCA_Attach,button,pass) end
         end)
         hooksecurefunc("HealBot_Aura_SetAuraCheckFlags", function()
-            HBCA_RefreshBuffRows()
+            HBCA_RefreshBuffRows(true)
         end)
         hooksecurefunc("HealBot_Options_Debuff_Reset", function()
             local _, signature, scoped=HealBot_Forever_GetDebuffTypes()

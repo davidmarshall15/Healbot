@@ -82,10 +82,24 @@ types="Magic"; e.HealBot_Forever_RefreshArrivalDebuffPolicy()
 assert(db.shown and slot.shown,"in-combat type edit did not restore matching group")
 assert(#d.frames==count,"late join or combat updates allocated native frames")
 d.combat(false)
+local function rejectFirstDisable(container)
+    local original=container.SetEnabled
+    function container:SetEnabled(enabled)
+        assert(not enabled)
+        self.SetEnabled=original
+        error("transient teardown failure")
+    end
+end
+rejectFirstDisable(db.container)
+rejectFirstDisable(slot.container)
 types=""; skin()
-assert(not row.arrivalDebuffs.db and not db.container.enabled and row.arrivalDebuffs.slot==slot)
+assert(not row.arrivalDebuffs.db and not db.container.shown and db.container.enabled and row.arrivalDebuffs.slot==slot)
 cures.DebuffWatch=false; skin()
-assert(not row.arrivalDebuffs.slot and not slot.container.enabled and row.arrivalAuras[1].container==hot)
+assert(not row.arrivalDebuffs.slot and not slot.container.shown and slot.container.enabled and row.arrivalAuras[1].container==hot)
+d.combat(true)
+assert(db.container.enabled and slot.container.enabled)
+d.combat(false)
+assert(not db.container.enabled and not slot.container.enabled and hot.enabled, "obsolete harmful widgets were not retired on regen")
 cures.DebuffWatch=true; cures.DebuffWatchInCombat=false; types="Magic"; skin()
 assert(not next(row.arrivalDebuffs),"combat-disabled monitor prepared reserve widgets")
 cures.DebuffWatchInCombat=true; e.rejectSlot=true

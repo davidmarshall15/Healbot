@@ -1391,7 +1391,7 @@ function HealBot_Aura_VisitKnownBuffs(visit)
 end
 
 -- Build native exclusions from configuration/cache only, never combat aura data.
-function HealBot_Aura_NativeBuffExclusions()
+function HealBot_Aura_NativeBuffExclusions(unresolved)
     local excluded={}
     local function Exclude(id) excluded[id]=true end
     local zone=hb_lVars["mapName"]
@@ -1399,9 +1399,10 @@ function HealBot_Aura_NativeBuffExclusions()
         if instances.ALL or instances[zone] then
             local id=type(key)=="number" and key or HealBot_WoWAPI_SpellId(key)
             if type(id)=="number" then Exclude(id) end
+            if unresolved and type(key)=="string" and not id then unresolved(key) end
             if HealBot_Forever_VisitSpellNameIDs and (HealBot_Globals.CustomBuffIDMethod[key] or 2)>1 then
                 local name=type(key)=="string" and key or HealBot_WoWAPI_SpellName(key)
-                HealBot_Forever_VisitSpellNameIDs(id,name,Exclude)
+                HealBot_Forever_VisitSpellNameIDs(id,name,Exclude,unresolved)
             end
         end
     end
@@ -4346,10 +4347,13 @@ end
 
 local function HealBot_Aura_ConfigBuffFilter(id, sName, filter)
       --HealBot_setCall("HealBot_Aura_ConfigBuffFilter")
+    local changed=HealBot_BuffFilter[id]~=filter
     HealBot_BuffFilter[id]=filter
     if (HealBot_Globals.CustomBuffIDMethod[id] or 2)>1 and sName then
+        changed=changed or HealBot_BuffFilter[sName]~=filter
         HealBot_BuffFilter[sName]=filter
     end
+    if changed and HealBot_Forever_InvalidateBuffPolicy then HealBot_Forever_InvalidateBuffPolicy() end
 end
 
 function HealBot_Aura_ConfigClassHoT()

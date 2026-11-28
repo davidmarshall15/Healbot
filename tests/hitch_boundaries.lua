@@ -55,6 +55,11 @@ local cpu=os.clock()
 for i=1,200000 do tick(6) end
 local steady=os.clock()-cpu
 assert(nativeReads==0 and netReads==0)
+local function drawTooltip() clock=clock+2; return "drawn" end
+env.HealBot_Action_DoRefreshTooltip=drawTooltip
+sampler:OnEvent("ADDON_LOADED","HealBot_Tips")
+sampler:OnEvent("ADDON_LOADED","HealBot_Tips")
+assert(env.HealBot_Action_DoRefreshTooltip()=="drawn")
 sampler:OnEvent("PLAYER_TARGET_CHANGED")
 env.HealBot_Panel_PartyChanged()
 tick(160)
@@ -71,6 +76,9 @@ assert(not r.hitches[2].following.recentHomeLatencyMs and not r.hitches[2].follo
 assert(r.playerClass=="WARRIOR" and r.clientBuild=="71139" and r.startedUtc==1780000000)
 assert(r.slowFrames==2 and #r.hitches==2 and h.boundary.wallMs==160)
 assert(h.boundary.heaviestName=="HealBot_Panel_PartyChanged" and h.boundary.heaviestMs==11)
+assert(h.boundary.tooltipPhases.HealBot_Action_DoRefreshTooltip.ms==2)
+assert(h.boundary.tooltipPhases.HealBot_Action_DoRefreshTooltip.calls==1)
+assert(env.HealBot_Action_DoRefreshTooltip==drawTooltip)
 assert(h.boundary.partyPhases.HealBot_Panel_buildDataStore.ms==1 and h.boundary.partyPhases.HealBot_Panel_PlayersChanged.ms==9)
 assert(h.boundary.partyPhases.HealBot_Panel_SetupBars.ms==7 and h.boundary.partyPhases.HealBot_Panel_PositionBars.ms==4)
 assert(h.boundary.topAddons[1].name=="OtherAddon" and #h.boundary.topAddons==1)

@@ -94,7 +94,7 @@ for pass=1,2 do
     assert(e.HealBot_Action_setLuVars==original and e.HealBot_Timers_Set==throwing,'global wrappers not restored')
     e.HealBot_Forever_VisitAuraPerfScopes(function(name,fn) assert(fn==baseline[name],'local wrapper not restored'); return fn end)
     local report=d.globals.ForeverPerformanceReport
-    assert(report.revision=='1.4' and report.slowFrames==1,'report lost frame metrics')
+    assert(report.revision=='1.5' and report.slowFrames==1,'report lost frame metrics')
     assert(not sampler.shown and not next(sampler.events),'profiling events still subscribed after report')
     local bg='pvp / Arathi Basin / instance raid (40) / combat'
     local city='world / Ironforge / solo (1) / out of combat'
@@ -114,7 +114,12 @@ for pass=1,2 do
     local found=false
     local correlated,owner,partyScope,unitScope=false,false,false,false
     for _,entry in ipairs(report.functions) do
-        if entry.name=='Aura.ConfiguredBuffFilters' then found=true; assert(entry.calls==3,'scoped timing not captured or wrappers nested') end
+        if entry.name=='Aura.ConfiguredBuffFilters' then
+            -- The explicit reserve passes each take a fresh snapshot. The flags
+            -- notification between them reuses the current policy.
+            found=true
+            assert(entry.calls==2,'unexpected number of full filter compilations')
+        end
         if entry.name=='Aura.RefreshBuffRows' then
             correlated=true
             assert(entry.worstBuildCalls==0 and entry.worstBuildMs==0,'policy refresh rebuilt native containers')

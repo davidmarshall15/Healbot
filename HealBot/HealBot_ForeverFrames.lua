@@ -6,6 +6,7 @@ local targetUnits={}
 local auraError
 
 local function IndexTargetButton(button)
+    button.foreverVitalsGUID=nil
     local previous=targetUnits[button]
     if previous then targetButtons[previous][button]=nil end
     local unit=button.unit
@@ -25,14 +26,16 @@ local function RefreshTargetButtons(unit)
 end
 
 -- Target tokens can point at a different unit without changing the secure
--- button's unit attribute. Refresh display data without a GUID-based rebuild.
-function HealBot_Forever_RefreshTarget(button)
+-- button's unit attribute. A single-field update needs positive evidence that
+-- the last full paint belongs to this occupant. Never compare opaque GUIDs.
+function HealBot_Forever_RefreshTarget(button, field)
     if not InCombatLockdown() then return end
     local unit=button.unit
     if unit~="target" and unit~="targettarget" and unit~="focus" then return end
-    button.health.updhlth=false
-    button.mana.update=false
     if not UnitExists(unit) then
+        button.foreverVitalsGUID=nil
+        button.health.updhlth=false
+        button.mana.update=false
         button.name=""
         button.health.current,button.health.max,button.health.pct,button.health.cpct,button.health.hpct=0,0,0,0,0
         button.text.namecomplete=""
@@ -42,19 +45,41 @@ function HealBot_Forever_RefreshTarget(button)
         button.gref.Bar:SetValue(0)
         button.mana.current,button.mana.max,button.mana.pct,button.mana.hpct=0,0,0,0
         HealBot_Aux_setPowerBars(button)
-        return
+        button.mana.change=false
+        return true
     end
-    button.name=UnitName(unit)
-    button.text.namecomplete=button.name
-    button.gref.txt.text:SetText(button.name)
-    button.health.current,button.health.max,button.health.pct,button.health.cpct,
-        button.health.hpct,button.health.rcol,button.health.gcol=HealBot_WoWAPI_UnitHealth(unit)
-    button.gref.Bar:SetValue(button.health.hpct)
-    HealBot_Text_DoSetHealthText(button, false, true)
-    HealBot_Action_setButtonManaBarCol(button)
-    button.mana.current,button.mana.max,button.mana.pct,button.mana.hpct=
-        HealBot_WoWAPI_UnitMana(unit, button.mana.type)
-    HealBot_Aux_setPowerBars(button)
+    local guid
+    if field and UnitGUID then
+        local current=UnitGUID(unit)
+        if not HealBot_issecretvalue(current) and type(current)=="string" and current~="" then guid=current end
+    end
+    local same=guid and guid==button.foreverVitalsGUID and unit==button.foreverVitalsUnit
+    local full=not same or field=="both"
+    if full then
+        button.foreverVitalsGUID=nil
+        button.name=UnitName(unit)
+        button.text.namecomplete=button.name
+        button.gref.txt.text:SetText(button.name)
+    end
+    if full or field=="health" then
+        button.health.updhlth=false
+        button.health.current,button.health.max,button.health.pct,button.health.cpct,
+            button.health.hpct,button.health.rcol,button.health.gcol=HealBot_WoWAPI_UnitHealth(unit)
+        button.gref.Bar:SetValue(button.health.hpct)
+        HealBot_Text_DoSetHealthText(button, false, true)
+    end
+    if full or field=="power" then
+        button.mana.update=false
+        if full or button.mana.change then HealBot_Action_setButtonManaBarCol(button) end
+        button.mana.current,button.mana.max,button.mana.pct,button.mana.hpct=
+            HealBot_WoWAPI_UnitMana(unit, button.mana.type)
+        HealBot_Aux_setPowerBars(button)
+        button.mana.change=false
+    end
+    if full and guid and not HealBot_issecretvalue(button.name) and type(button.name)=="string" and button.name~="" then
+        button.foreverVitalsUnit,button.foreverVitalsGUID=unit,guid
+    end
+    return true
 end
 
 local function CreateIncomingBar(button)
@@ -467,6 +492,7 @@ end
 -- No native UI methods, aura data, settings or combat behavior are replaced.
 do
     local enabled = false
+    local timingRevision = "1.5"
     local started
     local stats = {}
     local originals = {}
@@ -519,13 +545,20 @@ do
             contexts[label]=context
         end
     end
-    sampler:SetScript("OnEvent",function(self,event)
+    local InstallTooltipScopes
+    sampler:SetScript("OnEvent",function(self,event,addon)
+        if event=="ADDON_LOADED" then
+            if addon=="HealBot_Tips" then InstallTooltipScopes() end
+            return
+        end
         recentEvents[event]=GetTime()
         if event=="PLAYER_ENTERING_WORLD" or event=="ZONE_CHANGED_NEW_AREA" or event=="GROUP_ROSTER_UPDATE"
             or event=="PLAYER_REGEN_ENABLED" or event=="PLAYER_REGEN_DISABLED" then RefreshContext(self,event) end
     end)
     local phases={HealBot_Panel_buildDataStore=true,HealBot_Panel_PlayersChanged=true,
         HealBot_Panel_SetupBars=true,HealBot_Panel_PositionBars=true}
+    local tooltipPhases={"HealBot_Action_DoRefreshTooltip","HealBot_Tooltip_DisplayIconTooltip",
+        "HealBot_Tooltip_DisplayCompactIconTooltip"}
     local function NativeSample(fn,...)
         if not fn then return end
         local ok,value=pcall(fn,...)
@@ -559,6 +592,9 @@ do
                 if phases[record.name] then
                     sample.partyPhases=sample.partyPhases or {}
                     sample.partyPhases[record.name]={ms=record.frameTotal,calls=record.frameCalls,max=record.frameMax}
+                elseif record.tooltip then
+                    sample.tooltipPhases=sample.tooltipPhases or {}
+                    sample.tooltipPhases[record.name]={ms=record.frameTotal,calls=record.frameCalls,max=record.frameMax}
                 end
             end
         end
@@ -662,6 +698,16 @@ do
         if not localScope then _G[name] = wrapper end
         return wrapper
     end
+    InstallTooltipScopes=function()
+        for _,name in ipairs(tooltipPhases) do
+            local fn=_G[name]
+            if type(fn)=="function" and not wrappers[name] then
+                local record={name=name,calls=0,total=0,max=0,tooltip=true}
+                stats[#stats+1]=record
+                Install(name,fn,record)
+            end
+        end
+    end
     local function Stop()
         enabled = false
         started=nil
@@ -694,6 +740,8 @@ do
         RefreshContext()
         for _,event in ipairs(contextEvents) do sampler:RegisterEvent(event) end
         for _,event in ipairs(traceEvents) do sampler:RegisterEvent(event) end
+        sampler:RegisterEvent("ADDON_LOADED")
+        InstallTooltipScopes()
         started = GetTime()
         for _, name in ipairs(names) do
             local original = _G[name]
@@ -723,7 +771,7 @@ do
         _G[observerName]=observer
         enabled = true
         sampler:Show()
-        print("HealBot timing 1.4 started. Use /hbperf report after the slowdown.")
+        print("HealBot timing "..timingRevision.." started. Use /hbperf report after the slowdown.")
     end
     SLASH_HEALBOTLIVEPERF1 = "/hbperf"
     SlashCmdList.HEALBOTLIVEPERF = function(arg)
@@ -731,14 +779,14 @@ do
         if arg == "on" then Start(); return end
         if arg == "off" then Stop(); print("HealBot timing stopped; original functions restored."); return end
         if arg ~= "report" or not started then
-            print("HealBot timing 1.4: /hbperf on, /hbperf report, /hbperf off.")
+            print("HealBot timing "..timingRevision..": /hbperf on, /hbperf report, /hbperf off.")
             return
         end
         local duration = GetTime() - started
         Stop()
         table.sort(stats, function(a, b) return a.max > b.max end)
         for _,record in ipairs(stats) do record.frame,record.frameCalls,record.frameTotal,record.frameMax=nil,nil,nil,nil end
-        local report = {revision = "1.4", elapsed = duration, maxFrameMs = maxFrameMs,
+        local report = {revision = timingRevision, elapsed = duration, maxFrameMs = maxFrameMs,
             startedUtc=startedUtc,playerClass=playerClass,clientBuild=clientBuild,hitches=hitches,
             contexts=contexts,maxFrameContext=maxFrameContext,
             frames = frames, slowFrames = slowFrames, functions = stats,rebuildReasons=rebuildReasons}

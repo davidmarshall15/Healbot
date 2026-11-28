@@ -4755,27 +4755,30 @@ for _,ids in pairs(byName) do
 end
 
 local verifiedNames={}
-local function VisitCandidate(candidate,name,visit)
+local function VisitCandidate(candidate,name,visit,unresolved)
     local actual=verifiedNames[candidate]
     if not actual then
         actual=HealBot_WoWAPI_SpellName(candidate)
-        if HealBot_issecretvalue(actual) or type(actual)~="string" or actual=="" then return end
+        if HealBot_issecretvalue(actual) or type(actual)~="string" or actual=="" then
+            if unresolved then unresolved(candidate) end
+            return
+        end
         verifiedNames[candidate]=actual
     end
     if actual==name then visit(candidate,name) end
 end
-local function VisitGroup(ids,name,visit)
+local function VisitGroup(ids,name,visit,unresolved)
     if ids then
-        for _,candidate in ipairs(ids) do VisitCandidate(candidate,name,visit) end
+        for _,candidate in ipairs(ids) do VisitCandidate(candidate,name,visit,unresolved) end
     end
 end
-function HealBot_Forever_VisitSpellNameIDs(id,name,visit)
+function HealBot_Forever_VisitSpellNameIDs(id,name,visit,unresolved)
     if HealBot_issecretvalue(name) or type(name)~="string" or name=="" then return end
     if HealBot_issecretvalue(id) then return end
     local numeric=byID[id]
-    VisitGroup(numeric,name,visit)
+    VisitGroup(numeric,name,visit,unresolved)
     local named=byName[name]
-    if named~=numeric then VisitGroup(named,name,visit) end
+    if named~=numeric then VisitGroup(named,name,visit,unresolved) end
     if not named then
         local bucket=singletons[name:sub(1,2)]
         if bucket and not name:find("[\r\n\t]") then
@@ -4783,7 +4786,7 @@ function HealBot_Forever_VisitSpellNameIDs(id,name,visit)
             if ending then
                 local nextLine=bucket:find("\n",ending+1,true)
                 local candidate=tonumber(bucket:sub(ending+1,nextLine-1))
-                VisitCandidate(candidate,name,visit)
+                VisitCandidate(candidate,name,visit,unresolved)
             end
         end
     end

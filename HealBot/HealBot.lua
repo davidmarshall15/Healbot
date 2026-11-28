@@ -1103,7 +1103,7 @@ function HealBot_UnitMana(button)
       --HealBot_setCall("HealBot_UnitMana", button)
     if HEALBOT_FOREVER and InCombatLockdown() and HealBot_Forever_RefreshTarget and
        (button.unit=="target" or button.unit=="targettarget" or button.unit=="focus") then
-        HealBot_Forever_RefreshTarget(button)
+        HealBot_Forever_RefreshTarget(button,"power")
         return
     end
     button.mana.update=false
@@ -3096,7 +3096,7 @@ function HealBot_UnitHealth(button, force)
       --HealBot_setCall("HealBot_UnitHealth", button)
     if HEALBOT_FOREVER and InCombatLockdown() and HealBot_Forever_RefreshTarget and
        (button.unit=="target" or button.unit=="targettarget" or button.unit=="focus") then
-        HealBot_Forever_RefreshTarget(button)
+        HealBot_Forever_RefreshTarget(button,"health")
         return
     end
     button.health.updhlth=false
@@ -4191,10 +4191,11 @@ function HealBot_UnitUpdateButton(button)
                     HealBot_UnitUpdateAura(button)
                 else
                     button.special.aura=true
-                    HealBot_UnitHealth(button)
+                    local refreshed=HealBot_Forever_RefreshTarget and HealBot_Forever_RefreshTarget(button,"both")
+                    if not refreshed then HealBot_UnitHealth(button) end
                     HealBot_HealsInUpdate(button)
                     HealBot_AbsorbsUpdate(button)
-                    HealBot_UnitMana(button)
+                    if not refreshed then HealBot_UnitMana(button) end
                 end
             elseif button.event.aura then
                 button.event.aura=false

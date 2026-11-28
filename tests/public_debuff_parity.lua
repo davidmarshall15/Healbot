@@ -114,7 +114,16 @@ local d=fixture("PRIEST",4)
 local env=d.env
 env.IsInInstance=function() return true,"pvp" end
 env.HealBot_Forever_WatchesWeakenedSoul=function() return true end
-env.HealBot_Timers_Set=function() end
+local queued={}
+-- Run the production slow-update marker to verify that only this button
+-- enters the per-unit debuff refresh queue when native ownership changes.
+local slowSource=assert(read("HealBot/HealBot.lua"):match("(function HealBot_DebuffSlowUpdate%b().-\nend)"))
+local slowUpdate=setfenv(assert(loadstring(slowSource.."\nreturn HealBot_DebuffSlowUpdate")),{})()
+env.HealBot_DebuffSlowUpdate=function(button)
+    queued[#queued+1]=button
+    slowUpdate(button)
+end
+env.HealBot_Timers_Set=function(_,name) assert(name~="CheckDebuffs","slot change queued a roster-wide refresh") end
 env.HealBot_Aura_GetHiddenDebuffIcons=function(inCombat) return {[inCombat and 988 or 989]=true} end
 d.globals.CombatAurasNativeWeakenedSoul=true
 local b=d.button()
@@ -127,6 +136,9 @@ assert(db and slot and db.shown and slot.shown and db.groups.hbcadb.options.cand
 b.aura={debuff={scanUnit=b.unit,scanCombat=false,publicUnit=b.unit,publicShield=true}}
 d.hook("HealBot_Aura_CheckUnitDebuffs",b)
 assert(not db.shown and not slot.shown and not b.hbcaNativeDebuffs,"readable auras drawn twice")
+assert(#queued==1 and queued[1]==b and b.status.slowupdate and b.aura.debuff.slowupd and b.aura.debuff.update)
+d.hook("HealBot_Aura_CheckUnitDebuffs",b)
+assert(#queued==1,"unchanged slot ownership queued its button twice")
 env.HealBot_Events_UnitDebuff=function(target) target.debuffQueued=true end
 b.aura.debuff.update=false
 d.fire("PLAYER_ENTERING_WORLD")
