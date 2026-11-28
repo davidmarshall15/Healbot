@@ -1128,11 +1128,12 @@ local function HBCA_BuildWeakenedSoulSlot(button, layout)
     return container
 end
 
--- Reserve rows use the same native icon factory and filters as normal bars.
--- Share public configuration within one synchronous pass, never across events.
-function HealBot_Forever_PrepareArrivalAuraContext()
+-- Geometry and donor snapshots belong to this pass. Structural updates can
+-- reuse spell filters after checking the current settings and invalidations.
+function HealBot_Forever_PrepareArrivalAuraContext(reusePolicy)
     if InCombatLockdown() or not HBCA_Enabled() then return {} end
-    return {filters=HBCA_ConfiguredBuffFilters(HBCA_Defaults())}
+    local getFilters=reusePolicy and HBCA_CurrentBuffFilters or HBCA_ConfiguredBuffFilters
+    return {filters=getFilters(HBCA_Defaults())}
 end
 
 -- A roster pass uses one visible donor to skin many unoccupied slots. Read
@@ -1903,7 +1904,7 @@ local function HBCA_Attach(button, context)
     local filters
     if context then
         if context.needsFilters then
-            context.filters=HBCA_ConfiguredBuffFilters(g)
+            context.filters=HBCA_CurrentBuffFilters(g)
             context.needsFilters=nil
         end
         filters=context.filters
@@ -1965,7 +1966,7 @@ local function HBCA_AttachDeferred()
     if InCombatLockdown() then return end
     local context
     for button in pairs(deferred) do
-        context=context or HealBot_Forever_PrepareArrivalAuraContext()
+        context=context or HealBot_Forever_PrepareArrivalAuraContext(true)
         deferred[button]=nil
         HBCA_Attach(button,context)
     end
@@ -1998,7 +1999,7 @@ local function HBCA_DropAll()
     local context=HBCA_AttachDeferred()
     if not InCombatLockdown() then
         for row,donor in pairs(arrivalDonors) do
-            context=context or HealBot_Forever_PrepareArrivalAuraContext()
+            context=context or HealBot_Forever_PrepareArrivalAuraContext(true)
             HealBot_Forever_SkinArrivalAuras(row,donor,context)
             HBCA_ShowArrivalAuras(row)
         end

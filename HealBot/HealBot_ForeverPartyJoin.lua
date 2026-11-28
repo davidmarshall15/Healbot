@@ -460,7 +460,7 @@ local function Sync()
         local reserve=enabled and not UnitExists(row.unit)
         if reserve and donor then
             if not auraContext and HealBot_Forever_PrepareArrivalAuraContext then
-                auraContext=HealBot_Forever_PrepareArrivalAuraContext()
+                auraContext=HealBot_Forever_PrepareArrivalAuraContext(true)
             end
             SkinExtras(row,donor,auraContext)
         end

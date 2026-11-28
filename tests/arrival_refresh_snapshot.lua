@@ -27,11 +27,19 @@ context=prepare and prepare()
 for _,row in ipairs(rows) do d.env.HealBot_Forever_SkinArrivalAuras(row,donor,context) end
 assert(#d.frames==allocated,'unchanged refresh allocates containers')
 if prepare then assert(calls==initial,'unchanged pass must scan once, not once per row') end
+if prepare then
+    calls=0
+    for _=1,8 do
+        local rosterPass=prepare(true)
+        for _,row in ipairs(rows) do d.env.HealBot_Forever_SkinArrivalAuras(row,donor,rosterPass) end
+    end
+    assert(calls==0,'warm roster passes repeated spell lookups')
+end
 for _,row in ipairs(rows) do assert(#row.arrivalAuras==3,'reserve row lost prepared icon sets') end
 -- Next event must see changed settings; a snapshot must never survive the pass.
 d.globals.CustomBuffsIconSet[139]=2
 d.globals.WatchHoT.PRIE[139]=3
-context=prepare and prepare()
+context=prepare and prepare(true)
 for _,row in ipairs(rows) do d.env.HealBot_Forever_SkinArrivalAuras(row,donor,context) end
 for _,row in ipairs(rows) do
     local found=false
@@ -50,7 +58,7 @@ if prepare then
     assert(calls==oneScan,'configuration event rescanned for each reserve row')
     -- DropAll rebuilds normal and reserve rows with the same pass snapshot.
     calls=0; d.env.SlashCmdList.HBCOMBATAURAS('size 19')
-    assert(calls==oneScan,'settings rebuild rescanned for each normal/reserve row')
+    assert(calls==0,'a size-only rebuild rescanned unchanged spell settings')
 end
 -- No native allocations or configuration scan from the direct combat path.
 d.combat(true); calls=0; allocated=#d.frames

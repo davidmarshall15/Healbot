@@ -13,7 +13,8 @@ local snapshots,skins,bindings,watches=0,0,0,0
 env.BindRow=function(row) bindings=bindings+1; row.bindingGeneration=0 end
 env.RegisterUnitWatch=function() watches=watches+1 end
 local last
-env.HealBot_Forever_PrepareArrivalAuraContext=function()
+env.HealBot_Forever_PrepareArrivalAuraContext=function(reusePolicy)
+    assert(reusePolicy,'a structural roster pass requested a full spell-policy rebuild')
     snapshots=snapshots+1; last={generation=snapshots}; return last
 end
 env.SkinExtras=function(row,donor,context)
