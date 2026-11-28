@@ -359,12 +359,29 @@ local function BindRow(row)
     row.bindingGeneration=bindingGeneration
 end
 
-local function SkinExtras(row, donor, auraContext)
+local function FindSkinDonor()
+    local groupToken="^"..rosterMode.."%d+$"
+    local fallback,fx,fy,liveFallback
+    for _,button in pairs(HealBot_Buttons or {}) do
+        if button.frame==frame and button.status.active and button:IsShown() and button.gref and button.gref.Bar then
+            local x,y=button.gref.Bar:GetCenter()
+            if x and y then
+                local unit=button.unit
+                local exists=unit and UnitExists(unit)
+                if exists and (unit=="player" or unit:match(groupToken)) then return button,x,y end
+                if not fallback or (exists and not liveFallback) then
+                    fallback,fx,fy,liveFallback=button,x,y,exists
+                end
+            end
+        end
+    end
+    return fallback,fx,fy
+end
+
+local function SkinExtras(row, donor, auraContext, cx, cy)
     row.frame=frame
     row.skinPower=row.skinPower or {}
     for _,entry in pairs(row.skinPower) do entry.bar:Hide() end
-    local cx,cy=donor.gref.Bar:GetCenter()
-    if not cx or not cy then return end
     for id=1,9 do
         if hbv_Aux_GetBarVar("USE",frame,id)==4 then
             local source=donor.gref.aux[id]
@@ -447,22 +464,20 @@ local function Sync()
         end
         enabled=PositionReservedRows()
     end
-    local donor
-    for _,button in pairs(HealBot_Buttons or {}) do
-        if button.frame==frame and button.status.active and button:IsShown() and button.gref then
-            donor=button
-            break
-        end
-    end
+    local donor,donorX,donorY,checkedDonor
     bindingError=nil
     local auraContext
     for _,row in ipairs(rows) do
         local reserve=enabled and not UnitExists(row.unit)
+        if reserve and not checkedDonor then
+            donor,donorX,donorY=FindSkinDonor()
+            checkedDonor=true
+        end
         if reserve and donor then
             if not auraContext and HealBot_Forever_PrepareArrivalAuraContext then
                 auraContext=HealBot_Forever_PrepareArrivalAuraContext(true)
             end
-            SkinExtras(row,donor,auraContext)
+            SkinExtras(row,donor,auraContext,donorX,donorY)
         end
         if reserve and row.bindingGeneration~=bindingGeneration then
             local ok,err=pcall(BindRow,row)

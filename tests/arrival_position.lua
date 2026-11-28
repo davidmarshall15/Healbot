@@ -44,3 +44,45 @@ donor.gref.icon[1].GetCenter=function() error('combat inspected donor geometry')
 d.env.HealBot_Forever_SkinArrivalAuras(rows[1],donor)
 assert(#d.frames==allocated,'combat allocated frames')
 print('PASS: 28 reserve rows reanchor without allocations; exact offsets, failure hiding/retry, size rebuilds and combat guard preserved')
+
+-- A roster event may fire before the old panel buttons have finished moving.
+-- Exercise Sync with real native aura preparation and the existing secure watch.
+local syncFixture=fixture('PRIEST',4)
+local api=syncFixture.env
+api.IsInRaid=function() return true end
+api.HealBot_retLuVars=function() return true end
+api.HealBot_Media_retLuVars=function() return true end
+api.Healbot_Config_Skins={Current_Skin='test',HealGroups={test={}}}
+api.hbv_Aux_GetBarVar=function() return 1 end
+api.RegisterUnitWatch=function(row) row.watches=(row.watches or 0)+1 end
+local existing={raid2=true,target=true,raid9=true}
+api.UnitExists=function(unit) return existing[unit] end
+local departing=syncFixture.button('raid1')
+local other=syncFixture.button('target')
+local member=syncFixture.button('raid2')
+for _,button in ipairs({departing,other,member}) do button.status.active=true end
+departing.gref.Bar.GetCenter=function() return nil end
+api.HealBot_Buttons={departing,other,member}
+local sync=setfenv(assert(loadstring(read('HealBot/HealBot_ForeverPartyJoin.lua')..[[
+    rows=...
+    rosterMode,frame,frameSkin,skinDirty='raid',1,'test',false
+    PositionReservedRows=function() return true end
+    return Sync
+]])),api)
+local reserve={unit='raid30',healthBar={},bindingGeneration=0,GetFrameLevel=function() return 5 end}
+local donorUsed
+local prepare=api.HealBot_Forever_SkinArrivalAuras
+api.HealBot_Forever_SkinArrivalAuras=function(row,donor,context)
+    donorUsed=donor
+    return prepare(row,donor,context)
+end
+sync=sync({reserve})
+sync()
+assert(reserve.watches==1 and reserve.arrivalAuras and #reserve.arrivalAuras>0,
+    'reserve armed without native aura artwork while another same-frame player was ready')
+assert(donorUsed==member,'a special target displaced the ready raid member as the skin donor')
+existing.raid2=nil
+member.status.active=false
+sync()
+assert(donorUsed==other and reserve.watches==1,'same-frame fallback lost when all regular members left')
+print('PASS: roster shrink arms the reserve with native artwork and retains the alternate donor for split frames')
