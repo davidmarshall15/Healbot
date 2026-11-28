@@ -89,4 +89,20 @@ assert(#callbacks==1); table.remove(callbacks,1)()
 assert(copies(armor,22783,"party2")==1,"late catalogue rank did not update its row")
 events.onEvent(events,"SPELL_DATA_LOAD_RESULT",22783,true)
 assert(#callbacks==0,"resolved catalogue rank recompiled repeatedly")
+-- Disabling the renderer also releases already visible reserve artwork when
+-- no fresh unit event arrives on the reserve token.
+local donor=catalog.button("raid1")
+local reserve={unit="raid2",frame=1,healthBar={},GetFrameLevel=function() return 5 end}
+catalog.env.HealBot_Forever_SkinArrivalAuras(reserve,donor)
+catalog.env.HealBot_Forever_UpdateArrivalAuras(reserve)
+local reserveRow=assert(reserve.arrivalAuras[1]).container
+catalog.combat(true)
+assert(reserveRow.shown and catalog.row(donor).shown)
+catalog.env.HealBot_CombatAuras_SetOption("enabled",false)
+assert(not reserveRow.shown and not catalog.row(donor).shown,"native-off left prepared artwork on a bar")
+catalog.combat(false);catalog.env.HealBot_CombatAuras_SetOption("enabled",true)
+catalog.combat(true);catalog.env.HealBot_Forever_UpdateArrivalAuras(reserve)
+assert(reserve.arrivalAuras[1].container.shown and catalog.row(donor).shown,"native-on did not restore artwork")
+catalog.globals.CombatAurasOn=false;catalog.hook("HealBot_Aura_SetAuraCheckFlags")
+assert(not reserve.arrivalAuras[1].container.shown and not catalog.row(donor).shown,"flag refresh missed a disabled renderer")
 print("PASS: independent native bar and flag policy reuse, live option changes, spellbook and late spell data invalidation")

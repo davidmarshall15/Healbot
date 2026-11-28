@@ -372,9 +372,12 @@ local function HBCA_Defaults()
     return HealBot_Globals
 end
 
+local hiddenWhileDisabled=false
 local function HBCA_Enabled()
     local g=HBCA_Defaults()
-    return g and g.CombatAurasOn and HEALBOT_MIDNIGHT
+    local enabled=g and g.CombatAurasOn and HEALBOT_MIDNIGHT
+    if enabled then hiddenWhileDisabled=false end
+    return enabled
 end
 
 local weakenedSoulSpellID=6788
@@ -1975,6 +1978,17 @@ local function HBCA_SetAllShown(show)
     end
 end
 
+local function HBCA_HideDisabledRows()
+    if hiddenWhileDisabled then return end
+    hiddenWhileDisabled=true
+    policyInputs=nil
+    watchedRankNames,unresolvedPolicyIDs,unresolvedPolicyNames=nil,nil,nil
+    HBCA_SetAllShown(false)
+    if HEALBOT_FOREVER then
+        for row in pairs(arrivalDonors) do HBCA_ShowArrivalAuras(row,false) end
+    end
+end
+
 local function HBCA_DropAll()
     for button in pairs(attached) do HBCA_DropButton(button) end
     attached={}
@@ -1994,7 +2008,11 @@ end
 local function HBCA_RefreshBuffRows(reusePolicy)
     local g=HBCA_Defaults()
     if not HEALBOT_FOREVER or not g then return end
-    if not HBCA_Enabled() or (not next(attached) and not next(arrivalDonors)) then
+    if not HBCA_Enabled() then
+        HBCA_HideDisabledRows()
+        return
+    end
+    if not next(attached) and not next(arrivalDonors) then
         policyInputs=nil
         watchedRankNames,unresolvedPolicyIDs,unresolvedPolicyNames=nil,nil,nil
         return
@@ -2310,7 +2328,7 @@ function HealBot_CombatAuras_SetOption(option, value)
         g[key]=value
     end
     if changed then
-        if option=="enabled" and not value then HBCA_SetAllShown(false)
+        if option=="enabled" and not value then HBCA_HideDisabledRows()
         else HBCA_DropAll() end
         if option=="persist" and HealBot_Forever_UpdateDebuffOverlay then
             for button in pairs(known) do HealBot_Forever_UpdateDebuffOverlay(button) end
