@@ -39,4 +39,58 @@ env.HealBot_ActionIcons_SelfCountTextUpdateAll()
 eq(#timers,0,"a refresh already pending is not restarted")
 eq(rescheduled,1,"a refresh already pending is rescheduled")
 
+local function install(name)
+    local definition=assert(source:match("(function "..name.."%b().-\nend)"))
+    setfenv(assert(loadstring(definition)),env)()
+end
+local secret={}
+local charges,casts,items=0,0,0
+local castReads=0
+env.HealBot_issecretvalue=function(value) return rawequal(value,secret) end
+env.C_Spell={
+    GetSpellCharges=function(id)
+        if id==1 then return {currentCharges=charges} end
+    end,
+    GetSpellCastCount=function() castReads=castReads+1; return casts end,
+}
+local apiPath=arg[2] or "HealBot/Libs/LibWoWAPI/HealBot_WoWAPI.lua"
+setfenv(assert(loadfile(apiPath)),env)()
+env.HealBot_WoWAPI_SetC_Spell()
+env.HealBot_WoWAPI_ItemCount=function() return items end
+env.hbv_ActionIcons_GetBoolean=function() return false end
+env.activeFrames={[3]=true,[5]=true}
+env.iconFrame={[3]={numIcons=3},[5]={numIcons=1}}
+env.actionIcons={[3]={{infoType="spell",infoID=1,count=0},{infoType="spell",infoID=2,count=0},{infoType="item",infoID=3,count=0}},
+    [5]={{infoType="spell",infoID=1,count=0}}}
+env.actionIconFrame={[3]={},[5]={}}
+for frame,icons in pairs(env.actionIcons) do
+    for k in ipairs(icons) do
+        env.actionIconFrame[frame][k]={countText={SetText=function(self,value) self.value=value end}}
+    end
+end
+install("HealBot_ActionIcons_SelfCountText")
+install("HealBot_ActionIcons_SelfCountTextUpdate")
+install("HealBot_ActionIcons_SelfCountTextUpdateExisting")
+charges,casts,items=1,4,3
+run({3})
+eq(env.actionIconFrame[3][1].countText.value,1,"first charge restored from empty")
+eq(env.actionIconFrame[3][2].countText.value,4,"reagent count uses the cast count API")
+eq(env.actionIconFrame[3][3].countText.value,3,"first acquired item restores count")
+eq(castReads,1,"charge-based spell does not query cast count")
+charges,casts,items=secret,secret,secret
+run({3});eq(castReads,2,"protected charge was not evaluated or replaced")
+for k=1,3 do eq(env.actionIconFrame[3][k].countText.value,"","unknown count stays blank") end
+charges=2
+timers,env.hb_lVars,env.activeFramesIdx={},{},{3,5}
+env.HealBot_ActionIcons_SelfCountTextUpdateAll()
+env.activeFrames[3]=nil
+env.activeFramesIdx={5}
+for _,t in ipairs(timers) do t.fn() end
+eq(env.actionIconFrame[3][1].countText.value,"","retired panel untouched")
+eq(env.actionIconFrame[5][1].countText.value,2,"original active panel survives reordered list")
+local legacy=setmetatable({GetSpellCount=function() return 7 end},{__index=_G})
+setfenv(assert(loadfile(apiPath)),legacy)()
+legacy.HealBot_WoWAPI_SetC_Spell()
+eq(legacy.HealBot_WoWAPI_SpellCount(2),7,"legacy item-based count API")
+eq(legacy.HealBot_WoWAPI_SpellCharges(2),nil,"legacy client without charges")
 print("Self count text tests passed: "..passed)

@@ -2108,7 +2108,10 @@ function HealBot_ActionIcons_CheckStateChange()
         --HealBot_setCall("HealBot_ActionIcons_CheckStateChange")
     if #activeFramesIdx>0 then
         for x=1,#activeFramesIdx do
-            C_Timer.After(x/40, function() HealBot_ActionIcons_CheckStateChangeFrame(activeFramesIdx[x]) end)
+            local frame=activeFramesIdx[x]
+            C_Timer.After(x/40, function()
+                if activeFrames[frame] then HealBot_ActionIcons_CheckStateChangeFrame(frame) end
+            end)
         end
     end
 end
@@ -2664,20 +2667,19 @@ end
 
 function HealBot_ActionIcons_SelfCountText(frame, id)
         --HealBot_setCall("HealBot_ActionIcons_SelfCountText")
-    if hbv_ActionIcons_GetBoolean("HIDECOUNTTEXT", frame) then
-        actionIcons[frame][id].count=0
-    elseif actionIcons[frame][id].infoType == "spell" then
-        actionIcons[frame][id].count=HealBot_WoWAPI_SpellCharges(actionIcons[frame][id].infoID) or HealBot_WoWAPI_SpellCount(actionIcons[frame][id].infoID) or 0
-    elseif actionIcons[frame][id].infoType == "item" then
-        actionIcons[frame][id].count=HealBot_WoWAPI_ItemCount(actionIcons[frame][id].infoID, nil, true) or 0
-    else
-        actionIcons[frame][id].count=0
+    local icon=actionIcons[frame][id]
+    local count
+    if not hbv_ActionIcons_GetBoolean("HIDECOUNTTEXT", frame) then
+        if icon.infoType=="spell" then
+            count=HealBot_WoWAPI_SpellCharges(icon.infoID)
+            if not HealBot_issecretvalue(count) and count==nil then count=HealBot_WoWAPI_SpellCount(icon.infoID) end
+        elseif icon.infoType=="item" then
+            count=HealBot_WoWAPI_ItemCount(icon.infoID,nil,true)
+        end
     end
-    if not HealBot_issecretvalue(actionIcons[frame][id].count) and actionIcons[frame][id].count>0 then
-        actionIconFrame[frame][id].countText:SetText(actionIcons[frame][id].count)
-    else
-        actionIconFrame[frame][id].countText:SetText("")
-    end
+    if HealBot_issecretvalue(count) or type(count)~="number" then count=0 end
+    icon.count=count
+    actionIconFrame[frame][id].countText:SetText(count>0 and count or "")
 end
 
 function HealBot_ActionIcons_SelfCountTextUpdate(frame)
@@ -2691,12 +2693,9 @@ end
 
 function HealBot_ActionIcons_SelfCountTextUpdateExisting(frame)
         --HealBot_setCall("HealBot_ActionIcons_SelfCountTextUpdateExisting")
-    if iconFrame[frame].numIcons>0 then
-        for y=1,iconFrame[frame].numIcons do
-            if not HealBot_issecretvalue(actionIcons[frame][y].count) and actionIcons[frame][y].count>0 then
-                HealBot_ActionIcons_SelfCountText(frame, y)
-            end
-        end
+    if activeFrames[frame] and iconFrame[frame] then
+        -- A depleted charge, reagent or item stack can become available again.
+        HealBot_ActionIcons_SelfCountTextUpdate(frame)
     end
 end
 
@@ -2706,7 +2705,8 @@ function HealBot_ActionIcons_SelfCountTextUpdateAll()
         if not hb_lVars["SelfCountTextUpdate"] then
             hb_lVars["SelfCountTextUpdate"]=true
             for x=1,#activeFramesIdx do
-                C_Timer.After(x/40, function() HealBot_ActionIcons_SelfCountTextUpdateExisting(activeFramesIdx[x]) end)
+                local frame=activeFramesIdx[x]
+                C_Timer.After(x/40, function() HealBot_ActionIcons_SelfCountTextUpdateExisting(frame) end)
             end
             C_Timer.After(0.25, function() HealBot_ActionIcons_setLuVars("SelfCountTextUpdate", false) end)
         else
@@ -2784,10 +2784,15 @@ function HealBot_ActionIcons_UpdateAllCDs()
                 onGCD=true
                 C_Timer.After(gcd-0.05, HealBot_ActionIcons_EndGCD)
                 for x=1,#activeFramesIdx do
-                    for y=1,iconFrame[activeFramesIdx[x]].numIcons do
-                        if actionIcons[activeFramesIdx[x]][y].highlight then
-                            HealBot_ActionIcons_FadeIcon(activeFramesIdx[x], y)
-                            C_Timer.After(gcd-0.025, function() HealBot_ActionIcons_CheckHighlightIconAbility(activeFramesIdx[x], y) end)
+                    local frame=activeFramesIdx[x]
+                    for y=1,iconFrame[frame].numIcons do
+                        if actionIcons[frame][y].highlight then
+                            HealBot_ActionIcons_FadeIcon(frame,y)
+                            C_Timer.After(gcd-0.025,function()
+                                if activeFrames[frame] and y<=iconFrame[frame].numIcons then
+                                    HealBot_ActionIcons_CheckHighlightIconAbility(frame,y)
+                                end
+                            end)
                         end
                     end
                     --HealBot_ActionIcons_SelfCDTextUpdate(x)

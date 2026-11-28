@@ -1031,6 +1031,7 @@ end
 
 function HealBot_Events_InvChange()
       --HealBot_setCall("HealBot_Events_InvChange")
+    HealBot_Timers_Set("SKINS","SelfCountTextUpdate",true)
     HealBot_Timers_Set("PLAYER","InvChange")
 end
 

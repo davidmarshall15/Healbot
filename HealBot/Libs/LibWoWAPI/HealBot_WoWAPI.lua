@@ -118,11 +118,11 @@ local function HealBot_WoWAPI_GetCooldownV11(spellId)
 end
 
 local function HealBot_WoWAPI_GetSpellChargesV1(spellId)
-    return GetSpellCharges(spellId)
+    if GetSpellCharges then return GetSpellCharges(spellId) end
 end
 
 local function HealBot_WoWAPI_GetSpellCountV1(spellId)
-    return GetSpellCount(spellId)
+    if GetSpellCount then return GetSpellCount(spellId) end
 end
 
 local function HealBot_WoWAPI_GetSpellChargesV11(spellId)
@@ -173,15 +173,10 @@ function HealBot_WoWAPI_SetC_Spell()
             GetSpellCooldown=C_Spell.GetSpellCooldown
         end
         if C_Spell.GetSpellCharges then
-            HealBot_WoWAPI_GetSpellCount=HealBot_WoWAPI_GetSpellChargesV11
             HealBot_WoWAPI_GetSpellCharges=HealBot_WoWAPI_GetSpellChargesV11
             GetSpellCharges=C_Spell.GetSpellCharges
         end
-        if C_Spell.GetSpellCount then
-            HealBot_WoWAPI_GetSpellCount=HealBot_WoWAPI_GetSpellChargesV11
-            HealBot_WoWAPI_GetSpellCharges=HealBot_WoWAPI_GetSpellChargesV11
-            GetSpellCharges=C_Spell.GetSpellCharges
-        end
+        HealBot_WoWAPI_GetSpellCount=C_Spell.GetSpellCastCount or C_Spell.GetSpellCount or HealBot_WoWAPI_GetSpellCountV1
         HealBot_WoWAPI_GetSpellLink=C_Spell.GetSpellLink or GetSpellLink
         HealBot_WoWAPI_IsPassiveSpell=C_Spell.IsSpellPassive or IsPassiveSpell
         HealBot_WoWAPI_PickupSpell=C_Spell.PickupSpell or PickupSpell
