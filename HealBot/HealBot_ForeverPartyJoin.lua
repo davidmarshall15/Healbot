@@ -337,7 +337,7 @@ local function BindRow(row)
     row.bindingGeneration=bindingGeneration
 end
 
-local function SkinExtras(row, donor)
+local function SkinExtras(row, donor, auraBatch)
     row.frame=frame
     row.skinPower=row.skinPower or {}
     for _,entry in pairs(row.skinPower) do entry.bar:Hide() end
@@ -378,7 +378,7 @@ local function SkinExtras(row, donor)
             end
         end
     end
-    if HealBot_Forever_SkinArrivalAuras then HealBot_Forever_SkinArrivalAuras(row,donor) end
+    if HealBot_Forever_SkinArrivalAuras then HealBot_Forever_SkinArrivalAuras(row,donor,auraBatch) end
 end
 
 local function Sync()
@@ -433,9 +433,10 @@ local function Sync()
         end
     end
     bindingError=nil
+    local auraBatch={}
     for _,row in ipairs(rows) do
         local reserve=enabled and not UnitExists(row.unit)
-        if reserve and donor then SkinExtras(row,donor) end
+        if reserve and donor then SkinExtras(row,donor,auraBatch) end
         if reserve and row.bindingGeneration~=bindingGeneration then
             local ok,err=pcall(BindRow,row)
             if not ok then
