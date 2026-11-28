@@ -12,7 +12,13 @@ env.BindRow=function() end
 local snapshots,skins,bindings,watches=0,0,0,0
 env.BindRow=function(row) bindings=bindings+1; row.bindingGeneration=0 end
 env.RegisterUnitWatch=function() watches=watches+1 end
-local last
+local last,extraContext,worker,builds=nil,nil,nil,0
+local create=env.CreateFrame
+env.CreateFrame=function(...)
+    local frame=create(...)
+    function frame:SetScript(_,callback) worker=callback end
+    return frame
+end
 env.HealBot_Forever_PrepareArrivalAuraContext=function(reusePolicy)
     assert(reusePolicy,'a structural roster pass requested a full spell-policy rebuild')
     snapshots=snapshots+1; last={generation=snapshots}; return last
@@ -20,15 +26,24 @@ end
 env.SkinExtras=function(row,donor,context,x,y)
     skins=skins+1
     assert(x==1 and y==2,'reserve did not share the donor center')
-    assert(context==last and context.generation==snapshots,'roster rows did not share this pass snapshot')
+    if skins%28==1 then extraContext=context end
+    assert(context==extraContext,'reserve power rows did not share this pass snapshot')
 end
+env.HealBot_Forever_SkinArrivalAuras=function(_,_,context)
+    builds=builds+1
+    assert(context==last and context.generation==snapshots,'native rows did not share this pass snapshot')
+end
+env.HealBot_Forever_UpdateArrivalAuras=function() end
 local centerReads=0
 local donor={unit='raid1',frame=1,status={active=true},IsShown=function() return true end,
     gref={Bar={GetCenter=function() centerReads=centerReads+1; return 1,2 end}}}
 env.HealBot_Buttons={donor}
 env.API.queue(); env.tick()
-assert(snapshots==1 and skins==28 and bindings==28 and watches==28,'raid reserve pass counts')
+assert(snapshots==0 and skins==28 and bindings==28 and watches==28,'raid reserve pass counts')
+while worker do worker() end
+assert(snapshots==1 and builds==28)
 env.API.queue(); env.tick()
+while worker do worker() end
 assert(snapshots==2 and skins==56,'next event must get a fresh snapshot')
 assert(centerReads==2,'donor center read again for individual reserve rows')
 assert(bindings==28 and watches==28,'unchanged pass repeated secure binding/watch changes')

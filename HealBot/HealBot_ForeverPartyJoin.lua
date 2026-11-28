@@ -648,11 +648,11 @@ local function PowerStyles(donor,cx,cy)
     return styles
 end
 
-local function SkinExtras(row, donor, auraContext, cx, cy)
+local function SkinExtras(row, donor, context, cx, cy)
     row.frame=frame
     row.skinPower=row.skinPower or {}
-    if not auraContext.powerStyles then auraContext.powerStyles=PowerStyles(donor,cx,cy) end
-    local styles=auraContext.powerStyles
+    if not context.powerStyles then context.powerStyles=PowerStyles(donor,cx,cy) end
+    local styles=context.powerStyles
     for id,entry in pairs(row.skinPower) do
         if not styles[id] and entry.shown then
             entry.bar:Hide()
@@ -688,7 +688,66 @@ local function SkinExtras(row, donor, auraContext, cx, cy)
             if fontApplied then entry.style,entry.anchor=style,row.healthBar end
         end
     end
-    if HealBot_Forever_SkinArrivalAuras then HealBot_Forever_SkinArrivalAuras(row,donor,auraContext) end
+end
+
+-- Secure watches, click bindings and base artwork are ready in Sync. Native
+-- aura templates for empty slots are substantially more expensive. Prepare one
+-- member per rendered frame, starting with the next available roster slot.
+local auraWorker
+local auraRoster,auraDonor,auraContext
+local auraIndex,auraRemaining=1,0
+
+local function StopAuraPreparation()
+    auraDonor,auraContext=nil,nil
+    auraRemaining=0
+    if auraWorker then auraWorker:SetScript("OnUpdate",nil) end
+end
+
+local function PrepareNextReserve()
+    if InCombatLockdown() or HealBot_Globals.ForeverPartyJoin==false then
+        StopAuraPreparation()
+        return
+    end
+    if skinDirty then return end
+    if not auraDonor.status.active or not auraDonor:IsShown() or auraDonor.frame~=frame then
+        auraDonor=FindSkinDonor()
+        auraContext=nil
+        if not auraDonor then StopAuraPreparation(); return end
+    end
+    while auraRemaining>0 do
+        local row=rows[auraIndex]
+        auraIndex=auraIndex%#rows+1
+        auraRemaining=auraRemaining-1
+        if row.reserve and not UnitExists(row.unit) then
+            auraContext=auraContext or HealBot_Forever_PrepareArrivalAuraContext(true)
+            HealBot_Forever_SkinArrivalAuras(row,auraDonor,auraContext)
+            HealBot_Forever_UpdateArrivalAuras(row)
+            break
+        end
+    end
+    if auraRemaining==0 then
+        auraIndex=1
+        StopAuraPreparation()
+    end
+end
+
+local function QueueReserveAuras(donor)
+    if not donor or not HealBot_Forever_SkinArrivalAuras then
+        if auraRemaining>0 then StopAuraPreparation() end
+        return
+    end
+    -- Keep our place through repeated roster changes so later rows get a turn.
+    if auraRoster~=rows then auraIndex=1 end
+    auraRoster,auraDonor,auraContext=rows,donor,nil
+    if auraRemaining==0 then
+        auraWorker=auraWorker or CreateFrame("Frame")
+        auraWorker:SetScript("OnUpdate",PrepareNextReserve)
+    end
+    auraRemaining=#rows
+end
+
+function HealBot_Forever_UpdateQueuedArrivalFilters(filters)
+    if auraContext then auraContext.filters=filters end
 end
 
 local function Sync()
@@ -737,7 +796,7 @@ local function Sync()
     end
     local donor,donorX,donorY,checkedDonor
     bindingError=nil
-    local auraContext
+    local extraContext={}
     for _,row in ipairs(rows) do
         local reserve=enabled and not UnitExists(row.unit)
         if reserve and not checkedDonor then
@@ -745,10 +804,7 @@ local function Sync()
             checkedDonor=true
         end
         if reserve and donor then
-            if not auraContext then
-                auraContext=HealBot_Forever_PrepareArrivalAuraContext and HealBot_Forever_PrepareArrivalAuraContext(true) or {}
-            end
-            SkinExtras(row,donor,auraContext,donorX,donorY)
+            SkinExtras(row,donor,extraContext,donorX,donorY)
         end
         if reserve and row.bindingGeneration~=bindingGeneration then
             local ok,err=pcall(BindRow,row)
@@ -766,6 +822,7 @@ local function Sync()
             row:Hide()
         end
     end
+    QueueReserveAuras(donor)
 end
 
 local function QueueSync()
@@ -780,6 +837,10 @@ local function QueueSync()
         end
     end
     C_Timer.After(0,TrySync)
+end
+
+function HealBot_Forever_QueueReserveAuraRefresh()
+    QueueSync()
 end
 
 local events=CreateFrame("Frame")
@@ -856,6 +917,8 @@ end
 
 function HealBot_Forever_VisitPartyPerfScopes(visit)
     Sync=visit("PartyJoin.Sync",Sync)
+    PrepareNextReserve=visit("PartyJoin.PrepareReserve",PrepareNextReserve)
+    if auraRemaining>0 then auraWorker:SetScript("OnUpdate",PrepareNextReserve) end
 end
 
 function HealBot_Forever_VisitReserveBars(visit)

@@ -79,6 +79,7 @@ assert(not r.hitches[2].following.recentHomeLatencyMs and not r.hitches[2].follo
 assert(r.playerClass=="WARRIOR" and r.clientBuild=="71139" and r.startedUtc==1780000000)
 assert(r.slowFrames==2 and #r.hitches==2 and h.boundary.wallMs==160)
 assert(h.boundary.heaviestName=="HealBot_Panel_PartyChanged" and h.boundary.heaviestMs==11)
+assert(table.concat(printed,"\n"):find("160.0ms frame boundary: HealBot_Panel_PartyChanged, 11.0ms",1,true))
 assert(h.boundary.tooltipPhases.HealBot_Action_DoRefreshTooltip.ms==2)
 assert(h.boundary.tooltipPhases.HealBot_Action_DoRefreshTooltip.calls==1)
 for name,cost in pairs(updateCosts) do

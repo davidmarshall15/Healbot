@@ -99,7 +99,7 @@ local bindingGeneration=0
 -- actual media helpers, so early initialization still reproduces nil LSM.
 local source=read("HealBot/HealBot_ForeverPartyJoin.lua")
 local sync=between(source,'local function FindSkinDonor()','local function SkinExtras(')
-    ..between(source,'local function Sync()','local events=CreateFrame("Frame")')
+    ..between(source,'local auraWorker','local events=CreateFrame("Frame")')
 local media=read("HealBot/Libs/LibMedia/HealBot_Media.lua")
 media=media:sub(1,assert(media:find("local hbSounds={}",1,true))-1)
 local function runtime()

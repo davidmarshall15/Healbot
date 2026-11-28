@@ -63,11 +63,11 @@ local member=syncFixture.button('raid2')
 for _,button in ipairs({departing,other,member}) do button.status.active=true end
 departing.gref.Bar.GetCenter=function() return nil end
 api.HealBot_Buttons={departing,other,member}
-local sync=setfenv(assert(loadstring(read('HealBot/HealBot_ForeverPartyJoin.lua')..[[
+local rosterRuntime=setfenv(assert(loadstring(read('HealBot/HealBot_ForeverPartyJoin.lua')..[[
     rows=...
     rosterMode,frame,frameSkin,skinDirty='raid',1,'test',false
     PositionReservedRows=function() return true end
-    return Sync
+    return Sync,PrepareNextReserve
 ]])),api)
 local reserve={unit='raid30',healthBar={},bindingGeneration=0,GetFrameLevel=function() return 5 end}
 local donorUsed
@@ -76,13 +76,46 @@ api.HealBot_Forever_SkinArrivalAuras=function(row,donor,context)
     donorUsed=donor
     return prepare(row,donor,context)
 end
-sync=sync({reserve})
+local sync,update=rosterRuntime({reserve})
 sync()
+assert(reserve.watches==1 and not reserve.arrivalAuras,"secure watch must be ready before native artwork")
+update()
 assert(reserve.watches==1 and reserve.arrivalAuras and #reserve.arrivalAuras>0,
     'reserve armed without native aura artwork while another same-frame player was ready')
 assert(donorUsed==member,'a special target displaced the ready raid member as the skin donor')
 existing.raid2=nil
 member.status.active=false
 sync()
+update()
 assert(donorUsed==other and reserve.watches==1,'same-frame fallback lost when all regular members left')
 print('PASS: roster shrink arms the reserve with native artwork and retains the alternate donor for split frames')
+
+syncFixture.skin.limits={4,4,4}
+local battleground={}
+for i=1,40 do
+    if i<=9 then existing["raid"..i]=true end
+    battleground[i]={unit="raid"..i,healthBar={},bindingGeneration=0,GetFrameLevel=function() return 5 end}
+end
+member.status.active=true
+sync,update=rosterRuntime(battleground)
+local count=#syncFixture.frames
+sync()
+local function newContainers()
+    local n=0
+    for j=count+1,#syncFixture.frames do
+        if syncFixture.frames[j].kind=="AuraContainer" then n=n+1 end
+    end
+    count=#syncFixture.frames
+    return n
+end
+assert(newContainers()==0,"Warsong entry allocated a native reserve container in PartyJoin.Sync")
+local total,peak=0,0
+for i=10,40 do
+    update()
+    local n=newContainers()
+    assert(n>0 and battleground[i].watches==1 and #battleground[i].arrivalAuras==3,
+        "reserve skin or native icon sets failed to warm")
+    total,peak=total+n,math.max(peak,n)
+end
+assert(total==peak*31,"expected the same configured icon count on every reserve")
+print(("PASS: real battleground reserve builds spread %d native containers across 31 renders, max %d per frame"):format(total,peak))

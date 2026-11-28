@@ -47,10 +47,10 @@ local function pass()
     for _,row in ipairs(rows) do skin(row,donor,context,20,15) end
 end
 pass()
-assert(allocated==39 and fonts==39 and auras==39)
+assert(allocated==39 and fonts==39 and auras==0)
 writes,fonts,centers,auras=0,0,0,0
 for i=1,10 do pass() end
-assert(writes==0 and fonts==0 and centers==10 and auras==390,
+assert(writes==0 and fonts==0 and centers==10 and auras==0,
     ("ten unchanged passes: %d writes, %d font calls, %d donor center reads, %d aura refreshes"):format(writes,fonts,centers,auras))
 local function changed(t,k,v)
     t[k]=v; writes,fonts=0,0; pass()

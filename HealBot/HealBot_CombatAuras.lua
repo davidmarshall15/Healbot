@@ -2008,7 +2008,9 @@ local function HBCA_DropAll()
     -- re-attach everything we have ever seen (builds run now or at next regen)
     for button in pairs(known) do deferred[button]=true end
     local context=HBCA_AttachDeferred()
-    if not InCombatLockdown() then
+    if HealBot_Forever_QueueReserveAuraRefresh then
+        HealBot_Forever_QueueReserveAuraRefresh()
+    elseif not InCombatLockdown() then
         for row,donor in pairs(arrivalDonors) do
             context=context or HealBot_Forever_PrepareArrivalAuraContext(true)
             HealBot_Forever_SkinArrivalAuras(row,donor,context)
@@ -2032,6 +2034,7 @@ local function HBCA_RefreshBuffRows(reusePolicy)
     local filters
     if reusePolicy then filters=HBCA_CurrentBuffFilters(g)
     else filters=HBCA_ConfiguredBuffFilters(g) end
+    if HealBot_Forever_UpdateQueuedArrivalFilters then HealBot_Forever_UpdateQueuedArrivalFilters(filters) end
     local combat=InCombatLockdown()
     local canUpdate=not combat or (HealBot_Config_Buffs and HealBot_Config_Buffs.BuffCustomWatchInCombat==true)
     for button,rows in pairs(attached) do
@@ -2066,6 +2069,7 @@ local function HBCA_RefreshBuffRows(reusePolicy)
 end
 
 local rankRefreshQueued=false
+local pendingDurationRefresh=false
 local function HBCA_QueueRankRefresh()
     policyInputs=nil
     if rankRefreshQueued or not C_Timer or not C_Timer.After then return end
@@ -2141,6 +2145,10 @@ ev:SetScript("OnEvent", function(_, event, spellID, success)
         for container in pairs(pendingRetirement) do RetireAuraContainer(container) end
         HBCA_SetAllShown(HEALBOT_FOREVER)
         HBCA_AttachDeferred()
+        if pendingDurationRefresh then
+            pendingDurationRefresh=false
+            HBCA_RefreshBuffRows(true)
+        end
         if HEALBOT_FOREVER and HealBot_Aura_RefreshDebuffIconVisibility then
             HealBot_Aura_RefreshDebuffIconVisibility(true)
         end
@@ -2337,6 +2345,14 @@ function HealBot_CombatAuras_SetOption(option, value)
     end
     if changed then
         if option=="enabled" and not value then HBCA_HideDisabledRows()
+        elseif HEALBOT_FOREVER and option=="maxdur" then
+            if InCombatLockdown() and not (HealBot_Config_Buffs and HealBot_Config_Buffs.BuffCustomWatchInCombat==true) then
+                pendingDurationRefresh=true
+            else
+                pendingDurationRefresh=false
+                HBCA_RefreshBuffRows(true)
+            end
+        elseif HEALBOT_FOREVER and option=="persist" then HBCA_SetAllShown(true)
         else HBCA_DropAll() end
         if option=="persist" and HealBot_Forever_UpdateDebuffOverlay then
             for button in pairs(known) do HealBot_Forever_UpdateDebuffOverlay(button) end
