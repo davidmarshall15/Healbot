@@ -492,7 +492,7 @@ end
 -- No native UI methods, aura data, settings or combat behavior are replaced.
 do
     local enabled = false
-    local timingRevision = "1.7"
+    local timingRevision = "1.8"
     local shieldCounts
     local started
     local stats = {}
@@ -732,7 +732,8 @@ do
         stats = {}
         -- Fixed counters only. Neither targets nor cast identifiers enter SavedVariables.
         shieldCounts={sent=0,targetMissing=0,castKeyMissing=0,matched=0,rankMismatch=0,unpaired=0,
-            directClick=0,clickMatched=0,auraMatched=0,
+            directClick=0,clickMatched=0,auraMatched=0,ownDebuffFound=0,publicNameMiss=0,nameHidden=0,
+            clickAbsent=0,clickRankMismatch=0,clickNameMismatch=0,clickLate=0,clickInvalidated=0,
             completeSeen=0,partialSeen=0,partialUnknown=0,completeMiss=0,missAfterSeen=0,
             selected=0,suppressed=0,painted=0,outOfRange=0,paintBlocked=0}
         HealBot_Forever_ShieldPerf=shieldCounts
@@ -809,8 +810,13 @@ do
         print(string.format("Shield: %d sent, %d matched, %d unresolved target names, %d missing cast keys, %d rank mismatches, %d unpaired at success.",
             shieldCounts.sent,shieldCounts.matched,shieldCounts.targetMissing,shieldCounts.castKeyMissing,
             shieldCounts.rankMismatch,shieldCounts.unpaired))
-        print(string.format("Direct shield clicks: %d. Missing targets recovered by click: %d; by aura: %d.",
-            shieldCounts.directClick,shieldCounts.clickMatched,shieldCounts.auraMatched))
+        print(string.format("Direct shield clicks: %d. Missing targets recovered by click: %d; by aura: %d. Own debuffs found on clicked unit: %d.",
+            shieldCounts.directClick,shieldCounts.clickMatched,shieldCounts.auraMatched,shieldCounts.ownDebuffFound))
+        if shieldCounts.targetMissing>0 then
+            print(string.format("Unresolved names: %d readable, %d hidden, %d empty. Click misses: %d absent, %d wrong rank, %d name conflicts, %d late, %d roster changes.",
+                shieldCounts.publicNameMiss,shieldCounts.nameHidden,shieldCounts.targetMissing-shieldCounts.publicNameMiss-shieldCounts.nameHidden,
+                shieldCounts.clickAbsent,shieldCounts.clickRankMismatch,shieldCounts.clickNameMismatch,shieldCounts.clickLate,shieldCounts.clickInvalidated))
+        end
         print(string.format("6788 scans: %d complete seen, %d partial seen, %d partial unknown, %d own-lockout misses (%d after seen). Warning selected/suppressed %d/%d. Paint/range/blocked %d/%d/%d.",
             shieldCounts.completeSeen,shieldCounts.partialSeen,
             shieldCounts.partialUnknown,shieldCounts.completeMiss,shieldCounts.missAfterSeen,

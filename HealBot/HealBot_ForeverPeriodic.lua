@@ -309,10 +309,30 @@ local function ShieldGUID(unit)
     if ok and PublicString(guid) and guid~="nil" then return guid end
 end
 
-local function ShieldUnitName(unit)
+local function ShieldUsesSurnames()
+    if not RegionalUniqueNamesEnabled then return false end
+    local ok,value=pcall(RegionalUniqueNamesEnabled)
+    return ok and not secret(value) and value==true
+end
+
+local function ShieldUnitName(unit,withCastNames)
     local named,short,realm=pcall(UnitFullName,unit)
     if not named or not PublicString(short) then return end
     if secret(realm) then return nil,short end
+    -- Forever exposes given name and surname separately. The spell event can
+    -- use their space-separated display name. Keep the existing identity key
+    -- and obtain any realm-qualified display form from this specific unit.
+    local display,qualified
+    if withCastNames and PublicString(realm) and not short:find(" ",1,true) and ShieldUsesSurnames() then
+        display=short.." "..realm
+        if GetUnitName then
+            local ok,unitName=pcall(GetUnitName,unit,true)
+            if ok and PublicString(unitName) then
+                local who,server=unitName:match("^([^-]+)%-(.+)$")
+                if who==display then qualified=who.."-"..server:gsub("%s","") end
+            end
+        end
+    end
     if not realm or realm=="" then
         local found,home=pcall(GetNormalizedRealmName)
         if found and PublicString(home) then realm=home else realm=nil end
@@ -320,7 +340,19 @@ local function ShieldUnitName(unit)
     local full=PublicString(realm) and short.."-"..realm:gsub("%s","") or nil
     local player,isPlayer=pcall(UnitIsPlayer,unit)
     local nameKey=full and player and not secret(isPlayer) and isPlayer and "name:"..full or nil
-    return nameKey,short,full
+    return nameKey,short,full,display,qualified
+end
+
+local function NormalizeShieldCastName(name)
+    local character,realm=name:match("^([^-]+)%-(.+)$")
+    if realm then return character.."-"..realm:gsub("%s","") end
+    return name
+end
+
+local function ShieldClickNameMatches(click,name)
+    if not PublicString(name) then return true end
+    name=NormalizeShieldCastName(name)
+    return name==click.short or name==click.full or name==click.display or name==click.qualified
 end
 
 local function ShieldMatches(target,guid,name)
@@ -330,12 +362,11 @@ end
 
 local function ResolveShieldTarget(name)
     if not PublicString(name) then return end
-    local character,realm=name:match("^([^-]+)%-(.+)$")
-    if realm then name=character.."-"..realm:gsub("%s","") end
+    name=NormalizeShieldCastName(name)
     local target
     for unit in pairs(buttonsByUnit) do
-        local key,short,full=ShieldUnitName(unit)
-        if name==short or name==full then
+        local key,short,full,display,qualified=ShieldUnitName(unit,true)
+        if name==short or name==full or name==display or name==qualified then
             local guid=ShieldGUID(unit)
             if not (guid or key) or (target and not ShieldMatches(target,guid,key)) then return end
             if not target then target={guid=guid,name=key}
@@ -352,13 +383,19 @@ local function CaptureShieldClick(frame,mouseButton,button)
     local unit=button.unit
     if not PublicString(unit) then return end
     local guid=ShieldGUID(unit)
-    local name,short,full=ShieldUnitName(unit)
+    local name,short,full,display,qualified=ShieldUnitName(unit,true)
     local slot=unit=="player" or unit:match("^party%d+$") or unit:match("^raid%d+$")
     if not guid and not name and not slot then return end
-    shieldClick={guid=guid,name=name,short=short,full=full,rank=rank,clicked=GetTime(),
-        unit=unit,group=buttonsByUnit[unit],roster=shieldRoster,slot=slot and unit or nil}
+    shieldClick={guid=guid,name=name,short=short,full=full,display=display,qualified=qualified,rank=rank,clicked=GetTime(),
+        frame=frame,unit=unit,group=buttonsByUnit[unit],roster=shieldRoster,slot=slot and unit or nil}
     local counts=HealBot_Forever_ShieldPerf
     if counts then counts.directClick=counts.directClick+1 end
+end
+
+-- A synchronous SENT can be delivered during the secure click. The physical
+-- button remains its source until its normal or emergency PostClick begins.
+function HealBot_Forever_EndShieldClick(frame)
+    if shieldClick and shieldClick.frame==frame then shieldClick.frame=nil end
 end
 
 local function CurrentShieldSlot(target,unit,guid,name)
@@ -490,8 +527,8 @@ local function MatchOwnedShield(cast,unit,aura,freshAddition)
         -- is hidden. Bound the estimate from SENT; later delivery cannot extend it.
         start=cast.sentAt
     else return end
-    local name,short,full=ShieldUnitName(unit)
-    if cast.sentName and cast.sentName~=short and cast.sentName~=full then return end
+    local name,short,full,display,qualified=ShieldUnitName(unit,cast.sentName~=nil)
+    if cast.sentName and cast.sentName~=short and cast.sentName~=full and cast.sentName~=display and cast.sentName~=qualified then return end
     local guid=ShieldGUID(unit)
     if not guid and not name then return end
     local absent=cast.absence and (cast.absence[guid] or cast.absence[name])
@@ -504,6 +541,19 @@ end
 local function ObservePendingShield(unit,info)
     local cast=unresolvedShield
     if GetTime()>cast.sentAt+1.5 then unresolvedShield=nil; return end
+    local hint=cast.harmfulHint
+    if hint and unit==hint.slot then
+        local guid=ShieldGUID(unit)
+        local name=hint.name and not (guid and hint.guid) and ShieldUnitName(unit) or nil
+        if not CurrentShieldSlot(hint,unit,guid,name) then
+            cast.harmfulHint=nil
+        else
+            cast.hintReads=(cast.hintReads or 0)+1
+            if HealBot_Events_ObserveOwnShieldDebuff(unit,buttonsByUnit[unit]) or cast.hintReads>=2 then
+                cast.harmfulHint=nil
+            end
+        end
+    end
     if ReadableTable(info) then
         if ReadableTable(info.addedAuras) then
             local removed,updated=info.removedAuraInstanceIDs,info.updatedAuraInstanceIDs
@@ -527,6 +577,28 @@ local function ObservePendingShield(unit,info)
     end
 end
 
+local function ShieldClickRejection(click,spellID,name)
+    if not click then return "clickAbsent" end
+    if click.roster~=shieldRoster or click.group~=buttonsByUnit[click.unit] then return "clickInvalidated" end
+    if not ShieldClickNameMatches(click,name) then return "clickNameMismatch" end
+    if click.rank~=spellID then
+        -- Some casts are reported under their base spell. Accept that spelling
+        -- only inside this actual action when the client's rank map agrees.
+        if not click.frame or not C_Spell or not C_Spell.GetBaseSpell then return "clickRankMismatch" end
+        local ok,base=pcall(C_Spell.GetBaseSpell,click.rank)
+        if not ok or secret(base) or base~=spellID then return "clickRankMismatch" end
+    end
+    if click.frame or click.clicked==GetTime() then return end
+    -- Queued casts may be sent later. Require a fully qualified, exact public
+    -- target from the click in that case; time or current mouseover alone can
+    -- also describe a failed click followed by somebody else's hotkey target.
+    if PublicString(name) and GetTime()-click.clicked<=1 then
+        local normalized=NormalizeShieldCastName(name)
+        if normalized==click.qualified or normalized==click.full or normalized==click.display then return end
+    end
+    return "clickLate"
+end
+
 local function TrackShieldCast(event,first,second,third)
     local counts=HealBot_Forever_ShieldPerf
     local click
@@ -534,20 +606,23 @@ local function TrackShieldCast(event,first,second,third)
         click,shieldClick=shieldClick,nil
         if PublicString(second) then shieldCasts[second]=nil end
     elseif event=="UNIT_SPELLCAST_FAILED" or event=="UNIT_SPELLCAST_FAILED_QUIET" or event=="UNIT_SPELLCAST_INTERRUPTED" then
-        shieldClick=nil
+        -- A delayed failure for an already submitted cast can arrive during
+        -- a fresh click. Only an unassigned failure can cancel that input.
+        if shieldClick and not (PublicString(first) and shieldCasts[first])
+            and (secret(second) or not second or second==shieldClick.rank) then shieldClick=nil end
     end
     if event=="UNIT_SPELLCAST_SENT" and ShieldSpell(third) then
         unresolvedShield=nil
         if counts then counts.sent=counts.sent+1 end
         if PublicString(second) then
             local cast=ResolveShieldTarget(first)
-            if not cast and counts then counts.targetMissing=counts.targetMissing+1 end
-            -- The first matching send in the actual click frame may use its
-            -- explicit spell action's recipient. Never borrow a prior hover,
-            -- a failed click from another frame or a conflicting public name.
-            if click and click.rank==third and click.clicked==GetTime()
-                and click.roster==shieldRoster and click.group==buttonsByUnit[click.unit]
-                and (not PublicString(first) or first==click.short or first==click.full) then
+            if not cast and counts then
+                counts.targetMissing=counts.targetMissing+1
+                if secret(first) then counts.nameHidden=counts.nameHidden+1
+                elseif PublicString(first) then counts.publicNameMiss=counts.publicNameMiss+1 end
+            end
+            local rejection=ShieldClickRejection(click,third,first)
+            if not rejection then
                 if not cast then
                     click.recovered=true
                     cast=click
@@ -555,10 +630,18 @@ local function TrackShieldCast(event,first,second,third)
                     click.guid,click.name=cast.guid or click.guid,cast.name or click.name
                     cast=click
                 end
+            elseif not cast and counts then
+                counts[rejection]=counts[rejection]+1
             end
             if not cast then
                 if shieldRanks[third] then
-                    cast={sentAt=GetTime(),sentName=PublicString(first) and first or nil}
+                    cast={sentAt=GetTime(),sentName=PublicString(first) and NormalizeShieldCastName(first) or nil}
+                    if rejection=="clickLate" and click.slot and cast.sentAt-click.clicked<=1
+                        and HealBot_Events_ObserveOwnShieldDebuff then
+                        -- This only chooses a place to look. Painting still
+                        -- requires a verified aura on that specific unit.
+                        cast.harmfulHint=click
+                    end
                     unresolvedShield=cast
                 end
             end

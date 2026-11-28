@@ -70,6 +70,10 @@ for pass=1,2 do
     e.HealBot_Forever_ShieldPerf.sent=pass
     assert(e.HealBot_Forever_ShieldPerf.directClick==0 and e.HealBot_Forever_ShieldPerf.clickMatched==0 and e.HealBot_Forever_ShieldPerf.auraMatched==0)
     e.HealBot_Forever_ShieldPerf.directClick,e.HealBot_Forever_ShieldPerf.clickMatched,e.HealBot_Forever_ShieldPerf.auraMatched=3,2,1
+    assert(e.HealBot_Forever_ShieldPerf.clickLate==0 and e.HealBot_Forever_ShieldPerf.nameHidden==0)
+    assert(e.HealBot_Forever_ShieldPerf.ownDebuffFound==0)
+    e.HealBot_Forever_ShieldPerf.ownDebuffFound=1
+    e.HealBot_Forever_ShieldPerf.targetMissing,e.HealBot_Forever_ShieldPerf.nameHidden,e.HealBot_Forever_ShieldPerf.clickLate=2,1,1
     assert(sampler.shown and sampler.events.PLAYER_ENTERING_WORLD and sampler.events.PLAYER_REGEN_DISABLED)
     local syncCount,x,y,z=runSync(1,nil,3)
     assert(syncCount==3 and x==1 and y==nil and z==3)
@@ -98,9 +102,11 @@ for pass=1,2 do
     assert(e.HealBot_Action_setLuVars==original and e.HealBot_Timers_Set==throwing,'global wrappers not restored')
     e.HealBot_Forever_VisitAuraPerfScopes(function(name,fn) assert(fn==baseline[name],'local wrapper not restored'); return fn end)
     local report=d.globals.ForeverPerformanceReport
-    assert(report.revision=='1.7' and report.slowFrames==1,'report lost frame metrics')
+    assert(report.revision=='1.8' and report.slowFrames==1,'report lost frame metrics')
     assert(report.shield.directClick==3 and report.shield.clickMatched==2 and report.shield.auraMatched==1)
     assert(table.concat(lines,'\n'):find("Direct shield clicks: 3. Missing targets recovered by click: 2; by aura: 1.",1,true))
+    assert(table.concat(lines,'\n'):find("Own debuffs found on clicked unit: 1.",1,true))
+    assert(table.concat(lines,'\n'):find("Unresolved names: 0 readable, 1 hidden, 1 empty. Click misses: 0 absent, 0 wrong rank, 0 name conflicts, 1 late, 0 roster changes.",1,true))
     assert(report.shield.sent==pass and report.shield.partialUnknown==0 and not e.HealBot_Forever_ShieldPerf)
     assert(table.concat(lines,'\n'):find('Shield: '..pass..' sent',1,true))
     assert(not sampler.shown and not next(sampler.events),'profiling events still subscribed after report')

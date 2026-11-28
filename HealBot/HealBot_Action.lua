@@ -8034,6 +8034,7 @@ end
 
 function HealBot_Action_PostClick(self,button)
       --HealBot_setCall("HealBot_Action_PostClick", self)
+    if HealBot_Forever_EndShieldClick then HealBot_Forever_EndShieldClick(self) end
     if self.id == 999 then
         HealBot_Panel_clickToFocus("hide")
         HealBot_nextRecalcParty(3)
@@ -8044,6 +8045,7 @@ end
 
 function HealBot_EmergAction_PostClick(self,button)
       --HealBot_setCall("HealBot_EmergAction_PostClick", self)
+    if HealBot_Forever_EndShieldClick then HealBot_Forever_EndShieldClick(self) end
     xButton=HealBot_Buttons[self.id]
     if self.id == 999 then
         HealBot_Panel_clickToFocus("hide")

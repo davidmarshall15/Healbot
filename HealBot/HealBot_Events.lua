@@ -603,12 +603,40 @@ local function RememberReportedAura(button,aura,fromScan,previous)
     record.expirationTime=expires
     record.scan=cache.scan
     cache.records[instance]=record
+    return true
 end
 
 function HealBot_Events_RememberScannedCustomDebuff(button,aura)
     -- A timed public application observed before combat remains useful if a
     -- later enumeration becomes restricted while UNIT_AURA stays subscribed.
     RememberReportedAura(button,aura,true)
+end
+
+-- A delayed click only selects the unit to inspect. The filtered list still
+-- has to expose the actual debuff and its current expiration on that unit.
+function HealBot_Events_ObserveOwnShieldDebuff(unit,subscribed)
+    if not HealBot_Config_Cures or not HealBot_Config_Cures.CDCshownHB or not C_UnitAuras.GetUnitAuras then return end
+    local ok,auras=pcall(C_UnitAuras.GetUnitAuras,unit,"HARMFUL|PLAYER")
+    if not ok or not ReadableAuraTable(auras) then return end
+    local found=false
+    for _,aura in ipairs(auras) do
+        if ReadableAuraTable(aura) and not HealBot_issecretvalue(aura.spellId) and aura.spellId==6788
+            and not HealBot_issecretvalue(aura.sourceUnit) and aura.sourceUnit=="player" then
+            for button in pairs(subscribed) do
+                if button.unit==unit and button.status.events and button.event and button.aura and button.aura.debuff
+                    and RememberReportedAura(button,aura,true) then
+                    button.aura.debuff.update=true
+                    HealBot_Events_UnitDebuff(button)
+                    found=true
+                end
+            end
+        end
+    end
+    if found then
+        local counts=HealBot_Forever_ShieldPerf
+        if counts then counts.ownDebuffFound=counts.ownDebuffFound+1 end
+        return true
+    end
 end
 
 function HealBot_Events_EndReportedDebuffScan(button)

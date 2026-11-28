@@ -98,6 +98,8 @@ units.raid1.realm="My Realm"
 cast("Zed-MyRealm","full-realm");check(rows[1],27);check(rows[4],27)
 assert(rows[1].updates==1 and rows[4].updates==1,"duplicate frames for a confirmed target were not both dirtied")
 local counts={sent=0,targetMissing=0,castKeyMissing=0,matched=0,rankMismatch=0,unpaired=0,
+    clickAbsent=0,clickRankMismatch=0,clickNameMismatch=0,clickLate=0,clickInvalidated=0,
+    publicNameMiss=0,nameHidden=0,
     directClick=0,clickMatched=0,auraMatched=0}
 env.HealBot_Forever_ShieldPerf=counts
 cast("Zed-MyRealm","diagnostic-good",600)
@@ -195,7 +197,9 @@ env.SecureButton_GetModifiedAttribute=function(frame,key,mouse)
 end
 env.HealBot_Spells_KnownByName=function(spell) return spell=="Power Word: Shield(Rank 3)" and 600 or nil end
 local function direct(row,kind)
-    hooks.HealBot_Action_ButtonPreClick({unit=row.unit,type=kind or "spell",spell="Power Word: Shield(Rank 3)"},"RightButton",row)
+    local frame={unit=row.unit,type=kind or "spell",spell="Power Word: Shield(Rank 3)"}
+    hooks.HealBot_Action_ButtonPreClick(frame,"RightButton",row)
+    return frame
 end
 advance(150)
 local priorMissing=counts.targetMissing
@@ -204,7 +208,9 @@ advance(150.15);event("SUCCEEDED","player","direct",600)
 check(rows[1],150.15);check(rows[2],nil)
 assert(counts.directClick==1 and counts.clickMatched==1 and counts.targetMissing==priorMissing+1)
 advance(166);check(rows[1],nil)
-direct(rows[1]);advance(166.01);cast(secret,"next-frame",600);check(rows[1],nil)
+env.HealBot_Forever_EndShieldClick(direct(rows[1]))
+advance(166.01);cast(secret,"next-frame",600);check(rows[1],nil)
+assert(counts.clickLate==1,"an unrelated later unnamed shield inherited a stale click")
 direct(rows[1]);cast("Outside-Home","other-target",600);check(rows[1],nil)
 direct(rows[1]);cast("","bad-binding-rank",17);check(rows[1],nil)
 direct(rows[1]);click(rows[2]);cast("","different-click",600);check(rows[1],nil);check(rows[2],nil)
@@ -239,4 +245,82 @@ member.guid,member.name=secret,secret;check(rows[1],200)
 env.UnitIsConnected=function() return false end;check(rows[1],nil)
 env.UnitIsConnected=function() return true end;check(rows[1],200)
 events:fire("GROUP_ROSTER_UPDATE");check(rows[1],nil);check(rows[4],nil)
+-- Regional names have both a given name and a surname. Ze Lang and Ze Lake
+-- can share a roster. Neither a conflicting surname nor an unverified realm
+-- may be turned into a match by truncating the event's target name.
+advance(230)
+units.raid1={guid="FOREVER-Z1",name="Ze",realm="Lang",player=true}
+units.raid2={guid="FOREVER-Z2",name="Ze",realm="Lake",player=true}
+units.raid3={guid="FOREVER-R",name="Rysha",realm="Flamebreeze",player=true}
+env.RegionalUniqueNamesEnabled=function() return true end
+env.GetUnitName=function(unit)
+    if unit=="raid3" then return "Rysha Flamebreeze-North Moon" end
+    return units[unit].name.."-"..units[unit].realm
+end
+cast("Ze","two-different-surnames",600);check(rows[1],nil);check(rows[2],nil)
+cast("Ze Long","similar-surname",600);check(rows[1],nil);check(rows[2],nil)
+cast("Ze Lang-Foreign","unverified-realm",600);check(rows[1],nil)
+cast("Ze Lang","split-regional-name",600);check(rows[1],230);check(rows[4],230);check(rows[2],nil)
+cast("Rysha Flamebreeze-NorthMoon","qualified-regional-name",600);check(rows[3],230)
+advance(246)
+env.RegionalUniqueNamesEnabled=function() return false end
+cast("Ze Lang","second-value-is-realm",600);check(rows[1],nil)
+cast("Ze-Lang","ordinary-realm",600);check(rows[1],246)
+advance(262)
+env.RegionalUniqueNamesEnabled=function() return secret end
+cast("Ze Lang","unknown-name-format",600);check(rows[1],nil)
+direct(rows[1]);advance(262.01);cast(secret,"inside-click-frame-boundary",600)
+check(rows[1],262.01);check(rows[2],nil)
+advance(278)
+local here=direct(rows[1])
+env.HealBot_Forever_EndShieldClick({}) -- a different frame cannot close this click
+env.C_Spell.GetBaseSpell=function(id) return id==600 and 17 or id end
+cast(secret,"attested-base-rank",17);check(rows[1],278);check(rows[2],nil)
+advance(294);here=direct(rows[1]);env.HealBot_Forever_EndShieldClick(here)
+advance(294.1);cast(secret,"unrelated-base-rank",17);check(rows[1],nil)
+here=direct(rows[1]);env.HealBot_Forever_EndShieldClick(here)
+local first,realm=units.raid1.name,units.raid1.realm
+units.raid1.name,units.raid1.realm=secret,secret
+advance(294.25);cast(first.."-"..realm,"delayed-identified-shield",600)
+check(rows[1],294.25);check(rows[2],nil)
+units.raid1.name,units.raid1.realm=first,realm
+advance(311);env.RegionalUniqueNamesEnabled=function() return true end
+here=direct(rows[1]);env.HealBot_Forever_EndShieldClick(here)
+units.raid1.name,units.raid1.realm=secret,secret
+advance(311.1);cast(first.." "..realm,"delayed-regional-shield",600)
+check(rows[1],311.1);check(rows[2],nil)
+units.raid1.name,units.raid1.realm=first,realm
+assert(counts.clickRankMismatch>=2 and counts.clickNameMismatch>=1 and counts.clickAbsent>0)
+advance(330)
+local probes,verified=0,false
+env.HealBot_Events_ObserveOwnShieldDebuff=function(unit,subscribed)
+    assert(unit=="raid1" and subscribed[rows[1]])
+    probes=probes+1
+    return verified
+end
+local function laterShield(key,wait)
+    local f=direct(rows[1]);env.HealBot_Forever_EndShieldClick(f)
+    advance(now+wait);cast(secret,key,600)
+end
+local function tickAura(unit)
+    events:fire("UNIT_AURA",unit,{isFullUpdate=false})
+end
+laterShield("no-public-aura",0.05)
+tickAura("raid2");assert(probes==0)
+for i=1,20 do tickAura("raid1") end
+assert(probes==2);check(rows[1],nil);check(rows[2],nil)
+verified=true;laterShield("actual-aura",0.05)
+tickAura("raid1");tickAura("raid1");assert(probes==3);check(rows[1],nil)
+laterShield("changed-member",0.05);events:fire("GROUP_ROSTER_UPDATE")
+tickAura("raid1");assert(probes==3)
+laterShield("rebound-member",0.05)
+units.raid1.guid="OTHER";tickAura("raid1");assert(probes==3)
+laterShield("too-old",1.05);tickAura("raid1");assert(probes==3)
+advance(348)
+event("SENT","player",secret,"older-attempt",600)
+direct(rows[1]);event("FAILED_QUIET","player","older-attempt",600)
+cast(secret,"newer-click",600);check(rows[1],348);check(rows[2],nil)
+advance(364)
+direct(rows[1]);event("FAILED_QUIET","player","no-previous-send",600)
+cast(secret,"hotkey-after-local-failure",600);check(rows[1],nil)
 print("PASS: confirmed own shields follow current recipients, including independently corroborated applications, removal and expiry")

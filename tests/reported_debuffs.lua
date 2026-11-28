@@ -177,4 +177,42 @@ add(entry(555,49,130),opaqueID,entry(6788,secret,130),opaqueDispel)
 assert(drain()==nil and not state.reported)
 event({addedAuras={entry(6788,55,130)},removedAuraInstanceIDs={secret}})
 assert(drain()==nil and not state.reported,"an unknown mutation certified a first newly observed instance")
+-- A late click can ask about one unit. The actual scoped result must prove
+-- which aura exists and how long remains, even when it predates that click.
+local function copyButton(unit)
+    return {unit=unit,status=button.status,event={},aura={debuff={}},frame=1}
+end
+local duplicate,bystander=copyButton(button.unit),copyButton("party2")
+local views={[button]=true,[duplicate]=true,[bystander]=true}
+local reads,scopeData=0,nil
+local getAuras=e.C_UnitAuras.GetUnitAuras
+e.C_UnitAuras.GetUnitAuras=function(unit,filter,...)
+    if filter~="HARMFUL|PLAYER" then return getAuras(unit,filter,...) end
+    assert(unit==button.unit)
+    reads=reads+1
+    if scopeData==nil then error("restricted") end
+    return scopeData
+end
+local function own(id,ending)
+    local row=entry(id,60,ending); row.sourceUnit="player"; return row
+end
+local observe=e.HealBot_Events_ObserveOwnShieldDebuff
+local counts={ownDebuffFound=0}
+e.HealBot_Forever_ShieldPerf=counts
+assert(not observe(button.unit,views))
+local helpful=own(6788,130); helpful.isHarmful=false; helpful.isHelpful=true
+local unknownSpell=own(6788,130); unknownSpell.spellId=secret
+for _,value in ipairs({secret,inaccessible,{}, {secret}, {own(17,130)}, {own(6788,secret)},
+    {own(6788,120)}, {entry(6788,60,130)}, {helpful}, {unknownSpell}}) do
+    scopeData=value
+    assert(not observe(button.unit,views) and not state.reported)
+end
+local previousReads=reads
+scopeData={own(6788,127)}
+assert(observe(button.unit,views) and reads==previousReads+1 and counts.ownDebuffFound==1)
+assert(button.event.debuff and duplicate.event.debuff and not bystander.event.debuff)
+assert(state.reported.records[60].expirationTime==127 and duplicate.aura.debuff.reported.records[60].expirationTime==127)
+e.HealBot_Forever_ShieldPerf=nil
+assert(drain()==6788)
+now=127; assert(partial()==nil,"an existing short debuff acquired a new shield timer")
 print("PASS: verified custom harmful applications survive combat privacy changes and retire on expiry, removal, roster changes and authoritative scans")
