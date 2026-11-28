@@ -3695,7 +3695,17 @@ function HealBot_Action_InitFrames()
         grpFrame[x]=_G["f"..x.."_HealBot_Action"]
         if not grpFrame[x] then
             grpFrame[x]=CreateFrame("Frame", "f"..x.."_HealBot_Action", UIParent, BackdropTemplateMixin and "SecureFrameTemplate,BackdropTemplate")
-            grpFrame[x]:SetBackdrop({
+            local artwork=grpFrame[x]
+            if HEALBOT_FOREVER then
+                -- Only this artwork follows combat arrivals. No secure button
+                -- is parented or anchored to it.
+                artwork=CreateFrame("Frame",nil,grpFrame[x],"BackdropTemplate")
+                artwork:SetAllPoints(grpFrame[x])
+                artwork:SetFrameLevel(1)
+                artwork:EnableMouse(false)
+                grpFrame[x].hbArrivalBackdrop=artwork
+            end
+            artwork:SetBackdrop({
                 bgFile="Interface\\Addons\\HealBot\\Images\\frame\\WhiteLine.tga",
                 edgeFile="Interface\\Addons\\HealBot\\Images\\frame\\border.tga",
                 tile=true,
@@ -8088,24 +8098,25 @@ end
 
 function HealBot_Action_SetFrameColours(frame)
       --HealBot_setCall("HealBot_Action_SetFrameColours")
+    local artwork=frame.hbArrivalBackdrop or frame
     if HealBot_Action_luVars["GlobalDimmingEnabled"] and not HealBot_Action_IsFrameActive(frame.id) then
-        frame:SetBackdropColor(
+        artwork:SetBackdropColor(
         hbv_Skins_GetFrameVar("Frame", "BACKR", frame.id),
         hbv_Skins_GetFrameVar("Frame", "BACKG", frame.id),
         hbv_Skins_GetFrameVar("Frame", "BACKB", frame.id),
        (hbv_Skins_GetFrameVar("Frame", "BACKA", frame.id)/HealBot_Action_luVars["GlobalDimming"]));
-        frame:SetBackdropBorderColor(
+        artwork:SetBackdropBorderColor(
         hbv_Skins_GetFrameVar("Frame", "BORDERR", frame.id),
         hbv_Skins_GetFrameVar("Frame", "BORDERG", frame.id),
         hbv_Skins_GetFrameVar("Frame", "BORDERB", frame.id),
        (hbv_Skins_GetFrameVar("Frame", "BORDERA", frame.id)/HealBot_Action_luVars["GlobalDimming"]));
     else
-        frame:SetBackdropColor(
+        artwork:SetBackdropColor(
         hbv_Skins_GetFrameVar("Frame", "BACKR", frame.id),
         hbv_Skins_GetFrameVar("Frame", "BACKG", frame.id),
         hbv_Skins_GetFrameVar("Frame", "BACKB", frame.id),
         hbv_Skins_GetFrameVar("Frame", "BACKA", frame.id))
-        frame:SetBackdropBorderColor(
+        artwork:SetBackdropBorderColor(
         hbv_Skins_GetFrameVar("Frame", "BORDERR", frame.id),
         hbv_Skins_GetFrameVar("Frame", "BORDERG", frame.id),
         hbv_Skins_GetFrameVar("Frame", "BORDERB", frame.id),

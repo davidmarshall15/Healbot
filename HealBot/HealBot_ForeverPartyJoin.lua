@@ -405,6 +405,45 @@ local function AnchorReserve(row,main,x,y)
     row:SetPoint("CENTER",main,"CENTER",x,y)
 end
 
+local expandedPanel
+local backdropQueued=false
+local function SetBackdropBounds(main,left,top,right,bottom)
+    local art=main.hbArrivalBackdrop
+    if (art.joinLeft or 0)==left and (art.joinTop or 0)==top and
+        (art.joinRight or 0)==right and (art.joinBottom or 0)==bottom then return end
+    art.joinLeft,art.joinTop,art.joinRight,art.joinBottom=left,top,right,bottom
+    art:ClearAllPoints()
+    if left==0 and top==0 and right==0 and bottom==0 then
+        art:SetAllPoints(main)
+    else
+        art:SetPoint("TOPLEFT",main,"TOPLEFT",left,top)
+        art:SetPoint("BOTTOMRIGHT",main,"BOTTOMRIGHT",right,bottom)
+    end
+end
+
+local function UpdateBackdrop()
+    backdropQueued=false
+    local main=frame and _G["f"..frame.."_HealBot_Action"]
+    if expandedPanel and expandedPanel~=main then SetBackdropBounds(expandedPanel,0,0,0,0) end
+    expandedPanel=nil
+    if not main or not main.hbArrivalBackdrop then return end
+    local left,top,right,bottom=0,0,0,0
+    for _,row in ipairs(rows) do
+        if row.reserve and row.layoutPanel==main and row:IsVisible() then
+            left,top=math.min(left,row.joinLeft),math.max(top,row.joinTop)
+            right,bottom=math.max(right,row.joinRight),math.min(bottom,row.joinBottom)
+        end
+    end
+    SetBackdropBounds(main,left,top,right,bottom)
+    if left<0 or top>0 or right>0 or bottom<0 then expandedPanel=main end
+end
+
+local function QueueBackdrop(row)
+    if backdropQueued or not (expandedPanel or row and row.layoutPanel) then return end
+    backdropQueued=true
+    C_Timer.After(0,UpdateBackdrop)
+end
+
 local function PositionReservedRows()
     local main=_G["f"..frame.."_HealBot_Action"]
     if not main then return false end
@@ -416,8 +455,9 @@ local function PositionReservedRows()
     local horizontal=Get("Anchors","GROW")==1
     local scale=Get("Frame","SCALE")
     local width,height=rows[1]:GetWidth(),rows[1]:GetHeight()
-    local dx=width+math.ceil(Get("HealBar","CMARGIN")*scale)
-    local dy=height+math.ceil(Get("HealBar","RMARGIN")*scale)
+    local columnMargin=math.ceil(Get("HealBar","CMARGIN")*scale)
+    local rowMargin=math.ceil(Get("HealBar","RMARGIN")*scale)
+    local dx,dy=width+columnMargin,height+rowMargin
     local occupied={}
     local originX,originY
     for _,button in pairs(HealBot_Buttons or {}) do
@@ -430,8 +470,8 @@ local function PositionReservedRows()
                 occupied[#occupied+1]={x=x,y=y,width=w,height=h}
                 originX=originX and xDir*math.min(xDir*originX,xDir*x) or x
                 originY=originY and yDir*math.min(yDir*originY,yDir*y) or y
-                dx=math.max(dx,w+math.ceil(Get("HealBar","CMARGIN")*scale))
-                dy=math.max(dy,h+math.ceil(Get("HealBar","RMARGIN")*scale))
+                dx=math.max(dx,w+columnMargin)
+                dy=math.max(dy,h+rowMargin)
             end
         end
     end
@@ -451,6 +491,12 @@ local function PositionReservedRows()
     if usedAcross>1 then laneSize=usedAlong end
     laneSize=math.max(1,laneSize,usedAlong)
     local nextSlot=0
+    local ratio,w,h,halfWidth,halfHeight
+    if main.hbArrivalBackdrop then
+        ratio=rows[1]:GetEffectiveScale()/main:GetEffectiveScale()
+        w,h=(dx-columnMargin)*ratio/2+padding,(dy-rowMargin)*ratio/2+padding
+        halfWidth,halfHeight=main:GetWidth()/2,main:GetHeight()/2
+    end
     for _,row in ipairs(rows) do
         if not UnitExists(row.unit) then
             local x,y,free
@@ -470,6 +516,14 @@ local function PositionReservedRows()
                 end
             until free
             AnchorReserve(row,main,x-mainX,y-mainY)
+            if ratio then
+                -- Anchors and dimensions below are prepared before lockdown.
+                -- Store offsets in the visual panel's coordinate system.
+                local cx,cy=(x-mainX)*ratio,(y-mainY)*ratio
+                row.joinLeft,row.joinRight=cx-w+halfWidth,cx+w-halfWidth
+                row.joinBottom,row.joinTop=cy-h+halfHeight,cy+h-halfHeight
+                row.layoutPanel=main
+            end
         end
     end
     return true
@@ -508,8 +562,8 @@ local function CreateRow(mode,index)
     row.border:SetAllPoints()
     row.nameText=bar:CreateFontString(nil,"OVERLAY")
     row.healthText=bar:CreateFontString(nil,"OVERLAY")
-    row:HookScript("OnShow",Paint)
-    row:HookScript("OnHide",ResetWarnings)
+    row:HookScript("OnShow",function(self) Paint(self); QueueBackdrop(self) end)
+    row:HookScript("OnHide",function(self) ResetWarnings(self); QueueBackdrop(self) end)
     for _,event in ipairs({"UNIT_HEALTH","UNIT_MAXHEALTH","UNIT_NAME_UPDATE","UNIT_IN_RANGE_UPDATE","UNIT_POWER_UPDATE","UNIT_MAXPOWER","UNIT_DISPLAYPOWER","UNIT_AURA","UNIT_CONNECTION","UNIT_FLAGS"}) do
         row:RegisterUnitEvent(event,row.unit)
     end
