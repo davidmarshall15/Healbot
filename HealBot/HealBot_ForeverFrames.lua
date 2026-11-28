@@ -94,6 +94,41 @@ local function CreateIncomingBar(button)
     if HealBot_Forever_CreatePrediction then HealBot_Forever_CreatePrediction(button) end
 end
 
+-- Prediction amounts change with health and casts. The native fill anchor
+-- follows health automatically, so only a changed layout needs new points.
+function HealBot_Forever_PositionPrediction(button,bar,anchor,level)
+    local health=button.gref.Bar
+    local width,height=health:GetWidth(),health:GetHeight()
+    local orientation,reverse=health:GetOrientation(),health:GetReverseFill()
+    local layout=bar.foreverPredictionLayout
+    if not layout then layout={}; bar.foreverPredictionLayout=layout end
+    local readable=not HealBot_issecretvalue(width) and not HealBot_issecretvalue(height)
+    if not readable or layout.width~=width or layout.height~=height or layout.anchor~=anchor
+        or layout.level~=level or layout.orientation~=orientation or layout.reverse~=reverse then
+        bar:ClearAllPoints()
+        bar:SetSize(width,height)
+        bar:SetOrientation(orientation)
+        bar:SetReverseFill(reverse)
+        if orientation=="VERTICAL" then
+            if reverse then bar:SetPoint("TOPLEFT",anchor,"BOTTOMLEFT")
+            else bar:SetPoint("BOTTOMLEFT",anchor,"TOPLEFT") end
+        elseif reverse then bar:SetPoint("TOPRIGHT",anchor,"TOPLEFT")
+        else bar:SetPoint("TOPLEFT",anchor,"TOPRIGHT") end
+        bar:SetFrameLevel(level)
+        layout.anchor,layout.level,layout.orientation,layout.reverse=anchor,level,orientation,reverse
+        layout.width,layout.height=readable and width or nil,readable and height or nil
+    end
+    if not bar.foreverShieldTexture then
+        local texture=hbv_Skins_GetFrameVar("HealBar","TEXTURE",button.frame)
+        HealBot_Media_UpdateTexture(bar,texture,"Forever prediction")
+        local fill=bar:GetStatusBarTexture()
+        if fill~=layout.fill or texture~=layout.texture then
+            fill:SetHorizTile(false)
+            layout.fill,layout.texture=fill,texture
+        end
+    end
+end
+
 function HealBot_Forever_UpdateIncomingHeals(button)
     if HealBot_Forever_UpdatePrediction and HealBot_Forever_UpdatePrediction(button) then return true end
     local incoming=button.foreverIncoming
@@ -112,24 +147,7 @@ function HealBot_Forever_UpdateIncomingHeals(button)
     UnitGetDetailedHealPrediction(button.unit, "player", calculator)
     -- The native calculator clamps to missing health; no secret arithmetic or
     -- comparisons are needed. The health texture supplies the starting point.
-    bar:ClearAllPoints()
-    bar:SetSize(healthBar:GetWidth(), healthBar:GetHeight())
-    bar:SetOrientation(healthBar:GetOrientation())
-    bar:SetReverseFill(healthBar:GetReverseFill())
-    if healthBar:GetOrientation()=="VERTICAL" then
-        if healthBar:GetReverseFill() then
-            bar:SetPoint("TOPLEFT", healthBar:GetStatusBarTexture(), "BOTTOMLEFT")
-        else
-            bar:SetPoint("BOTTOMLEFT", healthBar:GetStatusBarTexture(), "TOPLEFT")
-        end
-    elseif healthBar:GetReverseFill() then
-        bar:SetPoint("TOPRIGHT", healthBar:GetStatusBarTexture(), "TOPLEFT")
-    else
-        bar:SetPoint("TOPLEFT", healthBar:GetStatusBarTexture(), "TOPRIGHT")
-    end
-    bar:SetFrameLevel(button.gref["InHeal"]:GetFrameLevel())
-    HealBot_Media_UpdateTexture(bar, hbv_Skins_GetFrameVar("HealBar", "TEXTURE", button.frame), "Forever incoming heals")
-    bar:GetStatusBarTexture():SetHorizTile(false)
+    HealBot_Forever_PositionPrediction(button,bar,healthBar:GetStatusBarTexture(),button.gref.InHeal:GetFrameLevel())
     bar:SetMinMaxValues(0, calculator:GetMaximumHealth())
     local amount=calculator:GetIncomingHeals()
     bar:SetValue(amount)

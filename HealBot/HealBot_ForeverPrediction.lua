@@ -103,24 +103,6 @@ local function PredictionColour(button,kind,mode)
     end
 end
 
-local function PositionPrediction(button,bar,anchor,level)
-    local healthBar=button.gref["Bar"]
-    bar:ClearAllPoints()
-    bar:SetSize(healthBar:GetWidth(),healthBar:GetHeight())
-    bar:SetOrientation(healthBar:GetOrientation())
-    bar:SetReverseFill(healthBar:GetReverseFill())
-    if healthBar:GetOrientation()=="VERTICAL" then
-        if healthBar:GetReverseFill() then bar:SetPoint("TOPLEFT",anchor,"BOTTOMLEFT")
-        else bar:SetPoint("BOTTOMLEFT",anchor,"TOPLEFT") end
-    elseif healthBar:GetReverseFill() then bar:SetPoint("TOPRIGHT",anchor,"TOPLEFT")
-    else bar:SetPoint("TOPLEFT",anchor,"TOPRIGHT") end
-    bar:SetFrameLevel(level)
-    if not bar.foreverShieldTexture then
-        HealBot_Media_UpdateTexture(bar,hbv_Skins_GetFrameVar("HealBar","TEXTURE",button.frame),"Forever prediction")
-        bar:GetStatusBarTexture():SetHorizTile(false)
-    end
-end
-
 function HealBot_Forever_UpdateOverShield(button)
     local incoming=button.foreverIncoming
     if not PredictionReady(incoming) then return false end
@@ -168,7 +150,7 @@ function HealBot_Forever_UpdatePrediction(button)
     PredictionColour(button,"I",mode)
     local alpha=hbv_Skins_GetFrameVar("BarIACol","IA",button.frame)*button.status.alpha
     if button.range.current<=0 then alpha=alpha/3 end
-    PositionPrediction(button,incoming.bar,button.gref["Bar"]:GetStatusBarTexture(),button.gref["InHeal"]:GetFrameLevel())
+    HealBot_Forever_PositionPrediction(button,incoming.bar,button.gref["Bar"]:GetStatusBarTexture(),button.gref["InHeal"]:GetFrameLevel())
     incoming.bar:SetMinMaxValues(0,calculator:GetMaximumHealth())
     incoming.bar:SetValue(amount)
     incoming.bar:SetStatusBarColor(button.health.inhealr,button.health.inhealg,button.health.inhealb,
@@ -182,7 +164,7 @@ function HealBot_Forever_UpdatePrediction(button)
     -- state here feeds the auxiliary absorb bar and legacy colour consumers.
     PredictionColour(button,"A",absorbMode)
     local anchor=mode>1 and incoming.bar:GetStatusBarTexture() or button.gref["Bar"]:GetStatusBarTexture()
-    PositionPrediction(button,incoming.absorb,anchor,button.gref["Absorb"]:GetFrameLevel())
+    HealBot_Forever_PositionPrediction(button,incoming.absorb,anchor,button.gref["Absorb"]:GetFrameLevel())
     incoming.absorb:SetMinMaxValues(0,calculator:GetMaximumHealth())
     incoming.absorb:SetValue(absorbAmount)
     local absorbAlpha=hbv_Skins_GetFrameVar("BarIACol","AA",button.frame)*button.status.alpha
