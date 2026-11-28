@@ -1022,7 +1022,8 @@ function HealBot_Events_PowerIndicators(button)
     end
 end
 
-function HealBot_Events_ItemInfoReceived(self, itemId)
+function HealBot_Events_ItemInfoReceived(itemId,success)
+    HealBot_BagItemDataLoaded(itemId,success)
       --HealBot_setCall("HealBot_Events_ItemInfoReceived")
     HealBot_setLuVars("ItemDataReady", true)
     HealBot_Timers_Set("PLAYER","InitSmartCast",true,true)

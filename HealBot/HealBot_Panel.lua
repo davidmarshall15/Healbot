@@ -1053,10 +1053,10 @@ function HealBot_Panel_AnchorButton(button, backFrame, relButton, newColumn, chi
     end
 end
 
-function HealBot_Panel_UpdateHeadersOpacity()
+function HealBot_Panel_UpdateHeadersOpacity(changedFrames)
       --HealBot_setCall("HealBot_Panel_UpdateHeadersOpacity")
     for _,header in pairs(HealBot_Header_Frames) do
-        HealBot_Action_UpdateHeaderOpacity(header)
+        if not changedFrames or changedFrames[header.frame] then HealBot_Action_UpdateHeaderOpacity(header) end
     end
 end
 

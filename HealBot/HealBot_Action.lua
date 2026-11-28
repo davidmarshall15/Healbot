@@ -85,8 +85,6 @@ HealBot_Action_luVars["GroupBarsNumUnits"]=3
 HealBot_Action_luVars["GroupBarsRange"]=-1
 HealBot_Action_luVars["GroupBarsEnabled"]=false
 HealBot_Action_luVars["ActiveFrameID"]=0
-HealBot_Action_luVars["LastResetFrame"]=0
-HealBot_Action_luVars["ResetFrame"]=0
 
 function HealBot_Action_setLuVars(vName, vValue)
       --HealBot_setCall("HealBot_Action_setLuVars - "..vName)
@@ -3627,7 +3625,6 @@ function HealBot_Action_setFrameHeader(f)
 end
 
 local hbEventFuncs={["UNIT_AURA"]=HealBot_Events_UnitAura,
-                    ["UNIT_INVENTORY_CHANGED"]=HealBot_Events_InvChange,
                     ["UNIT_HEALTH_FREQUENT"]=HealBot_UnitHealth,
                     ["UNIT_HEALTH"]=HealBot_UnitHealth,
                     ["UNIT_MAXHEALTH"]=HealBot_UnitHealth,
@@ -3907,13 +3904,15 @@ function HealBot_Action_UpdateFrameOpacity(frame)
     end
 end
 
-function HealBot_Action_UpdateFramesOpacity()
+function HealBot_Action_UpdateFramesOpacity(changedFrames)
       --HealBot_setCall("HealBot_Action_UpdateFramesOpacity")
     for x=1,10 do
-        if HealBot_Action_FrameIsVisible(x) then
-            HealBot_Action_UpdateFrameOpacity(x)
-        else
-            hbUpdateFramesOpacity[x]=true
+        if not changedFrames or changedFrames[x] then
+            if HealBot_Action_FrameIsVisible(x) then
+                HealBot_Action_UpdateFrameOpacity(x)
+            else
+                hbUpdateFramesOpacity[x]=true
+            end
         end
     end
 end
@@ -3949,19 +3948,28 @@ function HealBot_Action_ResetUnitButtonOpacity(button)
     HealBot_Aggro_IndicatorUpdate(button)
 end
 
-function HealBot_Action_ResetOpacity(force)
-      --HealBot_setCall("HealBot_Action_ResetOpacity")
-    if HealBot_Action_luVars["LastResetFrame"] ~= HealBot_Action_luVars["ResetFrame"] or force then
-        HealBot_Action_luVars["LastResetFrame"]=HealBot_Action_luVars["ResetFrame"]
-        HealBot_Update_ResetUnitOpacity()
-        HealBot_Action_UpdateFramesOpacity()
-        HealBot_Panel_UpdateHeadersOpacity()
+do
+    local lastFrameActive, changedOpacityFrames={}, {}
+    function HealBot_Action_ResetOpacity(force)
+        local hasChanges=false
+        for frame=1,10 do
+            local active=grpFrameBar[frame] and HealBot_Action_IsFrameActive(frame) or false
+            changedOpacityFrames[frame]=(lastFrameActive[frame] or false)~=active
+            if changedOpacityFrames[frame] then hasChanges=true end
+            lastFrameActive[frame]=active
+        end
+        if hasChanges or force then
+            local changedFrames
+            if not force then changedFrames=changedOpacityFrames end
+            HealBot_Update_ResetUnitOpacity(changedFrames)
+            HealBot_Action_UpdateFramesOpacity(changedFrames)
+            HealBot_Panel_UpdateHeadersOpacity(changedFrames)
+        end
     end
 end
 
-function HealBot_Action_UpdateGlobalDimming(frame)
+function HealBot_Action_UpdateGlobalDimming()
     if hbv_Skins_GetVar("General", "GLOBALDIMMING")>1 then
-        HealBot_Action_luVars["ResetFrame"]=frame
         HealBot_Timers_Set("SKINS","UpdateGlobalDimming",true)
     end
 end
@@ -4538,7 +4546,6 @@ function HealBot_Action_UnregisterUnitEvents(button)
     button.status.events=false
     button.range.eventIn=nil
     button:UnregisterEvent("UNIT_AURA")
-    button:UnregisterEvent("UNIT_INVENTORY_CHANGED")
     button:UnregisterEvent("UNIT_MAXHEALTH")
     button:UnregisterEvent("UNIT_POWER_UPDATE")
     button:UnregisterEvent("UNIT_DISPLAYPOWER")
@@ -4656,7 +4663,6 @@ function HealBot_Action_RegisterUnitEvents(button)
             button:RegisterUnitEvent("UNIT_POWER_POINT_CHARGE", button.unit)
         end
         if button.isplayer then
-            button:RegisterUnitEvent("UNIT_INVENTORY_CHANGED", button.unit)
             button:RegisterUnitEvent("UNIT_SPELLCAST_SUCCEEDED", button.unit)
         end
         if HealBot_Action_luVars["regAggro"] then
