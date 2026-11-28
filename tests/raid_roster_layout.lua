@@ -43,3 +43,45 @@ for _,count in ipairs({4,14,28,39}) do
     assert(rows[count].arrivalAuras[1].x==33,"later roster pass kept stale donor position")
 end
 print("PASS: raid reserve layouts read three icon centers per pass for 4, 14, 28 and 39 slots")
+
+-- A departing donor may lose its reaction before the normal unit buttons
+-- settle. Replay both the departure and the subsequent update at each size.
+local d=fixture("DRUID",4)
+d.skin.limits={4,2,2}
+local api=d.env
+local readText=api.hbv_Skins_GetIconTextVar
+api.hbv_Skins_GetIconTextVar=function(key,...)
+    if key=="BUFFDURTHRH" then return 12 end
+    if key=="BUFFDURWARN" then return 4 end
+    return readText(key,...)
+end
+local friendly=true
+api.UnitIsFriend=function() return friendly end
+local donor=d.button("raid4")
+local rows={}
+local function reservePass(members,reaction)
+    friendly=reaction
+    local pass=api.HealBot_Forever_PrepareArrivalAuraContext(true)
+    for i=members+1,40 do
+        rows[i]=rows[i] or {unit="raid"..i,frame=1,healthBar={},GetFrameLevel=function() return 5 end}
+        api.HealBot_Forever_SkinArrivalAuras(rows[i],donor,pass)
+    end
+end
+local function countBuffContainers()
+    local count=0
+    for _,frame in ipairs(d.frames) do
+        if frame.parent~=donor and frame.groups.hbcahot then count=count+1 end
+    end
+    return count
+end
+reservePass(10,true)
+local warm=countBuffContainers()
+assert(warm==30*3,"expected three prepared buff sets per reserve position")
+reservePass(4,true)
+reservePass(3,nil)
+reservePass(3,true)
+reservePass(2,nil)
+reservePass(2,true)
+local built=countBuffContainers()-warm
+assert(built==8*3,"eight newly empty positions should build 24 buff containers, got "..built)
+print("PASS: a battleground shrinking from ten to two players builds only the 24 new buff containers")

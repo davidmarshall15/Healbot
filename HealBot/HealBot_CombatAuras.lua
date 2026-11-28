@@ -685,7 +685,7 @@ end
 -- Read only ordinary HealBot skin geometry, never native aura button data.
 -- Copy the first icon's anchor so offsets, inside/outside placement and the
 -- selected corner match out of combat, even when that icon is hidden.
-local function HBCA_SkinLayout(button, side, set)
+local function HBCA_SkinLayout(button, side, set, groupReserve)
     set=set or 1
     local hot=side=="hot"
     local point=hot and "BOTTOMRIGHT" or "BOTTOMLEFT"
@@ -755,8 +755,13 @@ local function HBCA_SkinLayout(button, side, set)
         layout.durationThreshold=g.CombatAurasNumsFollowSkin and type(threshold)=="number" and math.max(0,threshold) or false
         layout.durationWarning=type(warning)=="number" and math.max(0,warning) or 0
         layout.durationWarningColor="neutral"
-        if layout.numbers and layout.durationThreshold and UnitIsFriend and button.unit then
-            local friendly=UnitIsFriend("player",button.unit)
+        if layout.numbers and layout.durationThreshold then
+            -- Empty party/raid positions borrow only this button's geometry.
+            -- Their timer uses the friendly group palette even if the donor
+            -- has left, changed reaction, or has a restricted unit token.
+            local friendly
+            if groupReserve then friendly=true
+            elseif UnitIsFriend and button.unit then friendly=UnitIsFriend("player",button.unit) end
             if not HealBot_issecretvalue(friendly) and friendly~=nil then
                 layout.durationWarningColor=friendly and (hot and "helpful" or "harmful") or "hostile"
             end
@@ -807,7 +812,7 @@ local function HBCA_SameLayout(a, b)
     return true
 end
 
-local function HBCA_WeakenedSoulLayout(button, g, dbLayout)
+local function HBCA_WeakenedSoulLayout(button, g, dbLayout, groupReserve)
     local mode=HBCA_WeakenedSoulMode(g)
     if not mode or g.CombatAurasDebuffs<1 then return end
 
@@ -819,7 +824,7 @@ local function HBCA_WeakenedSoulLayout(button, g, dbLayout)
     local limit=hbv_Skins_GetIconVar("MAXDICONS",button.frame,set) or 0
     if limit<1 then return end
 
-    local layout=HBCA_SkinLayout(button,"db",set)
+    local layout=HBCA_SkinLayout(button,"db",set,groupReserve)
     layout.weakenedSoulMode=mode
     layout.iconSet=set
     local sharesMain=set==1 or (layout.point==dbLayout.point and layout.relative==dbLayout.relative
@@ -1162,9 +1167,9 @@ local function HBCA_ArrivalDebuffPlans(donor,cx,cy)
     local types,signature,scoped=HealBot_Forever_GetDebuffTypes()
     local wantsSlot=g.CombatAurasNativeWeakenedSoul and HBCA_WeakenedSoulWanted(nil,true)
     if signature=="" and not wantsSlot then return plans end
-    local db=HBCA_SkinLayout(donor,"db",1)
+    local db=HBCA_SkinLayout(donor,"db",1,true)
     db.dispelSignature=signature
-    local slot=wantsSlot and HBCA_WeakenedSoulLayout(donor,g,db)
+    local slot=wantsSlot and HBCA_WeakenedSoulLayout(donor,g,db,true)
     local function Add(kind,layout,set,filter)
         local icon=donor.gref.icon[debuffStart[set]]
         if not icon or not HBCA_ArrivalAnchor(layout,icon,cx,cy) then return end
@@ -1198,7 +1203,7 @@ local function HBCA_ArrivalLayout(donor, frame, context)
     for set=1,3 do
         if HEALBOT_FOREVER or (not filters and set==1) or (filters and filters[set]) then
             local source=donor.gref.icon[buffStart[set]]
-            local layout=HBCA_SkinLayout(donor,"hot",set)
+            local layout=HBCA_SkinLayout(donor,"hot",set,true)
             if HBCA_ArrivalAnchor(layout,source,cx,cy) then
                 layout.limit=hbv_Skins_GetIconVar("MAXBICONS",frame,set)
                 local fields={}

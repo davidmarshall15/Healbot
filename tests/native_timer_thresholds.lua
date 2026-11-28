@@ -9,7 +9,10 @@ end
 local prefix=assert(read("tests/native_buff_casters.lua"):match("^(.-)\nlocal function admits%("))
 local widget="        function f:SetIcon(v)"
 prefix=prefix:gsub(widget:gsub("([%(%)])","%%%1"),function()
-    return [[        function f:SetDurationText(text,options)
+    return [[        function f:AddAuraSlot(key,filter,options)
+            self:AddAuraGroup(key,filter,options)
+        end
+        function f:SetDurationText(text,options)
             if env.rejectPolicy and options.textColor then error("unsupported duration policy") end
             if env.rejectFormatter and options.textFormatter then error("formatter unavailable") end
             self.boundText,self.durationOptions=text,options
@@ -74,6 +77,34 @@ local enemy=d.button("arena1"); assert(color(debuffIcon(enemy),1)=="1,0,0,1")
 local frames=#d.frames
 d.combat(true); d.combat(false)
 assert(#d.frames==frames and curves==before+2,"combat handoff allocated timer frames or curves")
+-- An empty raid position borrows a visible button's geometry. Its native
+-- warning palette must survive a donor leaving, changing reaction or being
+-- replaced by another geometrically identical donor during a roster pass.
+do
+    d.globals.CombatAurasNativeWeakenedSoul=true
+    e.HealBot_Forever_WatchesWeakenedSoul=function() return true end
+    d.skin.limits={4,2,2}
+    local row={unit="raid28",frame=1,healthBar={},GetFrameLevel=function() return 5 end}
+    local originalFriend,originalSecret=e.UnitIsFriend,e.HealBot_issecretvalue
+    e.HealBot_Forever_SkinArrivalAuras(row,b2)
+    local helpful,db,slot=row.arrivalAuras,row.arrivalDebuffs.db,row.arrivalDebuffs.slot
+    assert(#helpful==3 and db and slot)
+    for _,item in ipairs(helpful) do assert(color(item.container.groups.hbcahot.icon,1)=="1,0.5,0,1") end
+    assert(color(db.container.groups.hbcadb.icon,1)=="0,1,0,1")
+    assert(color(slot.container.groups.hbcaweakenedSoul.icon,1)=="0,1,0,1")
+    local allocated=#d.frames
+    local secret={}
+    e.HealBot_issecretvalue=function(v) return v==secret end
+    for _,reaction in ipairs({false,secret,1,0,true,"missing"}) do
+        e.UnitIsFriend=function() if reaction~="missing" then return reaction end end
+        e.HealBot_Forever_SkinArrivalAuras(row,enemy)
+        assert(#d.frames==allocated and row.arrivalAuras==helpful and row.arrivalDebuffs.db==db and row.arrivalDebuffs.slot==slot,
+            "donor reaction rebuilt native aura rows on an empty raid position")
+    end
+    e.UnitIsFriend,e.HealBot_issecretvalue=originalFriend,originalSecret
+    d.skin.limits={4,0,0}
+    d.globals.CombatAurasNativeWeakenedSoul=false
+end
 activeThreshold=2
 d.hook("hbv_Skins_SetIconTextVar",2,"BUFFDURTHRH",1,1)
 own=assert(d.row(b)).groups.hbcahot.icon
