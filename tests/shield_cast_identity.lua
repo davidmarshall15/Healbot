@@ -97,7 +97,8 @@ cast("Zed-Home","opaque-realm");check(rows[1],nil)
 units.raid1.realm="My Realm"
 cast("Zed-MyRealm","full-realm");check(rows[1],27);check(rows[4],27)
 assert(rows[1].updates==1 and rows[4].updates==1,"duplicate frames for a confirmed target were not both dirtied")
-local counts={sent=0,targetMissing=0,castKeyMissing=0,matched=0,rankMismatch=0,unpaired=0}
+local counts={sent=0,targetMissing=0,castKeyMissing=0,matched=0,rankMismatch=0,unpaired=0,
+    directClick=0,clickMatched=0,auraMatched=0}
 env.HealBot_Forever_ShieldPerf=counts
 cast("Zed-MyRealm","diagnostic-good",600)
 event("SENT","player","Outside-Home","diagnostic-miss",600)
@@ -174,4 +175,68 @@ advance(126);cast("Zed-MyRealm","named-after-removal");check(rows[2],126)
 advance(129);event("SENT","player","Zed-MyRealm","early-6788",17)
 advance(129.2);event("SUCCEEDED","player","early-6788",17);check(rows[2],129.2)
 env.HealBot_Forever_ConfirmShieldAbsent(rows[2],129.2,129.1);check(rows[2],nil)
+
+-- Use the action classifier itself and drive the hook invoked by the normal
+-- and emergency PreClick handlers. Only the direct friendly release action
+-- can fill an unnamed same-frame SENT; success must match the same cast/rank.
+local action=assert(io.open("HealBot/HealBot_Action.lua","rb"))
+local body=action:read("*a"):gsub("\r\n","\n");action:close()
+body=assert(body:match("(local function ForeverClickedSpell.-)\nfunction HealBot_Action_ButtonPreClick"))
+setfenv(assert(loadstring(body)),env)()
+env.HealBot_Config_Spells={ButtonCastMethod=2}
+env.C_Spell.GetSpellDescription=function() return "" end
+env.SpellIsTargeting=function() return false end
+env.UnitCanAttack=function() return false end
+env.UnitCanAssist=function() return true end
+env.SecureButton_GetModifiedUnit=function(frame) return frame.unit end
+env.SecureButton_GetModifiedAttribute=function(frame,key,mouse)
+    if key=="helpbutton" and mouse=="RightButton" then return "heal2" end
+    if mouse=="heal2" then return frame[key] end
+end
+env.HealBot_Spells_KnownByName=function(spell) return spell=="Power Word: Shield(Rank 3)" and 600 or nil end
+local function direct(row,kind)
+    hooks.HealBot_Action_ButtonPreClick({unit=row.unit,type=kind or "spell",spell="Power Word: Shield(Rank 3)"},"RightButton",row)
+end
+advance(150)
+local priorMissing=counts.targetMissing
+direct(rows[1]);event("SENT","player",secret,"direct",600);check(rows[1],nil)
+advance(150.15);event("SUCCEEDED","player","direct",600)
+check(rows[1],150.15);check(rows[2],nil)
+assert(counts.directClick==1 and counts.clickMatched==1 and counts.targetMissing==priorMissing+1)
+advance(166);check(rows[1],nil)
+direct(rows[1]);advance(166.01);cast(secret,"next-frame",600);check(rows[1],nil)
+direct(rows[1]);cast("Outside-Home","other-target",600);check(rows[1],nil)
+direct(rows[1]);cast("","bad-binding-rank",17);check(rows[1],nil)
+direct(rows[1]);click(rows[2]);cast("","different-click",600);check(rows[1],nil);check(rows[2],nil)
+direct(rows[1],"macro");cast("","arbitrary-macro",600);check(rows[1],nil)
+direct(rows[1]);event("SENT","player",secret,"failed-direct",600);event("FAILED","player","failed-direct",600)
+event("SUCCEEDED","player","failed-direct",600);check(rows[1],nil)
+direct(rows[1]);event("SENT","player",secret,"intervening",139);cast("","later",600);check(rows[1],nil)
+-- Both identity fields can be hidden. The action still explicitly targeted
+-- the public subscribed roster slot. Dropping/replacing the slot retires it.
+local member=units.raid1
+member.guid,member.name=secret,secret
+direct(rows[1]);cast("","opaque-slot",600);check(rows[1],166.01);check(rows[4],166.01)
+events:fire("GROUP_ROSTER_UPDATE");check(rows[1],nil);check(rows[4],nil)
+direct(rows[1]);event("SENT","player",secret,"replaced-slot",600)
+hooks.HealBot_Action_UnregisterUnitEvents(rows[1]);hooks.HealBot_Action_UnregisterUnitEvents(rows[4])
+hooks.HealBot_Action_RegisterUnitEvents(rows[1]);hooks.HealBot_Action_RegisterUnitEvents(rows[4])
+event("SUCCEEDED","player","replaced-slot",600);check(rows[1],nil);check(rows[4],nil)
+member.guid,member.name="GUID-B","Bob"
+-- If the actual cast arrives later, an explicit incremental addition still
+-- has a public new instance under private timing. The same fields in an
+-- arbitrary lookup or mixed update cannot bring an old shield back.
+advance(180);local previousAura=counts.auraMatched
+cast(secret,"hidden-delta-clock")
+local opaque=aura(180,{duration=secret,expirationTime=secret,auraInstanceID=90001})
+exact=opaque;events:fire("UNIT_AURA","raid1",{isFullUpdate=true})
+events:fire("UNIT_AURA","raid1",{isFullUpdate=false,addedAuras={opaque},removedAuraInstanceIDs={90001}})
+check(rows[1],nil)
+advance(180.24);added("raid1",opaque);check(rows[1],180);check(rows[2],nil)
+assert(counts.auraMatched==previousAura+1)
+advance(200);direct(rows[1]);cast("Bob-Away","named-click-before-combat",600);check(rows[1],200)
+member.guid,member.name=secret,secret;check(rows[1],200)
+env.UnitIsConnected=function() return false end;check(rows[1],nil)
+env.UnitIsConnected=function() return true end;check(rows[1],200)
+events:fire("GROUP_ROSTER_UPDATE");check(rows[1],nil);check(rows[4],nil)
 print("PASS: confirmed own shields follow current recipients, including independently corroborated applications, removal and expiry")

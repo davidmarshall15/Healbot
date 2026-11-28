@@ -492,7 +492,7 @@ end
 -- No native UI methods, aura data, settings or combat behavior are replaced.
 do
     local enabled = false
-    local timingRevision = "1.6"
+    local timingRevision = "1.7"
     local shieldCounts
     local started
     local stats = {}
@@ -732,6 +732,7 @@ do
         stats = {}
         -- Fixed counters only. Neither targets nor cast identifiers enter SavedVariables.
         shieldCounts={sent=0,targetMissing=0,castKeyMissing=0,matched=0,rankMismatch=0,unpaired=0,
+            directClick=0,clickMatched=0,auraMatched=0,
             completeSeen=0,partialSeen=0,partialUnknown=0,completeMiss=0,missAfterSeen=0,
             selected=0,suppressed=0,painted=0,outOfRange=0,paintBlocked=0}
         HealBot_Forever_ShieldPerf=shieldCounts
@@ -805,9 +806,13 @@ do
         if type(HealBot_Globals) == "table" then HealBot_Globals.ForeverPerformanceReport = report end
         print(string.format("HealBot timing: %.1fs; %d frames; max frame %.1fms; frames >=40ms %d.",
             duration, frames, maxFrameMs, slowFrames))
-        print(string.format("Shield: %d sent, %d matched, %d missing target, %d missing key, %d rank mismatch, %d unpaired. 6788 scans: %d complete seen, %d partial seen, %d partial unknown, %d own-lockout misses (%d after seen). Warning selected/suppressed %d/%d. Paint/range/blocked %d/%d/%d.",
+        print(string.format("Shield: %d sent, %d matched, %d unresolved target names, %d missing cast keys, %d rank mismatches, %d unpaired at success.",
             shieldCounts.sent,shieldCounts.matched,shieldCounts.targetMissing,shieldCounts.castKeyMissing,
-            shieldCounts.rankMismatch,shieldCounts.unpaired,shieldCounts.completeSeen,shieldCounts.partialSeen,
+            shieldCounts.rankMismatch,shieldCounts.unpaired))
+        print(string.format("Direct shield clicks: %d. Missing targets recovered by click: %d; by aura: %d.",
+            shieldCounts.directClick,shieldCounts.clickMatched,shieldCounts.auraMatched))
+        print(string.format("6788 scans: %d complete seen, %d partial seen, %d partial unknown, %d own-lockout misses (%d after seen). Warning selected/suppressed %d/%d. Paint/range/blocked %d/%d/%d.",
+            shieldCounts.completeSeen,shieldCounts.partialSeen,
             shieldCounts.partialUnknown,shieldCounts.completeMiss,shieldCounts.missAfterSeen,
             shieldCounts.selected,shieldCounts.suppressed,shieldCounts.painted,shieldCounts.outOfRange,shieldCounts.paintBlocked))
         if maxFrameContext then print("Longest frame observed in "..maxFrameContext..".") end

@@ -7971,6 +7971,42 @@ function HealBot_Action_UseSmartCast(self,button)
     end
 end
 
+-- Identify a direct friendly cast on the clicked member using the same
+-- modified attributes as SecureActionButtonTemplate. Never execute the action.
+local function ForeverClickedSpell(self,mouseButton,button)
+    local targeting=SpellIsTargeting()
+    if HealBot_issecretvalue(targeting) or targeting then return end
+    if HealBot_Config_Spells.ButtonCastMethod==1 then
+        local down=SecureButton_GetModifiedAttribute(self,"downbutton",mouseButton)
+        if HealBot_issecretvalue(down) or down then return end
+    end
+    local unit=SecureButton_GetModifiedUnit(self,mouseButton)
+    if HealBot_issecretvalue(unit) or type(unit)~="string" or unit~=button.unit then return end
+    local attack=UnitCanAttack("player",unit)
+    local assist=UnitCanAssist("player",unit)
+    if HealBot_issecretvalue(attack) or attack or HealBot_issecretvalue(assist) or not assist then return end
+    local converted=SecureButton_GetModifiedAttribute(self,"helpbutton",mouseButton)
+    if HealBot_issecretvalue(converted) then return end
+    if converted then
+        if type(converted)~="string" then return end
+        mouseButton=converted
+        local effectiveUnit=SecureButton_GetModifiedUnit(self,mouseButton)
+        if HealBot_issecretvalue(effectiveUnit) or effectiveUnit~=unit then return end
+    end
+    local kind=SecureButton_GetModifiedAttribute(self,"type",mouseButton)
+    if HealBot_issecretvalue(kind) or kind~="spell" then return end
+    local spell=SecureButton_GetModifiedAttribute(self,"spell",mouseButton)
+    if HealBot_issecretvalue(spell) then return end
+    if type(spell)=="string" then spell=HealBot_Spells_KnownByName(spell) end
+    if not HealBot_issecretvalue(spell) and type(spell)=="number" then return spell end
+end
+
+function HealBot_Action_ForeverClickedSpell(self,mouseButton,button)
+    -- A denied read on an optional prediction must never interrupt a click.
+    local ok,id=pcall(ForeverClickedSpell,self,mouseButton,button)
+    if ok then return id end
+end
+
 function HealBot_Action_ButtonPreClick(self,mButton,button)
       --HealBot_setCall("HealBot_Action_ButtonPreClick", self)
     usedSmartCast=false;

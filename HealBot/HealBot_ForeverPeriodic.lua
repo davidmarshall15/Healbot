@@ -10,6 +10,9 @@ local shieldCasts={}
 local unresolvedShield
 local shieldLockouts={}
 local shieldNameOnly={}
+local shieldClick
+local shieldSlots={}
+local shieldRoster=0
 local shieldRanks={[17]=true,[592]=true,[600]=true,[3747]=true,[6065]=true,
     [6066]=true,[10898]=true,[10899]=true,[10900]=true,[10901]=true,[25217]=true,[25218]=true}
 local lockoutDuration=15
@@ -43,6 +46,8 @@ local function Disable()
     unresolvedShield=nil
     wipe(shieldLockouts)
     wipe(shieldNameOnly)
+    shieldClick=nil
+    wipe(shieldSlots)
     wipe(mendingByUnit)
     mendingAmount,mendingUntil=nil,nil
     channel=nil
@@ -340,15 +345,44 @@ local function ResolveShieldTarget(name)
     return target
 end
 
+local function CaptureShieldClick(frame,mouseButton,button)
+    if not HealBot_Action_ForeverClickedSpell then return end
+    local rank=HealBot_Action_ForeverClickedSpell(frame,mouseButton,button)
+    if not rank or not shieldRanks[rank] then return end
+    local unit=button.unit
+    if not PublicString(unit) then return end
+    local guid=ShieldGUID(unit)
+    local name,short,full=ShieldUnitName(unit)
+    local slot=unit=="player" or unit:match("^party%d+$") or unit:match("^raid%d+$")
+    if not guid and not name and not slot then return end
+    shieldClick={guid=guid,name=name,short=short,full=full,rank=rank,clicked=GetTime(),
+        unit=unit,group=buttonsByUnit[unit],roster=shieldRoster,slot=slot and unit or nil}
+    local counts=HealBot_Forever_ShieldPerf
+    if counts then counts.directClick=counts.directClick+1 end
+end
+
+local function CurrentShieldSlot(target,unit,guid,name)
+    if not target or target.slot~=unit or target.roster~=shieldRoster or target.group~=buttonsByUnit[unit]
+        or target.guid and guid and target.guid~=guid or target.name and name and target.name~=name then return false end
+    if UnitIsConnected then
+        local connected=UnitIsConnected(unit)
+        if secret(connected) or not connected then return false end
+    end
+    return true
+end
+
 local function ShieldRecord(button)
-    if not next(shieldLockouts) or not PublicString(button.unit) then return end
-    local guid=ShieldGUID(button.unit)
+    local unit=button.unit
+    if not PublicString(unit) or not (next(shieldLockouts) or shieldSlots[unit]) then return end
+    local guid=ShieldGUID(unit)
     local record=shieldLockouts[guid]
+    local name
     if not record and (not guid or next(shieldNameOnly)) then
-        local name=ShieldUnitName(button.unit)
+        name=ShieldUnitName(unit)
         local byName=guid and shieldNameOnly or shieldLockouts
         record=byName[name]
     end
+    if not record and CurrentShieldSlot(shieldSlots[unit],unit,guid,name) then record=shieldSlots[unit] end
     return record
 end
 
@@ -381,24 +415,34 @@ function HealBot_Forever_ConfirmShieldAbsent(button,start,removedFirstSeen)
     end
 end
 
+local function QueueShieldUnit(subscribed)
+    if not subscribed then return end
+    for button in pairs(subscribed) do
+        if button.event and button.aura and button.aura.debuff then
+            button.aura.debuff.update=true
+            HealBot_Events_UnitDebuff(button)
+        end
+    end
+end
+
 local function RefreshShieldLockouts(target)
+    if not target.guid and not target.name then
+        if CurrentShieldSlot(target,target.slot) then QueueShieldUnit(target.group) end
+        return
+    end
     for unit,subscribed in pairs(buttonsByUnit) do
         local guid=ShieldGUID(unit)
         local name
         if target.name and not (target.guid and guid) then name=ShieldUnitName(unit) end
-        if ShieldMatches(target,guid,name) then
-            for button in pairs(subscribed) do
-                if button.event and button.aura and button.aura.debuff then
-                    button.aura.debuff.update=true
-                    HealBot_Events_UnitDebuff(button)
-                end
-            end
+        if ShieldMatches(target,guid,name) or CurrentShieldSlot(target,unit,guid,name) then
+            QueueShieldUnit(subscribed)
         end
     end
 end
 
 local function StoreShieldCast(cast,start)
     cast.start=start
+    if cast.slot and CurrentShieldSlot(cast,cast.slot) then shieldSlots[cast.slot]=cast end
     if cast.guid then shieldLockouts[cast.guid]=cast end
     if cast.name then
         shieldLockouts[cast.name]=cast
@@ -410,6 +454,7 @@ local function StoreShieldCast(cast,start)
         if cast.guid and shieldLockouts[cast.guid]==cast then shieldLockouts[cast.guid]=nil; removed=true end
         if cast.name and shieldLockouts[cast.name]==cast then shieldLockouts[cast.name]=nil; removed=true end
         if cast.name and shieldNameOnly[cast.name]==cast then shieldNameOnly[cast.name]=nil end
+        if cast.slot and shieldSlots[cast.slot]==cast then shieldSlots[cast.slot]=nil; removed=true end
         if removed then RefreshShieldLockouts(cast) end
     end)
 end
@@ -418,6 +463,8 @@ local function FinishObservedShield(cast)
     if unresolvedShield~=cast or not cast.succeeded or not cast.application or cast.ambiguous then return end
     unresolvedShield=nil
     cast.corroborated=true
+    local counts=HealBot_Forever_ShieldPerf
+    if counts then counts.auraMatched=counts.auraMatched+1 end
     StoreShieldCast(cast,cast.application)
 end
 
@@ -425,15 +472,24 @@ local function ReadableTable(value)
     return not secret(value) and type(value)=="table" and (not canaccesstable or canaccesstable(value))
 end
 
-local function MatchOwnedShield(cast,unit,aura)
+local function MatchOwnedShield(cast,unit,aura,freshAddition)
     if not ReadableTable(aura) or secret(aura.spellId) or aura.spellId~=cast.spellID
         or secret(aura.sourceUnit) or aura.sourceUnit~="player"
         or secret(aura.isHelpful) or aura.isHelpful~=true then return end
     local duration,expiry,rate=aura.duration,aura.expirationTime,aura.timeMod
-    if secret(duration) or type(duration)~="number" or not (duration>0)
-        or secret(expiry) or type(expiry)~="number" or secret(rate) or (rate and rate~=1) then return end
-    local start=expiry-duration
-    if not (start>=cast.sentAt-0.05 and start<=GetTime()+0.05 and expiry>GetTime()) then return end
+    local visibleDuration=not secret(duration) and type(duration)=="number"
+    local visibleExpiry=not secret(expiry) and type(expiry)=="number"
+    if visibleDuration and not (duration>0) or visibleExpiry and not (expiry>GetTime())
+        or not secret(rate) and rate and rate~=1 then return end
+    local start
+    if visibleDuration and visibleExpiry then
+        start=expiry-duration
+        if secret(rate) and not freshAddition or not (start>=cast.sentAt-0.05 and start<=GetTime()+0.05) then return end
+    elseif freshAddition and not secret(aura.auraInstanceID) and type(aura.auraInstanceID)=="number" then
+        -- An incremental add identifies a new instance even when its clock
+        -- is hidden. Bound the estimate from SENT; later delivery cannot extend it.
+        start=cast.sentAt
+    else return end
     local name,short,full=ShieldUnitName(unit)
     if cast.sentName and cast.sentName~=short and cast.sentName~=full then return end
     local guid=ShieldGUID(unit)
@@ -450,7 +506,11 @@ local function ObservePendingShield(unit,info)
     if GetTime()>cast.sentAt+1.5 then unresolvedShield=nil; return end
     if ReadableTable(info) then
         if ReadableTable(info.addedAuras) then
-            for _,aura in ipairs(info.addedAuras) do MatchOwnedShield(cast,unit,aura) end
+            local removed,updated=info.removedAuraInstanceIDs,info.updatedAuraInstanceIDs
+            local fresh=not secret(info.isFullUpdate) and info.isFullUpdate==false
+                and not secret(removed) and (removed==nil or ReadableTable(removed) and not next(removed))
+                and not secret(updated) and (updated==nil or ReadableTable(updated) and not next(updated))
+            for _,aura in ipairs(info.addedAuras) do MatchOwnedShield(cast,unit,aura,fresh) end
         end
         if not unresolvedShield or (not secret(info.isFullUpdate) and info.isFullUpdate==false
             and not (ReadableTable(info.updatedAuraInstanceIDs) and #info.updatedAuraInstanceIDs>0)) then return end
@@ -469,14 +529,34 @@ end
 
 local function TrackShieldCast(event,first,second,third)
     local counts=HealBot_Forever_ShieldPerf
-    if event=="UNIT_SPELLCAST_SENT" and PublicString(second) then shieldCasts[second]=nil end
+    local click
+    if event=="UNIT_SPELLCAST_SENT" then
+        click,shieldClick=shieldClick,nil
+        if PublicString(second) then shieldCasts[second]=nil end
+    elseif event=="UNIT_SPELLCAST_FAILED" or event=="UNIT_SPELLCAST_FAILED_QUIET" or event=="UNIT_SPELLCAST_INTERRUPTED" then
+        shieldClick=nil
+    end
     if event=="UNIT_SPELLCAST_SENT" and ShieldSpell(third) then
         unresolvedShield=nil
         if counts then counts.sent=counts.sent+1 end
         if PublicString(second) then
             local cast=ResolveShieldTarget(first)
+            if not cast and counts then counts.targetMissing=counts.targetMissing+1 end
+            -- The first matching send in the actual click frame may use its
+            -- explicit spell action's recipient. Never borrow a prior hover,
+            -- a failed click from another frame or a conflicting public name.
+            if click and click.rank==third and click.clicked==GetTime()
+                and click.roster==shieldRoster and click.group==buttonsByUnit[click.unit]
+                and (not PublicString(first) or first==click.short or first==click.full) then
+                if not cast then
+                    click.recovered=true
+                    cast=click
+                elseif ShieldMatches(cast,click.guid,click.name) then
+                    click.guid,click.name=cast.guid or click.guid,cast.name or click.name
+                    cast=click
+                end
+            end
             if not cast then
-                if counts then counts.targetMissing=counts.targetMissing+1 end
                 if shieldRanks[third] then
                     cast={sentAt=GetTime(),sentName=PublicString(first) and first or nil}
                     unresolvedShield=cast
@@ -507,7 +587,10 @@ local function TrackShieldCast(event,first,second,third)
         if counts then
             if secret(second) or second~=cast.spellID then counts.rankMismatch=counts.rankMismatch+1
             elseif cast.sentAt then counts.unpaired=counts.unpaired+1
-            else counts.matched=counts.matched+1 end
+            else
+                counts.matched=counts.matched+1
+                if cast.recovered then counts.clickMatched=counts.clickMatched+1 end
+            end
         end
         if not secret(second) and second==cast.spellID then
             if not cast.sentAt then StoreShieldCast(cast,GetTime())
@@ -622,6 +705,14 @@ local function Install()
             end
             return
         end
+        if event=="PLAYER_ENTERING_WORLD" or event=="GROUP_ROSTER_UPDATE" then
+            shieldClick=nil
+            shieldRoster=shieldRoster+1
+            for unit in pairs(shieldSlots) do
+                shieldSlots[unit]=nil
+                QueueShieldUnit(buttonsByUnit[unit])
+            end
+        end
         if event=="PLAYER_ENTERING_WORLD" then unresolvedShield=nil; return end
         if event=="GROUP_ROSTER_UPDATE" then
             for unit in pairs(mendingByUnit) do Safe(RefreshMendingUnit,unit) end
@@ -638,10 +729,12 @@ local function Install()
         if not secret(unit) and unit=="player" then Safe(OnEvent,nil,event,unit,...) end
     end)
 
-    hooksecurefunc("HealBot_Action_ButtonPreClick",function(_,_,button)
+    hooksecurefunc("HealBot_Action_ButtonPreClick",function(frame,mouseButton,button)
+        shieldClick=nil
         if enabled and button and button.frame and button.frame<10 and button.status.events then
             TrackButton(button,true)
             clickedButton,clickedAt=button,GetTime()
+            CaptureShieldClick(frame,mouseButton,button)
         end
     end)
     hooksecurefunc("HealBot_Action_RegisterUnitEvents",function(button)
