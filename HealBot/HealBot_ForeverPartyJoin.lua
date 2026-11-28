@@ -51,9 +51,9 @@ local function Colour(mode,category,prefix,pct,red,green,cr,cg,cb,rr,rg,rb)
 end
 
 local function PaintPower(row)
-    if not row.skinPower then return end
-    local power,maximum,percent=HealBot_WoWAPI_UnitMana(row.unit,UnitPowerType(row.unit))
+    if not row.skinPower or not next(row.skinPower) then return end
     local powerType,token=UnitPowerType(row.unit)
+    local power,maximum,percent=HealBot_WoWAPI_UnitMana(row.unit,powerType)
     local colour=not secret(token) and PowerBarColor[token] or nil
     colour=colour or PowerBarColor.MANA
     local role=UnitGroupRolesAssigned(row.unit)
@@ -81,9 +81,16 @@ end
 
 local incomingColourModes={[3]=2,[4]=3,[6]=4,[7]=5,[8]=6}
 
-local function Paint(row)
+local function Paint(row,event)
     local unit=row.unit
     if not frame or not UnitExists(unit) then return end
+    if event=="UNIT_AURA" or event=="UNIT_POWER_UPDATE" or event=="UNIT_MAXPOWER" or event=="UNIT_DISPLAYPOWER" then
+        if event~="UNIT_AURA" then PaintPower(row) end
+        if HealBot_Forever_UpdateArrivalAuras then
+            HealBot_Forever_UpdateArrivalAuras(row,event=="UNIT_AURA" or event=="UNIT_DISPLAYPOWER")
+        end
+        return
+    end
     local health,maximum,pct,percent,_,red,green=HealBot_WoWAPI_UnitHealth(unit)
     row.healthBar:SetMinMaxValues(0,maximum)
     row.healthBar:SetValue(health)
@@ -101,7 +108,10 @@ local function Paint(row)
         return Colour(Get(category,key),category,prefix,pct,red,green,cr,cg,cb,rr,rg,rb)
     end
     local r,g,b=SkinColour("BarCol","HLTH","H")
-    row.healthBar:SetStatusBarColor(r,g,b,Get("BarCol",outOfRange and "ORA" or "HA"))
+    local enabledAlpha=Get("BarCol","HA")
+    local barAlpha=outOfRange and Get("BarCol","ORA") or enabledAlpha
+    row.healthBar:SetStatusBarColor(r,g,b,barAlpha)
+    if HealBot_Forever_SetArrivalIconOpacity then HealBot_Forever_SetArrivalIconOpacity(row,barAlpha,enabledAlpha) end
     local incoming=row.incomingBar
     if incoming then
         local mode=Get("BarIACol","IC")
@@ -109,7 +119,9 @@ local function Paint(row)
             local calculator=row.incomingCalculator
             UnitGetDetailedHealPrediction(unit,"player",calculator)
             incoming:SetMinMaxValues(0,calculator:GetMaximumHealth())
-            incoming:SetValue(calculator:GetIncomingHeals())
+            -- The second result is a clamp flag, not a StatusBar interpolation mode.
+            local amount=calculator:GetIncomingHeals()
+            incoming:SetValue(amount)
             local ir,ig,ib=Colour(incomingColourModes[mode] or 1,"BarIACol","I",pct,red,green,cr,cg,cb,rr,rg,rb)
             local alpha=Get("BarIACol","IA")
             incoming:SetStatusBarColor(ir,ig,ib,outOfRange and alpha/3 or alpha)
@@ -153,7 +165,9 @@ local function Paint(row)
     end
     row.healthText:SetText(combined and showName and "" or healthText)
     PaintPower(row)
-    if HealBot_Forever_UpdateArrivalAuras then HealBot_Forever_UpdateArrivalAuras(row) end
+    if HealBot_Forever_UpdateArrivalAuras then
+        HealBot_Forever_UpdateArrivalAuras(row,event~="UNIT_HEALTH" and event~="UNIT_MAXHEALTH" and event~="UNIT_HEAL_PREDICTION")
+    end
 end
 
 local function SetTextPosition(text,bar,point,x,y)
@@ -210,6 +224,15 @@ local function ApplySkin()
 end
 
 -- Reserve places against the live grid while protected anchors can be changed.
+local function AnchorReserve(row,main,x,y)
+    if row:GetNumPoints()==1 then
+        local point,relative,relativePoint,oldX,oldY=row:GetPoint(1)
+        if point=="CENTER" and relative==main and relativePoint=="CENTER" and oldX==x and oldY==y then return end
+    end
+    row:ClearAllPoints()
+    row:SetPoint("CENTER",main,"CENTER",x,y)
+end
+
 local function PositionReservedRows()
     local main=_G["f"..frame.."_HealBot_Action"]
     if not main then return false end
@@ -274,8 +297,7 @@ local function PositionReservedRows()
                     end
                 end
             until free
-            row:ClearAllPoints()
-            row:SetPoint("CENTER",main,"CENTER",x-mainX,y-mainY)
+            AnchorReserve(row,main,x-mainX,y-mainY)
         end
     end
     return true
@@ -320,7 +342,7 @@ local function CreateRow(mode,index)
     end
     row:SetScript("OnEvent",function(self,event,_,inRange)
         if event=="UNIT_IN_RANGE_UPDATE" and not secret(inRange) then self.eventInRange=inRange end
-        if self:IsVisible() then Paint(self) end
+        if self:IsVisible() then Paint(self,event) end
     end)
     return row
 end
@@ -337,7 +359,7 @@ local function BindRow(row)
     row.bindingGeneration=bindingGeneration
 end
 
-local function SkinExtras(row, donor)
+local function SkinExtras(row, donor, auraContext)
     row.frame=frame
     row.skinPower=row.skinPower or {}
     for _,entry in pairs(row.skinPower) do entry.bar:Hide() end
@@ -378,7 +400,7 @@ local function SkinExtras(row, donor)
             end
         end
     end
-    if HealBot_Forever_SkinArrivalAuras then HealBot_Forever_SkinArrivalAuras(row,donor) end
+    if HealBot_Forever_SkinArrivalAuras then HealBot_Forever_SkinArrivalAuras(row,donor,auraContext) end
 end
 
 local function Sync()
@@ -433,9 +455,15 @@ local function Sync()
         end
     end
     bindingError=nil
+    local auraContext
     for _,row in ipairs(rows) do
         local reserve=enabled and not UnitExists(row.unit)
-        if reserve and donor then SkinExtras(row,donor) end
+        if reserve and donor then
+            if not auraContext and HealBot_Forever_PrepareArrivalAuraContext then
+                auraContext=HealBot_Forever_PrepareArrivalAuraContext()
+            end
+            SkinExtras(row,donor,auraContext)
+        end
         if reserve and row.bindingGeneration~=bindingGeneration then
             local ok,err=pcall(BindRow,row)
             if not ok then
@@ -502,15 +530,32 @@ local function QueueSkinSync()
     QueueSync()
 end
 
+-- Buff watch/rank changes update prepared native groups in place. Only skin
+-- and layout changes need to restyle the reserve panel.
 hooksecurefunc("HealBot_Options_framesChanged",QueueSkinSync)
 hooksecurefunc("HealBot_Options_SetSkins",QueueSkinSync)
+hooksecurefunc("hbv_Skins_SetIconVar",function(_,key)
+    if key=="MAXBICONS" or key=="MAXDICONS" or key=="BICONSPACER" or key=="DICONSPACER"
+        or key=="BSCALE" or key=="DSCALE" or key=="BZOOM" or key=="DZOOM" then QueueSkinSync() end
+end)
+hooksecurefunc("hbv_Skins_SetIconTextVar",QueueSkinSync)
 hooksecurefunc("HealBot_Panel_SetupBars",QueueSync)
 hooksecurefunc("HealBot_Aura_SetAuraCheckFlags",function()
     for _,row in ipairs(rows) do
         if HealBot_Forever_UpdateArrivalAuras then HealBot_Forever_UpdateArrivalAuras(row) end
     end
 end)
-hooksecurefunc("HealBot_Forever_RefreshBuffExclusions",QueueSkinSync)
+local function RefreshReserveDebuffs()
+    if InCombatLockdown() then
+        if HealBot_Forever_RefreshArrivalDebuffPolicy then HealBot_Forever_RefreshArrivalDebuffPolicy() end
+    else
+        QueueSync()
+    end
+end
+for _,name in ipairs({"HealBot_Forever_RefreshDebuffIconPreferences","HealBot_Forever_SetWeakenedSoulNativeEnabled",
+    "HealBot_Aura_ConfigDebuffs","HealBot_Options_Debuff_Reset"}) do
+    if type(_G[name])=="function" then hooksecurefunc(name,RefreshReserveDebuffs) end
+end
 
 function HealBot_Forever_SetPartyJoinEnabled(enabled)
     HealBot_Globals.ForeverPartyJoin=enabled
@@ -519,6 +564,10 @@ function HealBot_Forever_SetPartyJoinEnabled(enabled)
     end
     QueueSync()
     print("HealBot combat party arrivals "..(enabled and "on" or "off")..(InCombatLockdown() and " (after combat)." or "."))
+end
+
+function HealBot_Forever_VisitPartyPerfScopes(visit)
+    Sync=visit("PartyJoin.Sync",Sync)
 end
 
 SLASH_HBFOREVERPARTYJOIN1="/hbpartyjoin"

@@ -21,6 +21,7 @@ end
 local function noop() end
 local env=setmetatable({}, {__index=_G})
 env._G=env
+env.SlashCmdList={}
 env.HealBot_Forever_GetDebuffTypes=function() return {}, "all" end
 env.HealBot_Forever_DebuffsEnabled=function() return monitoring~=false end
 env.HEALBOT_FOREVER=true

@@ -958,7 +958,7 @@ end
 function HealBot_Action_DisableBuffIconGlow(button)
     for i=1,12 do
         if button.glow.icon[i]>1 then
-            HealBot_Action_DisableIconGlow(button, "ICONDEBUFF", i)
+            HealBot_Action_DisableIconGlow(button, "ICONBUFF", i)
         end
     end
 end

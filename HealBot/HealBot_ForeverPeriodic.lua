@@ -3,6 +3,7 @@ local _, class=UnitClass("player")
 if class~="PRIEST" then return end
 
 local buttons={}
+local buttonsByUnit={}
 local casts={}
 local renews={}
 local shieldCasts={}
@@ -13,7 +14,7 @@ local lockoutDuration=15
 local mendingByUnit={}
 local mendingAmount, mendingUntil
 local mendingBase={[401859]=172,[1240826]=298,[1240827]=413}
-local mendingAuras={[401863]=true,[401877]=true,[41635]=true}
+local mendingAuras={[401863]=true,[401877]=true,[1240848]=true,[1240849]=true,[41635]=true}
 local channel, pendingPenance
 local channelStarts=0
 local clickedButton, clickedAt
@@ -222,7 +223,7 @@ local function EndChannel(castGUID)
     end
 end
 
-local function RefreshMendingUnit(unit)
+local function RefreshMendingUnit(unit,refreshExisting)
     if not mendingAmount or not C_UnitAuras or not C_UnitAuras.GetAuraDataByIndex then return end
     local index=1
     local hasMending=false
@@ -230,19 +231,41 @@ local function RefreshMendingUnit(unit)
     while GetTime()<mendingUntil do
         local ok,aura=pcall(C_UnitAuras.GetAuraDataByIndex,unit,index,"HELPFUL|PLAYER")
         if not ok or secret(aura) or not aura then break end
-        local id, name=aura.spellId,aura.name
-        if (not secret(id) and (mendingAuras[id] or mendingBase[id]))
-            or (PublicString(spellName) and PublicString(name) and spellName==name) then
-            hasMending=true
-            break
+        if type(aura)=="table" and (not canaccesstable or canaccesstable(aura)) then
+            local id, name=aura.spellId,aura.name
+            if (not secret(id) and (mendingAuras[id] or mendingBase[id]))
+                or (PublicString(spellName) and PublicString(name) and spellName==name) then
+                hasMending=true
+                break
+            end
         end
         index=index+1
     end
-    if hasMending==not not mendingByUnit[unit] then return end
+    if hasMending==not not mendingByUnit[unit] and not (refreshExisting and hasMending) then return end
     mendingByUnit[unit]=hasMending or nil
-    for button in pairs(buttons) do
-        if button.unit==unit then Safe(Update,button) end
+    local subscribed=buttonsByUnit[unit]
+    if subscribed then
+        for button in pairs(subscribed) do Safe(Update,button) end
     end
+end
+
+local function TrackButton(button,track)
+    local previous=buttons[button]
+    local unit=track and (PublicString(button.unit) and button.unit or true) or nil
+    if previous==unit then return end
+    if type(previous)=="string" then
+        local old=buttonsByUnit[previous]
+        old[button]=nil
+        if not next(old) then buttonsByUnit[previous],mendingByUnit[previous]=nil,nil end
+    end
+    buttons[button]=unit
+    if type(unit)=="string" then
+        local subscribed=buttonsByUnit[unit] or {}
+        buttonsByUnit[unit]=subscribed
+        subscribed[button]=true
+        if enabled and mendingAmount then Safe(RefreshMendingUnit,unit,true) end
+    end
+    if track and previous and button.foreverPeriodic then Safe(Update,button) end
 end
 
 local function StartMending(spellID)
@@ -250,14 +273,16 @@ local function StartMending(spellID)
     if secret(bonus) or type(bonus)~="number" then bonus=0 end
     mendingAmount=mendingBase[spellID]+bonus*0.429
     mendingUntil=GetTime()+180
-    local scanned={}
-    for button in pairs(buttons) do
-        if not scanned[button.unit] then
-            scanned[button.unit]=true
-            RefreshMendingUnit(button.unit)
+    for unit in pairs(buttonsByUnit) do RefreshMendingUnit(unit,true) end
+    local expiry=mendingUntil
+    C_Timer.After(180,function()
+        if mendingUntil~=expiry then return end
+        mendingAmount,mendingUntil=nil,nil
+        for unit in pairs(mendingByUnit) do
+            mendingByUnit[unit]=nil
+            for button in pairs(buttonsByUnit[unit]) do Safe(Update,button) end
         end
-        if mendingByUnit[button.unit] then Safe(Update,button) end
-    end
+    end)
 end
 
 local function ShieldSpell(spellID)
@@ -401,10 +426,8 @@ local function Install()
     events:RegisterEvent("UNIT_AURA")
     events:SetScript("OnEvent",function(_,event,unit,...)
         if event=="UNIT_AURA" then
-            if enabled and mendingAmount and not secret(unit) then
-                for button in pairs(buttons) do
-                    if button.unit==unit then Safe(RefreshMendingUnit,unit); break end
-                end
+            if enabled and mendingAmount and not secret(unit) and buttonsByUnit[unit] then
+                Safe(RefreshMendingUnit,unit)
             end
             return
         end
@@ -434,16 +457,19 @@ local function Install()
 
     hooksecurefunc("HealBot_Action_ButtonPreClick",function(_,_,button)
         if enabled and button and button.frame and button.frame<10 and button.status.events then
-            buttons[button]=true
+            TrackButton(button,true)
             clickedButton,clickedAt=button,GetTime()
         end
     end)
     hooksecurefunc("HealBot_Action_RegisterUnitEvents",function(button)
-        if button.frame<10 then buttons[button]=true end
+        TrackButton(button,button.frame<10)
     end)
     hooksecurefunc("HealBot_Action_UnregisterUnitEvents",function(button)
-        buttons[button]=nil
+        TrackButton(button,false)
         if button.foreverPeriodic then button.foreverPeriodic:Hide() end
+    end)
+    hooksecurefunc("HealBot_Action_ResetrCallsUnit",function(button)
+        if buttons[button] then TrackButton(button,button.frame<10) end
     end)
     hooksecurefunc("HealBot_Action_UpdateHealthButton",function(button)
         if button.foreverPeriodic then Safe(Update,button) end
@@ -452,7 +478,7 @@ local function Install()
         if kind=="bar" and button.foreverPeriodic then Safe(Update,button) end
     end)
     for _, button in pairs(HealBot_Buttons or {}) do
-        if button.frame and button.frame<10 and button.status.events then buttons[button]=true end
+        if button.frame and button.frame<10 and button.status.events then TrackButton(button,true) end
     end
     installed=true
 end

@@ -507,8 +507,49 @@ function HealBot_Events_UnitSpellCastSent(caster,unitName,castGUID,spellID)
     end
 end
 
-function HealBot_Events_UnitAura(button)
+local function ReadableAuraTable(value)
+    return not HealBot_issecretvalue(value) and type(value)=="table" and (not canaccesstable or canaccesstable(value))
+end
+
+local function EmptyAuraChanges(list)
+    if HealBot_issecretvalue(list) then return false end
+    return list==nil or (ReadableAuraTable(list) and next(list)==nil)
+end
+
+local function AddedAuraSide(info)
+    if not ReadableAuraTable(info) then return end
+    local full=info.isFullUpdate
+    if HealBot_issecretvalue(full) or full or not ReadableAuraTable(info.addedAuras)
+        or not EmptyAuraChanges(info.removedAuraInstanceIDs) or not EmptyAuraChanges(info.updatedAuraInstanceIDs) then return end
+    local side
+    for _,aura in pairs(info.addedAuras) do
+        if not ReadableAuraTable(aura) then return end
+        local helpful,harmful=aura.isHelpful,aura.isHarmful
+        if HealBot_issecretvalue(helpful) or HealBot_issecretvalue(harmful) then return end
+        local family
+        if helpful==true and not harmful then family="buff"
+        elseif harmful==true and not helpful then family="debuff"
+        else return end
+        if side and side~=family then return end
+        side=family
+    end
+    return side
+end
+
+function HealBot_Events_UnitAura(button, unit, updateInfo)
       --HealBot_setCall("HealBot_Events_UnitAura", button)
+    -- The event queue already merges multiple deliveries. A public add-only
+    -- delta needs only its own scanner. Keep any dirty work from another
+    -- event or an incomplete scan; opaque and mixed updates take both paths.
+    if HEALBOT_FOREVER and not (button.aura.buff.update and button.aura.debuff.update) then
+        local side=AddedAuraSide(updateInfo)
+        if side then
+            button.aura[side].update=true
+            if button.aura.debuff.update then HealBot_Events_UnitDebuff(button) end
+            if button.aura.buff.update then HealBot_Events_UnitBuff(button) end
+            return
+        end
+    end
     button.aura.buff.update=true
     button.aura.debuff.update=true
     HealBot_Events_CheckUnitAura(button)

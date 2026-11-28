@@ -18,7 +18,7 @@ local eventFrame
 local lastUnit
 local created=0
 local messages={}
-local env=setmetatable({}, {__index=_G})
+local env=setmetatable({SlashCmdList={}}, {__index=_G})
 
 local function frame()
     local f={shown=false, value=0, orientation="HORIZONTAL", reverse=false, level=5}
@@ -59,6 +59,10 @@ local function frame()
     function f:SetAlpha(alpha) self.alpha=alpha end
     function f:CreateTexture() self.overlay=frame() return self.overlay end
     function f:AddDispelTypeTexture(texture,options) self.dispel={texture=texture,options=options} end
+    function f:RemoveDispelTypeTexture(texture)
+        assert(self.dispel.texture==texture,"replaced an unrelated dispel texture")
+        self.dispel=nil
+    end
     function f:SetUnit(unit) self.unit=unit end
     function f:SetEnabled(value) assert(not combat,"enabled container in combat") self.enabled=value end
     function f:AddAuraGroup(_,filter,options)
@@ -69,7 +73,7 @@ local function frame()
         options.initializeFrame(self.aura)
     end
     function f:UpdateAllAuras() self.updates=(self.updates or 0)+1 end
-    function f:RegisterEvent() end
+    function f:RegisterEvent(event) if event=="PLAYER_REGEN_DISABLED" then eventFrame=self end end
     function f:RegisterUnitEvent() end
     function f:SetScript(_,callback) self.callback=callback end
     return f
@@ -84,7 +88,6 @@ env.CreateFrame=function(kind)
     assert(not combat,"created a frame in combat")
     created=created+1
     local f=frame()
-    if kind=="Frame" then eventFrame=f end
     return f
 end
 env.hooksecurefunc=function(name, callback) hooks[name]=callback end
@@ -157,6 +160,25 @@ eq(b.foreverDebuffs.all.options.maxFrameCount,1,"one native debuff selected")
 eq(b.foreverDebuffs.all.aura.dispel.options.customDispelColorMap.Magic.g,0.6,"configured debuff color")
 eq(b.foreverDebuffs.all.aura.overlay.target,b.gref.Bar:GetStatusBarTexture(),"debuff tint follows health fill")
 
+local originalRow, framesBeforeColor=b.foreverDebuffs.all,created
+env.HealBot_Config_Cures.CDCBarColour.Magic.G=0.42
+hooks.HealBot_SetCDCBarColours()
+eq(originalRow.aura.dispel.options.customDispelColorMap.Magic.g,0.42,"color-only setting reached current dispel row")
+eq(b.foreverDebuffs.dispel.aura.dispel.options.customDispelColorMap.Magic.g,0.42,"color-only setting reached dispel-only row")
+local updates=originalRow.updates
+hooks.HealBot_SetCDCBarColours()
+eq(originalRow.updates,updates,"unmodified palette avoided a native refresh")
+eq(created,framesBeforeColor,"color-only edit reused the prepared frames")
+combat=true
+env.HealBot_Config_Cures.CDCBarColour.Magic.G=0.6
+hooks.HealBot_SetCDCBarColours()
+eq(originalRow.shown,false,"outdated color visible during deferred configuration")
+eq(created,framesBeforeColor,"in-combat edit created native objects")
+combat=false
+eventFrame.callback(nil,"PLAYER_REGEN_ENABLED")
+eq(originalRow.aura.dispel.options.customDispelColorMap.Magic.g,0.6,"deferred color not restored")
+eq(b.foreverDebuffs.all,originalRow,"deferred color rebuilt the overlay")
+
 for _, overlay in pairs(b.foreverDebuffs) do
     for key, label in pairs(b.gref.txt) do
         eq(label:GetParent():GetFrameLevel()>overlay.aura:GetFrameLevel(),true,key.." remains above debuff tint")
@@ -223,6 +245,16 @@ eventFrame.callback(nil,"PLAYER_REGEN_ENABLED")
 eq(deferred.foreverIncoming~=nil,true,"deferred frame created after combat")
 eq(deferred.gref.txt.text:GetParent(),deferred.gref.Top,"deferred name moved above debuff tint")
 eq(b.foreverDebuffs.dispel.shown,true,"remaining debuffs retain tint after combat")
+b.aura.debuff={scanUnit=b.unit,scanCombat=false,id=6788}
+hooks.HealBot_Aura_CheckUnitDebuffs(b)
+eq(b.foreverDebuffs.dispel.shown,false,"mixed-scan native tint covered the exact custom-color winner after combat")
+b.aura.debuff.id=0
+b.aura.debuff.publicUnit=b.unit
+hooks.HealBot_Aura_CheckUnitDebuffs(b)
+eq(b.foreverDebuffs.dispel.shown,false,"complete public scan kept an overlapping native color")
+b.aura.debuff.publicUnit=nil
+hooks.HealBot_Aura_CheckUnitDebuffs(b)
+eq(b.foreverDebuffs.dispel.shown,true,"unknown protected dispels lost color after public winner expired")
 env.HealBot_Globals.CombatAurasPersistDebuffs=false
 env.HealBot_Forever_UpdateDebuffOverlay(b)
 eq(b.foreverDebuffs.dispel.shown,false,"persistence opt-out restores legacy tint outside combat")

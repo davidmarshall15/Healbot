@@ -21943,19 +21943,10 @@ function HealBot_Options_RetDebuffRGB(button)
         return HealBot_Config_Cures.CDCBarColour[button.aura.debuff.type].R or 1,
                HealBot_Config_Cures.CDCBarColour[button.aura.debuff.type].G or 0.25,
                HealBot_Config_Cures.CDCBarColour[button.aura.debuff.type].B or 0.25
-    elseif HealBot_Globals.CDCBarColour[button.aura.debuff.id] then
-        return HealBot_Globals.CDCBarColour[button.aura.debuff.id].R or 1,
-               HealBot_Globals.CDCBarColour[button.aura.debuff.id].G or 0.25,
-               HealBot_Globals.CDCBarColour[button.aura.debuff.id].B or 0.25
-    elseif HealBot_Globals.CDCBarColour[button.aura.debuff.name] then
-        return HealBot_Globals.CDCBarColour[button.aura.debuff.name].R or 1,
-               HealBot_Globals.CDCBarColour[button.aura.debuff.name].G or 0.25,
-               HealBot_Globals.CDCBarColour[button.aura.debuff.name].B or 0.25
-    else
-        return HealBot_Globals.CDCBarColour[customDebuffPriority].R or 1,
-               HealBot_Globals.CDCBarColour[customDebuffPriority].G or 0.25,
-               HealBot_Globals.CDCBarColour[customDebuffPriority].B or 0.25
     end
+    local color=HealBot_Aura_CustomDebuffSetting(HealBot_Globals.CDCBarColour,button.aura.debuff.id,button.aura.debuff.name)
+        or HealBot_Globals.CDCBarColour[customDebuffPriority]
+    return color.R or 1,color.G or 0.25,color.B or 0.25
 end
 
 function HealBot_Options_RetBuffRGB(button)
@@ -29556,8 +29547,8 @@ local debuffIconOptions=debuffIconOptionsGerman and {
     selectDebuff="Select a custom debuff with a spell ID.",
     help="Default follows the existing settings. This choice affects only the small icon.",
     combatHelp="WoW determines which protected debuff icons can be filtered individually in combat.",
-    native="Weakened Soul in combat (native)",
-    nativeHelp="Uses WoW's native combat display for Weakened Soul, including from other priests. Additional debuffs may appear.",
+    native="Native Weakened Soul indicator",
+    nativeHelp="Uses WoW's native display in combat and battlegrounds, including from other priests. When exact matching is restricted, additional matching debuffs may appear and the custom Weakened Soul bar color cannot be applied reliably.",
 }
 local debuffIconChoices={
     {label=debuffIconOptions.default},

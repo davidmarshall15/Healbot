@@ -13,7 +13,7 @@ end
 local source=read("HealBot/HealBot_CombatAuras.lua")
 local noop=function() end
 
-local function fixture(class,limit)
+local function fixture(class,limit,configure)
     local combat=false
     local frames,hooks,events={},{},{}
     local names={[139]="Renew",[6074]="Renew",[17]="Power Word: Shield",[592]="Power Word: Shield",
@@ -197,6 +197,7 @@ local function fixture(class,limit)
         end
         return found
     end
+    if configure then configure(env) end
     setfenv(assert(loadstring(source)),env)()
     driver.fire("PLAYER_LOGIN")
     return driver
@@ -290,8 +291,8 @@ eq(selfIcon.hbcaMarker~=nil,true,"Self icons retain the configured self marker")
 eq(everyoneIcon.hbcaMarker,nil,"Everyone icons do not falsely mark other casters as self")
 eq(everyoneIcon.cooldown.hideNumbers,false,"Everyone countdown follows skin settings")
 eq(everyoneIcon.cooldown.countdown.font,"test-font","Everyone countdown uses the configured font")
-eq(everyoneIcon.cooldown.countdown.fontSize,6,"countdown text is constrained to icon geometry")
-eq(everyoneIcon.count.fontSize,7,"stack text uses its own icon-safe size")
+eq(everyoneIcon.cooldown.countdown.fontSize,12,"Forever countdown text respects configured skin height")
+eq(everyoneIcon.count.fontSize,12,"Forever stack text respects configured skin height")
 eq(everyoneIcon.count.justify,"LEFT","stack text keeps its configured corner alignment")
 
 local empty=fixture("MAGE",4)

@@ -9,13 +9,16 @@ local secret=setmetatable({}, {__add=forbidden,__sub=forbidden,__mul=forbidden,
     __div=forbidden,__lt=forbidden,__le=forbidden,__index=forbidden,__tostring=forbidden})
 local combat=false
 local hooks={}
-local eventFrame
+local eventFrame, sampler
+local frames={}
 local walked, refreshed, queried, secretChecks, dispatched=0,0,0,0,0
 local names={target="New target",targettarget="New target of target",focus="New focus"}
 local exists={target=true,targettarget=true,focus=true}
 local calls={}
-local registered={}
+local registered
 local env=setmetatable({}, {__index=_G})
+env._G=env
+env.SlashCmdList={}
 
 local function region()
     return {
@@ -42,19 +45,19 @@ env.pairs=function(t)
 end
 env.CreateFrame=function(kind)
     assert(not combat,"created a protected frame in combat")
-    eq(kind,"Frame","only the shared event frame is created")
-    eventFrame={
-        RegisterEvent=function(_,event) registered[event]=true end,
-        RegisterUnitEvent=function(_,event,unit,...)
+    eq(kind,"Frame","module creates ordinary frames")
+    local frame={
+        events={},scripts={},shown=true,
+        RegisterEvent=function(self,event) self.events[event]=true end,
+        RegisterUnitEvent=function(self,event,unit,...)
             eq(select("#",...),0,"only the target unit dependency is registered")
-            registered[event]=unit
+            self.events[event]=unit
         end,
-        SetScript=function(_,script,callback)
-            eq(script,"OnEvent","installed the real event handler")
-            eventFrame.callback=callback
-        end,
+        SetScript=function(self,script,callback) self.scripts[script]=callback end,
+        Hide=function(self) self.shown=false end,
     }
-    return eventFrame
+    frames[#frames+1]=frame
+    return frame
 end
 env.hooksecurefunc=function(name,callback) hooks[name]=callback end
 env.HealBot_Forever_GetDebuffTypes=function() return {},"" end
@@ -78,7 +81,20 @@ env.HealBot_Aux_setPowerBars=function(button) button.renderedPower=button.mana.c
 
 local chunk=assert(loadfile("HealBot/HealBot_ForeverFrames.lua"))
 setfenv(chunk,env)()
+for _,frame in ipairs(frames) do
+    if frame.events.PLAYER_TARGET_CHANGED then eventFrame=frame end
+    if frame.scripts.OnUpdate then sampler=frame end
+end
+eq(#frames,2,"one shared target-event frame and one timing sampler")
+assert(eventFrame and sampler and eventFrame~=sampler,"independent frames for target events and timing")
+eq(type(eventFrame.scripts.OnEvent),"function","installed the real target-event handler")
+eq(sampler.shown,false,"optional timing sampler stays hidden")
+eq(next(sampler.events),nil,"optional timing sampler registers no events on load")
+eq(type(env.SlashCmdList.HEALBOTLIVEPERF),"function","timing can be enabled explicitly")
+registered=eventFrame.events
 local refresh=env.HealBot_Forever_RefreshTarget
+local debuffRebinds=0
+env.HealBot_Forever_RebindDebuffScan=function() debuffRebinds=debuffRebinds+1 end
 env.HealBot_Forever_RefreshTarget=function(button)
     refreshed=refreshed+1
     calls[button]=(calls[button] or 0)+1
@@ -104,17 +120,19 @@ end
 
 local function dispatch(event,unit,routedUnit)
     walked,refreshed,queried,secretChecks,dispatched=0,0,0,0,0
+    debuffRebinds=0
     calls={}
     -- Native filtering resolves which unit changed independently of the
     -- payload's spelling/readability; selected party/raid aliases may match.
     local registration=registered[event]
     if registration and (registration==true or registration==(routedUnit or unit)) then
         dispatched=1
-        eventFrame.callback(nil,event,unit)
+        eventFrame.scripts.OnEvent(eventFrame,event,unit)
     end
 end
 
 local function work(expected,label)
+    eq(debuffRebinds,expected,label..": only changed target bindings invalidate harmful state")
     eq(refreshed,expected,label..": refresh calls")
     eq(walked,expected,label..": only relevant buttons traversed")
     eq(queried,expected,label..": only relevant unit queries")
@@ -144,6 +162,8 @@ eq(target.name,"New target","target name updated")
 eq(targettarget.name,"New target of target","target of target name updated")
 eq(target.gref.Bar.value,secret,"secret health forwarded to the native bar")
 eq(target.renderedPower,secret,"secret power forwarded without inspection")
+refresh(target)
+eq(debuffRebinds,4,"ordinary health or mana repaint invalidated the debuff scan")
 
 dispatch("PLAYER_FOCUS_CHANGED")
 work(2,"focus change")

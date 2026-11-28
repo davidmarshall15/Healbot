@@ -18,7 +18,10 @@ local function IndexTargetButton(button)
 end
 
 local function RefreshTargetButtons(unit)
-    for button in pairs(targetButtons[unit]) do HealBot_Forever_RefreshTarget(button) end
+    for button in pairs(targetButtons[unit]) do
+        if HealBot_Forever_RebindDebuffScan then HealBot_Forever_RebindDebuffScan(button) end
+        HealBot_Forever_RefreshTarget(button)
+    end
 end
 
 -- Target tokens can point at a different unit without changing the secure
@@ -136,13 +139,26 @@ function HealBot_Forever_UpdateIncomingHeals(button)
     return true
 end
 
-local function DebuffColors()
+local dispelNames={"Magic","Curse","Disease","Poison","Bleed"}
+local dispelColors
+local function RefreshDebuffColors()
+    local configured=HealBot_Config_Cures.CDCBarColour
+    if dispelColors then
+        local changed=false
+        for _,name in ipairs(dispelNames) do
+            local old,color=dispelColors[name],configured[name]
+            if color and (not old or old.r~=color.R or old.g~=color.G or old.b~=color.B)
+                or (old and not color) then changed=true; break end
+        end
+        if not changed then return false end
+    end
     local colors={}
-    for _, name in ipairs({"Magic", "Curse", "Disease", "Poison", "Bleed"}) do
-        local color=HealBot_Config_Cures.CDCBarColour[name]
+    for _,name in ipairs(dispelNames) do
+        local color=configured[name]
         if color then colors[name]=CreateColor(color.R, color.G, color.B) end
     end
-    return colors
+    dispelColors=colors
+    return true
 end
 
 local function CreateDebuffOverlay(button, filter, types)
@@ -166,12 +182,15 @@ local function CreateDebuffOverlay(button, filter, types)
                 texture:SetAllPoints(button.gref["Bar"]:GetStatusBarTexture())
                 texture:SetColorTexture(1,1,1,1)
                 local options={style=Enum.CustomAuraButtonDispelTypeTextureStyle.PreserveAsset,
-                               customDispelColorMap=DebuffColors()}
+                               customDispelColorMap=dispelColors}
                 if frame.AddDispelTypeTexture then
                     frame:AddDispelTypeTexture(texture, options)
                 else
                     frame:SetAuraBorder(texture, options)
                 end
+                -- This group has one frame. Keep its output texture to reapply
+                -- changed colors without allocating a replacement aura group.
+                container.foreverColorFrame,container.foreverColorTexture=frame,texture
             end,
         })
         container:SetEnabled(true)
@@ -183,6 +202,22 @@ local function CreateDebuffOverlay(button, filter, types)
     return container
 end
 
+local function RefreshOverlayScope(button)
+    if not button.foreverDebuffs then return end
+    local types,signature=button.foreverDebuffTypes,button.foreverDebuffSignature
+    if button.foreverDebuffScoped then types,signature=HealBot_Forever_GetDebuffTypes(button) end
+    button.foreverDebuffScopeEmpty=signature==""
+    if button.foreverDebuffScopeEmpty or (not button.foreverScopeDirty and signature==button.foreverScopeSignature) then return end
+    for _,container in pairs(button.foreverDebuffs) do
+        if not pcall(container.SetAuraGroupCandidateFilters,container,"debuffColor",{includeDispelTypes=types}) then
+            button.foreverScopeDirty=true
+            return
+        end
+    end
+    button.foreverScopeDirty=nil
+    button.foreverScopeSignature=signature
+end
+
 function HealBot_Forever_UpdateDebuffOverlay(button)
     local overlays=button.foreverDebuffs
     if not overlays then return end
@@ -192,7 +227,11 @@ function HealBot_Forever_UpdateDebuffOverlay(button)
     -- to keep a disabled overlay visible until another aura scan occurs.
     local cures=HealBot_Config_Cures
     local barMode=HealBot_Globals.CustomDebuffsShowBarCol.DEFAULT or 4
+    local state=button.aura and button.aura.debuff
+    local publicWinner=state and state.scanUnit==button.unit and state.scanCombat==(not not inCombat)
+        and (state.publicUnit==button.unit or (not HealBot_issecretvalue(state.id) and type(state.id)=="number" and state.id>0))
     local enabled=button.status.events and not button.foreverDebuffDirty
+        and not publicWinner and not button.foreverScopeDirty and not button.foreverDebuffScopeEmpty
         and button.foreverDebuffUnit==button.unit and (inCombat or HealBot_Globals.CombatAurasPersistDebuffs~=false)
         and HealBot_Forever_DebuffsEnabled() and cures.CDCshownHB and
         (barMode==3 or barMode==4) and not button.special.unit and
@@ -201,23 +240,57 @@ function HealBot_Forever_UpdateDebuffOverlay(button)
     local dispelOnly=cures.CDCshownHBDispelOnly or cures.IgnoreCannotDispell
     local selected=dispelOnly and "dispel" or "all"
     button.foreverDebuffHandoff=enabled and button.unit or nil
+    local alpha=button.status.alpha
+    local publicAlpha=not HealBot_issecretvalue(alpha)
     for key, container in pairs(overlays) do
         local show=not not (enabled and key==selected)
-        container:SetAlpha(button.status.alpha)
-        container:SetShown(show)
-        if show and not container.foreverShown then container:UpdateAllAuras() end
-        container.foreverShown=show
+        if not publicAlpha or container.foreverAlpha~=alpha then
+            container:SetAlpha(alpha)
+            container.foreverAlpha=publicAlpha and alpha or nil
+        end
+        if container.foreverShown~=show then
+            container:SetShown(show)
+            if show then container:UpdateAllAuras() end
+            container.foreverShown=show
+        end
     end
 end
 
 local function RefreshDebuffOverlays(button)
-    local types, signature=HealBot_Forever_GetDebuffTypes()
+    if not dispelColors then RefreshDebuffColors() end
+    local types,signature,scoped=HealBot_Forever_GetDebuffTypes()
+    button.foreverDebuffTypes,button.foreverDebuffScoped=types,scoped
+    local rebuild=button.foreverDebuffSignature~=signature
+    local recolor=button.foreverDebuffs and button.foreverColors~=dispelColors
     if InCombatLockdown() then
-        button.foreverDebuffDirty=button.foreverDebuffSignature~=signature
+        button.foreverDebuffDirty=rebuild or recolor
+        if not button.foreverDebuffDirty then RefreshOverlayScope(button) end
         return
     end
-    if button.foreverDebuffSignature~=signature then
-        for _, container in pairs(button.foreverDebuffs or {}) do container:Hide() end
+    if recolor and not rebuild then
+        local options={style=Enum.CustomAuraButtonDispelTypeTextureStyle.PreserveAsset,customDispelColorMap=dispelColors}
+        for _,container in pairs(button.foreverDebuffs) do
+            local frame,texture=container.foreverColorFrame,container.foreverColorTexture
+            if frame then
+                local ok=pcall(function()
+                    if frame.AddDispelTypeTexture then
+                        frame:RemoveDispelTypeTexture(texture)
+                        frame:AddDispelTypeTexture(texture,options)
+                    else
+                        frame:SetAuraBorder(texture,options)
+                    end
+                    container:UpdateAllAuras()
+                end)
+                if not ok then rebuild=true; break end
+            end
+        end
+    end
+    button.foreverColors=dispelColors
+    if rebuild then
+        for _,container in pairs(button.foreverDebuffs or {}) do
+            container:Hide()
+            container:SetEnabled(false)
+        end
         button.foreverDebuffs=nil
         button.foreverDebuffSignature=signature
     end
@@ -230,6 +303,8 @@ local function RefreshDebuffOverlays(button)
         end)
         if ok then
             button.foreverDebuffs=overlays
+            button.foreverScopeSignature=signature
+            button.foreverScopeDirty=nil
         else
             for _, container in pairs(overlays) do container:Hide() end
             auraError=tostring(err)
@@ -238,6 +313,7 @@ local function RefreshDebuffOverlays(button)
     if button.foreverDebuffs then
         for _, container in pairs(button.foreverDebuffs) do container:SetUnit(button.unit) end
         button.foreverDebuffUnit=button.unit
+        RefreshOverlayScope(button)
     end
 end
 
@@ -289,9 +365,14 @@ local function Detach(button)
     end
 end
 
-local function UpdateAll()
+local function UpdateAll(refreshPredictions)
     for button in pairs(active) do
-        HealBot_Forever_UpdateIncomingHeals(button)
+        if refreshPredictions then
+            HealBot_Forever_UpdateIncomingHeals(button)
+        elseif HealBot_Forever_UpdateOverShield then
+            -- This tint also depends on UILOCK, which may change after the native combat event.
+            HealBot_Forever_UpdateOverShield(button)
+        end
         HealBot_Forever_UpdateDebuffOverlay(button)
     end
 end
@@ -313,17 +394,23 @@ hooksecurefunc("HealBot_Action_ResetrCallsUnit", function(button)
 end)
 hooksecurefunc("HealBot_Action_UpdateHealthButton", HealBot_Forever_UpdateDebuffOverlay)
 hooksecurefunc("HealBot_Aura_CheckUnitDebuffs",function(button)
-    if button.foreverDebuffHandoff and not InCombatLockdown() then
-        button.foreverDebuffHandoff=nil
-        HealBot_Forever_UpdateDebuffOverlay(button)
-    end
+    if not button.foreverDebuffs then return end
+    RefreshOverlayScope(button)
+    HealBot_Forever_UpdateDebuffOverlay(button)
 end)
-hooksecurefunc("HealBot_Aura_SetAuraCheckFlags", UpdateAll)
-hooksecurefunc("HealBot_Options_Debuff_Reset", function()
+hooksecurefunc("HealBot_Aura_SetAuraCheckFlags", function() UpdateAll(false) end)
+local function RefreshActiveDebuffOverlays()
     for button in pairs(active) do
         RefreshDebuffOverlays(button)
         HealBot_Forever_UpdateDebuffOverlay(button)
     end
+end
+hooksecurefunc("HealBot_Options_Debuff_Reset", function()
+    RefreshDebuffColors()
+    RefreshActiveDebuffOverlays()
+end)
+hooksecurefunc("HealBot_SetCDCBarColours", function()
+    if RefreshDebuffColors() then RefreshActiveDebuffOverlays() end
 end)
 hooksecurefunc("HealBot_Skins_ResetSkin", function(_, button)
     if active[button] then
@@ -362,7 +449,7 @@ events:SetScript("OnEvent", function(_, event)
             end
         end
     else
-        UpdateAll()
+        UpdateAll(true)
     end
 end)
 
@@ -374,4 +461,312 @@ function HealBot_Forever_FrameDiagnostics()
     end
     print("Native frames: incoming="..heals.."; debuff colors="..debuffs)
     if auraError then print("Debuff colors: "..auraError) end
+end
+
+-- Optional timing for the still-reported target/death stutter after upstream PR92.
+-- No native UI methods, aura data, settings or combat behavior are replaced.
+do
+    local enabled = false
+    local started
+    local stats = {}
+    local originals = {}
+    local wrappers = {}
+    local rebuildReasons={}
+    local buildCalls,buildMs=0,0
+    local frames, maxFrameMs, slowFrames = 0, 0, 0
+    local contexts,context,maxFrameContext
+    local hitches,pendingHitch,startedUtc,playerClass,clientBuild
+    local traceEvents={"PLAYER_TARGET_CHANGED","PLAYER_DEAD","PLAYER_ALIVE","PLAYER_UNGHOST","LOADING_SCREEN_ENABLED","LOADING_SCREEN_DISABLED"}
+    local recentEvents={}
+    local sampler = CreateFrame("Frame")
+    sampler:Hide()
+    local contextEvents={"PLAYER_ENTERING_WORLD","ZONE_CHANGED_NEW_AREA","GROUP_ROSTER_UPDATE","PLAYER_REGEN_DISABLED","PLAYER_REGEN_ENABLED"}
+    local instance,zone,rosterType,rosterSize,combat
+    local function PublicText(value)
+        if type(value)=="string" and not HealBot_issecretvalue(value) and value~="" then return value end
+    end
+    local function RefreshRoster()
+        local category=LE_PARTY_CATEGORY_INSTANCE
+        local instanceRaid=category and IsInRaid(category)
+        local instanceGroup=instanceRaid or (category and IsInGroup(category))
+        if not instanceGroup then category=LE_PARTY_CATEGORY_HOME end
+        local raid=instanceRaid or (not instanceGroup and IsInRaid(category))
+        if not raid and not instanceGroup and not IsInGroup(category) then
+            rosterType,rosterSize="solo",1
+            return
+        end
+        rosterType=(instanceGroup and "instance " or "")..(raid and "raid" or "party")
+        local size=GetNumGroupMembers(category)
+        rosterSize=type(size)=="number" and not HealBot_issecretvalue(size) and size>0 and size or nil
+    end
+    local function RefreshContext(_,event)
+        if not event or event=="PLAYER_ENTERING_WORLD" or event=="ZONE_CHANGED_NEW_AREA" then
+            instance=IsInInstance and PublicText(select(2,IsInInstance()))
+            if not instance or instance=="none" then instance="world" end
+            zone=GetRealZoneText and PublicText(GetRealZoneText())
+            combat=InCombatLockdown()
+            RefreshRoster()
+        elseif event=="GROUP_ROSTER_UPDATE" then
+            RefreshRoster()
+        else
+            combat=event=="PLAYER_REGEN_DISABLED"
+        end
+        local label=instance..(zone and " / "..zone or "").." / "..rosterType.." ("..(rosterSize or "?")..")"
+            ..(combat and " / combat" or " / out of combat")
+        context=contexts[label]
+        if not context then
+            context={label=label,rosterType=rosterType,rosterSize=rosterSize,frames=0,slowFrames=0,maxFrameMs=0,maxCallMs=0}
+            contexts[label]=context
+        end
+    end
+    sampler:SetScript("OnEvent",function(self,event)
+        recentEvents[event]=GetTime()
+        if event=="PLAYER_ENTERING_WORLD" or event=="ZONE_CHANGED_NEW_AREA" or event=="GROUP_ROSTER_UPDATE"
+            or event=="PLAYER_REGEN_ENABLED" or event=="PLAYER_REGEN_DISABLED" then RefreshContext(self,event) end
+    end)
+    local phases={HealBot_Panel_buildDataStore=true,HealBot_Panel_PlayersChanged=true,
+        HealBot_Panel_SetupBars=true,HealBot_Panel_PositionBars=true}
+    local function NativeSample(fn,...)
+        if not fn then return end
+        local ok,value=pcall(fn,...)
+        if ok and not HealBot_issecretvalue(value) then return value end
+    end
+    -- LastTime is a client tick sample. Keep it on this boundary and the next
+    -- since the client may publish its counters after the Lua OnUpdate.
+    local function Snapshot(ms,slowFrame)
+        local before=debugprofilestop()
+        local sample={wallMs=ms,context=context.label,frame=frames+1}
+        -- The client refreshes realm latency periodically, independently of frame time.
+        if slowFrame and GetNetStats then
+            local ok,_,_,home,world=pcall(GetNetStats)
+            if ok then
+                if type(home)=="number" and not HealBot_issecretvalue(home) then sample.recentHomeLatencyMs=home end
+                if type(world)=="number" and not HealBot_issecretvalue(world) then sample.recentWorldLatencyMs=world end
+            end
+        end
+        local now=GetTime()
+        for event,stamp in pairs(recentEvents) do
+            if now-stamp<=1 then
+                sample.recentEvents=sample.recentEvents or {}
+                sample.recentEvents[event]=now-stamp
+            end
+        end
+        for _,record in ipairs(stats) do
+            if record.frame==frames then
+                if not sample.heaviestMs or record.frameTotal>sample.heaviestMs then
+                    sample.heaviestName,sample.heaviestMs,sample.heaviestCalls=record.name,record.frameTotal,record.frameCalls
+                end
+                if phases[record.name] then
+                    sample.partyPhases=sample.partyPhases or {}
+                    sample.partyPhases[record.name]={ms=record.frameTotal,calls=record.frameCalls,max=record.frameMax}
+                end
+            end
+        end
+        local api=C_AddOnProfiler
+        local metric=Enum and Enum.AddOnProfilerMetric and Enum.AddOnProfilerMetric.LastTime
+        if api and metric then
+            sample.addonsMs=NativeSample(api.GetOverallMetric,metric)
+            sample.applicationMs=NativeSample(api.GetApplicationMetric,metric)
+            sample.healBotMs=NativeSample(api.GetAddOnMetric,"HealBot",metric)
+            local top=NativeSample(api.GetTopKAddOnsForMetric,metric,5)
+            if type(top)=="table" and (not canaccesstable or canaccesstable(top)) then
+                sample.topAddons={}
+                for i=1,math.min(5,#top) do
+                    local entry=top[i]
+                    if type(entry)=="table" and not HealBot_issecretvalue(entry) and (not canaccesstable or canaccesstable(entry)) then
+                        local name,value=PublicText(entry.addOnName),entry.metricValue
+                        if name and type(value)=="number" and not HealBot_issecretvalue(value) then
+                            sample.topAddons[#sample.topAddons+1]={name=name,ms=value}
+                        end
+                    end
+                end
+            end
+        end
+        sample.observerMs=debugprofilestop()-before
+        return sample
+    end
+    sampler:SetScript("OnUpdate", function(_, elapsed)
+        local ms = elapsed * 1000
+        local keep=ms>=40 and (#hitches<12 or ms>hitches[12].boundary.wallMs)
+        if pendingHitch or keep then
+            local snapshot=Snapshot(ms,keep)
+            if pendingHitch then pendingHitch.following=snapshot; pendingHitch=nil end
+            if keep then
+                local row={at=GetTime()-started,boundary=snapshot}
+                -- Keep the longest 12 intervals, ordered by duration, even in long captures.
+                local index=#hitches+1
+                while index>1 and ms>hitches[index-1].boundary.wallMs do index=index-1 end
+                table.insert(hitches,index,row)
+                if #hitches>12 then hitches[13]=nil end
+                pendingHitch=row
+            end
+        end
+        frames = frames + 1
+        context.frames=context.frames+1
+        if ms>context.maxFrameMs then context.maxFrameMs=ms end
+        if ms > maxFrameMs then maxFrameMs,maxFrameContext=ms,context.label end
+        if ms >= 40 then slowFrames=slowFrames+1; context.slowFrames=context.slowFrames+1 end
+    end)
+    local names = {"HealBot_PlayerTargetChanged", "HealBot_TargetChanged", "HealBot_UnitExists",
+        "HealBot_Panel_buildDataStore","HealBot_Panel_PlayersChanged","HealBot_Panel_SetupBars","HealBot_Panel_PositionBars",
+        "HealBot_Panel_PartyChanged", "HealBot_Panel_EnemyTargetsWithPlayersSelfUpdate",
+        "HealBot_Skins_ResetSkin", "HealBot_Aura_SetAuraCheckFlags",
+        "HealBot_Aura_CheckUnitBuffs", "HealBot_Aura_CheckUnitDebuffs",
+        "HealBot_Action_ResetrCallsUnit", "HealBot_Action_UpdateHealthButton",
+        "HealBot_Forever_RefreshTarget", "HealBot_Forever_UpdateIncomingHeals",
+        "HealBot_Forever_UpdateDebuffOverlay", "HealBot_Forever_UpdateArrivalAuras",
+        "HealBot_Forever_SkinArrivalAuras", "HealBot_Forever_PrepareArrivalAuraContext",
+        "HealBot_Action_setLuVars", "HealBot_Timers_Set",
+        -- The secure frame retains its original OnUpdate. These are the
+        -- actual runtime calls made by its fast, slow and final passes.
+        "HealBot_UnitUpdateButton", "HealBot_UnitSlowUpdate", "HealBot_Update_Slow",
+        "HealBot_Update_Final", "HealBot_Timers_Run", "HealBot_Timers_RunTimer"}
+    local function Finish(record, before, priorBuildCalls, priorBuildMs, callContext, category, timer, ...)
+        local elapsed = debugprofilestop() - before
+        record.calls = record.calls + 1
+        record.total = record.total + elapsed
+        if record.frame~=frames then
+            record.frame,record.frameCalls,record.frameTotal,record.frameMax=frames,1,elapsed,elapsed
+        else
+            record.frameCalls,record.frameTotal=record.frameCalls+1,record.frameTotal+elapsed
+            if elapsed>record.frameMax then record.frameMax=elapsed end
+        end
+        if record.name=="Aura.BuildOne" then buildCalls=buildCalls+1; buildMs=buildMs+elapsed end
+        if elapsed>callContext.maxCallMs then
+            callContext.maxCallMs,callContext.maxCallName=elapsed,record.name
+        end
+        if elapsed > record.max then
+            record.max = elapsed
+            record.maxContext=callContext.label
+            record.maxRosterType,record.maxRosterSize=callContext.rosterType,callContext.rosterSize
+            if record.name=="HealBot_Timers_RunTimer" then
+                record.maxTimerCategory,record.maxTimerName=PublicText(category),PublicText(timer)
+            end
+            if record.name=="Aura.RefreshBuffRows" then
+                record.worstBuildCalls=buildCalls-priorBuildCalls
+                record.worstBuildMs=buildMs-priorBuildMs
+            end
+        end
+        return ...
+    end
+    local function Install(name, original, record, localScope)
+        local wrapper = function(...)
+            if not enabled then return original(...) end
+            local before = debugprofilestop()
+            local priorBuildCalls,priorBuildMs=buildCalls,buildMs
+            local category,timer
+            if name=="HealBot_Timers_RunTimer" then category,timer=... end
+            return Finish(record,before,priorBuildCalls,priorBuildMs,context,category,timer,original(...))
+        end
+        originals[name], wrappers[name] = original, wrapper
+        if not localScope then _G[name] = wrapper end
+        return wrapper
+    end
+    local function Stop()
+        enabled = false
+        started=nil
+        sampler:Hide()
+        sampler:UnregisterAllEvents()
+        for name, wrapper in pairs(wrappers) do
+            if _G[name] == wrapper then _G[name] = originals[name] end
+        end
+        local function Restore(name,current)
+            if current==wrappers[name] then return originals[name] end
+            return current
+        end
+        if HealBot_Forever_VisitAuraPerfScopes then HealBot_Forever_VisitAuraPerfScopes(Restore) end
+        if HealBot_Forever_VisitPartyPerfScopes then HealBot_Forever_VisitPartyPerfScopes(Restore) end
+        wipe(originals)
+        wipe(wrappers)
+    end
+    local function Start()
+        Stop()
+        stats = {}
+        rebuildReasons={}
+        buildCalls,buildMs=0,0
+        frames, maxFrameMs, slowFrames = 0, 0, 0
+        contexts,maxFrameContext={},nil
+        hitches,pendingHitch={},nil
+        wipe(recentEvents)
+        startedUtc=GetServerTime and GetServerTime()
+        playerClass=UnitClass and PublicText(select(2,UnitClass("player")))
+        clientBuild=GetBuildInfo and select(2,GetBuildInfo())
+        RefreshContext()
+        for _,event in ipairs(contextEvents) do sampler:RegisterEvent(event) end
+        for _,event in ipairs(traceEvents) do sampler:RegisterEvent(event) end
+        started = GetTime()
+        for _, name in ipairs(names) do
+            local original = _G[name]
+            if type(original) == "function" then
+                local record = {name = name, calls = 0, total = 0, max = 0}
+                stats[#stats + 1] = record
+                Install(name, original, record)
+            end
+        end
+        local function InstallScope(name,original)
+            local record={name=name,calls=0,total=0,max=0,scope=true}
+            stats[#stats+1]=record
+            return Install(name,original,record,true)
+        end
+        if HealBot_Forever_VisitAuraPerfScopes then HealBot_Forever_VisitAuraPerfScopes(InstallScope) end
+        if HealBot_Forever_VisitPartyPerfScopes then HealBot_Forever_VisitPartyPerfScopes(InstallScope) end
+        local observerName="HealBot_Forever_RecordArrivalRebuild"
+        local previous=_G[observerName]
+        originals[observerName]=previous
+        local observer=function(reasons)
+            if enabled then
+                for reason in pairs(reasons) do rebuildReasons[reason]=(rebuildReasons[reason] or 0)+1 end
+            end
+            if type(previous)=="function" then return previous(reasons) end
+        end
+        wrappers[observerName]=observer
+        _G[observerName]=observer
+        enabled = true
+        sampler:Show()
+        print("HealBot timing 1.4 started. Use /hbperf report after the slowdown.")
+    end
+    SLASH_HEALBOTLIVEPERF1 = "/hbperf"
+    SlashCmdList.HEALBOTLIVEPERF = function(arg)
+        arg = (arg or ""):lower():match("^%s*(.-)%s*$")
+        if arg == "on" then Start(); return end
+        if arg == "off" then Stop(); print("HealBot timing stopped; original functions restored."); return end
+        if arg ~= "report" or not started then
+            print("HealBot timing 1.4: /hbperf on, /hbperf report, /hbperf off.")
+            return
+        end
+        local duration = GetTime() - started
+        Stop()
+        table.sort(stats, function(a, b) return a.max > b.max end)
+        for _,record in ipairs(stats) do record.frame,record.frameCalls,record.frameTotal,record.frameMax=nil,nil,nil,nil end
+        local report = {revision = "1.4", elapsed = duration, maxFrameMs = maxFrameMs,
+            startedUtc=startedUtc,playerClass=playerClass,clientBuild=clientBuild,hitches=hitches,
+            contexts=contexts,maxFrameContext=maxFrameContext,
+            frames = frames, slowFrames = slowFrames, functions = stats,rebuildReasons=rebuildReasons}
+        if maxFrameContext then
+            report.maxFrameRosterType=contexts[maxFrameContext].rosterType
+            report.maxFrameRosterSize=contexts[maxFrameContext].rosterSize
+        end
+        if type(HealBot_Globals) == "table" then HealBot_Globals.ForeverPerformanceReport = report end
+        print(string.format("HealBot timing: %.1fs; %d frames; max frame %.1fms; frames >=40ms %d.",
+            duration, frames, maxFrameMs, slowFrames))
+        if maxFrameContext then print("Longest frame observed in "..maxFrameContext..".") end
+        if hitches[1] then print("Saved the "..#hitches.." longest slow frames with surrounding addon CPU samples. HealBot phase times overlap.") end
+        for index,entry in ipairs(stats) do
+            if entry.calls>0 and (index<=6 or entry.scope or entry.name=="HealBot_Timers_RunTimer") then
+                local owner=entry.maxTimerName and (" ["..(entry.maxTimerCategory or "?").."/"..entry.maxTimerName.."]") or ""
+                print(string.format("%s%s: %d calls; max %.3fms (%s); inclusive total %.3fms.",
+                    entry.name,owner,entry.calls,entry.max,entry.maxContext or "unknown",entry.total))
+            end
+            if entry.worstBuildCalls then
+                print(string.format("Worst aura refresh included %d build calls taking %.3fms.",entry.worstBuildCalls,entry.worstBuildMs))
+            end
+        end
+        local reasonNames={}
+        for reason in pairs(rebuildReasons) do reasonNames[#reasonNames+1]=reason end
+        table.sort(reasonNames)
+        local reasonText={}
+        for _,reason in ipairs(reasonNames) do reasonText[#reasonText+1]=reason.."="..rebuildReasons[reason] end
+        print("Arrival rebuild reasons: "..(#reasonText>0 and table.concat(reasonText,", ") or "none recorded"))
+        print("Timing stopped. Nested totals overlap; timings are diagnostic evidence, not a confirmed cause.")
+    end
 end
