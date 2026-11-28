@@ -48,6 +48,7 @@ function CreateFrame()
     function object:SetSize() end
     function object:SetPoint() end
     function object:SetFrameStrata() end
+    function object:SetScript(event,callback) self[event]=callback end
     function object:Hide() end
     return object
 end
@@ -106,7 +107,10 @@ local function runtime()
     local env=setmetatable({}, {__index=_G})
     execute(setup,env)
     execute(media,env)
-    env.API=execute(locals..sync.."\nreturn {queue=QueueSync,queued=function() return refreshQueued end}",env)
+    env.API=execute(locals..sync..[[
+        return {queue=QueueSync, queued=function() return refreshQueued end,
+            render=function() if auraWorker and auraWorker.OnUpdate then auraWorker:OnUpdate() end end}
+    ]],env)
     return env
 end
 local passed=0
@@ -206,17 +210,44 @@ check("Absent skin configuration waits without touching frames",[=[
 ]=])
 check("Each reserve sync shares a fresh aura batch", [=[
     loaded=true; HealBot_Media_Register()
-    HealBot_Buttons={{frame=1,status={active=true},IsShown=function() return true end,gref={}}}
-    function UnitExists() return false end
-    function BindRow() end
-    local batches={}
-    function SkinExtras(row,donor,batch)
-        assert(type(batch)=="table" and donor==HealBot_Buttons[1])
-        batches[#batches+1]=batch
+    local donor={unit="player",frame=1,status={active=true},IsShown=function() return true end,
+        gref={Bar={GetCenter=function() return 0,0 end}}}
+    HealBot_Buttons={donor}
+    function UnitExists(unit) return unit=="player" end
+    function BindRow(row) row.bound=true end
+    function RegisterUnitWatch(row) assert(row.bound); row.watched=true end
+    local policy,scans,visits=0,0,0
+    local batches,styles={},{}
+    function SkinExtras(row,source,style)
+        assert(source==donor and type(style)=="table")
+        styles[policy]=styles[policy] or style
+        assert(style==styles[policy])
+        row.styled=policy
     end
-    API.queue(); tick(); API.queue(); tick()
-    assert(#batches==8 and batches[1]~=batches[5])
-    for i=1,4 do assert(batches[i]==batches[1] and batches[i+4]==batches[5]) end
+    function HealBot_Forever_PrepareArrivalAuraContext()
+        scans=scans+1
+        return {filters=policy}
+    end
+    function HealBot_Forever_SkinArrivalAuras(row,source,batch)
+        assert(row.watched and source==donor and batch.filters==policy)
+        visits=visits+1
+        assert(row==createdRows[(visits-1)%4+1])
+        batches[policy]=batches[policy] or batch
+        assert(batch==batches[policy])
+    end
+    function HealBot_Forever_UpdateArrivalAuras() end
+    for pass=1,2 do
+        policy=pass
+        API.queue(); tick()
+        for _,row in ipairs(createdRows) do assert(row.watched and row.styled==pass) end
+        assert(visits==(pass-1)*4,"roster sync built native rows inline")
+        for i=1,4 do
+            API.render()
+            assert(visits==(pass-1)*4+i,"expected one reserve row per render")
+        end
+        assert(scans==pass,"expected one shared filter snapshot per pass")
+    end
+    assert(batches[1]~=batches[2] and styles[1]~=styles[2])
 ]=])
 
 print("PASS: "..passed.." party startup scenarios (mock events, actual media helpers)")
