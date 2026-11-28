@@ -557,7 +557,7 @@ function HealBot_Events_UnitStatus(button)
     end
 end
 
-local function RememberReportedAura(button,aura,fromScan,firstSeen)
+local function RememberReportedAura(button,aura,fromScan,previous)
     if not HealBot_Config_Cures or not HealBot_Config_Cures.CDCshownHB then return end
     local tracked=HealBot_Globals.CustomDebuffs
     if not tracked or not next(tracked) then return end
@@ -575,10 +575,15 @@ local function RememberReportedAura(button,aura,fromScan,firstSeen)
         if id~=6788 then return end
         dispel=nil
     end
-    if HealBot_issecretvalue(source) or type(source)~="string" then source=nil end
+    if HealBot_issecretvalue(source) then source=previous and previous.sourceUnit end
+    if type(source)~="string" then source=nil end
     local expires=aura.expirationTime
-    if HealBot_issecretvalue(expires) or type(expires)~="number" or expires<=0 then expires=nil end
-    if fromScan and not expires or expires and expires<=GetTime() then return end
+    if HealBot_issecretvalue(expires) or type(expires)~="number" or expires<=0 then
+        expires=previous and previous.expirationTime
+    end
+    -- On an instance update the next scan also reconciles an expired record
+    -- with any estimate seeded by the original shield cast.
+    if fromScan and not expires or not previous and expires and expires<=GetTime() then return end
     local state=button.aura.debuff
     local cache=state.reported
     if cache and not ReportedAuraIdentity(button,cache) then state.reported=nil; cache=nil end
@@ -592,7 +597,7 @@ local function RememberReportedAura(button,aura,fromScan,firstSeen)
     -- Copy the public warning fields. The event's original AuraData may
     -- contain restricted values and its accessibility can change in combat.
     local record=cache.records[instance] or {}
-    if id==6788 then record.firstSeen=record.firstSeen or firstSeen or GetTime() end
+    if id==6788 then record.firstSeen=record.firstSeen or (previous and previous.firstSeen) or GetTime() end
     record.spellId,record.auraInstanceID,record.name=id,instance,name
     record.isHarmful,record.sourceUnit,record.dispelName=true,source,dispel
     record.expirationTime=expires
@@ -670,6 +675,47 @@ function HealBot_Events_GetReportedCustomDebuffs(button,complete)
     return cache.records
 end
 
+local function PubliclyDifferent(value,expected)
+    return not HealBot_issecretvalue(value) and value~=nil and value~=expected
+end
+
+local function UpdateReportedInstance(button,cache,instance,previous)
+    local ok,aura
+    if C_UnitAuras.GetAuraDataByAuraInstanceID then
+        ok,aura=pcall(C_UnitAuras.GetAuraDataByAuraInstanceID,button.unit,instance)
+    end
+    local expires=previous.expirationTime
+    if ok and ReadableAuraTable(aura) then
+        local id,key,harmful,helpful=aura.spellId,aura.auraInstanceID,aura.isHarmful,aura.isHelpful
+        if PubliclyDifferent(id,previous.spellId) or PubliclyDifferent(key,instance)
+            or PubliclyDifferent(harmful,true) or PubliclyDifferent(helpful,false) then return end
+        if not HealBot_issecretvalue(id) and id==previous.spellId and not HealBot_issecretvalue(key) and key==instance
+            and not HealBot_issecretvalue(harmful) and harmful==true and
+            (not HealBot_issecretvalue(aura.dispelName) or id==6788) then
+            RememberReportedAura(button,aura,nil,previous)
+            return
+        end
+        -- The public update names the same live instance. A changed public
+        -- source or dispel category invalidates policy based on the old fields.
+        local source,dispel,ending=aura.sourceUnit,aura.dispelName,aura.expirationTime
+        if PubliclyDifferent(source,previous.sourceUnit)
+            or not HealBot_issecretvalue(dispel) and dispel~=previous.dispelName then return end
+        if expires and not HealBot_issecretvalue(ending) and type(ending)=="number" and ending>0 then
+            expires=math.min(expires,ending)
+        end
+    elseif ok and not HealBot_issecretvalue(aura) and aura==nil then
+        local check=C_Secrets and C_Secrets.ShouldAurasBeSecret
+        if not check then return end
+        local checked,restricted=pcall(check)
+        if checked and not HealBot_issecretvalue(restricted) and restricted==false then return end
+    end
+    -- An opaque lookup cannot renew the timer or introduce a new warning.
+    if expires then
+        previous.expirationTime=expires
+        cache.records[instance]=previous
+    end
+end
+
 local function ReconcileReportedInstances(button,list,updated)
     local cache=button.aura.debuff.reported
     if not cache then return true end
@@ -684,13 +730,7 @@ local function ReconcileReportedInstances(button,list,updated)
             if not ReportedAuraIdentity(button,cache) then return false end
             cache.records[instance]=nil
             if not updated and previous.firstSeen then removedShield=math.max(removedShield or 0,previous.firstSeen) end
-            if updated and C_UnitAuras.GetAuraDataByAuraInstanceID then
-                local ok,aura=pcall(C_UnitAuras.GetAuraDataByAuraInstanceID,button.unit,instance)
-                if ok and ReadableAuraTable(aura) and not HealBot_issecretvalue(aura.auraInstanceID)
-                    and aura.auraInstanceID==instance and not HealBot_issecretvalue(aura.spellId) and aura.spellId==previous.spellId then
-                    RememberReportedAura(button,aura,nil,previous.firstSeen)
-                end
-            end
+            if updated then UpdateReportedInstance(button,cache,instance,previous) end
         end
     end
     return true,removedShield

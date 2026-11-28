@@ -1827,6 +1827,8 @@ end
 function HealBot_Aura_DebuffWarnings(button, debuffName, force, debuffIconIndex, expirationTime, barOnly)
         --HealBot_setCall("HealBot_Aura_DebuffWarnings", button)
     if button.aura.debuff.name~=debuffName or force then
+        -- Health, range and auxiliary-bar refreshes reuse the current warning.
+        if barOnly==nil then barOnly=button.aura.debuff.barOnly end
         button.aura.debuff.name=debuffName
         if HealBot_Text_TagInUse(button.framecol, "DEBUFF") then
             HealBot_Text_setNameTag(button)

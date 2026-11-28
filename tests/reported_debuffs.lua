@@ -109,7 +109,50 @@ end
 event({updatedAuraInstanceIDs={43,9999}})
 assert(drain()==888 and state.reported.records[43].expirationTime==134 and instanceReads==1)
 e.C_UnitAuras.GetAuraDataByAuraInstanceID=function() return inaccessible end
-event({updatedAuraInstanceIDs={43}}); assert(drain()==nil)
+event({updatedAuraInstanceIDs={43}})
+assert(drain()==888 and state.reported.records[43].expirationTime==134,"opaque update lost a known, timed instance")
+local opaque=entry(888,43,139)
+opaque.spellId=secret
+e.C_UnitAuras.GetAuraDataByAuraInstanceID=function() return opaque end
+event({updatedAuraInstanceIDs={43}})
+assert(drain()==888 and state.reported.records[43].expirationTime==134,"opaque identity extended the known expiry")
+opaque.expirationTime=124
+event({updatedAuraInstanceIDs={43}})
+assert(drain()==888 and state.reported.records[43].expirationTime==124,"public shorter expiry was ignored")
+opaque.spellId,opaque.expirationTime=888,secret
+event({updatedAuraInstanceIDs={43}})
+assert(drain()==888 and state.reported.records[43].expirationTime==124,"private timer extended a publicly identified update")
+now=124; assert(partial()==nil,"private update left an expired warning on the bar")
+-- The public instance ID identifies an ongoing application, only until a
+-- removal, authoritative rescan or identity change. Never seed an unseen ID.
+add(entry(6788,53,130)); assert(drain()==6788)
+e.C_UnitAuras.GetAuraDataByAuraInstanceID=function() return inaccessible end
+event({updatedAuraInstanceIDs={53}}); assert(drain()==6788)
+event({removedAuraInstanceIDs={53}}); assert(drain()==nil)
+add(entry(888,54,nil)); assert(drain()==888)
+event({updatedAuraInstanceIDs={54}}); assert(drain()==nil,"unknown timing retained an opaque update indefinitely")
+for _,invalid in ipairs({entry(999,43,140),entry(888,99,140)}) do
+    add(entry(888,43,130)); assert(drain()==888)
+    e.C_UnitAuras.GetAuraDataByAuraInstanceID=function() return invalid end
+    event({updatedAuraInstanceIDs={43}}); assert(drain()==nil,"a contrary identity retained a stale warning")
+end
+local changedSource=entry(888,43,130); changedSource.spellId,changedSource.sourceUnit=secret,"player"
+add(entry(888,43,130)); assert(drain()==888)
+e.C_UnitAuras.GetAuraDataByAuraInstanceID=function() return changedSource end
+event({updatedAuraInstanceIDs={43}}); assert(drain()==nil,"partial update retained a conflicting caster")
+add(entry(6788,43,125)); assert(drain()==6788)
+e.C_UnitAuras.GetAuraDataByAuraInstanceID=function() error("restricted") end
+event({updatedAuraInstanceIDs={43}}); assert(drain()==6788)
+cast=124; now=125
+event({updatedAuraInstanceIDs={43}})
+assert(drain()==nil and retired==124,"update at verified expiry resurrected a completed shield cast")
+cast=nil
+add(entry(888,43,130)); assert(drain()==888)
+e.C_UnitAuras.GetAuraDataByAuraInstanceID=function() return nil end
+event({updatedAuraInstanceIDs={43}}); assert(drain()==888)
+combat(false);event({updatedAuraInstanceIDs={43}})
+assert(drain()==nil,"public instance lookup reported absence")
+combat(true)
 -- Roster generation, physical occupant, connection, visibility and incomplete
 -- mutation boundaries each invalidate the cache before it can color another unit.
 for _,change in ipairs({{isFullUpdate=true},{updatedAuraInstanceIDs=secret},

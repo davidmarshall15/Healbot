@@ -253,8 +253,19 @@ e.HealBot_Config_Cures.WarnRange_Sound=88
 e.HealBot_Range_WarnInRange=function(_,_,which) return which==88 end
 e.HealBot_Media_PlaySound=function() sounds=sounds+1 end
 assert(tint({shield})==shieldID and sounds==0)
+setfenv(assert(loadstring(get("HealBot_Action_UpdateHotBar",read("HealBot/HealBot_Action.lua")).."\n"..
+    get("HealBot_Update_AuxDebuffBars",read("HealBot/HealBot_Update.lua")))),e)()
+e.HealBot_Action_luVars={HotBarsHealth=0}
+e.HealBot_UnitDebuffIcons={[a.id]={[51]={expirationTime=0}}}
+for i=1,20 do
+    e.HealBot_Action_UpdateHotBar(a)
+    e.HealBot_Update_AuxDebuffBars(a)
+end
+assert(sounds==0 and not e.HealBot_Aura_WarningFilter[a.unit][shieldName],"health refresh emitted or consumed a bar-only alert")
 local observedShield={name=shieldName,spellId=shieldID,sourceUnit="player",duration=15,expirationTime=115,icon=14,applications=1}
 assert(tint({observedShield})==shieldID and sounds==1,"full observation following a bar-only warning lost the configured alert")
+e.HealBot_Action_UpdateHotBar(a)
+assert(sounds==1,"health refresh repeated a live observed warning")
 assert(tint({observedShield})==shieldID and sounds==1,"steady observation repeated the configured alert")
 local counts={completeSeen=0,completeMiss=0,missAfterSeen=0,partialSeen=0,partialUnknown=0,selected=0,suppressed=0}
 e.HealBot_Forever_ShieldPerf=counts
