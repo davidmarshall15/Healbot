@@ -170,25 +170,14 @@ local function Update(button)
         local clip=CreateFrame("Frame",nil,button)
         clip:SetAllPoints(health)
         clip:SetClipsChildren(true)
-        clip:SetFrameLevel(math.max(0,button.gref.InHeal:GetFrameLevel()-1))
         periodic=CreateFrame("StatusBar",nil,clip)
         periodic:EnableMouse(false)
         button.foreverPeriodic=periodic
     end
-    local texture=health:GetStatusBarTexture()
-    local vertical=health:GetOrientation()=="VERTICAL"
-    local reverse=health:GetReverseFill()
-    periodic:ClearAllPoints()
-    periodic:SetSize(health:GetWidth(),health:GetHeight())
-    periodic:SetOrientation(health:GetOrientation())
-    periodic:SetReverseFill(reverse)
-    if vertical and reverse then periodic:SetPoint("TOPLEFT",texture,"BOTTOMLEFT")
-    elseif vertical then periodic:SetPoint("BOTTOMLEFT",texture,"TOPLEFT")
-    elseif reverse then periodic:SetPoint("TOPRIGHT",texture,"TOPLEFT")
-    else periodic:SetPoint("TOPLEFT",texture,"TOPRIGHT") end
-    periodic:SetFrameLevel(periodic:GetParent():GetFrameLevel())
-    HealBot_Media_UpdateTexture(periodic,hbv_Skins_GetFrameVar("HealBar","TEXTURE",button.frame),"Forever periodic heals")
-    periodic:GetStatusBarTexture():SetHorizTile(false)
+    local clip=periodic:GetParent()
+    local level=math.max(0,button.gref.InHeal:GetFrameLevel()-1)
+    if clip:GetFrameLevel()~=level then clip:SetFrameLevel(level) end
+    HealBot_Forever_PositionPrediction(button,periodic,health:GetStatusBarTexture(),level)
     periodic:SetMinMaxValues(0,UnitHealthMax(button.unit))
     periodic:SetValue(amount)
     local alpha=hbv_Skins_GetFrameVar("BarIACol","IA",button.frame)*button.status.alpha

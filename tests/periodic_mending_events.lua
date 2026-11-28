@@ -11,12 +11,14 @@ local noop=function() end
 local frame=setmetatable({}, {__index=function() return noop end})
 function frame:SetScript(_,fn) eventHandler=fn end
 local function widget()
-    local w=setmetatable({}, {__index=function() return noop end})
+    local w=setmetatable({}, {__index=function(_,name) if name:match("^%u") then return noop end end})
+    function w:ClearAllPoints() self.reanchors=(self.reanchors or 0)+1 end
     function w:Show() self.shown=true end
     function w:Hide() self.shown=false end
     function w:GetStatusBarTexture() return self end
     function w:GetParent() return self end
-    function w:GetFrameLevel() return 6 end
+    function w:GetFrameLevel() return self.level or 6 end
+    function w:SetFrameLevel(level) self.level=level end
     function w:GetWidth() return 50 end
     function w:GetHeight() return 20 end
     function w:GetOrientation() return "HORIZONTAL" end
@@ -49,10 +51,16 @@ local env=setmetatable({HEALBOT_FOREVER=true,SlashCmdList={},HealBot_Buttons=row
 }, {__index=_G})
 local function makeRow(unit)
     return {unit=unit,frame=1,status={events=true,enabled=true,current=1,alpha=1},range={current=1},
-        health={},foreverPeriodic=widget(),gref={Bar=widget()}}
+        health={},foreverPeriodic=widget(),gref={Bar=widget(),InHeal=widget()}}
 end
 for i=1,40 do rows[i]=makeRow("raid"..i) end
 rows[41]=makeRow("raid1")
+if not baseline then
+    local frames=assert(io.open("HealBot/HealBot_ForeverFrames.lua","rb"))
+    local helper=assert(frames:read("*a"):gsub("\r\n","\n"):match("(function HealBot_Forever_PositionPrediction%b().-\nend)"))
+    frames:close()
+    setfenv(assert(loadstring(helper)),env)()
+end
 watched=setfenv(assert(loadstring(code.."\nreturn buttons")),env)()
 local function fire(event,unit,...) eventHandler(frame,event,unit,...) end
 local function cast(spell) fire("UNIT_SPELLCAST_SUCCEEDED","player","cast",spell) end
@@ -64,6 +72,15 @@ local function advance(t)
 end
 cast(401859)
 assert(rows[1].foreverPeriodic.shown and rows[41].foreverPeriodic.shown and rows[1].foreverPeriodic.amount==172)
+if not baseline then
+    local periodic=rows[1].foreverPeriodic
+    local before=periodic.reanchors
+    for i=1,100 do hooks.HealBot_Action_UpdateHealthButton(rows[1]) end
+    assert(periodic.reanchors==before,"unchanged periodic prediction repeatedly reanchors")
+    rows[1].gref.InHeal:SetFrameLevel(9)
+    hooks.HealBot_Action_UpdateHealthButton(rows[1])
+    assert(periodic:GetFrameLevel()==8 and periodic.reanchors==before+1,"skin level did not move periodic overlay")
+end
 iterations,reads,lookups=0,0,0
 for i=1,100 do fire("UNIT_AURA","nameplate"..i) end
 assert(iterations==(baseline and 4100 or 0) and reads==0)
