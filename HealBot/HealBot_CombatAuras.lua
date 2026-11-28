@@ -121,6 +121,13 @@ end
 
 local function HBCA_ConfiguredBuffFilters(g)
     if not HEALBOT_FOREVER then return end
+    if HealBot_Config_Buffs and HealBot_Config_Buffs.BuffWatch==false then
+        -- Keep empty rows ready for combat toggles and stop watching for new ranks.
+        if buffSignature==false then return buffFilters, false end
+        watchedRankNames=nil
+        buffSignature,buffFilters=false,{}
+        return buffFilters, true
+    end
     local _, class=UnitClass("player")
     local broad=class~="PRIEST" and g.CombatAurasPriestOnly==true
     local sets=g.CustomBuffsIconSet or {}
@@ -970,19 +977,6 @@ local function HBCA_BuildOne(button, side, placement, set, spellFilter)
         if c.SetMouseClickEnabled then pcall(c.SetMouseClickEnabled, c, false) end
         if c.SetMouseMotionEnabled then pcall(c.SetMouseMotionEnabled, c, false) end
     end)
-    local cf=side=="hot" and HealBot_Aura_NativeBuffExclusions and {excludeSpellIDs=HealBot_Aura_NativeBuffExclusions()} or nil
-    if side=="hot" and (g.CombatAurasMaxDur or 0)>0 then
-        -- native candidate filter: seconds of TOTAL duration; finite cap also
-        -- rejects permanent auras (technique per DandersFrames)
-        cf=cf or {}
-        cf.maxDuration=g.CombatAurasMaxDur
-    end
-    if spellFilter then
-        cf=cf or {}
-        cf.includeDispelTypes=spellFilter.includeDispelTypes
-        cf.includeSpellIDs=spellFilter.includeSpellIDs
-        cf.excludeSpellIDs=spellFilter.excludeSpellIDs or cf.excludeSpellIDs
-    end
     local showNumbers=placement.numbers
     local opacity=HBCA_CreateRowIconOpacity(c,button,side,set)
     local initializeFrame=HBCA_MakeInit(size, placement, showNumbers, opacity)
@@ -1005,6 +999,19 @@ local function HBCA_BuildOne(button, side, placement, set, spellFilter)
             c.hbcaBuffLimit,c.hbcaHasBuffs=maxN,wanted
             c.hbcaBuffPolicy={filter=spellFilter,limit=maxN,duration=HBCA_BuffRowDuration(g)}
         else
+            local cf=side=="hot" and HealBot_Aura_NativeBuffExclusions and {excludeSpellIDs=HealBot_Aura_NativeBuffExclusions()} or nil
+            if side=="hot" and (g.CombatAurasMaxDur or 0)>0 then
+                -- native candidate filter: seconds of TOTAL duration; finite cap also
+                -- rejects permanent auras (technique per DandersFrames)
+                cf=cf or {}
+                cf.maxDuration=g.CombatAurasMaxDur
+            end
+            if spellFilter then
+                cf=cf or {}
+                cf.includeDispelTypes=spellFilter.includeDispelTypes
+                cf.includeSpellIDs=spellFilter.includeSpellIDs
+                cf.excludeSpellIDs=spellFilter.excludeSpellIDs or cf.excludeSpellIDs
+            end
             c:AddAuraGroup("hbca"..side, filter,
                 { maxFrameCount=maxN, initializeFrame=initializeFrame,
                   layout=HBCA_Layout(size,placement), candidateFilters=cf })
